@@ -1,6 +1,7 @@
 <template>
   <v-container>
     <header-page :title="$t('select teaching information')"></header-page>
+
     <v-row dense class="mb-3">
       <v-col
         cols="12"
@@ -10,7 +11,7 @@
       >
         <v-btn
           class="w-full pa-2"
-          @click="tab = tab_data.value"
+          @click="(tab = tab_data.value), changeTabs(tab)"
           depressed
           :dark="tab === tab_data.value"
           :color="tab === tab_data.value ? '#ff6b81' : '#F5F5F5'"
@@ -21,7 +22,7 @@
     </v-row>
     <!-- TAB 1 -->
     <div v-if="tab === 'teaching list'">
-      <!-- <loading-overlay :loading="my_courses_is_loading"> </loading-overlay> -->
+      <loading-overlay :loading="loading_tab_one"> </loading-overlay>
       <v-row class="mb-2">
         <v-col cols="12" align="center">
           <v-card flat width="340px">
@@ -35,7 +36,7 @@
                 >
                   <v-btn
                     class="w-full"
-                    @click="time_frame = time.value"
+                    @click="(time_frame = time.value), GetSchedule(time_frame)"
                     depressed
                     :dark="time_frame === time.value"
                     :color="time_frame === time.value ? '#ff6b81' : '#F5F5F5'"
@@ -50,119 +51,130 @@
       <!-- รายวัน -->
       <template v-if="time_frame === 'day'">
         <!-- COURSE LIST -->
-        <v-card
-          outlined
-          class="mb-2"
-          v-for="(course, course_index) in my_courses.data?.filter(
-            (v) => v.start_date === genToday && v?.type !== 'holiday'
-          )"
-          :key="course_index"
-        >
-          <v-card-text
-            class="cursor-pointer"
-            @click="
-              $router.push({
-                name: 'menageCourseDetail',
-                params: {
-                  courseId: course.course_id,
-                  timeId: course.time_id,
-                  dayOfWeekId: course.day_of_week_id,
-                  date: course.start_date,
-                  typeEvent: 'null',
-                },
-              })
-            "
-          >
-            <v-row dense>
-              <v-col cols="12" sm="4">
-                <v-img
-                  :aspect-ratio="16 / 9"
-                  :cover="$vuetify.breakpoint.smAndUp"
-                  :class="
-                    $vuetify.breakpoint.smAndUp ? 'rounded-lg' : 'rounded-lg'
-                  "
-                  :src="
-                    course.course_img || course.course_img !== ''
-                      ? course.course_img
-                      : require(`@/assets/course/default_course_img.svg`)
-                  "
-                  :max-width="$vuetify.breakpoint.smAndUp ? 500 : ''"
-                >
-                  <template v-slot:placeholder>
-                    <v-row
-                      class="fill-height ma-0"
-                      align="center"
-                      justify="center"
+        <div v-if="calendar_coach.data?.length >= 1">
+          <v-col cols="12">
+            <v-card
+              outlined
+              class="mb-2"
+              v-for="(course, course_index) in calendar_coach.data"
+              :key="course_index"
+            >
+              <v-card-text
+                class="cursor-pointer"
+                @click="
+                  $router.push({
+                    name: 'menageCourseDetail',
+                    params: {
+                      courseId: course.course_id,
+                      timeId: course.time_id,
+                      dayOfWeekId: course.day_of_week_id,
+                      date: course.start_date,
+                      typeEvent: 'null',
+                    },
+                  })
+                "
+              >
+                <v-row dense>
+                  <v-col cols="12" sm="4">
+                    <v-img
+                      :aspect-ratio="16 / 9"
+                      :cover="$vuetify.breakpoint.smAndUp"
+                      :class="
+                        $vuetify.breakpoint.smAndUp
+                          ? 'rounded-lg'
+                          : 'rounded-lg'
+                      "
+                      :src="
+                        course.course_img || course.course_img !== ''
+                          ? course.course_img
+                          : require(`@/assets/course/default_course_img.svg`)
+                      "
+                      :max-width="$vuetify.breakpoint.smAndUp ? 500 : ''"
                     >
-                      <v-progress-circular
-                        indeterminate
-                        color="#ff6b81"
-                      ></v-progress-circular>
+                      <template v-slot:placeholder>
+                        <v-row
+                          class="fill-height ma-0"
+                          align="center"
+                          justify="center"
+                        >
+                          <v-progress-circular
+                            indeterminate
+                            color="#ff6b81"
+                          ></v-progress-circular>
+                        </v-row>
+                      </template>
+                    </v-img>
+                  </v-col>
+                  <v-col cols="12" sm="8">
+                    <v-row dense>
+                      <v-col class="text-lg font-bold">{{
+                        `${
+                          $i18n.locale == "th" ? course.name : course.subtitle
+                        }`
+                      }}</v-col>
+                      <v-col cols="auto">
+                        <v-chip small color="#F9B320" dark
+                          >{{
+                            `${course.start_time}-${course.end_time}`
+                          }}น.</v-chip
+                        >
+                      </v-col>
                     </v-row>
-                  </template>
-                </v-img>
-              </v-col>
-              <v-col cols="12" sm="8">
-                <v-row dense>
-                  <v-col class="text-lg font-bold">{{
-                    `${$i18n.locale == "th" ? course.name : course.subtitle}`
-                  }}</v-col>
-                  <v-col cols="auto">
-                    <v-chip small color="#F9B320" dark
-                      >{{ `${course.start_time}-${course.end_time}` }}น.</v-chip
-                    >
+                    <v-row dense>
+                      <v-col cols="auto"
+                        ><v-icon color="#ff6b81">mdi-bookshelf</v-icon></v-col
+                      >
+                      <v-col>{{
+                        `${$t("warraphat learning sphere")} : ${
+                          $i18n.locale == "th"
+                            ? course.category_name
+                            : course.category_name_en
+                        }`
+                      }}</v-col>
+                    </v-row>
+                    <v-row dense>
+                      <v-col cols="auto"
+                        ><v-icon color="#ff6b81"
+                          >mdi-account-box-multiple</v-icon
+                        ></v-col
+                      >
+                      <v-col>{{
+                        `${$t("package")} :  ${course.course_package_name}`
+                      }}</v-col>
+                    </v-row>
+                    <v-row dense>
+                      <v-col cols="auto"
+                        ><v-icon color="#ff6b81"
+                          >mdi-clock-outline</v-icon
+                        ></v-col
+                      >
+                      <v-col>{{
+                        `${$t("teaching time")} : ${
+                          course.course_per_time
+                        } ${$t("hour")}`
+                      }}</v-col>
+                    </v-row>
                   </v-col>
                 </v-row>
-                <v-row dense>
-                  <v-col cols="auto"
-                    ><v-icon color="#ff6b81">mdi-bookshelf</v-icon></v-col
-                  >
-                  <v-col>{{
-                    `${$t("warraphat learning sphere")} : ${
-                      $i18n.locale == "th"
-                        ? course.category_name
-                        : course.category_name_en
-                    }`
-                  }}</v-col>
-                </v-row>
-                <v-row dense>
-                  <v-col cols="12" v-if="course.course_package_name">
-                    <rowData mini icon="mdi-account-box-multiple">{{
-                      `${$t("package")} :  ${course.course_package_name}`
-                    }}</rowData>
-                  </v-col>
-                </v-row>
-                <v-row dense>
-                  <v-col cols="auto"
-                    ><v-icon color="#ff6b81">mdi-clock-outline</v-icon></v-col
-                  >
-                  <v-col>{{
-                    `${$t("teaching time")} : ${course.course_per_time} ${$t(
-                      "hour"
-                    )}`
-                  }}</v-col>
-                </v-row>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-        <v-card
-          flat
-          v-if="
-            my_courses.data?.filter(
-              (v) => v.start_date === genToday && v?.type !== 'holiday'
-            ).length == 0
-          "
-        >
-          <v-card-text
-            class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg"
-          >
-            <span class="text-lg font-bold">
-              <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-              {{ $t("teaching information not found") }}
-            </span>
-          </v-card-text>
-        </v-card>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </div>
+
+        <div v-if="calendar_coach.data?.length <= 0">
+          <v-col cols="12">
+            <v-card flat>
+              <v-card-text
+                class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg"
+              >
+                <span class="text-lg font-bold">
+                  <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                  {{ $t("teaching information not found") }}
+                </span>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </div>
       </template>
       <!-- รายสัปดาห์ -->
       <template v-else>
@@ -188,7 +200,8 @@
     </div>
     <!-- TAB 2 -->
     <div v-if="tab === 'my teaching'">
-      {{ data_selected }}
+      <loading-overlay :loading="loading_tab_two"> </loading-overlay>
+
       <v-row ref="information">
         <v-col cols="auto"> {{ $t("my teaching information") }} : </v-col>
         <v-col class="font-bold">
@@ -201,8 +214,6 @@
       </v-row>
       <v-row dense ref="choose">
         <v-col>
-          <!-- @change="filterCourse()" -->
-          <!--  -->
           <span class="font-bold">{{ $t("choose a course") }}</span>
           <v-autocomplete
             v-model="filter_course"
@@ -213,7 +224,7 @@
             item-value="course_id"
             outlined
             dense
-            @input="handleInput(filter_course)"
+            @change="handleInput(filter_course)"
           >
             <template v-slot:no-data>
               <v-row dense>
@@ -223,155 +234,299 @@
           </v-autocomplete>
         </v-col>
       </v-row>
+      <v-row ref="my_courses" v-if="my_courses?.length >= 1 && this.no_value">
+        <v-col>
+          <v-card
+            dense
+            elevation="0"
+            flat
+            v-for="(course, course_index) in my_courses"
+            :key="`${course_index}-course`"
+          >
+            <!-- <pre>{{ course }}</pre> -->
+            <v-card-text class="bg-[#FBF3F5]">
+              <v-row dense>
+                <v-col cols="12" sm="4">
+                  <v-img
+                    class="rounded-lg"
+                    style="max-width: 500px"
+                    :src="
+                      course.course_img || course.course_img !== ''
+                        ? course.course_img
+                        : require(`@/assets/course/default_course_img.svg`)
+                    "
+                    :aspect-ratio="16 / 9"
+                  >
+                    <template v-slot:placeholder>
+                      <v-row
+                        class="fill-height ma-0"
+                        align="center"
+                        justify="center"
+                      >
+                        <v-progress-circular
+                          indeterminate
+                          color="#ff6b81"
+                        ></v-progress-circular>
+                      </v-row>
+                    </template>
+                  </v-img>
+                </v-col>
+                <v-col>
+                  <v-row dense>
+                    <v-col class="font-bold text-md">{{
+                      GenDateStr(new Date(course.start_date_str))
+                    }}</v-col>
+                  </v-row>
+                  <v-row dense>
+                    <v-col cols="12">
+                      <rowData mini icon="mdi-account"
+                        >{{ $t("warraphat learning sphere") }} :
+                        {{
+                          $i18n.locale == "th"
+                            ? course.category_name
+                            : course.category_name_en
+                        }}</rowData
+                      >
+                    </v-col>
 
-      <v-row ref="my_courses">
-        <div v-if="this.filter_course">
-          <v-col>
-            <v-card
-              dense
-              class="mb-3"
-              elevation="0"
-              flat
-              v-for="(course, course_index) in my_courses.data"
-              :key="`${course_index}-course`"
-            >
-              <pre>{{ course }}</pre>
-              <!-- <v-card-text class="bg-[#FBF3F5]">
-                <v-row dense>
-                  <v-col cols="12" sm="4">
-                    <v-img
-                      class="rounded-lg"
-                      style="max-width: 500px"
-                      :src="
-                        course.course_img || course.course_img !== ''
-                          ? course.course_img
-                          : require(`@/assets/course/default_course_img.svg`)
-                      "
-                      :aspect-ratio="16 / 9"
+                    <v-col cols="12" v-if="course.course_package_name">
+                      <rowData mini icon="mdi-account-box-multiple"
+                        >{{ $t("package") }} :
+                        {{ course.course_package_name }}</rowData
+                      >
+                    </v-col>
+                    <v-col cols="12">
+                      <rowData mini icon="mdi-bookshelf"
+                        >{{ $t("course") }} :{{
+                          `${
+                            $i18n.locale == "th" ? course.name : course.subtitle
+                          }`
+                        }}</rowData
+                      >
+                    </v-col>
+                    <v-col cols="12">
+                      <rowData mini icon="mdi-clock-time-four-outline"
+                        >{{ $t("teaching time") }} {{ course.course_per_time }}
+                        {{ $t("hour") }}</rowData
+                      >
+                    </v-col>
+                    <v-col cols="12">
+                      <v-chip small color="#F9B320" dark
+                        >{{ `${course.start_time} - ${course.end_time}` }}
+                        {{ $t("o'clock") }}</v-chip
+                      >
+                    </v-col>
+                  </v-row>
+                </v-col>
+              </v-row>
+              <v-row dense>
+                <v-col
+                  align="center"
+                  @click="
+                    !course.show_assessment
+                      ? OpenAssessment(course)
+                      : (course.show_assessment = false)
+                  "
+                  class="cursor-pointer"
+                  >{{ $t("assess students") }}
+                  <v-icon color="#ff6b81">{{
+                    course.show_assessment
+                      ? "mdi-chevron-up"
+                      : "mdi-chevron-down"
+                  }}</v-icon></v-col
+                >
+                <v-col
+                  align="center"
+                  @click="
+                    !course.show_assessment_pantential
+                      ? OpenAssessmentPotential(course)
+                      : (course.show_assessment_pantential = false)
+                  "
+                  class="cursor-pointer"
+                  >{{ $t("assess potential") }}
+                  <v-icon color="#ff6b81">{{
+                    course.show_assessment_pantential
+                      ? "mdi-chevron-up"
+                      : "mdi-chevron-down"
+                  }}</v-icon></v-col
+                >
+                <v-col
+                  align="center"
+                  @click="
+                    !course.show_summary
+                      ? OpenSummary(course)
+                      : (course.show_summary = false)
+                  "
+                  class="cursor-pointer"
+                  >{{ $t("teaching summary notes") }}
+                  <v-icon color="#ff6b81">{{
+                    course.show_summary ? "mdi-chevron-up" : "mdi-chevron-down"
+                  }}</v-icon></v-col
+                >
+              </v-row>
+            </v-card-text>
+            <v-expand-transition>
+              <template v-if="course.show_assessment">
+                <v-card-text>
+                  <v-card
+                    flat
+                    v-if="
+                      student_check_in.filter(
+                        (v) =>
+                          v.type === 'general' &&
+                          (v.status == 'punctual' || v.status == 'late')
+                      ).length === 0
+                    "
+                  >
+                    <v-card-text
+                      class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg"
                     >
-                      <template v-slot:placeholder>
-                        <v-row
-                          class="fill-height ma-0"
-                          align="center"
-                          justify="center"
-                        >
-                          <v-progress-circular
-                            indeterminate
-                            color="#ff6b81"
-                          ></v-progress-circular>
-                        </v-row>
-                      </template>
-                    </v-img>
-                  </v-col>
-                  <v-col>
-                    <v-row dense>
-                      <v-col class="font-bold text-md">{{
-                        GenDateStr(new Date(course.start_date_str))
-                      }}</v-col>
-                    </v-row>
-                    <v-row dense>
-                      <v-col cols="12">
-                        <rowData mini icon="mdi-account"
-                          >{{ $t("warraphat learning sphere") }} :
+                      <span class="text-lg font-bold">
+                        <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                        {{ $t("student assessment data not found") }}
+                      </span>
+                    </v-card-text>
+                  </v-card>
+                  <v-card
+                    outlined
+                    class="mb-3"
+                    v-for="(student, index) in student_check_in.filter(
+                      (v) =>
+                        v.type === 'general' &&
+                        (v.status == 'punctual' || v.status == 'late')
+                    )"
+                    :key="`${index}-checkin`"
+                  >
+                    <v-card-text>
+                      <v-row dense>
+                        <v-col cols="12" sm class="text-lg font-bold">
+                          {{ index + 1 }} .
                           {{
                             $i18n.locale == "th"
-                              ? course.category_name
-                              : course.category_name_en
-                          }}</rowData
+                              ? student.fullname
+                              : student.fullname_en
+                          }}</v-col
                         >
-                      </v-col>
-
-                      <v-col cols="12" v-if="course.course_package_name">
-                        <rowData mini icon="mdi-account-box-multiple"
-                          >{{ $t("package") }} :
-                          {{ course.course_package_name }}</rowData
-                        >
-                      </v-col>
-                      <v-col cols="12">
-                        <rowData mini icon="mdi-bookshelf"
-                          >{{ $t("course") }} :{{
-                            `${
-                              $i18n.locale == "th"
-                                ? course.name
-                                : course.subtitle
-                            }`
-                          }}</rowData
-                        >
-                      </v-col>
-                      <v-col cols="12">
-                        <rowData mini icon="mdi-clock-time-four-outline"
-                          >{{ $t("teaching time") }}
-                          {{ course.course_per_time }} {{ $t("hour") }}</rowData
-                        >
-                      </v-col>
-                      <v-col cols="12">
-                        <v-chip small color="#F9B320" dark
-                          >{{ `${course.start_time} - ${course.end_time}` }}
-                          {{ $t("o'clock") }}</v-chip
-                        >
-                      </v-col>
-                    </v-row>
-                  </v-col>
-                </v-row>
-                <v-row dense>
-                  <v-col
-                    align="center"
-                    @click="
-                      !course.show_assessment
-                        ? OpenAssessment(course)
-                        : (course.show_assessment = false)
-                    "
-                    class="cursor-pointer"
-                    >{{ $t("assess students") }}
-                    <v-icon color="#ff6b81">{{
-                      course.show_assessment
-                        ? "mdi-chevron-up"
-                        : "mdi-chevron-down"
-                    }}</v-icon></v-col
-                  >
-                  <v-col
-                    align="center"
-                    @click="
-                      !course.show_assessment_pantential
-                        ? OpenAssessmentPotential(course)
-                        : (course.show_assessment_pantential = false)
-                    "
-                    class="cursor-pointer"
-                    >{{ $t("assess potential") }}
-                    <v-icon color="#ff6b81">{{
-                      course.show_assessment_pantential
-                        ? "mdi-chevron-up"
-                        : "mdi-chevron-down"
-                    }}</v-icon></v-col
-                  >
-                  <v-col
-                    align="center"
-                    @click="
-                      !course.show_summary
-                        ? OpenSummary(course)
-                        : (course.show_summary = false)
-                    "
-                    class="cursor-pointer"
-                    >{{ $t("teaching summary notes") }}
-                    <v-icon color="#ff6b81">{{
-                      course.show_summary
-                        ? "mdi-chevron-up"
-                        : "mdi-chevron-down"
-                    }}</v-icon></v-col
-                  >
-                </v-row>
-              </v-card-text>
-              <v-expand-transition>
-                <template v-if="course.show_assessment">
+                        <v-col cols="12" sm="auto">
+                          <v-row dense class="d-flex aling-center">
+                            <v-col align="right">
+                              {{ $t("attendance") }}:
+                            </v-col>
+                            <v-col cols="auto">
+                              <v-chip
+                                class="font-bold"
+                                :color="
+                                  check_in_status_options.filter(
+                                    (v) => v.value === student.status
+                                  )[0].bg_color
+                                "
+                                :style="`color:${
+                                  check_in_status_options.filter(
+                                    (v) => v.value === student.status
+                                  )[0].color
+                                }`"
+                                v-if="
+                                  check_in_status_options.filter(
+                                    (v) => v.value === student.status
+                                  ).length > 0
+                                "
+                                >{{
+                                  $t(
+                                    check_in_status_options.filter(
+                                      (v) => v.value === student.status
+                                    )[0].label
+                                  )
+                                }}
+                              </v-chip>
+                            </v-col>
+                          </v-row>
+                        </v-col>
+                      </v-row>
+                      <v-row dense>
+                        <v-col cols="12" sm align="left" class="font-semibold">
+                          {{ $t("developmental level") }}
+                          <v-rating
+                            background-color="pink lighten-3"
+                            color="pink"
+                            large
+                            :value="
+                              evolution_options.filter(
+                                (v) => v.value === student.assessment.evolution
+                              ).length > 0
+                                ? evolution_options.filter(
+                                    (v) =>
+                                      v.value === student.assessment.evolution
+                                  )[0].num_value
+                                : 0
+                            "
+                            :length="
+                              evolution_options.filter(
+                                (v) => v.value === student.assessment.evolution
+                              ).length > 0
+                                ? evolution_options.filter(
+                                    (v) =>
+                                      v.value === student.assessment.evolution
+                                  )[0].num_value
+                                : 0
+                            "
+                            small
+                            readonly
+                          ></v-rating>
+                        </v-col>
+                        <v-col cols="12" sm align="left" class="font-semibold"
+                          >{{ $t("interest level") }}
+                          <v-rating
+                            background-color="pink lighten-3"
+                            color="pink"
+                            large
+                            :value="
+                              interest_options.filter(
+                                (v) => v.value === student.assessment.interest
+                              ).length > 0
+                                ? interest_options.filter(
+                                    (v) =>
+                                      v.value === student.assessment.interest
+                                  )[0].num_value
+                                : 0
+                            "
+                            :length="
+                              interest_options.filter(
+                                (v) => v.value === student.assessment.interest
+                              ).length > 0
+                                ? interest_options.filter(
+                                    (v) =>
+                                      v.value === student.assessment.interest
+                                  )[0].num_value
+                                : 0
+                            "
+                            small
+                            readonly
+                          ></v-rating>
+                        </v-col>
+                        <v-col cols="12" sm align="center">
+                          <v-btn
+                            class="w-full"
+                            outlined
+                            @click="showComment(student)"
+                            color="#ff6b81"
+                            ><v-icon>mdi-message-text-outline</v-icon
+                            >{{ $t("view comments") }}</v-btn
+                          >
+                        </v-col>
+                      </v-row>
+                    </v-card-text>
+                  </v-card>
+                </v-card-text>
+              </template>
+            </v-expand-transition>
+            <v-expand-transition>
+              <template v-if="course.show_assessment_pantential">
+                <v-card-text>
                   <v-card-text>
                     <v-card
                       flat
                       v-if="
-                        student_check_in.filter(
-                          (v) =>
-                            v.type === 'general' &&
-                            (v.status == 'punctual' || v.status == 'late')
-                        ).length === 0
+                        student_check_in.filter((v) => v.potential).length === 0
                       "
                     >
                       <v-card-text
@@ -379,7 +534,7 @@
                       >
                         <span class="text-lg font-bold">
                           <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                          {{ $t("student assessment data not found") }}
+                          {{ $t("no potential assessment information found") }}
                         </span>
                       </v-card-text>
                     </v-card>
@@ -387,9 +542,7 @@
                       outlined
                       class="mb-3"
                       v-for="(student, index) in student_check_in.filter(
-                        (v) =>
-                          v.type === 'general' &&
-                          (v.status == 'punctual' || v.status == 'late')
+                        (v) => v.potential
                       )"
                       :key="`${index}-checkin`"
                     >
@@ -403,7 +556,7 @@
                                 : student.fullname_en
                             }}</v-col
                           >
-                          <v-col cols="12" sm="auto">
+                          <v-col cols="12" sm="auto" align="center">
                             <v-row dense class="d-flex aling-center">
                               <v-col align="right">
                                 {{ $t("attendance") }}:
@@ -439,319 +592,152 @@
                           </v-col>
                         </v-row>
                         <v-row dense>
-                          <v-col
-                            cols="12"
-                            sm
-                            align="left"
-                            class="font-semibold"
-                          >
-                            {{ $t("developmental level") }}
+                          <v-col align="left" class="font-semibold"
+                            >{{ $t("developmental level") }}:
                             <v-rating
                               background-color="pink lighten-3"
                               color="pink"
                               large
+                              readonly
+                              small
                               :value="
                                 evolution_options.filter(
-                                  (v) =>
-                                    v.value === student.assessment.evolution
+                                  (v) => v.value === student.potential.evolution
                                 ).length > 0
                                   ? evolution_options.filter(
                                       (v) =>
-                                        v.value === student.assessment.evolution
+                                        v.value === student.potential.evolution
                                     )[0].num_value
                                   : 0
                               "
                               :length="
                                 evolution_options.filter(
-                                  (v) =>
-                                    v.value === student.assessment.evolution
+                                  (v) => v.value === student.potential.evolution
                                 ).length > 0
                                   ? evolution_options.filter(
                                       (v) =>
-                                        v.value === student.assessment.evolution
+                                        v.value === student.potential.evolution
                                     )[0].num_value
                                   : 0
                               "
-                              small
-                              readonly
                             ></v-rating>
                           </v-col>
-                          <v-col cols="12" sm align="left" class="font-semibold"
-                            >{{ $t("interest level") }}
-                            <v-rating
-                              background-color="pink lighten-3"
-                              color="pink"
-                              large
-                              :value="
-                                interest_options.filter(
-                                  (v) => v.value === student.assessment.interest
-                                ).length > 0
-                                  ? interest_options.filter(
-                                      (v) =>
-                                        v.value === student.assessment.interest
-                                    )[0].num_value
-                                  : 0
-                              "
-                              :length="
-                                interest_options.filter(
-                                  (v) => v.value === student.assessment.interest
-                                ).length > 0
-                                  ? interest_options.filter(
-                                      (v) =>
-                                        v.value === student.assessment.interest
-                                    )[0].num_value
-                                  : 0
-                              "
-                              small
-                              readonly
-                            ></v-rating>
-                          </v-col>
-                          <v-col cols="12" sm align="center">
+                          <v-col col="12" sm="auto">
                             <v-btn
                               class="w-full"
                               outlined
-                              @click="showComment(student)"
+                              @click="showPotentialComment(student)"
                               color="#ff6b81"
                               ><v-icon>mdi-message-text-outline</v-icon
                               >{{ $t("view comments") }}</v-btn
                             >
                           </v-col>
                         </v-row>
-                      </v-card-text>
-                    </v-card>
-                  </v-card-text>
-                </template>
-              </v-expand-transition>
-              <v-expand-transition>
-                <template v-if="course.show_assessment_pantential">
-                  <v-card-text>
-                    <v-card-text>
-                      <v-card
-                        flat
-                        v-if="
-                          student_check_in.filter((v) => v.potential).length ===
-                          0
-                        "
-                      >
-                        <v-card-text
-                          class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg"
-                        >
-                          <span class="text-lg font-bold">
-                            <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                            {{
-                              $t("no potential assessment information found")
-                            }}
-                          </span>
-                        </v-card-text>
-                      </v-card>
-                      <v-card
-                        outlined
-                        class="mb-3"
-                        v-for="(student, index) in student_check_in.filter(
-                          (v) => v.potential
-                        )"
-                        :key="`${index}-checkin`"
-                      >
-                        <v-card-text>
-                          <v-row dense>
-                            <v-col cols="12" sm class="text-lg font-bold">
-                              {{ index + 1 }} .
-                              {{
-                                $i18n.locale == "th"
-                                  ? student.fullname
-                                  : student.fullname_en
-                              }}</v-col
-                            >
-                            <v-col cols="12" sm="auto" align="center">
-                              <v-row dense class="d-flex aling-center">
-                                <v-col align="right">
-                                  {{ $t("attendance") }}:
-                                </v-col>
-                                <v-col cols="auto">
-                                  <v-chip
-                                    class="font-bold"
-                                    :color="
-                                      check_in_status_options.filter(
-                                        (v) => v.value === student.status
-                                      )[0].bg_color
-                                    "
-                                    :style="`color:${
-                                      check_in_status_options.filter(
-                                        (v) => v.value === student.status
-                                      )[0].color
-                                    }`"
-                                    v-if="
-                                      check_in_status_options.filter(
-                                        (v) => v.value === student.status
-                                      ).length > 0
-                                    "
-                                    >{{
-                                      $t(
-                                        check_in_status_options.filter(
-                                          (v) => v.value === student.status
-                                        )[0].label
-                                      )
-                                    }}
-                                  </v-chip>
-                                </v-col>
-                              </v-row>
-                            </v-col>
-                          </v-row>
-                          <v-row dense>
-                            <v-col align="left" class="font-semibold"
-                              >{{ $t("developmental level") }}:
-                              <v-rating
-                                background-color="pink lighten-3"
-                                color="pink"
-                                large
-                                readonly
-                                small
-                                :value="
-                                  evolution_options.filter(
-                                    (v) =>
-                                      v.value === student.potential.evolution
-                                  ).length > 0
-                                    ? evolution_options.filter(
-                                        (v) =>
-                                          v.value ===
-                                          student.potential.evolution
-                                      )[0].num_value
-                                    : 0
-                                "
-                                :length="
-                                  evolution_options.filter(
-                                    (v) =>
-                                      v.value === student.potential.evolution
-                                  ).length > 0
-                                    ? evolution_options.filter(
-                                        (v) =>
-                                          v.value ===
-                                          student.potential.evolution
-                                      )[0].num_value
-                                    : 0
-                                "
-                              ></v-rating>
-                            </v-col>
-                            <v-col col="12" sm="auto">
-                              <v-btn
-                                class="w-full"
-                                outlined
-                                @click="showPotentialComment(student)"
-                                color="#ff6b81"
-                                ><v-icon>mdi-message-text-outline</v-icon
-                                >{{ $t("view comments") }}</v-btn
-                              >
-                            </v-col>
-                          </v-row>
-                          <v-row dense>
-                            <v-col> {{ $t("interest level") }}</v-col>
-                          </v-row>
-                          <v-row dense>
-                            <v-col class="font-semibold">
-                              <span>
-                                {{ student.potential.interest }}
-                              </span>
-                            </v-col>
-                          </v-row>
-                        </v-card-text>
-                      </v-card>
-                    </v-card-text>
-                  </v-card-text>
-                </template>
-              </v-expand-transition>
-              <v-expand-transition>
-                <template v-if="course.show_summary">
-                  <v-card-text>
-                    <v-card
-                      flat
-                      v-if="
-                        !coach_check_in.summary &&
-                        !coach_check_in.homework &&
-                        !coach_check_in.attachment
-                      "
-                    >
-                      <v-card-text
-                        class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg"
-                      >
-                        <span class="text-lg font-bold">
-                          <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
-                          {{ $t("can't find teaching summaries") }}
-                        </span>
-                      </v-card-text>
-                    </v-card>
-                    <v-card outlined v-else>
-                      <v-card-text>
-                        <v-row>
-                          <v-col>
-                            {{ $t("teaching notes") }} :
-                            <span class="font-semibold">{{
-                              coach_check_in.summary
-                                ? coach_check_in.summary
-                                : "-"
-                            }}</span></v-col
-                          >
+                        <v-row dense>
+                          <v-col> {{ $t("interest level") }}</v-col>
                         </v-row>
-                        <v-row>
-                          <v-col>
-                            {{ $t("development / homework") }} :
-                            <span class="font-semibold">{{
-                              coach_check_in.homework
-                                ? coach_check_in.homework
-                                : "-"
-                            }}</span>
+                        <v-row dense>
+                          <v-col class="font-semibold">
+                            <span>
+                              {{ student.potential.interest }}
+                            </span>
                           </v-col>
                         </v-row>
-                        <div v-if="coach_check_in.attachment.length > 0">
-                          <v-row dense>
-                            <v-col class="font-bold">
-                              {{ $t("attachments") }} :</v-col
-                            >
-                          </v-row>
-
-                          <v-card
-                            @click="openFileSummary(file)"
-                            flat
-                            class="mb-3"
-                            v-for="(file, index) of coach_check_in.attachment"
-                            :key="`${index}-fileattachment`"
-                          >
-                            <v-card-text
-                              class="border-2 border-[#ff6b81] rounded-lg"
-                            >
-                              <v-row dense>
-                                <v-col cols="auto" class="pr-2">
-                                  <imgFileType
-                                    :mime_type="file.filesType"
-                                  ></imgFileType>
-                                </v-col>
-                                <v-col class="px-2">
-                                  <span class="font-bold">{{
-                                    file.originalFilesName
-                                  }}</span
-                                  ><br />
-                                  <span class="text-caption"
-                                    >{{ $t("file size") }} :
-                                    {{ (file.filesSize / 1000000).toFixed(2) }}
-                                    MB</span
-                                  >
-                                </v-col>
-                              </v-row>
-                            </v-card-text>
-                          </v-card>
-                        </div>
                       </v-card-text>
                     </v-card>
                   </v-card-text>
-                </template>
-              </v-expand-transition> -->
-            </v-card>
-          </v-col>
-        </div>
+                </v-card-text>
+              </template>
+            </v-expand-transition>
+            <v-expand-transition>
+              <template v-if="course.show_summary">
+                <v-card-text>
+                  <v-card
+                    flat
+                    v-if="
+                      !coach_check_in.summary &&
+                      !coach_check_in.homework &&
+                      !coach_check_in.attachment
+                    "
+                  >
+                    <v-card-text
+                      class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg"
+                    >
+                      <span class="text-lg font-bold">
+                        <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
+                        {{ $t("can't find teaching summaries") }}
+                      </span>
+                    </v-card-text>
+                  </v-card>
+                  <v-card outlined v-else>
+                    <v-card-text>
+                      <v-row>
+                        <v-col>
+                          {{ $t("teaching notes") }} :
+                          <span class="font-semibold">{{
+                            coach_check_in.summary
+                              ? coach_check_in.summary
+                              : "-"
+                          }}</span></v-col
+                        >
+                      </v-row>
+                      <v-row>
+                        <v-col>
+                          {{ $t("development / homework") }} :
+                          <span class="font-semibold">{{
+                            coach_check_in.homework
+                              ? coach_check_in.homework
+                              : "-"
+                          }}</span>
+                        </v-col>
+                      </v-row>
+                      <div v-if="coach_check_in.attachment.length > 0">
+                        <v-row dense>
+                          <v-col class="font-bold">
+                            {{ $t("attachments") }} :</v-col
+                          >
+                        </v-row>
+
+                        <v-card
+                          @click="openFileSummary(file)"
+                          flat
+                          class="mb-3"
+                          v-for="(file, index) of coach_check_in.attachment"
+                          :key="`${index}-fileattachment`"
+                        >
+                          <v-card-text
+                            class="border-2 border-[#ff6b81] rounded-lg"
+                          >
+                            <v-row dense>
+                              <v-col cols="auto" class="pr-2">
+                                <imgFileType
+                                  :mime_type="file.filesType"
+                                ></imgFileType>
+                              </v-col>
+                              <v-col class="px-2">
+                                <span class="font-bold">{{
+                                  file.originalFilesName
+                                }}</span
+                                ><br />
+                                <span class="text-caption"
+                                  >{{ $t("file size") }} :
+                                  {{ (file.filesSize / 1000000).toFixed(2) }}
+                                  MB</span
+                                >
+                              </v-col>
+                            </v-row>
+                          </v-card-text>
+                        </v-card>
+                      </div>
+                    </v-card-text>
+                  </v-card>
+                </v-card-text>
+              </template>
+            </v-expand-transition>
+          </v-card>
+        </v-col>
       </v-row>
-      <v-card
-        flat
-        v-if="this.data_selected === null || this.filter_course == ''"
-      >
+      <v-card flat v-if="my_courses?.length <= 0 || !this.no_value">
         <v-card-text
           class="pa-2 py-4 text-center border-2 border-[#ff6b81] rounded-lg"
         >
@@ -1084,14 +1070,17 @@
       <v-row dense>
         <v-col>
           <span class="font-bold">{{ $t("choose a course") }}</span>
+
           <v-autocomplete
             v-model="filter_course_student"
-            :item-text="$i18n.locale == 'th' ? 'name' : 'subtitle'"
+            :items="course_coach_list"
+            :item-text="
+              $i18n.locale == 'th' ? 'course_name_th' : 'course_name_en'
+            "
             item-value="course_id"
-            :items="course_coach_list.filter((v) => !v.type)"
-            @change="filterCourseStudent(filter_course_student)"
             outlined
             dense
+            @change="filterCourseStudent(filter_course_student)"
           >
             <template v-slot:no-data>
               <v-row dense>
@@ -1138,7 +1127,14 @@
           <v-data-table
             class="elevation-1 header-table"
             :headers="studentListHeader"
-            :items="student_list"
+            :items="student_list.data"
+            :items-per-page="itemsPerPage"
+            :server-items-length="student_list.amount"
+            :options.sync="options_student_list"
+            ref="studentList"
+            :footer-props="{
+              'disable-pagination': disable_pagination_btn,
+            }"
           >
             <template v-slot:[`item.firstName`]="{ item }">
               {{ $i18n.locale == "th" ? item.firstNameTh : item.firstNameEn }}
@@ -1146,9 +1142,9 @@
             <template v-slot:[`item.lastName`]="{ item }">
               {{ $i18n.locale == "th" ? item.lastNameTh : item.lastNameEn }}
             </template>
-            <template v-slot:no-data>
-              {{ $t("no data found in table") }}</template
-            >
+            <template v-slot:[`no-data`]>
+              <div class="font-bold">{{ $t("no data found in table") }}</div>
+            </template>
           </v-data-table>
         </v-card-text>
       </v-card>
@@ -1552,10 +1548,10 @@ export default {
     form_coach_leave: false,
     singleExpand: false,
     expanded: [],
-    filter_course: null,
-    filter_course_student: "",
+    filter_course: "",
     user_detail: "",
     tab: "teaching list",
+    // tab: "teachingList",
     today: new Date(),
     evolution_options: [
       { label: "ดีมาก", value: "very good", num_value: 5 },
@@ -1669,6 +1665,7 @@ export default {
     tabs_change: false,
     disable_pagination_btn: false,
     coach_leaves_is_loadings: true,
+    loading_tab_one: true,
     page: 1,
     itemsPerPage: 10,
     scrollTop: 0,
@@ -1677,16 +1674,29 @@ export default {
     waitingProcess: false,
     sameCourseLength: false,
     data_selected: null,
+    data_of_day: [],
+    value_start_date: "",
+    value_end_date: "",
+    options_student_list: {},
+    filter_course_student: "",
+    select_course: false,
+    select_temp: "",
+    type_select: "",
+    loading_tab_two: true,
+    no_value: false,
   }),
 
   watch: {
-    // tab: function () {
-    //   this.GetMyCourses({ coach_id: this.user_detail.account_id });
-    //   this.my_courses_is_loading = false;
-    // },
     options: {
       handler() {
         this.loadItems();
+      },
+    },
+    options_student_list: {
+      async handler() {
+        if (this.filter_course_student) {
+          await this.loadItemsTable();
+        }
       },
     },
   },
@@ -1698,30 +1708,22 @@ export default {
       this.loginShareToken(this.$route);
     }
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    // this.GetMyCourses({ coach_id: this.user_detail.account_id });
-    // this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
     this.GetCoachs();
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll);
   },
-  mounted() {
-    let currentMonth = new Date().getMonth() + 1;
-    let currentYear = new Date().getFullYear();
-    console.log("Current Month:", currentMonth);
-    console.log("Current Year:", currentYear);
 
-    if (this.tab === "teaching list") {
-      this.GetCalendarCoach({ month: currentMonth, year: currentYear });
-    }
-    if (this.tab === "my teaching") {
-      this.GetCourseCoachList();
-    }
-    // if (this.tab === "teaching list") {
-    //   this.GetCourseCoachList();
-    // }
+  async mounted() {
+    let startDate = new Date().toISOString().split("T")[0];
+    let endDate = new Date().toISOString().split("T")[0];
+    await this.GetCalendarCoach({
+      start_date: startDate,
+      end_date: endDate,
+    });
+    this.loading_tab_one = false;
+
     window.addEventListener("scroll", this.handleScroll);
-    // this.GetMyCourses({ limit: 1000, page: 1 });
     if (
       this.user_detail?.roles?.filter(
         (val) => val === "R_3" || val === "R_2" || val === "R_1"
@@ -1737,129 +1739,6 @@ export default {
     this.GetLoading(false);
   },
 
-  computed: {
-    ...mapGetters({
-      my_courses: "CoachModules/getMyCourses",
-      coachs: "CourseModules/getCoachs",
-      coach_leaves: "CoachModules/getCoachLeaves",
-      attachment_leave: "CoachModules/getAttachmentLeave",
-      student_check_in: "CoachModules/getStudentCheckIn",
-      coach_check_in: "CoachModules/getCoachCheckIn",
-      my_courses_is_loading: "CoachModules/getMyCoursesIsLoading",
-      profile_detail: "ProfileModules/getProfileDetail",
-      show_dialog_coach_leave_form: "CoachModules/getShowDialogCoachLeaveForm",
-      coach_leaves_is_loading: "CoachModules/getCoachLeavesIsLoading",
-      student_list: "CoachModules/getstudentList",
-      student_list_load: "CoachModules/getStudentListLoading",
-      courses_option: "CoachModules/getCoursesOption",
-      course_coach_list: "CoachModules/getCourseCoachList",
-      calendar_coach: "CoachModules/getCalendarCoach",
-    }),
-    column() {
-      return [
-        {
-          text: this.$t("no."),
-          align: "center",
-          sortable: false,
-          value: "count",
-        },
-
-        {
-          text: this.$t("date"),
-          align: "start",
-          sortable: false,
-          value: "date",
-        },
-        {
-          text: this.$t("type of take leave"),
-          align: "start",
-          sortable: false,
-          value: "leaveType",
-        },
-        {
-          text: this.$t("status"),
-          align: "start",
-          sortable: false,
-          value: "status",
-        },
-        { text: "", align: "right", sortable: false, value: "action" },
-      ];
-    },
-    studentListHeader() {
-      return [
-        {
-          text: this.$t("no."),
-          align: "center",
-          sortable: false,
-          value: "index",
-        },
-
-        {
-          text: this.$t("first name"),
-          align: "start",
-          sortable: false,
-          value: "firstName",
-        },
-        {
-          text: this.$t("last name"),
-          align: "start",
-          sortable: false,
-          value: "lastName",
-        },
-        {
-          text: this.$t("phone number"),
-          align: "start",
-          sortable: false,
-          value: "tel",
-        },
-        {
-          text: this.$t("email"),
-          align: "start",
-          sortable: false,
-          value: "email",
-        },
-      ];
-    },
-    // SetFunctionsComputed() {
-    //   this.GetMyCourses({ coach_id: this.user_detail.account_id });
-    //   this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
-    //   this.GetCoachs();
-    //   return "";
-    // },
-    genToday() {
-      return moment(new Date()).format("YYYY-MM-DD");
-    },
-
-    validateCoachLeave() {
-      let start_date = this.coach_leave_data.start_date ? true : false;
-      let end_date = this.coach_leave_data.end_date ? true : false;
-      let period = this.coach_leave_data.period ? true : false;
-      let leave_type = this.coach_leave_data.leave_type ? true : false;
-      let course =
-        this.coach_leave_data.courses?.length > 0
-          ? this.coach_leave_data.courses[0].my_course_id
-            ? true
-            : false
-          : false;
-      return !(start_date && end_date && period && leave_type && course);
-    },
-
-    periods() {
-      return [
-        { label: this.$t("full day leave"), value: "full" },
-        { label: this.$t("morning leave"), value: "morning" },
-        { label: this.$t("afternoon leave"), value: "afternoon" },
-      ];
-    },
-
-    leaveTypes() {
-      return [
-        { label: this.$t("sick leave"), value: "sick" },
-        { label: this.$t("personal"), value: "personal" },
-        { label: this.$t("take annual leave"), value: "take annual leave" },
-      ];
-    },
-  },
   methods: {
     ...mapActions({
       GetAllHolidays: "ManageScheduleModules/GetAllHolidays",
@@ -1880,39 +1759,55 @@ export default {
       GetCourseCoachList: "CoachModules/GetCourseCoachList",
       GetCalendarCoach: "CoachModules/GetCalendarCoach",
     }),
-    async filterMycourse() {
-      console.log("this.filter_course :>> ", this.filter_course);
-      if (this.filter_course) {
-        return this.my_courses.data?.filter(
-          (v) => v.course_id === this.filter_course
-        );
-      }
-    },
-    handleInput(item) {
-      // console.log("item", item);
-
-      if (item === null) {
-        console.log("item", item);
-        item = this.data_selected;
-      } else {
-        this.filterMycourse();
-        this.GetMyCourses({ limit: 10, page: 1 });
-      }
-    },
-    filterCourseStudent(items) {
-      this.GetstudentList({
-        coach_id: this.user_detail.account_id,
-        course_id: items,
-        type: this.select_student_type,
-      });
-    },
-    selectStudentType(items) {
-      if (this.filter_course_student !== "") {
-        this.GetstudentList({
-          coach_id: this.user_detail.account_id,
-          course_id: this.filter_course_student,
-          type: items,
+    async GetSchedule(val) {
+      if (val === "day") {
+        await this.GetCalendarCoach({
+          start_date: new Date().toISOString().split("T")[0],
+          end_date: new Date().toISOString().split("T")[0],
         });
+      }
+    },
+    async changeTabs(val) {
+      if (val === "teaching list") {
+        let current_date = new Date().toISOString().split("T")[0];
+
+        //หน้า รายการสอนวันนี้
+        await this.GetCalendarCoach({
+          start_date: current_date,
+          end_date: current_date,
+        });
+        this.loading_tab_one = false;
+      } else if (val === "my teaching" || val === "student lists") {
+        //การสอนของฉัน || รายชื่อน.ร
+        this.filter_course = "";
+        this.filter_course_student = "";
+        this.student_list.data = [];
+        this.$store.commit("CoachModules/SetMyCourses", []);
+
+        await this.GetCourseCoachList();
+        this.loading_tab_two = false;
+      }
+    },
+    async handleInput(item) {
+      this.no_value = item;
+      if (item) {
+        this.loading_tab_two = true;
+        await this.GetMyCourses({ limit: 10, page: 1, course_id: item });
+        this.loading_tab_two = false;
+      } else {
+        item = this.data_selected;
+      }
+    },
+
+    async selectStudentType(items) {
+      if (this.filter_course_student !== "") {
+        this.student_list.data = [];
+
+        this.loading = true;
+        this.select_student_type = items;
+        this.options_student_list = { page: 1, itemsPerPage: 1 };
+        await this.loadItemsTable(this.filter_course_student);
+        this.loading = false;
       } else {
         Swal.fire({
           icon: "warning",
@@ -1924,8 +1819,14 @@ export default {
           timerProgressBar: true,
         });
       }
-
-      this.select_student_type = items;
+    },
+    async filterCourseStudent() {
+      if (this.select_temp !== this.filter_course_student) {
+        this.select_course = true;
+      }
+      this.loading = true;
+      await this.loadItemsTable(this.filter_course_student);
+      this.loading = false;
     },
     SelectedStatus(status) {
       this.select_status = status;
@@ -2202,6 +2103,7 @@ export default {
           await this.GetMyCourses({
             limit: this.courses_option.limit,
             page: this.courses_option.page + 1,
+            course_id: this.filter_course,
           });
 
           this.isDataReceived = false;
@@ -2216,6 +2118,44 @@ export default {
       }
     },
 
+    async loadItemsTable(status) {
+      this.filter_course_student =
+        !status || status === ""
+          ? this.filter_course_student === ""
+            ? ""
+            : this.filter_course_student
+          : status;
+
+      if (this.select_temp !== this.filter_course_student) {
+        this.select_course = true;
+      }
+      this.select_temp = this.filter_course_student;
+
+      this.loading = true;
+      await this.moreDataTable(this.filter_course_student);
+      this.loading = false;
+    },
+
+    async moreDataTable() {
+      let { page, itemsPerPage } = this.options_student_list;
+      this.disable_pagination_btn = true;
+      this.student_list.data = [];
+      this.GetstudentList({
+        coach_id: this.user_detail.account_id,
+        course_id: this.filter_course_student,
+        type: this.select_student_type,
+        limit: itemsPerPage,
+        page: this.select_course ? 1 : page,
+      });
+      if (this.select_course) {
+        this.$refs.studentList.$props.options.page = 1;
+      }
+
+      this.disable_pagination_btn = false;
+      this.select_course = false;
+      this.orders_is_loadings = false;
+    },
+
     // filterMycourseStudent() {
     //   if (this.filter_course_student) {
     //     return this.my_courses.filter(
@@ -2225,6 +2165,129 @@ export default {
     //     return this.my_courses.filter((v) => !v.type);
     //   }
     // },
+  },
+  computed: {
+    ...mapGetters({
+      my_courses: "CoachModules/getMyCourses",
+      coachs: "CourseModules/getCoachs",
+      coach_leaves: "CoachModules/getCoachLeaves",
+      attachment_leave: "CoachModules/getAttachmentLeave",
+      student_check_in: "CoachModules/getStudentCheckIn",
+      coach_check_in: "CoachModules/getCoachCheckIn",
+      my_courses_is_loading: "CoachModules/getMyCoursesIsLoading",
+      profile_detail: "ProfileModules/getProfileDetail",
+      show_dialog_coach_leave_form: "CoachModules/getShowDialogCoachLeaveForm",
+      coach_leaves_is_loading: "CoachModules/getCoachLeavesIsLoading",
+      student_list: "CoachModules/getstudentList",
+      student_list_load: "CoachModules/getStudentListLoading",
+      courses_option: "CoachModules/getCoursesOption",
+      course_coach_list: "CoachModules/getCourseCoachList",
+      calendar_coach: "CoachModules/getCalendarCoach",
+    }),
+    column() {
+      return [
+        {
+          text: this.$t("no."),
+          align: "center",
+          sortable: false,
+          value: "count",
+        },
+
+        {
+          text: this.$t("date"),
+          align: "start",
+          sortable: false,
+          value: "date",
+        },
+        {
+          text: this.$t("type of take leave"),
+          align: "start",
+          sortable: false,
+          value: "leaveType",
+        },
+        {
+          text: this.$t("status"),
+          align: "start",
+          sortable: false,
+          value: "status",
+        },
+        { text: "", align: "right", sortable: false, value: "action" },
+      ];
+    },
+    studentListHeader() {
+      return [
+        {
+          text: this.$t("no."),
+          align: "center",
+          sortable: false,
+          value: "index",
+        },
+
+        {
+          text: this.$t("first name"),
+          align: "start",
+          sortable: false,
+          value: "firstName",
+        },
+        {
+          text: this.$t("last name"),
+          align: "start",
+          sortable: false,
+          value: "lastName",
+        },
+        {
+          text: this.$t("phone number"),
+          align: "start",
+          sortable: false,
+          value: "tel",
+        },
+        {
+          text: this.$t("email"),
+          align: "start",
+          sortable: false,
+          value: "email",
+        },
+      ];
+    },
+    // SetFunctionsComputed() {
+    //   this.GetMyCourses({ coach_id: this.user_detail.account_id });
+    //   this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
+    //   this.GetCoachs();
+    //   return "";
+    // },
+    genToday() {
+      return moment(new Date()).format("YYYY-MM-DD");
+    },
+
+    validateCoachLeave() {
+      let start_date = this.coach_leave_data.start_date ? true : false;
+      let end_date = this.coach_leave_data.end_date ? true : false;
+      let period = this.coach_leave_data.period ? true : false;
+      let leave_type = this.coach_leave_data.leave_type ? true : false;
+      let course =
+        this.coach_leave_data.courses?.length > 0
+          ? this.coach_leave_data.courses[0].my_course_id
+            ? true
+            : false
+          : false;
+      return !(start_date && end_date && period && leave_type && course);
+    },
+
+    periods() {
+      return [
+        { label: this.$t("full day leave"), value: "full" },
+        { label: this.$t("morning leave"), value: "morning" },
+        { label: this.$t("afternoon leave"), value: "afternoon" },
+      ];
+    },
+
+    leaveTypes() {
+      return [
+        { label: this.$t("sick leave"), value: "sick" },
+        { label: this.$t("personal"), value: "personal" },
+        { label: this.$t("take annual leave"), value: "take annual leave" },
+      ];
+    },
   },
 };
 </script>

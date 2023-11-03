@@ -37,10 +37,19 @@
         :event-overlap-threshold="30"
         @click:event="selectedDate($event)"
         :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
+        @change="GetSchedule"
       >
         <template v-slot:event="{ event }">
-          {{ event.start_time && event.end_time ? `${event.start_time} - ${event.end_time}` : '' }}
-          {{ event.start_time && event.end_time ? `\n${event.name} (${event.subtitle})` : `${event.name}` }}
+          {{
+            event.start_time && event.end_time
+              ? `${event.start_time} - ${event.end_time}`
+              : ""
+          }}
+          {{
+            event.start_time && event.end_time
+              ? `\n${event.name} (${event.subtitle})`
+              : `${event.name}`
+          }}
         </template>
         <template v-if="type === 'week'" v-slot:day-body="{ date, week }">
           <div
@@ -146,6 +155,7 @@
 
 <script>
 import { shortMonthToLongMonth } from "@/functions/functions";
+import { mapActions } from "vuex";
 
 export default {
   name: "calendarCoach",
@@ -252,6 +262,17 @@ export default {
     this.updateTime();
   },
   methods: {
+    ...mapActions({
+      GetCalendarCoach: "CoachModules/GetCalendarCoach",
+    }),
+
+    GetSchedule({ start, end }) {
+      this.GetCalendarCoach({
+        start_date: start.date,
+        end_date: end.date,
+      });
+    },
+
     genTitleCalender(title) {
       let title_part = title.split(" ");
 
