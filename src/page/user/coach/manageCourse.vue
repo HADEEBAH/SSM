@@ -85,7 +85,9 @@
                           : 'rounded-lg'
                       "
                       :src="
-                        course.course_img || course.course_img !== ''
+                        course.course_img &&
+                        course.course_img !== '' &&
+                        course.course_img !== null
                           ? course.course_img
                           : require(`@/assets/course/default_course_img.svg`)
                       "
@@ -1121,33 +1123,28 @@
       </v-row>
 
       <!-- TABLE -->
-      <v-card>
-        <v-card-text>
-          <!-- :loading="student_list_load" -->
-          <v-data-table
-            class="elevation-1 header-table"
-            :headers="studentListHeader"
-            :items="student_list.data"
-            :items-per-page="itemsPerPage"
-            :server-items-length="student_list.amount"
-            :options.sync="options_student_list"
-            ref="studentList"
-            :footer-props="{
-              'disable-pagination': disable_pagination_btn,
-            }"
-          >
-            <template v-slot:[`item.firstName`]="{ item }">
-              {{ $i18n.locale == "th" ? item.firstNameTh : item.firstNameEn }}
-            </template>
-            <template v-slot:[`item.lastName`]="{ item }">
-              {{ $i18n.locale == "th" ? item.lastNameTh : item.lastNameEn }}
-            </template>
-            <template v-slot:[`no-data`]>
-              <div class="font-bold">{{ $t("no data found in table") }}</div>
-            </template>
-          </v-data-table>
-        </v-card-text>
-      </v-card>
+      <v-data-table
+        class="elevation-1 header-table"
+        :headers="studentListHeader"
+        :items="student_list.data"
+        :items-per-page="itemsPerPage"
+        :server-items-length="student_list.amount"
+        :options.sync="options_student_list"
+        ref="studentList"
+        :footer-props="{
+          'disable-pagination': disable_pagination_btn,
+        }"
+      >
+        <template v-slot:[`item.firstName`]="{ item }">
+          {{ $i18n.locale == "th" ? item.firstNameTh : item.firstNameEn }}
+        </template>
+        <template v-slot:[`item.lastName`]="{ item }">
+          {{ $i18n.locale == "th" ? item.lastNameTh : item.lastNameEn }}
+        </template>
+        <template v-slot:[`no-data`]>
+          <div class="font-bold">{{ $t("no data found in table") }}</div>
+        </template>
+      </v-data-table>
     </div>
 
     <!-- CREATE :: LEAVE -->
