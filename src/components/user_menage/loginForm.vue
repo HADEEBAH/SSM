@@ -127,8 +127,8 @@ export default {
           (val || "").length > 5 ||
           this.$t("please enter a username at least 6 characters long"),
         (val) =>
-          (val || "").length < 20 ||
-          this.$t("please enter a username no longer than 20 characters"),
+          (val || "").length < 30 ||
+          this.$t("please enter a username no longer than 30 characters"),
         (val) =>
           /[A-Za-z0-9 ]/g.test(val) ||
           this.$t("the username cannot contain special characters"),

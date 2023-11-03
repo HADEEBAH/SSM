@@ -378,6 +378,9 @@ export default {
           (val || "").length > 5 ||
           this.$t("please enter a username at least 6 characters long"),
         (val) =>
+          (val || "").length < 30 ||
+          this.$t("please enter a username no longer than 30 characters"),
+        (val) =>
           val.split(" ").length <= 1 ||
           this.$t("the username cannot contain special characters"),
         (val) =>
