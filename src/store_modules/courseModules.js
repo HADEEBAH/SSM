@@ -319,6 +319,46 @@ const CourseModules = {
     },
   },
   actions: {
+    // DELETE : COURSE COACH
+    async DeleteCourseCoach(context, {course_id, course_coach_id}){
+      try{
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        let {data} = await axios.delete(`http://localhost:3000/api/v1/admincourse/delete-course-coach/${course_coach_id}`,config)
+        if(data.statusCode == 200){
+          context.dispatch("GetCourse", course_id)
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("coach deleted"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
+      }catch(error){
+        if (error.response.data.message == "This coach cannot be deleted. Because the middle of teaching") {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("can not delete coach"),
+            text: VueI18n.t(error.response.data.message),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+          context.dispatch("GetCourse", course_id)
+        }
+      }
+    },
     // COURSE TYPES
     async GetCourseTypes(context, { category_id }) {
       try {
