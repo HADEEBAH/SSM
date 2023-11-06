@@ -52,6 +52,7 @@
             :rules="rules.firstNameThRules"
             :disabled="!isEnabled"
             color="#ff6b81"
+            @paste="preventPaste"
           >
           </v-text-field>
         </v-col>
@@ -67,6 +68,7 @@
             :rules="rules.lastNameThRules"
             :disabled="!isEnabled"
             color="#ff6b81"
+            @paste="preventPaste"
           >
           </v-text-field>
         </v-col>
@@ -245,6 +247,9 @@ export default {
       GetProfileDetail: "ProfileModules/GetProfileDetail",
       changeProfileFail: "loginModules/changeProfileFail",
     }),
+    preventPaste(event) {
+      event.preventDefault();
+    },
     edit() {
       this.isDisabled = false;
       this.isEnabled = true;
