@@ -329,7 +329,7 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let {data} = await axios.delete(`http://localhost:3000/api/v1/admincourse/delete-course-coach/${course_coach_id}`,config)
+        let {data} = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/admincourse/delete-course-coach/${course_coach_id}`,config)
         if(data.statusCode == 200){
           context.dispatch("GetCourse", course_id)
           Swal.fire({
