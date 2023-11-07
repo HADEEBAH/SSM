@@ -967,12 +967,15 @@
         </template>
 
         <template v-slot:no-data>
-          <v-row class="fill-height ma-0 pa-5" align="center" justify="center">
+          <div class="font-bold">
+            {{ $t("no data found in table") }}
+          </div>
+          <!-- <v-row class="fill-height ma-0 pa-5" align="center" justify="center">
             <v-progress-circular
               indeterminate
               color="#ff6b81"
             ></v-progress-circular>
-          </v-row>
+          </v-row> -->
         </template>
 
         <template v-slot:[`item.count`]="{ item }">
@@ -2048,9 +2051,9 @@ export default {
       }
       this.tabs_temp = this.tab_selected;
 
-      this.loading = true;
+      this.coach_leaves_is_loadings = true;
       await this.moreData(this.tab_selected);
-      this.loading = false;
+      this.coach_leaves_is_loadings = false;
     },
     async moreData(status) {
       let { page, itemsPerPage } = this.options;
