@@ -203,7 +203,7 @@
         </template>
         <template v-slot:[`item.paid_date`]="{ item }">
           {{
-            item.paid_date ? GenDate(item.paid_date) + "" + item.paid_time : ""
+            item.paid_date ? GenDate(item.paid_date) + " " + item.paid_time : ""
           }}
         </template>
         <template v-slot:[`item.payment_status`]="{ item }">

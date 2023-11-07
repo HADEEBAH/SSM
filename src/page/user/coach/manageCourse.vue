@@ -1817,7 +1817,7 @@ export default {
 
         this.loading = true;
         this.select_student_type = items;
-        this.options_student_list = { page: 1, itemsPerPage: 1 };
+        this.options_student_list = { page: 1, itemsPerPage: 10 };
         await this.loadItemsTable(this.filter_course_student);
         this.loading = false;
       } else {
@@ -2144,7 +2144,7 @@ export default {
         coach_id: this.user_detail.account_id,
         course_id: this.filter_course_student,
         type: this.select_student_type,
-        limit: itemsPerPage,
+        limit: this.select_course ? 10 : itemsPerPage,
         page: this.select_course ? 1 : page,
       });
       if (this.select_course) {
