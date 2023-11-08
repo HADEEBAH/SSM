@@ -364,7 +364,6 @@ const loginModules = {
                     }
                 }
             } catch (response) {
-                console.log(response)
                 context.commit("SetIsLoading", false)
                 Swal.fire({
                     icon: 'error',
