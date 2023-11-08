@@ -748,15 +748,15 @@ const coachModules = {
         let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coach/leave`, payloadData, config)
         if (data.statusCode === 201) {
           if (admin) {
-            this.GetLeavesAll({
+            context.dispatch("GetLeavesAll",{
               limit : 10,
               page : 1,
             })
           
           } else {
-            this.GetLeavesByAccountId({
-              page : 10,
-              limit : 1,
+            context.dispatch("GetLeavesByAccountId",{
+              limit : 10,
+              page : 1,
               status :"",
             })
           }
