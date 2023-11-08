@@ -316,13 +316,8 @@ const orderModules = {
           },
         };
         let students = [];
-        let localhost = "http://localhost:3000"
-
-        // let { data } = await axios.get(
-        //   `${process.env.VUE_APP_URL}/api/v1/adminpayment/`,
-        //   config
-        // );
-        let { data } = await axios.get(`${localhost}/api/v1/adminpayment/limit?limit=${limit}&page=${page}&status=${status}`, config);
+        // let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/limit?limit=${limit}&page=${page}&status=${status}`, config);
         if (data.statusCode === 200) {
 
           startIndex = (page - 1) * limit;
@@ -399,7 +394,6 @@ const orderModules = {
             }
             if (order_item.students.length > 0) {
               order_item.students.forEach((student) => {
-                // console.log(student)
                 if (!student_name_list.includes(`${student?.firstNameTh} ${student?.lastNameTh}`)
                 ) {
                   student_name_list.push(
@@ -550,7 +544,6 @@ const orderModules = {
       }
     },
     async saveOrder(context, { regis_type }) {
-      // console.log(regis_type)
       context.commit("SetOrderIsLoading", true);
       try {
         let order = context.state.order;
@@ -672,7 +665,6 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // console.log(payload)
         let { data } = await axios.post(
           `${process.env.VUE_APP_URL}/api/v1/order/regis/course`,
           payload,
@@ -983,7 +975,6 @@ const orderModules = {
         };
         let updateStartDate = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/update-orderid/${order_data.orderId}`, {}, config)
         if (updateStartDate.data.statusCode == 200) {
-          // console.log(updateStartDate)
           let payment_payload = {
             orderId: order_data.orderNumber,
             paymentType: order_data.paymentType,

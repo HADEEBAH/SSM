@@ -30,6 +30,9 @@ const coachModules = {
     show_dialog_coach_leave_form: false,
     student_list: [],
     student_list_load: false,
+    courses_option: {},
+    course_coach_list: [],
+    calendar_coach: []
 
   },
   mutations: {
@@ -98,6 +101,15 @@ const coachModules = {
     },
     SetStudentListLoading(state, value) {
       state.student_list_load = value
+    },
+    SetCoursesOption(state, payload) {
+      state.courses_option = payload
+    },
+    SetCourseCoachList(state, payload) {
+      state.course_coach_list = payload
+    },
+    SetCalendarCoach(state, payload) {
+      state.calendar_coach = payload
     },
   },
   actions: {
@@ -543,7 +555,7 @@ const coachModules = {
     ShowDialogCoachLeaveForm(context, value) {
       context.commit("SetShowDialogCoachLeaveForm", value)
     },
-    async GetMyCourses(context, { coach_id }) {
+    async GetMyCourses(context, { limit, page, course_id }) {
       context.commit("SetMyCoursesIsLoading", true);
       try {
         let config = {
@@ -555,7 +567,8 @@ const coachModules = {
         };
         // let user_detail = JSON.parse(localStorage.getItem("userDetail"));
         let courses_task = [];
-        const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/coach/${coach_id}`, config);
+        // let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/coach-limit?limit=${limit}&page=${page}&courseId=${course_id}`, config)
         if (data.statusCode == 200) {
           let holidays = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
           if (holidays.data.statusCode === 200) {
@@ -568,51 +581,54 @@ const coachModules = {
               });
             }
           }
-          for await (const course of data.data) {
-            const course_data = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course.courseId}`);
-            if (course_data.data.statusCode == 200) {
-              for (const date of course.dates.date) {
-                let start_time = course.period.start;
-                let end_time = course.period.end;
-                const [start_hours, start_minutes] = start_time.split(":");
-                const [end_hours, end_minutes] = end_time.split(":");
-                const startDate = new Date(date);
-                startDate.setHours(start_hours);
-                startDate.setMinutes(start_minutes);
-                const endDate = new Date(date);
-                endDate.setHours(end_hours);
-                endDate.setMinutes(end_minutes);
-                courses_task.push({
-                  course_option_name: course.optionName,
-                  name: course_data.data.data.courseNameTh,
-                  subtitle: course_data.data.data.courseNameEn,
-                  course_id: course.courseId,
-                  time_id: course.timeId,
-                  type: course?.compType ? course?.compType : null,
-                  day_of_week_id: course.dayOfWeekId,
-                  coach: course.coachName,
-                  coach_en: course.coachNameEn,
-                  start_date: moment(startDate).format("YYYY-MM-DD"),
-                  start_date_str: moment(startDate).format("YYYY-MM-DD"),
-                  start: moment(startDate).format("YYYY-MM-DD HH:mm"),
-                  end: moment(endDate).format("YYYY-MM-DD HH:mm"),
-                  start_time: start_time,
-                  end_time: end_time,
-                  category_name: course_data.data.data.categoryNameTh,
-                  category_name_en: course_data.data.data.categoryNameEn,
-                  course_package_name: course.packageName,
-                  course_img: course_data.data.data.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${course_data.data.data.courseImg}` : "",
-                  course_per_time: course.hour_per_time,
-                  show_summary: false,
-                  show_assessment: false,
-                  show_assessment_pantential: false,
-                });
-              }
-            }
-          }
+          // for await (const course of data.data?.data) {
+          //   const course_data = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course.courseId}`);
+          //   if (course_data.data.statusCode == 200) {
+          //     for (const date of course.dates.date) {
+          //       let start_time = course.period.start;
+          //       let end_time = course.period.end;
+          //       const [start_hours, start_minutes] = start_time.split(":");
+          //       const [end_hours, end_minutes] = end_time.split(":");
+          //       const startDate = new Date(date);
+          //       startDate.setHours(start_hours);
+          //       startDate.setMinutes(start_minutes);
+          //       const endDate = new Date(date);
+          //       endDate.setHours(end_hours);
+          //       endDate.setMinutes(end_minutes);
+          //       courses_task.push({
+          //         course_option_name: course.optionName,
+          //         name: course_data.data.data.courseNameTh,
+          //         subtitle: course_data.data.data.courseNameEn,
+          //         course_id: course.courseId,
+          //         time_id: course.timeId,
+          //         type: course?.compType ? course?.compType : null,
+          //         day_of_week_id: course.dayOfWeekId,
+          //         coach: course.coachName,
+          //         coach_en: course.coachNameEn,
+          //         start_date: moment(startDate).format("YYYY-MM-DD"),
+          //         start_date_str: moment(startDate).format("YYYY-MM-DD"),
+          //         start: moment(startDate).format("YYYY-MM-DD HH:mm"),
+          //         end: moment(endDate).format("YYYY-MM-DD HH:mm"),
+          //         start_time: start_time,
+          //         end_time: end_time,
+          //         category_name: course_data.data.data.categoryNameTh,
+          //         category_name_en: course_data.data.data.categoryNameEn,
+          //         course_package_name: course.packageName,
+          //         course_img: course_data.data.data.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${course_data.data.data.courseImg}` : "",
+          //         course_per_time: course.hour_per_time,
+          //         show_summary: false,
+          //         show_assessment: false,
+          //         show_assessment_pantential: false,
+          //       });
+          //     }
+          //   }
+          // }
+          context.commit("SetCoursesOption", { limit: limit, page: page, count: data.data.length })
+
         }
-        context.commit("SetMyCourses", courses_task);
+        context.commit("SetMyCourses", data.data);
         context.commit("SetMyCoursesIsLoading", false);
+
         // if (data.statusCode == 200) {
         //   let courses_task = [];
         //   let holidays = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
@@ -885,10 +901,8 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/coach/leave/limit?limit=${limit}&page=${page}`, config)
-
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave`, config)
+        // let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/limit?limit=${limit}&page=${page}`, config)
         if (data.statusCode == 200) {
           data.data?.leaveList?.map((val, i) => {
             val.index = i + 1
@@ -915,10 +929,8 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/coach/leave/limits?limit=${limit}&page=${page}&status=${status}`, config)
-
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave`, config)
+        // let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/limits?limit=${limit}&page=${page}&status=${status}`, config)
         if (data.statusCode === 200) {
 
           startIndex = (page - 1) * limit;
@@ -943,10 +955,8 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/coach/leave/approved-limit/?limit=${limit}&page=${page}`, config)
-
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/approved-limit/?limit=${limit}&page=${page}`, config)
+        // let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/approved-limit/?limit=${limit}&page=${page}`, config)
         if (data.statusCode == 200) {
           data.data?.leaveList?.map((val, i) => {
             val.index = i + 1
@@ -970,10 +980,8 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/coach/leave/pending-limit/?limit=${limit}&page=${page}`, config)
-
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/pending-limit/?limit=${limit}&page=${page}`, config)
+        // let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/pending-limit/?limit=${limit}&page=${page}`, config)
         if (data.statusCode == 200) {
           data.data?.leaveList?.map((val, i) => {
             val.index = i + 1
@@ -997,10 +1005,8 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/coach/leave/reject-limit/?limit=${limit}&page=${page}`, config)
-
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/reject-limit/?limit=${limit}&page=${page}`, config)
+        // let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/reject-limit/?limit=${limit}&page=${page}`, config)
         if (data.statusCode == 200) {
           data.data?.leaveList?.map((val, i) => {
             val.index = i + 1
@@ -1024,10 +1030,8 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/coach/leave/cancel-limit/?limit=${limit}&page=${page}`, config)
-
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/cancel-limit/?limit=${limit}&page=${page}`, config)
+        // let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/cancel-limit/?limit=${limit}&page=${page}`, config)
         if (data.statusCode == 200) {
           data.data?.leaveList?.map((val, i) => {
             val.index = i + 1
@@ -1040,7 +1044,6 @@ const coachModules = {
         context.commit("SetCoachLeavesIsLoading", false)
       }
     },
-
     async SaveCoachLeave(context, { coach_leave_data, files, admin }) {
       try {
         let user_detail = JSON.parse(localStorage.getItem("userDetail"))
@@ -1131,10 +1134,9 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let localhost = "http://localhost:3000"
+        // let localhost = "http://localhost:3000"
 
-        let { data } = await axios.get(`${localhost}/api/v1/coach/leave/coach-limit?limit=${limit}&page=${page}&status=${status}`, config)
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/${account_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/coach-limit?limit=${limit}&page=${page}&status=${status}`, config)
         if (data.statusCode === 200) {
           data.data?.leavesList.map((val, i) => {
             val.index = i + 1
@@ -1260,8 +1262,9 @@ const coachModules = {
         console.log(error)
       }
     },
-    async GetstudentList(context, { coach_id, course_id, type }) {
-
+    async GetstudentList(context, { coach_id, course_id, type, limit, page }) {
+      let startIndex = 0;
+      let endIndex = 0;
       context.commit("SetStudentListLoading", true)
       try {
         let config = {
@@ -1271,12 +1274,18 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/student/?coachId=${coach_id}&courseId=${course_id}&type=${type}`, config)
+        // let localhost = "http://localhost:3000"
+
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/student-limit/?coachId=${coach_id}&courseId=${course_id}&type=${type}&limit=${limit}&page=${page}`, config)
         if (data.statusCode == 200) {
-          data.data.map((val, i) => {
+          data.data?.data?.map((val, i) => {
             val.index = i + 1
             return val
           })
+
+          startIndex = (page - 1) * limit;
+          endIndex = page * limit;
+          data.data.data = data.data?.data.slice(startIndex, endIndex)
 
         }
         context.commit("SetStudentList", data.data)
@@ -1298,6 +1307,42 @@ const coachModules = {
     },
     resetStudentList(context) {
       context.commit("SetStudentList", [])
+    },
+    async GetCourseCoachList(context) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        // let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/course-by-coach`, config)
+        if (data.statusCode == 200) {
+          context.commit("SetCourseCoachList", data.data)
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
+    async GetCalendarCoach(context, { start_date, end_date }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        // let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/coach-calendar?startDate=${start_date}&endDate=${end_date}`, config)
+        if (data.statusCode == 200) {
+          context.commit("SetCalendarCoach", data.data)
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
     },
   },
   getters: {
@@ -1367,6 +1412,16 @@ const coachModules = {
     getStudentListLoading(state) {
       return state.student_list_load
     },
+    getCoursesOption(state) {
+      return state.courses_option
+    },
+    getCourseCoachList(state) {
+      return state.course_coach_list
+    },
+    getCalendarCoach(state) {
+      return state.calendar_coach
+    },
+
   },
 };
 
