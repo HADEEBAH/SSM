@@ -1712,13 +1712,14 @@ export default {
     if (this.$route.query.token) {
       this.loginShareToken(this.$route);
     }
-    this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     this.GetCoachs();
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll);
   },
-
+  beforeMount(){
+    this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+  },
   async mounted() {
     let startDate = new Date().toISOString().split("T")[0];
     let endDate = new Date().toISOString().split("T")[0];
