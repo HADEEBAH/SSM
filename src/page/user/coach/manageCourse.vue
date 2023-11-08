@@ -1631,27 +1631,30 @@ export default {
     if (this.$route.query.token) {
       this.loginShareToken(this.$route);
     }
-    this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+   
     // this.GetMyCourses({ coach_id: this.user_detail.account_id });
     // this.GetLeavesByAccountId({ account_id: this.user_detail.account_id });
     this.GetCoachs();
   },
-
+  beforeMount(){
+    this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+  },
   mounted() {
-    this.GetMyCourses({ coach_id: this.user_detail.account_id });
-    this.my_courses_is_loading = false;
-    if (
-      this.user_detail?.roles?.filter(
-        (val) => val === "R_3" || val === "R_2" || val === "R_1"
-      ).length === 0
-    ) {
-      router.replace({ name: "UserKingdom" });
-    }
-    this.$store.dispatch("NavberUserModules/changeTitleNavber", "management");
-    if (this.user_detail?.account_id) {
-      this.GetProfileDetail(this.user_detail.account_id);
-    }
-
+    if( this.user_detail?.account_id){
+      this.GetMyCourses({ coach_id: this.user_detail.account_id });
+      this.my_courses_is_loading = false;
+      if (
+        this.user_detail?.roles?.filter(
+          (val) => val === "R_3" || val === "R_2" || val === "R_1"
+        ).length === 0
+      ) {
+        router.replace({ name: "UserKingdom" });
+      }
+      this.$store.dispatch("NavberUserModules/changeTitleNavber", "management");
+      if (this.user_detail?.account_id) {
+        this.GetProfileDetail(this.user_detail.account_id);
+      }
+    } 
     this.GetLoading(false);
   },
 

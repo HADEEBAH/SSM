@@ -339,20 +339,19 @@ const loginModules = {
                         tel: data.data.tel,
                         image: data.data.image !== "" ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}` : ""
                     }
-
                     localStorage.setItem("userDetail", JSON.stringify(payload))
                     if (route.name === "Login") {
                         router.replace({ name: "UserKingdom" })
                     } else {
                         if(roles.length > 0){
                             if(route.name == "StudentsSchedule"){
-                               if(roles.some(v => ['R_4','R_5'].some(v))){
+                               if(roles.some(v => ['R_4','R_5'].includes(v))){
                                     window.location.href = `${process.env.VUE_APP_URL}${route.path}`
                                 }else{
                                     router.replace({ name: "UserKingdom" })
                                 }
                             }else if(route.name == "menageCourse"){
-                               if(roles.some(v => ['R_3'].some(v))){
+                               if(roles.some(v => ['R_3'].includes(v))){
                                     window.location.href = `${process.env.VUE_APP_URL}${route.path}`
                                 }else{
                                     router.replace({ name: "UserKingdom" })
@@ -365,6 +364,7 @@ const loginModules = {
                     }
                 }
             } catch (response) {
+                console.log(response)
                 context.commit("SetIsLoading", false)
                 Swal.fire({
                     icon: 'error',
