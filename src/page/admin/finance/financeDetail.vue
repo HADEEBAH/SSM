@@ -1167,7 +1167,7 @@ export default {
         text: this.$t("do you want to confirm your payment?"),
         showDenyButton: false,
         showCancelButton: true,
-        cancelButtonText: this.$t("cancel"),
+        cancelButtonText: this.$t("no"),
         confirmButtonText: this.$t("agree"),
       }).then(async (result) => {
         if (result.isConfirmed) {
@@ -1180,13 +1180,13 @@ export default {
     dayOfWeekArray(day) {
       let days = day;
       const weekdays = [
-        this.$t("sunday"),
-        this.$t("monday"),
-        this.$t("tuesday"),
-        this.$t("wednesday"),
-        this.$t("thursday"),
-        this.$t("friday"),
-        this.$t("saturday"),
+        this.pdf_lang == "th" ? "วันอาทิตย์":"Sunday",
+        this.pdf_lang == "th" ? "วันจันทร์":"Monday",
+        this.pdf_lang == "th" ? "วันอังคาร":"Tuesday",
+        this.pdf_lang == "th" ? "วันพุธ":"Wednesday",
+        this.pdf_lang == "th" ? "วันพฤหัสบดี":"Thursday",
+        this.pdf_lang == "th" ? "วันศุกร์":"Friday",
+        this.pdf_lang == "th" ? "วันเสาร์":"Saturday",
       ];
       days.sort();
       let ranges = [];
