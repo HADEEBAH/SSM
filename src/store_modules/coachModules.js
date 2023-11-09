@@ -581,10 +581,9 @@ const coachModules = {
               });
             }
           }
-          
           context.commit("SetCoursesOption", { limit: limit, page: page, count: data.data.length })
-
         }
+        data.data.push(...courses_task)
         context.commit("SetMyCourses", data.data);
         context.commit("SetMyCoursesIsLoading", false);
       } catch (error) {
@@ -988,9 +987,22 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
+        let courses_task = []
         // let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/coach-calendar?startDate=${start_date}&endDate=${end_date}`, config)
         if (data.statusCode == 200) {
+          let holidays = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
+          if (holidays.data.statusCode === 200) {
+            for await (let holiday of holidays.data.data) {
+              courses_task.push({
+                type: 'holiday',
+                name: holiday.holidayName,
+                start_date: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`,
+                start: `${holiday.holidayYears}-${holiday.holidayMonth}-${holiday.holidayDate}`
+              });
+            }
+          }
+          data.data.data.push(...courses_task)
           context.commit("SetCalendarCoach", data.data)
         }
       } catch (error) {

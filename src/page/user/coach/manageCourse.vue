@@ -54,12 +54,12 @@
       <!-- รายวัน -->
       <template v-if="time_frame === 'day'">
         <!-- COURSE LIST -->
-        <div v-if="calendar_coach.data?.length >= 1">
+        <div v-if="calendar_coach.data.filter(v => v.type !== 'holiday')?.length >= 1">
           <v-col cols="12">
             <v-card
               outlined
               class="mb-2"
-              v-for="(course, course_index) in calendar_coach.data"
+              v-for="(course, course_index) in calendar_coach.data.filter(v => v.type !== 'holiday')"
               :key="course_index"
             >
               <v-card-text
@@ -166,7 +166,7 @@
           </v-col>
         </div>
 
-        <div v-if="calendar_coach.data?.length <= 0">
+        <div v-if="calendar_coach.data.filter(v => v.type !== 'holiday')?.length <= 0">
           <v-col cols="12">
             <v-card flat>
               <v-card-text
