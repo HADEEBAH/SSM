@@ -419,7 +419,6 @@ const CourseModules = {
         if (data.statusCode === 200) {
           let datesList = []
           for await (let coach of data.data) {
-              console.log("coach => ",coach)
               coach.checked = false
               let coachDate = coach
               if (!coachDate.cpo?.cpoId) {
@@ -497,7 +496,6 @@ const CourseModules = {
               }
           }
           let coachId=[]
-          console.log("dateList",datesList)
           data.data.map((v)=>
           {
             if(!coachId.includes(v.coachId)){
@@ -510,7 +508,6 @@ const CourseModules = {
             }
             return v
           })
-          console.log(data.data)
           context.commit("SetCoachListIsLoading", false)
           context.commit("SetCoachList",data.data.filter(v => v.datesList))
         }
