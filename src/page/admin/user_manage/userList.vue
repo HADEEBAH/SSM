@@ -402,6 +402,9 @@ export default {
       if (this.search_data_filter !== this.search) {
         this.filtered_datas = true;
       }
+      if (this.select_roles) {
+        this.$refs.userList.$props.options.page = 1;
+      }
       this.filter_role_is_loading = true;
       await this.loadItems(search, searchQuery);
       this.filter_role_is_loading = false;
@@ -411,6 +414,29 @@ export default {
       //   limit: "10",
       //   page: "1",
       // });
+    },
+
+    async selectedAll() {
+      let search_arr = [];
+
+      this.selected_all_bool = !this.selected_all_bool;
+      if (this.selected_all_bool) {
+        this.searchQuery = this.roles.slice();
+      } else {
+        this.searchQuery = [];
+      }
+      for await (let item of this.searchQuery) {
+        search_arr.push(item.roleNumber);
+      }
+      this.FilteredData({
+        name: this.search ? this.search : "",
+        role: search_arr,
+        limit: this.itemsPerPage,
+        page: 1,
+      });
+      // this.FilterGetUserList(
+      //   search_arr.length > 0 ? search_arr : this.searchQuery
+      // );
     },
 
     async loadItems() {
@@ -427,44 +453,28 @@ export default {
       this.filter_role_is_loading = true;
       await this.moreData();
       this.filter_role_is_loading = false;
-      // this.loading = true;
-      // if (this.select_temp !== this.searchQuery) {
-      //   this.select_roles = true;
-      // }
-      // await this.moreData().then((data) => {
-      //   this.desserts = data.items;
-      //   this.totalDesserts = data.total;
-      //   this.loading = false;
-      // });
     },
 
     async moreData() {
       let { page, itemsPerPage } = this.options;
+      let search_arr = [];
       this.disable_pagination_btn = true;
       this.user_list.data = [];
+      if (this.selected_all_bool) {
+        this.searchQuery = this.roles.slice();
+        for await (let item of this.searchQuery) {
+          search_arr.push(item.roleNumber);
+        }
+        this.searchQuery = search_arr;
+      }
 
       this.FilteredData({
         name: this.search,
         role: this.searchQuery,
         limit: this.select_roles ? 10 : itemsPerPage,
-        page: this.select_roles ? 1 : page,
+        page: page,
       });
 
-      // if (this.search || this.searchQuery) {
-      //   console.log("this.search :>> ", this.search);
-      //   console.log("this.searchQuery :>> ", this.searchQuery);
-      //   this.FilteredData({
-      //     name: this.search,
-      //     role: this.searchQuery,
-      //     limit: this.select_roles ? 10 : itemsPerPage,
-      //     page: this.select_roles ? 1 : page,
-      //   });
-      // } else {
-      //   this.GetUserList({ limit: itemsPerPage, page: page });
-      // }
-      if (this.select_roles) {
-        this.$refs.userList.$props.options.page = 1;
-      }
       if (this.filtered_datas) {
         this.$refs.userList.$props.options.page = 1;
       }
@@ -473,58 +483,6 @@ export default {
       this.select_roles = false;
       this.filtered_datas = false;
       this.filter_role_is_loading = false;
-      // return new Promise((resolve) => {
-      //   const { sortBy, sortDesc, page, itemsPerPage } = this.options;
-      //   let newItems = null;
-      //   // Fetch the new data, e.g., from an API
-      //   this.user_list.data = [];
-      //   this.disable_pagination_btn = true;
-
-      //   if (this.search) {
-      //     newItems = Array.from(
-      //       this.FilteredData({
-      //         name: this.search,
-      //         role: this.searchQuery,
-      //         limit: itemsPerPage,
-      //         page: page,
-      //       })
-      //     );
-      //   } else {
-      //     newItems = Array.from(
-      //       this.GetUserList({ limit: itemsPerPage, page: page })
-      //     );
-      //   }
-      //   if (this.tabs_change) {
-      //     this.$refs.user_list.$props.options.page = 1;
-      //   }
-      //   this.disable_pagination_btn = false;
-
-      //   // Perform sorting, if needed
-      //   if (sortBy.length === 1 && sortDesc.length === 1) {
-      //     newItems.sort((a, b) => {
-      //       const sortA = a[sortBy[0]];
-      //       const sortB = b[sortBy[0]];
-
-      //       return sortDesc[0]
-      //         ? sortB.localeCompare(sortA)
-      //         : sortA.localeCompare(sortB);
-      //     });
-      //   }
-
-      //   // Calculate the total count
-      //   const total = newItems.length;
-
-      //   // Slice the new data to match the current page and itemsPerPage
-      //   this.startIndex = (page - 1) * itemsPerPage;
-      //   this.endIndex = page * itemsPerPage;
-      //   const items = newItems;
-      //   // Simulate a delay before resolving the promise (for example, 1000 milliseconds)
-
-      //   resolve({
-      //     items,
-      //     total,
-      //   });
-      // });
     },
 
     editItem(item) {
@@ -651,27 +609,7 @@ export default {
         }
       });
     },
-    async selectedAll() {
-      let search_arr = [];
-      this.selected_all_bool = !this.selected_all_bool;
-      if (this.selected_all_bool) {
-        this.searchQuery = this.roles.slice();
-      } else {
-        this.searchQuery = [];
-      }
-      for await (let item of this.searchQuery) {
-        search_arr.push(item.roleNumber);
-      }
-      this.FilteredData({
-        name: this.search ? this.search : "",
-        role: search_arr,
-        limit: "10",
-        page: "1",
-      });
-      // this.FilterGetUserList(
-      //   search_arr.length > 0 ? search_arr : this.searchQuery
-      // );
-    },
+
     async selectedRoles(role) {
       this.query_roles = "";
       role.map((val) => {
