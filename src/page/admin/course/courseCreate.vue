@@ -287,7 +287,7 @@
               </v-col>
               <v-col cols="12" sm="auto" v-if="step < 4">
                 <v-btn
-                  dark
+                  :dark="steps[step - 1]"
                   color="#FF6B81"
                   :class="
                     $vuetify.breakpoint.smAndDown ? 'w-full' : 'btn-size-lg'
@@ -295,6 +295,7 @@
                   class="white--text"
                   depressed
                   @click="submitStep(step - 1)"
+                  :disabled="!steps[step - 1]"
                   >{{ $t("next") }}</v-btn
                 >
               </v-col>
@@ -317,6 +318,8 @@
                   depressed
                   :loading="loading"
                   @click="submitStep(step - 1)"
+                  :disabled="!steps[step - 1]"
+                  :dark="steps[step - 1]"
                   >{{ $t("create a course") }}</v-btn
                 >
               </v-col>
