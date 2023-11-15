@@ -42,12 +42,14 @@
                 hide-details
                 v-model="search"
                 prepend-inner-icon="mdi-magnify"
-                @input="search_data(search)"
+                @input="search_data(search, searchQuery)"
               ></v-text-field>
             </v-col>
             <label-custom v-if="!MobileSize" :text="$t('role')"></label-custom>
             <v-col cols="12" sm="3">
               <label-custom v-if="MobileSize" :text="$t('role')"></label-custom>
+              <!-- @input="FilterGetUserList(searchQuery)" -->
+
               <template>
                 <v-autocomplete
                   v-model="searchQuery"
@@ -55,7 +57,7 @@
                   item-text="role"
                   item-value="roleNumber"
                   :placeholder="$t('all')"
-                  @input="FilterGetUserList(searchQuery)"
+                  @change="search_data(search, searchQuery)"
                   outlined
                   dense
                   multiple
@@ -114,20 +116,23 @@
         <template>
           <v-data-table
             :headers="headers"
-            :items="user_list.data?.slice(startIndex, endIndex)"
-            :options.sync="options"
+            :items="user_list.data"
             :search="search"
             :selectedRole="selectedRole"
             :page.sync="page"
             :items-per-page="itemsPerPage"
             :page-count="pageCount"
             loading-text="Loading... Please wait"
-            :loading="loading"
             class="elevation-1 header-table"
+            :options.sync="options"
             :server-items-length="user_list.amount"
+            ref="userList"
+            :footer-props="{
+              'disable-pagination': disable_pagination_btn,
+            }"
           >
             <template v-slot:[`item.count`]="{ item }">
-              {{ item.index }}
+              {{ item.number }}
             </template>
 
             <template v-slot:[`item.roles`]="{ item }">
@@ -198,16 +203,9 @@
             </template>
 
             <template v-slot:no-data>
-              <v-row
-                class="fill-height ma-0 pa-5"
-                align="center"
-                justify="center"
-              >
-                <v-progress-circular
-                  indeterminate
-                  color="#ff6b81"
-                ></v-progress-circular>
-              </v-row>
+              <div class="font-bold">
+                {{ $t("no data found in table") }}
+              </div>
             </template>
           </v-data-table>
         </template>
@@ -274,6 +272,10 @@ export default {
       query_roles: "",
       user_lists: [],
       selectedFruits: [],
+      tabs_change: false,
+      disable_pagination_btn: false,
+      select_roles: false,
+      select_temp: "",
     };
   },
 
@@ -293,10 +295,10 @@ export default {
   },
 
   mounted() {
-    this.GetUserList({
-      limit: 10,
-      page: 1,
-    });
+    // this.GetUserList({
+    //   limit: 10,
+    //   page: 1,
+    // });
   },
 
   computed: {
@@ -304,6 +306,7 @@ export default {
       user_list: "UserModules/getUserList",
       show_by_id: "UserModules/getShowById",
       filter_role: "UserModules/getfilterGetUserList",
+      filtered_data: "UserModules/getFilteredData",
     }),
     formTitle() {
       return this.editedIndex === -1 ? "Edit" : "Edit";
@@ -387,52 +390,126 @@ export default {
       GetUserList: "UserModules/GetUserList",
       GetShowById: "UserModules/GetShowById",
       FilterGetUserList: "UserModules/FilterGetUserList",
+      FilteredData: "UserModules/FilteredData",
     }),
 
-    async loadItems() {
+    async search_data(search, searchQuery) {
+      if (this.select_temp !== this.searchQuery) {
+        this.select_roles = true;
+      }
       this.loading = true;
-      await this.moreData().then((data) => {
-        this.desserts = data.items;
-        this.totalDesserts = data.total;
-        this.loading = false;
-      });
+      await this.loadItems(search, searchQuery);
+      this.loading = false;
+      // this.FilteredData({
+      //   name: search ? search : "",
+      //   role: searchQuery,
+      //   limit: "10",
+      //   page: "1",
+      // });
+    },
+
+    async loadItems() {
+      if (this.select_temp !== this.searchQuery) {
+        this.select_roles = true;
+      }
+      this.select_temp = this.searchQuery;
+
+      this.loading = true;
+      await this.moreData();
+      this.loading = false;
+      // this.loading = true;
+      // if (this.select_temp !== this.searchQuery) {
+      //   this.select_roles = true;
+      // }
+      // await this.moreData().then((data) => {
+      //   this.desserts = data.items;
+      //   this.totalDesserts = data.total;
+      //   this.loading = false;
+      // });
     },
 
     async moreData() {
-      return new Promise((resolve) => {
-        const { sortBy, sortDesc, page, itemsPerPage } = this.options;
+      let { page, itemsPerPage } = this.options;
+      this.disable_pagination_btn = true;
+      this.user_list.data = [];
 
-        // Fetch the new data, e.g., from an API
-        const newItems = Array.from(
-          this.GetUserList({ limit: itemsPerPage, page: page })
-        );
-
-        // Perform sorting, if needed
-        if (sortBy.length === 1 && sortDesc.length === 1) {
-          newItems.sort((a, b) => {
-            const sortA = a[sortBy[0]];
-            const sortB = b[sortBy[0]];
-
-            return sortDesc[0]
-              ? sortB.localeCompare(sortA)
-              : sortA.localeCompare(sortB);
-          });
-        }
-
-        // Calculate the total count
-        const total = newItems.length;
-
-        // Slice the new data to match the current page and itemsPerPage
-        this.startIndex = (page - 1) * itemsPerPage;
-        this.endIndex = page * itemsPerPage;
-        const items = newItems;
-        // Simulate a delay before resolving the promise (for example, 1000 milliseconds)
-
-        resolve({
-          items,
-          total,
-        });
+      this.FilteredData({
+        name: this.search,
+        role: this.searchQuery,
+        limit: this.select_roles ? 10 : itemsPerPage,
+        page: this.select_roles ? 1 : page,
       });
+
+      // if (this.search || this.searchQuery) {
+      //   console.log("this.search :>> ", this.search);
+      //   console.log("this.searchQuery :>> ", this.searchQuery);
+      //   this.FilteredData({
+      //     name: this.search,
+      //     role: this.searchQuery,
+      //     limit: this.select_roles ? 10 : itemsPerPage,
+      //     page: this.select_roles ? 1 : page,
+      //   });
+      // } else {
+      //   this.GetUserList({ limit: itemsPerPage, page: page });
+      // }
+      if (this.select_roles) {
+        this.$refs.userList.$props.options.page = 1;
+      }
+
+      this.disable_pagination_btn = false;
+      this.select_roles = false;
+      // return new Promise((resolve) => {
+      //   const { sortBy, sortDesc, page, itemsPerPage } = this.options;
+      //   let newItems = null;
+      //   // Fetch the new data, e.g., from an API
+      //   this.user_list.data = [];
+      //   this.disable_pagination_btn = true;
+
+      //   if (this.search) {
+      //     newItems = Array.from(
+      //       this.FilteredData({
+      //         name: this.search,
+      //         role: this.searchQuery,
+      //         limit: itemsPerPage,
+      //         page: page,
+      //       })
+      //     );
+      //   } else {
+      //     newItems = Array.from(
+      //       this.GetUserList({ limit: itemsPerPage, page: page })
+      //     );
+      //   }
+      //   if (this.tabs_change) {
+      //     this.$refs.user_list.$props.options.page = 1;
+      //   }
+      //   this.disable_pagination_btn = false;
+
+      //   // Perform sorting, if needed
+      //   if (sortBy.length === 1 && sortDesc.length === 1) {
+      //     newItems.sort((a, b) => {
+      //       const sortA = a[sortBy[0]];
+      //       const sortB = b[sortBy[0]];
+
+      //       return sortDesc[0]
+      //         ? sortB.localeCompare(sortA)
+      //         : sortA.localeCompare(sortB);
+      //     });
+      //   }
+
+      //   // Calculate the total count
+      //   const total = newItems.length;
+
+      //   // Slice the new data to match the current page and itemsPerPage
+      //   this.startIndex = (page - 1) * itemsPerPage;
+      //   this.endIndex = page * itemsPerPage;
+      //   const items = newItems;
+      //   // Simulate a delay before resolving the promise (for example, 1000 milliseconds)
+
+      //   resolve({
+      //     items,
+      //     total,
+      //   });
+      // });
     },
 
     editItem(item) {
@@ -475,24 +552,6 @@ export default {
         this.datausers.push(this.editedItem);
       }
       this.close();
-    },
-
-    async search_data(name) {
-      try {
-        let config = {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Content-type": "Application/json",
-            Authorization: `Bearer ${VueCookie.get("token")}`,
-          },
-        };
-        await axios.get(
-          `${process.env.VUE_APP_URL}/api/v1/usermanagement/search?name=${name}`,
-          config
-        );
-      } catch (error) {
-        console.log(error);
-      }
     },
 
     async search_Role(role) {
@@ -588,9 +647,15 @@ export default {
       for await (let item of this.searchQuery) {
         search_arr.push(item.roleNumber);
       }
-      this.FilterGetUserList(
-        search_arr.length > 0 ? search_arr : this.searchQuery
-      );
+      this.FilteredData({
+        name: this.search ? this.search : "",
+        role: search_arr,
+        limit: "10",
+        page: "1",
+      });
+      // this.FilterGetUserList(
+      //   search_arr.length > 0 ? search_arr : this.searchQuery
+      // );
     },
     async selectedRoles(role) {
       this.query_roles = "";

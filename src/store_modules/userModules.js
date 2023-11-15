@@ -15,7 +15,8 @@ const userModules = {
         show_by_id: [],
         data_user_by_id: [],
         student_schedule: [],
-        user_one_temp: {}
+        user_one_temp: {},
+        filtered_data: [],
     },
     mutations: {
         SetUserList(state, payload) {
@@ -38,6 +39,10 @@ const userModules = {
         },
         SetShowByOne(state) {
             state.show_by_id = state.user_one_temp
+        },
+        SetFilteredData(state, payload) {
+            // state.filtered_data = payload
+            state.user_list = payload
 
         },
 
@@ -49,6 +54,8 @@ const userModules = {
         },
 
         async GetUserList(context, { limit, page }) {
+            let startIndex = 0;
+            let endIndex = 0;
             try {
                 let config = {
                     headers: {
@@ -60,6 +67,9 @@ const userModules = {
                 // let localhost = "http://localhost:3000"
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/usermanagement/limit?limit=${limit}&page=${page}`, config)
                 if (data.statusCode === 200) {
+                    startIndex = (page - 1) * limit;
+                    endIndex = page * limit;
+                    data.data.data = data.data?.data.slice(startIndex, endIndex)
                     data.data?.data.map((val, i) => {
                         val.index = i + 1
                         val.userRoles?.map((value) => {
@@ -71,6 +81,46 @@ const userModules = {
                         return val
                     })
                     context.commit("SetUserList", data.data)
+                } else {
+                    throw { error: data }
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async FilteredData(context, { name, role, limit, page }) {
+            let startIndex = 0;
+            let endIndex = 0;
+            try {
+                let config = {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Content-type": "Application/json",
+                        'Authorization': `Bearer ${VueCookie.get("token")}`
+                    }
+                }
+                let localhost = "http://localhost:3000"
+                let { data } = await axios.get(`${localhost}/api/v1/usermanagement/search-limit?name=${name}&role=${role}&limit=${limit}&page=${page}`, config)
+                // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/usermanagement/limit?limit=${limit}&page=${page}`, config)
+
+                if (data.statusCode === 200) {
+                    startIndex = (page - 1) * limit;
+                    endIndex = page * limit;
+                    data.data.data = data.data?.data.slice(startIndex, endIndex)
+                    data.data?.data.map((val, i) => {
+                        val.index = i + 1
+                        val.userRoles?.map((value) => {
+                            val.roleNameTh = value.roleNameTh
+                            val.roleNameTh = value.roleNameTh
+                            val.roleNameTh = value.roleNameTh
+                            return value
+                        })
+                        return val
+                    })
+                    context.commit("SetUserList", data.data)
+
+
                 } else {
                     throw { error: data }
                 }
@@ -196,7 +246,10 @@ const userModules = {
         },
         getUserOneTemp(state) {
             return state.user_one_temp
-        }
+        },
+        getFilteredData(state) {
+            return state.filtered_data
+        },
     },
 };
 

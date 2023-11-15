@@ -495,7 +495,6 @@
                     </v-autocomplete>
                   </v-col>
                   <!-- ระยะเวลาคอร์ส -->
-                  <pre>{{ options_data }}</pre>
                   <v-col cols="12" sm="6" md="6">
                     <label-custom :text="$t('period')"></label-custom>
                     <v-autocomplete
