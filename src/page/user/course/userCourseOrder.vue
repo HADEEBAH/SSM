@@ -430,19 +430,10 @@
         <v-card outlined class="mb-3">
           <v-card-text>
             <v-row dense class="d-flex align-start">
-              <v-col cols="9" sm="5">
+              <v-col cols="8" sm="6">
                 <labelCustom
                   :text="$t('username') + ' (' + $t('optional') + ')'"
                 ></labelCustom>
-                <!--   @change="
-                    student.username.length > 3
-                      ? checkUsername(
-                          student.username,
-                          'student',
-                          index_student
-                        )
-                      : ''
-                  " -->
                 <v-text-field
                   dense
                   outlined
@@ -466,18 +457,8 @@
                     >
                   </template>
                 </v-text-field>
-                <template v-if="!student.account_id">
-                  <label>
-                    {{ $t("if you don't have an account yet, please") }}
-                  </label>
-                  <label
-                    class="text-[#ff6b81] underline cursor-pointer mt-5"
-                    @click="registerStudent"
-                    >{{ $t("register") }} One ID</label
-                  >
-                </template>
               </v-col>
-              <v-col cols="auto" class="mb-2">
+              <v-col cols="auto" >
                 <br />
                 <v-btn
                   :loading="is_loading"
@@ -494,6 +475,20 @@
                 >
                   {{ $t("agree") }}
                 </v-btn>
+              </v-col>
+            </v-row>
+            <v-row dense>
+              <v-col>
+                <template v-if="!student.account_id">
+                  <label>
+                    {{ $t("if you don't have an account yet, please") }}
+                  </label>
+                  <label
+                    class="text-[#ff6b81] underline cursor-pointer mt-5"
+                    @click="registerStudent"
+                    >{{ $t("register") }} One ID</label
+                  >
+                </template>
               </v-col>
             </v-row>
             <template v-if="student.account_id">
@@ -522,21 +517,6 @@
                     outlined
                     v-model="student.lastname_en"
                     :placeholder="$t('english last name')"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-              <v-row dense>
-                <v-col cols="12" sm="6">
-                  <labelCustom
-                    required
-                    :text="$t('phone number')"
-                  ></labelCustom>
-                  <v-text-field
-                    :disabled="student.account_id ? true : false"
-                    dense
-                    outlined
-                    v-model="student.tel"
-                    :placeholder="$t('phone number')"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -682,9 +662,9 @@
           :title="$t('parent')"
         >
         </header-card>
-        <v-card-text class="pb-2">
+        <v-card-text class="pa-2">
           <v-row dense>
-            <v-col cols="9">
+            <v-col cols="8" sm="">
               <labelCustom
                 :text="$t('username') + ' (' + $t('optional') + ')'"
               ></labelCustom>
@@ -712,16 +692,6 @@
                   >
                 </template>
               </v-text-field>
-              <template v-if="!parent.account_id">
-                <label>
-                  {{ $t("if you don't have an account yet, please") }}</label
-                >
-                <label
-                  class="text-[#ff6b81] underline cursor-pointer mt-5"
-                  @click="registerParent"
-                  >{{ $t("register") }} One ID</label
-                >
-              </template>
             </v-col>
             <v-col cols="auto">
               <br />
@@ -735,6 +705,20 @@
               >
                 {{ $t("agree") }}
               </v-btn>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col>
+              <template v-if="!parent.account_id">
+                <label>
+                  {{ $t("if you don't have an account yet, please") }}</label
+                >
+                <label
+                  class="text-[#ff6b81] underline cursor-pointer mt-5"
+                  @click="registerParent"
+                  >{{ $t("register") }} One ID</label
+                >
+              </template>
             </v-col>
           </v-row>
           <template>
@@ -765,18 +749,6 @@
                   outlined
                   v-model="parent.lastname_en"
                   :placeholder="$t('english last name')"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row dense>
-              <v-col cols="12">
-                <labelCustom required :text="$t('phone number')"></labelCustom>
-                <v-text-field
-                  disabled
-                  dense
-                  outlined
-                  v-model="parent.tel"
-                  :placeholder="$t('phone number')"
                 ></v-text-field>
               </v-col>
             </v-row>
