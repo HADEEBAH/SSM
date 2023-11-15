@@ -100,9 +100,9 @@ const userModules = {
                         'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                let localhost = "http://localhost:3000"
-                let { data } = await axios.get(`${localhost}/api/v1/usermanagement/search-limit?name=${name}&role=${role}&limit=${limit}&page=${page}`, config)
-                // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/usermanagement/limit?limit=${limit}&page=${page}`, config)
+                // let localhost = "http://localhost:3000"
+                // let { data } = await axios.get(`${localhost}/api/v1/usermanagement/search-limit?name=${name}&role=${role}&limit=${limit}&page=${page}`, config)
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/usermanagement/search-limit?name=${name}&role=${role}&limit=${limit}&page=${page}`, config)
 
                 if (data.statusCode === 200) {
                     startIndex = (page - 1) * limit;
