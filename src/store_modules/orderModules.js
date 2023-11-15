@@ -1,3 +1,5 @@
+
+
 import axios from "axios";
 import Swal from "sweetalert2";
 import router from "@/router";
@@ -99,7 +101,7 @@ const orderModules = {
     history_list: [],
     history_list_is_loading: false,
     history_list_option: {},
-
+    filter_finance_data: []
 
 
   },
@@ -191,6 +193,9 @@ const orderModules = {
     },
     SetHistoryListIsLoading(state, payload) {
       state.history_list_is_loading = payload;
+    },
+    SetFilterFinance(state, payload) {
+      state.filter_finance_data = payload
     },
   },
   actions: {
@@ -317,6 +322,7 @@ const orderModules = {
         };
         let students = [];
         // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/adminpayment/limit?limit=${limit}&page=${page}&status=${status}`, config);
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/limit?limit=${limit}&page=${page}&status=${status}`, config);
         if (data.statusCode === 200) {
 
@@ -366,6 +372,73 @@ const orderModules = {
           context.commit("SetOrdersIsLoading", false);
 
           throw { error: data };
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async FilterFinanceData(context, { name, limit, page, status }) {
+      let startIndex = 0;
+      let endIndex = 0;
+      let students = [];
+
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/adminpayment/finance?search=${name}&limit=${limit}&page=${page}&status=${status}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/finance?search=${name}&limit=${limit}&page=${page}&status=${status}`, config)
+
+        if (data.statusCode === 200) {
+
+          startIndex = (page - 1) * limit;
+          endIndex = page * limit;
+          data.data.financeList = data.data?.financeList.slice(startIndex, endIndex)
+          data.data.count = status === 'success' ? data.data?.amountSuccess : (status === 'pending' ? data.data?.amountPending : (status === 'cancel' ? data.data?.amountCancel : (status === 'fail' ? data.data?.amountFail : data.data?.amount)))
+          if (data.data?.financeList?.length > 0) {
+            for await (let order of data.data?.financeList) {
+
+              for await (const student of order.student) {
+                if (!students.some((v) => v.account_id == student.userOneId)) {
+                  students.push({
+                    student_name: `${student.firstNameTh} ${student.lastNameTh}`,
+                    account_id: student.userOneId,
+                  });
+                }
+              }
+              if (order.payment_status === "success") {
+                let inputDate = order.payment?.paymentDate
+                let cutTime = order.payment?.paymentTime
+                const year = parseInt(inputDate?.substring(0, 4));
+                const month = parseInt(inputDate?.substring(4, 6));
+                const day = inputDate?.substring(6, 8);
+                const formatted = `${year}-${month}-${day}`;
+                let HH = cutTime?.slice(0, 2);
+                let mm = cutTime?.slice(2, 4);
+                order.paid_date = `${formatted}`
+                order.paid_time = `${HH + ":" + mm}`
+              } else {
+                order.paid_date = ""
+                order.paid_time = ""
+              }
+              // order.course_name = `${order.course?.courseNameTh}(${order.course?.courseNameEn})`;
+              order.course_nameTh = order.course?.courseNameTh;
+              order.course_nameEn = order.course?.courseNameEn;
+              order.student_name = `${order.user?.firstNameTh} ${order.user?.lastNameTh}`;
+              order.student_name_en = `${order.user?.firstNameEng} ${order.user?.lastNameEng}`;
+            }
+          }
+
+          context.commit("SetOrders", data.data);
+          context.commit("SetStudents", students);
+          context.commit("SetOrdersIsLoading", false);
+        } else {
+          throw { error: data }
         }
       } catch (error) {
         console.log(error);
@@ -1563,6 +1636,9 @@ const orderModules = {
     },
     getHistoryListIsLoading(state) {
       return state.history_list_is_loading;
+    },
+    getFilterFinanceData(state) {
+      return state.filter_finance_data
     },
   },
 };

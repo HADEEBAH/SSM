@@ -1,3 +1,4 @@
+
 <template>
   <v-app>
     <loading-overlay :loading="orders_is_loadings"></loading-overlay>
@@ -17,7 +18,6 @@
           >
         </v-col>
       </v-row>
-      <!-- search -->
       <v-row dense class="mb-3">
         <v-col cols="6" sm="6" align="start"> </v-col>
         <v-col cols="12" sm="6" align="end">
@@ -27,8 +27,9 @@
             prepend-inner-icon="mdi-magnify"
             outlined
             :placeholder="$t('search')"
-            v-model="search"
+            v-model="search_filter"
             color="#ff6b81"
+            @input="clickTab(search_filter)"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -183,11 +184,12 @@
         :headers="columns"
         :items="orders.financeList"
         item-key="order_number"
-        :search="search"
         show-select
         class="elevation-1 header-table"
         :items-per-page="itemsPerPage"
-        :server-items-length="orders.count"
+        :server-items-length="
+          this.search_filter ? orders.totalRows : orders.count
+        "
         :options.sync="options"
         ref="orders"
         :footer-props="{
@@ -256,6 +258,11 @@
         </template>
         <template v-slot:[`no-results`]>
           <div class="font-bold">{{ $t("no data found in table") }}</div>
+        </template>
+        <template v-slot:no-data>
+          <div class="font-bold">
+            {{ $t("no data found in table") }}
+          </div>
         </template>
       </v-data-table>
       <!-- DIALOG -->
@@ -792,7 +799,7 @@ export default {
     loadingOverlay,
   },
   data: () => ({
-    search: "",
+    search_filter: "",
     today: new Date().toISOString(),
     search_student: null,
     show_dialog: false,
@@ -869,6 +876,8 @@ export default {
     orders_is_loadings: true,
     page: 1,
     itemsPerPage: 10,
+    text_temp: "",
+    text_change: false,
   }),
   watch: {
     options: {
@@ -903,6 +912,7 @@ export default {
       options_data: "CourseModules/getOptions",
       finance_filter: "FinanceModules/getFinanceFilter",
       finance_filter_loading: "FinanceModules/getFinanceLoading",
+      filter_finance_data: "OrderModules/getFilterFinanceData",
     }),
     columns() {
       return [
@@ -961,6 +971,7 @@ export default {
       GetPackages: "CourseModules/GetPackages",
       financeFilter: "FinanceModules/financeFilter",
       searchNameUser: "loginModules/searchNameUser",
+      FilterFinanceData: "OrderModules/FilterFinanceData",
     }),
     GenDate(date) {
       return new Date(date).toLocaleDateString(
@@ -1074,6 +1085,9 @@ export default {
       if (this.tabs_temp !== this.tab_selected) {
         this.tabs_change = true;
       }
+      if (this.text_temp !== this.search_filter) {
+        this.text_change = true;
+      }
       await this.loadItems(this.tab_selected);
     },
 
@@ -1090,27 +1104,40 @@ export default {
       }
       this.tabs_temp = this.tab_selected;
 
-      this.loading = true;
+      if (this.text_temp !== this.search_filter) {
+        this.text_change = true;
+      }
+      this.text_temp = this.search_filter;
+
+      this.orders_is_loadings = true;
       await this.moreData(this.tab_selected);
-      this.loading = false;
+      this.orders_is_loadings = false;
     },
 
     async moreData(status) {
       let { page, itemsPerPage } = this.options;
       this.disable_pagination_btn = true;
       this.orders.financeList = [];
-      await this.GetOrders({
+      // await this.GetOrders({
+      //   limit: itemsPerPage,
+      //   page: this.tabs_change ? 1 : page,
+      //   status: status,
+      // });
+      this.orders_is_loadings = true;
+      await this.FilterFinanceData({
+        name: this.search_filter,
         limit: itemsPerPage,
         page: this.tabs_change ? 1 : page,
         status: status,
       });
+      this.orders_is_loadings = false;
+
       if (this.tabs_change) {
         this.$refs.orders.$props.options.page = 1;
       }
 
       this.disable_pagination_btn = false;
       this.tabs_change = false;
-      this.orders_is_loadings = false;
     },
   },
 };
