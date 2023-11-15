@@ -149,6 +149,7 @@
                     class="white--text btn-size-lg"
                     depressed
                     @click="CourseUpdateDetail()"
+                    :disabled="!courseValidate"
                   >
                     {{ $t("save") }}
                   </v-btn>
@@ -585,9 +586,8 @@
                       v-if="
                         search_student_list
                           ? search_student_datas.length === 0
-                          : coach_list?.filter(
-                              (v) => v?.studentArr.length > 0
-                            ).length === 0
+                          : coach_list?.filter((v) => v?.studentArr.length > 0)
+                              .length === 0
                       "
                     >
                       <v-card dense outlined>
@@ -604,9 +604,7 @@
                       <div
                         v-for="(coach, coach_index) in search_student_list
                           ? search_student_datas
-                          : coach_list?.filter(
-                              (v) => v?.studentArr.length > 0
-                            )"
+                          : coach_list?.filter((v) => v?.studentArr.length > 0)"
                         :key="`${coach_index}-coach_index`"
                       >
                         <v-card
@@ -1112,7 +1110,7 @@
                                             ) in no_check_in_student_list"
                                             :key="`${student_index}-index`"
                                           >
-                                          <!-- {{student }} -->
+                                            <!-- {{student }} -->
                                             <v-card-text class="pa-2">
                                               <v-row
                                                 dense
@@ -2173,8 +2171,9 @@ export default {
       student_list_is_loading: "CourseModules/getStudentListIsLoading",
       student_reserve_list: "CourseModules/getStudentReserveList",
       student_potential_list: "CourseModules/getStudentPotentialList",
-      student_potential_list_is_loading:"CourseModules/getStudentPotentialListIsLoading",
-      no_check_in_student_list:"CourseModules/getNoChackInStudentList",
+      student_potential_list_is_loading:
+        "CourseModules/getStudentPotentialListIsLoading",
+      no_check_in_student_list: "CourseModules/getNoChackInStudentList",
     }),
     breadcrumbs() {
       return [

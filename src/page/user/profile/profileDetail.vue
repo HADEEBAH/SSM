@@ -44,7 +44,6 @@
         <v-col cols="12" sm="6">
           <label-custom :text="$t('first name(thai)')"></label-custom>
           <v-text-field
-            @keydown="validate($event, 'th-special')"
             placeholder="-"
             v-model="profile_detail.firstNameTh"
             outlined
@@ -52,7 +51,9 @@
             :rules="rules.firstNameThRules"
             :disabled="!isEnabled"
             color="#ff6b81"
-            @paste="preventPaste"
+            :error-messages="
+              getErrorMessage(profile_detail.firstNameTh, 'thai')
+            "
           >
           </v-text-field>
         </v-col>
@@ -60,15 +61,13 @@
         <v-col cols="12" sm="6">
           <label-custom :text="$t('last name(thai)')"></label-custom>
           <v-text-field
-            @keydown="validate($event, 'th-special')"
             placeholder="-"
             v-model="profile_detail.lastNameTh"
             outlined
             dense
-            :rules="rules.lastNameThRules"
             :disabled="!isEnabled"
             color="#ff6b81"
-            @paste="preventPaste"
+            :error-messages="getErrorMessage(profile_detail.lastNameTh, 'thai')"
           >
           </v-text-field>
         </v-col>
@@ -146,7 +145,7 @@
             color="#ff6b81"
             @click="submitEdit()"
           >
-            <span>{{ $t("save") }}</span>
+            <span>{{ $t("save") }}55</span>
           </v-btn>
         </v-col>
       </v-row>
@@ -247,6 +246,15 @@ export default {
       GetProfileDetail: "ProfileModules/GetProfileDetail",
       changeProfileFail: "loginModules/changeProfileFail",
     }),
+    getErrorMessage(text, language) {
+      const thaiPattern = /^[\u0E00-\u0E7F0-9()\s]+$/;
+
+      if (language === "thai" && !thaiPattern.test(text)) {
+        return [this.$t("invalid Thai languages")];
+      } else {
+        return [];
+      }
+    },
     preventPaste(event) {
       event.preventDefault();
     },
@@ -428,6 +436,14 @@ export default {
       profile_detail: "ProfileModules/getProfileDetail",
       profile_fail: "loginModules/getProfileFail",
     }),
+    // isButtonDisabled() {
+    //   // Disable the button if either input has an error
+    //   return (
+    //     this.getErrorMessage(this.profile_detail.firstNameTh, "thai").length >
+    //       0 ||
+    //     this.getErrorMessage(this.profile_detail.lastNameTh, "thai").length > 0
+    //   );
+    // },
     setFunctions() {
       this.GetAll(this.user_detail.account_id);
       this.GetProfileDetail(this.$route.params.profile_id);

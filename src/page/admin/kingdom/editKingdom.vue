@@ -1,7 +1,10 @@
 <template>
   <v-container>
     <v-form ref="category_form" v-model="category_form">
-      <headerPage :title="$t('registration changing section')" class="my-5"></headerPage>
+      <headerPage
+        :title="$t('registration changing section')"
+        class="my-5"
+      ></headerPage>
       <label-custom :text="$t('upload the cover')"></label-custom>
       <v-card
         class="border-dashed border-2 rounded-lg my-3"
@@ -140,6 +143,8 @@
       <v-row dense>
         <v-col cols="12" sm="6">
           <label-custom required :text="$t('wls name (thai)')"></label-custom>
+          <!-- @keydown="validate($event, 'th')"
+            @paste="preventPaste" -->
           <v-text-field
             :rules="rules.category_name_th"
             :disabled="showData"
@@ -147,8 +152,7 @@
             :placeholder="$t('fill in wls name')"
             outlined
             v-model="category.categoryNameTh"
-            @keydown="validate($event, 'th')"
-            @paste="preventPaste"
+            :error-messages="getErrorMessage(category.categoryNameTh, 'thai')"
           ></v-text-field>
         </v-col>
 
@@ -164,7 +168,9 @@
             :placeholder="$t('fill in wls name')"
             outlined
             v-model="category.categoryNameEng"
-            @keydown="validate($event, 'en-spcebar')"
+            :error-messages="
+              getErrorMessage(category.categoryNameEng, 'english')
+            "
           ></v-text-field>
         </v-col>
 
@@ -228,7 +234,8 @@
             <v-btn
               class="white--text mb-5"
               depressed
-              color="#ff6b81"
+              :disabled="isButtonDisabled"
+              :color="isButtonDisabled ? '' : '#ff6b81'"
               :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
               @click="openDialog()"
               >{{ $t("save") }}
@@ -278,11 +285,13 @@ export default {
     dialogCard,
   },
   data: () => ({
+    thaiInputText: "",
     preview_url: null,
     showData: true,
     dialog_show: false,
     category_form: false,
   }),
+
   mounted() {},
   created() {
     this.GetCategory(this.$route.params.category_id);
@@ -291,6 +300,21 @@ export default {
     ...mapActions({
       GetCategory: "CategoryModules/GetCategory",
     }),
+
+    getErrorMessage(text, language) {
+      // Check the pattern based on the language
+      const thaiPattern = /^[\u0E00-\u0E7F0-9()\s]+$/;
+      const englishPattern = /^[a-zA-Z0-9()\s]+$/;
+
+      // Return an error message if the pattern is not matched
+      if (language === "thai" && !thaiPattern.test(text)) {
+        return [this.$t("invalid Thai languages")];
+      } else if (language === "english" && !englishPattern.test(text)) {
+        return [this.$t("invalid English languages")];
+      } else {
+        return [];
+      }
+    },
 
     closeImage() {
       this.preview_url = null;
@@ -411,13 +435,13 @@ export default {
             }
           } else {
             Swal.fire({
-                icon: "info",
-                title: this.$t("your data will not be saved"),
-                timer: 3000,
-                timerProgressBar: true,
-                showCancelButton: false,
-                showConfirmButton: false,
-              });
+              icon: "info",
+              title: this.$t("your data will not be saved"),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
           }
         });
       }
@@ -430,6 +454,15 @@ export default {
     ...mapGetters({
       category: "CategoryModules/getCategory",
     }),
+
+    isButtonDisabled() {
+      // Disable the button if either input has an error
+      return (
+        this.getErrorMessage(this.category.categoryNameTh, "thai").length > 0 ||
+        this.getErrorMessage(this.category.categoryNameEng, "english").length >
+          0
+      );
+    },
 
     categoryData: {
       get() {

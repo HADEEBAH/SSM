@@ -93,18 +93,21 @@
               required
               :text="$t('course name (thai)')"
             ></label-custom>
+            <!-- @keydown="inputName($event, 'th')" :rules="course_name_th"
+            @paste="preventPaste" -->
+
             <v-text-field
               dense
               :disabled="disable"
               :outlined="!disable"
               :filled="disable"
-              @keydown="inputName($event, 'th')"
-              :rules="course_name_th"
               @change="ChangeCourseData(course_data)"
               @focus="$event.target.select()"
               v-model="course_data.course_name_th"
               :placeholder="$t('specify the course name (thai)')"
-              @paste="preventPaste"
+              :error-messages="
+                getErrorMessage(course_data.course_name_th, 'thai')
+              "
               color="#ff6b81"
             ></v-text-field>
           </v-col>
@@ -113,19 +116,22 @@
               required
               :text="$t('course name (english)')"
             ></label-custom>
+            <!-- :rules="course_name_en" -->
+            <!-- @paste="preventPaste" @keydown="inputName($event, 'en-spcebar')"  -->
+
             <v-text-field
               dense
               :disabled="disable"
               :outlined="!disable"
               :filled="disable"
               @focus="$event.target.select()"
-              @keydown="inputName($event, 'en-spcebar')"
-              :rules="course_name_en"
               v-model="course_data.course_name_en"
               @change="ChangeCourseData(course_data)"
               :placeholder="$t('specify the course name (english)')"
-              @paste="preventPaste"
               color="#ff6b81"
+              :error-messages="
+                getErrorMessage(course_data.course_name_en, 'english')
+              "
             ></v-text-field>
           </v-col>
         </v-row>
@@ -895,6 +901,19 @@ export default {
     ...mapGetters({
       course_data: "CourseModules/getCourseData",
     }),
+    isButtonDisabled() {
+      // Disable the button if either input has an error
+      !this.course_data.course_name_th && !this.course_data.course_name_en;
+
+      return (
+        this.getErrorMessage(this.course_data.course_name_th, "thai").length >
+          0 ||
+        this.getErrorMessage(this.course_data.course_name_en, "english")
+          .length > 0 ||
+        !this.course_data.course_name_th.trim()?.length > 0 ||
+        !this.course_data.course_name_en.trim()?.length > 0
+      );
+    },
     course_name_th() {
       return [
         (val) =>
@@ -989,6 +1008,22 @@ export default {
     ...mapActions({
       ChangeCourseData: "CourseModules/ChangeCourseData",
     }),
+    getErrorMessage(text, language) {
+      // Check the pattern based on the language
+      const thaiPattern = /^[\u0E00-\u0E7F0-9()\s]+$/;
+      const englishPattern = /^[a-zA-Z0-9()\s]+$/;
+      if (text.length == 0) {
+        return [];
+      }
+      // Return an error message if the pattern is not matched
+      if (language === "thai" && !thaiPattern.test(text)) {
+        return [this.$t("invalid Thai languages")];
+      } else if (language === "english" && !englishPattern.test(text)) {
+        return [this.$t("invalid English languages")];
+      } else {
+        return [];
+      }
+    },
     removeChip(item, value) {
       value.splice(value.indexOf(item.value), 1);
     },

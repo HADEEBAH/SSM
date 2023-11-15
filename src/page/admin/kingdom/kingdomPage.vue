@@ -4,9 +4,7 @@
       <headerPage :title="$t(`wls setup`)"></headerPage>
       <v-row dense>
         <v-col>
-          <label-custom
-            :text="$t(`upload the cover`)"
-          ></label-custom>
+          <label-custom :text="$t(`upload the cover`)"></label-custom>
 
           <v-card class="mx-3" flat>
             <v-card-text
@@ -108,22 +106,20 @@
             dense
             :placeholder="$t(`fill in wls name`)"
             outlined
-            v-model="kingdom.kingdom_name_th"
-            @keydown="validate($event, 'th')"
-            @paste="preventPaste"
+            v-model="thaiInputText"
             color="#ff6b81"
+            :error-messages="getErrorMessage(thaiInputText, 'thai')"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
           <label-custom :text="$t(`wls name (English)`)"></label-custom>
-
           <v-text-field
             dense
             :placeholder="$t(`fill in wls name`)"
             outlined
-            v-model="kingdom.kingdom_name_eng"
-            @keydown="validate($event, 'en-spcebar')"
+            v-model="englishInputText"
             color="#ff6b81"
+            :error-messages="getErrorMessage(englishInputText, 'english')"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -178,8 +174,8 @@
           <v-btn
             class="white--text mb-5"
             depressed
-            :disabled="!isInputValid"
-            :color="isInputValid ? '#ff6b81' : ''"
+            :disabled="isButtonDisabled"
+            :color="isButtonDisabled ? '' : '#ff6b81'"
             :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
             @click="openDialog()"
             >{{ $t("save") }}
@@ -187,11 +183,13 @@
         </v-col>
       </v-row>
       <v-col cols="12" sm="12" v-if="!enabled" align="right">
+        <!--  :disabled="isInputValid"
+          :color="!isInputValid ? '#ff6b81' : ''" -->
         <v-btn
           class="white--text my-5 w-full"
           depressed
-          :disabled="!isInputValid"
-          :color="isInputValid ? '#ff6b81' : ''"
+          :disabled="isButtonDisabled"
+          :color="isButtonDisabled ? '' : '#ff6b81'"
           :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
           @click="showBtn()"
         >
@@ -238,6 +236,8 @@ export default {
   },
   data: () => {
     return {
+      thaiInputText: "",
+      englishInputText: "",
       inputValue: "",
       dialog_show: false,
       enabled: true,
@@ -262,17 +262,39 @@ export default {
   watch: {},
 
   computed: {
-    isInputValid() {
+    isButtonDisabled() {
+      // Disable the button if either input has an error
+
+      !this.thaiInputText && !this.englishInputText;
       return (
-        this.kingdom.kingdom_name_th.trim()?.length > 0 &&
-        this.kingdom.kingdom_name_eng.trim()?.length > 0 &&
-        this.kingdom.learning_method.trim()?.length > 0 &&
-        this.kingdom.detail.trim()?.length > 0
+        this.getErrorMessage(this.thaiInputText, "thai").length > 0 ||
+        this.getErrorMessage(this.englishInputText, "english").length > 0 ||
+        (this.kingdom.kingdom_name_eng.trim()?.length > 0 &&
+          this.kingdom.learning_method.trim()?.length > 0 &&
+          this.kingdom.detail.trim()?.length > 0) ||
+        !this.thaiInputText.trim()?.length > 0 ||
+        !this.englishInputText.trim()?.length > 0
       );
     },
   },
 
   methods: {
+    getErrorMessage(text, language) {
+      // Check the pattern based on the language
+      const thaiPattern = /^[\u0E00-\u0E7F0-9()\s]+$/;
+      const englishPattern = /^[a-zA-Z0-9()\s]+$/;
+      if (text.length == 0) {
+        return [];
+      }
+      // Return an error message if the pattern is not matched
+      if (language === "thai" && !thaiPattern.test(text)) {
+        return [this.$t("invalid Thai languages")];
+      } else if (language === "english" && !englishPattern.test(text)) {
+        return [this.$t("invalid English languages")];
+      } else {
+        return [];
+      }
+    },
     closeDialog() {
       this.dialog_show = false;
       this.saved = true;
@@ -292,8 +314,8 @@ export default {
       this.$router.push({ name: "ManageKingdom" });
     },
     cancleText() {
-      this.kingdom.kingdom_name_th = "";
-      this.kingdom.kingdom_name_eng = "";
+      this.thaiInputText = "";
+      this.englishInputText = "";
       this.kingdom.learning_method = "";
       this.kingdom.detail = "";
       this.preview_url = "";
@@ -317,8 +339,8 @@ export default {
               },
             };
             const payload = {
-              category_name_th: this.kingdom.kingdom_name_th,
-              category_name_en: this.kingdom.kingdom_name_eng,
+              category_name_th: this.thaiInputText,
+              category_name_en: this.englishInputText,
               category_description: this.kingdom.detail,
               taught_by: this.kingdom.learning_method,
             };
