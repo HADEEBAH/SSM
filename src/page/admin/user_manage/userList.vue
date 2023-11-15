@@ -1,5 +1,7 @@
 <template>
   <v-app>
+    <loading-overlay :loading="filter_role_is_loading"> </loading-overlay>
+
     <v-container>
       <v-row dense>
         <headerPage :title="$t('add accounts')"></headerPage>
@@ -123,6 +125,7 @@
             :items-per-page="itemsPerPage"
             :page-count="pageCount"
             loading-text="Loading... Please wait"
+            :loading="filter_role_is_loading"
             class="elevation-1 header-table"
             :options.sync="options"
             :server-items-length="user_list.amount"
@@ -217,6 +220,7 @@
 <script>
 import headerPage from "@/components/header/headerPage.vue";
 import LabelCustom from "@/components/label/labelCustom.vue";
+import loadingOverlay from "@/components/loading/loadingOverlay.vue";
 import { mapActions, mapGetters } from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -227,6 +231,7 @@ export default {
   components: {
     headerPage,
     LabelCustom,
+    loadingOverlay,
   },
   data() {
     return {
@@ -276,6 +281,8 @@ export default {
       disable_pagination_btn: false,
       select_roles: false,
       select_temp: "",
+      filtered_datas: false,
+      search_data_filter: "",
     };
   },
 
@@ -294,12 +301,7 @@ export default {
     },
   },
 
-  mounted() {
-    // this.GetUserList({
-    //   limit: 10,
-    //   page: 1,
-    // });
-  },
+  mounted() {},
 
   computed: {
     ...mapGetters({
@@ -397,9 +399,12 @@ export default {
       if (this.select_temp !== this.searchQuery) {
         this.select_roles = true;
       }
-      this.loading = true;
+      if (this.search_data_filter !== this.search) {
+        this.filtered_datas = true;
+      }
+      this.filter_role_is_loading = true;
       await this.loadItems(search, searchQuery);
-      this.loading = false;
+      this.filter_role_is_loading = false;
       // this.FilteredData({
       //   name: search ? search : "",
       //   role: searchQuery,
@@ -414,9 +419,14 @@ export default {
       }
       this.select_temp = this.searchQuery;
 
-      this.loading = true;
+      if (this.search_data_filter !== this.search) {
+        this.filtered_datas = true;
+      }
+      this.search_data_filter = this.search;
+
+      this.filter_role_is_loading = true;
       await this.moreData();
-      this.loading = false;
+      this.filter_role_is_loading = false;
       // this.loading = true;
       // if (this.select_temp !== this.searchQuery) {
       //   this.select_roles = true;
@@ -455,9 +465,14 @@ export default {
       if (this.select_roles) {
         this.$refs.userList.$props.options.page = 1;
       }
+      if (this.filtered_datas) {
+        this.$refs.userList.$props.options.page = 1;
+      }
 
       this.disable_pagination_btn = false;
       this.select_roles = false;
+      this.filtered_datas = false;
+      this.filter_role_is_loading = false;
       // return new Promise((resolve) => {
       //   const { sortBy, sortDesc, page, itemsPerPage } = this.options;
       //   let newItems = null;
