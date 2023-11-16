@@ -207,16 +207,9 @@
           </template>
 
           <template v-slot:no-data>
-            <v-row
-              class="fill-height ma-0 pa-5"
-              align="center"
-              justify="center"
-            >
-              <v-progress-circular
-                indeterminate
-                color="#ff6b81"
-              ></v-progress-circular>
-            </v-row>
+            <div class="font-bold">
+              {{ $t("no data found in table") }}
+            </div>
           </template>
 
           <template v-slot:[`item.actions`]="{ item }">
@@ -533,9 +526,9 @@ export default {
       }
       this.tabs_temp = this.tabs;
 
-      this.loading = true;
+      this.coach_leaves_is_loadings = true;
       await this.moreData(this.tabs);
-      this.loading = false;
+      this.coach_leaves_is_loadings = false;
     },
 
     async moreData(status) {
