@@ -5,15 +5,14 @@
       <ImgCard vertical_detail color="#FEFBFC" outlined class="mb-3">
         <template v-slot:img>
           <v-img
-            contain
             class="rounded-lg"
             :src="
               course_data.course_img || course_data.course_img !== ''
                 ? course_data.course_img
                 : require(`@/assets/course/default_course_img.svg`)
             "
-            max-height="140"
-            max-width="140"
+            style="max-width: 500px"
+            :aspect-ratio="16 / 9"
           >
             <template v-slot:placeholder>
               <v-row class="fill-height ma-0" align="center" justify="center">
@@ -430,7 +429,7 @@
         <v-card outlined class="mb-3">
           <v-card-text>
             <v-row dense class="d-flex align-start">
-              <v-col cols="8" sm="6">
+              <v-col cols="12">
                 <labelCustom
                   :text="$t('username') + ' (' + $t('optional') + ')'"
                 ></labelCustom>
@@ -450,6 +449,8 @@
                       : ''
                   "
                   :placeholder="$t('username')"
+                  append-outer-icon="mdi-magnify"
+                  @click:append-outer="checkUsername(student.username, 'student', index_student)"
                 >
                   <template v-slot:append>
                     <v-icon v-if="student.account_id" color="green"
@@ -457,10 +458,7 @@
                     >
                   </template>
                 </v-text-field>
-              </v-col>
-              <v-col cols="auto" >
-                <br />
-                <v-btn
+                <!-- <v-btn
                   :loading="is_loading"
                   :dark="!student.username.length < 3"
                   :disabled="student.username.length < 3"
@@ -474,7 +472,7 @@
                   depressed
                 >
                   {{ $t("agree") }}
-                </v-btn>
+                </v-btn> -->
               </v-col>
             </v-row>
             <v-row dense>

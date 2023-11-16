@@ -5,15 +5,14 @@
       <ImgCard vertical_detail color="#FEFBFC" outlined class="mb-3">
         <template v-slot:img>
           <v-img
-            contain
             class="rounded-lg"
             :src="
               course_data.course_img || course_data.course_img !== ''
                 ? course_data.course_img
                 : require(`@/assets/course/default_course_img.svg`)
             "
-            max-height="140"
-            max-width="140"
+            style="max-width: 500px"
+            :aspect-ratio="16 / 9"
           >
             <template v-slot:placeholder>
               <v-row class="fill-height ma-0" align="center" justify="center">
@@ -101,12 +100,13 @@
           </v-btn>
         </v-col>
       </v-row>
-      <v-row>
+      <!-- {{ selected_package }} -->
+      <v-row v-if="selected_package.package_id !== ''">
         <v-col>{{
-          `${selected_package.package} 1 :${selected_package.students}`
+          `${selected_package.package} 1 : ${selected_package.students}`
         }}</v-col>
       </v-row>
-      <v-slide-group center-active>
+      <v-slide-group  center-active v-if="selected_package.package_id !== ''">
         <v-slide-item
           v-for="(option, option_index) in selected_package.options"
           :key="option_index"
@@ -136,7 +136,7 @@
               <v-row dense v-if="!option.discount">
                 <v-col class="text-lg font-bold">
                   <span class="text-5xl font-black">{{
-                    option.total_price.toLocaleString()
+                    option.total_price?.toLocaleString()
                   }}</span>
                   {{ $t("baht") }}
                 </v-col>
@@ -144,10 +144,10 @@
               <v-row dense v-else>
                 <v-col class="text-lg font-bold">
                   <span class="text-md line-through font-black">{{
-                    option.total_price.toLocaleString()
+                    option.total_price?.toLocaleString()
                   }}</span>
                   <span class="text-5xl red--text font-black">{{
-                    option.net_price.toLocaleString()
+                    option.net_price?.toLocaleString()
                   }}</span>
                   {{ $t("baht") }}
                 </v-col>
