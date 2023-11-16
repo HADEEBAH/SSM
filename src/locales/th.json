@@ -326,8 +326,8 @@
     "intervals and coaches have been corrected":"( แก้ไขช่วงเวลาและโค้ชเรียบร้อยแล้ว )",
     "information added successfully": "( เพิ่มข้อมูลเรียบร้อยแล้ว )",
     "is complete" : "เรียบร้อยแล้ว",
-    "invalid Thai languages": "กรุณากรอกข้อความภาษาไทยและไม่มีอักขระพิเศษ",
-    "invalid English languages": "กรุณากรอกข้อความภาษาอังกฤษและไม่มีอักขระพิเศษ",
+    "invalid Thai languages": "กรุณากรอกข้อความภาษาไทย",
+    "invalid English languages": "กรุณากรอกข้อความภาษาอังกฤษ",
 
     "january":"มกราคม",
     "june": "มิถุนายน",

@@ -4,7 +4,7 @@
       <headerPage :title="$t(`wls setup`)"></headerPage>
       <v-row dense>
         <v-col>
-          <label-custom :text="$t(`upload the cover`)"></label-custom>
+          <label-custom :text="$t(`upload the cover55`)"></label-custom>
 
           <v-card class="mx-3" flat>
             <v-card-text
@@ -281,8 +281,9 @@ export default {
   methods: {
     getErrorMessage(text, language) {
       // Check the pattern based on the language
-      const thaiPattern = /^[\u0E00-\u0E7F0-9()\s]+$/;
-      const englishPattern = /^[a-zA-Z0-9()\s]+$/;
+      const thaiPattern =
+        /^[\u0E00-\u0E7F\d\s!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+$/;
+      const englishPattern = /^[a-zA-Z\d\s!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+$/;
       if (text.length == 0) {
         return [];
       }
