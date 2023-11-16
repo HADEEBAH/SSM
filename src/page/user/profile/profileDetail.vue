@@ -247,7 +247,8 @@ export default {
       changeProfileFail: "loginModules/changeProfileFail",
     }),
     getErrorMessage(text, language) {
-      const thaiPattern = /^[\u0E00-\u0E7F0-9()\s]+$/;
+      const thaiPattern =
+        /^[\u0E00-\u0E7F\d\s!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+$/;
 
       if (language === "thai" && !thaiPattern.test(text)) {
         return [this.$t("invalid Thai languages")];

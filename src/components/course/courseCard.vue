@@ -1010,8 +1010,9 @@ export default {
     }),
     getErrorMessage(text, language) {
       // Check the pattern based on the language
-      const thaiPattern = /^[\u0E00-\u0E7F0-9()\s]+$/;
-      const englishPattern = /^[a-zA-Z0-9()\s]+$/;
+      const thaiPattern =
+        /^[\u0E00-\u0E7F\d\s!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+$/;
+      const englishPattern = /^[a-zA-Z\d\s!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+$/;
       if (text.length == 0) {
         return [];
       }
