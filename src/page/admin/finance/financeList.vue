@@ -188,9 +188,7 @@
         show-select
         class="elevation-1 header-table"
         :items-per-page="itemsPerPage"
-        :server-items-length="
-          this.search_filter ? orders.totalRows : orders.count
-        "
+        :server-items-length="search_bool ? orders.totalRows : orders.count"
         :options.sync="options"
         ref="orders"
         :footer-props="{
@@ -259,7 +257,7 @@
         </template>
         <template v-slot:[`no-results`]>
           <div class="font-bold">
-            {{ this.search_filter ? "" : $t("no data found in table") }}
+            {{ $t("no data found in table") }}
           </div>
         </template>
         <template v-slot:no-data>
@@ -802,6 +800,7 @@ export default {
     loadingOverlay,
   },
   data: () => ({
+    search_bool: false,
     search_filter: "",
     today: new Date().toISOString(),
     search_student: null,
@@ -1085,6 +1084,7 @@ export default {
       };
     },
     async clickTab() {
+      this.search_bool = true;
       if (this.tabs_temp !== this.tab_selected) {
         this.tabs_change = true;
       }
