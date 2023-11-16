@@ -680,6 +680,7 @@ const coachModules = {
           endIndex = page * limit;
           data.data.leaveList = data.data?.leaveList.slice(startIndex, endIndex)
           data.data.count = status === 'approved' ? data.data.amountApproved : (status === 'pending' ? data.data.amountPending : (status === 'reject' ? data.data.amountReject : (status === 'cancel' ? data.data.amountCancel : data.data.amount)))
+
           await context.commit("SetNewCoachLeaves", data.data)
           await context.commit("SetCoachLeavesIsLoading", false)
         }
@@ -734,16 +735,16 @@ const coachModules = {
         let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coach/leave`, payloadData, config)
         if (data.statusCode === 201) {
           if (admin) {
-            context.dispatch("GetLeavesAll",{
-              limit : 10,
-              page : 1,
+            context.dispatch("GetLeavesAll", {
+              limit: 10,
+              page: 1,
             })
-          
+
           } else {
-            context.dispatch("GetLeavesByAccountId",{
-              limit : 10,
-              page : 1,
-              status :"",
+            context.dispatch("GetLeavesByAccountId", {
+              limit: 10,
+              page: 1,
+              status: "",
             })
           }
           Swal.fire({
