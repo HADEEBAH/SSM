@@ -1,18 +1,24 @@
 <template>
   <v-container>
     <loading-overlay :loading="coach_leaves_is_loadings"> </loading-overlay>
-    <headerPage :title="$t('approval of leave')" slot_tag>
-      <!-- search -->
-      <v-text-field
-        v-model="search"
-        :placeholder="$t('search')"
-        prepend-inner-icon="mdi-magnify"
-        outlined
-        dense
-        color="#ff6b81"
-      >
-      </v-text-field>
-    </headerPage>
+    <v-row>
+      <v-col cols="6">
+        <headerPage :title="$t('approval of leave')" slot_tag />
+      </v-col>
+      <v-col cols="6">
+        <v-text-field
+          v-model="search"
+          :placeholder="$t('search')"
+          outlined
+          dense
+          color="#ff6b81"
+          append-outer-icon="mdi-magnify"
+        >
+        </v-text-field>
+      </v-col>
+    </v-row>
+    <!-- search -->
+
     <v-row>
       <v-col cols="12" align="right">
         <v-btn

@@ -24,12 +24,13 @@
           <v-text-field
             hide-details
             dense
-            prepend-inner-icon="mdi-magnify"
             outlined
             :placeholder="$t('search')"
             v-model="search_filter"
             color="#ff6b81"
-            @input="clickTab(search_filter)"
+            append-outer-icon="mdi-magnify"
+            @click:append-outer="clickTab(search_filter)"
+            @keyup.enter="clickTab(search_filter)"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -257,7 +258,9 @@
           }}
         </template>
         <template v-slot:[`no-results`]>
-          <div class="font-bold">{{ $t("no data found in table") }}</div>
+          <div class="font-bold">
+            {{ this.search_filter ? "" : $t("no data found in table") }}
+          </div>
         </template>
         <template v-slot:no-data>
           <div class="font-bold">
@@ -1126,18 +1129,39 @@ export default {
       this.orders_is_loadings = true;
       await this.FilterFinanceData({
         name: this.search_filter,
-        limit: itemsPerPage,
-        page: this.tabs_change ? 1 : page,
+        limit: this.search_filter
+          ? this.text_change
+            ? 10
+            : itemsPerPage
+          : this.tabs_change
+          ? 10
+          : itemsPerPage,
+
+        page: this.search_filter
+          ? this.text_change
+            ? 1
+            : page
+          : this.tabs_change
+          ? 1
+          : page,
+        // limit: itemsPerPage,
+
+        // page: this.tabs_change ? 1 : page,
+        // page: page,
         status: status,
       });
-      this.orders_is_loadings = false;
 
       if (this.tabs_change) {
+        this.$refs.orders.$props.options.page = 1;
+      }
+      if (this.text_change) {
         this.$refs.orders.$props.options.page = 1;
       }
 
       this.disable_pagination_btn = false;
       this.tabs_change = false;
+      this.text_change = false;
+      // this.orders_is_loadings = false;
     },
   },
 };
