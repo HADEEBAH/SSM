@@ -67,17 +67,25 @@
         <v-row dense>
           <v-col class="flex align-center">
             <label class="text-lg font-bold ma-2">{{
-              new Date(focus).toLocaleDateString("th-TH", {
-                day: "numeric",
-                weekday: "long",
-              })
+              new Date(focus).toLocaleDateString(
+                this.$i18n.locale == "th" ? "th-TH" : "en-US",
+                {
+                  day: "numeric",
+                  weekday: "long",
+                  year: "numeric",
+                  month: "long",
+                }
+              )
             }}</label>
             <v-divider></v-divider>
           </v-col>
         </v-row>
         <div v-if="event_date.length >= 0">
           <template>
-            <div v-for="(event, event_index) in event_date" :key="`${event_index}-event`">
+            <div
+              v-for="(event, event_index) in event_date"
+              :key="`${event_index}-event`"
+            >
               <v-card flat v-if="!event.type">
                 <v-card-text class="border-2 border-[#ff6b81]">
                   <v-row dense>
@@ -90,19 +98,33 @@
 
                     <v-col>
                       {{ $t("study by") }}:
-                      <span class="font-bold">{{ $i18n.locale == "th" ? event.timed : event.studentNameEn}}</span>
+                      <span class="font-bold">{{
+                        $i18n.locale == "th" ? event.timed : event.studentNameEn
+                      }}</span>
 
                       <v-row dense>
                         <v-col cols="12">
                           {{ $t("course") }}:
-                          <span class="font-bold">{{ event.name }}</span>
+                          <span class="font-bold">
+                            {{
+                              $i18n.locale == "th"
+                                ? event.courseTh
+                                : event.courseEn
+                            }}
+                          </span>
                         </v-col>
                       </v-row>
                       <v-row dense>
                         <v-col class="text-sm">
                           {{ $t("coach") }}:
-                          <span class="font-bold">{{ event.subtitle }} </span
-                          ><br />
+                          <span class="font-bold">
+                            {{
+                              $i18n.locale == "th"
+                                ? event.coachNameTh
+                                : event.coachNameEn
+                            }}
+                          </span>
+                          <br />
                           <div>
                             <v-btn
                               small
@@ -133,7 +155,7 @@
                   <v-row dense>
                     <v-col cols="12">
                       {{ $t("holiday") }}:
-                      <span class="font-bold">{{event.name }}</span>
+                      <span class="font-bold">{{ event.name }}</span>
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -280,7 +302,9 @@ export default {
           if (!event.type) {
             if (start === end && start === date) {
               this.event_date.push({
-                studentNameEn : event.studentNameEn,
+                studentNameEn: event.studentNameEn,
+                courseTh: event.courseTh,
+                courseEn: event.courseEn,
                 timed: event.timed,
                 name: event.name,
                 subtitle: event.subtitle,
@@ -288,6 +312,8 @@ export default {
                 start_time: start_time,
                 end_time: end_time,
                 color: event.color,
+                coachNameTh: event.coachNameTh,
+                coachNameEn: event.coachNameEn,
                 courseId: event.courseId,
               });
             }
