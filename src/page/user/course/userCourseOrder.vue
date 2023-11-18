@@ -67,7 +67,8 @@
         <v-radio-group v-model="course_order.day" @change="resetTime">
           <v-row>
             <v-col
-              cols="6"
+              cols="12"
+              sm="6"
               v-for="(date, date_index) in course_data.days"
               :key="date_index"
             >
@@ -88,7 +89,8 @@
           <v-radio-group v-model="course_order.time">
             <v-row>
               <v-col
-                cols="6"
+                cols="12"
+                sm="6"
                 v-for="(time, time_index) in course_order.day.times"
                 :key="time_index"
               >
