@@ -459,24 +459,6 @@ const CourseModules = {
                   }
                 }
               } else {
-                // if (coachDate?.coachLeaveDate) {
-                //   for await (const dateLeave of coachDate?.coachLeaveDate) {
-                //     if (datesList.filter(v => v.date === dateLeave.teachCompensationDate && v.start === dateLeave.teachCompensationStartTime && v.end === dateLeave.teachCompensationEndTime && v.cpo.packageName === coachDate.cpo.packageName).length === 0) {
-                //       datesList.push({
-                //         coachId :coach.coachId,
-                //         date: dateLeave.teachCompensationDate,
-                //         timeId: null,
-                //         start: dateLeave.teachCompensationStartTime,
-                //         end: dateLeave.teachCompensationEndTime,
-                //         time: `${dateLeave.teachCompensationStartTime}-${dateLeave.teachCompensationEndTime} ${VueI18n.t("o'clock")}`,
-                //         cpo: coachDate.cpo ? coachDate.cpo : null,
-                //         cpoId: coachDate.cpo?.cpoId ? coachDate.cpo?.cpoId : null,
-                //         students: coachDate.studentArr,
-                //         checked: false,
-                //       })
-                //     }
-                //   }
-                // }
                 for await (const date of coachDate.dates.date) {
                   if (datesList.filter(v =>v.coachId == coach.coachId && v.date === date && v.start === coachDate.time.start && v.end === coachDate.time.end && v.cpo.packageName === coachDate.cpo.packageName).length === 0) {
                     datesList.push({

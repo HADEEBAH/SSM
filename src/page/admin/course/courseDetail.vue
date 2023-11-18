@@ -738,7 +738,7 @@
                                   </template>
                                 </v-autocomplete>
                               </v-col>
-                              <v-col>
+                              <v-col v-if="course_data.course_type_id== 'CT_1'">
                                 <v-autocomplete
                                   dense
                                   v-model="filter.package"
