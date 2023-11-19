@@ -1769,6 +1769,7 @@ const CourseModules = {
     // EXPORT COURSE STUDENT LIST
     async ExportStudentList(context, { coach_list, course_id, course_name, course_type_id }) {
       try {
+        console.log({ coach_list, course_id, course_name, course_type_id })
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -1849,7 +1850,7 @@ const CourseModules = {
         }
         var workbook = XLSX.utils.book_new();
         var worksheet = XLSX.utils.json_to_sheet(report);
-        XLSX.utils.book_append_sheet(workbook, worksheet, course_name);
+        XLSX.utils.book_append_sheet(workbook, worksheet, "sheet 1");
         var excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
         var blob = new Blob([excelBuffer], { type: "application/octet-stream" });
         var url = URL.createObjectURL(blob);
