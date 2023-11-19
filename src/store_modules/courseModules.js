@@ -320,8 +320,8 @@ const CourseModules = {
   },
   actions: {
     // DELETE : COURSE COACH
-    async DeleteCourseCoach(context, {course_id, course_coach_id}){
-      try{
+    async DeleteCourseCoach(context, { course_id, course_coach_id }) {
+      try {
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -329,8 +329,8 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let {data} = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/admincourse/delete-course-coach/${course_coach_id}`,config)
-        if(data.statusCode == 200){
+        let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/admincourse/delete-course-coach/${course_coach_id}`, config)
+        if (data.statusCode == 200) {
           context.dispatch("GetCourse", course_id)
           Swal.fire({
             icon: "success",
@@ -343,7 +343,7 @@ const CourseModules = {
             timerProgressBar: true,
           })
         }
-      }catch(error){
+      } catch (error) {
         if (error.response.data.message == "This coach cannot be deleted. Because the middle of teaching") {
           Swal.fire({
             icon: "error",
@@ -477,10 +477,9 @@ const CourseModules = {
                 }
               }
           }
-          let coachId=[]
-          data.data.map((v)=>
-          {
-            if(!coachId.includes(v.coachId)){
+          let coachId = []
+          data.data.map((v) => {
+            if (!coachId.includes(v.coachId)) {
               coachId.push(v.coachId)
               v.datesList = datesList.filter(f => f.coachId == v.coachId).sort(function (a, b) {
                 var dateA = new Date(a.date);
@@ -491,7 +490,7 @@ const CourseModules = {
             return v
           })
           context.commit("SetCoachListIsLoading", false)
-          context.commit("SetCoachList",data.data.filter(v => v.datesList))
+          context.commit("SetCoachList", data.data.filter(v => v.datesList))
         }
       } catch (error) {
         context.commit("SetCoachListIsLoading", false)

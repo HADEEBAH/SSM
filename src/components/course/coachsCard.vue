@@ -7,10 +7,8 @@
         :class="`bg-[${color}] mb-5`"
         :key="coach_index"
       >
-      
         <!-- TEACH DAY -->
         <template v-for="(teach_day, teach_day_index) in coach.teach_day_data">
-          
           <v-card-text :key="`${teach_day_index}-day`" class="border">
             <v-divider
               v-if="teach_day_index > 0"
@@ -27,7 +25,13 @@
                   :label="$t('teaching')"
                 ></v-switch>
               </v-col>
-              <v-col cols="auto" v-if="course_data.coachs.filter(v => v.teach_day_data.length > 0).length > 1">
+              <v-col
+                cols="auto"
+                v-if="
+                  course_data.coachs.filter((v) => v.teach_day_data.length > 0)
+                    .length > 1
+                "
+              >
                 <template v-if="!teach_day?.course_coach_id">
                   <v-btn
                     icon
@@ -44,7 +48,12 @@
                     small
                     color="red"
                     v-if="!disable"
-                    @click="DeleteCoachById(coach.course_coach_id,course_data.course_id)"
+                    @click="
+                      DeleteCoachById(
+                        coach.course_coach_id,
+                        course_data.course_id
+                      )
+                    "
                     ><v-icon>mdi-close</v-icon></v-btn
                   >
                 </template>
@@ -388,7 +397,8 @@ export default {
     },
     class_date() {
       return [
-        (val) => (val || "").length > 0 || this.$t("please select a date"),
+        (val) =>
+          (val || "").length > 0 || this.$t("please select a teaching date"),
       ];
     },
     start_time() {
@@ -426,7 +436,7 @@ export default {
       DeleteTime: "CourseModules/DeleteTime",
       GetCourse: "CourseModules/GetCourse",
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
-      DeleteCourseCoach:"CourseModules/DeleteCourseCoach",
+      DeleteCourseCoach: "CourseModules/DeleteCourseCoach",
     }),
     checkMinute(teach_day, hours) {
       if (teach_day.length > 1) {
@@ -558,7 +568,7 @@ export default {
         }
       }
     },
-    DeleteCoachById(course_coach_id, course_id){
+    DeleteCoachById(course_coach_id, course_id) {
       Swal.fire({
         icon: "question",
         title: this.$t("want to delete a coach?"),
@@ -569,12 +579,11 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.DeleteCourseCoach({
-            course_id : course_id,
-            course_coach_id : course_coach_id
-          })
+            course_id: course_id,
+            course_coach_id: course_coach_id,
+          });
         }
-      })
-     
+      });
     },
     removeCoach(coach, index) {
       coach.splice(index, 1);

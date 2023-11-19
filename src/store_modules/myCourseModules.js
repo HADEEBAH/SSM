@@ -141,12 +141,16 @@ const myCourseModules = {
                             dataCourseSchedule.dates.push({
                                 start: date + ' ' + course.period.start,
                                 end: date + ' ' + course.period.end,
-                                name: data_local.roles.includes('R_5') ? `${course.courseName.courseNameTh}(${course.courseName.courseNameEn})` : `${VueI18n.locale == 'th' ? course.studentName : course.studentNameEn} : ${course.courseName.courseNameTh} (${course.courseName.courseNameEn})`,
+                                name: data_local.roles.includes('R_5') ? `${VueI18n.locale == 'th' ? course.courseName.courseNameTh : course.courseName.courseNameEn}` : `${VueI18n.locale == 'th' ? course.studentName : course.studentNameEn} : ${course.courseName.courseNameTh} (${course.courseName.courseNameEn})`,
+                                courseTh: course.courseName.courseNameTh,
+                                courseEn: course.courseName.courseNameEn,
                                 timed: course.studentName,
-                                studentNameEn : course.studentNameEn,
+                                studentNameEn: course.studentNameEn,
                                 start_time: course.period.start,
                                 end_time: course.period.end,
-                                subtitle: `${course.coachName}(${course.coachNameEn})`,
+                                coachNameTh: course.coachName,
+                                coachNameEn: course.coachNameEn,
+                                // subtitle: `${course.coachName}(${course.coachNameEn})`,
                                 courseId: course.courseId,
                                 // test1: course
                             })
@@ -172,7 +176,7 @@ const myCourseModules = {
                     }
                     let mycourse = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
                     if (mycourse.data.statusCode === 200) {
-                        for(let course of mycourse.data.data){
+                        for (let course of mycourse.data.data) {
                             course.day_name = course.dates.day ? dayOfWeekArray(course.dates.day) : course.dates.day
                         }
                         if (data_local.roles.includes('R_4')) {

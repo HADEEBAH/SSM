@@ -2555,6 +2555,16 @@ export default {
               }
             };
             reader.readAsDataURL(file);
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: this.$t("something went wrong"),
+              text: this.$t("upload only image files (png, jpeg) only"),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
           }
         }
       }
@@ -2567,7 +2577,7 @@ export default {
     removeArtworkFileData(data, index) {
       Swal.fire({
         icon: "question",
-        title: "do you want to delete this file?",
+        title: this.$t("do you want to delete this file?"),
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: this.$t("agree"),
@@ -2585,7 +2595,7 @@ export default {
     removePrivilegeFileData() {
       Swal.fire({
         icon: "question",
-        title: "do you want to delete this file?",
+        title: this.$t("do you want to delete this file?"),
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: this.$t("agree"),
