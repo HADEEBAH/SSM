@@ -1271,7 +1271,7 @@
                     </template>
                   </v-data-table>
                 </v-tab-item>
-                <v-tab-item valus="students potential">
+                <v-tab-item valus="student potential">
                   <v-card flat dent class="mb-3 rounded-lg">
                     <v-card-text class="py-2 bg-[#FCE0E7] rounded-lg">
                       <v-row dense class="d-flex align-center">
@@ -2258,6 +2258,7 @@ export default {
       ExportStudentList: "CourseModules/ExportStudentList",
     }),
     searchStudentPotential(search) {
+      console.log( this.coach_list)
       let coach_list_search = [];
       const regex = new RegExp(search.trim(), "i");
       for (let coach of this.coach_list.filter(
