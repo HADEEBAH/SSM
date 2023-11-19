@@ -568,6 +568,7 @@
               >
                 <template v-slot:selection="{ attrs, item, selected }">
                   <v-chip
+                    :disabled="disable"
                     v-bind="attrs"
                     :input-value="selected"
                     close
@@ -961,7 +962,8 @@ export default {
     },
     class_date() {
       return [
-        (val) => (val || "").length > 0 || this.$t("please select a date"),
+        (val) =>
+          (val || "").length > 0 || this.$t("please select a teaching date"),
       ];
     },
     coach() {
@@ -1204,6 +1206,7 @@ export default {
         } else {
           Swal.fire({
             icon: "error",
+            title: this.$t("something went wrong"),
             text: this.$t("upload only image files (png, jpeg) only"),
             timer: 3000,
             timerProgressBar: true,

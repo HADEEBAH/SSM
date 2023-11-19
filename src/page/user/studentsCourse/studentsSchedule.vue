@@ -240,9 +240,9 @@
                         <v-col>
                           <v-chip color="#F9B320" dark>
                             {{
-                              `${item.day_name} ${item.period.start} - ${
-                                item.period.end
-                              } ${$t("o'clock")}`
+                              `${dayOfWeekArray(item.dates.day)} ${
+                                item.period.start
+                              } - ${item.period.end} ${$t("o'clock")}`
                             }}
                           </v-chip>
                         </v-col>
@@ -385,12 +385,13 @@
                       </v-col>
                     </v-row>
                     <v-row dense>
+                      <!-- <pre>{{ item }}</pre> -->
                       <v-col cols="12">
                         <v-chip color="#F9B320" dark>
                           {{
-                            `${item.day_name} ${item.period.start} - ${
-                              item.period.end
-                            } ${$t("o'clock")}`
+                            `${dayOfWeekArray(item.dates.day)} ${
+                              item.period.start
+                            } - ${item.period.end} ${$t("o'clock")}`
                           }}
                         </v-chip>
                       </v-col>
@@ -1125,7 +1126,7 @@ export default {
         page: 1,
       });
       this.loading_overlay = false;
-    }else if (this.user_detail.roles?.includes("R_4")) {
+    } else if (this.user_detail.roles?.includes("R_4")) {
       await this.GetStudentData(this.user_detail.account_id);
       await this.GetProfileBooked({
         account_id: this.user_detail?.account_id,
@@ -1133,11 +1134,11 @@ export default {
         page: 1,
       });
       this.loading_overlay = false;
-    }else{
+    } else {
       this.$router.push({
-        name: 'StudentsSchedule',
-        params: { action: 'MyBooking' },
-      })
+        name: "StudentsSchedule",
+        params: { action: "MyBooking" },
+      });
       this.loading_overlay = false;
     }
   },
@@ -1202,6 +1203,43 @@ export default {
       loginShareToken: "loginModules/loginShareToken",
       GetCourse: "CourseModules/GetCourse",
     }),
+
+    dayOfWeekArray(day) {
+      let days = day;
+      const weekdays = [
+        this.$t("sunday"),
+        this.$t("monday"),
+        this.$t("tuesday"),
+        this.$t("wednesday"),
+        this.$t("thursday"),
+        this.$t("friday"),
+        this.$t("saturday"),
+      ];
+      let ranges = [];
+      if (days[0]) {
+        let rangeStart = parseInt(days[0]);
+        let prevDay = rangeStart;
+        for (let i = 1; i < days.length; i++) {
+          const day = parseInt(days[i]);
+          if (day === prevDay + 1) {
+            prevDay = day;
+          } else {
+            const rangeEnd = prevDay;
+            ranges.push({ start: rangeStart, end: rangeEnd });
+            rangeStart = day;
+            prevDay = day;
+          }
+        }
+        ranges.push({ start: rangeStart, end: prevDay });
+        return ranges
+          .map(({ start, end }) =>
+            start === end
+              ? weekdays[start]
+              : `${weekdays[start]} - ${weekdays[end]}`
+          )
+          .join(", ");
+      }
+    },
 
     async searchStudentCourse(studentId) {
       if (studentId !== null) {

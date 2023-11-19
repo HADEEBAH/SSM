@@ -126,7 +126,7 @@ export const CheckFileSize = (file, id) => { //check file รอ merge กับ
         Swal.fire({
             icon: "error",
             title: VueI18n.t('something went wrong'),
-            text: VueI18n.t('file size must not exceed 5 MB'),
+            text: VueI18n.t('upload only image files (png, jpeg) only 55'),
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,

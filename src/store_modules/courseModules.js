@@ -320,8 +320,8 @@ const CourseModules = {
   },
   actions: {
     // DELETE : COURSE COACH
-    async DeleteCourseCoach(context, {course_id, course_coach_id}){
-      try{
+    async DeleteCourseCoach(context, { course_id, course_coach_id }) {
+      try {
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -329,8 +329,8 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let {data} = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/admincourse/delete-course-coach/${course_coach_id}`,config)
-        if(data.statusCode == 200){
+        let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/admincourse/delete-course-coach/${course_coach_id}`, config)
+        if (data.statusCode == 200) {
           context.dispatch("GetCourse", course_id)
           Swal.fire({
             icon: "success",
@@ -343,7 +343,7 @@ const CourseModules = {
             timerProgressBar: true,
           })
         }
-      }catch(error){
+      } catch (error) {
         if (error.response.data.message == "This coach cannot be deleted. Because the middle of teaching") {
           Swal.fire({
             icon: "error",
@@ -419,86 +419,85 @@ const CourseModules = {
         if (data.statusCode === 200) {
           let datesList = []
           for await (let coach of data.data) {
-              coach.checked = false
-              let coachDate = coach
-              if (!coachDate.cpo?.cpoId) {
-                if (coachDate?.coachLeaveDate) {
-                  for await (const dateLeave of coachDate?.coachLeaveDate) {
-                    datesList.push({
-                      coachId :coach.coachId,
-                      date: dateLeave.teachCompensationDate,
-                      timeId: null,
-                      start: dateLeave.teachCompensationStartTime,
-                      end: dateLeave.teachCompensationEndTime,
-                      startDate: coachDate.dates.startDate ? new Date(coachDate.dates.startDate).toLocaleDateString("th-TH") : '',
-                      endDate: coachDate.dates.endDate ? new Date(coachDate.dates.endDate).toLocaleDateString("th-TH") : '',
-                      time: `${dateLeave.teachCompensationStartTime}-${dateLeave.teachCompensationEndTime} ${VueI18n.t("o'clock")}`,
-                      cpo: coachDate.cpo ? coachDate.cpo : null,
-                      cpoId: coachDate.cpo?.cpoId ? coachDate.cpo?.cpoId : null,
-                      students: coachDate.studentArr,
-                      checked: false,
-                    })
-                  }
-                }
-                for await (const date of coachDate.dates.date) {
-                  if (datesList.filter(v => v.date === date).length === 0) {
-                    datesList.push({
-                      coachId :coach.coachId,
-                      date: date,
-                      timeId: coachDate.time.timeId,
-                      start: coachDate.time.start,
-                      end: coachDate.time.end,
-                      startDate: coachDate.dates.startDate ? new Date(coachDate.dates.startDate).toLocaleDateString("th-TH") : '',
-                      endDate: coachDate.dates.endDate ? new Date(coachDate.dates.endDate).toLocaleDateString("th-TH") : '',
-                      time: `${coachDate.time.start}-${coachDate.time.end} ${VueI18n.t("o'clock")}`,
-                      cpo: coachDate.cpo ? coachDate.cpo : null,
-                      cpoId: coachDate.cpo?.cpoId ? coachDate.cpo?.cpoId : null,
-                      students: coachDate.studentArr,
-                      checked: false,
-                    })
-                  }
-                }
-              } else {
-                // if (coachDate?.coachLeaveDate) {
-                //   for await (const dateLeave of coachDate?.coachLeaveDate) {
-                //     if (datesList.filter(v => v.date === dateLeave.teachCompensationDate && v.start === dateLeave.teachCompensationStartTime && v.end === dateLeave.teachCompensationEndTime && v.cpo.packageName === coachDate.cpo.packageName).length === 0) {
-                //       datesList.push({
-                //         coachId :coach.coachId,
-                //         date: dateLeave.teachCompensationDate,
-                //         timeId: null,
-                //         start: dateLeave.teachCompensationStartTime,
-                //         end: dateLeave.teachCompensationEndTime,
-                //         time: `${dateLeave.teachCompensationStartTime}-${dateLeave.teachCompensationEndTime} ${VueI18n.t("o'clock")}`,
-                //         cpo: coachDate.cpo ? coachDate.cpo : null,
-                //         cpoId: coachDate.cpo?.cpoId ? coachDate.cpo?.cpoId : null,
-                //         students: coachDate.studentArr,
-                //         checked: false,
-                //       })
-                //     }
-                //   }
-                // }
-                for await (const date of coachDate.dates.date) {
-                  if (datesList.filter(v =>v.coachId == coach.coachId && v.date === date && v.start === coachDate.time.start && v.end === coachDate.time.end && v.cpo.packageName === coachDate.cpo.packageName).length === 0) {
-                    datesList.push({
-                      coachId :coach.coachId,
-                      date: date,
-                      timeId: coachDate.time.timeId,
-                      start: coachDate.time.start,
-                      end: coachDate.time.end,
-                      time: `${coachDate.time.start} - ${coachDate.time.end} ${VueI18n.t("o'clock")}`,
-                      cpo: coachDate.cpo ? coachDate.cpo : null,
-                      cpoId: coachDate.cpo.cpoId ? coachDate.cpo.cpoId : null,
-                      students: coachDate.studentArr,
-                      checked: false,
-                    })
-                  }
+            coach.checked = false
+            let coachDate = coach
+            if (!coachDate.cpo?.cpoId) {
+              if (coachDate?.coachLeaveDate) {
+                for await (const dateLeave of coachDate?.coachLeaveDate) {
+                  datesList.push({
+                    coachId: coach.coachId,
+                    date: dateLeave.teachCompensationDate,
+                    timeId: null,
+                    start: dateLeave.teachCompensationStartTime,
+                    end: dateLeave.teachCompensationEndTime,
+                    startDate: coachDate.dates.startDate ? new Date(coachDate.dates.startDate).toLocaleDateString("th-TH") : '',
+                    endDate: coachDate.dates.endDate ? new Date(coachDate.dates.endDate).toLocaleDateString("th-TH") : '',
+                    time: `${dateLeave.teachCompensationStartTime}-${dateLeave.teachCompensationEndTime} ${VueI18n.t("o'clock")}`,
+                    cpo: coachDate.cpo ? coachDate.cpo : null,
+                    cpoId: coachDate.cpo?.cpoId ? coachDate.cpo?.cpoId : null,
+                    students: coachDate.studentArr,
+                    checked: false,
+                  })
                 }
               }
+              for await (const date of coachDate.dates.date) {
+                if (datesList.filter(v => v.date === date).length === 0) {
+                  datesList.push({
+                    coachId: coach.coachId,
+                    date: date,
+                    timeId: coachDate.time.timeId,
+                    start: coachDate.time.start,
+                    end: coachDate.time.end,
+                    startDate: coachDate.dates.startDate ? new Date(coachDate.dates.startDate).toLocaleDateString("th-TH") : '',
+                    endDate: coachDate.dates.endDate ? new Date(coachDate.dates.endDate).toLocaleDateString("th-TH") : '',
+                    time: `${coachDate.time.start}-${coachDate.time.end} ${VueI18n.t("o'clock")}`,
+                    cpo: coachDate.cpo ? coachDate.cpo : null,
+                    cpoId: coachDate.cpo?.cpoId ? coachDate.cpo?.cpoId : null,
+                    students: coachDate.studentArr,
+                    checked: false,
+                  })
+                }
+              }
+            } else {
+              // if (coachDate?.coachLeaveDate) {
+              //   for await (const dateLeave of coachDate?.coachLeaveDate) {
+              //     if (datesList.filter(v => v.date === dateLeave.teachCompensationDate && v.start === dateLeave.teachCompensationStartTime && v.end === dateLeave.teachCompensationEndTime && v.cpo.packageName === coachDate.cpo.packageName).length === 0) {
+              //       datesList.push({
+              //         coachId :coach.coachId,
+              //         date: dateLeave.teachCompensationDate,
+              //         timeId: null,
+              //         start: dateLeave.teachCompensationStartTime,
+              //         end: dateLeave.teachCompensationEndTime,
+              //         time: `${dateLeave.teachCompensationStartTime}-${dateLeave.teachCompensationEndTime} ${VueI18n.t("o'clock")}`,
+              //         cpo: coachDate.cpo ? coachDate.cpo : null,
+              //         cpoId: coachDate.cpo?.cpoId ? coachDate.cpo?.cpoId : null,
+              //         students: coachDate.studentArr,
+              //         checked: false,
+              //       })
+              //     }
+              //   }
+              // }
+              for await (const date of coachDate.dates.date) {
+                if (datesList.filter(v => v.coachId == coach.coachId && v.date === date && v.start === coachDate.time.start && v.end === coachDate.time.end && v.cpo.packageName === coachDate.cpo.packageName).length === 0) {
+                  datesList.push({
+                    coachId: coach.coachId,
+                    date: date,
+                    timeId: coachDate.time.timeId,
+                    start: coachDate.time.start,
+                    end: coachDate.time.end,
+                    time: `${coachDate.time.start} - ${coachDate.time.end} ${VueI18n.t("o'clock")}`,
+                    cpo: coachDate.cpo ? coachDate.cpo : null,
+                    cpoId: coachDate.cpo.cpoId ? coachDate.cpo.cpoId : null,
+                    students: coachDate.studentArr,
+                    checked: false,
+                  })
+                }
+              }
+            }
           }
-          let coachId=[]
-          data.data.map((v)=>
-          {
-            if(!coachId.includes(v.coachId)){
+          let coachId = []
+          data.data.map((v) => {
+            if (!coachId.includes(v.coachId)) {
               coachId.push(v.coachId)
               v.datesList = datesList.filter(f => f.coachId == v.coachId).sort(function (a, b) {
                 var dateA = new Date(a.date);
@@ -509,7 +508,7 @@ const CourseModules = {
             return v
           })
           context.commit("SetCoachListIsLoading", false)
-          context.commit("SetCoachList",data.data.filter(v => v.datesList))
+          context.commit("SetCoachList", data.data.filter(v => v.datesList))
         }
       } catch (error) {
         context.commit("SetCoachListIsLoading", false)
@@ -1806,7 +1805,7 @@ const CourseModules = {
                       report.push({
                         "วันที่": date.date,
                         "เวลาเรียน": date.time,
-                        "ชืี่อโค้ช": `${coach.firstNameTh} ${coach.lastNameTh}`,
+                        "ชื่อโค้ช": `${coach.firstNameTh} ${coach.lastNameTh}`,
                         "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
                         "แพ็กเกจ": date.cpo.packageName,
                         "ระยะเวลา": student.cpo?.optionName,
@@ -1820,7 +1819,7 @@ const CourseModules = {
                       report.push({
                         "วันที่": date.date,
                         "เวลาเรียน": date.time,
-                        "ชืี่อโค้ช": `${coach.firstNameTh} ${coach.lastNameTh}`,
+                        "ชื่อโค้ช": `${coach.firstNameTh} ${coach.lastNameTh}`,
                         "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
                         "การเขาเรียน": student.status === "punctual" ? "ตรงเวลา" : student.status === "late" ? "สาย" : student.status === "leave" ? "ลา" : student.status === "emergency leave" ? 'ลาฉุกเฉิน' : student.status === "absent" ? 'ขาด' : '-',
                         "ระดับพัฒนาการ": student.assessment?.evolution === "very good" ? 'ดีมาก' : student.assessment?.evolution === "good" ? 'ดี' : 'ปรับปรุง',
@@ -1836,7 +1835,7 @@ const CourseModules = {
                       report.push({
                         "วันที่": date.date,
                         "เวลาเรียน": date.time,
-                        "ชืี่อโค้ช": `${coach.firstNameTh} ${coach.lastNameTh}`,
+                        "ชื่อโค้ช": `${coach.firstNameTh} ${coach.lastNameTh}`,
                         "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
                         "แพ็กเกจ": date.cpo.packageName,
                         "ระยะเวลา": date.cpo?.optionName,
@@ -1850,7 +1849,7 @@ const CourseModules = {
                       report.push({
                         "วันที่": date.date,
                         "เวลาเรียน": date.time,
-                        "ชืี่อโค้ช": `${coach.firstNameTh} ${coach.lastNameTh}`,
+                        "ชื่อโค้ช": `${coach.firstNameTh} ${coach.lastNameTh}`,
                         "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
                         "การเขาเรียน": "",
                         "ระดับพัฒนาการ": "",

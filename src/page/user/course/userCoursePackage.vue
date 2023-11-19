@@ -2,51 +2,64 @@
   <v-app>
     {{ SetFunction }}
     <v-container>
-      <ImgCard vertical_detail color="#FEFBFC" outlined class="mb-3">
-        <template v-slot:img>
-          <v-img
-            class="rounded-lg"
-            :src="
-              course_data.course_img || course_data.course_img !== ''
-                ? course_data.course_img
-                : require(`@/assets/course/default_course_img.svg`)
-            "
-            style="max-width: 500px"
-            :aspect-ratio="16 / 9"
-          >
-            <template v-slot:placeholder>
-              <v-row class="fill-height ma-0" align="center" justify="center">
-                <v-progress-circular
-                  indeterminate
-                  color="#ff6b81"
-                ></v-progress-circular>
-              </v-row> </template
-          ></v-img>
-        </template>
-        <template v-slot:header>
-          <div class="text-md font-bold">
-            {{
-              `${
-                $i18n.locale == "th"
-                  ? course_data.course_name_th
-                  : course_data.course_name_en
-              }`
-            }}
-          </div>
-          <div class="text-sm">{{ course_data.location }}</div>
-        </template>
-        <template v-slot:detail>
-          <v-row dense>
-            <v-col cols="12" sm="6" class="pa-0">
-              <rowData mini col_detail="8" icon="mdi-clock-outline">
-                {{ course_data.course_hours }} {{ $t("hrs.") }}/{{
-                  $t("time")
-                }}</rowData
+      <v-card class="mb-3">
+        <v-row dense>
+          <v-col cols="12" sm="6">
+            <v-img
+              class="rounded-lg my-3 mx-3"
+              style="max-width: 400px; max-height: 400px"
+              :src="
+                course_data.course_img || course_data.course_img !== ''
+                  ? course_data.course_img
+                  : require(`@/assets/course/default_course_img.svg`)
+              "
+              :aspect-ratio="16 / 9"
+            >
+              <template v-slot:placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-progress-circular
+                    indeterminate
+                    color="#ff6b81"
+                  ></v-progress-circular>
+                </v-row> </template
+            ></v-img>
+          </v-col>
+          <v-col cols="12" sm="6" align-self="start">
+            <!-- <template v-slot:header> -->
+            <div class="text-xl font-bold my-3 mx-3">
+              {{
+                `${
+                  $i18n.locale == "th"
+                    ? course_data.course_name_th
+                    : course_data.course_name_en
+                }`
+              }}
+            </div>
+            <div class="text-sm my-3 mx-3">{{ course_data.location }}</div>
+
+            <v-row dense class="my-3 mx-3">
+              <v-col cols="12" sm="6" class="pa-0">
+                <rowData mini col_detail="8" icon="mdi-clock-outline">
+                  {{ course_data.course_hours }} {{ $t("hrs.") }}/{{
+                    $t("time")
+                  }}</rowData
+                >
+              </v-col>
+              <!-- <v-col
+                cols="12"
+                sm="6"
+                class="pa-0"
+                v-if="course_data.course_type_id === 'CT_1'"
               >
-            </v-col>
-          </v-row>
-        </template>
-      </ImgCard>
+                <rowData mini col_detail="5" icon="mdi-book-multiple-outline">
+                  {{ course_order.package }}</rowData
+                >
+              </v-col> -->
+            </v-row>
+          </v-col>
+        </v-row>
+      </v-card>
+
       <v-row dense>
         <v-col cols="12" class="text-lg font-bold">{{
           $t("choose a package")
@@ -106,7 +119,7 @@
           `${selected_package.package} 1 : ${selected_package.students}`
         }}</v-col>
       </v-row>
-      <v-slide-group  center-active v-if="selected_package.package_id !== ''">
+      <v-slide-group center-active v-if="selected_package.package_id !== ''">
         <v-slide-item
           v-for="(option, option_index) in selected_package.options"
           :key="option_index"
@@ -330,12 +343,11 @@
 </template>
 
 <script>
-import ImgCard from "@/components/course/imgCard.vue";
 import rowData from "@/components/label/rowData.vue";
 import { mapGetters, mapActions } from "vuex";
 export default {
   name: "userCourseDetail",
-  components: { ImgCard, rowData },
+  components: { rowData },
   data: () => ({
     show_dialog_artwork: false,
     show_dialog_privilege: false,
