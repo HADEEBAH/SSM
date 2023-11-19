@@ -1789,7 +1789,7 @@ const CourseModules = {
                       report.push({
                         "วันที่": date.date,
                         "เวลาเรียน": date.time,
-                        "ชืี่อโค้ช": `${coach.firstNameTh} ${coach.lastNameTh}`,
+                        "ชืี่อโค้ช": `${coach.coachName}`,
                         "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
                         "แพ็กเกจ": date.cpo.packageName,
                         "ระยะเวลา": student.cpo?.optionName,
@@ -1803,7 +1803,7 @@ const CourseModules = {
                       report.push({
                         "วันที่": date.date,
                         "เวลาเรียน": date.time,
-                        "ชืี่อโค้ช": `${coach.firstNameTh} ${coach.lastNameTh}`,
+                        "ชืี่อโค้ช": `${coach.coachName}`,
                         "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
                         "การเขาเรียน": student.status === "punctual" ? "ตรงเวลา" : student.status === "late" ? "สาย" : student.status === "leave" ? "ลา" : student.status === "emergency leave" ? 'ลาฉุกเฉิน' : student.status === "absent" ? 'ขาด' : '-',
                         "ระดับพัฒนาการ": student.assessment?.evolution === "very good" ? 'ดีมาก' : student.assessment?.evolution === "good" ? 'ดี' : 'ปรับปรุง',
@@ -1819,7 +1819,7 @@ const CourseModules = {
                       report.push({
                         "วันที่": date.date,
                         "เวลาเรียน": date.time,
-                        "ชืี่อโค้ช": `${coach.firstNameTh} ${coach.lastNameTh}`,
+                        "ชืี่อโค้ช": `${coach.coachName}`,
                         "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
                         "แพ็กเกจ": date.cpo.packageName,
                         "ระยะเวลา": date.cpo?.optionName,
@@ -1833,7 +1833,7 @@ const CourseModules = {
                       report.push({
                         "วันที่": date.date,
                         "เวลาเรียน": date.time,
-                        "ชืี่อโค้ช": `${coach.firstNameTh} ${coach.lastNameTh}`,
+                        "ชืี่อโค้ช": `${coach.coachName}`,
                         "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
                         "การเขาเรียน": "",
                         "ระดับพัฒนาการ": "",
