@@ -4,10 +4,10 @@
       {{ setFunctions }}
       <v-card class="mb-3">
         <v-row dense>
-          <v-col cols="12" sm="6">
+          <v-col cols="12" sm="3" class="d-flex align-center">
             <v-img
               class="rounded-lg my-3 mx-3"
-              style="max-width: 400px; max-height: 400px"
+              :class="$vuetify.breakpoint.smAndUp ? 'width-img' : 'width-img-sm'"
               :src="
                 course_data.course_img || course_data.course_img !== ''
                   ? course_data.course_img
@@ -36,7 +36,6 @@
               }}
             </div>
             <div class="text-sm my-3 mx-3">{{ course_data.location }}</div>
-
             <v-row dense class="my-3 mx-3">
               <v-col cols="12" sm="6" class="pa-0">
                 <rowData mini col_detail="5" icon="mdi-clock-outline">
@@ -51,7 +50,7 @@
                 class="pa-0"
                 v-if="course_data.course_type_id === 'CT_1'"
               >
-                <rowData mini col_detail="5" icon="mdi-book-multiple-outline">
+                <rowData mini col_detail="7" icon="mdi-book-multiple-outline">
                   {{ course_order.package }}</rowData
                 >
               </v-col>
@@ -1701,3 +1700,6 @@ export default {
   },
 };
 </script>
+<style>
+ 
+</style>
