@@ -419,81 +419,63 @@ const CourseModules = {
         if (data.statusCode === 200) {
           let datesList = []
           for await (let coach of data.data) {
-            coach.checked = false
-            let coachDate = coach
-            if (!coachDate.cpo?.cpoId) {
-              if (coachDate?.coachLeaveDate) {
-                for await (const dateLeave of coachDate?.coachLeaveDate) {
-                  datesList.push({
-                    coachId: coach.coachId,
-                    date: dateLeave.teachCompensationDate,
-                    timeId: null,
-                    start: dateLeave.teachCompensationStartTime,
-                    end: dateLeave.teachCompensationEndTime,
-                    startDate: coachDate.dates.startDate ? new Date(coachDate.dates.startDate).toLocaleDateString("th-TH") : '',
-                    endDate: coachDate.dates.endDate ? new Date(coachDate.dates.endDate).toLocaleDateString("th-TH") : '',
-                    time: `${dateLeave.teachCompensationStartTime}-${dateLeave.teachCompensationEndTime} ${VueI18n.t("o'clock")}`,
-                    cpo: coachDate.cpo ? coachDate.cpo : null,
-                    cpoId: coachDate.cpo?.cpoId ? coachDate.cpo?.cpoId : null,
-                    students: coachDate.studentArr,
-                    checked: false,
-                  })
+              coach.checked = false
+              let coachDate = coach
+              if (!coachDate.cpo?.cpoId) {
+                if (coachDate?.coachLeaveDate) {
+                  for await (const dateLeave of coachDate?.coachLeaveDate) {
+                    datesList.push({
+                      coachId :coach.coachId,
+                      date: dateLeave.teachCompensationDate,
+                      timeId: null,
+                      start: dateLeave.teachCompensationStartTime,
+                      end: dateLeave.teachCompensationEndTime,
+                      startDate: coachDate.dates.startDate ? new Date(coachDate.dates.startDate).toLocaleDateString("th-TH") : '',
+                      endDate: coachDate.dates.endDate ? new Date(coachDate.dates.endDate).toLocaleDateString("th-TH") : '',
+                      time: `${dateLeave.teachCompensationStartTime}-${dateLeave.teachCompensationEndTime} ${VueI18n.t("o'clock")}`,
+                      cpo: coachDate.cpo ? coachDate.cpo : null,
+                      cpoId: coachDate.cpo?.cpoId ? coachDate.cpo?.cpoId : null,
+                      students: coachDate.studentArr,
+                      checked: false,
+                    })
+                  }
+                }
+                for await (const date of coachDate.dates.date) {
+                  if (datesList.filter(v => v.date === date).length === 0) {
+                    datesList.push({
+                      coachId :coach.coachId,
+                      date: date,
+                      timeId: coachDate.time.timeId,
+                      start: coachDate.time.start,
+                      end: coachDate.time.end,
+                      startDate: coachDate.dates.startDate ? new Date(coachDate.dates.startDate).toLocaleDateString("th-TH") : '',
+                      endDate: coachDate.dates.endDate ? new Date(coachDate.dates.endDate).toLocaleDateString("th-TH") : '',
+                      time: `${coachDate.time.start}-${coachDate.time.end} ${VueI18n.t("o'clock")}`,
+                      cpo: coachDate.cpo ? coachDate.cpo : null,
+                      cpoId: coachDate.cpo?.cpoId ? coachDate.cpo?.cpoId : null,
+                      students: coachDate.studentArr,
+                      checked: false,
+                    })
+                  }
+                }
+              } else {
+                for await (const date of coachDate.dates.date) {
+                  if (datesList.filter(v =>v.coachId == coach.coachId && v.date === date && v.start === coachDate.time.start && v.end === coachDate.time.end && v.cpo.packageName === coachDate.cpo.packageName).length === 0) {
+                    datesList.push({
+                      coachId :coach.coachId,
+                      date: date,
+                      timeId: coachDate.time.timeId,
+                      start: coachDate.time.start,
+                      end: coachDate.time.end,
+                      time: `${coachDate.time.start} - ${coachDate.time.end} ${VueI18n.t("o'clock")}`,
+                      cpo: coachDate.cpo ? coachDate.cpo : null,
+                      cpoId: coachDate.cpo.cpoId ? coachDate.cpo.cpoId : null,
+                      students: coachDate.studentArr,
+                      checked: false,
+                    })
+                  }
                 }
               }
-              for await (const date of coachDate.dates.date) {
-                if (datesList.filter(v => v.date === date).length === 0) {
-                  datesList.push({
-                    coachId: coach.coachId,
-                    date: date,
-                    timeId: coachDate.time.timeId,
-                    start: coachDate.time.start,
-                    end: coachDate.time.end,
-                    startDate: coachDate.dates.startDate ? new Date(coachDate.dates.startDate).toLocaleDateString("th-TH") : '',
-                    endDate: coachDate.dates.endDate ? new Date(coachDate.dates.endDate).toLocaleDateString("th-TH") : '',
-                    time: `${coachDate.time.start}-${coachDate.time.end} ${VueI18n.t("o'clock")}`,
-                    cpo: coachDate.cpo ? coachDate.cpo : null,
-                    cpoId: coachDate.cpo?.cpoId ? coachDate.cpo?.cpoId : null,
-                    students: coachDate.studentArr,
-                    checked: false,
-                  })
-                }
-              }
-            } else {
-              // if (coachDate?.coachLeaveDate) {
-              //   for await (const dateLeave of coachDate?.coachLeaveDate) {
-              //     if (datesList.filter(v => v.date === dateLeave.teachCompensationDate && v.start === dateLeave.teachCompensationStartTime && v.end === dateLeave.teachCompensationEndTime && v.cpo.packageName === coachDate.cpo.packageName).length === 0) {
-              //       datesList.push({
-              //         coachId :coach.coachId,
-              //         date: dateLeave.teachCompensationDate,
-              //         timeId: null,
-              //         start: dateLeave.teachCompensationStartTime,
-              //         end: dateLeave.teachCompensationEndTime,
-              //         time: `${dateLeave.teachCompensationStartTime}-${dateLeave.teachCompensationEndTime} ${VueI18n.t("o'clock")}`,
-              //         cpo: coachDate.cpo ? coachDate.cpo : null,
-              //         cpoId: coachDate.cpo?.cpoId ? coachDate.cpo?.cpoId : null,
-              //         students: coachDate.studentArr,
-              //         checked: false,
-              //       })
-              //     }
-              //   }
-              // }
-              for await (const date of coachDate.dates.date) {
-                if (datesList.filter(v => v.coachId == coach.coachId && v.date === date && v.start === coachDate.time.start && v.end === coachDate.time.end && v.cpo.packageName === coachDate.cpo.packageName).length === 0) {
-                  datesList.push({
-                    coachId: coach.coachId,
-                    date: date,
-                    timeId: coachDate.time.timeId,
-                    start: coachDate.time.start,
-                    end: coachDate.time.end,
-                    time: `${coachDate.time.start} - ${coachDate.time.end} ${VueI18n.t("o'clock")}`,
-                    cpo: coachDate.cpo ? coachDate.cpo : null,
-                    cpoId: coachDate.cpo.cpoId ? coachDate.cpo.cpoId : null,
-                    students: coachDate.studentArr,
-                    checked: false,
-                  })
-                }
-              }
-            }
           }
           let coachId = []
           data.data.map((v) => {
@@ -1786,6 +1768,7 @@ const CourseModules = {
     // EXPORT COURSE STUDENT LIST
     async ExportStudentList(context, { coach_list, course_id, course_name, course_type_id }) {
       try {
+        console.log({ coach_list, course_id, course_name, course_type_id })
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -1805,7 +1788,7 @@ const CourseModules = {
                       report.push({
                         "วันที่": date.date,
                         "เวลาเรียน": date.time,
-                        "ชื่อโค้ช": `${coach.firstNameTh} ${coach.lastNameTh}`,
+                        "ชืี่อโค้ช": `${coach.coachName}`,
                         "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
                         "แพ็กเกจ": date.cpo.packageName,
                         "ระยะเวลา": student.cpo?.optionName,
@@ -1819,7 +1802,7 @@ const CourseModules = {
                       report.push({
                         "วันที่": date.date,
                         "เวลาเรียน": date.time,
-                        "ชื่อโค้ช": `${coach.firstNameTh} ${coach.lastNameTh}`,
+                        "ชืี่อโค้ช": `${coach.coachName}`,
                         "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
                         "การเขาเรียน": student.status === "punctual" ? "ตรงเวลา" : student.status === "late" ? "สาย" : student.status === "leave" ? "ลา" : student.status === "emergency leave" ? 'ลาฉุกเฉิน' : student.status === "absent" ? 'ขาด' : '-',
                         "ระดับพัฒนาการ": student.assessment?.evolution === "very good" ? 'ดีมาก' : student.assessment?.evolution === "good" ? 'ดี' : 'ปรับปรุง',
@@ -1835,7 +1818,7 @@ const CourseModules = {
                       report.push({
                         "วันที่": date.date,
                         "เวลาเรียน": date.time,
-                        "ชื่อโค้ช": `${coach.firstNameTh} ${coach.lastNameTh}`,
+                        "ชืี่อโค้ช": `${coach.coachName}`,
                         "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
                         "แพ็กเกจ": date.cpo.packageName,
                         "ระยะเวลา": date.cpo?.optionName,
@@ -1849,7 +1832,7 @@ const CourseModules = {
                       report.push({
                         "วันที่": date.date,
                         "เวลาเรียน": date.time,
-                        "ชื่อโค้ช": `${coach.firstNameTh} ${coach.lastNameTh}`,
+                        "ชืี่อโค้ช": `${coach.coachName}`,
                         "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
                         "การเขาเรียน": "",
                         "ระดับพัฒนาการ": "",
@@ -1866,7 +1849,7 @@ const CourseModules = {
         }
         var workbook = XLSX.utils.book_new();
         var worksheet = XLSX.utils.json_to_sheet(report);
-        XLSX.utils.book_append_sheet(workbook, worksheet, course_name);
+        XLSX.utils.book_append_sheet(workbook, worksheet, "sheet 1");
         var excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
         var blob = new Blob([excelBuffer], { type: "application/octet-stream" });
         var url = URL.createObjectURL(blob);

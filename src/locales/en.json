@@ -88,6 +88,7 @@
 
     "cash":"Cash",
     "can't apply": "Can't apply",
+    "Can not use the same accountID to create Relations." : "Can not use the same user to create Relations.",
     "can't find items in the basket" : "Can't find items in the basket",
     "can't find teaching summaries" : "Can't find teaching summaries",
     "can't be deleted Because the enrollment": "Can't be deleted Because the enrollment",
@@ -608,7 +609,7 @@
     "registration changing section" : "Registration Changing Section",
     "register for an account" : "Register for an account",
     "register for" : "Register for",
-    "register for a course" : "Apply",
+    "register for a course" : "Register for a course",
     "register for yourself" : "Register for myself",
     "register to study for others" : "Register for other people",
     "registration history" : "Registration history",

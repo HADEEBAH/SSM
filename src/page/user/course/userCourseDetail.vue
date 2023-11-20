@@ -65,7 +65,7 @@
           col_detail="5"
           mini
           icon="mdi-clock-time-four-outline"
-          >{{ course_data.course_hours }} {{ $t("hrs.") }}/{{
+          >{{ course_data.course_hours.toFixed(2) }} {{ $t("hrs.") }}/{{
             $t("time")
           }}</rowData
         >

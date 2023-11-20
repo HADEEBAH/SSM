@@ -77,6 +77,7 @@
     "booking status": "สถานะการจอง",
 
     "can't apply": "ไม่สามารถสมัครได้",
+    "Can not use the same accountID to create Relations." : "ไม่สามารถใช้ผู้ใช้เดียวกันเพื่อสร้างความสัมพันธ์ได้",
     "can't find items in the basket" : "ไม่พบข้อมูลในตะกร้า",
     "can't find teaching summaries" : "ไม่พบข้อมูลบันทึกสรุปการสอน",
     "can't be deleted Because the enrollment": "ไม่สามารถลบได้ เนื่องจากที่การสมัครเรียนแล้ว",

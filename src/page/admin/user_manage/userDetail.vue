@@ -1149,7 +1149,7 @@
                 :placeholder="$t('please specify the name of the competition')"
                 v-model="certificate_data.certificate_name"
                 outlined
-                :rules="rules.certificate_name"
+                :rules="certificate_dialog_show ? rules_certificate_name : []"
               >
               </v-text-field>
             </v-col>
@@ -1173,7 +1173,7 @@
                     "
                     v-model="certificate_data.certificate_date_src"
                     readonly
-                    :rules="rules.certificate_date"
+                    :rules="certificate_dialog_show ? rules_certificate_date : []"
                     :placeholder="
                       $t('please specify the date of the competition')
                     "
@@ -1544,19 +1544,22 @@ export default {
     },
     DialogCertificate(certificate, state) {
       // console.log(certificate)
-      if (state === "create") {
-        this.certificate_data = {
-          certificate_name: "",
-          certificate_date: "",
-          certificate_date_src: "",
-          menu_certificate_date: false,
-          file: null,
-          fileName: null,
-          preview_url: "",
-          certificate_attachment: "",
-          state: "create",
-        };
-      } else {
+      this.rules_certificate_name = [
+        (val) =>
+          (val || "").length > 0 ||
+          this.$t("please specify the name of the competition"),
+        (val) =>
+          (val || "").length <= 50 ||
+          this.$t(
+            "please specify the name of the competition with no more than 50 characters"
+          ),
+      ]
+      this.rules_certificate_date = [
+        (val) =>
+            (val || "").length > 0 ||
+            this.$t("please specify the date of the competition"),
+      ]
+      if (state !== "create") {
         this.certificate_data = {
           certificate_id: certificate.certificateId,
           certificate_name: certificate.certificateName,
@@ -1578,25 +1581,11 @@ export default {
           state: state,
         };
       } 
-     
       this.certificate_dialog_show = true;
-      this.rules_certificate_name = [
-        (val) =>
-          (val || "").length > 0 ||
-          this.$t("please specify the name of the competition"),
-        (val) =>
-          (val || "").length <= 50 ||
-          this.$t(
-            "please specify the name of the competition with no more than 50 characters"
-          ),
-      ]
-      this.rules_certificate_date = [
-        (val) =>
-            (val || "").length > 0 ||
-            this.$t("please specify the date of the competition"),
-      ]
     },
     closeDialog() {
+      this.$refs.certificate_name.resetValidation();
+      this.$refs.certificate_date.resetValidation();
       this.certificate_dialog_show = false;
       this.certificate_show = false;
       this.addCertificate_dialog_show = false;
@@ -1656,7 +1645,7 @@ export default {
         }
       });
     },
-    saveDialog() {
+    saveDialog() {    
       if (this.certificate_data.state == "create") {
         this.$refs.certificate_form.validate();
         if (this.certificate_form) {
@@ -1666,6 +1655,20 @@ export default {
               account_id: this.params,
             },
           });
+          this.certificate_dialog_show = false;
+          this.certificate_show = false;
+          this.addCertificate_dialog_show = false;
+          this.certificate_data = {
+            certificate_name: "",
+            certificate_date: "",
+            certificate_date_src: "",
+            menu_certificate_date: false,
+            file: null,
+            fileName: null,
+            preview_url: "",
+            certificate_attachment: "",
+            state: "create",
+          };
           this.certificate_dialog_show = false;
         }
       } else if (this.certificate_data.state == "edit") {
@@ -1679,9 +1682,25 @@ export default {
             },
             certificate_id: this.certificate_data.certificate_id,
           });
+          this.certificate_dialog_show = false;
+          this.certificate_show = false;
+          this.addCertificate_dialog_show = false;
+          this.certificate_data = {
+            certificate_name: "",
+            certificate_date: "",
+            certificate_date_src: "",
+            menu_certificate_date: false,
+            file: null,
+            fileName: null,
+            preview_url: "",
+            certificate_attachment: "",
+            state: "create",
+          };
         this.certificate_dialog_show = false;
         }
       }
+      this.$refs.certificate_name.resetValidation();
+      this.$refs.certificate_date.resetValidation();
     },
     removeCertificate(certificate_id) {
       // console.log(certificate_id)

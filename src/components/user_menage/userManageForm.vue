@@ -1146,6 +1146,10 @@ export default {
               this.error_message = this.$t(
                 "parent and student usernames must be unique"
               );
+            } else if( response?.data?.message === "Can not use the same accountID to create Relations."){
+              this.error_message = this.$t(
+                "Can not use the same accountID to create Relations."
+              );
             } else {
               this.error_message = this.$t("something went wrong");
             }

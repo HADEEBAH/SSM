@@ -428,13 +428,11 @@ const manageScheduleModules = {
           }
           params.push(`${key[index]}=${query[items].join(`&&${key[index]}=`)}`);
         });
-
-        const endpoint = `${process.env.VUE_APP_URL}/api/v1/admincourse/filter-schedule?${params.join("&&")}`
+        const endpoint = `${process.env.VUE_APP_URL}/api/v1/schedule/filter-schedule?${params.join("&&")}`
         let { data } = await axios.get(endpoint, config);
         const res = data.data;
 
         if (data.statusCode === 200) {
-
           res.map((item) => {
             let times = null;
             let colors;
@@ -490,7 +488,6 @@ const manageScheduleModules = {
 
             dataInSchadule = eventSchadule;
           });
-
           if (query_length > 0) {
             context.commit("SetDataFilterSchedule", dataInSchadule);
             context.commit("SetGetAllHolidaysIsLoading", false)

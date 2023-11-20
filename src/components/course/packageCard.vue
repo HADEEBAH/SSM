@@ -286,10 +286,10 @@
                   <v-col cols="12" sm="6">
                     <v-row dense>
                       <v-col>{{ $t("average") }}</v-col>
-                      <v-col class="text-[#FF6B81] font-bold text-right">{{
+                      <v-col cols="auto" class="text-[#FF6B81] font-bold text-right">{{
                         option.net_price_unit.toLocaleString()
                       }}</v-col>
-                      <v-col>{{ $t("baht") }}/{{ $t("time") }}</v-col>
+                      <v-col cols="auto">{{ $t("baht") }}/{{ $t("time") }}</v-col>
                     </v-row>
                   </v-col>
                 </v-row>
