@@ -38,8 +38,8 @@
             <div class="text-sm my-3 mx-3">{{ course_data.location }}</div>
             <v-row dense class="my-3 mx-3">
               <v-col cols="12" sm="6" class="pa-0">
-                <rowData mini col_detail="5" icon="mdi-clock-outline">
-                  {{ course_data.course_hours }} {{ $t("hrs.") }}/{{
+                <rowData mini col_detail="8" icon="mdi-clock-outline">
+                  {{ course_data.course_hours.toFixed(2) }} {{ $t("hrs.") }}/{{
                     $t("time")
                   }}</rowData
                 >
