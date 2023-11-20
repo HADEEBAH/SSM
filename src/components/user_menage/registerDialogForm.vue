@@ -22,18 +22,6 @@
             <v-row dense>
               <v-col cols="12" sm="6">
                 <label>{{ $t("first name(thai)") }}</label>
-                <!-- <v-text-field
-                  dense
-                  ref="firstname_th"
-                  :rules="firstNameThRules"
-                  required
-                  v-model="user_one_id.firstname_th"
-                  :placeholder="$t('specify first name(Thai)')"
-                  @change="changeUserOneId(user_one_id)"
-                  @keydown="Validation($event, 'th-special')"
-                  outlined
-                  color="#FF6B81"
-                ></v-text-field> -->
                 <v-text-field
                   dense
                   ref="firstname_th"
@@ -42,6 +30,7 @@
                   v-model="user_one_id.firstname_th"
                   :placeholder="$t('specify first name(Thai)')"
                   @change="changeUserOneId(user_one_id)"
+                  @keydown="Validation($event, 'th-special')"
                   outlined
                   color="#FF6B81"
                 ></v-text-field>
