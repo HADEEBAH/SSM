@@ -145,7 +145,7 @@
             color="#ff6b81"
             @click="submitEdit()"
           >
-            <span>{{ $t("save") }}55</span>
+            <span>{{ $t("save") }}</span>
           </v-btn>
         </v-col>
       </v-row>

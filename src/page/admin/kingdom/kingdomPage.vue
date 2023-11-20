@@ -4,7 +4,7 @@
       <headerPage :title="$t(`wls setup`)"></headerPage>
       <v-row dense>
         <v-col>
-          <label-custom :text="$t(`upload the cover55`)"></label-custom>
+          <label-custom :text="$t(`upload the cover`)"></label-custom>
 
           <v-card class="mx-3" flat>
             <v-card-text
