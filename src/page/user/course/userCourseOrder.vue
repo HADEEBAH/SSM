@@ -4,7 +4,7 @@
       {{ setFunctions }}
       <v-card class="mb-3">
         <v-row dense>
-          <v-col cols="12" sm="3">
+          <v-col cols="12" sm="3" class="d-flex align-center">
             <v-img
               class="rounded-lg my-3 mx-3"
               :class="$vuetify.breakpoint.smAndUp ? 'width-img' : 'width-img-sm'"

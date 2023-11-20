@@ -174,7 +174,6 @@ body{
     0 2px 2px 0 rgb(54 176 255 / 14%), 0 4px 16px 0 rgb(90 102 255 / 12%) !important;
 }
 .width-img{
-    max-width: 200px; 
     max-height: 400px
 }
 .width-img-sm{
