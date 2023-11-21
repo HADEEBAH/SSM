@@ -771,7 +771,7 @@
                           </v-col>
 
                           <v-col cols="12" md="12" sm="12" class="text-lg">
-                            {{ course_data.detail }}
+                            <div v-html="course_data.detail"></div>
                           </v-col>
                           <v-col cols="12" md="12" sm="12">
                             <div class="mt-8">
@@ -781,7 +781,7 @@
                             </div>
                             <v-divider class=""></v-divider>
                             <span class="pa-2">
-                              {{ course_data.music_performance }}
+                              <div v-html="course_data.music_performance"></div>
                             </span>
                           </v-col>
                           <v-col cols="12" md="12" sm="12">
@@ -790,7 +790,7 @@
                             </div>
                             <v-divider class=""></v-divider>
                             <span class="pa-2">
-                              {{ course_data.catification }}
+                              <div v-html=" course_data.catification"></div>
                             </span>
                           </v-col>
                         </v-row>

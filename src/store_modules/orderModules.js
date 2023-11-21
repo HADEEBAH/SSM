@@ -1,5 +1,4 @@
 
-
 import axios from "axios";
 import Swal from "sweetalert2";
 import router from "@/router";
@@ -1153,6 +1152,7 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
+        // let localhost = "http://192.168.73.12:3002"
         let updateStartDate = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/update-orderid/${paymnet_data.orderId}`, {}, config)
         if (updateStartDate.data.statusCode == 200) {
           let payment_payload = {
@@ -1368,7 +1368,7 @@ const orderModules = {
             timer: 3000,
             timerProgressBar: true,
           }).finally(() => {
-            context.dispatch("getHistory")
+            context.dispatch("GetHistoryList",{ limit: 6, page: 1})
           });
         }
       } catch (error) {

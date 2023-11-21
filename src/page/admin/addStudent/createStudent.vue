@@ -385,7 +385,7 @@
                   color="#FF6B81"
                 >
                   <template v-slot:selection="data">
-                    {{ `${data.item.start}-${data.item.end}น.` }}
+                    {{ `${data.item.start}-${data.item.end} ${$t("o'clock")}` }}
                   </template>
                   <template v-slot:no-data>
                     <v-list-item>
