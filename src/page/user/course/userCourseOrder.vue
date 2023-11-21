@@ -1511,8 +1511,8 @@ export default {
             title: this.$t("proceed with payment?"),
             showDenyButton: false,
             showCancelButton: true,
-            confirmButtonText: this.$t("accepts"),
-            cancelButtonText: this.$t("cancel"),
+            confirmButtonText: this.$t("agree"),
+            cancelButtonText: this.$t("no"),
           }).then(async (result) => {
             if (result.isConfirmed) {
               if (this.course_order.course_type_id == "CT_1") {
