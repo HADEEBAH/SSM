@@ -44,7 +44,7 @@
                 hide-details
                 v-model="search"
                 prepend-inner-icon="mdi-magnify"
-                @input="search_data(search, searchQuery)"
+                @input="search_data()"
               ></v-text-field>
             </v-col>
             <label-custom v-if="!MobileSize" :text="$t('role')"></label-custom>
@@ -59,7 +59,7 @@
                   item-text="role"
                   item-value="roleNumber"
                   :placeholder="$t('all')"
-                  @change="search_data(search, searchQuery)"
+                  @change="search_data()"
                   outlined
                   dense
                   multiple
@@ -323,6 +323,7 @@ export default {
 
     icon() {
       if (this.selected_all_bool) return "mdi-close-box";
+      if (this.searchQuery.length === 5) return "mdi-close-box";
       if (
         !this.selected_all_bool ||
         this.searchQuery.length < this.roles.length
@@ -395,7 +396,8 @@ export default {
       FilteredData: "UserModules/FilteredData",
     }),
 
-    async search_data(search, searchQuery) {
+    async search_data() {
+      this.selected_all_bool = false;
       if (this.select_temp !== this.searchQuery) {
         this.select_roles = true;
       }
@@ -406,14 +408,8 @@ export default {
         this.$refs.userList.$props.options.page = 1;
       }
       this.filter_role_is_loading = true;
-      await this.loadItems(search, searchQuery);
+      await this.loadItems(this.search, this.searchQuery);
       this.filter_role_is_loading = false;
-      // this.FilteredData({
-      //   name: search ? search : "",
-      //   role: searchQuery,
-      //   limit: "10",
-      //   page: "1",
-      // });
     },
 
     async selectedAll() {
@@ -460,6 +456,7 @@ export default {
       let search_arr = [];
       this.disable_pagination_btn = true;
       this.user_list.data = [];
+
       if (this.selected_all_bool) {
         this.searchQuery = this.roles.slice();
         for await (let item of this.searchQuery) {

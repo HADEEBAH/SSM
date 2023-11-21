@@ -22,6 +22,7 @@
             <v-row dense>
               <v-col cols="12" sm="6">
                 <label>{{ $t("first name(thai)") }}</label>
+                <!-- @keydown="Validation($event, 'th-special')" -->
                 <v-text-field
                   dense
                   ref="firstname_th"
@@ -30,13 +31,16 @@
                   v-model="user_one_id.firstname_th"
                   :placeholder="$t('specify first name(Thai)')"
                   @change="changeUserOneId(user_one_id)"
-                  @keydown="Validation($event, 'th-special')"
                   outlined
                   color="#FF6B81"
+                  :error-messages="
+                    getErrorMessage(user_one_id.firstname_th, 'thai')
+                  "
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
                 <label>{{ $t("last name(thai)") }}</label>
+                <!-- @keydown="Validation($event, 'th-special')" -->
                 <v-text-field
                   dense
                   ref="lastname_th"
@@ -45,15 +49,19 @@
                   v-model="user_one_id.lastname_th"
                   :placeholder="$t('specify last name(Thai)')"
                   @change="changeUserOneId(user_one_id)"
-                  @keydown="Validation($event, 'th-special')"
                   outlined
                   color="#FF6B81"
+                  :error-messages="
+                    getErrorMessage(user_one_id.lastname_th, 'thai')
+                  "
                 ></v-text-field>
               </v-col>
             </v-row>
             <v-row dense>
               <v-col cols="12" sm="6">
                 <label>{{ $t("first name(english)") }}</label>
+                <!-- @keydown="Validation($event, 'en-special')" -->
+
                 <v-text-field
                   dense
                   ref="firstname_en"
@@ -62,13 +70,16 @@
                   v-model="user_one_id.firstname_en"
                   :placeholder="$t('specify first name(english)')"
                   @change="changeUserOneId(user_one_id)"
-                  @keydown="Validation($event, 'en-special')"
                   outlined
                   color="#FF6B81"
+                  :error-messages="
+                    getErrorMessage(user_one_id.firstname_en, 'english')
+                  "
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
                 <label>{{ $t("last name(english)") }}</label>
+                <!-- @keydown="Validation($event, 'en-special')" -->
                 <v-text-field
                   dense
                   ref="lastname_en"
@@ -77,15 +88,21 @@
                   v-model="user_one_id.lastname_en"
                   :placeholder="$t('specify last name(english)')"
                   @change="changeUserOneId(user_one_id)"
-                  @keydown="Validation($event, 'en-special')"
                   outlined
                   color="#FF6B81"
+                  :error-messages="
+                    getErrorMessage(user_one_id.lastname_en, 'english')
+                  "
                 ></v-text-field>
               </v-col>
             </v-row>
             <v-row dense>
               <v-col>
                 <label>{{ $t("phone number") }}</label>
+                <!-- @keydown="Validation($event, 'number')" -->
+                <!-- :error-messages="
+                    getErrorMessage(user_one_id.phone_number, 'number')
+                  " -->
                 <v-text-field
                   dense
                   ref="phone_number"
@@ -94,16 +111,18 @@
                   required
                   v-model="user_one_id.phone_number"
                   @input="checkPhoneNumber"
-                  @keydown="Validation($event, 'number')"
                   :placeholder="$t('specify phone number')"
                   @change="changeUserOneId(user_one_id)"
                   outlined
                   color="#FF6B81"
+                  @keydown="Validation($event, 'number')"
                 ></v-text-field>
               </v-col>
             </v-row>
             <v-row dense>
               <v-col>
+                <!-- @keydown="Validation($event, 'en-number')" -->
+
                 <label>{{ $t("username") }}</label>
                 <v-text-field
                   autocomplete="off-autofill"
@@ -113,21 +132,24 @@
                   required
                   v-model="user_one_id.username"
                   :placeholder="$t('specify username')"
-                  @keydown="Validation($event, 'en-number')"
                   @change="changeUserOneId(user_one_id)"
                   outlined
                   color="#FF6B81"
+                  :error-messages="
+                    getErrorMessage(user_one_id.username, 'userNameText')
+                  "
                 ></v-text-field>
               </v-col>
             </v-row>
             <v-row dense>
               <v-col>
                 <label>{{ $t("password") }}</label>
+                <!-- @keydown="Validation($event, 'en')" -->
+
                 <v-text-field
                   dense
                   autocomplete="off-autofill"
                   ref="password_rig"
-                  @keydown="Validation($event, 'en')"
                   :type="show_password ? 'text' : 'password'"
                   :rules="passwordRules"
                   required
@@ -140,6 +162,9 @@
                   @change="changeUserOneId(user_one_id)"
                   outlined
                   color="#FF6B81"
+                  :error-messages="
+                    getErrorMessage(user_one_id.password, 'english')
+                  "
                 >
                 </v-text-field>
               </v-col>
@@ -147,6 +172,8 @@
             <v-row dense>
               <v-col>
                 <label>{{ $t("confirm password") }}</label>
+                <!-- @keydown="Validation($event, 'en')" -->
+
                 <v-text-field
                   dense
                   ref="confirm_password"
@@ -163,8 +190,10 @@
                   @click:append="show_confirm_password = !show_confirm_password"
                   @change="changeUserOneId(user_one_id)"
                   outlined
-                  @keydown="Validation($event, 'en')"
                   color="#FF6B81"
+                  :error-messages="
+                    getErrorMessage(user_one_id.confirm_password, 'english')
+                  "
                 >
                 </v-text-field>
               </v-col>
@@ -176,6 +205,7 @@
                   v-model="user_one_id.accept_terms"
                   @change="changeUserOneId(user_one_id)"
                   color="pink lighten-1"
+                  :rules="[confirm_checkbox]"
                 >
                   <template v-slot:label>
                     <label>
@@ -197,16 +227,20 @@
           </v-card-text>
           <v-card-actions>
             <v-row dense>
-              <v-col class="text-center">
-                <v-btn
-                  :loading="is_loading"
-                  :disabled="!user_one_id.accept_terms"
-                  depressed
-                  class="white--text"
-                  :class="
+              <!-- :class="
                     $vuetify.breakpoint.mdAndUp
                       ? 'btn-register'
                       : 'w-full btn-register'
+                  " -->
+              <v-col class="text-center">
+                <v-btn
+                  :loading="is_loading"
+                  :disabled="!valid"
+                  depressed
+                  class="white--text"
+                  :color="!valid ? '' : '#ff6b81'"
+                  :class="
+                    $vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'
                   "
                   @click="save"
                   >{{ $t("register") }}</v-btn
@@ -305,7 +339,7 @@ export default {
   data: () => ({
     policy_show: false,
     policy: false,
-    valid: true,
+    valid: false,
     show_password: false,
     show_confirm_password: false,
     rules: {
@@ -314,7 +348,9 @@ export default {
     },
   }),
   created() {},
-  mounted() {},
+  mounted() {
+    this.valid = false;
+  },
   methods: {
     ...mapActions({
       changeDialogRegisterOneId: "RegisterModules/changeDialogRegisterOneId",
@@ -322,6 +358,34 @@ export default {
       registerUserOneId: "RegisterModules/registerUserOneId",
       registerParent: "RegisterModules/registerParent",
     }),
+    getErrorMessage(text, language) {
+      const thaiPattern =
+        /^[\u0E00-\u0E7F\d\s!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+$/;
+      const englishPattern =
+        /^[a-zA-Z\d\s!''"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+$/;
+      // const numberPattern = /^[/(\d{0,3})(\d{0,3})(\d{0,4})/]+$/;
+      const userNamePattern = /^[a-zA-Z\d0-9\s!]+$/;
+      if (this.user_one_id.accept_terms === true) {
+        this.valid = true;
+      }
+      if (text === "") {
+        return [];
+      }
+      // Return an error message if the pattern is not matched
+      // else if (language === "number" && !numberPattern.test(text)) {
+      //   return [this.$t("555")];
+      // }
+      if (language === "thai" && !thaiPattern.test(text)) {
+        return [this.$t("invalid Thai languages")];
+      } else if (language === "english" && !englishPattern.test(text)) {
+        return [this.$t("invalid English languages")];
+      } else if (language === "userNameText" && !userNamePattern.test(text)) {
+        return [this.$t("invalid user name")];
+      } else {
+        return [];
+      }
+    },
+
     checkPhoneNumber() {
       let x = this.user_one_id.phone_number.replace(/\D/g, "");
       x = x.match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
@@ -358,6 +422,10 @@ export default {
           "please enter a confirmation password that is at least 8 characters long"
         );
     },
+    confirm_checkbox() {
+      return (val) =>
+        (val && val === true) || this.$t("please enter a checkbox");
+    },
     confirmPasswordRule() {
       return (v) =>
         v === this.user_one_id.password || this.$t("passwords do not match");
@@ -387,7 +455,7 @@ export default {
           /[A-Za-z0-9]/.test(val) ||
           this.$t("the username cannot contain special characters"),
         (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+          !/[\uD800-\uDBFF\d][\uDC00-\uDFFF]/g.test(val) ||
           this.$t("username cannot contain emojis"),
       ];
     },
@@ -403,14 +471,15 @@ export default {
           this.$t(
             "please enter your name (thai) length not exceeding 20 characters"
           ),
+        // (val) =>
+        //   /[ก-๏\s]/g.test(val) || this.$t("please enter your name in thai"),
+        // (val) =>
+        //   val.split(" ").length <= 1 ||
+        //   this.$t("please enter your name in thai"),
         (val) =>
-          /[ก-๏\s]/g.test(val) || this.$t("please enter your name in thai"),
-        (val) =>
-          val.split(" ").length <= 1 ||
-          this.$t("please enter your name in thai"),
-        (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-          this.$t("please enter your name in thai"),
+          !/[\uD800-\uDBFF\d\s!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~][\uDC00-\uDFFF]/g.test(
+            val
+          ) || this.$t("please enter your name in thai"),
       ];
     },
     firstNameEnRules() {
@@ -427,12 +496,13 @@ export default {
           ),
         (val) =>
           /[A-Za-z]/g.test(val) || this.$t("please enter your name in english"),
+        // (val) =>
+        //   val.split(" ").length <= 1 ||
+        //   this.$t("please enter your name in english"),
         (val) =>
-          val.split(" ").length <= 1 ||
-          this.$t("please enter your name in english"),
-        (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-          this.$t("please enter your name in english"),
+          !/[\uD800-\uDBFF\d\s!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~][\uDC00-\uDFFF]/g.test(
+            val
+          ) || this.$t("please enter your name in english"),
       ];
     },
     lastNameThRules() {
@@ -447,15 +517,16 @@ export default {
           this.$t(
             "please enter your last name (Thai) not more than 20 characters"
           ),
+        // (val) =>
+        //   val.split(" ").length <= 1 ||
+        //   this.$t("please enter your last name in thai"),
+        // (val) =>
+        //   /[ก-๏\s]/g.test(val) ||
+        //   this.$t("please enter your last name in thai"),
         (val) =>
-          val.split(" ").length <= 1 ||
-          this.$t("please enter your last name in thai"),
-        (val) =>
-          /[ก-๏\s]/g.test(val) ||
-          this.$t("please enter your last name in thai"),
-        (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-          this.$t("please enter your last name in thai"),
+          !/[\uD800-\uDBFF\d\s!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~][\uDC00-\uDFFF]/g.test(
+            val
+          ) || this.$t("please enter your last name in thai"),
       ];
     },
     lastNameEnRules() {
@@ -470,15 +541,16 @@ export default {
           this.$t(
             "please enter your last name (English). length not exceeding 20 characters"
           ),
-        (val) =>
-          val.split(" ").length <= 1 ||
-          this.$t("please enter your last name in english"),
+        // (val) =>
+        //   val.split(" ").length <= 1 ||
+        //   this.$t("please enter your last name in english"),
         (val) =>
           /[A-Za-z ]/g.test(val) ||
           this.$t("please enter your last name in english"),
         (val) =>
-          !/[\uD800-\uDBFF][\uDC00-\uDFFF ]/g.test(val) ||
-          this.$t("please enter your last name in english"),
+          !/[\uD800-\uDBFF\d\s!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~][\uDC00-\uDFFF ]/g.test(
+            val
+          ) || this.$t("please enter your last name in english"),
       ];
     },
     passwordRules() {
