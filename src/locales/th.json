@@ -329,6 +329,9 @@
     "is complete" : "เรียบร้อยแล้ว",
     "invalid Thai languages": "กรุณากรอกข้อความภาษาไทย",
     "invalid English languages": "กรุณากรอกข้อความภาษาอังกฤษ",
+    "invalid user name": "กรุณากรอกข้อความภาษาอังกฤษหรือตัวเลข",
+    "invalid user password": "กรุณากรอกข้อความภาษาอังกฤษ",
+
 
     "january":"มกราคม",
     "june": "มิถุนายน",
@@ -461,6 +464,8 @@
     "please complete personal information":"กรุณากรอกข้อมูลส่วนตัวให้ครบถ้วนหรือกดปุ่มยกเลิกกรณีไม่ต้องการแก้ไขข้อมูล",
     "please confirm the new password again" : "กรุณาระบุยืนยันรหัสผ่านใหม่อีกครั้ง",
     "please confirm your passwords are the same" : "กรุณาระบุยืนยันรหัสผ่านให้ตรงกัน",
+    
+    "please enter a checkbox" : "กรุณาระกดกล่องสี่เหลี่ยมนี้",
     "please enter a 10-digit phone number" : "กรุณาระบุเบอร์โทรศัพท์ 10 หลัก",
     "please enter a confirmation password that is at least 8 characters long" : "กรุณาระบุยืนยันรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
     "please enter a phone number starting with 0" : "กรุณาระบุเบอร์โทรขึ้นต้นด้วยเลข 0",

@@ -1,7 +1,7 @@
 <!-- snacbar สำหรับ popup -->
 <template>
   <div :style="MobileSize ? 'width: 90%; ' : 'width: 50%;'">
-    <v-form ref="form">
+    <v-form ref="form" v-model="valid">
       <v-card
         :class="
           MobileSize
@@ -24,27 +24,32 @@
           <v-row dense>
             <v-col cols="12" class="pa-0 text-bold text-black">
               <label>{{ $t("username/oneid") }}</label>
+              <!-- 
+              @keydown="validate($event, 'en-number')" -->
+              <!--  -->
+
               <v-text-field
-                @keydown="validate($event, 'en-number')"
                 dense
-                :rules="usernameRules"
-                required
                 v-model="user_one_id.username"
                 :placeholder="$t('enter username')"
                 outlined
+                :rules="usernameRules"
                 color="#ff6b81"
+                :error-messages="
+                  getErrorMessage(user_one_id.username, 'userNameText')
+                "
               ></v-text-field>
             </v-col>
             <v-col cols="12" class="pa-0 text-bold text-black">
               <label>{{ $t("password") }}</label>
+              <!-- @keydown="validate($event, 'en')" -->
+              <!--  -->
+
               <v-text-field
                 dense
                 autocomplete="off-autofill"
                 ref="password"
-                @keydown="validate($event, 'en')"
                 :type="show_password ? 'text' : 'password'"
-                :rules="passwordRules"
-                required
                 :append-icon="
                   show_password ? 'mdi-eye-outline' : 'mdi-eye-off-outline'
                 "
@@ -54,17 +59,22 @@
                 outlined
                 @keyup.enter="login()"
                 color="#ff6b81"
+                :rules="passwordRules"
+                :error-messages="
+                  getErrorMessage(user_one_id.password, 'passwordText')
+                "
               ></v-text-field>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="12">
               <v-btn
+                :disabled="!valid"
                 width="100%"
                 depressed
-                dark
+                :dark="valid"
                 :loading="is_loading"
-                color="#ff6b81"
+                :color="!valid ? '' : '#ff6b81'"
                 @click="login()"
               >
                 {{ $t("login") }}
@@ -110,7 +120,11 @@ export default {
   data: () => ({
     show_password: false,
     logo: `${process.env.VUE_APP_URL}/logo.svg`,
+    valid: false,
   }),
+  mounted() {
+    this.valid = false;
+  },
   beforeMount() {
     if (this.$route.query.token) {
       this.loginShareToken(this.$route);
@@ -121,6 +135,17 @@ export default {
       user_one_id: "loginModules/getUserOneId",
       is_loading: "loginModules/getIsLoading",
     }),
+
+    // isButtonDisabled() {
+    //   // Disable the button if either input has an error
+
+    //   return (
+    //     this.getErrorMessage(this.user_one_id.username, "userNameText").length >
+    //       0 ||
+    //     this.getErrorMessage(this.user_one_id.password, "passwordText").length >
+    //       0
+    //   );
+    // },
     usernameRules() {
       return [
         (val) =>
@@ -159,6 +184,26 @@ export default {
       loginOneId: "loginModules/loginOneId",
       loginShareToken: "loginModules/loginShareToken",
     }),
+
+    getErrorMessage(text, language) {
+      // Check the pattern based on the language
+      const userNamePattern = /^[a-zA-Z\d0-9\s!]+$/;
+      const passwordPattern = /^[a-zA-Z\d\s!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+$/;
+      // if (text.length == 0) {
+      //   return [];
+      // }
+      // Return an error message if the pattern is not matched
+      if (text === "") {
+        return [];
+      }
+      if (language === "userNameText" && !userNamePattern.test(text)) {
+        return [this.$t("invalid user name")];
+      } else if (language === "passwordText" && !passwordPattern.test(text)) {
+        return [this.$t("invalid user password")];
+      } else {
+        return [];
+      }
+    },
 
     login() {
       if (this.$refs.form.validate()) {
