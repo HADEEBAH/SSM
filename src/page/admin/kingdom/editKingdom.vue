@@ -235,7 +235,6 @@
               class="white--text mb-5"
               depressed
               :disabled="isButtonDisabled"
-              :color="isButtonDisabled ? '' : '#ff6b81'"
               :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
               @click="openDialog()"
               >{{ $t("save") }}
