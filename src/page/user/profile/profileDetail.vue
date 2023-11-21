@@ -63,6 +63,7 @@
           <v-text-field
             placeholder="-"
             v-model="profile_detail.lastNameTh"
+            :rules="rules.lastNameThRules"
             outlined
             dense
             :disabled="!isEnabled"
@@ -142,7 +143,7 @@
             :disabled="!valid"
             class="white--text my-5 w-full"
             depressed
-            color="#ff6b81"
+            :color="!valid ? '' : '#ff6b81'"
             @click="submitEdit()"
           >
             <span>{{ $t("save") }}</span>
@@ -206,7 +207,7 @@ export default {
   },
   data: () => ({
     isEnabled: false,
-    valid: true,
+    valid: false,
     is_loading: false,
     user_detail: {},
     image_profile: {},
@@ -246,10 +247,23 @@ export default {
       GetProfileDetail: "ProfileModules/GetProfileDetail",
       changeProfileFail: "loginModules/changeProfileFail",
     }),
+    // getErrorMessage(text, language) {
+    //   const thaiPattern =
+    //     /^[\u0E00-\u0E7F\d\s!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+$/;
+
+    //   if (language === "thai" && !thaiPattern.test(text)) {
+    //     return [this.$t("invalid Thai languages")];
+    //   } else {
+    //     return [];
+    //   }
+    // },
     getErrorMessage(text, language) {
       const thaiPattern =
         /^[\u0E00-\u0E7F\d\s!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+$/;
 
+      if (text === "") {
+        return [];
+      }
       if (language === "thai" && !thaiPattern.test(text)) {
         return [this.$t("invalid Thai languages")];
       } else {
@@ -450,81 +464,86 @@ export default {
       this.GetProfileDetail(this.$route.params.profile_id);
       return "";
     },
-    firstNameThRules() {
-      const specialCharsRegex = /[ก-๏\s]/g;
-      const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
-      return [
-        (val) =>
-          (val || "").length > 1 ||
-          "โปรดระบุชื่อ (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          this.$t(
-            "please enter your name (thai) length not exceeding 20 characters"
-          ),
-        (val) =>
-          specialCharsRegex.test(val) || this.$t("please enter your thai name"),
-        (val) =>
-          !emojiRegex.test(val) || this.$t("please enter your thai name"),
-      ];
-    },
-    firstNameEnRules() {
-      const specialCharsRegex = /[A-Za-z]/g;
-      const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
-      return [
-        (val) =>
-          (val || "").length > 1 ||
-          this.$t(
-            "please enter your name (english), at least 2 characters long"
-          ),
-        (val) =>
-          (val || "").length < 20 ||
-          this.$t(
-            "please enter your name (english) length not exceeding 20 characters"
-          ),
-        (val) =>
-          specialCharsRegex.test(val) ||
-          this.$t("please enter your name in english"),
-        (val) =>
-          !emojiRegex.test(val) || this.$t("please enter your name in english"),
-      ];
-    },
-    lastNameThRules() {
-      const specialCharsRegex = /[ก-๏\s]/g;
-      const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
-      return [
-        (val) =>
-          (val || "").length > 1 ||
-          this.$t(
-            "please enter your last name (Thai), at least 2 characters long"
-          ),
-        (val) =>
-          (val || "").length < 20 ||
-          this.$t(
-            "please enter your last name (Thai) not more than 20 characters"
-          ),
-        (val) =>
-          specialCharsRegex.test(val) ||
-          this.$t("please enter your last name in thai"),
-        (val) =>
-          !emojiRegex.test(val) ||
-          this.$t("please enter your last name in thai"),
-      ];
-    },
-    lastNameEnRules() {
-      const specialCharsRegex = /[A-Za-z]/g;
-      const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
-      return [
-        (val) =>
-          (val || "").length > 1 ||
-          "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
-        (val) =>
-          (val || "").length < 20 ||
-          "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวไม่เกิน 20 ตัวอักษร",
-        (val) => specialCharsRegex.test(val) || "กรุณากรอกนามสกุลภาษาอังกฤษ",
-        (val) => !emojiRegex.test(val) || "กรุณากรอกสกุลภาษาอังกฤษ",
-      ];
-    },
+    // firstNameThRules() {
+    //   return [
+    //     (val) =>
+    //       (val || "").length > 1 ||
+    //       this.$t(
+    //         "please enter your name (thai) with a length of at least 2 characters"
+    //       ),
+    //     (val) =>
+    //       (val || "").length < 20 ||
+    //       this.$t(
+    //         "please enter your name (thai) length not exceeding 20 characters"
+    //       ),
+    //     (val) =>
+    //       /[ก-๏\s]/g.test(val) || this.$t("please enter your name in thai"),
+    //     (val) =>
+    //       val.split(" ").length <= 1 ||
+    //       this.$t("please enter your name in thai"),
+    //     (val) =>
+    //       !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+    //       this.$t("please enter your name in thai"),
+    //   ];
+    // },
+    // firstNameEnRules() {
+    //   const specialCharsRegex = /[A-Za-z]/g;
+    //   const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
+    //   return [
+    //     (val) =>
+    //       (val || "").length > 1 ||
+    //       this.$t(
+    //         "please enter your name (english), at least 2 characters long"
+    //       ),
+    //     (val) =>
+    //       (val || "").length < 20 ||
+    //       this.$t(
+    //         "please enter your name (english) length not exceeding 20 characters"
+    //       ),
+    //     (val) =>
+    //       specialCharsRegex.test(val) ||
+    //       this.$t("please enter your name in english"),
+    //     (val) =>
+    //       !emojiRegex.test(val) || this.$t("please enter your name in english"),
+    //   ];
+    // },
+    // lastNameThRules() {
+    //   return [
+    //     (val) =>
+    //       (val || "").length > 1 ||
+    //       this.$t(
+    //         "please enter your last name (Thai), at least 2 characters long"
+    //       ),
+    //     (val) =>
+    //       (val || "").length < 20 ||
+    //       this.$t(
+    //         "please enter your last name (Thai) not more than 20 characters"
+    //       ),
+    //     (val) =>
+    //       val.split(" ").length <= 1 ||
+    //       this.$t("please enter your last name in thai"),
+    //     (val) =>
+    //       /[ก-๏\s]/g.test(val) ||
+    //       this.$t("please enter your last name in thai"),
+    //     (val) =>
+    //       !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+    //       this.$t("please enter your last name in thai"),
+    //   ];
+    // },
+    // lastNameEnRules() {
+    //   const specialCharsRegex = /[A-Za-z]/g;
+    //   const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
+    //   return [
+    //     (val) =>
+    //       (val || "").length > 1 ||
+    //       "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
+    //     (val) =>
+    //       (val || "").length < 20 ||
+    //       "โปรดระบุนามสกุล (ภาษาอังกฤษ) ความยาวไม่เกิน 20 ตัวอักษร",
+    //     (val) => specialCharsRegex.test(val) || "กรุณากรอกนามสกุลภาษาอังกฤษ",
+    //     (val) => !emojiRegex.test(val) || "กรุณากรอกสกุลภาษาอังกฤษ",
+    //   ];
+    // },
     rules() {
       return {
         email: [
@@ -588,24 +607,24 @@ export default {
             !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
             this.$t("please enter your thai name"),
         ],
-        firstNameEnRules: [
-          (val) =>
-            (val || "").length > 1 ||
-            this.$t(
-              "please enter your name (english), at least 2 characters long"
-            ),
-          (val) =>
-            (val || "").length < 20 ||
-            this.$t(
-              "please enter your name (english) length not exceeding 20 characters"
-            ),
-          (val) =>
-            /[A-Za-z]/g.test(val) ||
-            this.$t("please enter your name in english"),
-          (val) =>
-            !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-            this.$t("please enter your name in english"),
-        ],
+        // firstNameEnRules: [
+        //   (val) =>
+        //     (val || "").length > 1 ||
+        //     this.$t(
+        //       "please enter your name (english), at least 2 characters long"
+        //     ),
+        //   (val) =>
+        //     (val || "").length < 20 ||
+        //     this.$t(
+        //       "please enter your name (english) length not exceeding 20 characters"
+        //     ),
+        //   (val) =>
+        //     /[A-Za-z]/g.test(val) ||
+        //     this.$t("please enter your name in english"),
+        //   (val) =>
+        //     !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+        //     this.$t("please enter your name in english"),
+        // ],
         lastNameThRules: [
           (val) =>
             (val || "").length > 1 ||
@@ -617,6 +636,9 @@ export default {
             this.$t(
               "please enter your last name (Thai) not more than 20 characters"
             ),
+          (val) =>
+            val.split(" ").length <= 1 ||
+            this.$t("please enter your last name in thai"),
           (val) =>
             /[ก-๏\s]/g.test(val) ||
             this.$t("please enter your last name in thai"),

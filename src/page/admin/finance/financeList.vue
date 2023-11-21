@@ -25,7 +25,7 @@
             hide-details
             dense
             outlined
-            :placeholder="$t('search')"
+            :placeholder="$t('search order number')"
             v-model="search_filter"
             color="#ff6b81"
             append-outer-icon="mdi-magnify"

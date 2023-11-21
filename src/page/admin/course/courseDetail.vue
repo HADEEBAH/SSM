@@ -374,7 +374,7 @@
                 >
                   <v-row
                     v-if="
-                      preview_artwork_files && preview_artwork_files.length > 0
+                      preview_artwork_files && preview_artwork_files?.length > 0
                     "
                   >
                     <v-col
@@ -425,7 +425,7 @@
                   <v-row
                     v-if="
                       !preview_artwork_files ||
-                      preview_artwork_files.length == 0
+                      preview_artwork_files?.length == 0
                     "
                   >
                     <v-col cols="12" class="flex align-center justify-center">
@@ -585,7 +585,7 @@
                     <div
                       v-if="
                         search_student_list
-                          ? search_student_datas.length === 0
+                          ? search_student_datas?.length === 0
                           : coach_list?.filter((v) => v?.studentArr.length > 0)
                               .length === 0
                       "
@@ -604,11 +604,13 @@
                       <div
                         v-for="(coach, coach_index) in search_student_list
                           ? search_student_datas
-                          : coach_list?.filter((v) => v?.studentArr.length > 0)"
+                          : coach_list?.filter(
+                              (v) => v?.studentArr?.length > 0
+                            )"
                         :key="`${coach_index}-coach_index`"
                       >
                         <v-card
-                          v-if="coach?.studentArr.length > 0"
+                          v-if="coach?.studentArr?.length > 0"
                           outlined
                           dense
                           class="rounded-lg cursor-pointer mb-3 bg-[#FCFCFC]"
@@ -738,7 +740,9 @@
                                   </template>
                                 </v-autocomplete>
                               </v-col>
-                              <v-col v-if="course_data.course_type_id== 'CT_1'">
+                              <v-col
+                                v-if="course_data.course_type_id == 'CT_1'"
+                              >
                                 <v-autocomplete
                                   dense
                                   v-model="filter.package"
@@ -765,8 +769,8 @@
                               dense
                               class="mb-3 font-bold"
                               v-if="
-                                coach.datesList.length > 0 &&
-                                coach.studentArr.length > 0
+                                coach.datesList?.length > 0 &&
+                                coach.studentArr?.length > 0
                               "
                             >
                               <v-col cols="auto">
@@ -788,8 +792,8 @@
                             </v-row>
                             <v-card
                               v-if="
-                                coach.datesList.length === 0 ||
-                                coach.studentArr.length === 0
+                                coach.datesList?.length === 0 ||
+                                coach.studentArr?.length === 0
                               "
                               outlined
                               class="my-3"
@@ -803,8 +807,8 @@
                             </v-card>
                             <div
                               v-if="
-                                coach.datesList.length > 0 &&
-                                coach.studentArr.length > 0
+                                coach.datesList?.length > 0 &&
+                                coach.studentArr?.length > 0
                               "
                             >
                               <div
@@ -904,7 +908,7 @@
                                               v.cpo?.packageName ===
                                               date.cpo?.packageName
                                           ).length === 0 &&
-                                          date.students.length === 0
+                                          date.students?.length === 0
                                         "
                                       >
                                         <v-card dense outlined>
@@ -993,7 +997,7 @@
                                               (v) =>
                                                 v.cpo?.packageName ===
                                                 date.cpo?.packageName
-                                            ).length > 0
+                                            )?.length > 0
                                           "
                                         >
                                           <v-card
@@ -1318,9 +1322,9 @@
                     <div
                       v-if="
                         search_student_potential
-                          ? search_student_potential_datas.length === 0
+                          ? search_student_potential_datas?.length === 0
                           : coach_list.filter(
-                              (v) => v.studentPotentialArr.length > 0
+                              (v) => v.studentPotentialArr?.length > 0
                             ).length === 0
                       "
                     >
@@ -1339,7 +1343,7 @@
                         v-for="(coach, coach_index) in search_student_potential
                           ? search_student_potential_datas
                           : coach_list.filter(
-                              (v) => v.studentPotentialArr.length > 0
+                              (v) => v.studentPotentialArr?.length > 0
                             )"
                         :key="`${coach_index}-potential_index`"
                       >
@@ -1391,7 +1395,7 @@
                               </v-col>
                             </v-row>
                             <div v-else>
-                              <div v-if="student_potential_list.length === 0">
+                              <div v-if="student_potential_list?.length === 0">
                                 <v-card dense outlined>
                                   <v-card-text>
                                     <v-row>
@@ -1404,7 +1408,7 @@
                                   </v-card-text>
                                 </v-card>
                               </div>
-                              <div v-if="student_potential_list.length > 0">
+                              <div v-if="student_potential_list?.length > 0">
                                 <v-row dense class="d-flex align-center mb-2">
                                   <v-col>
                                     <v-divider></v-divider>
@@ -1441,7 +1445,7 @@
                                     </v-row>
                                   </v-card-text>
                                 </v-card>
-                                <div v-if="student_potential_list.length > 0">
+                                <div v-if="student_potential_list?.length > 0">
                                   <v-card
                                     class="mb-2"
                                     outlined
@@ -1673,7 +1677,7 @@
                 </v-row>
               </v-card-text>
             </v-card>
-            <div v-if="student_data_assessment?.assessment.length > 0">
+            <div v-if="student_data_assessment?.assessment?.length > 0">
               <v-card
                 class="mb-3"
                 v-for="(assess, index) in student_data_assessment?.assessment"
@@ -1712,7 +1716,7 @@
                         v-if="
                           check_in_status_options.filter(
                             (v) => v.value === assess.status
-                          ).length > 0
+                          )?.length > 0
                         "
                         >{{
                           $t(
@@ -1870,7 +1874,7 @@
                         v-if="
                           check_in_status_options.filter(
                             (v) => v.value === student_data_assessment.status
-                          ).length > 0
+                          )?.length > 0
                         "
                         >{{
                           $t(
@@ -1997,7 +2001,7 @@
               class="mb-3"
               v-if="
                 !student_data_assessment?.potential &&
-                student_data_assessment?.assessment.length == 0
+                student_data_assessment?.assessment?.length == 0
               "
             >
               <v-card-text>
@@ -2258,7 +2262,6 @@ export default {
       ExportStudentList: "CourseModules/ExportStudentList",
     }),
     searchStudentPotential(search) {
-      console.log( this.coach_list)
       let coach_list_search = [];
       const regex = new RegExp(search.trim(), "i");
       for (let coach of this.coach_list.filter(
@@ -2445,7 +2448,6 @@ export default {
       data.checked = !data.checked;
     },
     dayOfWeekArray(day) {
-      // console.log(day)
       let days = day.split(",");
       const weekdays = [
         this.$t("sunday"),
@@ -2652,8 +2654,6 @@ export default {
                 month: "long",
                 day: "numeric",
               };
-              // for (const student_account of student_list.students) {
-              // console.log("student_account :>> ", student_account.studentId);
 
               let payload = {
                 notificationName: "แจ้งเตือนเลื่อนวันเปิดเรียน",

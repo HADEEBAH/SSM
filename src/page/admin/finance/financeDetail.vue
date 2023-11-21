@@ -320,7 +320,7 @@
                       <v-col cols="auto">
                         <v-avatar>
                           <v-img
-                            v-if="status.value === 'unpaid'"
+                            v-if="status.value === ''"
                             src="@/assets/finance/close.png"
                           ></v-img>
                           <v-img
@@ -460,7 +460,7 @@ export default {
       {
         text: "unpaid",
         img: "@/assets/finance/close.png",
-        value: "unpaid",
+        value: "",
       },
       {
         text: "credit/debit",
@@ -1034,12 +1034,18 @@ export default {
               },
               {
                 text: `${
-                  course?.cpo?.packageName ?  course.cpo.packageName : ""
+                  course?.cpo?.packageName ? course.cpo.packageName : ""
                 }`,
                 color: "#ff6b81",
               },
               {
-                text: `${course?.cpo?.optionName ? this.pdf_lang == "th" ? course.cpo.optionName : course.cpo.optionNameEn : ""}`,
+                text: `${
+                  course?.cpo?.optionName
+                    ? this.pdf_lang == "th"
+                      ? course.cpo.optionName
+                      : course.cpo.optionNameEn
+                    : ""
+                }`,
                 color: "#ff6b81",
               },
             ],
@@ -1180,13 +1186,13 @@ export default {
     dayOfWeekArray(day) {
       let days = day;
       const weekdays = [
-        this.pdf_lang == "th" ? "วันอาทิตย์":"Sunday",
-        this.pdf_lang == "th" ? "วันจันทร์":"Monday",
-        this.pdf_lang == "th" ? "วันอังคาร":"Tuesday",
-        this.pdf_lang == "th" ? "วันพุธ":"Wednesday",
-        this.pdf_lang == "th" ? "วันพฤหัสบดี":"Thursday",
-        this.pdf_lang == "th" ? "วันศุกร์":"Friday",
-        this.pdf_lang == "th" ? "วันเสาร์":"Saturday",
+        this.pdf_lang == "th" ? "วันอาทิตย์" : "Sunday",
+        this.pdf_lang == "th" ? "วันจันทร์" : "Monday",
+        this.pdf_lang == "th" ? "วันอังคาร" : "Tuesday",
+        this.pdf_lang == "th" ? "วันพุธ" : "Wednesday",
+        this.pdf_lang == "th" ? "วันพฤหัสบดี" : "Thursday",
+        this.pdf_lang == "th" ? "วันศุกร์" : "Friday",
+        this.pdf_lang == "th" ? "วันเสาร์" : "Saturday",
       ];
       days.sort();
       let ranges = [];
