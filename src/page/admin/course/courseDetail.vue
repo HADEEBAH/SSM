@@ -1272,6 +1272,7 @@
                   </v-data-table>
                 </v-tab-item>
                 <v-tab-item valus="student potential">
+                  
                   <v-card flat dent class="mb-3 rounded-lg">
                     <v-card-text class="py-2 bg-[#FCE0E7] rounded-lg">
                       <v-row dense class="d-flex align-center">
@@ -1320,7 +1321,7 @@
                         search_student_potential
                           ? search_student_potential_datas.length === 0
                           : coach_list.filter(
-                              (v) => v.studentPotentialArr.length > 0
+                              (v) => v.studentPotentialArr
                             ).length === 0
                       "
                     >
@@ -1339,7 +1340,7 @@
                         v-for="(coach, coach_index) in search_student_potential
                           ? search_student_potential_datas
                           : coach_list.filter(
-                              (v) => v.studentPotentialArr.length > 0
+                              (v) => v.studentPotentialArr
                             )"
                         :key="`${coach_index}-potential_index`"
                       >

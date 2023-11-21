@@ -90,7 +90,7 @@ const loginModules = {
                                 let student = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/username-potencial/${data.data.userOneId}`)
                                 if (student.data.statusCode === 200) {
                                     if (student.data.message === "study") {
-                                        if (student.data.data.data.some(v => v.courseId === course_id && v.paymentStatus !== "cancel")) {
+                                        if (student.data.data.data.some(v => v.courseId === course_id && !["cancel","fail"].includes(v.paymentStatus))) {
                                             Swal.fire({
                                                 icon: "warning",
                                                 title: VueI18n.t("warning"),
