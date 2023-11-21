@@ -1092,7 +1092,7 @@
             <v-row dense>
               <v-col cols="12" sm="6">
                 <v-btn
-                  :class="$vuetify.breakpoint.smAndUp ? '' : 'w-full'"
+                  class="w-full"
                   @click="clearStudentComment()"
                   text
                   color="#ff6b81"
@@ -1273,7 +1273,7 @@
             <v-row dense>
               <v-col cols="12" sm="6">
                 <v-btn
-                  :class="$vuetify.breakpoint.smAndUp ? '' : 'w-full'"
+                  class="w-full"
                   @click="clearDialogPotential(selected_student)"
                   text
                   color="#ff6b81"
