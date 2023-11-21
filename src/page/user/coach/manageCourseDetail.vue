@@ -742,8 +742,15 @@
               </v-col>
             </v-row>
           </v-form>
+          <div v-if="student_check_in_is_loading" class="w-full" align="center">
+            <v-progress-circular
+              indeterminate
+              size="64"
+              color="#ff6b81"
+            ></v-progress-circular>
+          </div>
           <!-- Upload file -->
-          <v-card flat class="mb-3">
+          <v-card v-else flat class="mb-3">
             <v-card-text
               class="border-dashed border-2 border-pink-600 rounded-lg"
             >
@@ -921,19 +928,19 @@
             </v-card-text>
           </v-card>
           <v-row dense>
-            <v-col cols="12" sm="6">
+            <v-col cols="12" sm align="right">
               <v-btn
+                outlined
                 :class="$vuetify.breakpoint.smAndUp ? '' : 'w-full'"
-                text
                 color="#ff6b81"
                 @click="clearTeachingNote"
               >
                 {{ $t("delete information") }}
               </v-btn>
             </v-col>
-            <v-col cols="12" sm="6">
+            <v-col cols="12" sm="auto">
               <v-btn
-                class="w-full"
+                class="w-64"
                 depressed
                 color="#ff6b81"
                 dark
@@ -1771,7 +1778,6 @@ export default {
     },
     async saveSummary(items) {
       let student_id = [];
-
       await items.map((val) => {
         student_id.push({ studentId: val.studentId });
       });
@@ -1795,7 +1801,6 @@ export default {
               date: this.$route.params.date,
             });
             this.is_loading = false;
-
             if (student_id.length > 0) {
               let payload = {
                 notificationName: "แจ้งเตือนการบันทึกสรุปการสอน",

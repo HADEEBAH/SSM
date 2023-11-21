@@ -32,7 +32,7 @@ const coachModules = {
     student_list_load: false,
     courses_option: {},
     course_coach_list: [],
-    calendar_coach: []
+    calendar_coach: [],
 
   },
   mutations: {
@@ -347,6 +347,7 @@ const coachModules = {
       }
     },
     async GetCoachCheckIn(context, { course_id, date }) {
+      context.commit("SetStudentCheckInIsLoading",true)
       try {
         let payload = {
           checkInCoachId: null,
@@ -391,10 +392,12 @@ const coachModules = {
             }
           })
           context.commit("SetCoachCheckIn", payload)
+          context.commit("SetStudentCheckInIsLoading",false)
         } else {
           throw { error: data }
         }
       } catch (error) {
+        context.commit("SetStudentCheckInIsLoading",false)
         Swal.fire({
           icon: "error",
           title: VueI18n.t("something went wrong"),
@@ -605,10 +608,12 @@ const coachModules = {
             showCancelButton: false,
             showConfirmButton: false,
           }).finally(() => {
-            context.dispatch("GetCoachCheckIn", {
-              course_id: course_id,
-              date: date,
-            })
+            setTimeout(()=>{
+              context.dispatch("GetCoachCheckIn", {
+                course_id: course_id,
+                date: date,
+              })
+            },2000)
           })
         }
       } catch (error) {
