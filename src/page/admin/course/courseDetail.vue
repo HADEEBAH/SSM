@@ -581,13 +581,13 @@
                       ></v-progress-circular>
                     </v-col>
                   </v-row>
+                 
                   <template v-else>
                     <div
                       v-if="
                         search_student_list
                           ? search_student_datas?.length === 0
-                          : coach_list?.filter((v) => v?.studentArr.length > 0)
-                              .length === 0
+                          : coach_list?.filter(v => v?.studentArr.length > 0).length === 0
                       "
                     >
                       <v-card dense outlined>
@@ -604,9 +604,7 @@
                       <div
                         v-for="(coach, coach_index) in search_student_list
                           ? search_student_datas
-                          : coach_list?.filter(
-                              (v) => v?.studentArr?.length > 0
-                            )"
+                          : coach_list?.filter(v => v?.studentArr?.length > 0)"
                         :key="`${coach_index}-coach_index`"
                       >
                         <v-card
@@ -908,7 +906,7 @@
                                               v.cpo?.packageName ===
                                               date.cpo?.packageName
                                           ).length === 0 &&
-                                          date.students?.length === 0
+                                          coach.studentArr?.length === 0
                                         "
                                       >
                                         <v-card dense outlined>
@@ -2819,6 +2817,8 @@ export default {
       this.GetStudentByDate({
         course_id: this.$route.params.course_id,
         date: date.date,
+        start_time: date.start,
+        end_time :  date.end,
       });
       if (this.selected_schedule !== index) {
         this.selected_schedule = index;
