@@ -1368,7 +1368,7 @@ const orderModules = {
             timer: 3000,
             timerProgressBar: true,
           }).finally(() => {
-            context.dispatch("GetHistoryList",{ limit: 6, page: 1})
+            context.dispatch("GetHistoryList", { limit: 6, page: 1 })
           });
         }
       } catch (error) {
@@ -1556,8 +1556,9 @@ const orderModules = {
               item.courseImg = process.env.VUE_APP_URL.concat(
                 `/api/v1/files/${item.courseImg}`
               );
-              item.show_student = false;
             }
+            item.show_student = false;
+
           }
           context.commit("SetHistoryList", data.data);
           context.commit("SetHistoryListOption", { limit: limit, page: page, count: data.data.length })
