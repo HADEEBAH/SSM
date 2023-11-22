@@ -416,6 +416,7 @@ const CourseModules = {
         }
         // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/course/${course_id}`, config)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course/${course_id}`, config)
+        // let { data } = await axios.get(`http://localhost:3000/api/v1/schedule/manage-course/${course_id}`,config)
         if (data.statusCode === 200) {
           let datesList = []
           for await (let coach of data.data) {
@@ -435,7 +436,7 @@ const CourseModules = {
                     time: `${dateLeave.teachCompensationStartTime}-${dateLeave.teachCompensationEndTime} ${VueI18n.t("o'clock")}`,
                     cpo: coachDate.cpo ? coachDate.cpo : null,
                     cpoId: coachDate.cpo?.cpoId ? coachDate.cpo?.cpoId : null,
-                    students: coachDate.studentArr,
+                    students: coachDate.studentArr.filter(v => v.date == dateLeave.teachCompensationDate && v.startTime == coachDate.time.start && v.endTime == coachDate.time.end),
                     checked: false,
                   })
                 }
@@ -453,7 +454,7 @@ const CourseModules = {
                     time: `${coachDate.time.start}-${coachDate.time.end} ${VueI18n.t("o'clock")}`,
                     cpo: coachDate.cpo ? coachDate.cpo : null,
                     cpoId: coachDate.cpo?.cpoId ? coachDate.cpo?.cpoId : null,
-                    students: coachDate.studentArr,
+                    students: coachDate.studentArr.filter(v => v.date == date && v.startTime == coachDate.time.start && v.endTime == coachDate.time.end),
                     checked: false,
                   })
                 }
@@ -470,34 +471,30 @@ const CourseModules = {
                     time: `${coachDate.time.start} - ${coachDate.time.end} ${VueI18n.t("o'clock")}`,
                     cpo: coachDate.cpo ? coachDate.cpo : null,
                     cpoId: coachDate.cpo.cpoId ? coachDate.cpo.cpoId : null,
-                    students: coachDate.studentArr,
+                    students: coachDate.studentArr.filter(v => v.date == date && v.startTime == coachDate.time.start && v.endTime == coachDate.time.end),
                     checked: false,
                   })
                 }
               }
             }
           }
-          let coachId = []
           data.data.map((v) => {
-            if (!coachId.includes(v.coachId)) {
-              coachId.push(v.coachId)
-              v.datesList = datesList.filter(f => f.coachId == v.coachId).sort(function (a, b) {
-                var dateA = new Date(a.date);
-                var dateB = new Date(b.date);
-                return dateA - dateB;
-              });
-            }
+            v.datesList = datesList.filter(f => f.coachId == v.coachId).sort(function (a, b) {
+              var dateA = new Date(a.date);
+              var dateB = new Date(b.date);
+              return dateA - dateB;
+            });
             return v
           })
           context.commit("SetCoachListIsLoading", false)
-          context.commit("SetCoachList", data.data.filter(v => v.datesList))
+          await context.commit("SetCoachList", data.data)
         }
       } catch (error) {
         context.commit("SetCoachListIsLoading", false)
       }
     },
     // STUDENT :: LIST BY COACH
-    async GetStudentByDate(context, { course_id, date }) {
+    async GetStudentByDate(context, { course_id, date, start_time, end_time }) {
       context.commit("SetStudentListIsLoadIng", true)
       try {
         let config = {
@@ -510,15 +507,16 @@ const CourseModules = {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/date/${date}`, config)
 
         if (data.statusCode === 200) {
-          // console.log(data.data)
-          if (data.data.length > 0) {
+         
+          if (data.data.length > 0 && data.data?.filter(v => v?.potential?.checkInPotentialId).length == 0) {
             context.commit("SetStudentList", data.data)
             context.commit("SetNoChackInStudentList", [])
           } else {
             context.commit("SetStudentList", [])
             let scheduleStudent = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course-student/${course_id}/${date}`, config)
             if (scheduleStudent.data.statusCode == 200) {
-              context.commit("SetNoChackInStudentList", scheduleStudent.data.data)
+              let scheduleStudentData = scheduleStudent.data.data.filter(v => v.endTime == end_time && v.startTime == start_time)
+              context.commit("SetNoChackInStudentList", scheduleStudentData)
             }
           }
 
