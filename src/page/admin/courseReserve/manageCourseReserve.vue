@@ -263,7 +263,7 @@ export default {
             reserve_id: reserve_id,
             reserve_data: reserve_data,
           });
-        }else{
+        } else {
           this.GetReserveList();
         }
       });

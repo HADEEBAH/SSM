@@ -1121,11 +1121,6 @@ export default {
       let { page, itemsPerPage } = this.options;
       this.disable_pagination_btn = true;
       this.orders.financeList = [];
-      // await this.GetOrders({
-      //   limit: itemsPerPage,
-      //   page: this.tabs_change ? 1 : page,
-      //   status: status,
-      // });
       this.orders_is_loadings = true;
       await this.FilterFinanceData({
         name: this.search_filter,

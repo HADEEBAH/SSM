@@ -33,6 +33,7 @@ const coachModules = {
     courses_option: {},
     course_coach_list: [],
     calendar_coach: [],
+    // filter_leave_data: []
 
   },
   mutations: {
@@ -347,7 +348,7 @@ const coachModules = {
       }
     },
     async GetCoachCheckIn(context, { course_id, date }) {
-      context.commit("SetStudentCheckInIsLoading",true)
+      context.commit("SetStudentCheckInIsLoading", true)
       try {
         let payload = {
           checkInCoachId: null,
@@ -392,12 +393,12 @@ const coachModules = {
             }
           })
           context.commit("SetCoachCheckIn", payload)
-          context.commit("SetStudentCheckInIsLoading",false)
+          context.commit("SetStudentCheckInIsLoading", false)
         } else {
           throw { error: data }
         }
       } catch (error) {
-        context.commit("SetStudentCheckInIsLoading",false)
+        context.commit("SetStudentCheckInIsLoading", false)
         Swal.fire({
           icon: "error",
           title: VueI18n.t("something went wrong"),
@@ -608,12 +609,12 @@ const coachModules = {
             showCancelButton: false,
             showConfirmButton: false,
           }).finally(() => {
-            setTimeout(()=>{
+            setTimeout(() => {
               context.dispatch("GetCoachCheckIn", {
                 course_id: course_id,
                 date: date,
               })
-            },2000)
+            }, 2000)
           })
         }
       } catch (error) {
@@ -664,7 +665,7 @@ const coachModules = {
       }
     },
     // NEW COACH LEAVE All 
-    async GetNewLeavesAll(context, { limit, page, status }) {
+    async GetNewLeavesAll(context, { search, limit, page, status }) {
       let startIndex = 0;
       let endIndex = 0;
 
@@ -677,8 +678,10 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/limits?limit=${limit}&page=${page}&status=${status}`, config)
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${localhost}/api/v1/coach/leave/search-coach-leave?search=${search}&limit=${limit}&page=${page}&status=${status}`, config)
+
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/limits?limit=${limit}&page=${page}&status=${status}`, config)
         if (data.statusCode === 200) {
 
           startIndex = (page - 1) * limit;
