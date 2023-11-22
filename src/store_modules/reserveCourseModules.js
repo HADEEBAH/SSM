@@ -19,11 +19,44 @@ const reserveCourseModules = {
     }
   },
   actions: {
-    async GetReserveList(context) {
+    // async GetReserveList(context) {
+    //   context.commit("SetReserveListIsLoading", true)
+    //   try {
+    //     let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/getAll-studentDetail`)
+    //     if (data.statusCode === 200) {
+    //       data.data.map((item) => {
+    //         const options = { year: "numeric", month: "long", day: "numeric" };
+    //         const thaiLocale = "th-TH";
+    //         item.dateTh = new Date(item.createdDate).toLocaleString(thaiLocale, options)
+    //         item.timeTh = moment(item.createdDate).format("HH:mm")
+    //         item.courseFullName = `${item.courseName}(${item.courseNameEn})`
+    //         item.studentFullName = `${item.studentData.firstNameTh} ${item.studentData.lastNameTh}`
+    //         item.studentFullNameEn = `${item.studentData.firstNameEn} ${item.studentData.lastNameEn}`
+    //         item.createdByFullName = `${item.createdByData.firstNameTh} ${item.createdByData.lastNameTh}`
+    //         item.createdByFullNameEn = `${item.createdByData.firstNameEn} ${item.createdByData.lastNameEn}`
+    //         item.tel = item.createdByData.tel
+    //       })
+    //       // console.log(data.data)
+    //       context.commit("SetReserveList", data.data)
+    //       context.commit("SetReserveListIsLoading", false)
+    //     }
+    //   } catch (error) {
+    //     context.commit("SetReserveListIsLoading", false)
+    //   }
+    // },
+    async GetReserveList(context, { search, limit, page, status }) {
+      let startIndex = 0;
+      let endIndex = 0;
       context.commit("SetReserveListIsLoading", true)
       try {
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/getAll-studentDetail`)
+        let localhost = "http://localhost:3002"
+        let { data } = await axios.get(`${localhost}/api/v1/order/reserve/search-limit?searchData=${search}&limit=${limit}&page=${page}&status=${status}`)
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/search-limit?searchData=${search}&limit=${limit}&page=${page}&status=${status}`)
         if (data.statusCode === 200) {
+          startIndex = (page - 1) * limit;
+          endIndex = page * limit;
+          data.data.financeList = data.data?.financeList.slice(startIndex, endIndex)
+          data.data.count = status === 'waiting' ? data.data?.amountPending : (status === 'cancel' ? data.data?.amountCancel : (status === 'contacted' ? data.data?.amountApproved : data.data?.amount))
           data.data.map((item) => {
             const options = { year: "numeric", month: "long", day: "numeric" };
             const thaiLocale = "th-TH";

@@ -1,14 +1,17 @@
 <template>
   <v-container>
+    <loading-overlay :loading="reserve_is_loadings"></loading-overlay>
     <header-page slot_tag :title="$t(`manage course booking`)">
       <v-text-field
         class="w-full"
         outlined
         dense
         hide-details
-        prepend-inner-icon="mdi-magnify"
-        v-model="search"
         :placeholder="$t(`search`)"
+        v-model="search_filter"
+        append-outer-icon="mdi-magnify"
+        @click:append-outer="clickTab(search_filter)"
+        @keyup.enter="clickTab(search_filter)"
       ></v-text-field>
     </header-page>
 
@@ -18,7 +21,7 @@
           cols="12"
           sm="3"
           :key="`${type_index}-type`"
-          @click="type_selected = type.value"
+          @click="(type_selected = type.value), clickTab(type_selected)"
         >
           <img-card
             class="cursor-pointer"
@@ -26,7 +29,7 @@
           >
             <template v-slot:img>
               <v-img
-                v-if="type.value == 'all'"
+                v-if="type.value == ''"
                 max-height="90"
                 max-width="70"
                 src="@/assets/coachLeave/all.png"
@@ -56,7 +59,7 @@
             <template v-slot:detail>
               <v-row class="d-flex align-end">
                 <v-col cols="12" align="center" class="text-3xl font-bold">{{
-                  type.value == "all"
+                  type.value == ""
                     ? reserve_list.length
                     : reserve_list.filter((v) => v.status == type.value).length
                 }}</v-col>
@@ -76,15 +79,23 @@
         class="header-table"
         :headers="columns"
         :items="
-          type_selected === 'all'
-            ? reserve_list
-            : reserve_list.filter((v) => v.status === type_selected)
+          type_selected === ''
+            ? reserve_list.result
+            : reserve_list.result?.filter((v) => v.status === type_selected)
         "
-        :search="search"
         :sort-by="sortBy"
         :sort-desc="sortDesc"
         @update:sort-by="updateSortBy"
         @update:sort-desc="updateSortDesc"
+        :items-per-page="itemsPerPage"
+        :server-items-length="
+          search_bool ? reserve_list.totalRows : reserve_list.count
+        "
+        :options.sync="options"
+        ref="reserveList"
+        :footer-props="{
+          'disable-pagination': disable_pagination_btn,
+        }"
       >
         <template v-slot:no-data>
           <v-row dense>
@@ -148,16 +159,26 @@ export default {
   name: "manageCourseReserve",
   components: { headerPage, imgCard, LoadingOverlay },
   data: () => ({
-    type_selected: "all",
-    search: "",
+    type_selected: "",
+    search_filter: "",
     sortBy: "date",
     sortDesc: false,
+    search_bool: false,
+    tabs_temp: "",
+    tabs_change: false,
+    text_temp: "",
+    text_change: false,
+    page: 1,
+    itemsPerPage: 10,
+    reserve_is_loadings: true,
+    disable_pagination_btn: false,
+    options: {},
   }),
   created() {
-    this.GetReserveList();
+    // this.GetReserveList();
   },
   mounted() {},
-  watch: {},
+
   computed: {
     ...mapGetters({
       reserve_list: "reserveCourseModules/reserveList",
@@ -165,7 +186,7 @@ export default {
     }),
     course_type() {
       return [
-        { name: this.$t("all"), value: "all" },
+        { name: this.$t("all"), value: "" },
         { name: this.$t("waiting"), value: "waiting" },
         { name: this.$t("confirmed"), value: "contacted" },
         { name: this.$t("canceled"), value: "cancel" },
@@ -249,6 +270,82 @@ export default {
       GetReserveList: "reserveCourseModules/GetReserveList",
       UpdateStatusReserve: "reserveCourseModules/UpdateStatusReserve",
     }),
+    // clickTab(item) {
+    //   console.log("item :>> ", item);
+    //   console.log("this.type_selected :>> ", this.type_selected);
+    // },
+    async clickTab() {
+      this.search_bool = true;
+      console.log("this.type_selected :>> ", this.type_selected);
+      if (this.tabs_temp !== this.type_selected) {
+        this.tabs_change = true;
+      }
+      if (this.text_temp !== this.search_filter) {
+        this.text_change = true;
+      }
+      await this.loadItems(this.type_selected);
+    },
+    async loadItems(status) {
+      this.type_selected =
+        !status || status === ""
+          ? this.type_selected === ""
+            ? ""
+            : this.type_selected
+          : status;
+
+      if (this.tabs_temp !== this.type_selected) {
+        this.tabs_change = true;
+      }
+      this.tabs_temp = this.type_selected;
+
+      if (this.text_temp !== this.search_filter) {
+        this.text_change = true;
+      }
+      this.text_temp = this.search_filter;
+
+      this.reserve_is_loadings = true;
+      await this.moreData(this.type_selected);
+      this.reserve_is_loadings = false;
+    },
+
+    async moreData(status) {
+      let { page, itemsPerPage } = this.options;
+      this.disable_pagination_btn = true;
+      this.reserve_list.result = [];
+      this.reserve_is_loadings = true;
+      await this.GetReserveList({
+        search: this.search_filter,
+        limit: this.search_filter
+          ? this.text_change
+            ? 10
+            : itemsPerPage
+          : this.tabs_change
+          ? 10
+          : itemsPerPage,
+
+        page: this.search_filter
+          ? this.text_change
+            ? 1
+            : page
+          : this.tabs_change
+          ? 1
+          : page,
+        status: status,
+        // status: this.type_selected,
+      });
+      if (this.tabs_change) {
+        this.$refs.reserveList.$props.options.page = 1;
+      }
+      if (this.text_change) {
+        this.$refs.reserveList.$props.options.page = 1;
+      }
+
+      this.disable_pagination_btn = false;
+      this.tabs_change = false;
+      this.text_change = false;
+      // this.orders_is_loadings = false;
+    },
+
     update(reserve_id, reserve_data) {
       Swal.fire({
         icon: "question",
@@ -263,7 +360,7 @@ export default {
             reserve_id: reserve_id,
             reserve_data: reserve_data,
           });
-        }else{
+        } else {
           this.GetReserveList();
         }
       });
