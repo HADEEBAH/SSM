@@ -486,8 +486,14 @@ const CourseModules = {
             });
             return v
           })
+          let coachList = []
+          for await (let coach of data.data){
+            if(!coachList.some(v => v.coachId == coach.coachId)){
+              coachList.push(coach)
+            }
+          }
           context.commit("SetCoachListIsLoading", false)
-          await context.commit("SetCoachList", data.data)
+          await context.commit("SetCoachList", coachList)
         }
       } catch (error) {
         context.commit("SetCoachListIsLoading", false)
