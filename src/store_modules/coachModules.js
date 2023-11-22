@@ -681,7 +681,7 @@ const coachModules = {
         // let localhost = "http://localhost:3000"
         // let { data } = await axios.get(`${localhost}/api/v1/coach/leave/search-coach-leave?search=${search}&limit=${limit}&page=${page}&status=${status}`, config)
 
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/limits?limit=${limit}&page=${page}&status=${status}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coach/leave/search-coach-leave?search=${search}&limit=${limit}&page=${page}&status=${status}`, config)
         if (data.statusCode === 200) {
 
           startIndex = (page - 1) * limit;
