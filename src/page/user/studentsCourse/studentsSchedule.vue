@@ -1117,22 +1117,17 @@ export default {
   async mounted() {
     this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
     window.addEventListener("scroll", this.handleScroll);
-
+    await this.GetProfileBooked({
+      account_id: this.user_detail?.account_id,
+      limit: 2,
+      page: 1,
+    });
     if (this.user_detail.roles?.includes("R_5")) {
       await this.GetStudentData(this.user_detail.account_id);
-      await this.GetProfileBooked({
-        account_id: this.user_detail?.account_id,
-        limit: 2,
-        page: 1,
-      });
+      
       this.loading_overlay = false;
     } else if (this.user_detail.roles?.includes("R_4")) {
       await this.GetStudentData(this.user_detail.account_id);
-      await this.GetProfileBooked({
-        account_id: this.user_detail?.account_id,
-        limit: 2,
-        page: 1,
-      });
       this.loading_overlay = false;
     } else {
       this.$router.push({
