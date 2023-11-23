@@ -7,12 +7,14 @@
       </v-col>
       <v-col cols="6">
         <v-text-field
-          v-model="search"
+          v-model="search_filter"
           :placeholder="$t('search')"
           outlined
           dense
           color="#ff6b81"
           append-outer-icon="mdi-magnify"
+          @click:append-outer="clickTab()"
+          @keyup.enter="clickTab()"
         >
         </v-text-field>
       </v-col>
@@ -196,10 +198,11 @@
     <template>
       <div>
         <v-data-table
-          :search="search"
           class="elevation-1 header-table"
           :items="coach_leaves_all.leaveList"
-          :server-items-length="coach_leaves_all.count"
+          :server-items-length="
+            search_bool ? coach_leaves_all.totalRows : coach_leaves_all.count
+          "
           :options.sync="options"
           :headers="column"
           :items-per-page="itemsPerPage"
@@ -334,7 +337,7 @@ export default {
       // tab: "all",
       tabs: "",
       type_selected: "all",
-      search: "",
+      search_filter: "",
       coach_leave_data: {
         menu_start_date: false,
         start_date: null,
@@ -361,6 +364,9 @@ export default {
       coach_leaves_is_loadings: true,
       tabs_temp: "",
       tabs_change: false,
+      text_temp: "",
+      text_change: false,
+      search_bool: false,
     };
   },
   watch: {
@@ -517,9 +523,14 @@ export default {
     },
 
     async clickTab() {
+      this.search_bool = true;
       if (this.tabs_temp !== this.tabs) {
         this.tabs_change = true;
       }
+      if (this.text_temp !== this.search_filter) {
+        this.text_change = true;
+      }
+
       await this.loadItems(this.tabs);
     },
 
@@ -527,10 +538,15 @@ export default {
       this.tabs =
         !status || status === "" ? (this.tabs === "" ? "" : this.tabs) : status;
 
-      if (this.tabs_temp !== this.tabs) {
+      if (this.tabs_temp !== this.tab_selected) {
         this.tabs_change = true;
       }
-      this.tabs_temp = this.tabs;
+      this.tabs_temp = this.tab_selected;
+
+      if (this.text_temp !== this.search_filter) {
+        this.text_change = true;
+      }
+      this.text_temp = this.search_filter;
 
       this.coach_leaves_is_loadings = true;
       await this.moreData(this.tabs);
@@ -540,19 +556,40 @@ export default {
     async moreData(status) {
       let { page, itemsPerPage } = this.options;
       this.disable_pagination_btn = true;
-      this.coach_leaves_all.leaveList = [];
+      // this.coach_leaves_all.leaveList = [];
+      // this.coach_leaves_is_loadings = true;
       await this.GetNewLeavesAll({
-        limit: itemsPerPage,
-        page: this.tabs_change ? 1 : page,
+        search: this.search_filter,
+        limit: this.search_filter
+          ? this.text_change
+            ? 10
+            : itemsPerPage
+          : this.tabs_change
+          ? 10
+          : itemsPerPage,
+
+        page: this.search_filter
+          ? this.text_change
+            ? 1
+            : page
+          : this.tabs_change
+          ? 1
+          : page,
+        // limit: itemsPerPage,
+        // page: this.tabs_change ? 1 : page,
         status: status,
       });
       if (this.tabs_change) {
         this.$refs.coach_leave.$props.options.page = 1;
       }
+      if (this.text_change) {
+        this.$refs.coach_leave.$props.options.page = 1;
+      }
 
       this.disable_pagination_btn = false;
       this.tabs_change = false;
-      this.coach_leaves_is_loadings = false;
+      this.text_change = false;
+      // this.coach_leaves_is_loadings = false;
     },
   },
 };

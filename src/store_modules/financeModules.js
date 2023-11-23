@@ -87,6 +87,8 @@ const financeModules = {
                 "โค้ช": order.coach_name,
                 "นักเรียน": order.student_name,
                 "ผู้ซื้อ": order.created_by_name,
+                "วันที่ออกเอกสาร": moment().format("DD/MM/YYYY HH:mm"),
+
               })
             });
             if (data.data.length === reports.length) {
