@@ -488,8 +488,13 @@ const CourseModules = {
           })
           let coachList = []
           for await (let coach of data.data){
-            if(!coachList.some(v => v.coachId == coach.coachId)){
+            if(!coachList.some(v => v.coachId == coach.coachId && coach.datesList.length > 0)){
               coachList.push(coach)
+            }
+          }
+          for await (let potential of data.data.filter(v => v.studentPotentialArr && v?.studentPotentialArr?.length > 0)) {
+            if(!coachList.some(v=>v.coachId == potential.coachId && v.startTime == potential.startTime && v.endTime == potential.endTime )){
+              coachList.push(potential)
             }
           }
           context.commit("SetCoachListIsLoading", false)
@@ -521,6 +526,7 @@ const CourseModules = {
             context.commit("SetStudentList", [])
             let scheduleStudent = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course-student/${course_id}/${date}`, config)
             if (scheduleStudent.data.statusCode == 200) {
+              console.log(scheduleStudent)
               let scheduleStudentData = scheduleStudent.data.data.filter(v => v.endTime == end_time && v.startTime == start_time)
               context.commit("SetNoChackInStudentList", scheduleStudentData)
             }
