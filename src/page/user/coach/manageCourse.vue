@@ -161,9 +161,9 @@
                         ></v-col
                       >
                       <v-col>{{
-                        `${$t("teaching time")} : ${
-                          course.course_per_time
-                        } ${$t("hour")}`
+                        `${$t(
+                          "teaching time"
+                        )} : ${course.course_per_time.toFixed(2)} ${$t("hour")}`
                       }}</v-col>
                     </v-row>
                   </v-col>
@@ -325,7 +325,8 @@
                     </v-col>
                     <v-col cols="12">
                       <rowData mini icon="mdi-clock-time-four-outline"
-                        >{{ $t("teaching time") }} {{ course.course_per_time }}
+                        >{{ $t("teaching time") }}
+                        {{ course.course_per_time.toFixed(2) }}
                         {{ $t("hour") }}</rowData
                       >
                     </v-col>

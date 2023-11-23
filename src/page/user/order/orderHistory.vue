@@ -27,7 +27,10 @@
               <v-card class="mb-3">
                 <v-card-text>
                   <v-row dense class="mb-3">
-                    <v-col>
+                    {{ $t("order number") }}:<span class="font-bold indent-3">{{
+                      `${order.orderNumber}`
+                    }}</span>
+                    <!-- <v-col>
                       <label class="text-caption"
                         >{{ $t("order number") }}:
                       </label>
@@ -36,7 +39,7 @@
                           {{ order.orderNumber }}
                         </v-col>
                       </v-row>
-                    </v-col>
+                    </v-col> -->
                     <v-col
                       cols="12"
                       sm="6"
