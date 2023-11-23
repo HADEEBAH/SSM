@@ -49,15 +49,23 @@ const reserveCourseModules = {
       let endIndex = 0;
       context.commit("SetReserveListIsLoading", true)
       try {
-        let localhost = "http://localhost:3002"
-        let { data } = await axios.get(`${localhost}/api/v1/order/reserve/search-limit?searchData=${search}&limit=${limit}&page=${page}&status=${status}`)
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/search-limit?searchData=${search}&limit=${limit}&page=${page}&status=${status}`)
-        if (data.statusCode === 200) {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        // let localhost = "http://localhost:3002"
+        // let { data } = await axios.get(`${localhost}/api/v1/order/reserve/search-limit?searchData=${search}&limit=${limit}&page=${page}&status=${status}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/search-limit?searchData=${search}&limit=${limit}&page=${page}&status=${status}`, config)
+        if (data?.statusCode === 200) {
           startIndex = (page - 1) * limit;
           endIndex = page * limit;
-          data.data.financeList = data.data?.financeList.slice(startIndex, endIndex)
+          data.data.result = data.data?.result.slice(startIndex, endIndex)
           data.data.count = status === 'waiting' ? data.data?.amountPending : (status === 'cancel' ? data.data?.amountCancel : (status === 'contacted' ? data.data?.amountApproved : data.data?.amount))
-          data.data.map((item) => {
+
+          data.data?.result.map((item) => {
             const options = { year: "numeric", month: "long", day: "numeric" };
             const thaiLocale = "th-TH";
             item.dateTh = new Date(item.createdDate).toLocaleString(thaiLocale, options)
@@ -69,15 +77,15 @@ const reserveCourseModules = {
             item.createdByFullNameEn = `${item.createdByData.firstNameEn} ${item.createdByData.lastNameEn}`
             item.tel = item.createdByData.tel
           })
-          // console.log(data.data)
-          context.commit("SetReserveList", data.data)
+          await context.commit("SetReserveList", data.data)
+
           context.commit("SetReserveListIsLoading", false)
         }
       } catch (error) {
         context.commit("SetReserveListIsLoading", false)
       }
     },
-    async UpdateStatusReserve(context, { reserve_id, reserve_data }) {
+    async UpdateStatusReserve(context, { reserve_id, reserve_data, search, limit, page, status }) {
       try {
         const config = {
           headers: {
@@ -97,11 +105,24 @@ const reserveCourseModules = {
             showCancelButton: false,
             showConfirmButton: false,
           })
-          context.dispatch("GetReserveList")
+          context.dispatch("GetReserveList", {
+            search: search,
+            limit: limit,
+            page: page,
+            status: status
+          })
+
         }
       } catch (error) {
-        context.dispatch("GetReserveList")
+        context.dispatch("GetReserveList", {
+          search: search,
+          limit: limit,
+          page: page,
+          status: status
+        }
+        )
         if (error.response?.data.statusCode == 400) {
+
           if (error.response.data.message == "Cannot register , fail at course monitor , course-coach or seats are full") {
             Swal.fire({
               icon: "warning",
