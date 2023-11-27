@@ -695,140 +695,147 @@
     </v-dialog>
 
     <!-- CHECK USER PARENT DIALOG-->
-    <v-dialog
-      v-model="add_relation"
-      :width="$vuetify.breakpoint.smAndUp ? '50vw' : ''"
-    >
-      <v-card class="pa-2">
-        <v-row dense>
-          <v-col cols="12" align="right">
-            <v-btn color="#ff6b81" icon @click="closeDialog"
-              ><v-icon>mdi-close</v-icon></v-btn
-            >
-          </v-col>
-        </v-row>
-        <header-card
-          icon="mdi-card-account-details-outline"
-          icon_color="#ff6b81"
-          :title="
-            profile_detail?.userRoles?.roleId === 'R_5'
-              ? this.$t('add parents')
-              : this.$t('add student')
-          "
-        >
-        </header-card>
-        <v-card-text class="pa-2">
+    <v-form ref="form" v-model="valid">
+      <v-dialog
+        v-model="add_relation"
+        :width="$vuetify.breakpoint.smAndUp ? '50vw' : ''"
+      >
+        <v-card class="pa-2">
           <v-row dense>
-            <v-col cols="9">
-              <labelCustom :text="this.$t('username')"></labelCustom>
-              <v-text-field
-                :rules="rules.usernameRules"
-                @keydown="validate($event, 'en')"
-                ref="username"
-                dense
-                outlined
-                v-model="relation_user.username"
-                @change="checkUsername(relation_user.username)"
-                :placeholder="this.$t('username')"
-                color="#ff6b81"
+            <v-col cols="12" align="right">
+              <v-btn color="#ff6b81" icon @click="closeDialog"
+                ><v-icon>mdi-close</v-icon></v-btn
               >
-                <template v-slot:append>
-                  <v-icon v-if="relation_user.account_id" color="green"
-                    >mdi-checkbox-marked-circle-outline</v-icon
+            </v-col>
+          </v-row>
+          <header-card
+            icon="mdi-card-account-details-outline"
+            icon_color="#ff6b81"
+            :title="
+              profile_detail?.userRoles?.roleId === 'R_5'
+                ? this.$t('add parents')
+                : this.$t('add student')
+            "
+          >
+          </header-card>
+          <v-card-text class="pa-2">
+            <v-row dense>
+              <v-col cols="9">
+                <!-- @keydown="validate($event, 'en')" -->
+
+                <labelCustom :text="this.$t('username')"></labelCustom>
+                <v-text-field
+                  :rules="rules.usernameRules"
+                  ref="username"
+                  dense
+                  outlined
+                  v-model="relation_user.username"
+                  @change="checkUsername(relation_user.username)"
+                  :placeholder="this.$t('username')"
+                  color="#ff6b81"
+                  :error-messages="
+                    getErrorMessage(relation_user.username, 'userNameText')
+                  "
+                >
+                  <template v-slot:append>
+                    <v-icon v-if="relation_user.account_id" color="green"
+                      >mdi-checkbox-marked-circle-outline</v-icon
+                    >
+                  </template>
+                </v-text-field>
+                <template v-if="!relation_user.account_id">
+                  <label>
+                    {{ $t("if you don't have an account yet, please") }}
+                  </label>
+                  <label
+                    class="text-[#ff6b81] underline cursor-pointer mt-5"
+                    @click="registerRelation"
+                    >{{ $t("sign up for One ID") }}</label
                   >
                 </template>
-              </v-text-field>
-              <template v-if="!relation_user.account_id">
-                <label>
-                  {{ $t("if you don't have an account yet, please") }}
-                </label>
-                <label
-                  class="text-[#ff6b81] underline cursor-pointer mt-5"
-                  @click="registerRelation"
-                  >{{ $t("sign up for One ID") }}</label
+              </v-col>
+              <v-col cols="auto">
+                <br />
+                <v-btn
+                  :disabled="!valid"
+                  :loading="is_loading"
+                  :color="!valid ? '' : '#ff6b81'"
+                  @click="checkUsername(relation_user.username)"
+                  depressed
+                  :dark="valid ? '' : '#ff6b81'"
+                  >{{ $t("agree") }}</v-btn
                 >
-              </template>
-            </v-col>
-            <v-col cols="auto">
-              <br />
-              <v-btn
-                :loading="is_loading"
-                color="#ff6b81"
-                @click="checkUsername(relation_user.username)"
-                depressed
-                dark
-                >{{ $t("agree") }}</v-btn
-              >
-            </v-col>
-          </v-row>
-          <template>
-            <v-row dense>
-              <v-col cols="12">
-                <labelCustom :text="$t('first name(english)')"></labelCustom>
-                <v-text-field
-                  disabled
-                  dense
-                  outlined
-                  v-model="relation_user.firstname_en"
-                  :placeholder="$t('english first name')"
-                  color="#ff6b81"
-                ></v-text-field>
               </v-col>
             </v-row>
+            <template>
+              <v-row dense>
+                <v-col cols="12">
+                  <labelCustom :text="$t('first name(english)')"></labelCustom>
+                  <v-text-field
+                    disabled
+                    dense
+                    outlined
+                    v-model="relation_user.firstname_en"
+                    :placeholder="$t('english first name')"
+                    color="#ff6b81"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row dense>
+                <v-col cols="12">
+                  <labelCustom :text="$t('last name(english)')"></labelCustom>
+                  <v-text-field
+                    disabled
+                    dense
+                    outlined
+                    v-model="relation_user.lastname_en"
+                    :placeholder="$t('english last name')"
+                    color="#ff6b81"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row dense>
+                <v-col cols="12">
+                  <labelCustom :text="$t('phone number')"></labelCustom>
+                  <v-text-field
+                    disabled
+                    dense
+                    outlined
+                    v-model="relation_user.tel"
+                    :placeholder="$t('phone number')"
+                    color="#ff6b81"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </template>
+          </v-card-text>
+          <v-card-actions class="px-6">
             <v-row dense>
-              <v-col cols="12">
-                <labelCustom :text="$t('last name(english)')"></labelCustom>
-                <v-text-field
-                  disabled
-                  dense
-                  outlined
-                  v-model="relation_user.lastname_en"
-                  :placeholder="$t('english last name')"
+              <v-col>
+                <v-btn
+                  @click="closeDialog"
+                  class="w-full"
                   color="#ff6b81"
-                ></v-text-field>
+                  outlined
+                  >{{ $t("cancel") }}</v-btn
+                >
+              </v-col>
+              <v-col>
+                <v-btn
+                  :color="!valid ? '#CCCCCC' : '#ff6b81'"
+                  class="w-full"
+                  :dark="valid"
+                  :disabled="!valid"
+                  depressed
+                  @click="addRelations"
+                  >{{ $t("save") }}</v-btn
+                >
               </v-col>
             </v-row>
-            <v-row dense>
-              <v-col cols="12">
-                <labelCustom :text="$t('phone number')"></labelCustom>
-                <v-text-field
-                  disabled
-                  dense
-                  outlined
-                  v-model="relation_user.tel"
-                  :placeholder="$t('phone number')"
-                  color="#ff6b81"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-          </template>
-        </v-card-text>
-        <v-card-actions class="px-6">
-          <v-row dense>
-            <v-col>
-              <v-btn
-                @click="closeDialog"
-                class="w-full"
-                color="#ff6b81"
-                outlined
-                >{{ $t("cancel") }}</v-btn
-              >
-            </v-col>
-            <v-col>
-              <v-btn
-                :color="!valid ? '#CCCCCC' : '#ff6b81'"
-                class="w-full"
-                :dark="valid"
-                :disabled="!valid"
-                depressed
-                @click="addRelations"
-                >{{ $t("save") }}</v-btn
-              >
-            </v-col>
-          </v-row>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-form>
     <!-- DIALOG::REGISTER -->
     <v-dialog
       persistent
@@ -957,6 +964,21 @@ export default {
       GetStudentCourse: "MyCourseModules/GetStudentCourse",
       GetCertificateCount: "UserManageModules/GetCertificateCount",
     }),
+
+    getErrorMessage(text, language) {
+      const userNamePattern = /^[a-zA-Z\d0-9\s!]+$/;
+      if (this.user_one_id.accept_terms === true) {
+        this.valid = true;
+      }
+      if (text === "") {
+        return [];
+      }
+      if (language === "userNameText" && !userNamePattern.test(text)) {
+        return [this.$t("invalid user name")];
+      } else {
+        return [];
+      }
+    },
 
     async getStudentData(order_item_id) {
       await this.$store.dispatch("getStudentData", order_item_id);

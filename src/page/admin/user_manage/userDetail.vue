@@ -214,7 +214,7 @@
               <v-col
                 cols="12"
                 v-if="
-                ['R_1','R_2','R_3','R_4'].some(v => v == item.roleId)
+                  ['R_1', 'R_2', 'R_3', 'R_4'].some((v) => v == item.roleId)
                 "
               >
                 <!-- Role admin || Role coach || Parent -->
@@ -1141,7 +1141,10 @@
           </div>
           <v-row dense class="ml-5 mx-5">
             <v-col cols="12">
-              <LabelCustom required :text="$t('competition name')"></LabelCustom>
+              <LabelCustom
+                required
+                :text="$t('competition name')"
+              ></LabelCustom>
               <v-text-field
                 ref="certificate_name"
                 dense
@@ -1173,7 +1176,9 @@
                     "
                     v-model="certificate_data.certificate_date_src"
                     readonly
-                    :rules="certificate_dialog_show ? rules_certificate_date : []"
+                    :rules="
+                      certificate_dialog_show ? rules_certificate_date : []
+                    "
                     :placeholder="
                       $t('please specify the date of the competition')
                     "
@@ -1290,6 +1295,7 @@
           </div>
           <div class="text-center mx-5 mb-5">
             <v-btn
+              :disabled="!certificate_form"
               v-if="certificate_data.state !== 'detail'"
               depressed
               class="white--text btn-size-lg"
@@ -1375,8 +1381,8 @@ export default {
     params: "",
     relations: [],
     today: new Date(),
-    rules_certificate_date : [],
-    rules_certificate_name : []
+    rules_certificate_date: [],
+    rules_certificate_name: [],
   }),
   created() {
     this.params = this.$route?.params?.account_id;
@@ -1553,12 +1559,12 @@ export default {
           this.$t(
             "please specify the name of the competition with no more than 50 characters"
           ),
-      ]
+      ];
       this.rules_certificate_date = [
         (val) =>
-            (val || "").length > 0 ||
-            this.$t("please specify the date of the competition"),
-      ]
+          (val || "").length > 0 ||
+          this.$t("please specify the date of the competition"),
+      ];
       if (state !== "create") {
         this.certificate_data = {
           certificate_id: certificate.certificateId,
@@ -1580,7 +1586,7 @@ export default {
           certificate_attachment: certificate.certificateAttachment,
           state: state,
         };
-      } 
+      }
       this.certificate_dialog_show = true;
     },
     closeDialog() {
@@ -1629,7 +1635,7 @@ export default {
       // console.log("removeFile");
       this.certificate_data.file = null;
       this.certificate_data.fileName = "";
-      this.certificate_data.preview_url= null
+      this.certificate_data.preview_url = null;
     },
     showImg(item) {
       return `${process.env.VUE_APP_URL}/api/v1/files/${item}`;
@@ -1645,7 +1651,7 @@ export default {
         }
       });
     },
-    saveDialog() {    
+    saveDialog() {
       if (this.certificate_data.state == "create") {
         this.$refs.certificate_form.validate();
         if (this.certificate_form) {
@@ -1696,7 +1702,7 @@ export default {
             certificate_attachment: "",
             state: "create",
           };
-        this.certificate_dialog_show = false;
+          this.certificate_dialog_show = false;
         }
       }
       this.$refs.certificate_name.resetValidation();
