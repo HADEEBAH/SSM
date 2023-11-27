@@ -4,7 +4,6 @@
       {{ setFunctions }}
       <loading-overlay :loading="course_is_loading"></loading-overlay>
       <header-page :breadcrumbs="breadcrumbs"></header-page>
-
       <v-row class="mb-3">
         <v-col cols="12" sm @click="tab = 'course'">
           <img-card
@@ -587,7 +586,7 @@
                       v-if="
                         search_student_list
                           ? search_student_datas?.length === 0
-                          : coach_list?.filter(v => v?.studentArr.length > 0).length === 0
+                          : coach_list?.filter(v => v?.datesList.length > 0).length === 0
                       "
                     >
                       <v-card dense outlined>
@@ -601,14 +600,15 @@
                       </v-card>
                     </div>
                     <template v-else>
+                     
                       <div
                         v-for="(coach, coach_index) in search_student_list
                           ? search_student_datas
-                          : coach_list?.filter(v => v?.studentArr?.length > 0)"
+                          : coach_list?.filter(v => (v?.studentPotentialArr?.length == 0 && v?.datesList?.length > 0) || (v?.studentPotentialArr?.length !== v?.datesList?.length))"
                         :key="`${coach_index}-coach_index`"
                       >
                         <v-card
-                          v-if="coach?.studentArr?.length > 0"
+                          v-if="coach?.datesList?.length > 0"
                           outlined
                           dense
                           class="rounded-lg cursor-pointer mb-3 bg-[#FCFCFC]"
@@ -767,8 +767,7 @@
                               dense
                               class="mb-3 font-bold"
                               v-if="
-                                coach.datesList?.length > 0 &&
-                                coach.studentArr?.length > 0
+                                coach.datesList?.length > 0 
                               "
                             >
                               <v-col cols="auto">
@@ -790,8 +789,7 @@
                             </v-row>
                             <v-card
                               v-if="
-                                coach.datesList?.length === 0 ||
-                                coach.studentArr?.length === 0
+                                coach.datesList?.length === 0 
                               "
                               outlined
                               class="my-3"
@@ -805,8 +803,7 @@
                             </v-card>
                             <div
                               v-if="
-                                coach.datesList?.length > 0 &&
-                                coach.studentArr?.length > 0
+                                coach.datesList?.length > 0 
                               "
                             >
                               <div
@@ -906,7 +903,7 @@
                                               v.cpo?.packageName ===
                                               date.cpo?.packageName
                                           ).length === 0 &&
-                                          coach.studentArr?.length === 0
+                                          coach.dateLists?.length === 0
                                         "
                                       >
                                         <v-card dense outlined>

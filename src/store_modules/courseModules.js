@@ -488,8 +488,13 @@ const CourseModules = {
           })
           let coachList = []
           for await (let coach of data.data){
-            if(!coachList.some(v => v.coachId == coach.coachId)){
+            if(!coachList.some(v => v.coachId == coach.coachId && coach.datesList.length > 0)){
               coachList.push(coach)
+            }
+          }
+          for await (let potential of data.data.filter(v => v.studentPotentialArr && v?.studentPotentialArr?.length > 0)) {
+            if(!coachList.some(v=>v.coachId == potential.coachId && v.startTime == potential.startTime && v.endTime == potential.endTime )){
+              coachList.push(potential)
             }
           }
           context.commit("SetCoachListIsLoading", false)
