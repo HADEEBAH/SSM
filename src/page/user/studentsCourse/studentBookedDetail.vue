@@ -43,11 +43,11 @@
       </v-card-text>
     </v-card>
     <!-- DETAIL -->
-    <!-- Music performance  -->
+    <!-- Performance  -->
     <v-expansion-panels flat>
       <v-expansion-panel>
         <v-expansion-panel-header class="px-0 font-bold">
-          Music performance
+          Performance
           <template v-slot:actions>
             <v-icon color="#ff6b81"> $expand </v-icon>
           </template>

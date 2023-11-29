@@ -776,7 +776,7 @@
                           <v-col cols="12" md="12" sm="12">
                             <div class="mt-8">
                               <label-custom
-                                text="Music performance"
+                                text="Performance"
                               ></label-custom>
                             </div>
                             <v-divider class=""></v-divider>
@@ -1007,7 +1007,7 @@
                           <v-col cols="12" md="12" sm="12">
                             <div class="mt-8">
                               <label-custom
-                                text="Music performance"
+                                text="Performance"
                               ></label-custom>
                             </div>
                             <v-divider class=""></v-divider>

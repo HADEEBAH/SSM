@@ -317,7 +317,7 @@
           </v-row>
           <v-row dense>
             <v-col cols="12">
-              <label-custom :text="'Music performance'"></label-custom>
+              <label-custom :text="'Performance'"></label-custom>
               <vue-editor
                 :editorToolbar="customToolbar"
                 :placeholder="
