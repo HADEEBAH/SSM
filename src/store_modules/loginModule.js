@@ -90,7 +90,7 @@ const loginModules = {
                                 let student = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/username-potencial/${data.data.userOneId}`)
                                 if (student.data.statusCode === 200) {
                                     if (student.data.message === "study") {
-                                        if (student.data.data.data.some(v => v.courseId === course_id && !["cancel","fail"].includes(v.paymentStatus))) {
+                                        if (student.data.data.data.some(v => v.courseId === course_id && !["cancel", "fail"].includes(v.paymentStatus))) {
                                             Swal.fire({
                                                 icon: "warning",
                                                 title: VueI18n.t("warning"),
@@ -179,9 +179,10 @@ const loginModules = {
                 }
             }
         },
-        async checkUsernameOneid(context, { username, status, type }) {
+        // async checkUsernameOneid(context, { username, status, type }) {
+        async checkUsernameOneid(context, { username, type }) {
             context.commit("SetIsLoading", true)
-            console.log("status", status);
+            // console.log("status", status);
             context.commit("SetUserStudentData", [])
             context.commit("SetUserData", [])
             let config = {
@@ -343,23 +344,23 @@ const loginModules = {
                     if (route.name === "Login") {
                         router.replace({ name: "UserKingdom" })
                     } else {
-                        if(roles.length > 0){
-                            if(route.name == "StudentsSchedule"){
-                               if(roles.some(v => ['R_4','R_5'].includes(v))){
+                        if (roles.length > 0) {
+                            if (route.name == "StudentsSchedule") {
+                                if (roles.some(v => ['R_4', 'R_5'].includes(v))) {
                                     window.location.href = `${process.env.VUE_APP_URL}${route.path}`
-                                }else{
+                                } else {
                                     router.replace({ name: "UserKingdom" })
                                 }
-                            }else if(route.name == "menageCourse"){
-                               if(roles.some(v => ['R_3'].includes(v))){
+                            } else if (route.name == "menageCourse") {
+                                if (roles.some(v => ['R_3'].includes(v))) {
                                     window.location.href = `${process.env.VUE_APP_URL}${route.path}`
-                                }else{
+                                } else {
                                     router.replace({ name: "UserKingdom" })
                                 }
-                            }else{
+                            } else {
                                 window.location.href = `${process.env.VUE_APP_URL}${route.path}`
-                            }   
-                          
+                            }
+
                         }
                     }
                 }

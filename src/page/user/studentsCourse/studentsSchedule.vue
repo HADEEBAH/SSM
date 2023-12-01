@@ -776,7 +776,7 @@
                           <v-col cols="12" md="12" sm="12">
                             <div class="mt-8">
                               <label-custom
-                                text="Music performance"
+                                text="Performance"
                               ></label-custom>
                             </div>
                             <v-divider class=""></v-divider>
@@ -790,7 +790,7 @@
                             </div>
                             <v-divider class=""></v-divider>
                             <span class="pa-2">
-                              <div v-html=" course_data.catification"></div>
+                              <div v-html="course_data.catification"></div>
                             </span>
                           </v-col>
                         </v-row>
@@ -997,7 +997,8 @@
                               class="mdi mdi-clock-outline"
                               style="color: #ff6b81"
                             ></span>
-                            {{ course_data.course_hours }} {{ $t("hrs./time") }}
+                            {{ course_data.course_hours.toFixed(2) }}
+                            {{ $t("hrs./time") }}
                           </v-col>
 
                           <v-col cols="12" md="12" sm="12" class="text-lg">
@@ -1006,7 +1007,7 @@
                           <v-col cols="12" md="12" sm="12">
                             <div class="mt-8">
                               <label-custom
-                                text="Music performance"
+                                text="Performance"
                               ></label-custom>
                             </div>
                             <v-divider class=""></v-divider>
@@ -1124,7 +1125,7 @@ export default {
     });
     if (this.user_detail.roles?.includes("R_5")) {
       await this.GetStudentData(this.user_detail.account_id);
-      
+
       this.loading_overlay = false;
     } else if (this.user_detail.roles?.includes("R_4")) {
       await this.GetStudentData(this.user_detail.account_id);

@@ -1,90 +1,160 @@
 <template>
   <v-container>
+    <loading-overlay :loading="reserve_is_loadings"></loading-overlay>
     <header-page slot_tag :title="$t(`manage course booking`)">
       <v-text-field
         class="w-full"
         outlined
         dense
         hide-details
-        prepend-inner-icon="mdi-magnify"
-        v-model="search"
         :placeholder="$t(`search`)"
+        v-model="search_filter"
+        append-outer-icon="mdi-magnify"
+        @click:append-outer="clickTab(search_filter)"
+        @keyup.enter="clickTab(search_filter)"
       ></v-text-field>
     </header-page>
 
-    <v-row class="mb-2" dense>
-      <template v-for="(type, type_index) in course_type">
-        <v-col
-          cols="12"
-          sm="3"
-          :key="`${type_index}-type`"
-          @click="type_selected = type.value"
+    <v-row dense class="mb-3">
+      <v-col cols="12" sm="3" @click="(tab_selected = ''), clickTab()">
+        <img-card
+          :class="
+            tab_selected === ''
+              ? 'img-card-active cursor-pointer drop-shadow-lg'
+              : 'cursor-pointer drop-shadow-lg'
+          "
+          style="border-radius: 16px"
         >
-          <img-card
-            class="cursor-pointer"
-            :class="type_selected === type.value ? 'img-card-active' : ''"
-          >
-            <template v-slot:img>
-              <v-img
-                v-if="type.value == 'all'"
-                max-height="90"
-                max-width="70"
-                src="@/assets/coachLeave/all.png"
-              ></v-img>
-              <v-img
-                v-if="type.value == 'contacted'"
-                max-height="90"
-                max-width="70"
-                src="@/assets/coachLeave/accept.png"
-              ></v-img>
-              <v-img
-                v-if="type.value == 'waiting'"
-                max-height="90"
-                max-width="70"
-                src="@/assets/coachLeave/wait.png"
-              ></v-img>
-              <v-img
-                v-if="type.value == 'cancel'"
-                max-height="90"
-                max-width="70"
-                src="@/assets/coachLeave/disaccept.png"
-              ></v-img>
-            </template>
-            <template v-slot:header>
-              <div class="font-bold">{{ type.name }}</div>
-            </template>
-            <template v-slot:detail>
-              <v-row class="d-flex align-end">
-                <v-col cols="12" align="center" class="text-3xl font-bold">{{
-                  type.value == "all"
-                    ? reserve_list.length
-                    : reserve_list.filter((v) => v.status == type.value).length
-                }}</v-col>
-                <v-col class="text-center text-sm">{{ $t("list") }}</v-col>
-              </v-row>
-            </template>
-          </img-card>
-        </v-col>
-      </template>
+          <template v-slot:img>
+            <v-img
+              max-height="90"
+              max-width="70"
+              src="@/assets/coachLeave/all.png"
+            ></v-img>
+          </template>
+          <template v-slot:header>
+            <div class="font-bold">{{ $t("all") }}</div>
+          </template>
+          <template v-slot:detail>
+            <v-row class="d-flex align-end">
+              <v-col align="center" class="text-3xl font-bold">
+                {{ reserve_list.amount ? reserve_list.amount : 0 }}
+              </v-col>
+              <v-col class="text-sm">{{ $t("list") }}</v-col>
+            </v-row>
+          </template>
+        </img-card>
+      </v-col>
+
+      <v-col cols="12" sm="3" @click="(tab_selected = 'waiting'), clickTab()">
+        <img-card
+          class="cursor-pointer drop-shadow-lg"
+          :class="tab_selected === 'waiting' ? 'img-card-active' : ''"
+          style="border-radius: 16px"
+        >
+          <template v-slot:img>
+            <v-img
+              max-height="90"
+              max-width="70"
+              src="@/assets/coachLeave/wait.png"
+            ></v-img>
+          </template>
+          <template v-slot:header>
+            <div class="font-bold">{{ $t("waiting") }}</div>
+          </template>
+          <template v-slot:detail>
+            <v-row class="d-flex align-end">
+              <v-col align="center" class="text-3xl font-bold">
+                {{
+                  reserve_list.amountPending ? reserve_list.amountPending : 0
+                }}
+              </v-col>
+              <v-col class="text-sm">{{ $t("list") }}</v-col>
+            </v-row>
+          </template>
+        </img-card>
+      </v-col>
+
+      <v-col cols="12" sm="3" @click="(tab_selected = 'contacted'), clickTab()">
+        <img-card
+          class="cursor-pointer drop-shadow-lg"
+          :class="tab_selected === 'contacted' ? 'img-card-active' : ''"
+          style="border-radius: 16px"
+        >
+          <template v-slot:img>
+            <v-img
+              max-height="90"
+              max-width="70"
+              src="@/assets/coachLeave/accept.png"
+            ></v-img>
+          </template>
+          <template v-slot:header>
+            <div class="font-bold">{{ $t("confirmed") }}</div>
+          </template>
+          <template v-slot:detail>
+            <v-row class="d-flex align-end">
+              <v-col align="center" class="text-3xl font-bold">
+                {{
+                  reserve_list.amountApproved ? reserve_list.amountApproved : 0
+                }}
+              </v-col>
+              <v-col class="text-sm">{{ $t("list") }}</v-col>
+            </v-row>
+          </template>
+        </img-card>
+      </v-col>
+
+      <v-col cols="12" sm="3" @click="(tab_selected = 'cancel'), clickTab()">
+        <img-card
+          class="cursor-pointer drop-shadow-lg"
+          :class="tab_selected === 'cancel' ? 'img-card-active' : ''"
+          style="border-radius: 16px"
+        >
+          <template v-slot:img>
+            <v-img
+              max-height="90"
+              max-width="70"
+              src="@/assets/coachLeave/disaccept.png"
+            ></v-img>
+          </template>
+
+          <template v-slot:header>
+            <div class="font-bold">{{ $t("canceled") }}</div>
+          </template>
+          <template v-slot:detail>
+            <v-row class="d-flex align-end">
+              <v-col align="center" class="text-3xl font-bold">
+                {{ reserve_list.amountCancel ? reserve_list.amountCancel : 0 }}
+              </v-col>
+              <v-col class="text-sm">{{ $t("list") }}</v-col>
+            </v-row>
+          </template>
+        </img-card>
+      </v-col>
     </v-row>
+
     <loading-overlay
       v-if="reserve_list_is_loading"
       :loading="reserve_list_is_loading"
     ></loading-overlay>
-    <v-card v-else outlined>
+    <v-card>
       <v-data-table
         class="header-table"
         :headers="columns"
-        :items="
-          type_selected === 'all'
-            ? reserve_list
-            : reserve_list.filter((v) => v.status === type_selected)
-        "
-        :search="search"
+        :items="reserve_list.result"
         :sort-by="sortBy"
         :sort-desc="sortDesc"
         @update:sort-by="updateSortBy"
         @update:sort-desc="updateSortDesc"
+        :items-per-page="itemsPerPage"
+        :server-items-length="
+          search_bool ? reserve_list.totalRows : reserve_list.count
+        "
+        :options.sync="options"
+        ref="reserveLists"
+        :footer-props="{
+          'disable-pagination': disable_pagination_btn,
+        }"
       >
         <template v-slot:no-data>
           <v-row dense>
@@ -148,16 +218,31 @@ export default {
   name: "manageCourseReserve",
   components: { headerPage, imgCard, LoadingOverlay },
   data: () => ({
-    type_selected: "all",
-    search: "",
+    tab_selected: "",
+    search_filter: "",
     sortBy: "date",
     sortDesc: false,
+    search_bool: false,
+    tabs_temp: "",
+    tabs_change: false,
+    text_temp: "",
+    text_change: false,
+    page: 1,
+    itemsPerPage: 10,
+    reserve_is_loadings: false,
+    disable_pagination_btn: false,
+    options: {},
   }),
-  created() {
-    this.GetReserveList();
+  watch: {
+    options: {
+      handler() {
+        this.loadItems();
+      },
+    },
   },
+  created() {},
   mounted() {},
-  watch: {},
+
   computed: {
     ...mapGetters({
       reserve_list: "reserveCourseModules/reserveList",
@@ -165,7 +250,7 @@ export default {
     }),
     course_type() {
       return [
-        { name: this.$t("all"), value: "all" },
+        { name: this.$t("all"), value: "" },
         { name: this.$t("waiting"), value: "waiting" },
         { name: this.$t("confirmed"), value: "contacted" },
         { name: this.$t("canceled"), value: "cancel" },
@@ -195,6 +280,11 @@ export default {
     },
     columns() {
       return [
+        {
+          text: this.$t("no."),
+          value: "number",
+          align: "start",
+        },
         {
           text: this.$t("reserve date"),
           value: "createdDate",
@@ -249,6 +339,76 @@ export default {
       GetReserveList: "reserveCourseModules/GetReserveList",
       UpdateStatusReserve: "reserveCourseModules/UpdateStatusReserve",
     }),
+
+    async clickTab() {
+      this.search_bool = true;
+      if (this.tabs_temp !== this.tab_selected) {
+        this.tabs_change = true;
+      }
+      if (this.text_temp !== this.search_filter) {
+        this.text_change = true;
+      }
+      await this.loadItems(this.tab_selected);
+    },
+    async loadItems(status) {
+      this.tab_selected =
+        !status || status === ""
+          ? this.tab_selected === ""
+            ? ""
+            : this.tab_selected
+          : status;
+
+      if (this.tabs_temp !== this.tab_selected) {
+        this.tabs_change = true;
+      }
+      this.tabs_temp = this.tab_selected;
+
+      if (this.text_temp !== this.search_filter) {
+        this.text_change = true;
+      }
+      this.text_temp = this.search_filter;
+
+      this.reserve_is_loadings = true;
+      await this.moreData(this.tab_selected);
+      this.reserve_is_loadings = false;
+    },
+    async moreData(status) {
+      let { page, itemsPerPage } = this.options;
+      this.disable_pagination_btn = true;
+      // this.reserve_list.result = [];
+      // this.reserve_is_loadings = true;
+      await this.GetReserveList({
+        search: this.search_filter,
+        limit: this.search_filter
+          ? this.text_change
+            ? 10
+            : itemsPerPage
+          : this.tabs_change
+          ? 10
+          : itemsPerPage,
+
+        page: this.search_filter
+          ? this.text_change
+            ? 1
+            : page
+          : this.tabs_change
+          ? 1
+          : page,
+        status: status,
+      });
+      if (this.tabs_change) {
+        this.$refs.reserveLists.$props.options.page = 1;
+      }
+      if (this.text_change) {
+        this.$refs.reserveLists.$props.options.page = 1;
+      }
+
+      this.disable_pagination_btn = false;
+      this.tabs_change = false;
+      this.text_change = false;
+      this.orders_is_loadings = false;
+    },
+
     update(reserve_id, reserve_data) {
       Swal.fire({
         icon: "question",
@@ -259,12 +419,21 @@ export default {
         confirmButtonText: this.$t("agree"),
       }).then(async (result) => {
         if (result.isConfirmed) {
+          this.reserve_is_loadings = true;
           this.UpdateStatusReserve({
             reserve_id: reserve_id,
             reserve_data: reserve_data,
+            search: this.search_filter,
+            limit: 10,
+            page: 1,
+            status: this.tab_selected,
           });
+          this.reserve_is_loadings = false;
         } else {
-          this.GetReserveList();
+          this.reserve_is_loadings = true;
+          await this.loadItems(this.tab_selected);
+          this.reserve_is_loadings = false;
+          // this.GetReserveList();
         }
       });
     },

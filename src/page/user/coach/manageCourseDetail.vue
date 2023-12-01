@@ -60,7 +60,8 @@
                 </v-col>
                 <v-col cols="12" sm class="pa-0">
                   <rowData mini icon="mdi-clock-outline"
-                    >{{ $t("teaching time") }} {{ course_data.course_hours }}
+                    >{{ $t("teaching time") }}
+                    {{ course_data.course_hours.toFixed(2) }}
                     {{ $t("hour") }}</rowData
                   >
                 </v-col>
