@@ -241,16 +241,23 @@ export default {
       this.type_selected = this.course_types[0].course_type_id;
     }
   },
-  mounted() {
+  async mounted() {
     window.addEventListener("scroll", this.handleScroll);
     this.GetCategory(this.$route.params.category_id);
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "course");
-    this.$store.dispatch("CourseModules/GetCoursesFilter", {
+    await this.GetCoursesFilter({
       category_id: this.$route.params.category_id,
       status: "Active",
-      limit: 12,
-      page: 1,
+      course_type_id: this.type_selected,
+      limit: this.filter_course_option.limit,
+      page: this.filter_course_option.page + 1,
     });
+    // this.$store.dispatch("CourseModules/GetCoursesFilter", {
+    //   category_id: this.$route.params.category_id,
+    //   status: "Active",
+    //   limit: 12,
+    //   page: 1,
+    // });
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll);
