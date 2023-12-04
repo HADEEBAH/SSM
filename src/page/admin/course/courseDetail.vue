@@ -1082,7 +1082,14 @@
                                                     <v-col class="pa-0">
                                                       <v-btn
                                                         text
-                                                        disabled
+                                                        @click="$router.push({
+                                                          name : 'UserDetail',
+                                                          params: {
+                                                            account_id:student.studentId,
+                                                            action : 'view',
+                                                            from : 'courseDetail'
+                                                          }
+                                                        })" 
                                                         class="px-1"
                                                         color="#ff6b81"
                                                       >
@@ -1179,7 +1186,14 @@
                                                     <v-col class="pa-0">
                                                       <v-btn
                                                         text
-                                                        disabled
+                                                        @click="$router.push({
+                                                          name : 'UserDetail',
+                                                          params: {
+                                                            account_id:student.studentId,
+                                                            action : 'view',
+                                                            from : 'courseDetail'
+                                                          }
+                                                        })"                                                       
                                                         class="px-1"
                                                         color="#ff6b81"
                                                       >
@@ -1318,9 +1332,7 @@
                       v-if="
                         search_student_potential
                           ? search_student_potential_datas?.length === 0
-                          : coach_list.filter(
-                              (v) => v.studentPotentialArr?.length > 0
-                            ).length === 0
+                          : coach_list.length === 0
                       "
                     >
                       <v-card dense outlined>
@@ -1497,7 +1509,14 @@
                                             <v-col class="pa-0">
                                               <v-btn
                                                 text
-                                                disabled
+                                                @click="$router.push({
+                                                  name : 'UserDetail',
+                                                  params: {
+                                                    account_id:potential.studentId,
+                                                    action : 'view',
+                                                    from : 'courseDetail'
+                                                  }
+                                                })"        
                                                 class="px-1"
                                                 color="#ff6b81"
                                               >
