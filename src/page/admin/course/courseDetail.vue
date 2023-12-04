@@ -1332,7 +1332,7 @@
                       v-if="
                         search_student_potential
                           ? search_student_potential_datas?.length === 0
-                          : coach_list.length === 0
+                          : coach_list.filter((v) => v.studentPotentialArr?.length > 0).length === 0
                       "
                     >
                       <v-card dense outlined>

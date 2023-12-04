@@ -493,11 +493,15 @@ const CourseModules = {
             }
           }
           for await (let potential of data.data.filter(v => v.studentPotentialArr && v?.studentPotentialArr?.length > 0)) {
-            if(!coachList.some(v=>v.coachId == potential.coachId && v.startTime == potential.startTime && v.endTime == potential.endTime )){
-              coachList.push(potential)
+            if(coachList.some(v=> v.coachId == potential.coachId && v.startTime == potential.startTime && v.endTime == potential.endTime )){
+              for( let list of coachList.filter(v=> v.coachId == potential.coachId && v.startTime == potential.startTime && v.endTime == potential.endTime )){
+                list.studentPotentialArr = potential.studentPotentialArr
+              }
+              
             }
           }
           context.commit("SetCoachListIsLoading", false)
+          // console.log(coachList)
           await context.commit("SetCoachList", coachList)
         }
       } catch (error) {
