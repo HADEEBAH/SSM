@@ -1155,6 +1155,7 @@ export default {
     time: "13.00:15.00",
     search_course_close: "",
     search_course_open: "",
+    sumTotal: "",
   }),
   created() {
     this.FilterYears().then(() => {
@@ -1488,6 +1489,7 @@ export default {
                     let sumTotal = 0;
                     for (let items of w.globals.seriesTotals) {
                       sumTotal = sumTotal + items;
+                      // console.log("sumTotal :>> ", sumTotal);
                       items = items.toLocaleString();
                     }
                     return sumTotal.toLocaleString();
@@ -1495,11 +1497,13 @@ export default {
                 },
               },
             },
+            dataLabels: {
+              enabled: true,
+              minAngleToShowLabel: 5,
+            },
           },
         },
-        dataLabels: {
-          enabled: true,
-        },
+
         fill: {
           type: "gradient",
         },
