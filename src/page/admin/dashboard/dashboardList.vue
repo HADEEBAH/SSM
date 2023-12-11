@@ -431,17 +431,8 @@
                               font-size: small;
                             "
                           >
-                            {{ $t("baht") }} ({{
-                              ((get_donut.sumTotalSuccess * 100) /
-                              (get_donut.sumTotalPending + get_donut.sumSuccess)
-                                ? (get_donut.sumTotalSuccess * 100) /
-                                  (get_donut.sumTotalPending +
-                                    get_donut.sumSuccess)
-                                : "0"
-                              )?.toLocaleString("us-us", {
-                                maximumFractionDigits: 2,
-                              })
-                            }}%)
+                            {{ $t("baht") }}
+                            ({{ genPersentSucces() }}%)
                           </span>
                         </span>
                       </div>
@@ -470,18 +461,7 @@
                               font-size: small;
                             "
                           >
-                            {{ $t("baht") }} ({{
-                              ((get_donut.sumTotalPending * 100) /
-                              (get_donut.sumTotalPending +
-                                get_donut.sumTotalSuccess)
-                                ? (get_donut.sumTotalPending * 100) /
-                                  (get_donut.sumTotalPending +
-                                    get_donut.sumTotalSuccess)
-                                : "0"
-                              )?.toLocaleString("us-us", {
-                                maximumFractionDigits: 2,
-                              })
-                            }}%)
+                            {{ $t("baht") }} ({{ genPersentPending() }}%)
                           </span>
                         </span>
                       </div>
@@ -1195,6 +1175,36 @@ export default {
       GetStudentValue: "DashboardModules/GetStudentValue",
     }),
 
+    genPersentSucces() {
+      console.log(
+        this.get_donut.sumTotalSuccess,
+        this.get_donut.sumTotalPending
+      );
+
+      let persent =
+        parseFloat(this.get_donut.sumTotalSuccess) /
+        (parseFloat(this.get_donut.sumTotalPending) +
+          parseFloat(this.get_donut.sumTotalSuccess))
+          ? parseFloat(this.get_donut.sumTotalSuccess) /
+            (parseFloat(this.get_donut.sumTotalPending) +
+              parseFloat(this.get_donut.sumTotalSuccess))
+          : 0;
+      persent = persent * 100;
+      return persent.toFixed(2);
+    },
+
+    genPersentPending() {
+      let persent =
+        parseFloat(this.get_donut.sumTotalPending) /
+        (parseFloat(this.get_donut.sumTotalPending) +
+          parseFloat(this.get_donut.sumTotalSuccess))
+          ? parseFloat(this.get_donut.sumTotalPending) /
+            (parseFloat(this.get_donut.sumTotalPending) +
+              parseFloat(this.get_donut.sumTotalSuccess))
+          : 0;
+      persent = persent * 100;
+      return persent.toFixed(2);
+    },
     selectYears() {
       this.GetGraf(this.dashboard_graf);
     },
