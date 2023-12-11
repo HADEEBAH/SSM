@@ -1699,9 +1699,12 @@ export default {
             );
           }
         }
-      } else {
-        return this.check_in_status_options;
+      } else if(this.course_data.course_type_id === "CT_2"){
+          return this.check_in_status_options.filter(
+            (v) => v.value !== "leave"
+          );
       }
+      
     },
     clearTeachingNote() {
       this.coach_check_in.summary = null;
