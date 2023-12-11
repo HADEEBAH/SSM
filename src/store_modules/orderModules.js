@@ -841,12 +841,12 @@ const orderModules = {
                 context.commit("SetOrderIsLoading", false);
               }
             } else {
-              const order_enpoint = `${process.env.VUE_APP_URL}/api/v1/order/update/${data.data.orderNumber}`
-              const payment_payload = {
-                paymentType: "",
-                paymentStatus: "pending",
-              };
-              await axios.patch(order_enpoint, payment_payload)
+              // const order_enpoint = `${process.env.VUE_APP_URL}/api/v1/order/update/${data.data.orderNumber}`
+              // const payment_payload = {
+              //   paymentType: "",
+              //   paymentStatus: "pending",
+              // };
+              // await axios.patch(order_enpoint, payment_payload)
               Swal.fire({
                 icon: "success",
                 title: VueI18n.t("succeed"),
