@@ -205,10 +205,12 @@
           "
           :options.sync="options"
           :headers="column"
-          :items-per-page="itemsPerPage"
+          :items-per-page.sync="itemsPerPage"
           ref="coach_leave"
           :footer-props="{
             'disable-pagination': disable_pagination_btn,
+            'items-per-page-options': [10, 20, 30, 40, 50],
+            'items-per-page-text': 'Rows per page:',
           }"
         >
           <template v-slot:[`item.count`]="{ item }">

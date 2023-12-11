@@ -539,6 +539,7 @@
                 </v-col>
               </v-row>
               <v-tabs-items v-model="student_tab" class="rounded-lg">
+                <!-- นักเรียนในคอร์ส -->
                 <v-tab-item valus="students in course">
                   <v-card flat dent class="mb-3 rounded-lg">
                     <v-card-text class="py-2 bg-[#FCE0E7] rounded-lg">
@@ -580,13 +581,14 @@
                       ></v-progress-circular>
                     </v-col>
                   </v-row>
-                 
+
                   <template v-else>
                     <div
                       v-if="
                         search_student_list
                           ? search_student_datas?.length === 0
-                          : coach_list?.filter(v => v?.datesList.length > 0).length === 0
+                          : coach_list?.filter((v) => v?.datesList.length > 0)
+                              .length === 0
                       "
                     >
                       <v-card dense outlined>
@@ -600,11 +602,16 @@
                       </v-card>
                     </div>
                     <template v-else>
-                     
                       <div
                         v-for="(coach, coach_index) in search_student_list
                           ? search_student_datas
-                          : coach_list?.filter(v => (v?.studentPotentialArr?.length == 0 && v?.datesList?.length > 0) || (v?.studentPotentialArr?.length !== v?.datesList?.length))"
+                          : coach_list?.filter(
+                              (v) =>
+                                (v?.studentPotentialArr?.length == 0 &&
+                                  v?.datesList?.length > 0) ||
+                                v?.studentPotentialArr?.length !==
+                                  v?.datesList?.length
+                            )"
                         :key="`${coach_index}-coach_index`"
                       >
                         <v-card
@@ -766,9 +773,7 @@
                             <v-row
                               dense
                               class="mb-3 font-bold"
-                              v-if="
-                                coach.datesList?.length > 0 
-                              "
+                              v-if="coach.datesList?.length > 0"
                             >
                               <v-col cols="auto">
                                 <div style="width: 44px"></div>
@@ -788,9 +793,7 @@
                               <v-col align="right"></v-col>
                             </v-row>
                             <v-card
-                              v-if="
-                                coach.datesList?.length === 0 
-                              "
+                              v-if="coach.datesList?.length === 0"
                               outlined
                               class="my-3"
                             >
@@ -801,11 +804,7 @@
                                 {{ $t("student information not found") }}
                               </v-card-text>
                             </v-card>
-                            <div
-                              v-if="
-                                coach.datesList?.length > 0 
-                              "
-                            >
+                            <div v-if="coach.datesList?.length > 0">
                               <div
                                 v-for="(date, index_date) in filterDateByCoach(
                                   coach_index
@@ -1221,6 +1220,7 @@
                     </template>
                   </template>
                 </v-tab-item>
+                <!-- นักเรียนจองคิว -->
                 <v-tab-item valus="student booking">
                   <v-data-table
                     class="header-table rounded-lg"
@@ -1284,6 +1284,7 @@
                     </template>
                   </v-data-table>
                 </v-tab-item>
+                <!-- นักเรียนจบคอร์ส -->
                 <v-tab-item valus="student potential">
                   <v-card flat dent class="mb-3 rounded-lg">
                     <v-card-text class="py-2 bg-[#FCE0E7] rounded-lg">
@@ -2834,7 +2835,7 @@ export default {
         course_id: this.$route.params.course_id,
         date: date.date,
         start_time: date.start,
-        end_time :  date.end,
+        end_time: date.end,
       });
       if (this.selected_schedule !== index) {
         this.selected_schedule = index;

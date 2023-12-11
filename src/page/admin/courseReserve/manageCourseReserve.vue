@@ -146,7 +146,7 @@
         :sort-desc="sortDesc"
         @update:sort-by="updateSortBy"
         @update:sort-desc="updateSortDesc"
-        :items-per-page="itemsPerPage"
+        :items-per-page.sync="itemsPerPage"
         :server-items-length="
           search_bool ? reserve_list.totalRows : reserve_list.count
         "
@@ -154,6 +154,8 @@
         ref="reserveLists"
         :footer-props="{
           'disable-pagination': disable_pagination_btn,
+          'items-per-page-options': [10, 20, 30, 40, 50],
+          'items-per-page-text': 'Rows per page:',
         }"
       >
         <template v-slot:no-data>
@@ -284,10 +286,12 @@ export default {
           text: this.$t("no."),
           value: "number",
           align: "start",
+          sortable: false,
         },
         {
           text: this.$t("reserve date"),
           value: "createdDate",
+          sortable: false,
           align: "start",
         },
         {
