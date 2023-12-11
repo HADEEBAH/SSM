@@ -144,7 +144,7 @@
                         }`
                       }}</v-col>
                     </v-row>
-                    <v-row dense>
+                    <v-row dense v-if="course.course_package_name">
                       <v-col cols="auto"
                         ><v-icon color="#ff6b81"
                           >mdi-account-box-multiple</v-icon
