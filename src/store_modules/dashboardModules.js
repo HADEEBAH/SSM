@@ -135,8 +135,9 @@ const dashboardModules = {
       context.commit("SetGetLoading", true)
 
       try {
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/potencial-duplicate`)
-
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/potencial-duplicate`)
+        // let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/student-summary`)
 
         if (data.statusCode === 200) {
           context.commit("SetGetStudentValue", data.data)
@@ -339,14 +340,11 @@ const dashboardModules = {
       context.commit("SetGetLoading", true)
 
       try {
+        // let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/current-student`)
-
-
         if (data.statusCode === 200) {
           context.commit("SetGetCurrentStudent", data.data)
           context.commit("SetGetLoading", false)
-
-
         }
       } catch (error) {
         context.commit("SetGetCurrentStudent", [])
@@ -358,6 +356,7 @@ const dashboardModules = {
       context.commit("SetGetLoading", true)
 
       try {
+        // let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/potential-student`)
 
 

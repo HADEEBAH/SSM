@@ -36,7 +36,7 @@
           <template v-slot:detail>
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
-                {{ get_student_list_value.countStudents }}
+                {{ get_student_value?.countStudents }}
               </v-col>
               <v-col class="text-sm">{{ $t("person") }}</v-col>
             </v-row>
@@ -65,7 +65,7 @@
           <template v-slot:detail>
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
-                {{ get_student_list_value.currentStudent?.countStudentCurrent }}
+                {{ get_student_value?.currentStudent }}
               </v-col>
               <v-col class="text-sm">{{ $t("person") }}</v-col>
             </v-row>
@@ -99,8 +99,7 @@
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
                 {{
-                  get_student_list_value.potencialsStudent
-                    ?.countStudentPotencials
+                  get_student_value?.potencialsStudent
                 }}
               </v-col>
               <v-col class="text-sm">{{ $t("person") }}</v-col>
@@ -125,7 +124,7 @@
           <template v-slot:detail>
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
-                {{ get_student_list_value.countReserve?.countStudent }}
+                {{ get_student_value.countReserve}} 
               </v-col>
               <v-col class="text-sm">{{ $t("person") }}</v-col>
             </v-row>
@@ -191,7 +190,7 @@
           <span>{{ $t("no data found in table") }}</span>
         </template>
         <template v-slot:[`item.course`]="{ item }">
-          {{ `${item.courseCount} ${$t("courses")}` }}
+          {{ `${item.countStudent} ${$t("courses")}` }}
         </template>
 
         <template v-slot:[`item.actions`]="{ item }">
@@ -222,7 +221,7 @@
         :headers="data_tab_three"
         @page-count="pageCount = $event"
         class="elevation-1 header-table"
-        :items="get_potential_student.potencialsStudent?.potencials"
+        :items="get_potential_student.potencials"
         :search="search"
       >
         <template v-slot:no-results>
@@ -610,20 +609,22 @@ export default {
     potential_user_course: [],
   }),
   mounted() {
-    this.GetStudentListValue();
+    this.GetStudentValue();
+    this.clickTab(this.tab)
     // this.GetAllStudentList();
   },
   methods: {
     ...mapActions({
-      GetStudentListValue: "DashboardModules/GetStudentListValue",
+      // GetStudentListValue: "DashboardModules/GetStudentListValue",
       GetAllStudentList: "DashboardModules/GetAllStudentList",
       GetCurrentStudent: "DashboardModules/GetCurrentStudent",
       GetPotentialStudent: "DashboardModules/GetPotentialStudent",
       GetReserveStudent: "DashboardModules/GetReserveStudent",
+      GetStudentValue: "DashboardModules/GetStudentValue",
     }),
 
     dialogDetailEnd(items) {
-      this.potential_user_course = items.coursesDetaill;
+      this.potential_user_course = items.courseDetail;
       this.course_detail_dialog_end = true;
       // this.detail_dialog_end = items;
     },
@@ -671,6 +672,7 @@ export default {
     ...mapGetters({
       dashboard_loading: "DashboardModules/getloading",
       get_student_list_value: "DashboardModules/getStudentListValue",
+      get_student_value: "DashboardModules/getStudentValue",
       get_all_student_list: "DashboardModules/getAllStudentList",
       get_current_student: "DashboardModules/getCurrentStudent",
       get_potential_student: "DashboardModules/getPotentialStudent",

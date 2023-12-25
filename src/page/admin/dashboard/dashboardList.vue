@@ -57,7 +57,7 @@
                     style="color: #1876d1; font-size: xx-large"
                     class="font-bold text-lg"
                   >
-                    {{ get_student_value.currentStudent?.countStudentCurrent }}
+                    {{ get_student_value.currentStudent }}
                   </div>
                   <v-col align="center">
                     <div class="my-3">{{ $t("person") }}</div>
@@ -81,7 +81,6 @@
                   >
                     {{
                       get_student_value.potencialsStudent
-                        ?.countStudentPotencials
                     }}
                   </div>
                   <v-col align="center">
@@ -104,7 +103,7 @@
                     style="color: #1876d1; font-size: xx-large"
                     class="font-bold text-lg"
                   >
-                    {{ get_student_value.countReserve?.countStudent }}
+                    {{ get_student_value?.countReserve }}
                   </div>
                   <v-col align="center">
                     <div class="my-3">{{ $t("person") }}</div>
