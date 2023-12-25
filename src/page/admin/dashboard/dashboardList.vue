@@ -414,6 +414,7 @@
                         <v-icon color="#ff6b81">mdi-circle-medium</v-icon>
                         <span class="text-xl">
                           {{ $t("paid") }}
+                          <!-- <pre>{{ get_donut }}</pre> -->
                           <span
                             style="color: #ff6b81"
                             class="font-bold text-xl"

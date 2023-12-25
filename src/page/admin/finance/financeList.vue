@@ -193,6 +193,7 @@
         ref="orders"
         :footer-props="{
           'disable-pagination': disable_pagination_btn,
+          'items-per-page-options': [10, 20, 30, 40, 50],
         }"
       >
         <template v-slot:[`item.total_price`]="{ item }">

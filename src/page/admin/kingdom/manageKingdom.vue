@@ -19,6 +19,9 @@
         :items="categorys"
         :loading="LoadingTable"
         :search="search"
+        :footer-props="{
+          'items-per-page-options': [10, 20, 30, 40, 50],
+        }"
       >
         <template v-slot:[`item.actions`]="{ item }">
           <v-btn

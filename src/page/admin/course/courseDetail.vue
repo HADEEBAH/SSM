@@ -536,6 +536,18 @@
                   >
                     {{ $t("export") }}
                   </v-btn>
+                  <!-- @click="exportStudentsEndCourse()" -->
+
+                  <v-btn
+                    v-if="student_tab == 2"
+                    :disabled="!select_export_end"
+                    depressed
+                    color="#ff6b81"
+                    :dark="select_export_end"
+                    @click="exportToExcel()"
+                  >
+                    {{ $t("export") }}
+                  </v-btn>
                 </v-col>
               </v-row>
               <v-tabs-items v-model="student_tab" class="rounded-lg">
@@ -1081,14 +1093,17 @@
                                                     <v-col class="pa-0">
                                                       <v-btn
                                                         text
-                                                        @click="$router.push({
-                                                          name : 'UserDetail',
-                                                          params: {
-                                                            account_id:student.studentId,
-                                                            action : 'view',
-                                                            from : 'courseDetail'
-                                                          }
-                                                        })" 
+                                                        @click="
+                                                          $router.push({
+                                                            name: 'UserDetail',
+                                                            params: {
+                                                              account_id:
+                                                                student.studentId,
+                                                              action: 'view',
+                                                              from: 'courseDetail',
+                                                            },
+                                                          })
+                                                        "
                                                         class="px-1"
                                                         color="#ff6b81"
                                                       >
@@ -1185,14 +1200,17 @@
                                                     <v-col class="pa-0">
                                                       <v-btn
                                                         text
-                                                        @click="$router.push({
-                                                          name : 'UserDetail',
-                                                          params: {
-                                                            account_id:student.studentId,
-                                                            action : 'view',
-                                                            from : 'courseDetail'
-                                                          }
-                                                        })"                                                       
+                                                        @click="
+                                                          $router.push({
+                                                            name: 'UserDetail',
+                                                            params: {
+                                                              account_id:
+                                                                student.studentId,
+                                                              action: 'view',
+                                                              from: 'courseDetail',
+                                                            },
+                                                          })
+                                                        "
                                                         class="px-1"
                                                         color="#ff6b81"
                                                       >
@@ -1290,13 +1308,17 @@
                     <v-card-text class="py-2 bg-[#FCE0E7] rounded-lg">
                       <v-row dense class="d-flex align-center">
                         <v-col cols="auto">
-                          <v-btn icon @click="selectAllCoach()">
+                          <v-checkbox
+                            v-model="select_export_end"
+                            color="#ff6b81"
+                          ></v-checkbox>
+                          <!-- <v-btn icon @click="selectAllCoachEnd()">
                             <v-icon color="#ff6b81">{{
                               selected_all_coach
                                 ? "mdi-checkbox-marked"
                                 : "mdi-checkbox-blank-outline"
                             }}</v-icon>
-                          </v-btn>
+                          </v-btn> -->
                         </v-col>
                         <v-col class="text-[#ff6b81] font-bold">{{
                           $t("coach list")
@@ -1333,7 +1355,9 @@
                       v-if="
                         search_student_potential
                           ? search_student_potential_datas?.length === 0
-                          : coach_list.filter((v) => v.studentPotentialArr?.length > 0).length === 0
+                          : coach_list.filter(
+                              (v) => v.studentPotentialArr?.length > 0
+                            ).length === 0
                       "
                     >
                       <v-card dense outlined>
@@ -1510,14 +1534,17 @@
                                             <v-col class="pa-0">
                                               <v-btn
                                                 text
-                                                @click="$router.push({
-                                                  name : 'UserDetail',
-                                                  params: {
-                                                    account_id:potential.studentId,
-                                                    action : 'view',
-                                                    from : 'courseDetail'
-                                                  }
-                                                })"        
+                                                @click="
+                                                  $router.push({
+                                                    name: 'UserDetail',
+                                                    params: {
+                                                      account_id:
+                                                        potential.studentId,
+                                                      action: 'view',
+                                                      from: 'courseDetail',
+                                                    },
+                                                  })
+                                                "
                                                 class="px-1"
                                                 color="#ff6b81"
                                               >
@@ -2059,7 +2086,6 @@ import { CheckFileSize, dateDMY, dateFormatter } from "@/functions/functions";
 import imgFileType from "@/components/file_type/imgFileType.vue";
 import { mapGetters, mapActions } from "vuex";
 import mixin from "@/mixin";
-
 export default {
   name: "coureDetail",
   components: {
@@ -2149,6 +2175,7 @@ export default {
     search_student_datas: [],
     search_student_potential: "",
     search_student_potential_datas: [],
+    select_export_end: false,
   }),
   mounted() {},
   watch: {
@@ -2276,6 +2303,40 @@ export default {
       RemovePrivilageByCourseID: "CourseModules/RemovePrivilageByCourseID",
       ExportStudentList: "CourseModules/ExportStudentList",
     }),
+
+    async exportToExcel() {
+      var XLSX = require("xlsx");
+      let report = [];
+
+      for (const student of this.student_potential_list) {
+        const inputDate = new Date(student.date);
+        const formattedDate = inputDate.toISOString().split("T")[0];
+        report.push({
+          วันที่: formattedDate,
+          // "เวลาเรียน": date.time,
+          ชื่อโค้ช: student.coachName,
+          ชื่อนักเรียน: `${student.firstNameTh} ${student.lastNameTh}`,
+          จำนวนครั้งที่เรียน: student.totalDay,
+          ช่วงเวลา: student.cpo?.optionName,
+        });
+      }
+
+      var workbook = XLSX.utils.book_new();
+      var worksheet = XLSX.utils.json_to_sheet(report);
+      XLSX.utils.book_append_sheet(workbook, worksheet, "sheet 1");
+      var excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+      var blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+      var url = URL.createObjectURL(blob);
+      var link = document.createElement("a");
+      link.href = url;
+      link.download = `${"course_name"}.xlsx`;
+      link.click();
+      URL.revokeObjectURL(url);
+    },
+
     searchStudentPotential(search) {
       let coach_list_search = [];
       const regex = new RegExp(search.trim(), "i");
@@ -2427,6 +2488,15 @@ export default {
         course_type_id: this.course_data.course_type_id,
       });
     },
+    //EXPORT STUDENT END COURSES
+    exportStudentsEndCourse() {
+      this.ExportStudentList({
+        coach_list: this.coach_list,
+        course_id: this.$route.params.course_id,
+        course_name: this.course_data.course_name_th,
+        course_type_id: this.course_data.course_type_id,
+      });
+    },
     readFile(file) {
       return `${process.env.VUE_APP_URL}/api/v1/files/${file}`;
     },
@@ -2455,6 +2525,12 @@ export default {
       );
       this.selected_all_coach = !this.selected_all_coach;
     },
+
+    // SELECT CHECK BOX COACH END
+    selectAllCoachEnd() {
+      this.select_export_end = true;
+    },
+
     selectCoachChecked(coach) {
       coach.datesList.map((v) => (v.checked = !coach.checked));
       coach.checked = !coach.checked;
