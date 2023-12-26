@@ -101,6 +101,10 @@
             : courses.filter((v) => v.course_type_id === tab)
         "
         :loading="LoadingTable"
+        :footer-props="{
+          'items-per-page-options': [10, 20, 30, 40, 50],
+          'items-per-page-text': 'Rows per page:',
+        }"
       >
         <template v-slot:no-data>
           <v-row dense>

@@ -283,7 +283,7 @@
           <v-col cols="12" sm="6" v-if="course_data.course_type_id === 'CT_2'">
             <label-custom
               required
-              :text="$t('accepted students/time')"
+              :text="$t('accepted students/time555')"
             ></label-custom>
             <v-text-field
               dense
