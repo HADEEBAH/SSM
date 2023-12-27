@@ -593,7 +593,7 @@
                       ></v-progress-circular>
                     </v-col>
                   </v-row>
-
+                  
                   <template v-else>
                     <div
                       v-if="
@@ -619,10 +619,10 @@
                           ? search_student_datas
                           : coach_list?.filter(
                               (v) =>
-                                (v?.studentPotentialArr?.length == 0 &&
-                                  v?.datesList?.length > 0) ||
-                                v?.studentPotentialArr?.length !==
-                                  v?.datesList?.length
+                                // (v?.studentPotentialArr?.length == 0 &&
+                                //   v?.datesList?.length > 0) ||
+                                // v?.studentPotentialArr?.length !==
+                                  v?.datesList?.length > 0
                             )"
                         :key="`${coach_index}-coach_index`"
                       >
