@@ -686,6 +686,10 @@
                           :items="student_schedule"
                           :search="search"
                         >
+                          <template v-slot:[`item.time_per_times`]="{ item }">
+                            {{ item.dates.count }} / {{ item.dates.totalDay }}
+                            {{ $t("time") }}
+                          </template>
                           <template v-slot:[`item.dates`]="{ item }">
                             {{ dayOfWeekName(item.dates.day) }}
                           </template>
@@ -999,6 +1003,10 @@
                   :items="student_schedule"
                   :search="search"
                 >
+                  <template v-slot:[`item.time_per_times`]="{ item }">
+                    {{ item.dates.count }} / {{ item.dates.totalDay }}
+                    {{ $t("time") }}
+                  </template>
                   <template v-slot:[`item.dates`]="{ item }">
                     {{ dayOfWeekName(item.dates.day) }}
                   </template>
@@ -2018,12 +2026,18 @@ export default {
           value: this.$i18n.locale == "th" ? "coachNameTh" : "coachNameEn",
           sortable: false,
         },
+
         {
           text: this.$t("course type"),
           value:
             this.$i18n.locale == "th"
               ? "cpo.courseTypeNameTh"
               : "cpo.courseTypeNameEn",
+          sortable: false,
+        },
+        {
+          text: this.$t("number of times"),
+          value: "time_per_times",
           sortable: false,
         },
         {
@@ -2072,6 +2086,11 @@ export default {
             this.$i18n.locale == "th"
               ? "cpo.courseTypeNameTh"
               : "cpo.courseTypeNameEn",
+        },
+        {
+          text: this.$t("number of times"),
+          value: "time_per_times",
+          sortable: false,
         },
         {
           text: this.$t("periods"),
