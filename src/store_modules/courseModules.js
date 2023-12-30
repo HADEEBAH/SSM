@@ -509,7 +509,7 @@ const CourseModules = {
       }
     },
     // STUDENT :: LIST BY COACH
-    async GetStudentByDate(context, { course_id, date, start_time, end_time }) {
+    async GetStudentByDate(context, { course_id, date, start_time, end_time, time_id, coach_id }) {
       context.commit("SetStudentListIsLoadIng", true)
       try {
         let config = {
@@ -519,7 +519,7 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/date/${date}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach_id}/date/${date}/time/${time_id}`, config)
 
         if (data.statusCode === 200) {
          
@@ -530,7 +530,7 @@ const CourseModules = {
             context.commit("SetStudentList", [])
             let scheduleStudent = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course-student/${course_id}/${date}`, config)
             if (scheduleStudent.data.statusCode == 200) {
-              let scheduleStudentData = scheduleStudent.data.data.filter(v => v.endTime == end_time && v.startTime == start_time)
+              let scheduleStudentData = scheduleStudent.data.data.filter(v => v.endTime == end_time && v.startTime == start_time && v.coachId == coach_id)
               context.commit("SetNoChackInStudentList", scheduleStudentData)
             }
           }
