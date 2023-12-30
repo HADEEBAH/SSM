@@ -77,7 +77,6 @@
                     params: {
                       courseId: course.course_id,
                       timeId: course.time_id,
-                      dayOfWeekId: course.day_of_week_id,
                       date: course.start_date,
                       typeEvent: 'null',
                     },
