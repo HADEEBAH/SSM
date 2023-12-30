@@ -240,7 +240,7 @@ const routes = [
         component: userMenageCourse,
       },
       {
-        path: 'menage-course/detail/:courseId/:timeId/:dayOfWeekId/:date/:typeEvent',
+        path: 'menage-course/detail/:courseId/:timeId/:date/:typeEvent',
         name: 'menageCourseDetail',
         component: userMenageCourseDetail,
       },
