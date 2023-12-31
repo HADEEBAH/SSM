@@ -120,6 +120,8 @@
                               params: {
                                 courseId: event.course_id,
                                 timeId: event.time_id,
+                                timeStart: event.start_time,
+                                timeEnd: event.end_time,
                                 date: event.start_date,
                                 typeEvent: event.type ? event.type : 'null',
                               },
@@ -300,6 +302,8 @@ export default {
           params: {
             courseId: data.event.course_id,
             timeId: data.event.time_id,
+            timeStart: data.event.start_time,
+            timeEnd: data.event.end_time,
             date: data.event.start_date,
             typeEvent: data.type ? data.type : "null",
           },
