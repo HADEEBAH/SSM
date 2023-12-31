@@ -1491,6 +1491,9 @@ export default {
       this.GetCoachCheckIn({
         course_id: this.$route.params.courseId,
         date: this.$route.params.date,
+        time_id: this.$route.params.timeId,
+        time_start: this.$route.params.timeStart,
+        time_end: this.$route.params.timeEnd,
       });
     },
   },
@@ -1568,6 +1571,10 @@ export default {
       this.GetCoachCheckIn({
         course_id: this.$route.params.courseId,
         date: this.$route.params.date,
+        time_id: this.$route.params.timeId,
+        time_start: this.$route.params.timeStart,
+        time_end: this.$route.params.timeEnd,
+
       });
 
       return "";
@@ -1989,11 +1996,16 @@ export default {
               course_id: this.course_data.course_id,
               date: this.$route.params.date,
               time_id: this.$route.params.timeId,
+              time_start: this.$route.params.timeStart,
+              time_end: this.$route.params.timeEnd,
               type: this.$route.params.typeEvent,
             }).then(async () => {
               await this.GetCoachCheckIn({
                 course_id: this.$route.params.courseId,
                 date: this.$route.params.date,
+                time_id: this.$route.params.timeId,
+                time_start: this.$route.params.timeStart,
+                time_end: this.$route.params.timeEnd,
               });
             });
           }
