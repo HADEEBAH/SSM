@@ -347,8 +347,9 @@ const coachModules = {
         })
       }
     },
-    async GetCoachCheckIn(context, { course_id, date }) {
+    async GetCoachCheckIn(context, { course_id, date, time_id, time_start, time_end }) {
       context.commit("SetStudentCheckInIsLoading", true)
+      // console.log(time_id,time_start,time_end)
       try {
         let payload = {
           checkInCoachId: null,
@@ -364,10 +365,12 @@ const coachModules = {
           },
         };
         let user_detail = JSON.parse(localStorage.getItem("userDetail"));
-
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}/date/${date}`, config)
+        // let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}/date/${date}/${time_id}/${time_start}/${time_end}`, config)
         if (data.statusCode === 200) {
-          data.data.forEach((check_in) => {
+          // console.log(data.data)
+          if( data.data?.checkInCoachId){
+            const check_in = data.data
             let img_url = []
             if (check_in.attachment.length > 0) {
               for (const img of check_in.attachment) {
@@ -386,12 +389,16 @@ const coachModules = {
               checkInCoachId: check_in.checkInCoachId,
               courseId: check_in.courseId,
               date: check_in.date,
+              time_id : check_in.timeId,
+              time_start : check_in.timeStart,
+              time_end : check_in.timeEnd,
               summary: check_in.summary,
               homework: check_in.homework,
               attachment: img_url,
               summary_files: [],
             }
-          })
+          }
+          
           context.commit("SetCoachCheckIn", payload)
           context.commit("SetStudentCheckInIsLoading", false)
         } else {
@@ -481,7 +488,8 @@ const coachModules = {
 
       }
     },
-    async GetStudentByTimeId(context, { course_id, date }) {
+    async GetStudentByTimeId(context, { course_id, date ,time_id}) {
+      context.commit("SetStudentCheckIn",[])
       try {
         let config = {
           headers: {
@@ -490,8 +498,10 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/${course_id}/date/${date}`, config)
+        // let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${course_id}/date/${date}`, config)
         if (data.statusCode === 200) {
+          // console.log(data.data)
           let i = 1
           for await (let student of data.data) {
             student.no = i
@@ -507,13 +517,13 @@ const coachModules = {
             student.potentialfiles = []
             i = i + 1
           }
-          await context.commit("SetStudentCheckIn", data.data)
+          await context.commit("SetStudentCheckIn", data.data.filter(v => v.timeId === time_id))
         }
       } catch (error) {
         console.log(error)
       }
     },
-    async CheckInCoach(context, { course_id, time_id, date, type }) {
+    async CheckInCoach(context, { course_id, time_id, date, type , time_start, time_end }) {
       context.commit("SetCoachCheckInIsLoading", true)
       try {
         let config = {
@@ -524,30 +534,21 @@ const coachModules = {
           },
         };
         let user_detail = JSON.parse(localStorage.getItem("userDetail"));
+        // let loaclhost = "http://localhost:3000"
         const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}`, {
           "date": date,
           "timeId": time_id,
+          "timeStart": time_start,
+          "timeEnd": time_end,
           "type": type
         }, config)
         if (data.statusCode === 201) {
-          let stadentData = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/${course_id}/date/${date}`, config)
-          if (stadentData.data.statusCode === 200) {
-            stadentData.data.data.forEach((student, index) => {
-              student.no = index + 1
-              student.fullname = `${student.firstNameTh} ${student.lastNameTh}`
-              student.fullname_en = `${student.firstNameEn} ${student.lastNameEn}`
-              student.check_in_student_id = student.checkInStudentId,
-                student.menu_compensation_date = false,
-                student.compensation_date = "",
-                student.compensation_date_str = "",
-                student.class_time = "-"
-              student.check_in_status = student.status
-            });
-            context.commit("SetCoachCheckInIsLoading", false)
-            context.commit("SetStudentCheckIn", stadentData.data.data)
-          } else {
-            throw { error: data }
-          }
+          context.dispatch("GetStudentByTimeId",{
+            course_id: course_id,
+            date : date,
+            time_id: time_id,
+          })
+          context.commit("SetCoachCheckInIsLoading", false)
         } else {
           context.commit("SetCoachCheckInIsLoading", false)
           throw { error: data }

@@ -2912,6 +2912,8 @@ export default {
         date: date.date,
         start_time: date.start,
         end_time: date.end,
+        time_id: date.timeId ,
+        coach_id : date.coachId
       });
       if (this.selected_schedule !== index) {
         this.selected_schedule = index;

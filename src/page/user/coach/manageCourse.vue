@@ -4,7 +4,6 @@
       :title="$t('select teaching information')"
       ref="headeres"
     ></header-page>
-
     <v-row dense class="mb-3" ref="selectTab">
       <v-col
         cols="12"
@@ -77,7 +76,8 @@
                     params: {
                       courseId: course.course_id,
                       timeId: course.time_id,
-                      dayOfWeekId: course.day_of_week_id,
+                      timeStart: course.start_time,
+                      timeEnd: course.end_time,
                       date: course.start_date,
                       typeEvent: 'null',
                     },
