@@ -1,3 +1,4 @@
+
 <template>
   <v-app class="background-color">
     <v-container class="overflow-x: hidden;">
@@ -79,9 +80,7 @@
                     style="color: #1876d1; font-size: xx-large"
                     class="font-bold text-lg"
                   >
-                    {{
-                      get_student_value.potencialsStudent
-                    }}
+                    {{ get_student_value.potencialsStudent }}
                   </div>
                   <v-col align="center">
                     <div class="my-3">{{ $t("person") }}</div>
@@ -228,19 +227,16 @@
                     {{ $t("income") }}
                   </v-col>
 
-                  <!-- Year -->
+                  <!-- Year GRAF-->
                   <v-col cols="6">
                     <v-select
-                      v-model="selected_years"
+                      v-model="selectedYear"
                       :items="filter_years"
-                      item-value="usYears"
-                      :item-text="
-                        $i18n.locale == 'th' ? 'thaiYears' : 'usYears'
-                      "
-                      return-object
-                      dense
+                      item-value="en"
+                      :item-text="$i18n.locale == 'th' ? 'th' : 'en'"
+                      @input="onYearChangeGraft()"
                       outlined
-                      @input="selectYears()"
+                      dense
                       color="#ff6b81"
                     >
                       <template v-slot:no-data>
@@ -254,7 +250,7 @@
                       </template>
                     </v-select>
                   </v-col>
-                  <!-- Month -->
+                  <!-- Month GRAF-->
                   <v-col cols="6">
                     <v-select
                       v-model="selected_mounth"
@@ -275,14 +271,6 @@
                           </v-list-item-content>
                         </v-list-item>
                       </template>
-
-                      <!-- <template v-slot:selected="{ item }">
-                        <v-list-item-content>
-                          <v-list-item-title>
-                            {{ $i18n.locale == "th" ? item.name : item.nameEn }}
-                          </v-list-item-title>
-                        </v-list-item-content>
-                      </template> -->
                     </v-select>
                   </v-col>
                 </v-row>
@@ -333,18 +321,16 @@
                     >
                     {{ $t("income proportion") }}
                   </v-col>
-                  <!-- YEAR -->
+                  <!-- YEAR DONUT-->
                   <v-col cols="6">
                     <v-select
-                      v-model="donut_years"
+                      v-model="selectedYearDonut"
                       :items="filter_years"
-                      item-value="usYears"
-                      :item-text="
-                        $i18n.locale == 'th' ? 'thaiYears' : 'usYears'
-                      "
-                      dense
+                      item-value="en"
+                      :item-text="$i18n.locale == 'th' ? 'th' : 'en'"
+                      @input="onYearChangeDonut()"
                       outlined
-                      @input="selectDonutYears()"
+                      dense
                       color="#ff6b81"
                     >
                       <template v-slot:no-data>
@@ -356,20 +342,29 @@
                           </v-list-item-content>
                         </v-list-item>
                       </template>
-                      <!-- <template v-slot:selected="{ item }">
-                        <v-list-item-content>
-                          <v-list-item-title>
-                            {{
-                              $i18n.locale == "th"
-                                ? item.thaiYears
-                                : item.usYears
-                            }}
-                          </v-list-item-title>
-                        </v-list-item-content>
-                      </template> -->
                     </v-select>
+                    <!-- <v-select
+                      v-model="donut_years"
+                      :items="filter_years"
+                      item-value="en"
+                      :item-text="$i18n.locale == 'th' ? 'th' : 'en'"
+                      dense
+                      outlined
+                      @input="selectDonutYears(event)"
+                      color="#ff6b81"
+                    >
+                      <template v-slot:no-data>
+                        <v-list-item>
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              {{ $t("no data found") }}
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </template>
+                    </v-select> -->
                   </v-col>
-                  <!-- MONTH -->
+                  <!-- MONTH DONUT-->
                   <v-col cols="6">
                     <v-select
                       v-model="donut_mounth"
@@ -378,7 +373,7 @@
                       return-object
                       dense
                       outlined
-                      @input="selectDonutMounth()"
+                      @input="selectDonutMounth(event)"
                       color="#ff6b81"
                     >
                       <template v-slot:no-data>
@@ -1117,12 +1112,17 @@ export default {
     totalSuccessDonut: 0,
     totalPendingDonut: 0,
     totalPriceDonut: 0,
-
+    selectedYear: "",
+    selectedYearDonut: "",
     selected_mounth: "",
     donut_mounth: "",
     selected_years: "",
     donut_years: "",
     dashboard_graf: {
+      year: "",
+      month: "",
+    },
+    dashboard_donut: {
       year: "",
       month: "",
     },
@@ -1139,18 +1139,19 @@ export default {
   }),
   created() {
     this.FilterYears().then(() => {
-      if (this.filter_years.length > 0) {
-        this.selected_years = this.filter_years[0].usYears;
-        this.donut_years = this.filter_years[0].usYears;
+      this.dashboard_graf = {
+        year: this.selectedYear,
+        month: this.selected_mounth.key,
+      };
+      this.dashboard_donut = {
+        year: this.selectedYearDonut,
+        month: this.donut_mounth.key,
+      };
 
-        this.dashboard_graf = {
-          year: this.filter_years[0].usYears,
-          month: this.mapMonth.key,
-        };
-        this.GetDonut(this.dashboard_graf);
-        this.GetGraf(this.dashboard_graf);
-      }
+      this.GetDonut(this.dashboard_donut);
+      this.GetGraf(this.dashboard_graf);
     });
+
     const month = new Date().getMonth() + 1;
     this.mapMonth = this.thaiMonths.filter(
       (item) => parseInt(item.key) === month
@@ -1158,12 +1159,11 @@ export default {
   },
   beforeMount() {},
   async mounted() {
-    this.selected_mounth = this.mapMonth;
+    (this.selectedYear = new Date().getFullYear().toString()),
+      (this.selectedYearDonut = new Date().getFullYear().toString()),
+      (this.selected_mounth = this.mapMonth);
     this.donut_mounth = this.mapMonth;
-    // await this.GetEmptyCourse();
     await this.GetStudentValue();
-    // await this.GetCourseType();
-    // await this.GetPotential();
   },
   methods: {
     ...mapActions({
@@ -1206,22 +1206,40 @@ export default {
       persent = persent * 100;
       return persent.toFixed(2);
     },
-    selectYears() {
+
+    onYearChangeGraft() {
+      this.dashboard_graf = {
+        year: this.selectedYear,
+        month: this.selected_mounth.key,
+      };
+
       this.GetGraf(this.dashboard_graf);
     },
 
     selectMunth() {
-      this.dashboard_graf.month = this.selected_mounth.key;
+      this.dashboard_graf = {
+        year: this.selectedYear,
+        month: this.selected_mounth.key,
+      };
+
       this.GetGraf(this.dashboard_graf);
     },
 
-    selectDonutYears() {
-      this.GetDonut(this.dashboard_graf);
+    onYearChangeDonut() {
+      this.dashboard_donut = {
+        year: this.selectedYearDonut,
+        month: this.donut_mounth.key,
+      };
+      this.GetDonut(this.dashboard_donut);
     },
 
     selectDonutMounth() {
-      this.dashboard_graf.month = this.donut_mounth.key;
-      this.GetDonut(this.dashboard_graf);
+      this.dashboard_donut = {
+        year: this.selectedYearDonut,
+        month: this.donut_mounth.key,
+      };
+
+      this.GetDonut(this.dashboard_donut);
     },
 
     heightGraf() {

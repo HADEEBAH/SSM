@@ -1,3 +1,6 @@
+
+
+
 import axios from "axios";
 import VueI18n from "../i18n";
 function dayOfWeekArray(day) {
@@ -288,10 +291,10 @@ const dashboardModules = {
 
 
         if (data.statusCode === 200) {
-          data.data?.map((items) => {
-            items.thaiYears = items?.th
-            items.usYears = items?.en
-          })
+          // data.data?.map((items) => {
+          //   items.thaiYears = items?.th
+          //   items.usYears = items?.en
+          // })
           context.commit("SetFilterYears", data.data)
           // console.log('data.data :>> ', data.data);
         }
