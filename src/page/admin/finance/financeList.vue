@@ -194,6 +194,7 @@
         :footer-props="{
           'disable-pagination': disable_pagination_btn,
           'items-per-page-options': [10, 20, 30, 40, 50],
+          'items-per-page-text': 'Rows per page:',
         }"
       >
         <template v-slot:[`item.total_price`]="{ item }">
@@ -1149,9 +1150,11 @@ export default {
 
       if (this.tabs_change) {
         this.$refs.orders.$props.options.page = 1;
+        this.$refs.orders.$props.options.itemsPerPage = 10;
       }
       if (this.text_change) {
         this.$refs.orders.$props.options.page = 1;
+        this.$refs.orders.$props.options.itemsPerPage = 10;
       }
 
       this.disable_pagination_btn = false;

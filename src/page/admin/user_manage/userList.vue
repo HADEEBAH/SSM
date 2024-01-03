@@ -133,6 +133,7 @@
             :footer-props="{
               'disable-pagination': disable_pagination_btn,
               'items-per-page-options': [10, 20, 30, 40, 50],
+              'items-per-page-text': 'Rows per page:',
             }"
           >
             <template v-slot:[`item.count`]="{ item }">
@@ -407,6 +408,7 @@ export default {
       }
       if (this.select_roles) {
         this.$refs.userList.$props.options.page = 1;
+        this.$refs.userList.$props.options.itemsPerPage = 10;
       }
       this.filter_role_is_loading = true;
       await this.loadItems(this.search, this.searchQuery);
@@ -475,6 +477,7 @@ export default {
 
       if (this.filtered_datas) {
         this.$refs.userList.$props.options.page = 1;
+        this.$refs.userList.$props.options.itemsPerPage = 10;
       }
 
       this.disable_pagination_btn = false;

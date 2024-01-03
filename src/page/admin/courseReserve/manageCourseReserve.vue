@@ -402,9 +402,11 @@ export default {
       });
       if (this.tabs_change) {
         this.$refs.reserveLists.$props.options.page = 1;
+        this.$refs.reserveLists.$props.options.itemsPerPage = 10;
       }
       if (this.text_change) {
         this.$refs.reserveLists.$props.options.page = 1;
+        this.$refs.reserveLists.$props.options.itemsPerPage = 10;
       }
 
       this.disable_pagination_btn = false;
