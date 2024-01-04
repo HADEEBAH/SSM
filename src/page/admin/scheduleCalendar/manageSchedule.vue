@@ -1,3 +1,5 @@
+
+
 <template>
   <v-container>
     <headerPage :title="$t('manage tables')"></headerPage>
@@ -53,7 +55,12 @@
           indeterminate
         ></v-progress-circular>
       </v-col>
-      <v-col v-show="!get_all_holidays_is_loading && !get_all_course_is_loading" cols="12" md="8" sm="8">
+      <v-col
+        v-show="!get_all_holidays_is_loading && !get_all_course_is_loading"
+        cols="12"
+        md="8"
+        sm="8"
+      >
         <calendarAdmin></calendarAdmin>
       </v-col>
       <v-col cols="12" md="4" sm="4">
@@ -967,16 +974,16 @@ export default {
       ResetFilte: "ManageScheduleModules/ResetFilte",
       ResetSearch: "ManageScheduleModules/ResetSearch",
     }),
-    ClarData(){
-      this.ResetFilte()
+    ClarData() {
+      this.ResetFilte();
       this.GetDataInSchedule({
-        month: new Date().getMonth()+1,
-        year: new Date().getFullYear()
-      })
-      this.filter_dialog = false
-      this.selectedCourseType = []
-      this.selectedCourse = []
-      this.selectedCoach = []
+        month: new Date().getMonth() + 1,
+        year: new Date().getFullYear(),
+      });
+      this.filter_dialog = false;
+      this.selectedCourseType = [];
+      this.selectedCourse = [];
+      this.selectedCoach = [];
     },
     GenDate(date) {
       if (date) {
@@ -1079,9 +1086,9 @@ export default {
             if (data.statusCode === 200) {
               (this.show_dialog_edit_holoday = false), this.GetAllHolidays();
               this.GetDataInSchedule({
-                month: new Date().getMonth()+1,
-                year: new Date().getFullYear()
-              })
+                month: new Date().getMonth() + 1,
+                year: new Date().getFullYear(),
+              });
               Swal.fire({
                 icon: "success",
                 title: this.$t("succeed"),
@@ -1158,9 +1165,9 @@ export default {
               this.nameHoliday = "";
               this.GetAllHolidays();
               this.GetDataInSchedule({
-                month: new Date().getMonth()+1,
-                year: new Date().getFullYear()
-              })
+                month: new Date().getMonth() + 1,
+                year: new Date().getFullYear(),
+              });
               this.holidaydatesTh = "";
 
               if (data.statusCode === 201) {
@@ -1280,9 +1287,9 @@ export default {
               payload = { ...this.setDataEditDialog };
               this.GetEditHolidays(payload);
               this.GetDataInSchedule({
-                month: new Date().getMonth()+1,
-                year: new Date().getFullYear()
-              })
+                month: new Date().getMonth() + 1,
+                year: new Date().getFullYear(),
+              });
               this.show_dialog_edit_holoday = false;
               this.editHolidayDates = null;
               this.setDataEditDialog = {};

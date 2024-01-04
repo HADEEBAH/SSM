@@ -1,3 +1,4 @@
+
 <template>
   <v-container>
     <v-card-title>
@@ -195,10 +196,10 @@
                   readonly
                   :value="
                     $i18n.locale == 'th'
-                      ? details.itmeData.coachName
-                      : details.itmeData?.coachNameEn
-                      ? details.itmeData.coachNameEn
-                      : details.itmeData.coachName
+                      ? details.itmeData?.itmeData?.coachName
+                      : details.itmeData?.itmeData?.coachNameEn
+                      ? details.itmeData?.itmeData?.coachNameEn
+                      : details.itmeData?.itmeData?.coachName
                   "
                   hide-details
                   color="#ff6b81"
@@ -348,11 +349,10 @@ export default {
       GetAllHolidays: "ManageScheduleModules/GetAllHolidays",
       GetDataInSchedule: "ManageScheduleModules/GetDataInSchedule",
     }),
-    GetSchedule({start}){
-      if(!this.data_search_schedule && !this.data_filter_schedule){
-        this.GetDataInSchedule({month: start.month , year: start.year})
+    GetSchedule({ start }) {
+      if (!this.data_search_schedule && !this.data_filter_schedule) {
+        this.GetDataInSchedule({ month: start.month, year: start.year });
       }
-     
     },
     convertDate(item) {
       const oriDate = new Date(item);
@@ -377,7 +377,7 @@ export default {
       this.details = data.event;
       this.dialog_detail = true;
     },
-  
+
     goToday() {
       this.focus = new Date();
     },

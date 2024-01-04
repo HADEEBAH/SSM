@@ -967,6 +967,8 @@
         ref="coach_leaves"
         :footer-props="{
           'disable-pagination': disable_pagination_btn,
+          'items-per-page-options': [10, 20, 30, 40, 50],
+          'items-per-page-text': 'Rows per page:',
         }"
       >
         <!-- <template v-slot:no-data>
@@ -2080,6 +2082,7 @@ export default {
       });
       if (this.tabs_change) {
         this.$refs.coach_leaves.$props.options.page = 1;
+        this.$refs.coach_leaves.$props.options.itemsPerPage = 10;
       }
 
       this.disable_pagination_btn = false;
@@ -2163,6 +2166,7 @@ export default {
       });
       if (this.select_course) {
         this.$refs.studentList.$props.options.page = 1;
+        this.$refs.studentList.$props.options.itemsPerPage = 10;
       }
 
       this.disable_pagination_btn = false;
