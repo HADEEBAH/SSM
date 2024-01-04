@@ -531,20 +531,20 @@
                     :disabled="!coach_list.some((v) => v.checked === true)"
                     depressed
                     color="#ff6b81"
+                    :loading="export_is_loading"
                     :dark="coach_list.some((v) => v.checked === true)"
                     @click="exportStudents()"
                   >
                     {{ $t("export") }}
                   </v-btn>
-                  <!-- @click="exportStudentsEndCourse()" -->
 
                   <v-btn
                     v-if="student_tab == 2"
-                    :disabled="!select_export_end"
                     depressed
                     color="#ff6b81"
-                    :dark="select_export_end"
-                    @click="exportToExcel()"
+                    dark
+                    :loading="export_is_loading"
+                    @click="exportStudentsEndCourse()"
                   >
                     {{ $t("export") }}
                   </v-btn>
@@ -1308,10 +1308,13 @@
                     <v-card-text class="py-2 bg-[#FCE0E7] rounded-lg">
                       <v-row dense class="d-flex align-center">
                         <v-col cols="auto">
-                          <v-checkbox
+                          <!-- <v-checkbox
+                            dense
+                            hide-details
                             v-model="select_export_end"
                             color="#ff6b81"
-                          ></v-checkbox>
+                          >
+                          </v-checkbox> -->
                           <!-- <v-btn icon @click="selectAllCoachEnd()">
                             <v-icon color="#ff6b81">{{
                               selected_all_coach
@@ -2220,6 +2223,7 @@ export default {
       student_potential_list_is_loading:
         "CourseModules/getStudentPotentialListIsLoading",
       no_check_in_student_list: "CourseModules/getNoChackInStudentList",
+      export_is_loading : "CourseModules/export_is_loading"
     }),
     breadcrumbs() {
       return [
@@ -2302,40 +2306,8 @@ export default {
       GetStudentPotentialByCoach: "CourseModules/GetStudentPotentialByCoach",
       RemovePrivilageByCourseID: "CourseModules/RemovePrivilageByCourseID",
       ExportStudentList: "CourseModules/ExportStudentList",
+      ExportEndStudentList : "CourseModules/ExportEndStudentList"
     }),
-
-    async exportToExcel() {
-      var XLSX = require("xlsx");
-      let report = [];
-
-      for (const student of this.student_potential_list) {
-        const inputDate = new Date(student.date);
-        const formattedDate = inputDate.toISOString().split("T")[0];
-        report.push({
-          วันที่: formattedDate,
-          // "เวลาเรียน": date.time,
-          ชื่อโค้ช: student.coachName,
-          ชื่อนักเรียน: `${student.firstNameTh} ${student.lastNameTh}`,
-          จำนวนครั้งที่เรียน: student.totalDay,
-          ช่วงเวลา: student.cpo?.optionName,
-        });
-      }
-
-      var workbook = XLSX.utils.book_new();
-      var worksheet = XLSX.utils.json_to_sheet(report);
-      XLSX.utils.book_append_sheet(workbook, worksheet, "sheet 1");
-      var excelBuffer = XLSX.write(workbook, {
-        bookType: "xlsx",
-        type: "array",
-      });
-      var blob = new Blob([excelBuffer], { type: "application/octet-stream" });
-      var url = URL.createObjectURL(blob);
-      var link = document.createElement("a");
-      link.href = url;
-      link.download = `${"course_name"}.xlsx`;
-      link.click();
-      URL.revokeObjectURL(url);
-    },
 
     searchStudentPotential(search) {
       let coach_list_search = [];
@@ -2490,12 +2462,10 @@ export default {
     },
     //EXPORT STUDENT END COURSES
     exportStudentsEndCourse() {
-      this.ExportStudentList({
+      this.ExportEndStudentList({
         coach_list: this.coach_list,
-        course_id: this.$route.params.course_id,
-        course_name: this.course_data.course_name_th,
-        course_type_id: this.course_data.course_type_id,
-      });
+        course_id: this.$route.params.course_id
+      })
     },
     readFile(file) {
       return `${process.env.VUE_APP_URL}/api/v1/files/${file}`;

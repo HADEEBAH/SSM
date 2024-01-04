@@ -40,6 +40,7 @@ function dayOfWeekArray(day) {
 const CourseModules = {
   namespaced: true,
   state: {
+    export_is_loading : false,
     no_check_in_student_list: [],
     course_types: [],
     courses_is_loading: false,
@@ -153,6 +154,9 @@ const CourseModules = {
 
   },
   mutations: {
+    SetExportIsLoading(state, payload){
+      state.export_is_loading = payload
+    },
     SetNoChackInStudentList(state, paylaod) {
       state.no_check_in_student_list = paylaod
     },
@@ -1780,6 +1784,7 @@ const CourseModules = {
     },
     // EXPORT COURSE STUDENT LIST
     async ExportStudentList(context, { coach_list, course_id, course_name, course_type_id }) {
+      context.commit("SetExportIsLoading",true)
       try {
         let config = {
           headers: {
@@ -1789,74 +1794,78 @@ const CourseModules = {
           }
         }
         let report = []
+        const checked_count = coach_list.filter(v => v.checked)?.length
+        let checking = []
         for await (const coach of coach_list) {
           if (coach.checked) {
             for await (const date of coach.datesList) {
-              let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/date/${date.date}`, config)
-              if (data.statusCode === 200) {
-                if (data.data.length > 0) {
-                  for await (const student of data.data) {
-                    if (course_type_id === "CT_1") {
-                      report.push({
-                        "วันที่": date.date,
-                        "เวลาเรียน": date.time,
-                        "ชื่อโค้ช": `${coach.coachName}`,
-                        "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
-                        "แพ็กเกจ": date.cpo.packageName,
-                        "ระยะเวลา": student.cpo?.optionName,
-                        "จำนวนครั้ง": `${student.countCheckIn}/${student.totalDay}`,
-                        "การเขาเรียน": student.status === "punctual" ? "ตรงเวลา" : student.status === "late" ? "สาย" : student.status === "leave" ? "ลา" : student.status === "emergency leave" ? 'ลาฉุกเฉิน' : student.status === "absent" ? 'ขาด' : '-',
-                        "ระดับพัฒนาการ": student.assessment?.evolution === "very good" ? 'ดีมาก' : student.assessment?.evolution === "good" ? 'ดี' : 'ปรับปรุง',
-                        "ระดับความสนใจ": student.assessment?.interest === "very good" ? 'ดีมาก' : student.assessment?.interest === "good" ? 'ดี' : 'ปรับปรุง',
-                        "ความคิดเห็น": student.assessment?.remark,
-                      })
-                    } else {
-                      report.push({
-                        "วันที่": date.date,
-                        "เวลาเรียน": date.time,
-                        "ชื่อโค้ช": `${coach.coachName}`,
-                        "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
-                        "การเขาเรียน": student.status === "punctual" ? "ตรงเวลา" : student.status === "late" ? "สาย" : student.status === "leave" ? "ลา" : student.status === "emergency leave" ? 'ลาฉุกเฉิน' : student.status === "absent" ? 'ขาด' : '-',
-                        "ระดับพัฒนาการ": student.assessment?.evolution === "very good" ? 'ดีมาก' : student.assessment?.evolution === "good" ? 'ดี' : 'ปรับปรุง',
-                        "ระดับความสนใจ": student.assessment?.interest === "very good" ? 'ดีมาก' : student.assessment?.interest === "good" ? 'ดี' : 'ปรับปรุง',
-                        "ความคิดเห็น": student.assessment?.remark,
-                      })
+              if(date.checked){
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach.coachId}/date/${date.date}/time/${date.timeId}`, config)
+                if (data.statusCode === 200) {
+                  if (data.data.length > 0) {
+                    for await (const student of data.data) {
+                      if (course_type_id === "CT_1") {
+                        report.push({
+                          "วันที่": date.date,
+                          "เวลาเรียน": date.time,
+                          "ชื่อโค้ช": `${coach.coachName}`,
+                          "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
+                          "แพ็กเกจ": date.cpo.packageName,
+                          "ระยะเวลา": student.cpo?.optionName,
+                          "จำนวนครั้ง": `${student.countCheckIn}/${student.totalDay}`,
+                          "การเขาเรียน": student.status === "punctual" ? "ตรงเวลา" : student.status === "late" ? "สาย" : student.status === "leave" ? "ลา" : student.status === "emergency leave" ? 'ลาฉุกเฉิน' : student.status === "absent" ? 'ขาด' : '-',
+                          "ระดับพัฒนาการ": student.assessment?.evolution === "very good" ? 'ดีมาก' : student.assessment?.evolution === "good" ? 'ดี' : 'ปรับปรุง',
+                          "ระดับความสนใจ": student.assessment?.interest === "very good" ? 'ดีมาก' : student.assessment?.interest === "good" ? 'ดี' : 'ปรับปรุง',
+                          "ความคิดเห็น": student.assessment?.remark,
+                        })
+                      } else {
+                        report.push({
+                          "วันที่": date.date,
+                          "เวลาเรียน": date.time,
+                          "ชื่อโค้ช": `${coach.coachName}`,
+                          "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
+                          "การเขาเรียน": student.status === "punctual" ? "ตรงเวลา" : student.status === "late" ? "สาย" : student.status === "leave" ? "ลา" : student.status === "emergency leave" ? 'ลาฉุกเฉิน' : student.status === "absent" ? 'ขาด' : '-',
+                          "ระดับพัฒนาการ": student.assessment?.evolution === "very good" ? 'ดีมาก' : student.assessment?.evolution === "good" ? 'ดี' : 'ปรับปรุง',
+                          "ระดับความสนใจ": student.assessment?.interest === "very good" ? 'ดีมาก' : student.assessment?.interest === "good" ? 'ดี' : 'ปรับปรุง',
+                          "ความคิดเห็น": student.assessment?.remark,
+                        })
+                      }
                     }
-                  }
-
-                } else {
-                  for await (const student of date.students) {
-                    if (course_type_id === "CT_1") {
-                      report.push({
-                        "วันที่": date.date,
-                        "เวลาเรียน": date.time,
-                        "ชื่อโค้ช": `${coach.coachName}`,
-                        "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
-                        "แพ็กเกจ": date.cpo.packageName,
-                        "ระยะเวลา": date.cpo?.optionName,
-                        "จำนวนครั้ง": "",
-                        "การเขาเรียน": "",
-                        "ระดับพัฒนาการ": "",
-                        "ระดับความสนใจ": "",
-                        "ความคิดเห็น": "",
-                      })
-                    } else {
-                      report.push({
-                        "วันที่": date.date,
-                        "เวลาเรียน": date.time,
-                        "ชื่อโค้ช": `${coach.coachName}`,
-                        "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
-                        "การเขาเรียน": "",
-                        "ระดับพัฒนาการ": "",
-                        "ระดับความสนใจ": "",
-                        "ความคิดเห็น": "",
-                      })
+  
+                  } else {
+                    for await (const student of date.students) {
+                      if (course_type_id === "CT_1") {
+                        report.push({
+                          "วันที่": date.date,
+                          "เวลาเรียน": date.time,
+                          "ชื่อโค้ช": `${coach.coachName}`,
+                          "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
+                          "แพ็กเกจ": date.cpo.packageName,
+                          "ระยะเวลา": date.cpo?.optionName,
+                          "จำนวนครั้ง": "",
+                          "การเขาเรียน": "",
+                          "ระดับพัฒนาการ": "",
+                          "ระดับความสนใจ": "",
+                          "ความคิดเห็น": "",
+                        })
+                      } else {
+                        report.push({
+                          "วันที่": date.date,
+                          "เวลาเรียน": date.time,
+                          "ชื่อโค้ช": `${coach.coachName}`,
+                          "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
+                          "การเขาเรียน": "",
+                          "ระดับพัฒนาการ": "",
+                          "ระดับความสนใจ": "",
+                          "ความคิดเห็น": "",
+                        })
+                      }
                     }
                   }
                 }
               }
-
             }
+            checking.push(coach.checked)
           }
         }
         var workbook = XLSX.utils.book_new();
@@ -1870,12 +1879,73 @@ const CourseModules = {
         link.download = `${course_name}.xlsx`;
         link.click();
         URL.revokeObjectURL(url);
+        if(checked_count === checking?.length){
+          context.commit("SetExportIsLoading",false)
+        }else{
+          context.commit("SetExportIsLoading",false)
+        }
       } catch (error) {
+        context.commit("SetExportIsLoading",false)
         console.log(error)
       }
-    }
+    },
+    // EXPORT END COURSE STUDENT LIST
+    async ExportEndStudentList(context, { coach_list, course_id}) {
+        context.commit("SetExportIsLoading",true)
+        try {
+          let config = {
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Content-type": "Application/json",
+              'Authorization': `Bearer ${VueCookie.get("token")}`
+            }
+          }
+          let report = []
+          let checking = []
+          let coachPotential = coach_list.filter(v => v.studentPotentialArr?.length > 0)
+          for await (let coach of coachPotential){
+            let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach.coachId}`, config)
+            if (data.statusCode === 200) {
+              for await (let student of data.data){
+                report.push({
+                  "วันที่": moment(student?.date).format("DD-MM-YYYY"),
+                  "ชื่อนักเรียน": `${student?.firstNameTh} ${student?.lastNameTh}`,
+                  "ชื่อโค้ช": student?.coachName,
+                  "จำนวนครั้ง": `${student?.countCheckIn}/${student?.totalDay}`,
+                  "ระดับพัฒนาการ": student?.evolution === "very good" ? 'ดีมาก' : student?.evolution === "good" ? 'ดี' : 'ปรับปรุง',
+                  "ระดับความสนใจ": student?.interest,
+                  "ความคิดเห็น":  student?.remark,
+                })
+              }
+            }
+            checking.push(coach)
+          }
+          var workbook = XLSX.utils.book_new();
+          var worksheet = XLSX.utils.json_to_sheet(report);
+          XLSX.utils.book_append_sheet(workbook, worksheet, "sheet 1");
+          var excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+          var blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+          var url = URL.createObjectURL(blob);
+          var link = document.createElement("a");
+          link.href = url;
+          link.download = `รายชื่อนักเรียนจบคอร์ส.xlsx`;
+          link.click();
+          URL.revokeObjectURL(url);
+          if(checking.length === coachPotential?.length){
+            context.commit("SetExportIsLoading",false)
+          }else{
+            context.commit("SetExportIsLoading",false)
+          }
+        } catch (error) {
+          context.commit("SetExportIsLoading",false)
+          console.log(error)
+        }
+      }
   },
   getters: {
+    export_is_loading(state){
+      return state.export_is_loading
+    },
     getNoChackInStudentList(state) {
       return state.no_check_in_student_list
     },
