@@ -537,12 +537,12 @@
                   >
                     {{ $t("export") }}
                   </v-btn>
-
                   <v-btn
                     v-if="student_tab == 2"
                     depressed
                     color="#ff6b81"
-                    dark
+                    :dark="!DisableButtonExport()"
+                    :disabled="DisableButtonExport()"
                     :loading="export_is_loading"
                     @click="exportStudentsEndCourse()"
                   >
@@ -1307,22 +1307,6 @@
                   <v-card flat dent class="mb-3 rounded-lg">
                     <v-card-text class="py-2 bg-[#FCE0E7] rounded-lg">
                       <v-row dense class="d-flex align-center">
-                        <v-col cols="auto">
-                          <!-- <v-checkbox
-                            dense
-                            hide-details
-                            v-model="select_export_end"
-                            color="#ff6b81"
-                          >
-                          </v-checkbox> -->
-                          <!-- <v-btn icon @click="selectAllCoachEnd()">
-                            <v-icon color="#ff6b81">{{
-                              selected_all_coach
-                                ? "mdi-checkbox-marked"
-                                : "mdi-checkbox-blank-outline"
-                            }}</v-icon>
-                          </v-btn> -->
-                        </v-col>
                         <v-col class="text-[#ff6b81] font-bold">{{
                           $t("coach list")
                         }}</v-col>
@@ -2308,7 +2292,9 @@ export default {
       ExportStudentList: "CourseModules/ExportStudentList",
       ExportEndStudentList : "CourseModules/ExportEndStudentList"
     }),
-
+    DisableButtonExport(){
+     return this.search_student_potential ? !this.search_student_potential_datas.length > 0 : !this.coach_list.filter((v) => v.studentPotentialArr?.length > 0).length > 0
+    },
     searchStudentPotential(search) {
       let coach_list_search = [];
       const regex = new RegExp(search.trim(), "i");

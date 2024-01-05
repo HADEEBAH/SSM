@@ -430,8 +430,8 @@ export default {
             reserve_id: reserve_id,
             reserve_data: reserve_data,
             search: this.search_filter,
-            limit: 10,
-            page: 1,
+            limit: this.$refs.reserveLists.$props.options.itemsPerPage,
+            page: this.$refs.reserveLists.$props.options.page ,
             status: this.tab_selected,
           });
           this.reserve_is_loadings = false;
