@@ -1814,9 +1814,9 @@ const CourseModules = {
                           "ระยะเวลา": student.cpo?.optionName,
                           "จำนวนครั้ง": `${student.countCheckIn}/${student.totalDay}`,
                           "การเขาเรียน": student.status === "punctual" ? "ตรงเวลา" : student.status === "late" ? "สาย" : student.status === "leave" ? "ลา" : student.status === "emergency leave" ? 'ลาฉุกเฉิน' : student.status === "absent" ? 'ขาด' : '-',
-                          "ระดับพัฒนาการ": student.assessment?.evolution === "very good" ? 'ดีมาก' : student.assessment?.evolution === "good" ? 'ดี' : 'ปรับปรุง',
-                          "ระดับความสนใจ": student.assessment?.interest === "very good" ? 'ดีมาก' : student.assessment?.interest === "good" ? 'ดี' : 'ปรับปรุง',
-                          "ความคิดเห็น": student.assessment?.remark,
+                          "ระดับพัฒนาการ": student.assessment?.evolution ? student.assessment?.evolution === "very good" ? 'ดีมาก' : student.assessment?.evolution === "good" ? 'ดี' : 'ปรับปรุง':'-',
+                          "ระดับความสนใจ":student.assessment?.interest ? student.assessment?.interest === "very good" ? 'ดีมาก' : student.assessment?.interest === "good" ? 'ดี' : 'ปรับปรุง':'-',
+                          "ความคิดเห็น": student.assessment?.remark ? student.assessment?.remark : "-",
                         })
                       } else {
                         report.push({
@@ -1825,9 +1825,9 @@ const CourseModules = {
                           "ชื่อโค้ช": `${coach.coachName}`,
                           "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
                           "การเขาเรียน": student.status === "punctual" ? "ตรงเวลา" : student.status === "late" ? "สาย" : student.status === "leave" ? "ลา" : student.status === "emergency leave" ? 'ลาฉุกเฉิน' : student.status === "absent" ? 'ขาด' : '-',
-                          "ระดับพัฒนาการ": student.assessment?.evolution === "very good" ? 'ดีมาก' : student.assessment?.evolution === "good" ? 'ดี' : 'ปรับปรุง',
-                          "ระดับความสนใจ": student.assessment?.interest === "very good" ? 'ดีมาก' : student.assessment?.interest === "good" ? 'ดี' : 'ปรับปรุง',
-                          "ความคิดเห็น": student.assessment?.remark,
+                          "ระดับพัฒนาการ": student.assessment?.evolution ? student.assessment?.evolution === "very good" ? 'ดีมาก' : student.assessment?.evolution === "good" ? 'ดี' : 'ปรับปรุง' : '-',
+                          "ระดับความสนใจ": student.assessment?.interest ? student.assessment?.interest === "very good" ? 'ดีมาก' : student.assessment?.interest === "good" ? 'ดี' : 'ปรับปรุง' : '-',
+                          "ความคิดเห็น": student.assessment?.remark ? student.assessment?.remark : "-",
                         })
                       }
                     }
@@ -1912,9 +1912,9 @@ const CourseModules = {
                   "ชื่อนักเรียน": `${student?.firstNameTh} ${student?.lastNameTh}`,
                   "ชื่อโค้ช": student?.coachName,
                   "จำนวนครั้ง": `${student?.countCheckIn}/${student?.totalDay}`,
-                  "ระดับพัฒนาการ": student?.evolution === "very good" ? 'ดีมาก' : student?.evolution === "good" ? 'ดี' : 'ปรับปรุง',
-                  "ระดับความสนใจ": student?.interest,
-                  "ความคิดเห็น":  student?.remark,
+                  "ระดับพัฒนาการ": student?.evolution ? student?.evolution === "very good" ? 'ดีมาก' : student?.evolution === "good" ? 'ดี' : 'ปรับปรุง':'-',
+                  "ระดับความสนใจ": student?.interest ?student?.interest : '-',
+                  "ความคิดเห็น":  student?.remark ? student?.remark : '-',
                 })
               }
             }
