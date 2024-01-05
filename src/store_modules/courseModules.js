@@ -1831,34 +1831,64 @@ const CourseModules = {
                         })
                       }
                     }
-  
                   } else {
-                    for await (const student of date.students) {
-                      if (course_type_id === "CT_1") {
-                        report.push({
-                          "วันที่": date.date,
-                          "เวลาเรียน": date.time,
-                          "ชื่อโค้ช": `${coach.coachName}`,
-                          "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
-                          "แพ็กเกจ": date.cpo.packageName,
-                          "ระยะเวลา": date.cpo?.optionName,
-                          "จำนวนครั้ง": "",
-                          "การเขาเรียน": "",
-                          "ระดับพัฒนาการ": "",
-                          "ระดับความสนใจ": "",
-                          "ความคิดเห็น": "",
-                        })
-                      } else {
-                        report.push({
-                          "วันที่": date.date,
-                          "เวลาเรียน": date.time,
-                          "ชื่อโค้ช": `${coach.coachName}`,
-                          "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
-                          "การเขาเรียน": "",
-                          "ระดับพัฒนาการ": "",
-                          "ระดับความสนใจ": "",
-                          "ความคิดเห็น": "",
-                        })
+                    if(date.students.length > 0 ){
+                      for await (const student of date.students) {
+                        if (course_type_id === "CT_1") {
+                          report.push({
+                            "วันที่": date.date,
+                            "เวลาเรียน": date.time,
+                            "ชื่อโค้ช": `${coach.coachName}`,
+                            "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
+                            "แพ็กเกจ": date.cpo.packageName,
+                            "ระยะเวลา": date.cpo?.optionName,
+                            "จำนวนครั้ง": "-",
+                            "การเขาเรียน": "-",
+                            "ระดับพัฒนาการ": "-",
+                            "ระดับความสนใจ": "-",
+                            "ความคิดเห็น": "-",
+                          })
+                        } else {
+                          report.push({
+                            "วันที่": date.date,
+                            "เวลาเรียน": date.time,
+                            "ชื่อโค้ช": `${coach.coachName}`,
+                            "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
+                            "การเขาเรียน": "-",
+                            "ระดับพัฒนาการ": "-",
+                            "ระดับความสนใจ": "-",
+                            "ความคิดเห็น": "-",
+                          })
+                        }
+                      }
+                    }else{
+                      for await (const student of coach.studentArr) {
+                        if (course_type_id === "CT_1") {
+                          report.push({
+                            "วันที่": date.date,
+                            "เวลาเรียน": date.time,
+                            "ชื่อโค้ช": `${coach.coachName}`,
+                            "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
+                            "แพ็กเกจ": date.cpo.packageName,
+                            "ระยะเวลา": date.cpo?.optionName,
+                            "จำนวนครั้ง": "-",
+                            "การเขาเรียน": "-",
+                            "ระดับพัฒนาการ": "-",
+                            "ระดับความสนใจ": "-",
+                            "ความคิดเห็น": "-",
+                          })
+                        } else {
+                          report.push({
+                            "วันที่": date.date,
+                            "เวลาเรียน": date.time,
+                            "ชื่อโค้ช": `${coach.coachName}`,
+                            "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
+                            "การเขาเรียน": "",
+                            "ระดับพัฒนาการ": "-",
+                            "ระดับความสนใจ": "-",
+                            "ความคิดเห็น": "-",
+                          })
+                        }
                       }
                     }
                   }
@@ -1868,18 +1898,18 @@ const CourseModules = {
             checking.push(coach.checked)
           }
         }
-        var workbook = XLSX.utils.book_new();
-        var worksheet = XLSX.utils.json_to_sheet(report);
-        XLSX.utils.book_append_sheet(workbook, worksheet, "sheet 1");
-        var excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-        var blob = new Blob([excelBuffer], { type: "application/octet-stream" });
-        var url = URL.createObjectURL(blob);
-        var link = document.createElement("a");
-        link.href = url;
-        link.download = `${course_name}.xlsx`;
-        link.click();
-        URL.revokeObjectURL(url);
         if(checked_count === checking?.length){
+          var workbook = XLSX.utils.book_new();
+          var worksheet = XLSX.utils.json_to_sheet(report);
+          XLSX.utils.book_append_sheet(workbook, worksheet, "sheet 1");
+          var excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+          var blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+          var url = URL.createObjectURL(blob);
+          var link = document.createElement("a");
+          link.href = url;
+          link.download = `${course_name}.xlsx`;
+          link.click();
+          URL.revokeObjectURL(url);
           context.commit("SetExportIsLoading",false)
         }else{
           context.commit("SetExportIsLoading",false)
@@ -1920,18 +1950,21 @@ const CourseModules = {
             }
             checking.push(coach)
           }
-          var workbook = XLSX.utils.book_new();
-          var worksheet = XLSX.utils.json_to_sheet(report);
-          XLSX.utils.book_append_sheet(workbook, worksheet, "sheet 1");
-          var excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-          var blob = new Blob([excelBuffer], { type: "application/octet-stream" });
-          var url = URL.createObjectURL(blob);
-          var link = document.createElement("a");
-          link.href = url;
-          link.download = `รายชื่อนักเรียนจบคอร์ส.xlsx`;
-          link.click();
-          URL.revokeObjectURL(url);
+        
           if(checking.length === coachPotential?.length){
+            if(report.length > 0){
+              var workbook = XLSX.utils.book_new();
+              var worksheet = XLSX.utils.json_to_sheet(report);
+              XLSX.utils.book_append_sheet(workbook, worksheet, "sheet 1");
+              var excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+              var blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+              var url = URL.createObjectURL(blob);
+              var link = document.createElement("a");
+              link.href = url;
+              link.download = `รายชื่อนักเรียนจบคอร์ส.xlsx`;
+              link.click();
+              URL.revokeObjectURL(url);
+            }
             context.commit("SetExportIsLoading",false)
           }else{
             context.commit("SetExportIsLoading",false)
