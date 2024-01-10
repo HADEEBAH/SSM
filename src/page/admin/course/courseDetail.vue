@@ -824,7 +824,7 @@
                                 :key="`${index_date}-date`"
                               >
                                 <v-card
-                                  @click="selectSchedule(index_date, date)"
+                                  @click="selectSchedule(index_date, date, filterDateByCoach(coach_index))"
                                   outlined
                                   class="rounded-lg cursor-pointer mb-3"
                                   dense
@@ -949,6 +949,7 @@
                                             <v-divider></v-divider>
                                           </v-col>
                                         </v-row>
+                                        <!-- STUDENT HEADER -->
                                         <v-card class="mb-2" flat dense>
                                           <v-card-text
                                             class="pa-2 bg-[#FCE0E7] rounded-lg"
@@ -957,41 +958,26 @@
                                               dense
                                               class="text-md font-bold"
                                             >
-                                              <v-col cols="1" align="center">{{
-                                                $t("no.")
-                                              }}</v-col>
-                                              <v-col cols align="center">
-                                                {{ $t("first name") }} -
-                                                {{ $t("last name") }}
+                                              <v-col cols="1" align="center">{{ $t("no.")}}</v-col>
+                                              <v-col cols align="center">{{ $t("first name") }} - {{ $t("last name") }}
                                               </v-col>
-                                              <v-col
-                                                cols="2"
+                                              <v-col 
+                                                cols="2" 
                                                 align="center"
-                                                v-if="
-                                                  course_data.course_type_id ===
-                                                  'CT_1'
-                                                "
+                                                v-if="course_data.course_type_id === 'CT_1'"
                                               >
                                                 {{ $t("period") }}
                                               </v-col>
-                                              <v-col
-                                                cols="2"
-                                                align="center"
-                                                v-if="
-                                                  course_data.course_type_id ===
-                                                  'CT_1'
-                                                "
+                                              <v-col v-if=" course_data.course_type_id === 'CT_1'"
+                                                cols="2" align="center"
                                               >
                                                 {{ $t("number of times") }}
                                               </v-col>
-                                              <v-col
-                                                cols="4"
-                                                align="center"
-                                                v-else
-                                              >
-                                                {{
-                                                  $t("start date - end date")
-                                                }}
+                                              <v-col v-else  cols="4" align="center" >
+                                                {{$t("start date - end date") }}
+                                              </v-col>
+                                              <v-col cols>
+                                                {{ $t("status")}}
                                               </v-col>
                                               <v-col cols="4"></v-col>
                                             </v-row>
@@ -1067,6 +1053,30 @@
                                                   {{ student.countCheckIn }}/{{
                                                     student.totalDay
                                                   }}
+                                                </v-col>
+                                                <v-col cols>
+                                                  <v-chip
+                                                    align="center"
+                                                    class="font-bold"
+                                                    :color="
+                                                      check_in_status_options.filter(
+                                                        (v) => v.value === student.status
+                                                      )[0].bg_color
+                                                    "
+                                                    :style="`color:${
+                                                      check_in_status_options.filter(
+                                                        (v) => v.value === student.status
+                                                      )[0].color
+                                                    }`"
+                                                    v-if="
+                                                      check_in_status_options.filter(
+                                                        (v) => v.value ===student.status
+                                                      )?.length > 0
+                                                    "
+                                                    >{{
+                                                        $t(student.status) 
+                                                    }}
+                                                  </v-chip>
                                                 </v-col>
                                                 <v-col cols="4">
                                                   <v-row dense>
@@ -1162,23 +1172,24 @@
                                                   }}
                                                 </v-col>
                                                 <v-col
+                                                  v-if=" course_data.course_type_id === 'CT_1'"
                                                   cols="2"
                                                   align="center"
-                                                  v-if="
-                                                    course_data.course_type_id ===
-                                                    'CT_1'
-                                                  "
                                                 >
-                                                  -
+                                                  <!-- {{ `${student.countCheckIn}/${student.totalDay}` }} -->
+                                                  - 
                                                 </v-col>
                                                 <v-col
+                                                  v-else
                                                   cols="4"
                                                   align="center"
-                                                  v-else
                                                 >
                                                   <span class="font-bold">{{
                                                     `${date.startDate} - ${date.endDate}`
                                                   }}</span>
+                                                </v-col>
+                                                <v-col>
+                                                  <span class="text-sm">{{$t("no check in admin")}}</span> 
                                                 </v-col>
                                                 <v-col cols="4">
                                                   <v-row dense>
@@ -2862,14 +2873,15 @@ export default {
         this.selected_coach = "";
       }
     },
-    selectSchedule(index, date) {
+    selectSchedule(index, date, coach_data) {
       this.GetStudentByDate({
         course_id: this.$route.params.course_id,
         date: date.date,
         start_time: date.start,
         end_time: date.end,
         time_id: date.timeId ,
-        coach_id : date.coachId
+        coach_id : date.coachId,
+        coach_data
       });
       if (this.selected_schedule !== index) {
         this.selected_schedule = index;
