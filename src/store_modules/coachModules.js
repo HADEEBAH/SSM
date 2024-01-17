@@ -582,7 +582,7 @@ const coachModules = {
         context.commit("SetMyCoursesIsLoading", false);
       }
     },
-    async UploadFileSummary(context, { checkInCoach, files, course_id, date }) {
+    async UploadFileSummary(context, { checkInCoach, files }) {
       try {
         let config = {
           headers: {
@@ -609,13 +609,6 @@ const coachModules = {
             timerProgressBar: true,
             showCancelButton: false,
             showConfirmButton: false,
-          }).finally(() => {
-            setTimeout(() => {
-              context.dispatch("GetCoachCheckIn", {
-                course_id: course_id,
-                date: date,
-              })
-            }, 2000)
           })
         }
       } catch (error) {

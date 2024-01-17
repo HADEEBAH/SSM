@@ -1810,7 +1810,15 @@ export default {
               files: this.coach_check_in.summary_files,
               course_id: this.$route.params.courseId,
               date: this.$route.params.date,
-            });
+            })
+            await this.CheckInCoach({
+              course_id: this.course_data.course_id,
+              date: this.$route.params.date,
+              time_id: this.$route.params.timeId,
+              time_start: this.$route.params.timeStart,
+              time_end: this.$route.params.timeEnd,
+              type: this.$route.params.typeEvent,
+            })
             this.is_loading = false;
             if (student_id.length > 0) {
               let payload = {
