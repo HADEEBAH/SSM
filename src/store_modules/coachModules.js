@@ -258,9 +258,10 @@ const coachModules = {
               payloadData.append(`img_url`, file, file.fileName);
             }
           }
+          let localhost = "http://localhost:3000"
           if (!student.assessment.assessmentStudentsId) {
             payloadData.append("payload", JSON.stringify(payload))
-            let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`, payloadData, config)
+            let { data } = await axios.post(`${localhost}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`, payloadData, config)
             if (data.statusCode == 201) {
               count = count + 1
             } else {
@@ -268,7 +269,7 @@ const coachModules = {
             }
           } else {
             payloadData.append("payload", JSON.stringify(payload))
-            let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`, payloadData, config)
+            let { data } = await axios.patch(`${localhost}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`, payloadData, config)
             if (data.statusCode == 200) {
               count = count + 1
             } else {
@@ -599,7 +600,8 @@ const coachModules = {
             payloadData.append(`img_url`, file);
           }
         }
-        let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/summary/${checkInCoach.checkInCoachId}`, payloadData, config)
+        const localhost = "http://localhost:3000"
+        let { data } = await axios.patch(`${localhost}/api/v1/coachmanagement/summary/${checkInCoach.checkInCoachId}`, payloadData, config)
         if (data.statusCode == 200) {
           Swal.fire({
             icon: "success",
