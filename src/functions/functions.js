@@ -103,21 +103,8 @@ export const generateTimeArrayHours = (timedata) => {
     }
     return output;
 }
-// export const CheckFileSize = (file) => {
-//     const fileSizeInBytes = file.size;
-//     const fileSizeInMB = fileSizeInBytes / (1024 * 1024);
-//     if (fileSizeInMB > 10) {
-//         Swal.fire({
-//             icon: "error",
-//             text: "ขนาดไฟล์ต้องไม่เกิน 10 MB",
-//             confirmButtonText: "ตกลง"
-//         })
-//         return false
-//     }
-//     return true
-// }
 
-export const CheckFileSize = (file, id) => { //check file รอ merge กับ พี่น๊อต
+export const CheckFileSize = (file, id) => {
     const key = document.getElementById(id)
     const fileSizeInBytes = file.size;
     const fileSizeInMB = fileSizeInBytes / (1024 * 1024);
@@ -126,7 +113,7 @@ export const CheckFileSize = (file, id) => { //check file รอ merge กับ
         Swal.fire({
             icon: "error",
             title: VueI18n.t('something went wrong'),
-            text: VueI18n.t('upload only image files (png, jpeg) only'),
+            text: VueI18n.t('file size must not exceed 5 MB'),
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -137,7 +124,7 @@ export const CheckFileSize = (file, id) => { //check file รอ merge กับ
     return true
 }
 
-export const CheckFileSizeType = (file, id) => { //check file รอ merge กับ พี่น๊อต
+export const CheckFileSizeType = (file, id) => {
     const format = [
         "image/png",
         "image/jpeg"

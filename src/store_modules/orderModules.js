@@ -720,14 +720,21 @@ const orderModules = {
             },
             student: students,
           });
-          let price = course.option?.net_price
-            ? course.option.net_price
-            : course.price;
-          if (course.price * course.students.length !== price) {
-            total_price = total_price + price * course.students.length;
-          } else {
-            total_price = total_price + price;
+          let price = 0
+          if (order.type == "addStudent") {
+            price = course.price;
+            total_price  = order.total_price * course.students.length;
+          }else{
+            price = course.option?.net_price
+              ? course.option.net_price
+              : course.price;
+            if (course.price * course.students.length !== price) {
+              total_price = total_price + price * course.students.length;
+            } else {
+              total_price = total_price + price;
+            }
           }
+         
         });
         payload.totalPrice = total_price;
         let config = {

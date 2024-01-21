@@ -258,6 +258,7 @@ const coachModules = {
               payloadData.append(`img_url`, file, file.fileName);
             }
           }
+          // let localhost = "http://localhost:3000"
           if (!student.assessment.assessmentStudentsId) {
             payloadData.append("payload", JSON.stringify(payload))
             let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/assessment/${student.check_in_student_id}`, payloadData, config)
@@ -582,7 +583,7 @@ const coachModules = {
         context.commit("SetMyCoursesIsLoading", false);
       }
     },
-    async UploadFileSummary(context, { checkInCoach, files, course_id, date }) {
+    async UploadFileSummary(context, { checkInCoach, files }) {
       try {
         let config = {
           headers: {
@@ -599,6 +600,7 @@ const coachModules = {
             payloadData.append(`img_url`, file);
           }
         }
+        // const localhost = "http://localhost:3000"
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/summary/${checkInCoach.checkInCoachId}`, payloadData, config)
         if (data.statusCode == 200) {
           Swal.fire({
@@ -609,13 +611,6 @@ const coachModules = {
             timerProgressBar: true,
             showCancelButton: false,
             showConfirmButton: false,
-          }).finally(() => {
-            setTimeout(() => {
-              context.dispatch("GetCoachCheckIn", {
-                course_id: course_id,
-                date: date,
-              })
-            }, 2000)
           })
         }
       } catch (error) {
