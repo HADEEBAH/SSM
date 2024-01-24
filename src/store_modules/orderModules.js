@@ -100,12 +100,13 @@ const orderModules = {
     history_list: [],
     history_list_is_loading: false,
     history_list_option: {},
-    filter_finance_data: []
-
-
+    filter_finance_data: [],
+    order_number_detail : [],
   },
   mutations: {
-
+    SetOrderNumberDetail(state, payload){
+      state.order_number_detail = payload
+    },
     SetOrderHistory(state, payload) {
       state.order_history = payload;
     },
@@ -1580,7 +1581,58 @@ const orderModules = {
       } catch (error) {
         context.commit("SetOrderHistoryIsLoading", false);
       }
-
+    },
+    async GetOrderDetailByOrderNumber(context, {orderNumber}){
+      try{
+          // let localhost = "http://localhost:3000"
+          const {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/order?orderNumber=${orderNumber}`)
+          if(data.statusCode === 200){
+            context.commit("SetOrderNumberDetail",data.data)
+          }
+      }catch(error){
+        await Swal.fire({
+          icon: "error",
+          title: VueI18n.t("something went wrong"),
+          text: VueI18n.t(error.response.data.message),
+          timer: 3000,
+          showDenyButton: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        });
+      }
+    },
+    async UpdateScheduleAndCheckIn(context, {orderNumber , lastTime, type, endDate}){
+      try{
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        // let localhost = "http://localhost:3000"
+        const {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/schedule/AutoResetScheldule`,{
+          orderNumber,
+          lastCount : lastTime,
+          type,
+          endDate,
+        }, config)
+        if(data.statusCode === 200){
+          context.commit("SetOrderNumberDetail",data.data)
+        }
+      }catch(error){
+        await Swal.fire({
+          icon: "error",
+          title: VueI18n.t("something went wrong"),
+          text: VueI18n.t(error.response.data.message),
+          timer: 3000,
+          showDenyButton: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        });
+      }
     },
   },
   getters: {
@@ -1648,6 +1700,9 @@ const orderModules = {
     getFilterFinanceData(state) {
       return state.filter_finance_data
     },
+    getOrderNumberDetail(state){
+      return state.order_number_detail
+    }
   },
 };
 

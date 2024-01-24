@@ -226,6 +226,12 @@ export default {
         roles: ["R_1"],
       },
       {
+        title: "manage check in later",
+        to: "ManageCheckInLater",
+        child: [],
+        roles: ["R_1"],
+      },
+      {
         title: "banner setting",
         to: "Banner",
         child: [],
