@@ -8,7 +8,7 @@
         <v-row>
             <v-col>
                 <v-text-field v-model="orderNumder" :rules="RulesOrderNumber" dense outlined
-                    placeholder="กรุณากรอกเลขออเดอร์">
+                    :placeholder="$t('enter order number')">
                 </v-text-field>
             </v-col>
             <v-col>
@@ -70,11 +70,16 @@
                         </v-row>
                     </v-card-text>
                 </v-card>
+                <v-card v-if="order_number_detail.length === 0" outlined>
+                    <v-card-text class="text-center font-bold">
+                        {{ $t("enter order number") }}
+                    </v-card-text>
+                </v-card>
             </v-col>
             <v-col v-if="order_number_detail" cols="4" >
                 <v-radio-group v-model="type">
-                    <v-radio label="ระบุวันที่เรียนจบ" value="end-class"></v-radio>
-                    <v-radio label="ระบุจำนวนครั้งคงเหลือ" value="last-time"></v-radio>
+                    <v-radio :label="$t('specify graduation date')" value="end-class"></v-radio>
+                    <v-radio :label="$t('specify the remaining number of times')" value="last-time"></v-radio>
                 </v-radio-group>
                 <template  v-if="type">
                     <v-card outlined class="mb-3">
@@ -83,8 +88,8 @@
                                 <v-col class="font-bold">
                                     {{
                                         type == "end-class"
-                                        ? "ระบุวันที่เรียนจบ"
-                                        : "ระบุจำนวนครั้งคงเหลือ"
+                                        ? $t('specify graduation date')
+                                        : $t('specify the remaining number of times')
                                     }}
                                 </v-col>
                             </v-row>
@@ -103,7 +108,7 @@
                                         <v-date-picker v-model="endClassDate" locale="th-TH"></v-date-picker>
                                     </v-menu>
                                     <v-text-field v-if="type === 'last-time'" v-model="lastTime" :rules="RulesLastTime" dense
-                                        outlined type="number" placeholder="กรุณาระบุจำนวนครั้งคงเหลือ">
+                                        outlined type="number" :placeholder="$t('specify the remaining number of times')">
                                     </v-text-field>
                                 </v-col>
                             </v-row>
@@ -149,7 +154,9 @@ export default {
             return [(val) => (val || "").length > 0 || this.$t("enter order number")];
         },
     },
-    created() { },
+    created() { 
+        this.$store.commit("OrderModules/SetOrderNumberDetail",[])
+    },
     methods: {
         ...mapActions({
             GetOrderDetailByOrderNumber: "OrderModules/GetOrderDetailByOrderNumber",
@@ -159,6 +166,8 @@ export default {
             this.GetOrderDetailByOrderNumber({
                 orderNumber,
             });
+            this.endClassDate = ""
+            this.lastTime = ""
         },
         dayOfWeekArray(day) {
             let days = day.split(",");

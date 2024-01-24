@@ -101,7 +101,7 @@ const orderModules = {
     history_list_is_loading: false,
     history_list_option: {},
     filter_finance_data: [],
-    order_number_detail : {},
+    order_number_detail : [],
   },
   mutations: {
     SetOrderNumberDetail(state, payload){
@@ -1584,8 +1584,8 @@ const orderModules = {
     },
     async GetOrderDetailByOrderNumber(context, {orderNumber}){
       try{
-          let localhost = "http://localhost:3000"
-          const {data} = await axios.get(`${localhost}/api/v1/schedule/order?orderNumber=${orderNumber}`)
+          // let localhost = "http://localhost:3000"
+          const {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/order?orderNumber=${orderNumber}`)
           if(data.statusCode === 200){
             context.commit("SetOrderNumberDetail",data.data)
           }
@@ -1611,8 +1611,8 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let localhost = "http://localhost:3000"
-        const {data} = await axios.post(`${localhost}/api/v1/schedule/AutoResetScheldule`,{
+        // let localhost = "http://localhost:3000"
+        const {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/schedule/AutoResetScheldule`,{
           orderNumber,
           lastCount : lastTime,
           type,
