@@ -69,6 +69,8 @@ import PortfolioDetail from '@/page/pdf/portfolioDetail.vue'
 import PageNotFound from '@/page/pageNotFound.vue'
 import ForgotPassword from './page/forgotPassword.vue'
 import ResetPassword from './page/resetPassword.vue'
+//ManageCheckInLater
+import ManageCheckInLater from './page/admin/checkIn/checkInOrder.vue'
 
 const routes = [
   {
@@ -109,6 +111,11 @@ const routes = [
     name: 'Admin',
     component: NavBarAdmin,
     children: [
+      {
+        path:"ManageCheckInLater",
+        name:"ManageCheckInLater",
+        component:ManageCheckInLater,
+      },
       {
         path: 'courseReserve',
         name: 'CourseReserveList',
