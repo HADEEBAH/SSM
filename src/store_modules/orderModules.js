@@ -1620,7 +1620,7 @@ const orderModules = {
         if(data.statusCode === 201){
           await Swal.fire({
             icon: "success",
-            title: VueI18n.t("success"),
+            title: VueI18n.t("succeed"),
             text: VueI18n.t("created scedule and check in"),
             timer: 3000,
             showDenyButton: false,
