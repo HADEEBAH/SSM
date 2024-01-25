@@ -418,7 +418,6 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/course/${course_id}`, config)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course/${course_id}`, config)
         // let { data } = await axios.get(`http://localhost:3000/api/v1/schedule/manage-course/${course_id}`,config)
         if (data.statusCode === 200) {
@@ -497,11 +496,10 @@ const CourseModules = {
             }
           }
           for await (let potential of data.data.filter(v => v.studentPotentialArr && v?.studentPotentialArr?.length > 0)) {
-            if(coachList.some(v=> v.coachId == potential.coachId && v.startTime == potential.startTime && v.endTime == potential.endTime )){
-              for( let list of coachList.filter(v=> v.coachId == potential.coachId && v.startTime == potential.startTime && v.endTime == potential.endTime )){
+            if(coachList.some(v=> v.coachId == potential.coachId )){
+              for( let list of coachList.filter(v=> v.coachId == potential.coachId)){
                 list.studentPotentialArr = potential.studentPotentialArr
               }
-              
             }
           }
           context.commit("SetCoachListIsLoading", false)
@@ -1791,7 +1789,7 @@ const CourseModules = {
 
     },
     // EXPORT COURSE STUDENT LIST
-    async ExportStudentList(context, { coach_list, course_id, course_name, course_type_id }) {
+    async ExportStudentList(context, { coach_list, course_id, course_name, course_type_id, lang }) {
       context.commit("SetExportIsLoading",true)
       try {
         let config = {
@@ -1814,28 +1812,36 @@ const CourseModules = {
                     for await (const student of data.data) {
                       if (course_type_id === "CT_1") {
                         report.push({
-                          "วันที่": date.date,
-                          "เวลาเรียน": date.time,
-                          "ชื่อโค้ช": `${coach.coachName}`,
-                          "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
-                          "แพ็กเกจ": date.cpo.packageName,
-                          "ระยะเวลา": student.cpo?.optionName,
-                          "จำนวนครั้ง": `${student.countCheckIn}/${student.totalDay}`,
-                          "การเขาเรียน": student.status === "punctual" ? "ตรงเวลา" : student.status === "late" ? "สาย" : student.status === "leave" ? "ลา" : student.status === "emergency leave" ? 'ลาฉุกเฉิน' : student.status === "absent" ? 'ขาด' : '-',
-                          "ระดับพัฒนาการ": student.assessment?.evolution ? student.assessment?.evolution === "very good" ? 'ดีมาก' : student.assessment?.evolution === "good" ? 'ดี' : 'ปรับปรุง':'-',
-                          "ระดับความสนใจ":student.assessment?.interest ? student.assessment?.interest === "very good" ? 'ดีมาก' : student.assessment?.interest === "good" ? 'ดี' : 'ปรับปรุง':'-',
-                          "ความคิดเห็น": student.assessment?.remark ? student.assessment?.remark : "-",
+                          [lang == 'en'? "date":"วันที่"]: date.date,
+                          [lang == 'en'? "time":"เวลาเรียน"] : date.time,
+                          [lang == 'en'? "coach name":"ชื่อโค้ช"]: lang == "en" ? coach.coachNameEn :coach.coachName,
+                          [lang == 'en'? "student name":"ชื่อนักเรียน"]: lang == "en" ? `${student.firstNameEn} ${student.lastNameEn}`:`${student.firstNameTh} ${student.lastNameTh}`,
+                          [lang == 'en'? "package":"แพ็กเกจ"] : date.cpo.packageName,
+                          [lang == 'en'? "period":"ระยะเวลา"] : lang == 'en'? student.cpo?.optionNameEn : student.cpo?.optionName,
+                          [lang == 'en'? "times":"จำนวนครั้ง"]: `${student.countCheckIn}/${student.totalDay}`,
+                          [lang == 'en'? "attendance":"การเข้าเรียน"] : lang == 'en' ? student.statu : student.status === "punctual" ? "ตรงเวลา" :
+                          student.status === "late" ? "สาย" : 
+                          student.status === "leave" ? "ลา" :
+                          student.status === "emergency leave" ? 'ลาฉุกเฉิน' :
+                          student.status === "absent" ? 'ขาด' : '-',
+                          [lang == 'en'? "evolution":"ระดับพัฒนาการ"] : lang == 'en' ?  student.assessment?.evolution : student.assessment?.evolution ? student.assessment?.evolution === "very good" ? 'ดีมาก' : student.assessment?.evolution === "good" ? 'ดี' : 'ปรับปรุง':'-',
+                          [lang == 'en'? "interest":"ระดับความสนใจ"]: lang == 'en' ? student.assessment?.interest : student.assessment?.interest ? student.assessment?.interest === "very good" ? 'ดีมาก' : student.assessment?.interest === "good" ? 'ดี' : 'ปรับปรุง':'-',
+                          [lang == 'en'? "remark":"ความคิดเห็น"]: student.assessment?.remark ? student.assessment?.remark : "-",
                         })
                       } else {
                         report.push({
-                          "วันที่": date.date,
-                          "เวลาเรียน": date.time,
-                          "ชื่อโค้ช": `${coach.coachName}`,
-                          "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
-                          "การเขาเรียน": student.status === "punctual" ? "ตรงเวลา" : student.status === "late" ? "สาย" : student.status === "leave" ? "ลา" : student.status === "emergency leave" ? 'ลาฉุกเฉิน' : student.status === "absent" ? 'ขาด' : '-',
-                          "ระดับพัฒนาการ": student.assessment?.evolution ? student.assessment?.evolution === "very good" ? 'ดีมาก' : student.assessment?.evolution === "good" ? 'ดี' : 'ปรับปรุง' : '-',
-                          "ระดับความสนใจ": student.assessment?.interest ? student.assessment?.interest === "very good" ? 'ดีมาก' : student.assessment?.interest === "good" ? 'ดี' : 'ปรับปรุง' : '-',
-                          "ความคิดเห็น": student.assessment?.remark ? student.assessment?.remark : "-",
+                          [lang == 'en'? "date":"วันที่"]: date.date,
+                          [lang == 'en'? "time":"เวลาเรียน"] : date.time,
+                          [lang == 'en'? "coach name":"ชื่อโค้ช"]: lang == "en" ? coach.coachNameEn :coach.coachName,
+                          [lang == 'en'? "student name":"ชื่อนักเรียน"]: lang == "en" ? `${student.firstNameEn} ${student.lastNameEn}`:`${student.firstNameTh} ${student.lastNameTh}`,
+                          [lang == 'en'? "attendance":"การเข้าเรียน"] : lang == 'en' ? student.statu : student.status === "punctual" ? "ตรงเวลา" :
+                          student.status === "late" ? "สาย" : 
+                          student.status === "leave" ? "ลา" :
+                          student.status === "emergency leave" ? 'ลาฉุกเฉิน' :
+                          student.status === "absent" ? 'ขาด' : '-',
+                          [lang == 'en'? "evolution":"ระดับพัฒนาการ"] : lang == 'en' ?  student.assessment?.evolution : student.assessment?.evolution ? student.assessment?.evolution === "very good" ? 'ดีมาก' : student.assessment?.evolution === "good" ? 'ดี' : 'ปรับปรุง':'-',
+                          [lang == 'en'? "interest":"ระดับความสนใจ"]: lang == 'en' ? student.assessment?.interest : student.assessment?.interest ? student.assessment?.interest === "very good" ? 'ดีมาก' : student.assessment?.interest === "good" ? 'ดี' : 'ปรับปรุง':'-',
+                          [lang == 'en'? "remark":"ความคิดเห็น"]: student.assessment?.remark ? student.assessment?.remark : "-",
                         })
                       }
                     }
@@ -1844,28 +1850,28 @@ const CourseModules = {
                       for await (const student of date.students) {
                         if (course_type_id === "CT_1") {
                           report.push({
-                            "วันที่": date.date,
-                            "เวลาเรียน": date.time,
-                            "ชื่อโค้ช": `${coach.coachName}`,
-                            "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
-                            "แพ็กเกจ": date.cpo.packageName,
-                            "ระยะเวลา": date.cpo?.optionName,
-                            "จำนวนครั้ง": "-",
-                            "การเขาเรียน": "-",
-                            "ระดับพัฒนาการ": "-",
-                            "ระดับความสนใจ": "-",
-                            "ความคิดเห็น": "-",
+                            [lang == 'en'? "date":"วันที่"]: date.date,
+                            [lang == 'en'? "time":"เวลาเรียน"] : date.time,
+                            [lang == 'en'? "coach name":"ชื่อโค้ช"]: lang == "en" ? coach.coachNameEn :coach.coachName,
+                            [lang == 'en'? "student name":"ชื่อนักเรียน"]: lang == "en" ? `${student.firstNameEn} ${student.lastNameEn}`:`${student.firstNameTh} ${student.lastNameTh}`,
+                            [lang == 'en'? "package":"แพ็กเกจ"] : date.cpo.packageName,
+                            [lang == 'en'? "period":"ระยะเวลา"] : lang == 'en'? student.cpo?.optionNameEn : student.cpo?.optionName,
+                            [lang == 'en'? "times":"จำนวนครั้ง"]: "-",
+                            [lang == 'en'? "attendance":"การเข้าเรียน"]: "-",
+                            [lang == 'en'? "evolution":"ระดับพัฒนาการ"]: "-",
+                            [lang == 'en'? "interest":"ระดับความสนใจ"]: "-",
+                            [lang == 'en'? "remark":"ความคิดเห็น"]: "-",
                           })
                         } else {
                           report.push({
-                            "วันที่": date.date,
-                            "เวลาเรียน": date.time,
-                            "ชื่อโค้ช": `${coach.coachName}`,
-                            "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
-                            "การเขาเรียน": "-",
-                            "ระดับพัฒนาการ": "-",
-                            "ระดับความสนใจ": "-",
-                            "ความคิดเห็น": "-",
+                            [lang == 'en'? "date":"วันที่"]: date.date,
+                            [lang == 'en'? "time":"เวลาเรียน"] : date.time,
+                            [lang == 'en'? "coach name":"ชื่อโค้ช"]: lang == "en" ? coach.coachNameEn :coach.coachName,
+                            [lang == 'en'? "student name":"ชื่อนักเรียน"]: lang == "en" ? `${student.firstNameEn} ${student.lastNameEn}`:`${student.firstNameTh} ${student.lastNameTh}`,
+                            [lang == 'en'? "attendance":"การเข้าเรียน"]: "-",
+                            [lang == 'en'? "evolution":"ระดับพัฒนาการ"]: "-",
+                            [lang == 'en'? "interest":"ระดับความสนใจ"]: "-",
+                            [lang == 'en'? "remark":"ความคิดเห็น"]: "-",
                           })
                         }
                       }
@@ -1873,28 +1879,29 @@ const CourseModules = {
                       for await (const student of coach.studentArr) {
                         if (course_type_id === "CT_1") {
                           report.push({
-                            "วันที่": date.date,
-                            "เวลาเรียน": date.time,
-                            "ชื่อโค้ช": `${coach.coachName}`,
-                            "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
-                            "แพ็กเกจ": date.cpo.packageName,
-                            "ระยะเวลา": date.cpo?.optionName,
-                            "จำนวนครั้ง": "-",
-                            "การเขาเรียน": "-",
-                            "ระดับพัฒนาการ": "-",
-                            "ระดับความสนใจ": "-",
-                            "ความคิดเห็น": "-",
+                            [lang == 'en'? "date":"วันที่"]: date.date,
+                            [lang == 'en'? "time":"เวลาเรียน"] : date.time,
+                            [lang == 'en'? "coach name":"ชื่อโค้ช"]: lang == "en" ? coach.coachNameEn :coach.coachName,
+                            [lang == 'en'? "student name":"ชื่อนักเรียน"]: lang == "en" ? `${student.firstNameEn} ${student.lastNameEn}`:`${student.firstNameTh} ${student.lastNameTh}`,
+                            [lang == 'en'? "package":"แพ็กเกจ"] : date.cpo.packageName,
+                            [lang == 'en'? "period":"ระยะเวลา"] : lang == 'en'? student.cpo?.optionNameEn : student.cpo?.optionName,
+                            [lang == 'en'? "times":"จำนวนครั้ง"]: "-",
+                            [lang == 'en'? "attendance":"การเข้าเรียน"]: "-",
+                            [lang == 'en'? "evolution":"ระดับพัฒนาการ"]: "-",
+                            [lang == 'en'? "interest":"ระดับความสนใจ"]: "-",
+                            [lang == 'en'? "remark":"ความคิดเห็น"]: "-",
                           })
                         } else {
                           report.push({
-                            "วันที่": date.date,
-                            "เวลาเรียน": date.time,
-                            "ชื่อโค้ช": `${coach.coachName}`,
-                            "ชื่อนักเรียน": `${student.firstNameTh} ${student.lastNameTh}`,
-                            "การเขาเรียน": "",
-                            "ระดับพัฒนาการ": "-",
-                            "ระดับความสนใจ": "-",
-                            "ความคิดเห็น": "-",
+                            [lang == 'en'? "date":"วันที่"]: date.date,
+                            [lang == 'en'? "time":"เวลาเรียน"] : date.time,
+                            [lang == 'en'? "coach name":"ชื่อโค้ช"]: lang == "en" ? coach.coachNameEn :coach.coachName,
+                            [lang == 'en'? "student name":"ชื่อนักเรียน"]: lang == "en" ? `${student.firstNameEn} ${student.lastNameEn}`:`${student.firstNameTh} ${student.lastNameTh}`,
+                            [lang == 'en'? "times":"จำนวนครั้ง"]: "-",
+                            [lang == 'en'? "attendance":"การเข้าเรียน"]: "-",
+                            [lang == 'en'? "evolution":"ระดับพัฒนาการ"]: "-",
+                            [lang == 'en'? "interest":"ระดับความสนใจ"]: "-",
+                            [lang == 'en'? "remark":"ความคิดเห็น"]: "-",
                           })
                         }
                       }
@@ -1928,7 +1935,7 @@ const CourseModules = {
       }
     },
     // EXPORT END COURSE STUDENT LIST
-    async ExportEndStudentList(context, { coach_list, course_id}) {
+    async ExportEndStudentList(context, { coach_list, course_id ,lang}) {
         context.commit("SetExportIsLoading",true)
         try {
           let config = {
@@ -1943,16 +1950,17 @@ const CourseModules = {
           let coachPotential = coach_list.filter(v => v.studentPotentialArr?.length > 0)
           for await (let coach of coachPotential){
             let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach.coachId}`, config)
+            console.log(data.data)
             if (data.statusCode === 200) {
               for await (let student of data.data){
                 report.push({
-                  "วันที่": moment(student?.date).format("DD-MM-YYYY"),
-                  "ชื่อนักเรียน": `${student?.firstNameTh} ${student?.lastNameTh}`,
-                  "ชื่อโค้ช": student?.coachName,
-                  "จำนวนครั้ง": `${student?.countCheckIn}/${student?.totalDay}`,
-                  "ระดับพัฒนาการ": student?.evolution ? student?.evolution === "very good" ? 'ดีมาก' : student?.evolution === "good" ? 'ดี' : 'ปรับปรุง':'-',
-                  "ระดับความสนใจ": student?.interest ?student?.interest : '-',
-                  "ความคิดเห็น":  student?.remark ? student?.remark : '-',
+                  [lang == 'en'? "date":"วันที่"] : moment(student?.date).format("DD-MM-YYYY"),
+                  [lang == 'en'? "student name":"ชื่อนักเรียน"]: lang == 'en' ? `${student?.firstNameEn} ${student?.lastNameEn}` : `${student?.firstNameTh} ${student?.lastNameTh}`,
+                  [lang == 'en'? "coach name":"ชื่อโค้ช"]: lang == 'en' ? student?.coachNameEn : student?.coachName,
+                  [lang == 'en'? "times":"จำนวนครั้ง"]: `${student?.countCheckIn}/${student?.totalDay}`,
+                  [lang == 'en'? "evolution":"ระดับพัฒนาการ"]: lang == 'en' ? student?.evolution : student?.evolution ? student?.evolution === "very good" ? 'ดีมาก' : student?.evolution === "good" ? 'ดี' : 'ปรับปรุง':'-',
+                  [lang == 'en'? "interest":"ระดับความสนใจ"]: student?.interest ?student?.interest : '-',
+                  [lang == 'en'? "remark":"ความคิดเห็น"]:  student?.remark ? student?.remark : '-',
                 })
               }
             }

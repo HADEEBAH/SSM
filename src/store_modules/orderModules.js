@@ -1584,7 +1584,6 @@ const orderModules = {
     },
     async GetOrderDetailByOrderNumber(context, {orderNumber}){
       try{
-          // let localhost = "http://localhost:3000"
           const {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/order?orderNumber=${orderNumber}`)
           if(data.statusCode === 200){
             context.commit("SetOrderNumberDetail",data.data)
@@ -1618,8 +1617,17 @@ const orderModules = {
           type,
           endDate,
         }, config)
-        if(data.statusCode === 200){
-          context.commit("SetOrderNumberDetail",data.data)
+        if(data.statusCode === 201){
+          await Swal.fire({
+            icon: "success",
+            title: VueI18n.t("success"),
+            text: VueI18n.t("created scedule and check in"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          });
         }
       }catch(error){
         await Swal.fire({

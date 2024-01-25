@@ -203,7 +203,10 @@ const RegisterModules = {
                         case "The mobile no must be at least 10 characters.":
                             text = VueI18n.t("mobile number must have at least 10 characters")
                             break;
-                        case "username duplicate":
+                        case "username duplicate in wsl":
+                            text = VueI18n.t("username already exists in warraphat")
+                            break;
+                        case "username duplicate in oneID":
                             text = VueI18n.t("username already exists")
                             break;
                         case "The password format is invalid.":
@@ -314,7 +317,10 @@ const RegisterModules = {
                         case "The mobile no must be at least 10 characters.":
                             text = VueI18n.t("mobile number must have at least 10 characters")
                             break;
-                        case "username duplicate":
+                        case "username duplicate in wsl":
+                            text = VueI18n.t("username already exists in warraphat")
+                            break;
+                        case "username duplicate in oneID":
                             text = VueI18n.t("username already exists")
                             break;
                         case "The password format is invalid.":

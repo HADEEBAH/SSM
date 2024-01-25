@@ -173,6 +173,7 @@
     "class information" : "ข้อมูลวันเรียน",
     "click to go to the latest course to be taught" : "คลิกเพื่อไปคอร์สที่ต้องสอนล่าสุด",
     "created date" : "วันที่สร้าง",
+    "created scedule and check in": "สร้างตารางเวลาและเช็คอินแล้ว",
     "credit/debit" : "เครดิต/เดบิท",
     "customization" : "จัดการอาณาจักร",
     "currently our class is full of students. thank you for your interest in our course." : "ขณะนี้คลาสเรามีผู้เรียนเต็มจำนวนแล้ว ขอบคุณท่านที่สนใจคอร์สของเรา",
@@ -784,6 +785,8 @@
     "username cannot contain emojis" : "ชื่อผู้ใช้ต้องไม่มีอิโมจิ",
     "username not found": "ไม่มี username",
     "username already exists": "username นี้ถูกใช้แล้ว",
+    "username already exists in warraphat" : "username นี้ถูกใช้แล้วในระบบโรงเรียนวรพัฒน์",
+
     "user page": "หน้าผู้ใช้งาน",
     "username (English)": "ชื่อผู้ใช้(ภาษาอังกฤษ)",
     "user information": "ข้อมูลผู้ใช้งาน",

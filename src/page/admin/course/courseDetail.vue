@@ -533,7 +533,7 @@
                     color="#ff6b81"
                     :loading="export_is_loading"
                     :dark="coach_list.some((v) => v.checked === true)"
-                    @click="exportStudents()"
+                    @click="show_dialog_export_student = true"
                   >
                     {{ $t("export") }}
                   </v-btn>
@@ -544,7 +544,7 @@
                     :dark="!DisableButtonExport()"
                     :disabled="DisableButtonExport()"
                     :loading="export_is_loading"
-                    @click="exportStudentsEndCourse()"
+                    @click="show_dialog_export_end_student = true"
                   >
                     {{ $t("export") }}
                   </v-btn>
@@ -2067,6 +2067,98 @@
           </v-card-text>
         </v-card>
       </v-dialog>
+      <v-dialog
+        width="40vw"
+        v-if="show_dialog_export_student"
+        v-model="show_dialog_export_student"
+      >
+        <v-card>
+          <v-card-title>
+            <v-row>
+              <v-col>
+                {{$t('language')}}
+              </v-col>
+              <v-col cols=auto>
+                <v-btn icon @click="show_dialog_export_student=false">
+                  <v-icon color="#ff6b81">mdi-close</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card-title>
+          <v-card-text>
+            <v-row>
+              <v-col class="text-center">
+                <v-radio-group
+                  v-model="exportStudentLang"
+                  row
+                >
+                  <v-radio
+                    :label="$t('thai')"
+                    value="th"
+                  ></v-radio>
+                  <v-radio
+                    :label="$t('english')"
+                    value="en"
+                  ></v-radio>
+                </v-radio-group>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <v-btn class="w-full" depressed color="#ff6b81" dark @click="exportStudents(exportStudentLang)">
+                  {{$t('export')}}
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+      <v-dialog
+        width="40vw"
+        v-if="show_dialog_export_end_student"
+        v-model="show_dialog_export_end_student"
+      >
+        <v-card>
+          <v-card-title>
+            <v-row>
+              <v-col>
+                {{$t('language')}}
+              </v-col>
+              <v-col cols=auto>
+                <v-btn icon @click="show_dialog_export_end_student=false">
+                  <v-icon color="#ff6b81">mdi-close</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card-title>
+          <v-card-text>
+            <v-row>
+              <v-col class="text-center">
+                <v-radio-group
+                  v-model="exportStudentLang"
+                  row
+                >
+                  <v-radio
+                    :label="$t('thai')"
+                    value="th"
+                  ></v-radio>
+                  <v-radio
+                    :label="$t('english')"
+                    value="en"
+                  ></v-radio>
+                </v-radio-group>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <v-btn class="w-full" depressed color="#ff6b81" dark @click="exportStudentsEndCourse(exportStudentLang)">
+                  {{$t('export')}}
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
     </v-container>
   </v-app>
 </template>
@@ -2098,6 +2190,7 @@ export default {
   },
   mixins: [mixin],
   data: () => ({
+    exportStudentLang : "th",
     courseValidate: false,
     coachValidate: false,
     packageValidate: false,
@@ -2174,6 +2267,8 @@ export default {
     search_student_potential: "",
     search_student_potential_datas: [],
     select_export_end: false,
+    show_dialog_export_student : false,
+    show_dialog_export_end_student : false,
   }),
   mounted() {},
   watch: {
@@ -2449,19 +2544,21 @@ export default {
       }
     },
     //EXPORT STUDENT
-    exportStudents() {
+    exportStudents(lang) {
       this.ExportStudentList({
         coach_list: this.coach_list,
         course_id: this.$route.params.course_id,
         course_name: this.course_data.course_name_th,
         course_type_id: this.course_data.course_type_id,
+        lang
       });
     },
     //EXPORT STUDENT END COURSES
-    exportStudentsEndCourse() {
+    exportStudentsEndCourse(lang) {
       this.ExportEndStudentList({
         coach_list: this.coach_list,
-        course_id: this.$route.params.course_id
+        course_id: this.$route.params.course_id,
+        lang
       })
     },
     readFile(file) {
