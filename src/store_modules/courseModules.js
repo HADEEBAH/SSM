@@ -1950,7 +1950,6 @@ const CourseModules = {
           let coachPotential = coach_list.filter(v => v.studentPotentialArr?.length > 0)
           for await (let coach of coachPotential){
             let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach.coachId}`, config)
-            console.log(data.data)
             if (data.statusCode === 200) {
               for await (let student of data.data){
                 report.push({
