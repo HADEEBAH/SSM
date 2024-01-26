@@ -532,7 +532,7 @@ const CourseModules = {
             context.commit("SetNoChackInStudentList", [])
           } else {
             context.commit("SetStudentList", [])
-            // const loaclhost = "http://localhost:3002"
+            // const loaclhost = "http://localhost:3000"
             let scheduleStudent = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course-student/${course_id}/${date}?starTime=${start_time}&endTime=${end_time}&coachId=${coach_id}`, config)
             if (scheduleStudent.data.statusCode == 200) {
               let scheduleStudentData = scheduleStudent.data.data.filter(v => v.endTime == end_time && v.startTime == start_time && v.coachId == coach_id)
