@@ -71,7 +71,7 @@ import ForgotPassword from './page/forgotPassword.vue'
 import ResetPassword from './page/resetPassword.vue'
 //ManageCheckInLater
 import ManageCheckInLater from './page/admin/checkIn/checkInOrder.vue'
-
+import AdminCheckin from './page/admin/checkIn/adminCheckin.vue'
 const routes = [
   {
     path: '/auth',
@@ -115,6 +115,11 @@ const routes = [
         path:"ManageCheckInLater",
         name:"ManageCheckInLater",
         component:ManageCheckInLater,
+      },
+      {
+        path:"adminCheckin",
+        name:"AdminCheckin",
+        component:AdminCheckin,
       },
       {
         path: 'courseReserve',
