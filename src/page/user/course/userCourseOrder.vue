@@ -1260,8 +1260,8 @@ export default {
                 course_monitors_filter[0].m_maximum_student
               ) {
                 if (
-                  this.course_order.option.course_package_option_id ===
-                  course_monitors_filter[0].m_course_package_options_id
+                  this.course_order.option.package_id ===
+                  course_monitors_filter[0].m_package_id
                 ) {
                   return course_monitors_filter[0]?.m_status;
                 } else {

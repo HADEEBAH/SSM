@@ -14,7 +14,7 @@
                         <v-autocomplete dense outlined hide-details :placeholder="$t('date')"></v-autocomplete>
                     </v-col>
                     <v-col>
-                        <v-autocomplete dense outlined hide-details :placeholder="$t('time')"></v-autocomplete>
+                        <v-autocomplete dense outlined hide-details :placeholder="$t('times')"></v-autocomplete>
                     </v-col>
                 </v-row>
             </v-card-text>
