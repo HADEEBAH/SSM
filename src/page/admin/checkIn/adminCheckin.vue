@@ -4,7 +4,7 @@
         <v-card class="mb-3" outlined rounded="lg">
             <v-card-text>
                 <v-row>
-                    <v-col>
+                    <v-col cols="12" sm="">
                         <v-autocomplete 
                             v-model="filter.course"
                             dense 
@@ -17,9 +17,16 @@
                             item-value="courseId"
                             item-text="courseName"
                             :placeholder="$t('course')">
+                            <template v-slot:no-data>
+                                <v-list-item>
+                                    <v-list-item-title>
+                                        {{ $t("enter course name") }}
+                                    </v-list-item-title>
+                                </v-list-item>
+                            </template>
                         </v-autocomplete>
                     </v-col>
-                    <v-col>
+                    <v-col cols="12" sm="">
                         <v-autocomplete 
                             v-model="filter.coach"
                             dense 
@@ -29,9 +36,16 @@
                             item-value="coachId"
                             item-text="coachName"
                             :placeholder="$t('coach')">
+                            <template v-slot:no-data>
+                                <v-list-item>
+                                    <v-list-item-title>
+                                        {{ $t("no data found") }}
+                                    </v-list-item-title>
+                                </v-list-item>
+                            </template>
                         </v-autocomplete>
                     </v-col>
-                    <v-col>
+                    <v-col cols="12" sm="">
                         <v-autocomplete 
                             v-model="filter.dayOfWeek"
                             dense 
@@ -41,9 +55,16 @@
                             item-value="dayOfWeekId"
                             item-text="dayOfWeekName"
                             :placeholder="$t('date')">
+                            <template v-slot:no-data>
+                                <v-list-item>
+                                    <v-list-item-title>
+                                        {{ $t("no data found") }}
+                                    </v-list-item-title>
+                                </v-list-item>
+                            </template>
                         </v-autocomplete>
                     </v-col>
-                    <v-col>
+                    <v-col cols="12" sm="">
                         <v-autocomplete
                             v-model="filter.time" 
                             dense 
@@ -102,7 +123,7 @@
                 <template v-if="schedule.checkedIn ">
                     <v-expand-transition v-show="schedule.openStudents"  >
                         <div class="pl-6 mb-3">
-                            <v-card class="mb-3" dense outlined rounded="lg" color="#ffe1e5">
+                            <v-card v-if="$vuetify.breakpoint.smAndUp" class="mb-3" dense outlined rounded="lg" color="#ffe1e5">
                                 <v-card-text>
                                     <v-row>
                                         <v-col cols="" class="font-bold text-[#ff6b81]" align="center">{{ $t("first name - last name")}}</v-col>
@@ -121,12 +142,12 @@
                                 rounded="lg">
                                 <v-card-text>
                                     <v-row>
-                                        <v-col class="d-flex justify-center align-center">{{ student.studentName }}</v-col>
-                                        <v-col class="d-flex justify-center align-center" cols="3">
+                                        <v-col cols="12" sm="" class="d-flex align-center" :class="$vuetify.breakpoint.smAndUp ? 'justify-center' : ''">{{ student.studentName }}</v-col>
+                                        <v-col cols="12" sm="3" class="d-flex align-center" :class="$vuetify.breakpoint.smAndUp ? 'justify-center' : ''">
                                             <v-chip v-if="student.packageId" dark :color="packageColor(student.packageId)">{{student.packageName}}</v-chip>
                                         </v-col>
-                                        <v-col class="d-flex justify-center align-center" cols="2">{{ `${student.countCheckIn}/${student.totalCheckIn}` }}</v-col>
-                                        <v-col cols="3">
+                                        <v-col cols="12" sm="2" class="d-flex align-center" :class="$vuetify.breakpoint.smAndUp ? 'justify-center' : ''">{{ `${$vuetify.breakpoint.smAndUp? '' : $t("number of times studied")+': '} ${student.countCheckIn}/${student.totalCheckIn}` }}</v-col>
+                                        <v-col  cols="12" sm="3">
                                             <v-select 
                                                 v-model="student.status"
                                                 hide-details 
