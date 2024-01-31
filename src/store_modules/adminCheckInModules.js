@@ -1,6 +1,9 @@
 import axios from "axios";
 import VueCookie from "vue-cookie";
 import VueI18n from "../i18n";
+import { dateFormatter } from '@/functions/functions';
+import moment from "moment";
+
 function dayOfWeekArray(day) {
     let days = day;
     const weekdays = [
@@ -70,10 +73,25 @@ const adminCheckInModules = {
         SetCheckInCoach(state,{index, students}){
             state.scheduleCheckin[index].checkedIn = 1
             state.scheduleCheckin[index].checkInStudent = students
-        } 
+        },
+        async SetCheckInStudent(state,{ checkInStudentId }){
+            await state.scheduleCheckin.forEach((checkIn, Index) => {
+                if( checkIn.checkInStudent){
+                    const indexStudent = checkIn.checkInStudent.findIndex(v => v.checkInStudentId == checkInStudentId)
+                    if(indexStudent > -1){
+                        if(["late","punctual"].includes(state.scheduleCheckin[Index].checkInStudent[indexStudent].status)){
+                            state.scheduleCheckin[Index].checkInStudent[indexStudent].countCheckIn += 1
+                        }
+                    }
+                    
+                }
+                
+            });
+        }
     },
     actions: {
         async SearchCourses(context,{ search }){
+            context.commit("SetScheduleCheckin",[])
             try{
                 let config = {
                     headers: {
@@ -82,7 +100,7 @@ const adminCheckInModules = {
                       Authorization: `Bearer ${VueCookie.get("token")}`,
                     },
                 };
-                const { data } = await axios.get(`http://localhost:3000/api/v1/adminfeature/course?courseName=${search}`,config)
+                const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminfeature/course?courseName=${search}`,config)
                 if(data.statusCode == 200){
                     context.commit("SetCourses",data.data.map(v => {
                         v.courseName = `${v.courseNameTh}(${v.courseNameEn})`
@@ -94,6 +112,7 @@ const adminCheckInModules = {
             }
         },
         async SearchCoach(context,{ courseId }){
+            context.commit("SetScheduleCheckin",[])
             try{
                 let config = {
                     headers: {
@@ -102,7 +121,7 @@ const adminCheckInModules = {
                       Authorization: `Bearer ${VueCookie.get("token")}`,
                     },
                 };
-                const { data } = await axios.get(`http://localhost:3000/api/v1/adminfeature/coach/course?courseId=${courseId}`,config)
+                const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminfeature/coach/course?courseId=${courseId}`,config)
                 if(data.statusCode == 200){
                     context.commit("SetCoachs",data.data.map( v => { 
                         v.coachName = `${v.coachNameTh}(${v.coachNameEn})`
@@ -114,6 +133,7 @@ const adminCheckInModules = {
             }
         },
         async SearchDayOfWeek(context,{ courseId, coachId }){
+            context.commit("SetScheduleCheckin",[])
             try{
                 let config = {
                     headers: {
@@ -122,7 +142,7 @@ const adminCheckInModules = {
                       Authorization: `Bearer ${VueCookie.get("token")}`,
                     },
                 };
-                const { data } = await axios.get(`http://localhost:3000/api/v1/adminfeature/dow?courseId=${courseId}&coachId=${coachId}`,config)
+                const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminfeature/dow?courseId=${courseId}&coachId=${coachId}`,config)
                 if(data.statusCode == 200){
                     context.commit("SetDayOfWeekName",data.data.map( v => { 
                         v.dayOfWeekName = dayOfWeekArray(v.day)
@@ -134,6 +154,7 @@ const adminCheckInModules = {
             }
         },
         async SearchTime(context, { courseId, coachId , dowId}){
+            context.commit("SetScheduleCheckin",[])
             try{
                 let config = {
                     headers: {
@@ -142,7 +163,7 @@ const adminCheckInModules = {
                       Authorization: `Bearer ${VueCookie.get("token")}`,
                     },
                 };
-                const { data } = await axios.get(`http://localhost:3000/api/v1/adminfeature/time?courseId=${courseId}&coachId=${coachId}&dayOfWeekId=${dowId}`,config)
+                const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminfeature/time?courseId=${courseId}&coachId=${coachId}&dayOfWeekId=${dowId}`,config)
                 if(data.statusCode == 200){
                     context.commit("SetTime",data.data.map( v => { 
                         v.time = `${v.timeStart}-${v.timeEnd}`
@@ -164,23 +185,29 @@ const adminCheckInModules = {
                       Authorization: `Bearer ${VueCookie.get("token")}`,
                     },
                 };
-                const {data} = await axios.get(`http://localhost:3000/api/v1/adminfeature/schedule?courseId=${course}&coachId=${coach}&dowId=${dayOfWeek}&timeId=${time}&timeStart=${timeStart}&timeEnd=${timeEnd}`,config)
+                const {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminfeature/schedule?courseId=${course}&coachId=${coach}&dowId=${dayOfWeek}&timeId=${time}&timeStart=${timeStart}&timeEnd=${timeEnd}`,config)
                 if(data.statusCode == 200){
                     context.commit("SetScheduleCheckinIsLoadIng",false)
-                    context.commit("SetScheduleCheckin",data.data.map(v => {
-                        v.compensationDateStr = "",
-                        v.menuCompensationDate = false
-                        v.startTime = ""
-                        v.endTime = ""
-                        return v
-                    }))
+                    for await (let checkIn of data.data){
+                        if(checkIn.checkInStudent){
+                            checkIn.checkInStudent = checkIn.checkInStudent.map(s => { 
+                                let compensationDate = moment(s.compensationDate).format("YYYY-MM-DD")
+                                s.compensationDateStr =  s.compensationDate ? dateFormatter(compensationDate, "DD MMT YYYYT") : '',
+                                s.menuCompensationDate = false
+                                s.startTime = ""
+                                s.endTime = ""
+                                return s
+                            })
+                        }
+                    }
+                    context.commit("SetScheduleCheckin",data.data)
                 }
             }catch(error){
                 context.commit("SetScheduleCheckinIsLoadIng",false)
                 console.log(error)
             }
         },
-        async UpdateCheckinStudent(context, {checkInStudentId, status}){
+        async UpdateCheckinStudent(context, {checkInStudentId, status, payload}){
             try{
                 let config = {
                     headers: {
@@ -189,9 +216,9 @@ const adminCheckInModules = {
                       Authorization: `Bearer ${VueCookie.get("token")}`,
                     },
                 };
-                const {data} = await axios.patch(`http://localhost:3000/api/v1/adminfeature/checkIn/${checkInStudentId}`,{ status },config)
-                if(data.statusCode == 201){
-                    console.log(data.data)
+                const {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/adminfeature/checkIn/${checkInStudentId}`,{ status, ...payload },config)
+                if(data.statusCode == 200){
+                    context.commit("SetCheckInStudent",{ checkInStudentId })
                 }
             }catch(error){
                 console.log(error)
@@ -199,7 +226,6 @@ const adminCheckInModules = {
         },
         async CheckInCoach(context, {checkInData, index}){
             try{
-                console.log(checkInData)
                 let config = {
                     headers: {
                       "Access-Control-Allow-Origin": "*",
@@ -207,12 +233,11 @@ const adminCheckInModules = {
                       Authorization: `Bearer ${VueCookie.get("token")}`,
                     },
                 };
-                const {data} = await axios.post(`http://localhost:3000/api/v1/adminfeature/checkincoach`,{ 
+                const {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/adminfeature/checkincoach`,{ 
                    ...checkInData
                 },config)
                 if(data.statusCode == 201){
                     context.commit("SetCheckInCoach",{index : index , students : data.data})
-                    console.log(data.data)
                 }
             }catch(error){
                 console.log(error)

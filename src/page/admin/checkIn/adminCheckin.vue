@@ -136,7 +136,7 @@
                                                 :items="check_in_status_options"
                                                 item-text="label"
                                                 item-value="value"
-                                                @change="CheckInStudent(student.checkInStudentId, student.status)"
+                                                @change="CheckInStudent(student.checkInStudentId, student)"
                                             >
                                                 <template #item="{ item }">
                                                     <v-list-item-content>
@@ -154,7 +154,7 @@
                                         </v-col>
                                     </v-row>
                                     <v-row v-if="student.status==='leave'" dense>
-                                        <v-col cols="12" sm="2">{{ $t("compensatory study day") }}</v-col>
+                                        <v-col cols="12" sm="2" class="d-flex jusify-center align-center">{{ $t("compensatory study day")  }}</v-col>
                                         <v-col cols="12" sm="4">
                                             <v-menu
                                             v-model="student.menuCompensationDate"
@@ -164,13 +164,14 @@
                                             >
                                             <template v-slot:activator="{ on, attrs }">
                                                 <v-text-field
-                                                dense
-                                                outlined
-                                                v-model="student.compensationDateStr"
-                                                readonly
-                                                :placeholder="$t('choose a compensation date')"
-                                                v-bind="attrs"
-                                                v-on="on"
+                                                    dense
+                                                    outlined
+                                                    hide-details
+                                                    v-model="student.compensationDateStr"
+                                                    readonly
+                                                    :placeholder="$t('choose a compensation date')"
+                                                    v-bind="attrs"
+                                                    v-on="on"
                                                 >
                                                 <template v-slot:append>
                                                     <v-icon
@@ -181,7 +182,8 @@
                                                 </v-text-field>
                                             </template>
                                             <v-date-picker
-                                                @input="inputDate(index, student)"
+                                                @input="inputDate(IndexSchedule, indexStudent, student)"
+                                                @change="CheckInStudent(student.checkInStudentId, student)"
                                                 v-model="student.compensationDate"
                                                 locale="th-TH"
                                             ></v-date-picker>
@@ -191,15 +193,13 @@
                                             <v-text-field
                                                 outlined
                                                 dense
+                                                hide-details
                                                 :style="`width:${width()}px;`"
                                                 style="position:absolute; display: block; z-index: 4"
-                                                @focus="
-                                                    SelectedStartDate(
-                                                    $event,
-                                                    student.compensationStartTime
-                                                    )
-                                                "
+                                                @focus="SelectedStartDate($event, student.compensationStartTime)"
                                                 :value="genTime(student.compensationStartTime)"
+                                                @change="CheckInStudent(student.checkInStudentId, student)"
+
                                             >
                                             </v-text-field>
                                             <TimePicker
@@ -219,10 +219,9 @@
                                                 dense
                                                 :style="`width:${width()}px;`"
                                                 style="position:absolute; display: block; z-index: 4"
-                                                @focus="
-                                                    SelectedStartDate($event, student.compensationEndTime)
-                                                "
                                                 :value="genTime(student.compensationEndTime)"
+                                                @focus="SelectedStartDate($event, student.compensationEndTime)"
+                                                @change="CheckInStudent(student.checkInStudentId, student)"
                                             >
                                             </v-text-field>
                                             <TimePicker
@@ -259,7 +258,7 @@ import headerPage from "@/components/header/headerPage.vue";
 import { mapActions, mapGetters } from 'vuex';
 import moment from "moment";
 import { Input, TimePicker } from "ant-design-vue";
-
+import { dateFormatter } from "@/functions/functions";
 
 export default {
     name: "AdminCheckin",
@@ -407,6 +406,9 @@ export default {
             UpdateCheckinStudent : "adminCheckInModules/UpdateCheckinStudent",
             CheckInCoach : "adminCheckInModules/CheckInCoach"
         }),
+        inputDate(indexSchedule, indexStudent, item) {
+            this.scheduleCheckin[indexSchedule].checkInStudent[indexStudent].compensationDateStr = dateFormatter(item.compensationDate, "DD MMT YYYYT")
+        },
         width() {
             switch (this.$vuetify.breakpoint.name) {
                 case "xs":
@@ -448,9 +450,23 @@ export default {
         CheckedInCoach(checkInData, index){
             this.CheckInCoach({ checkInData, index })
         },
-        CheckInStudent(checkInStudentId, status){
-            console.log(checkInStudentId, status)
-            this.UpdateCheckinStudent({checkInStudentId, status})
+        CheckInStudent(checkInStudentId, studentData){
+            let payload = {
+                compensationDate: "",
+                compensationStartTime: "",
+                compensationEndTime: "",
+            }
+            if(studentData.status === "leave" && studentData.compensationDate && studentData.compensationStartTime && studentData.compensationEndTime){
+                payload = {
+                    compensationDate: studentData.compensationDate,
+                    compensationStartTime: studentData.compensationStartTime,
+                    compensationEndTime: studentData.compensationEndTime,
+                }
+                this.UpdateCheckinStudent({checkInStudentId, status : studentData.status , payload})
+            }else{
+                this.UpdateCheckinStudent({checkInStudentId, status : studentData.status , payload})
+            }
+            
         }
     }
 };
