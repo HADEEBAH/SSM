@@ -22,7 +22,7 @@ import reserveCourseModules from '@/store_modules/reserveCourseModules'
 import DashboardModules from '@/store_modules/dashboardModules'
 import portfolioModules from '@/store_modules/portfolioModules'
 import ResetPasswordModules from '@/store_modules/resetPasswordModules'
-
+import adminCheckInModules from '@/store_modules/adminCheckInModules'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
@@ -48,7 +48,8 @@ const store = new Vuex.Store({
     BannerModules: BannerModules,
     NotificationsModules: NotificationsModules,
     DashboardModules: DashboardModules,
-    ResetPasswordModules: ResetPasswordModules
+    ResetPasswordModules: ResetPasswordModules,
+    adminCheckInModules : adminCheckInModules,
   }
 })
 

@@ -227,9 +227,12 @@ export default {
       },
       {
         title: "manage check in later",
-        to: "ManageCheckInLater",
-        child: [],
-        roles: ["R_1"],
+        to: "",
+        child: [
+          { title: "check in later by order number", to: "ManageCheckInLater", roles: ["R_1","R_2"] },
+          { title: "admin check in later", to: "AdminCheckin", roles: ["R_1","R_2"] },
+        ],
+        roles: ["R_1","R_2"],
       },
       {
         title: "banner setting",
