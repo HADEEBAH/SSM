@@ -2,6 +2,7 @@
     "admin has added a course for you":"แอดมินได้เพิ่มคอร์สเรียนให้คุณ",
     "admin applies for course": "แอดมินสมัครคอร์ส",
     "admin" : "ผู้ดูแลระบบ",
+    "admin check in later" : "แอดมินเช็คอินย้อนหลัง",
     "add coach" : "เพิ่มโค้ช",
     "add user" : "เพิ่มผู้ใช้",
     "add learner" : "เพิ่มผู้เรียน",
@@ -64,6 +65,7 @@
     "april": "เมษายน",
     "august": "สิงหาคม",
 
+    "date list": "รายการวันที่",
     "baht" : "บาท",
     "banner setting" : "จัดการแบนเนอร์",
     "banner added successfully": "( เพิ่มแบนเนอร์เรียบร้อยแล้ว )",
@@ -98,6 +100,8 @@
     "cash out" : "ชำระเงิน",
     "certification" : "การรับรอง",
     "change photo":"เปลี่ยนรูป",
+    "check in later" : "เช็คอินย้อนหลัง",
+    "check in later by order number" : "เช็คอินภายหลังตามหมายเลขคำสั่งซื้อ",
     "check-in notification" : "แจ้งเตือนการเช็คอิน",
     "check-in reminder" : "แจ้งเตือนการเช็คอิน",
     "check in teach" : "ลงเวลาเข้าสอน",
@@ -471,7 +475,7 @@
     "please complete personal information":"กรุณากรอกข้อมูลส่วนตัวให้ครบถ้วนหรือกดปุ่มยกเลิกกรณีไม่ต้องการแก้ไขข้อมูล",
     "please confirm the new password again" : "กรุณาระบุยืนยันรหัสผ่านใหม่อีกครั้ง",
     "please confirm your passwords are the same" : "กรุณาระบุยืนยันรหัสผ่านให้ตรงกัน",
-    
+    "please selete data" : "กรุณาเลือกข้อมูล",
     "please enter a checkbox" : "กรุณาระกดกล่องสี่เหลี่ยมนี้",
     "please enter a 10-digit phone number" : "กรุณาระบุเบอร์โทรศัพท์ 10 หลัก",
     "please enter a confirmation password that is at least 8 characters long" : "กรุณาระบุยืนยันรหัสผ่านความยาวอย่างน้อย 8 ตัวอักษร",
