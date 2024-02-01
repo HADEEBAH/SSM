@@ -90,6 +90,7 @@
 
     "cash":"Cash",
     "can't apply": "Can't apply",
+    "can not save" : "can not save",
     "Can not use the same accountID to create Relations." : "Can not use the same user to create Relations.",
     "can't find items in the basket" : "Can't find items in the basket",
     "can't find teaching summaries" : "Can't find teaching summaries",
