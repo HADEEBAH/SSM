@@ -127,7 +127,7 @@
                                 <v-card-text>
                                     <v-row>
                                         <v-col cols="" class="font-bold text-[#ff6b81]" align="center">{{ $t("first name - last name")}}</v-col>
-                                        <v-col cols="3" class="font-bold text-[#ff6b81]" align="center">{{ $t("package") }}</v-col>
+                                        <v-col cols="3" class="font-bold text-[#ff6b81]" align="center">{{ schedule?.checkInStudent[0].packageId ? $t("package") : '' }}</v-col>
                                         <v-col cols="2" class="font-bold text-[#ff6b81]" align="center">{{ $t("number of times studied")}}</v-col>
                                         <v-col cols="3"></v-col>
                                     </v-row>
@@ -157,7 +157,6 @@
                                                 :items="check_in_status_options"
                                                 item-text="label"
                                                 item-value="value"
-                                                @change="CheckInStudent(student.checkInStudentId, student)"
                                             >
                                                 <template #item="{ item }">
                                                     <v-list-item-content>
@@ -204,7 +203,6 @@
                                             </template>
                                             <v-date-picker
                                                 @input="inputDate(IndexSchedule, indexStudent, student)"
-                                                @change="CheckInStudent(student.checkInStudentId, student)"
                                                 v-model="student.compensationDate"
                                                 locale="th-TH"
                                             ></v-date-picker>
@@ -219,8 +217,6 @@
                                                 style="position:absolute; display: block; z-index: 4"
                                                 @focus="SelectedStartDate($event, student.compensationStartTime)"
                                                 :value="genTime(student.compensationStartTime)"
-                                                @change="CheckInStudent(student.checkInStudentId, student)"
-
                                             >
                                             </v-text-field>
                                             <TimePicker
@@ -242,7 +238,6 @@
                                                 style="position:absolute; display: block; z-index: 4"
                                                 :value="genTime(student.compensationEndTime)"
                                                 @focus="SelectedStartDate($event, student.compensationEndTime)"
-                                                @change="CheckInStudent(student.checkInStudentId, student)"
                                             >
                                             </v-text-field>
                                             <TimePicker
@@ -258,6 +253,18 @@
                                     </v-row>
                                 </v-card-text>
                             </v-card>
+                            <v-row>
+                                <v-col cols="12" class="d-flex justify-end">
+                                    <v-btn 
+                                        :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'" 
+                                        dark 
+                                        rounded 
+                                        depressed 
+                                        color="#ff6b81"
+                                        @click="saveStudentCheckIn(schedule)"
+                                    >{{ $t("save") }}</v-btn>
+                                </v-col>
+                            </v-row>
                         </div>
                     </v-expand-transition>
                 </template>
@@ -280,6 +287,7 @@ import { mapActions, mapGetters } from 'vuex';
 import moment from "moment";
 import { Input, TimePicker } from "ant-design-vue";
 import { dateFormatter } from "@/functions/functions";
+import Swal from "sweetalert2";
 
 export default {
     name: "AdminCheckin",
@@ -424,7 +432,7 @@ export default {
             SearchDayOfWeek :"adminCheckInModules/SearchDayOfWeek",
             SearchTime :"adminCheckInModules/SearchTime",
             GetScheduleCheckIn: "adminCheckInModules/GetScheduleCheckIn",
-            UpdateCheckinStudent : "adminCheckInModules/UpdateCheckinStudent",
+            UpdateCheckinStudents : "adminCheckInModules/UpdateCheckinStudents",
             CheckInCoach : "adminCheckInModules/CheckInCoach"
         }),
         inputDate(indexSchedule, indexStudent, item) {
@@ -462,7 +470,7 @@ export default {
             }
         },
         packageColor(packageId){
-            console.log(this.packages_color.filter(v => v.value == packageId)[0].color)
+            // console.log(this.packages_color.filter(v => v.value == packageId)[0].color)
             return this.packages_color.filter(v => v.value == packageId)[0].color
         },
         openExpand(index){
@@ -471,23 +479,39 @@ export default {
         CheckedInCoach(checkInData, index){
             this.CheckInCoach({ checkInData, index })
         },
-        CheckInStudent(checkInStudentId, studentData){
-            let payload = {
-                compensationDate: "",
-                compensationStartTime: "",
-                compensationEndTime: "",
-            }
-            if(studentData.status === "leave" && studentData.compensationDate && studentData.compensationStartTime && studentData.compensationEndTime){
-                payload = {
-                    compensationDate: studentData.compensationDate,
-                    compensationStartTime: studentData.compensationStartTime,
-                    compensationEndTime: studentData.compensationEndTime,
-                }
-                this.UpdateCheckinStudent({checkInStudentId, status : studentData.status , payload})
-            }else{
-                this.UpdateCheckinStudent({checkInStudentId, status : studentData.status , payload})
-            }
+        // CheckInStudent(checkInStudentId, studentData){
+        //     let payload = {
+        //         compensationDate: "",
+        //         compensationStartTime: "",
+        //         compensationEndTime: "",
+        //     }
+        //     if(studentData.status === "leave" && studentData.compensationDate && studentData.compensationStartTime && studentData.compensationEndTime){
+        //         payload = {
+        //             compensationDate: studentData.compensationDate,
+        //             compensationStartTime: studentData.compensationStartTime,
+        //             compensationEndTime: studentData.compensationEndTime,
+        //         }
+        //         this.UpdateCheckinStudent({checkInStudentId, status : studentData.status , payload})
+        //     }else{
+        //         this.UpdateCheckinStudent({checkInStudentId, status : studentData.status , payload})
+        //     }
             
+        // },
+        saveStudentCheckIn(scheduleData){
+            // console.log(scheduleData.checkInStudent)
+            Swal.fire({
+                icon: "question",
+                title: this.$t("want to save?"),
+                showDenyButton: false,
+                showCancelButton: true,
+                confirmButtonText: this.$t("agree"),
+                cancelButtonText: this.$t("no"),
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    this.UpdateCheckinStudents({payload : scheduleData.checkInStudent})
+                }
+            })
+           
         }
     }
 };

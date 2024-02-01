@@ -3,6 +3,7 @@ import VueCookie from "vue-cookie";
 import VueI18n from "../i18n";
 import { dateFormatter } from '@/functions/functions';
 import moment from "moment";
+import Swal from "sweetalert2";
 
 function dayOfWeekArray(day) {
     let days = day;
@@ -74,16 +75,16 @@ const adminCheckInModules = {
             state.scheduleCheckin[index].checkedIn = 1
             state.scheduleCheckin[index].checkInStudent = students
         },
-        async SetCheckInStudent(state,{ checkInStudentId }){
+        async SetCheckInStudent(state,{ payload }){
             await state.scheduleCheckin.forEach((checkIn, Index) => {
                 if( checkIn.checkInStudent){
-                    const indexStudent = checkIn.checkInStudent.findIndex(v => v.checkInStudentId == checkInStudentId)
-                    if(indexStudent > -1){
-                        if(["late","punctual"].includes(state.scheduleCheckin[Index].checkInStudent[indexStudent].status)){
-                            state.scheduleCheckin[Index].checkInStudent[indexStudent].countCheckIn += 1
+                    checkIn.checkInStudent.forEach((student , indexStudent)=>{
+                        if(payload.some(p => student.checkInStudentId == p.checkInStudentId)){
+                            if(!["leave"].includes(state.scheduleCheckin[Index].checkInStudent[indexStudent].status)){
+                                state.scheduleCheckin[Index].checkInStudent[indexStudent].countCheckIn += 1
+                            }
                         }
-                    }
-                    
+                    })
                 }
                 
             });
@@ -191,8 +192,13 @@ const adminCheckInModules = {
                     for await (let checkIn of data.data){
                         if(checkIn.checkInStudent){
                             checkIn.checkInStudent = checkIn.checkInStudent.map(s => { 
-                                let compensationDate = moment(s.compensationDate).format("YYYY-MM-DD")
-                                s.compensationDateStr =  s.compensationDate ? dateFormatter(compensationDate, "DD MMT YYYYT") : '',
+                                if(s?.compensationDate){
+                                    let compensationDate = moment(s.compensationDate).format("YYYY-MM-DD")
+                                    s.compensationDateStr = dateFormatter(compensationDate, "DD MMT YYYYT")
+                                }else{
+                                    s.compensationDateStr = ""
+                                    s.compensationDate = ""
+                                }
                                 s.menuCompensationDate = false
                                 s.startTime = ""
                                 s.endTime = ""
@@ -207,7 +213,7 @@ const adminCheckInModules = {
                 console.log(error)
             }
         },
-        async UpdateCheckinStudent(context, {checkInStudentId, status, payload}){
+        async UpdateCheckinStudents(context, {payload}){
             try{
                 let config = {
                     headers: {
@@ -216,12 +222,39 @@ const adminCheckInModules = {
                       Authorization: `Bearer ${VueCookie.get("token")}`,
                     },
                 };
-                const {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/adminfeature/checkIn/${checkInStudentId}`,{ status, ...payload },config)
+                payload.map(v => {
+                    if(v.status !== "leave"){
+                        v.compensationDate = ""
+                        v.compensationStartTime = ""
+                        v.compensationEndTime = ""
+                    }
+                    return v
+                })
+                const {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/adminfeature/checkinallstudent`, payload ,config)
                 if(data.statusCode == 200){
-                    context.commit("SetCheckInStudent",{ checkInStudentId })
+                    Swal.fire({
+                        icon: "success",
+                        title: VueI18n.t("succeed"),
+                        text: VueI18n.t("save data successfully"),
+                        timer: 3000,
+                        showDenyButton: false,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        timerProgressBar: true,
+                    })
+                    context.commit("SetCheckInStudent",{payload : payload})  
                 }
             }catch(error){
-                console.log(error)
+                Swal.fire({
+                    icon: "error",
+                    title: VueI18n.t("fail"),
+                    text: VueI18n.t("save failed"),
+                    timer: 3000,
+                    showDenyButton: false,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    timerProgressBar: true,
+                })
             }
         },
         async CheckInCoach(context, {checkInData, index}){
