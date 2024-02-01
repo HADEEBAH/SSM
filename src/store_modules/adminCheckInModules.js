@@ -80,8 +80,12 @@ const adminCheckInModules = {
                 if( checkIn.checkInStudent){
                     checkIn.checkInStudent.forEach((student , indexStudent)=>{
                         if(payload.some(p => student.checkInStudentId == p.checkInStudentId)){
+                            
                             if(!["leave"].includes(state.scheduleCheckin[Index].checkInStudent[indexStudent].status)){
                                 state.scheduleCheckin[Index].checkInStudent[indexStudent].countCheckIn += 1
+                            }else{
+                                state.scheduleCheckin[Index].checkInStudent[indexStudent].compensationStartTime = moment(state.scheduleCheckin[Index].checkInStudent[indexStudent].compensationStartTime,"HH:mm")
+                                state.scheduleCheckin[Index].checkInStudent[indexStudent].compensationEndTime = moment(state.scheduleCheckin[Index].checkInStudent[indexStudent].compensationEndTime,"HH:mm")
                             }
                         }
                     })
@@ -195,6 +199,8 @@ const adminCheckInModules = {
                                 if(s?.compensationDate){
                                     let compensationDate = moment(s.compensationDate).format("YYYY-MM-DD")
                                     s.compensationDateStr = dateFormatter(compensationDate, "DD MMT YYYYT")
+                                    s.compensationStartTime = s.compensationStartTime ? moment(s.compensationStartTime,"HH:mm") : ''
+                                    s.compensationEndTime = s.compensationEndTime ? moment(s.compensationEndTime , "HH:mm") : ''
                                 }else{
                                     s.compensationDateStr = ""
                                     s.compensationDate = ""
@@ -222,15 +228,19 @@ const adminCheckInModules = {
                       Authorization: `Bearer ${VueCookie.get("token")}`,
                     },
                 };
-                payload.map(v => {
+                let dataPayload = payload
+                dataPayload.map(v => {
                     if(v.status !== "leave"){
                         v.compensationDate = ""
                         v.compensationStartTime = ""
                         v.compensationEndTime = ""
+                    }else{
+                        v.compensationStartTime = moment(v.compensationStartTime).format("HH:mm")
+                        v.compensationEndTime = moment(v.compensationEndTime).format("HH:mm")
                     }
                     return v
                 })
-                const {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/adminfeature/checkinallstudent`, payload ,config)
+                const {data} = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/adminfeature/checkinallstudent`, dataPayload ,config)
                 if(data.statusCode == 200){
                     Swal.fire({
                         icon: "success",
