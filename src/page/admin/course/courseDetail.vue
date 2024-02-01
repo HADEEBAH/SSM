@@ -832,9 +832,8 @@
                     <template v-else>
                       <div v-for="(coach, coach_index) in search_student_potential
                         ? search_student_potential_datas
-                        : coach_list.filter(
-                          (v) => v.studentPotentialArr?.length > 0
-                        )" :key="`${coach_index}-potential_index`">
+                        : coachListPotential(coach_list)"
+                        :key="`${coach_index}-potential_index`">
                         <v-card @click="seletedCoachPotential(coach, coach_index)" outlined dense
                           class="rounded-lg cursor-pointer mb-3 bg-[#FCFCFC]">
                           <v-card-text class="pa-2">
@@ -2064,6 +2063,19 @@ export default {
           }
         });
       }
+    },
+    coachListPotential(coach_list){
+      let coachList = []
+      const coachs = coach_list.filter(v => v.studentPotentialArr?.length > 0)
+      if(coachs.length > 0){
+        for (const coach of coachs){
+          // console.log(coach)
+          if(!coachList.some(v => v.coachId == coach.coachId)){
+            coachList.push(coach)
+          }
+        }
+      }
+      return coachList
     },
     CourseUpdateCoach() {
       this.$refs.coach_form.validate();
