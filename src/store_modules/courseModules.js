@@ -527,7 +527,7 @@ const CourseModules = {
 
         if (data.statusCode === 200) {
          
-          if (data.data.length > 0 && data.data?.filter(v => v?.potential?.checkInPotentialId).length == 0) {
+          if (data.data.length > 0 && data.data?.filter(v => v?.potential?.checkInPotentialId).length !== data.data.length) {
             context.commit("SetStudentList", data.data)
             context.commit("SetNoChackInStudentList", [])
           } else {
@@ -535,12 +535,13 @@ const CourseModules = {
             // const loaclhost = "http://localhost:3000"
             let scheduleStudent = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course-student/${course_id}/${date}?starTime=${start_time}&endTime=${end_time}&coachId=${coach_id}`, config)
             if (scheduleStudent.data.statusCode == 200) {
-              let scheduleStudentData = scheduleStudent.data.data.filter(v => v.endTime == end_time && v.startTime == start_time && v.coachId == coach_id)
+              let scheduleStudentData = scheduleStudent.data.data.filter(v => v.endTime == end_time && v.startTime == start_time && v.coachId == coach_id)         
               scheduleStudentData.map(v=>{
                 v.countCheckIn = current_check_in
                 v.totalDay = count_check_In_date.length
                 return v
               })
+              console.log("scheduleStudentData",scheduleStudentData)
               context.commit("SetNoChackInStudentList", scheduleStudentData)
             }
           }

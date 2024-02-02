@@ -425,6 +425,9 @@ export default {
             deep : true      
         }
     },
+    created(){
+        this.$store.commit("adminCheckInModules/SetScheduleCheckin",[])
+    },
     methods:{
         ...mapActions({
             SearchCourses :"adminCheckInModules/SearchCourses",
