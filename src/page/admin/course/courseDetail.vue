@@ -330,11 +330,7 @@
                       <div v-for="(coach, coach_index) in search_student_list
                         ? search_student_datas
                         : coach_list?.filter(
-                          (v) =>
-                            // (v?.studentPotentialArr?.length == 0 &&
-                            //   v?.datesList?.length > 0) ||
-                            // v?.studentPotentialArr?.length !==
-                            v?.datesList?.length > 0
+                          (v) =>v?.datesList?.length > 0
                         )" :key="`${coach_index}-coach_index`">
                         <v-card v-if="coach?.datesList?.length > 0" outlined dense
                           class="rounded-lg cursor-pointer mb-3 bg-[#FCFCFC]">
@@ -1001,7 +997,10 @@
                 {{ $t("assessment") }}
               </v-col>
             </v-row>
-            <v-card v-if="student_data_assessment?.checkInPotentialId" class="mb-3">
+            <v-card v-if="student_data_assessment?.checkInPotentialId"  
+              class="mb-3"
+              outlined
+            >
               <v-card-text>
                 <v-row>
                   <v-col cols="auto">
@@ -1038,32 +1037,20 @@
                         </v-row>
                         <v-row dense>
                           <v-col>
-                            <span class="text-[#999999]">
-                              {{ $t("interest level") }}:
-                            </span>
-                            {{
-                              student_data_assessment.Interest
-                              ? student_data_assessment.Interest
-                              : "-"
-                            }}
+                            <span class="text-[#999999]"> {{ $t("interest level") }}: </span>
+                            {{ student_data_assessment.Interest || "-" }}
                           </v-col>
                         </v-row>
                         <v-row dense>
                           <v-col>
-                            <span class="text-[#999999]">
-                              {{ $t("comments") }}:
-                            </span>
-                            {{
-                              student_data_assessment.remark
-                              ? student_data_assessment.remark
-                              : "-"
-                            }}
+                            <span class="text-[#999999]">{{ $t("comments") }}: </span>
+                            {{ student_data_assessment.remark || "-" }}
                           </v-col>
                         </v-row>
                         <v-row dense>
                           <v-col cols="12">
                             <b>{{ $t("attachments") }}: </b>
-                            <v-card @click="openFile(file.attachmentFiles)" flat class="mb-3" v-for="(
+                            <v-card outlined @click="openFile(file.attachmentFiles)" flat class="mb-3" v-for="(
                                 file, index_file
                               ) in student_data_assessment.attachmentPotential" :key="index_file">
                               <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
@@ -1179,7 +1166,7 @@
                       <span class="text-[#999999]"> {{ $t("comments") }}: </span>{{ assess.assessment.remark }}
                     </v-col>
                   </v-row>
-                  <v-card @click="openFile(file.attFiles)" flat class="mb-3"
+                  <v-card outlined @click="openFile(file.attFiles)" flat class="mb-3"
                     v-for="(file, index_file) in assess.assessment.attachment" :key="index_file">
                     <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                       <v-row>
@@ -1201,7 +1188,7 @@
               </v-card>
             </div>
             <div v-else-if="student_data_assessment?.assessment">
-              <v-card class="mb-3">
+              <v-card outlined class="mb-3">
                 <v-card-text>
                   <v-row dense>
                     <v-col cols="auto">
@@ -1287,7 +1274,7 @@
                         student_data_assessment.assessment.remark }}
                     </v-col>
                   </v-row>
-                  <v-card @click="openFile(file.attFiles)" flat class="mb-3" v-for="(file, index_file) in student_data_assessment
+                  <v-card outlined @click="openFile(file.attFiles)" flat class="mb-3" v-for="(file, index_file) in student_data_assessment
                     .assessment.attachment" :key="index_file">
                     <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                       <v-row>
