@@ -228,6 +228,7 @@ const adminCheckInModules = {
                       Authorization: `Bearer ${VueCookie.get("token")}`,
                     },
                 };
+                let Isleave = []
                 let dataPayload = payload
                 dataPayload.map(v => {
                     if(v.status !== "leave"){
@@ -235,6 +236,7 @@ const adminCheckInModules = {
                         v.compensationStartTime = ""
                         v.compensationEndTime = ""
                     }else{
+                        Isleave.push(v)
                         v.compensationStartTime = moment(v.compensationStartTime).format("HH:mm")
                         v.compensationEndTime = moment(v.compensationEndTime).format("HH:mm")
                     }
@@ -253,6 +255,18 @@ const adminCheckInModules = {
                         timerProgressBar: true,
                     })
                     context.commit("SetCheckInStudent",{payload : payload})  
+                    if(Isleave.length > 0){
+                        const {timeEnd, timeStart , coachId, courseId ,timeId, dayOfWeekId} = context.state.scheduleCheckin[0]
+                        console.log({timeEnd, timeStart , coachId, courseId ,timeId, dayOfWeekId})
+                        await context.dispatch("GetScheduleCheckIn",{
+                            course : courseId, 
+                            coach : coachId,
+                            dayOfWeek : dayOfWeekId, 
+                            time : timeId, 
+                            timeStart, 
+                            timeEnd
+                        })
+                    }
                 }
             }catch(error){
                 Swal.fire({
