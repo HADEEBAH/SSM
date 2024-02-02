@@ -257,7 +257,6 @@ const adminCheckInModules = {
                     context.commit("SetCheckInStudent",{payload : payload})  
                     if(Isleave.length > 0){
                         const {timeEnd, timeStart , coachId, courseId ,timeId, dayOfWeekId} = context.state.scheduleCheckin[0]
-                        console.log({timeEnd, timeStart , coachId, courseId ,timeId, dayOfWeekId})
                         await context.dispatch("GetScheduleCheckIn",{
                             course : courseId, 
                             coach : coachId,
