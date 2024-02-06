@@ -196,6 +196,7 @@ const loginModules = {
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/search/username?username=${username}`, config)
                 if (data.statusCode === 200) {
                     if (data.data.userOneId) {
+                        console.log(data.data)
                         if (type === 'student') {
                             context.commit("SetUserStudentData", [data.data])
                         } else {

@@ -903,7 +903,7 @@ import TermOfUse from "@/components/termOfUse.vue";
 import Swal from "sweetalert2";
 import { mapActions, mapGetters } from "vuex";
 import { inputValidation } from "@/functions/functions";
-
+import moment from "moment";
 export default {
   name: "userCourseOrder",
   components: {
@@ -1198,18 +1198,40 @@ export default {
       inputValidation(e, lang);
     },
     ValidateReserve() {
-      let validate_reserve = [];
-      if (this.course_order.students.length > 0) {
-        for (let student of this.course_order.students) {
-          validate_reserve.push(
-            this.reserve_list.some((v) => v.studentId == student.account_id)
-          );
+      if(this.course_data.course_status == "Reserve"){
+        const today = moment(new Date()).format("YYYY-MM-DD")
+        if(!moment(today).isBetween(this.course_data.reservation_start_date, this.course_data.reservation_end_date, null, '[]')){
+          let validate_reserve = [];
+          console.log("reserve_list => ",this.reserve_list)
+          if (this.course_order.students.length > 0) {
+            for (let student of this.course_order.students) {
+              validate_reserve.push(
+                this.reserve_list.some((v) => v.studentId == student.account_id)
+              );
+            }
+          }
+          if (validate_reserve.includes(true)) {
+            return true;
+          } else {
+            return false;
+          }
+        }else{
+          return false;
         }
-      }
-      if (validate_reserve.includes(true)) {
-        return true;
-      } else {
-        return false;
+      }else{
+        let validate_reserve = [];
+        if (this.course_order.students.length > 0) {
+          for (let student of this.course_order.students) {
+            validate_reserve.push(
+              this.reserve_list.some((v) => v.studentId == student.account_id)
+            );
+          }
+        }
+        if (validate_reserve.includes(true)) {
+          return true;
+        } else {
+          return false;
+        }
       }
     },
     GenCoachNumberStudent(coach_id, dayOfWeekId, timeId) {
@@ -1234,47 +1256,52 @@ export default {
     },
     GenMonitors() {
       if (this.course_monitors) {
-        if (this.course_order.time && this.course_order.coach_id) {
-          let time_data = this.course_order.time;
-          let dayOfWeekId = time_data?.timeData
-            ? time_data.timeData.filter(
-                (v) => v.coach_id === this.course_order.coach_id
-              )[0].dayOfWeekId
-            : time_data.dayOfWeekId;
-          let timeId = time_data?.timeData
-            ? time_data.timeData.filter(
-                (v) => v.coach_id === this.course_order.coach_id
-              )[0].timeId
-            : time_data.timeId;
-          if (this.course_order.course_type_id === "CT_1") {
-            let course_monitors_filter = this.course_monitors.filter(
-              (v) =>
-                v.m_course_id == this.course_order.course_id &&
-                v.m_day_of_week_id === dayOfWeekId &&
-                v.m_time_id == timeId
-            );
-            if (course_monitors_filter.length > 0) {
-              if (
-                this.course_order.students.length +
-                  course_monitors_filter[0].m_current_student <=
-                course_monitors_filter[0].m_maximum_student
-              ) {
+        if(this.course_data.course_status === "Reserve"){
+          return "Close"
+        }else{
+          if (this.course_order.time && this.course_order.coach_id) {
+            let time_data = this.course_order.time;
+            let dayOfWeekId = time_data?.timeData
+              ? time_data.timeData.filter(
+                  (v) => v.coach_id === this.course_order.coach_id
+                )[0].dayOfWeekId
+              : time_data.dayOfWeekId;
+            let timeId = time_data?.timeData
+              ? time_data.timeData.filter(
+                  (v) => v.coach_id === this.course_order.coach_id
+                )[0].timeId
+              : time_data.timeId;
+            if (this.course_order.course_type_id === "CT_1") {
+              let course_monitors_filter = this.course_monitors.filter(
+                (v) =>
+                  v.m_course_id == this.course_order.course_id &&
+                  v.m_day_of_week_id === dayOfWeekId &&
+                  v.m_time_id == timeId
+              );
+              if (course_monitors_filter.length > 0) {
                 if (
-                  this.course_order.option.package_id ===
-                  course_monitors_filter[0].m_package_id
+                  this.course_order.students.length +
+                    course_monitors_filter[0].m_current_student <=
+                  course_monitors_filter[0].m_maximum_student
                 ) {
-                  return course_monitors_filter[0]?.m_status;
+                  if (
+                    this.course_order.option.package_id ===
+                    course_monitors_filter[0].m_package_id
+                  ) {
+                    return course_monitors_filter[0]?.m_status;
+                  } else {
+                    return "Close";
+                  }
                 } else {
                   return "Close";
                 }
               } else {
-                return "Close";
+                return "Open";
               }
-            } else {
-              return "Open";
             }
           }
         }
+       
       } else {
         return "Open";
       }
@@ -1606,6 +1633,7 @@ export default {
                   student.tel = this.user_student_data[0].mobileNo;
                   student.username = username;
                   student.account_id = this.user_student_data[0].userOneId;
+                  student.IsWaraphat = this.user_student_data[0].IsWaraphat
                 } else {
                   if (student) {
                     student.firstname_en = "";

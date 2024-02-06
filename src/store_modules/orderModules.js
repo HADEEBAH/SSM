@@ -1160,7 +1160,6 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // let localhost = "http://192.168.73.12:3002"
         let updateStartDate = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/update-orderid/${paymnet_data.orderId}`, {}, config)
         if (updateStartDate.data.statusCode == 200) {
           let payment_payload = {
@@ -1396,47 +1395,135 @@ const orderModules = {
     async CreateReserveCourse(context, { course_data }) {
       try {
         let count = 0;
-        for await (let student of course_data.students) {
-          let payload = {
-            studentId: student.account_id,
-            coursePackageOptionId: null,
-            dayOfWeekId: null,
-            timeId: null,
-            courseId: course_data.course_id,
-            parentId: null,
-            coachId: course_data.coach_id ? course_data.coach_id : null,
-            orderTmpId: null,
-          };
-          if (course_data.course_type_id === "CT_1") {
-            payload.dayOfWeekId = course_data?.time?.timeData
-              ? course_data.time.timeData.filter(
-                (v) => v.coach_id === course_data.coach_id
-              )[0].dayOfWeekId
-              : course_data.time.dayOfWeekId;
-            payload.coursePackageOptionId =
-              course_data.option.course_package_option_id;
-            payload.timeId = course_data?.time?.timeData
-              ? course_data.time.timeData.filter(
-                (v) => v.coach_id === course_data.coach_id
-              )[0].timeId
-              : course_data.time.timeId;
-          }
-          let config = {
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-              "Content-type": "Application/json",
-              Authorization: `Bearer ${VueCookie.get("token")}`,
-            },
-          };
-          let { data } = await axios.post(
-            `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
-            payload,
-            config
-          );
-          if (data.statusCode === 201) {
-            count = count + 1;
-          } else {
-            throw { error: data.data };
+        let CheckStudentIsWaraphat = true
+        if(course_data.students.some(v => !v.IsWaraphat)){
+          CheckStudentIsWaraphat = false
+          Swal.fire({
+            icon: "question",
+            text: VueI18n.t("because there are students who are not in the school system, is it allowed to save student information?"),
+            showDenyButton: false,
+            showCancelButton: true,
+            confirmButtonText: VueI18n.t("agree"),
+            cancelButtonText: VueI18n.t("no"),
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              CheckStudentIsWaraphat = true
+            }else{
+              course_data.students = course_data.students.filter(v => v.IsWaraphat === true)
+              CheckStudentIsWaraphat = true
+            }
+            if(CheckStudentIsWaraphat){
+              for await (let student of course_data.students) {
+                let payload = {
+                  studentId: student.account_id,
+                  coursePackageOptionId: null,
+                  dayOfWeekId: null,
+                  timeId: null,
+                  courseId: course_data.course_id,
+                  parentId: null,
+                  coachId: course_data.coach_id ? course_data.coach_id : null,
+                  orderTmpId: null,
+                  IsWaraphat : student.IsWaraphat,
+                  username : student.username,
+                };
+                if (course_data.course_type_id === "CT_1") {
+                  payload.dayOfWeekId = course_data?.time?.timeData
+                    ? course_data.time.timeData.filter(
+                      (v) => v.coach_id === course_data.coach_id
+                    )[0].dayOfWeekId
+                    : course_data.time.dayOfWeekId;
+                  payload.coursePackageOptionId =
+                    course_data.option.course_package_option_id;
+                  payload.timeId = course_data?.time?.timeData
+                    ? course_data.time.timeData.filter(
+                      (v) => v.coach_id === course_data.coach_id
+                    )[0].timeId
+                    : course_data.time.timeId;
+                }
+                let config = {
+                  headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Content-type": "Application/json",
+                    Authorization: `Bearer ${VueCookie.get("token")}`,
+                  },
+                };
+                let { data } = await axios.post(
+                  `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
+                  payload,
+                  config
+                );
+                if (data.statusCode === 201) {
+                  count = count + 1;
+                } else {
+                  throw { error: data.data };
+                }
+              }
+
+              if (count === course_data.students.length) {
+                await Swal.fire({
+                  icon: "success",
+                  title: VueI18n.t("succeed"),
+                  text: VueI18n.t(
+                    "successfully reserved a course Staff will contact you later"
+                  ),
+                  showDenyButton: false,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                  timer: 3000,
+                  timerProgressBar: true,
+                }).finally(() => {
+                  router.replace({ name: "UserKingdom" });
+                });
+              }
+            }
+          })
+        }else{
+          if(CheckStudentIsWaraphat){
+            for await (let student of course_data.students) {
+              let payload = {
+                studentId: student.account_id,
+                coursePackageOptionId: null,
+                dayOfWeekId: null,
+                timeId: null,
+                courseId: course_data.course_id,
+                parentId: null,
+                coachId: course_data.coach_id ? course_data.coach_id : null,
+                orderTmpId: null,
+                IsWaraphat : student.IsWaraphat,
+                username : student.username,
+              };
+              if (course_data.course_type_id === "CT_1") {
+                payload.dayOfWeekId = course_data?.time?.timeData
+                  ? course_data.time.timeData.filter(
+                    (v) => v.coach_id === course_data.coach_id
+                  )[0].dayOfWeekId
+                  : course_data.time.dayOfWeekId;
+                payload.coursePackageOptionId =
+                  course_data.option.course_package_option_id;
+                payload.timeId = course_data?.time?.timeData
+                  ? course_data.time.timeData.filter(
+                    (v) => v.coach_id === course_data.coach_id
+                  )[0].timeId
+                  : course_data.time.timeId;
+              }
+              let config = {
+                headers: {
+                  "Access-Control-Allow-Origin": "*",
+                  "Content-type": "Application/json",
+                  Authorization: `Bearer ${VueCookie.get("token")}`,
+                },
+              };
+              let { data } = await axios.post(
+                `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
+                payload,
+                config
+              );
+              if (data.statusCode === 201) {
+                count = count + 1;
+              } else {
+                throw { error: data.data };
+              }
+            }
           }
         }
         if (count === course_data.students.length) {

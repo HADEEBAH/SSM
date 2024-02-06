@@ -211,6 +211,13 @@ export default {
         color: "#f1c232",
       },
       {
+        label: "เปิดให้จองคอร์ส",
+        label_en: "open for reservation courses",
+        value: "Reserve",
+        icon: "mdi-file-document-edit-outline",
+        color: "#f1c232",
+      },
+      {
         label: "ปิดคอร์ส",
         label_en: "Closed",
         value: "InActive",
