@@ -804,6 +804,106 @@
         </v-card-text>
       </template>
     </v-card>
+    <!-- RESERVE -->
+    <v-card flat>
+      <headerCard :title="$t('reservations')"></headerCard>
+      <v-card-text class="py-0">
+        <v-divider class="mb-3"></v-divider>
+        <v-row dense>
+          <v-col class="py-0">
+            <v-checkbox 
+              v-model="course_data.reservation" 
+              :disabled="disable"
+              @change="ChengeReservation($event)" 
+              :label="$t('course reservations open before the class start date')"
+              color="#ff6b81"
+            >
+            </v-checkbox>
+          </v-col>
+        </v-row>
+        <v-row v-if="course_data.reservation" dense >
+          <v-col cols="12">
+            <label-custom required :text="$t('reservation date range')"></label-custom>
+          </v-col>
+          <v-col cols="12" sm="6" class="pt-0">
+            <v-menu
+              v-model="course_data.menu_reservation_start_date"
+              :disabled="disable"
+              :close-on-content-click="false"
+              transition="scale-transition"
+              offset-y
+              min-width="auto"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="course_data.reservation_start_date_str"
+                  dense
+                  :disabled="disable"
+                  :outlined="!disable"
+                  :filled="disable"
+                  readonly
+                  :placeholder="$t('specify the reservation date range')"
+                  v-bind="attrs"
+                  v-on="on"
+                  color="#ff6b81"
+                >
+                  <template v-slot:append>
+                    <v-icon
+                      :color="course_data.reservation_start_date ? '#FF6B81' : ''"
+                      >mdi-calendar</v-icon
+                    >
+                  </template>
+                </v-text-field>
+              </template>
+              <v-date-picker
+                :min="today.toISOString()"
+                v-model="course_data.reservation_start_date"
+                @input="inputDate($event, 'reservation start')"
+                locale="th-TH"
+              ></v-date-picker>
+            </v-menu>
+          </v-col>
+          <v-col cols="12" sm="6" class="pt-0">
+            <v-menu
+              v-model="course_data.menu_reservation_end_date"
+              :close-on-content-click="false"
+              :disabled="disable"
+              transition="scale-transition"
+              offset-y
+              min-width="auto"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="course_data.reservation_end_date_str"
+                  :disabled="disable"
+                  :outlined="!disable"
+                  :filled="disable"
+                  dense
+                  readonly
+                  :placeholder="$t('specify the reservation date range')"
+                  v-bind="attrs"
+                  v-on="on"
+                  color="#ff6b81"
+                >
+                  <template v-slot:append>
+                    <v-icon
+                      :color="course_data.reservation_end_date ? '#FF6B81' : ''"
+                      >mdi-calendar</v-icon
+                    >
+                  </template>
+                </v-text-field>
+              </template>
+              <v-date-picker
+                :min="course_data.reservation_start_date ? course_data.reservation_start_date : today.toISOString()"
+                v-model="course_data.reservation_end_date"
+                @input="inputDate($event, 'reservation end')"
+                locale="th-TH"
+              ></v-date-picker>
+            </v-menu>
+          </v-col>
+        </v-row>
+      </v-card-text>
+    </v-card> 
   </div>
 </template>
 
@@ -1010,6 +1110,16 @@ export default {
     ...mapActions({
       ChangeCourseData: "CourseModules/ChangeCourseData",
     }),
+    ChengeReservation(e){
+      if(!e){
+        this.course_data.menu_reservation_start_date = false
+        this.course_data.menu_reservation_end_date = false
+        this.course_data.reservation_start_date_str = ""
+        this.course_data.reservation_start_date = ""
+        this.course_data.reservation_end_date_str = ""
+        this.course_data.reservation_end_date = ""
+      }
+    },
     getErrorMessage(text, language) {
       // Check the pattern based on the language
       const thaiPattern =
@@ -1158,6 +1268,20 @@ export default {
     },
     inputDate(e, data) {
       switch (data) {
+        case "reservation start":
+          this.course_data.menu_reservation_start_date = false
+          this.course_data.reservation_start_date_str = dateFormatter(
+            e,
+            "DD MMT YYYYT"
+          );
+          break;
+        case "reservation end":
+          this.course_data.menu_reservation_end_date = false
+          this.course_data.reservation_end_date_str = dateFormatter(
+            e,
+            "DD MMT YYYYT"
+          );
+          break; 
         case "course open":
           this.course_data.course_open_date_str = dateFormatter(
             e,

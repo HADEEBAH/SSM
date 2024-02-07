@@ -335,12 +335,14 @@ export default {
     },
 
     GerPeriod(period) {
-      let str = period.toString();
-      let part_period = str.split(".");
-      if (part_period.length > 1) {
-        return period.toLocaleString("en-US", { minimumFractionDigits: 2 });
-      } else {
-        return period;
+      if(period){
+        let str = period.toString();
+        let part_period = str.split(".");
+        if (part_period.length > 1) {
+          return period.toLocaleString("en-US", { minimumFractionDigits: 2 });
+        } else {
+          return period;
+        }
       }
     },
     searchCourse(event) {
@@ -361,11 +363,6 @@ export default {
         }
       });
     },
-    // sumCouserPotential(courseData) {
-    //   if (!this.course_potential) {
-    //     this.GetPotential({ course_id: courseData.course_id });
-    //   }
-    // },
     CutWold(course) {
       return course.course_detail.slice(0, 122) + "...";
     },

@@ -576,11 +576,8 @@
                                                   : `${student.firstNameEn} ${student.lastNameEn}`
                                                 }}
                                                 </v-col>
-                                                <v-col cols="4" align="center" v-if="course_data.course_type_id ===
-                                                    'CT_2'
-                                                    ">{{
-      `${date.startDate} - ${date.endDate}`
-    }}
+                                                <v-col cols="4" align="center" v-if="course_data.course_type_id ==='CT_2'">
+                                                  {{`${date.startDate} - ${date.endDate}`}}
                                                 </v-col>
                                                 <v-col cols="2" align="center" v-else>{{
                                                   $i18n.locale == "th"
@@ -597,18 +594,9 @@
                                                   }}
                                                 </v-col>
                                                 <v-col cols>
-                                                  <v-chip align="center" class="font-bold" :color="check_in_status_options.filter(
-                                                    (v) => v.value === student.status
-                                                  )[0].bg_color
-                                                    " :style="`color:${check_in_status_options.filter(
-    (v) => v.value === student.status
-  )[0].color
-    }`" v-if="check_in_status_options.filter(
-        (v) => v.value === student.status
-      )?.length > 0
-      ">{{
-      $t(student.status)
-    }}
+                                                  <v-chip align="center" class="font-bold" :color="check_in_status_options.filter((v) => v.value === student.status)[0].bg_color
+                                                    " :style="`color:${check_in_status_options.filter((v) => v.value === student.status)[0].color}`" v-if="check_in_status_options.filter((v) => v.value === student.status)?.length > 0">
+                                                    {{$t(student.status)}}
                                                   </v-chip>
                                                 </v-col>
                                                 <v-col cols="4">
@@ -776,14 +764,45 @@
                       {{ genDate(item.createdDate) }}
                     </template>
                     <template v-slot:[`item.status`]="{ item }">
-                      <v-chip class="w-full flex justify-center" label :text-color="item.status === 'waiting' ? '#58A144' : '#FCC419'
+                      <!-- <v-chip class="w-full flex justify-center" label :text-color="item.status === 'waiting' ? '#58A144' : '#FCC419'
                         " :color="item.status === 'waiting' ? '#F0F9EE' : '#FFF9E8'
                         ">{{
                         item.status === "waiting"
                         ? $t("waiting for contact")
                         : item.status
                       }}
-                      </v-chip>
+                      </v-chip> -->
+                      <v-select
+                        v-model="item.status"
+                        dense
+                        outlined
+                        hide-details
+                        item-color="pink"
+                        :items="status"
+                        item-text="label"
+                        item-value="value"
+                        @change="updateReserve(item.reserveId, item)"
+                      >
+                        <template v-slot:selection="{ item }">
+                          <v-list-item-title>
+                            <v-icon :color="item.color">
+                              {{ item.icon }}
+                            </v-icon>
+                            {{ item.label }}
+                          </v-list-item-title>
+                        </template>
+
+                        <template v-slot:item="{ props, item }">
+                          <v-list-item-avatar v-bind="props">
+                            <v-icon :color="item.color">
+                              {{ item.icon }}
+                            </v-icon>
+                          </v-list-item-avatar>
+                          <v-list-item-title v-bind="props">
+                            {{ item.label }}
+                          </v-list-item-title>
+                        </template>
+                      </v-select>
                     </template>
                   </v-data-table>
                 </v-tab-item>
@@ -1544,6 +1563,28 @@ export default {
         { text: this.$t("course details"), to: "" },
       ];
     },
+    status() {
+      return [
+        {
+          label: this.$t("waiting"),
+          value: "waiting",
+          icon: "mdi-timer-sand-complete",
+          color: "#f1c232",
+        },
+        {
+          label: this.$t("confirmed"),
+          value: "contacted",
+          icon: "mdi-check-circle",
+          color: "green",
+        },
+        {
+          label: this.$t("canceled"),
+          value: "cancel",
+          icon: "mdi-close-circle",
+          color: "red",
+        },
+      ];
+    },
     column() {
       return [
         {
@@ -1619,8 +1660,43 @@ export default {
       GetStudentPotentialByCoach: "CourseModules/GetStudentPotentialByCoach",
       RemovePrivilageByCourseID: "CourseModules/RemovePrivilageByCourseID",
       ExportStudentList: "CourseModules/ExportStudentList",
-      ExportEndStudentList: "CourseModules/ExportEndStudentList"
+      ExportEndStudentList: "CourseModules/ExportEndStudentList",
+      UpdateStatusReserveAdmin : "reserveCourseModules/UpdateStatusReserveAdmin"
     }),
+    updateReserve(reserve_id, reserve_data) {
+      if( this.course_data.course_status === "Active" ){
+        console.log("updateReserve",reserve_id, reserve_data, this.course_data )
+        Swal.fire({
+          icon: "question",
+          title: this.$t("do you want to change your status?"),
+          showDenyButton: false,
+          showCancelButton: true,
+          cancelButtonText: this.$t("no"),
+          confirmButtonText: this.$t("agree"),  
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            this.UpdateStatusReserveAdmin({
+              reserve_id: reserve_id,
+              reserve_data: reserve_data,
+            });
+          }
+        })
+      }else{
+        Swal.fire({
+          icon: "error",
+          title: this.$t("something went wrong"),
+          text: this.$t("please open a course"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
+        }).then(()=>{
+          this.GetStudentReserveByCourseId({
+            course_id: this.$route.params.course_id,
+          });
+        })
+      }
+    },
     DisableButtonExport() {
       return this.search_student_potential ? !this.search_student_potential_datas.length > 0 : !this.coach_list.filter((v) => v.studentPotentialArr?.length > 0).length > 0
     },

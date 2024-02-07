@@ -5,6 +5,9 @@ import router from "@/router";
 import VueCookie from "vue-cookie"
 import VueI18n from "../i18n";
 var XLSX = require("xlsx");
+import {
+  dateFormatter,
+} from "@/functions/functions";
 function dayOfWeekArray(day) {
   // console.log(day)
   let days = day
@@ -46,6 +49,13 @@ const CourseModules = {
     courses_is_loading: false,
     course_is_loading: false,
     course_data: {
+      reservation : false,
+      menu_reservation_start_date : "",
+      menu_reservation_end_date : "",
+      reservation_start_date_str : "",
+      reservation_start_date : "",
+      reservation_end_date_str : "",
+      reservation_end_date : "",
       course_id: "",
       course_type_id: "CT_1",
       course_name_th: "",
@@ -225,6 +235,13 @@ const CourseModules = {
     },
     ResetCourse(state) {
       state.course_data = {
+        reservation : false,
+        menu_reservation_start_date : "",
+        menu_reservation_end_date : "",
+        reservation_start_date_str : "",
+        reservation_start_date : "",
+        reservation_end_date_str : "",
+        reservation_end_date : "",
         course_id: "",
         course_type_id: "CT_1",
         course_name_th: "",
@@ -576,7 +593,7 @@ const CourseModules = {
     // RESERVE :: STUDENT LIST BY COURSE
     async GetStudentReserveByCourseId(context, { course_id }) {
       try {
-        let config = {
+        let config = {  
           headers: {
             "Access-Control-Allow-Origin": "*",
             "Content-type": "Application/json",
@@ -602,6 +619,9 @@ const CourseModules = {
           }
         }
         let payload = {
+          "reservation":course_data.reservation,
+          "reservationEndDate":course_data.reservation_end_date,
+          "reservationStartDate":course_data.reservation_start_date,
           "courseId": course_data.course_id,
           "courseTypeId": course_data.course_type_id,
           "type": course_data.type,
@@ -1171,12 +1191,20 @@ const CourseModules = {
             }
           }
           let payload = {
+            reservation :  data.data.reservationEndDate ? true : false,
+            menu_reservation_start_date : "",
+            menu_reservation_end_date : "",
+            reservation_start_date_str : data.data.reservationStartDate ? dateFormatter( data.data.reservationStartDate,"DD MMT YYYYT") : "",
+            reservation_start_date : data.data.reservationStartDate,
+            reservation_end_date_str : data.data.reservationEndDate ? dateFormatter( data.data.reservationEndDate,"DD MMT YYYYT") : "",
+            reservation_end_date : data.data.reservationEndDate,
             course_img_privilege: data.data.courseImgPrivilege ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.courseImgPrivilege}` : null,
             course_id: data.data.courseId,
             course_type_id: data.data.courseTypeId,
             course_type: data.data.courseTypeName,
             course_name_th: data.data.courseNameTh,
             course_name_en: data.data.courseNameEn,
+            course_status : data.data.courseStatus,
             course_img: data.data.courseImg ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.courseImg}` : "",
             category_id: data.data.categoryId,
             category_name_th: data.data.categoryNameTh,
@@ -1474,6 +1502,9 @@ const CourseModules = {
       try {
         let course = context.state.course_data
         let payload = {
+          "reservation":course.reservation,
+          "reservationEndDate":course.reservation_end_date,
+          "reservationStartDate":course.reservation_start_date,
           "categoryId": course.category_id,
           "courseTypeId": course.course_type_id,
           "courseImg": "",
@@ -1568,7 +1599,7 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let { data } = await axios.post(process.env.VUE_APP_URL + "/api/v1/course/create", data_payload, config)
+        let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/course/create`, data_payload, config)
         if (data.statusCode === 201) {
           context.commit("SetCourseIsLoading", false)
           router.replace({ name: "CourseList" })
@@ -1593,12 +1624,11 @@ const CourseModules = {
     // COURSE :: FILTER
     async GetCoursesFilter(context, { category_id, status, course_type_id, limit, page }) {
       if (page == 1) {
-
         context.commit("SetCoursesIsLoading", true)
       }
       try {
         if (status) {
-          status = "Active"
+          status = ["Active","Reserve"]
         }
         if (!course_type_id) {
           course_type_id = 'CT_1'
@@ -1642,18 +1672,6 @@ const CourseModules = {
       }
 
     },
-    // COURSE :: POTENTIAL
-    // async GetPotential(context, { course_id }) {
-    //   try {
-    //     let endpoint = `${process.env.VUE_APP_URL}/api/v1/coachmanagement/course/potential/${course_id}`
-    //     let { data } = await axios.get(endpoint)
-    //     if (data.statusCode === 200) {
-    //       context.commit("SetCoursePotential", data.data)
-    //     }
-    //   } catch (error) {
-    //     console.log(error)
-    //   }
-    // },
     // COURSE :: Delete Day Of Week
     async DeleteDayOfWeek(context, { day_of_week_id }) {
       try {
