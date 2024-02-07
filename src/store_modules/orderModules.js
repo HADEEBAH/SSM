@@ -1396,7 +1396,7 @@ const orderModules = {
       try {
         let count = 0;
         let CheckStudentIsWaraphat = true
-        if(course_data.students.some(v => !v.IsWaraphat)){
+        if(course_data.students.some(v => !v.IsWaraphat && v.is_other  )){
           CheckStudentIsWaraphat = false
           Swal.fire({
             icon: "question",
