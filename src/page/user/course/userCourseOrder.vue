@@ -1202,7 +1202,6 @@ export default {
         const today = moment(new Date()).format("YYYY-MM-DD")
         if(!moment(today).isBetween(this.course_data.reservation_start_date, this.course_data.reservation_end_date, null, '[]')){
           let validate_reserve = [];
-          console.log("reserve_list => ",this.reserve_list)
           if (this.course_order.students.length > 0) {
             for (let student of this.course_order.students) {
               validate_reserve.push(

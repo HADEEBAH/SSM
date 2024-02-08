@@ -270,6 +270,15 @@
                     @click="show_dialog_export_student = true">
                     {{ $t("export") }}
                   </v-btn>
+                  <v-btn 
+                    v-if="student_tab == 1" 
+                    depressed 
+                    color="#ff6b81"
+                    :disabled="!student_reserve_list.length > 0"
+                    :dark="student_reserve_list.length > 0" 
+                    @click="show_dialog_export_reserve_student = true">
+                    {{ $t("export") }}
+                  </v-btn>
                   <v-btn v-if="student_tab == 2" depressed color="#ff6b81" :dark="!DisableButtonExport()"
                     :disabled="DisableButtonExport()" :loading="export_is_loading"
                     @click="show_dialog_export_end_student = true">
@@ -726,6 +735,20 @@
                 </v-tab-item>
                 <!-- นักเรียนจองคิว -->
                 <v-tab-item valus="student booking">
+                  <v-row dense v-if="course_data.reservation">
+                    <v-col class="pr-3" cols="12" align="right">
+                      <v-btn 
+                        @click="UpdateReserveAll()"
+                        class="mb-3" 
+                        dense 
+                        dark 
+                        depressed 
+                        color="#ff6b81"
+                      >
+                         {{ $t("all contacted") }}
+                      </v-btn>
+                    </v-col>
+                  </v-row>
                   <v-data-table class="header-table rounded-lg" :headers="column" :items="student_reserve_list">
                     <template v-slot:no-data>
                       <v-row dense>
@@ -764,15 +787,15 @@
                       {{ genDate(item.createdDate) }}
                     </template>
                     <template v-slot:[`item.status`]="{ item }">
-                      <!-- <v-chip class="w-full flex justify-center" label :text-color="item.status === 'waiting' ? '#58A144' : '#FCC419'
-                        " :color="item.status === 'waiting' ? '#F0F9EE' : '#FFF9E8'
+                      <v-chip class="w-full flex justify-center" label :text-color="item.status === 'contacted' ? '#58A144' : '#FCC419'
+                        " :color="item.status === 'contacted' ? '#F0F9EE' : '#FFF9E8'
                         ">{{
                         item.status === "waiting"
                         ? $t("waiting for contact")
-                        : item.status
+                        : $t(item.status)
                       }}
-                      </v-chip> -->
-                      <v-select
+                      </v-chip>
+                      <!-- <v-select
                         v-model="item.status"
                         dense
                         outlined
@@ -802,7 +825,7 @@
                             {{ item.label }}
                           </v-list-item-title>
                         </template>
-                      </v-select>
+                      </v-select> -->
                     </template>
                   </v-data-table>
                 </v-tab-item>
@@ -1401,6 +1424,40 @@
           </v-card-text>
         </v-card>
       </v-dialog>
+      <!-- EXPORT : RESERVE -->
+      <v-dialog width="40vw" v-if="show_dialog_export_reserve_student" v-model="show_dialog_export_reserve_student">
+        <v-card>
+          <v-card-title>
+            <v-row>
+              <v-col>
+                {{ $t('language') }}
+              </v-col>
+              <v-col cols=auto>
+                <v-btn icon @click="show_dialog_export_reserve_student = false">
+                  <v-icon color="#ff6b81">mdi-close</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card-title>
+          <v-card-text>
+            <v-row>
+              <v-col class="text-center">
+                <v-radio-group v-model="exportStudentLang" row>
+                  <v-radio :label="$t('thai')" value="th"></v-radio>
+                  <v-radio :label="$t('english')" value="en"></v-radio>
+                </v-radio-group>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <v-btn class="w-full" depressed color="#ff6b81" dark @click="exportStudentsReserveCourse(exportStudentLang)">
+                  {{ $t('export') }}
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
     </v-container>
   </v-app>
 </template>
@@ -1511,6 +1568,7 @@ export default {
     select_export_end: false,
     show_dialog_export_student: false,
     show_dialog_export_end_student: false,
+    show_dialog_export_reserve_student : false,
   }),
   mounted() { },
   watch: {
@@ -1661,11 +1719,48 @@ export default {
       RemovePrivilageByCourseID: "CourseModules/RemovePrivilageByCourseID",
       ExportStudentList: "CourseModules/ExportStudentList",
       ExportEndStudentList: "CourseModules/ExportEndStudentList",
-      UpdateStatusReserveAdmin : "reserveCourseModules/UpdateStatusReserveAdmin"
+      ExportReserveCourse : "CourseModules/ExportReserveCourse",
+      UpdateStatusReserveAdmin : "reserveCourseModules/UpdateStatusReserveAdmin",
+      UpdateAllStatusReserve : "reserveCourseModules/UpdateAllStatusReserve",
     }),
+    UpdateReserveAll(){
+      if( this.course_data.course_status === "Active" ){
+        Swal.fire({
+          icon: "question",
+          title: this.$t("do you want to change your status?"),
+          showDenyButton: false,
+          showCancelButton: true,
+          cancelButtonText: this.$t("no"),
+          confirmButtonText: this.$t("agree"),  
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            await this.UpdateAllStatusReserve({
+              courseId : this.$route.params.course_id,
+            })
+            await this.GetStudentReserveByCourseId({
+              course_id: this.$route.params.course_id,
+            });
+          }
+        })
+      }else{
+        Swal.fire({
+          icon: "error",
+          title: this.$t("something went wrong"),
+          text: this.$t("please open a course"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
+        }).then(()=>{
+          this.GetStudentReserveByCourseId({
+            course_id: this.$route.params.course_id,
+          });
+        })
+      }
+        
+    },
     updateReserve(reserve_id, reserve_data) {
       if( this.course_data.course_status === "Active" ){
-        console.log("updateReserve",reserve_id, reserve_data, this.course_data )
         Swal.fire({
           icon: "question",
           title: this.$t("do you want to change your status?"),
@@ -1851,6 +1946,13 @@ export default {
         course_type_id: this.course_data.course_type_id,
         lang
       });
+    },
+    //EXPORT STUDENT RESERVE
+    exportStudentsReserveCourse(lang){
+      this.ExportReserveCourse({
+        studentReserveList : this.student_reserve_list,
+        lang
+      })
     },
     //EXPORT STUDENT END COURSES
     exportStudentsEndCourse(lang) {
