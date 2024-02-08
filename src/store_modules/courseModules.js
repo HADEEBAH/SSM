@@ -8,18 +8,45 @@ var XLSX = require("xlsx");
 import {
   dateFormatter,
 } from "@/functions/functions";
-function dayOfWeekArray(day) {
+function dayOfWeekArray(day, lang) {
   // console.log(day)
   let days = day
-  const weekdays = [
-    VueI18n.t("sunday"),
-    VueI18n.t("monday"),
-    VueI18n.t("tuesday"),
-    VueI18n.t("wednesday"),
-    VueI18n.t("thursday"),
-    VueI18n.t("friday"),
-    VueI18n.t("saturday"),
-  ];
+  let weekdays = []
+  if(lang) {
+    if(lang == "en"){
+      weekdays = [
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
+      ];
+    }else{
+      weekdays = [
+        "อาทิตย์",
+        "จันทร์",
+        "อังคาร",
+        "พุธ",
+        "พฤหัสบดี",
+        "ศุกร์",
+        "เสาร์",
+      ];
+    }
+  }else{
+    weekdays = [
+      VueI18n.t("sunday"),
+      VueI18n.t("monday"),
+      VueI18n.t("tuesday"),
+      VueI18n.t("wednesday"),
+      VueI18n.t("thursday"),
+      VueI18n.t("friday"),
+      VueI18n.t("saturday"),
+    ];
+  }
+  
+  
   days.sort();
   let ranges = [];
   if (days[0]) {
@@ -436,7 +463,6 @@ const CourseModules = {
           }
         }
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course/${course_id}`, config)
-        // let { data } = await axios.get(`http://localhost:3000/api/v1/schedule/manage-course/${course_id}`,config)
         if (data.statusCode === 200) {
           let datesList = []
           for await (let coach of data.data) {
@@ -549,7 +575,6 @@ const CourseModules = {
             context.commit("SetNoChackInStudentList", [])
           } else {
             context.commit("SetStudentList", [])
-            // const loaclhost = "http://localhost:3000"
             let scheduleStudent = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course-student/${course_id}/${date}?starTime=${start_time}&endTime=${end_time}&coachId=${coach_id}`, config)
             if (scheduleStudent.data.statusCode == 200) {
               let scheduleStudentData = scheduleStudent.data.data.filter(v => v.endTime == end_time && v.startTime == start_time && v.coachId == coach_id)         
@@ -2007,7 +2032,51 @@ const CourseModules = {
           context.commit("SetExportIsLoading",false)
           console.log(error)
         }
+    },
+    // EXPORT STUDENT RESEVE
+    async ExportReserveCourse(context, { studentReserveList, lang }){
+      try{
+        let report = []
+        for await (const student of studentReserveList){
+          const dowName =  student.dayOfWeekName.split(",")
+          const statusText = [
+            { th : "รอกสนติดต่อ" ,en : "waiting" },
+            { th : "ติดต่อแล้ว" ,en : "contacted" },
+            { th : "ยกเลิกการจอง" ,en : "cancel" },
+          ]
+          report.push({
+            [lang == 'en'? "date":"วันที่"] : moment(student?.createdDate).format("DD-MM-YYYY"),
+            [lang == 'en'? "status":"สถานะ"]: lang == 'en' ? statusText.find(v => student.status == v.en).en : statusText.find(v => student.status == v.en).th,
+            [lang == 'en'? "course name":"ชื่อคอร์ส"]: lang == 'en' ? student.courseNameEn : student.courseNameTh,
+            [lang == 'en'? "student name":"ชื่อนักเรียน"]: lang == 'en' ? `${student?.firsNameEn} ${student?.lastNameEn}` : `${student?.firstNameTh} ${student?.lastNameTh}`,
+            [lang == 'en'? "tel":"เบอร์โทรศัพท์"]: `${student?.tel}`,
+            [lang == 'en'? "coach name":"ชื่อโค้ช"]: lang == 'en' ? `${student?.coachFirsNameEn} ${student?.coachLastNameEn}` : `${student?.coachFirstNameTh} ${student?.coachLastNameTh}`,
+            [lang == 'en'? "package":"แพ็คเกจ"]:  lang == 'en' ? `${student.packageName}-${student.optionNameEn}` : `${student.packageName}-${student.optionName}`,
+            [lang == 'en'? "date-time":"วัน-เวลา"]:  lang == 'en' ? `${dayOfWeekArray(dowName, lang)}(${student.startTime}-${student.endTime})` : `${dayOfWeekArray(dowName, lang)}(${student.startTime}-${student.endTime})`,
+          })
+        }
+        if(report.length > 0){
+          if(report.length === studentReserveList?.length){
+            var workbook = XLSX.utils.book_new();
+            var worksheet = XLSX.utils.json_to_sheet(report);
+            XLSX.utils.book_append_sheet(workbook, worksheet, "sheet 1");
+            var excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+            var blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+            var url = URL.createObjectURL(blob);
+            var link = document.createElement("a");
+            link.href = url;
+            link.download = `รายชื่อนักเรียนที่จอง.xlsx`;
+            link.click();
+            URL.revokeObjectURL(url);
+          }
+          context.commit("SetExportIsLoading",false)
+        }else{
+          context.commit("SetExportIsLoading",false)
+        }
+      }catch(error){
+        console.log(error)
       }
+    },
   },
   getters: {
     export_is_loading(state){
