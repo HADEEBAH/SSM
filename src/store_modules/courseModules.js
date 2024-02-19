@@ -1418,22 +1418,24 @@ const CourseModules = {
                     } else {
                       let times = []
                       for await (let time of coach_date.times) {
-                        times.push({
-                          start: time.start,
-                          end: time.end,
-                          timeData: []
-                        })
-                        for await (let t of times) {
-                          if (t.timeData.filter(v => v.courseCoachId == coach_date.courseCoachId).length === 0) {
-                            t.timeData.push({
-                              maximumStudent: time.maximumStudent,
-                              dayOfWeekId: time.dayOfWeekId,
-                              timeId: time.timeId,
-                              courseCoachId: coach_date.courseCoachId,
-                              coach_name: data.data.coachs.filter(v => v.courseCoachId === coach_date.courseCoachId)[0].coachFirstNameTh + " " + data.data.coachs.filter(v => v.courseCoachId === coach_date.courseCoachId)[0].coachLastNameTh,
-                              coach_name_en: data.data.coachs.filter(v => v.courseCoachId === coach_date.courseCoachId)[0].coachFirstNameEn + " " + data.data.coachs.filter(v => v.courseCoachId === coach_date.courseCoachId)[0].coachLastNameEn,
-                              coach_id: data.data.coachs.filter(v => v.courseCoachId === coach_date.courseCoachId)[0].accountId
-                            })
+                        if(!day.times.some(v => v.start === time.start && v.end === time.end)){
+                          times.push({
+                            start: time.start,
+                            end: time.end,
+                            timeData: []
+                          })
+                          for await (let t of times) {
+                            if (t.timeData.filter(v => v.courseCoachId == coach_date.courseCoachId).length === 0) {
+                              t.timeData.push({
+                                maximumStudent: time.maximumStudent,
+                                dayOfWeekId: time.dayOfWeekId,
+                                timeId: time.timeId,
+                                courseCoachId: coach_date.courseCoachId,
+                                coach_name: data.data.coachs.filter(v => v.courseCoachId === coach_date.courseCoachId)[0].coachFirstNameTh + " " + data.data.coachs.filter(v => v.courseCoachId === coach_date.courseCoachId)[0].coachLastNameTh,
+                                coach_name_en: data.data.coachs.filter(v => v.courseCoachId === coach_date.courseCoachId)[0].coachFirstNameEn + " " + data.data.coachs.filter(v => v.courseCoachId === coach_date.courseCoachId)[0].coachLastNameEn,
+                                coach_id: data.data.coachs.filter(v => v.courseCoachId === coach_date.courseCoachId)[0].accountId
+                              })
+                            }
                           }
                         }
                       }
