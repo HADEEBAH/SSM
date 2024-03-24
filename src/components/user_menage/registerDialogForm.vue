@@ -557,10 +557,11 @@ export default {
       return [
         (val) =>
           (val || "").length > 7 ||
-          this.$t("please enter a password that is at least 8 characters long"),
-        (val) =>
-          !/[ ]/g.test(val) ||
-          this.$t("password must not contain special characters"),
+          `${this.$t('password must contain at least one lowercase letter, one uppercase letter, one number, and one special character')}\n
+          ${this.$t("please enter a password that is at least 8 characters long")}
+          `,
+        (v) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/.test(v) || 
+          this.$t('password must contain at least one lowercase letter, one uppercase letter, one number, and one special character'),
       ];
     },
   },

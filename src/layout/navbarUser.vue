@@ -376,25 +376,72 @@
         </v-row>
       </v-container>
     </v-footer>
+    <!-- DIALOG :: SATISFACTION -->
+    <v-dialog v-model="dialogSatisfaction" class="rounded-xl" max-width="460">
+      <v-card class="pa-2">
+        <v-row>
+          <v-col cols="12" align="right">
+            <v-btn icon @click="closeDialogSatisfaction()">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-card-text>
+          <v-row dense>
+            <v-col class="text-xl text-[#ff6b81] text-center">
+              <strong>{{ $t('evaluate satisfaction with using the system') }}</strong>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col>
+              <span>{{ $t('satisfaction score') }}</span>
+              <v-rating
+                v-model="satisfaction.rate"
+                background-color="grey lighten-2"
+                color="warning"
+                hover
+                length="5"
+                size="30"
+              ></v-rating>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col>
+              <span>{{ $t('suggestions') }}</span>
+              <v-textarea v-model="satisfaction.remark" outlined :placeholder="$t('enter suggestions')"></v-textarea>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col align="right">
+              <v-btn outlined color="#ff6b81" @click="closeDialogSatisfaction()">{{$t('cancel')}}</v-btn>
+            </v-col>
+            <v-col cols="auto">
+              <v-btn depressed :dark="!disableSendSatisfaction" :disabled="disableSendSatisfaction" color="#ff6b81" @click="send()">{{$t('send')}}</v-btn>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
 <script>
 import mixin from "@/mixin";
 import { mapActions, mapGetters } from "vuex";
-
+import Swal from "sweetalert2";
 export default {
   mixins: [mixin],
   name: "navbarUser",
   data: () => ({
+    dialogSatisfaction: true,
+    satisfaction: {
+      rate : 0,
+      remark : ""
+    },
     menu: false,
     drawer: true,
     active_menu: "",
     active_menu_child: "",
-    user: {
-      full_name: "John Doe",
-      email: "john.doe@doe.com",
-    },
     menu_drawer_list: [
       {
         icon: "mdi-account-circle",
@@ -456,6 +503,7 @@ export default {
       ? localStorage.getItem("lang")
       : "th";
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+    this.dialogSatisfaction = this.user_detail?.isEvaluate
     if (this.user_detail?.account_id) {
       this.GetProfileDetail(this.user_detail?.account_id);
     }
@@ -504,6 +552,9 @@ export default {
       const { xs } = this.$vuetify.breakpoint;
       return !!xs;
     },
+    disableSendSatisfaction(){
+      return !this.satisfaction.rate || !this.satisfaction.remark
+    },
   },
   methods: {
     ...mapActions({
@@ -514,7 +565,27 @@ export default {
       GetNotificationsAll: "NotificationsModules/GetNotificationsAll",
       ReadNotifications: "NotificationsModules/ReadNotifications",
       GetAmountCartList: "OrderModules/GetAmountCartList",
+      sendSatisfaction: "satisfactionModules/sendSatisfaction"
     }),
+    closeDialogSatisfaction(){
+      this.dialogSatisfaction = false
+      this.user_detail.isEvaluate = false
+      localStorage.setItem("userDetail", JSON.stringify(this.user_detail))
+    },
+    send(){
+      Swal.fire({
+        icon: "question",
+        title: this.$t("confirm sending of satisfaction assessment?"),
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          this.sendSatisfaction({payload : this.satisfaction})
+        }
+      })
+    },
     setLocale(locale) {
       this.$i18n.locale = locale;
       localStorage.setItem("lang", locale);
