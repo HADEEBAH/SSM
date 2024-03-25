@@ -583,6 +583,9 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.sendSatisfaction({payload : this.satisfaction})
+          this.dialogSatisfaction = false
+          this.user_detail.isEvaluate = false
+          localStorage.setItem("userDetail", JSON.stringify(this.user_detail))
         }
       })
     },

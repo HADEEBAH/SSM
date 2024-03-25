@@ -20,7 +20,7 @@ const importUserModules = {
     mutations: {},
     actions: {
         async downloadfile(){
-            const response = await axios.get(`http://localhost:3000/api/v1/get-file-s3?key=template/template.xlsx`,{ responseType: 'blob'})
+            const response = await axios.get(`${process.env.VUE_APP_URL}/api/v1/get-file-s3?key=template/template.xlsx`,{ responseType: 'blob'})
             if (response.status === 200) {
                 const blob = new Blob([response.data], { type: response.headers['content-type'] });
                 const url = window.URL.createObjectURL(blob);
@@ -34,8 +34,7 @@ const importUserModules = {
         },
         async uploadUser(context, {payload}){
             payload.student = payload.student.map(convertObjectToString) 
-            payload.parent = payload.parent.map(convertObjectToString) 
-            console.log(payload)
+            payload.parent = payload.parent.map(convertObjectToString)
         }
     },
     getters: {},

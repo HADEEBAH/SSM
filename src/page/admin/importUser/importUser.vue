@@ -53,9 +53,10 @@
                 disable-pagination
                 >
                     <template #item="data">
-                        <tr>
+                        <tr :class="validateInputRowTable(data) ? 'bg-[#FFF6F7]' : ''">
                             <td v-for="(item, index) in data.item" :key="index">
-                                <input v-model="item.value" @input="updateData(index, data)">
+                                <input class="input-border rounded-md" v-model="item.value">
+                                <span class="text-xs text-[#ee3333]">{{validateInputTable(data.item, index)}}</span>
                             </td>
                         </tr>
                     </template>
@@ -79,9 +80,10 @@
                 disable-pagination
                 >
                     <template #item="data">
-                        <tr>
+                        <tr :class="validateInputRowTable(data) ? 'bg-[#FFF6F7]' : ''">
                             <td v-for="(item, index) in data.item" :key="index">
-                                <input v-model="item.value" @input="updateData(index, data)">
+                                <input class="input-border rounded-md" v-model="item.value">
+                                <span class="text-xs text-[#ee3333]">{{validateInputTable(data.item, index)}}</span>
                             </td>
                         </tr>
                     </template>
@@ -133,6 +135,31 @@ export default {
         openFileSeleter(){
             this.$refs.fileInput.click();
         },
+        validateInputRowTable(data){
+            const row = []
+            for (const key of Object.keys(data.item)) {
+               if(this.validateInputTable(data.item, key)){
+                row.push('x')
+               }
+            }
+            return row.length > 0
+        },
+        validateInputTable(data, index){
+            switch (index) {
+                case 'USERNAME':
+                    if (!data[index].value || data[index].value.length < 6) {
+                        return this.$t('please enter a username at least 6 characters long')
+                    }
+                    break;
+                case 'PASSWORD':
+                    if (!data[index].value || data[index].value.length < 8 ) {
+                        return this.$t('please enter a password that is at least 8 characters long')
+                    } else if ( !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/.test(data[index].value)) {
+                        return this.$t('password must contain at least one lowercase letter, one uppercase letter, one number, and one special character')
+                    }
+                    break;
+            }
+        },
         handleFileChange(event) {
             this.file = event.target.files[0];
             const reader = new FileReader();
@@ -171,14 +198,11 @@ export default {
                         }
                     }
                 }
-               
-               
-                console.log("Headers:", this.headers);
-                console.log("Data:", this.fileParent , this.fileStudent );
             };
             reader.readAsArrayBuffer(this.file);
         },
         save() {
+            console.log(this.fileStudent, this.fileParent)
             this.uploadUser({
                 payload: {
                     student: this.fileStudent,
