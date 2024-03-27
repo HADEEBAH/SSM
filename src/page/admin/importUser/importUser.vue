@@ -18,7 +18,7 @@
             </v-row>
           </template>
         </headerPage>
-        <v-card v-if="!fileStudent || !fileParent" outlined class="text-center">
+        <v-card v-if="!fileStudent || !getReturnFile || !fileParent" outlined class="text-center">
             <v-card-text>
                 <v-row>
                     <v-col>
@@ -103,7 +103,7 @@
 
 <script>
 import headerPage from "@/components/header/headerPage.vue";
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 const XLSX = require('xlsx');
 export default {
     components: { headerPage },
@@ -117,6 +117,9 @@ export default {
         };
     },
     computed: {
+      ...mapGetters({
+        getReturnFile: "importUserModules/getReturnFile"
+      }),
         formattedHeadersStudent() {
             return this.headersStudent.map(header => ({ text: header, value: header }));
         },
@@ -205,8 +208,8 @@ export default {
             console.log(this.fileStudent, this.fileParent)
             this.uploadUser({
                 payload: {
-                    student: this.fileStudent,
-                    parent: this.fileParent
+                    STUDENT: this.fileStudent,
+                    PARENT: this.fileParent
                 }
             })
         },
