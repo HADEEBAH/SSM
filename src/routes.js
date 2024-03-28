@@ -72,6 +72,8 @@ import ResetPassword from './page/resetPassword.vue'
 //ManageCheckInLater
 import ManageCheckInLater from './page/admin/checkIn/checkInOrder.vue'
 import AdminCheckin from './page/admin/checkIn/adminCheckin.vue'
+//IMPORT USER
+import ImportUser from './page/admin/importUser/importUser.vue'
 const routes = [
   {
     path: '/auth',
@@ -216,7 +218,11 @@ const routes = [
         name: 'StudentList',
         component: StudentList,
       },
-
+      {
+        path: 'importUser',
+        name: 'importUser',
+        component: ImportUser,
+      }
     ]
   },
   {

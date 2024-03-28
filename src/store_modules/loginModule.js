@@ -258,7 +258,6 @@ const loginModules = {
                         account_id: data.data.account_id,
                         email: data.data.email,
                         username: context.state.user_one_id.username,
-                        password: context.state.user_one_id.password,
                         first_name_en: data.data.first_name_en,
                         first_name_th: data.data.first_name_th,
                         last_name_en: data.data.last_name_en,
@@ -266,7 +265,9 @@ const loginModules = {
                         role: data.data.roles,
                         roles: roles,
                         tel: data.data.tel,
-                        image: data.data.image !== "" ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}` : ""
+                        image: data.data.image !== "" ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}` : "",
+                        isSatisfaction: data.data.isSatisfaction,
+                        isEvaluate: data.data.isEvaluate,
                     }
                     VueCookie.set("token", data.data.token, 1)
                     localStorage.setItem("userDetail", JSON.stringify(payload))
@@ -331,7 +332,6 @@ const loginModules = {
                         account_id: data.data.account_id,
                         email: data.data.email,
                         username: data.data.username,
-                        password: context.state.user_one_id.password,
                         first_name_en: data.data.first_name_en,
                         first_name_th: data.data.first_name_th,
                         last_name_en: data.data.last_name_en,
@@ -339,7 +339,9 @@ const loginModules = {
                         role: data.data.roles,
                         roles: roles,
                         tel: data.data.tel,
-                        image: data.data.image !== "" ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}` : ""
+                        image: data.data.image !== "" ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}` : "",
+                        isSatisfaction: data.data.isSatisfaction,
+                        isEvaluate: data.data.isEvaluate,
                     }
                     localStorage.setItem("userDetail", JSON.stringify(payload))
                     if (route.name === "Login") {

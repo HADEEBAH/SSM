@@ -240,6 +240,12 @@ export default {
         child: [],
         roles: ["R_1", "R_2"],
       },
+      {
+        title: "import user",
+        to: "importUser",
+        child: [],
+        roles: ["R_1"],
+      },
     ],
     menu_locale: false,
   }),

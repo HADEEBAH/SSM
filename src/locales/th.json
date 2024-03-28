@@ -129,6 +129,7 @@
     "coach name" : "ชื่อโค้ช",
     "coach information not found": "ไม่พบข้อมูลโค้ช",
     "coach who wants leave" : " โค้ชที่ต้องการลา",
+    "confirm sending of satisfaction assessment?" : "ยืนยันการส่งประเมินความพึงพอใจ?",
     "confirm" : "ยืนยัน",
     "confirmed" : "ติดต่อแล้ว",
     "confirm password" : "ยืนยันรหัสผ่าน",
@@ -251,8 +252,6 @@
     "december":"ธันวาคม",
     "details of take leave": "รายละเอียดการลา",
 
-
-
     "edit": "แก้ไข",
     "edit wls": "แก้ไขอาณาจักร",
     "edit parent information" : "แก้ไขข้อมูลผู้ปกครอง",
@@ -267,6 +266,7 @@
     "enter course details" : "กรอกรายละเอียดคอร์ส",
     "enter details" : "กรอกรายละเอียด",
     "enter password" : "ระบุรหัสผ่าน",
+    "enter suggestions" : "กรอกข้อเสนอแนะ",
     "error information": "ข้อมูลผิดพลาด",
     "enter username" : "ระบุชื่อผู้ใช้งาน",
     "email" : "อีเมล",
@@ -274,6 +274,8 @@
     "end time" : "เวลาสิ้นสุด",
     "excessive study hours" : "ชั่วโมงการเรียนเกินกว่าที่กำหนด",
     "export" : "นำออก",
+    "evaluate satisfaction with using the system" : "ประเมินความพึงพอใจการใช้งานระบบ",
+    "ReportProblem" : "รายงานปัญหาการใช้งาน",
 
     "forgot your password?" : "ลืมรหัสผ่านใช่หรือไม่?",
     "forgotten your password?" : "ลืมรหัสผ่านใช่หรือไม่?",
@@ -323,6 +325,7 @@
 
     "if you don't have an account yet, please" : "หากยังไม่มีบัญชีผู้ใช้กรุณา",
     "image example" : "ตัวอย่างภาพ",
+    "import user" : "นำเข้าผู้ใช้",
     "incomplete information": "ข้อมูลไม่ครบถ้วน",
     "instructor" : "จัดสอนโดย",
     "invalid data" : "ข้อมูลไม่ถูกต้อง",
@@ -460,6 +463,7 @@
     "password" : "รหัสผ่าน",
     "passwords do not match" : "รหัสผ่านไม่ตรงกัน",
     "password must not contain special characters" : "รหัสผ่านต้องไม่มีอักขระพิเศษ",
+    "password must contain at least one lowercase letter, one uppercase letter, one number, and one special character" : "รหัสผ่านจะต้องมีตัวอักษรพิมพ์เล็กอย่างน้อยหนึ่งตัว ตัวพิมพ์ใหญ่หนึ่งตัว ตัวเลขหนึ่งตัว และอักขระพิเศษหนึ่งตัว",
     "pay again" : "ชำระอีกครั้ง",
     "payment type" : "ประเภทการชำระเงิน",
     "payment amount" : "จำนวนที่ชำระ",
@@ -623,10 +627,14 @@
 
     
     "save" : "บันทึก",
+    "save parent" : "บันทึกผู้ปกครอง",
+    "save student" : "บันทึกนักเรียน",
     "save data successfully": "บันทึกข้อมูลสำเร็จ",
     "saved successfully": "( บันทึกเรียบร้อยแล้ว )",
     "save failed":"บันทึกไม่สำเร็จ",
     "saved":"บันทึกเรียบร้อยแล้ว",
+    "satisfaction score" : "คะแนนความพึงพอใจ",
+    "suggestions" : "ข้อเสนอแนะ",
     "saturday" : "วันเสาร์",
     "seat" : "ที่นั้ง",
     "see more" : "ดูเพิ่มเติม",
@@ -636,6 +644,7 @@
     "select teaching information" : "เลือกข้อมูลการสอน",
     "select your students here": "เลือกนักเรียนของคุณได้ที่นี้",
     "select user role": "เลือกบทบาทผู้ใช้งาน",
+    "send" : "ส่ง",
     "send notification" : "ส่งการแจ้งเตือน",
     "send a leave letter" : "ส่งใบลา",
     "sent a password change link to" : "ได้ส่งลิงค์เปลี่ยนรหัสผ่านไปยัง",
@@ -773,6 +782,7 @@
     "thursday" : "วันพฤหัสบดี",
     "this course is not in pending status":"( หลักสูตรนี้ไม่ได้อยู่ในสถานะรอดำเนินการ )",
     "this USER is already in a relationship": "user นี้มีความสัมพันธ์แล้ว!",
+    "thank you for participating in the satisfaction evaluation" : "ขอบคุณที่ร่วมประเมินความพึงพอใจ",
     "to" : "ถึง",
     "to request leave" : "ลงเวลาเพื่อขอลา",
     "today's teaching program"  : "รายการสอนวันนี้",
@@ -870,7 +880,19 @@
 
     
 
-
+    "Username is already used." : "มีชื่อผู้ใช้นี้อยู่ในระบบแล้ว",
+    "Parameter missing. Required username." : "ชื่อผู้ใช้ไม่ถูกต้อง",
+    "Duplicate username." : "ชื่อผู้ใช้นี้มีอยู่ใน OneId แล้ว",
+    "The username or password or tel format is invalid." : "ชื่อผู้ใช้ หรือรหัสผ่าน หรือ เบอร์โทร ไม่ถูกต้อง",
+    "Username relation not found. Or this username role not match." : "ชื่อผู้ใช้ของผู้ปกครองไม่ถูกต้อง",
+    "Insert relation incomplete." : "เพิ่มความสำพันธ์ไม่สำเร็จ",
+    "Insert ssm complete." : "สมัครสมาชิกสำเร็จ",
+    "Insert role complete." : "เพิ่มบทบาทสำเร็จ",
+    "Insert role incomplete." : "เพิ่มบทบาทไม่สำเร็จ",
+    "Insert biz complete." : "เพิ่มผู้ใช้งานเข้าวรพัฒน์สำเร็จ",
+    "Insert biz incomplete." : "เพิ่มผู้ใช้งานเข้าวรพัฒน์ไม่สำเร็จ",
+    "Insert relation complete." : "เพิ่มความสำพันธ์สำเร็จ",
+    "This username not found." : "สามารถใช้งานได้",
 
 
 

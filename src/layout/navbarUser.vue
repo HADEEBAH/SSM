@@ -26,6 +26,7 @@
           {{ $t(titel_navber) }}
         </v-app-bar-title>
         <v-spacer></v-spacer>
+        <v-btn v-if="$vuetify.breakpoint.smAndUp" depressed text color="#ffffff" @click="ReportProblem" >{{ $t("ReportProblem") }}</v-btn>
         <v-menu v-model="menu_locale" offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn :class="$vuetify.breakpoint.smAndUp ? 'mr-2' : ''" text v-bind="attrs" v-on="on">
@@ -267,7 +268,7 @@
         </v-row>
         <v-list nav>
           <div v-for="(list, list_index) in menu_drawer_list" :key="list_index">
-            <template v-if="list.to !== 'logOut'">
+            <template v-if="list.to !== 'logOut' && list.to !== 'ReportProblem'">
               <v-list-item
                 v-if="
                   list.to == 'StudentsSchedule'
@@ -297,6 +298,23 @@
             <v-list-item
               v-if="list.to === 'logOut'"
               @click="logOut"
+              :class="
+                menu_drawer_list.length - 1 !== list_index
+                  ? 'list-items-border-bottom'
+                  : ''
+              "
+            >
+              <v-list-item-avatar>
+                <v-icon color="#ff6b81">{{ list.icon }}</v-icon>
+              </v-list-item-avatar>
+              <v-list-item-title
+                :class="$route.name === list.to ? 'text-[#ff6b81]' : ''"
+                >{{ $t(list.title) }}
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item
+              v-if="list.to === 'ReportProblem' && $vuetify.breakpoint.xs"
+              @click="ReportProblem"
               :class="
                 menu_drawer_list.length - 1 !== list_index
                   ? 'list-items-border-bottom'
@@ -376,25 +394,70 @@
         </v-row>
       </v-container>
     </v-footer>
+    <!-- DIALOG :: SATISFACTION -->
+    <v-dialog v-model="dialogSatisfaction" class="rounded-xl" max-width="460" persistent>
+      <v-card>
+        <v-card-title primary-title class="justify-end">
+          <v-btn absolute class="top-0 right-0" icon @click="closeDialogSatisfaction()">
+              <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text>
+          <v-row dense>
+            <v-col class="text-xl text-[#ff6b81] text-center">
+              <strong>{{ $t('evaluate satisfaction with using the system') }}</strong>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col>
+              <span>{{ $t('satisfaction score') }}</span>
+              <v-rating
+                v-model="satisfaction.rate"
+                background-color="grey lighten-2"
+                color="warning"
+                hover
+                length="5"
+                size="30"
+              ></v-rating>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col>
+              <span>{{ $t('suggestions') }}</span>
+              <v-textarea v-model="satisfaction.remark" outlined :placeholder="$t('enter suggestions')"></v-textarea>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col align="right">
+              <v-btn outlined color="#ff6b81" @click="closeDialogSatisfaction()">{{$t('cancel')}}</v-btn>
+            </v-col>
+            <v-col cols="auto">
+              <v-btn depressed :dark="!disableSendSatisfaction" :disabled="disableSendSatisfaction" color="#ff6b81" @click="send()">{{$t('send')}}</v-btn>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
 <script>
 import mixin from "@/mixin";
 import { mapActions, mapGetters } from "vuex";
-
+import Swal from "sweetalert2";
 export default {
   mixins: [mixin],
   name: "navbarUser",
   data: () => ({
+    dialogSatisfaction: true,
+    satisfaction: {
+      rate : 0,
+      remark : ""
+    },
     menu: false,
     drawer: true,
     active_menu: "",
     active_menu_child: "",
-    user: {
-      full_name: "John Doe",
-      email: "john.doe@doe.com",
-    },
     menu_drawer_list: [
       {
         icon: "mdi-account-circle",
@@ -431,6 +494,13 @@ export default {
         params: null,
         roles: ["R_1", "R_2"],
       },
+      {
+        icon: "mdi-tools",
+        title: "ReportProblem",
+        to: "ReportProblem",
+        params: null,
+        roles: [],
+      },
       { icon: "mdi-logout", title: "logout", to: "logOut", roles: [] },
     ],
     user_detail: null,
@@ -456,6 +526,7 @@ export default {
       ? localStorage.getItem("lang")
       : "th";
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+    this.dialogSatisfaction = this.user_detail?.isEvaluate
     if (this.user_detail?.account_id) {
       this.GetProfileDetail(this.user_detail?.account_id);
     }
@@ -504,6 +575,9 @@ export default {
       const { xs } = this.$vuetify.breakpoint;
       return !!xs;
     },
+    disableSendSatisfaction(){
+      return !this.satisfaction.rate || !this.satisfaction.remark
+    },
   },
   methods: {
     ...mapActions({
@@ -514,7 +588,33 @@ export default {
       GetNotificationsAll: "NotificationsModules/GetNotificationsAll",
       ReadNotifications: "NotificationsModules/ReadNotifications",
       GetAmountCartList: "OrderModules/GetAmountCartList",
+      sendSatisfaction: "satisfactionModules/sendSatisfaction"
     }),
+    ReportProblem() {
+      window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSdayLva9MELypybakCFtdVfMbjVESI9dGN6y_yYDETkQWV33w/viewform?usp=sharing"
+    },
+    closeDialogSatisfaction(){
+      this.dialogSatisfaction = false
+      this.user_detail.isEvaluate = false
+      localStorage.setItem("userDetail", JSON.stringify(this.user_detail))
+    },
+    send(){
+      Swal.fire({
+        icon: "question",
+        title: this.$t("confirm sending of satisfaction assessment?"),
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          this.sendSatisfaction({payload : this.satisfaction})
+          this.dialogSatisfaction = false
+          this.user_detail.isEvaluate = false
+          localStorage.setItem("userDetail", JSON.stringify(this.user_detail))
+        }
+      })
+    },
     setLocale(locale) {
       this.$i18n.locale = locale;
       localStorage.setItem("lang", locale);
