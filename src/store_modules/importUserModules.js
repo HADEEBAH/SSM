@@ -1,10 +1,13 @@
 import axios from "axios";
-// import VueCookie from "vue-cookie";
+import Swal from "sweetalert2";
+import VueCookie from "vue-cookie";
+import VueI18n from "../i18n";
+
 function convertObjectToString(object) {
     for (let key in object) {
         if (Object.prototype.hasOwnProperty.call(object, key)) {
-          console.log('object', object)
-          console.log('key', key)
+          // console.log('object', object)
+          // console.log('key', key)
             // Check if the value is an object with a 'value' property
             if (typeof object[key] === 'object' && object[key] !== null && 'value' in object[key]) {
                 // Replace the nested object with its value or an empty string if 'value' is missing
@@ -24,11 +27,15 @@ function convertObjectToString(object) {
 const importUserModules = {
     namespaced: true,
     state: {
-      returnFile: null
+      returnFile: null,
+      uploadIsloading: false,
     },
     mutations: {
-      async setReturnFile (state, payload) {
+      setReturnFile (state, payload) {
         state.returnFile = payload
+      },
+      setUploadIsloading (state, value) {
+        state.uploadIsloading = value
       }
     },
     actions: {
@@ -46,37 +53,92 @@ const importUserModules = {
             }
         },
         async uploadUser(context, {payload}){
-          const endpoint = "http://localhost:3000/api/v1/account/import/excel-data-user"
-          const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMzM1NDE5NjQyNDY1MTY1IiwidXNlciI6Inl1dGh5dXRoIiwicm9sZXMiOlt7InJvbGVOYW1lRW5nIjoiU3VwZXIgYWRtaW4iLCJyb2xlTmFtZVRoIjoi4Lic4Li54LmJ4LiU4Li54LmB4Lil4Lij4Liw4Lia4Lia4Liq4Li54LiH4Liq4Li44LiUIiwicm9sZUlkIjoiUl8xIn1dLCJpYXQiOjE2ODgzNjk5MTUsImV4cCI6MTc4ODM2OTkxNCwiaXNzIjoibG9jYWxob3N0IiwianRpIjoiMjg0NjUyMmUtMDk3Mi00YWY2LWJjZjYtZjIwYTM2M2M4MWYyIn0.pjWTbJDQRk35sFxIyXM9fIoie0PuA7_NphpFTKIZCNA`
+          context.commit("setUploadIsloading", true)
+          const endpoint = `${process.env.VUE_APP_URL}/api/v1/account/import/excel-data-user`
           const config = {
             headers: {
               "Access-Control-Allow-Origin": "*",
               "Content-type": "Application/json",
-              'Authorization': `Bearer ${token}`
-              // 'Authorization': `Bearer ${VueCookie.get("token")}`
+              'Authorization': `Bearer ${VueCookie.get("token")}`
             }
           }
           try {
             payload.STUDENT = payload.STUDENT.map(convertObjectToString) 
             payload.PARENT = payload.PARENT.map(convertObjectToString)
-
-            let { data } = await axios.post(
-              `${endpoint}`,payload,config
-            );
-
-            console.log('data=>', data)
+            let { data } = await axios.post(`${endpoint}`, payload, config)
+            const error = ['Username is already used.', 'The username or password or tel format is invalid.','Duplicate username', 'Parameter missing. Required username.', 'Username relation not found. Or this username role not match.']
+            const errorData = []
             if (data.statusCode === 201) {
+              data.data.STUDENT.map( v => {
+                for( const key of Object.keys(v)){
+                  if( key === 'REMARK' ){
+                    if(error.includes(v[key])){
+                      errorData.push('x')
+                    }
+                  }
+                  v[key] = {value : v[key]}
+                }
+                return v
+              })
+              data.data.PARENT.map( v => {
+                for( const key of Object.keys(v)){
+                  if( key === 'REMARK' ){
+                    if(error.includes(v[key])){
+                      errorData.push('x')
+                    }
+                  }
+                  v[key] = {value : v[key]}
+                }
+                return v
+              })
+              console.log(errorData)
+              if(errorData.length === 0){
+                Swal.fire({
+                  icon: 'success',
+                  title: VueI18n.t('succeed'),
+                  text: VueI18n.t('save data successfully'),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                })
+              }
               context.commit("setReturnFile", data.data);
+              context.commit("setUploadIsloading", false)
             }
           } catch (error) {
-            console.log('error', error)
+            Swal.fire({
+              icon:'error',
+              title: VueI18n.t("something went wrong"),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            })
+            payload.STUDENT.map( v => {
+              for( const key of Object.keys(v)){
+                v[key] = {value : v[key]}
+              }
+              return v
+            })
+            payload.PARENT.map( v => {
+              for( const key of Object.keys(v)){
+                v[key] = {value : v[key]}
+              }
+              return v
+            })
+            context.commit("setReturnFile", payload);
+            context.commit("setUploadIsloading", false)
           }
         }
     },
     getters: {
-      getReturnFile(state) {
+      returnFile(state) {
         return state.returnFile
       },
+      uploadIsloading(state){
+        return state.uploadIsloading
+      }
     },
   };
   

@@ -880,7 +880,19 @@
 
     
 
-
+    "Username is already used." : "มีชื่อผู้ใช้นี้อยู่ในระบบแล้ว",
+    "Parameter missing. Required username." : "ชื่อผู้ใช้ไม่ถูกต้อง",
+    "Duplicate username." : "ชื่อผู้ใช้นี้มีอยู่ใน OneId แล้ว",
+    "The username or password or tel format is invalid." : "ชื่อผู้ใช้ หรือรหัสผ่าน หรือ เบอร์โทร ไม่ถูกต้อง",
+    "Username relation not found. Or this username role not match." : "ชื่อผู้ใช้ของผู้ปกครองไม่ถูกต้อง",
+    "Insert relation incomplete." : "เพิ่มความสำพันธ์ไม่สำเร็จ",
+    "Insert ssm complete." : "สมัครสมาชิกสำเร็จ",
+    "Insert role complete." : "เพิ่มบทบาทสำเร็จ",
+    "Insert role incomplete." : "เพิ่มบทบาทไม่สำเร็จ",
+    "Insert biz complete." : "เพิ่มผู้ใช้งานเข้าวรพัฒน์สำเร็จ",
+    "Insert biz incomplete." : "เพิ่มผู้ใช้งานเข้าวรพัฒน์ไม่สำเร็จ",
+    "Insert relation complete." : "เพิ่มความสำพันธ์สำเร็จ",
+    "This username not found." : "สามารถใช้งานได้",
 
 
 

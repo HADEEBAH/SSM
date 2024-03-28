@@ -18,7 +18,7 @@
             </v-row>
           </template>
         </headerPage>
-        <v-card v-if="!fileStudent || !getReturnFile || !fileParent" outlined class="text-center">
+        <v-card v-if="(!fileStudent && !fileParent) && !returnFile" outlined class="text-center">
             <v-card-text>
                 <v-row>
                     <v-col>
@@ -33,77 +33,95 @@
                         </v-btn>
                     </v-col>
                 </v-row>
-                <input ref="fileInput" style="display: none" type="file" @change="handleFileChange" accept=".xlsx" />
+                <input ref="fileInput" style="display: none" type="file" @input="handleFileChange" accept=".xlsx" />
             </v-card-text>
         </v-card>
-        <div v-if="fileParent" class="mb-3">
-            <v-row dense>
-                <v-col>
-                    <span class="text-lg">
-                        <strong>{{ $t('parent') }}</strong>
-                    </span>
-                </v-col>
-            </v-row>
-            <v-card outlined class="mb-3">
-                <v-data-table
-                v-if="fileParent && headersParent.length > 0"
-                :headers="formattedHeadersParent"
-                :items="fileParent"
-                hide-default-footer
-                disable-pagination
-                >
-                    <template #item="data">
-                        <tr :class="validateInputRowTable(data) ? 'bg-[#FFF6F7]' : ''">
-                            <td v-for="(item, index) in data.item" :key="index">
-                                <input class="input-border rounded-md" v-model="item.value">
-                                <span class="text-xs text-[#ee3333]">{{validateInputTable(data.item, index)}}</span>
-                            </td>
-                        </tr>
-                    </template>
-                </v-data-table>
-            </v-card>
+        <div v-if="!uploadIsloading">
+            <div v-if="fileParent" class="mb-3">
+                <v-row dense>
+                    <v-col>
+                        <span class="text-lg">
+                            <strong>{{ $t('parent') }}</strong>
+                        </span>
+                    </v-col>
+                </v-row>
+                <v-card outlined class="mb-3">
+                    <v-data-table
+                    v-if="fileParent && headersParent.length > 0"
+                    :headers="formattedHeadersParent"
+                    :items="fileParent"
+                    hide-default-footer
+                    disable-pagination
+                    >
+                        <template #item="data">
+                            <tr>
+                                <template v-for="(item, index) in data.item" >
+                                    <td v-if="!unHeader.includes(index)" :key="index">
+                                        <input v-if="index!=='REMARK'" class="input-border rounded-md" v-model="item.value">
+                                        <span class="text-xs" :class="validateInputTable(data.item, index) ? `text-[${validateInputTable(data.item, index).color}]` : ''">
+                                            {{validateInputTable(data.item, index) ? validateInputTable(data.item, index).text : ''}}
+                                        </span>
+                                    </td>
+                                </template>
+                            </tr>
+                        </template>
+                    </v-data-table>
+                </v-card>
+            </div>
+            <div v-if="fileStudent">
+                <v-row dense>
+                    <v-col>
+                        <span class="text-lg">
+                            <strong>{{ $t('student') }}</strong>
+                        </span>
+                    </v-col>
+                </v-row>
+                <v-card outlined class="mb-3">
+                    <v-data-table
+                    v-if="fileStudent && headersStudent.length > 0"
+                    :headers="formattedHeadersStudent"
+                    :items="fileStudent"
+                    hide-default-footer
+                    disable-pagination
+                    >
+                        <template #item="data">
+                            <tr>
+                                <template v-for="(item, index) in data.item" >
+                                    <td v-if="!unHeader.includes(index)" :key="index">
+                                        <input v-if="index!=='REMARK'" class="input-border rounded-md" v-model="item.value">
+                                        <span class="text-xs" :class="validateInputTable(data.item, index) ? `text-[${validateInputTable(data.item, index).color}]` : ''">
+                                            {{validateInputTable(data.item, index) ? validateInputTable(data.item, index).text : ''}}
+                                        </span>
+                                    </td>
+                                </template>
+                               
+                            </tr>
+                        </template>
+                    </v-data-table>
+                </v-card>
+                <v-row dense>
+                    <v-col align="right">
+                        <v-btn outlined color="#ff6b81" @click="cancel()">{{ $t('cancel') }}</v-btn>
+                    </v-col>
+                    <v-col cols="auto">
+                        <v-btn depressed dark color="#ff6b81" @click="save()">{{ $t('save') }}</v-btn>
+                    </v-col>
+                </v-row>
+            </div>
         </div>
-        <div v-if="fileStudent">
-            <v-row dense>
-                <v-col>
-                    <span class="text-lg">
-                        <strong>{{ $t('student') }}</strong>
-                    </span>
-                </v-col>
-            </v-row>
-            <v-card outlined class="mb-3">
-                <v-data-table
-                v-if="fileStudent && headersStudent.length > 0"
-                :headers="formattedHeadersStudent"
-                :items="fileStudent"
-                hide-default-footer
-                disable-pagination
-                >
-                    <template #item="data">
-                        <tr :class="validateInputRowTable(data) ? 'bg-[#FFF6F7]' : ''">
-                            <td v-for="(item, index) in data.item" :key="index">
-                                <input class="input-border rounded-md" v-model="item.value">
-                                <span class="text-xs text-[#ee3333]">{{validateInputTable(data.item, index)}}</span>
-                            </td>
-                        </tr>
-                    </template>
-                </v-data-table>
-            </v-card>
-            <v-row dense>
-                <v-col align="right">
-                    <v-btn outlined color="#ff6b81">{{ $t('cancel') }}</v-btn>
-                </v-col>
-                <v-col cols="auto">
-                    <v-btn depressed dark color="#ff6b81" @click="save()">{{ $t('save') }}</v-btn>
-                </v-col>
-            </v-row>
+        <div v-else class="w-full d-flex justify-center align-center" style="height: 300px;">
+            <v-progress-circular
+                :size="50"
+                color="pink"
+                indeterminate
+            ></v-progress-circular>
         </div>
     </v-container>
 </template>
 
 <script>
 import headerPage from "@/components/header/headerPage.vue";
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 const XLSX = require('xlsx');
 export default {
     components: { headerPage },
@@ -114,12 +132,14 @@ export default {
             file: null,
             headersStudent: [],
             headersParent: [],
+            unHeader : ['ROLE','ROLE_ID','ACCOUNT_ID']
         };
     },
     computed: {
-      ...mapGetters({
-        getReturnFile: "importUserModules/getReturnFile"
-      }),
+        ...mapGetters({
+            returnFile: "importUserModules/returnFile",
+            uploadIsloading : "importUserModules/uploadIsloading"
+        }),
         formattedHeadersStudent() {
             return this.headersStudent.map(header => ({ text: header, value: header }));
         },
@@ -127,10 +147,22 @@ export default {
             return this.headersParent.map(header => ({ text: header, value: header }));
         }
     },
+    watch:{
+        "returnFile": function(val){
+            this.file = null
+            this.headersStudent = Object.keys(val.STUDENT[0]).filter(v => !this.unHeader.includes(v))
+            this.headersParent = Object.keys(val.PARENT[0]).filter(v => !this.unHeader.includes(v))
+            this.fileParent = val.PARENT
+            this.fileStudent = val.STUDENT
+        }
+    },
     methods:{
         ...mapActions({
             downloadfile : "importUserModules/downloadfile",
             uploadUser : "importUserModules/uploadUser"
+        }),
+        ...mapMutations({
+            setReturnFile: "importUserModules/returnFile"
         }),
         downloadTemplateFile () {
             this.downloadfile()
@@ -145,20 +177,29 @@ export default {
                 row.push('x')
                }
             }
-            return row.length > 0
+            return row.length > 0 
         },
         validateInputTable(data, index){
+            const error = ['Username is already used.', 'The username or password or tel format is invalid.','Duplicate username', 'Parameter missing. Required username.', 'Username relation not found. Or this username role not match.']
             switch (index) {
                 case 'USERNAME':
                     if (!data[index].value || data[index].value.length < 6) {
-                        return this.$t('please enter a username at least 6 characters long')
+                        return {text : this.$t('please enter a username at least 6 characters long'), color: "#ee3333"} 
                     }
                     break;
                 case 'PASSWORD':
                     if (!data[index].value || data[index].value.length < 8 ) {
-                        return this.$t('please enter a password that is at least 8 characters long')
+                        return {text : this.$t('please enter a password that is at least 8 characters long'), color: "#ee3333"}
                     } else if ( !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/.test(data[index].value)) {
-                        return this.$t('password must contain at least one lowercase letter, one uppercase letter, one number, and one special character')
+                        return {text :this.$t('password must contain at least one lowercase letter, one uppercase letter, one number, and one special character'), color: "#ee3333"}
+                    }
+                    break;
+                case 'REMARK':
+                    if (error.includes(data[index].value)) {
+                        return  {text :this.$t(data[index].value), color: "#ee3333"}
+                    } 
+                    if (!error.includes(data[index].value)) { 
+                        return  {text :this.$t(data[index].value), color: "#c8eab2"}
                     }
                     break;
             }
@@ -205,7 +246,6 @@ export default {
             reader.readAsArrayBuffer(this.file);
         },
         save() {
-            console.log(this.fileStudent, this.fileParent)
             this.uploadUser({
                 payload: {
                     STUDENT: this.fileStudent,
@@ -213,6 +253,12 @@ export default {
                 }
             })
         },
+        cancel(){
+            this.fileStudent = null
+            this.fileParent = null
+            this.file = null
+            this.setReturnFile(null)
+        }
     }
 }
 </script>

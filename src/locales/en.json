@@ -905,6 +905,19 @@
     "your One Id username does not yet exist in the system": "Your One Id username does not yet exist in the system",
 
 
+    "Username is already used." : "Username is already used.",
+    "Parameter missing. Required username." : "Parameter missing. Required username.",
+    "Duplicate username." : "Duplicate username.",
+    "The username or password or tel format is invalid." : "The username or password or tel format is invalid.",
+    "Username relation not found. Or this username role not match." : "Username relation not found. Or this username role not match.",
+    "Insert relation incomplete." : "Insert relation incomplete.",
+    "Insert ssm complete." : "Insert ssm complete.",
+    "Insert role complete." : "Insert role complete.",
+    "Insert role incomplete." : "Insert role incomplete.",
+    "Insert biz complete." : "Insert biz complete.",
+    "Insert biz incomplete." : "Insert biz incomplete.",
+    "Insert relation complete." : "Insert relation complete.",
+    "This username not found." : "This username not found.",
 
 
 
