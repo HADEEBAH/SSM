@@ -91,7 +91,6 @@ const importUserModules = {
                 }
                 return v
               })
-              console.log(errorData)
               if(errorData.length === 0){
                 Swal.fire({
                   icon: 'success',
