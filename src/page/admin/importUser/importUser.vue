@@ -6,7 +6,7 @@
                 <v-col>
                     <v-btn outlined dense color="#ff6b81" @click="downloadTemplateFile()">
                         <v-icon>mdi-download-box-outline</v-icon>
-                        <span>download template</span>
+                        <span>{{$t('download template')}}</span>
                     </v-btn>
                 </v-col>
                 <!-- <v-col>
@@ -29,7 +29,7 @@
                     <v-col>
                         <v-btn depressed dark dense color="#ff6b81" @click="openFileSeleter()">
                             <v-icon>mdi mdi-upload-box</v-icon>
-                            <span>upload template</span>
+                            <span>{{$t('upload template')}}</span>
                         </v-btn>
                     </v-col>
                 </v-row>
