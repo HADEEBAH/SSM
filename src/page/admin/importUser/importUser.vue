@@ -22,7 +22,7 @@
             <v-card-text>
                 <v-row>
                     <v-col>
-                        กรุณาอัพโหลดไฟล์
+                        {{ $t('please upload file') }}
                     </v-col>
                 </v-row>
                 <v-row dense>
