@@ -58,7 +58,7 @@
                                 <template v-for="(item, index) in data.item" >
                                     <td v-if="!unHeader.includes(index)" :key="index">
                                         <input v-if="index!=='REMARK'" class="input-border rounded-md" v-model="item.value">
-                                        <span class="text-xs" :class="validateInputTable(data.item, index) ? `text-[${validateInputTable(data.item, index).color}]` : ''">
+                                        <span class="text-xs" :class="validateInputTable(data.item, index) ? `${validateInputTable(data.item, index)?.color}` : ''">
                                             {{validateInputTable(data.item, index) ? validateInputTable(data.item, index).text : ''}}
                                         </span>
                                     </td>
@@ -89,12 +89,11 @@
                                 <template v-for="(item, index) in data.item" >
                                     <td v-if="!unHeader.includes(index)" :key="index">
                                         <input v-if="index!=='REMARK'" class="input-border rounded-md" v-model="item.value">
-                                        <span class="text-xs" :class="validateInputTable(data.item, index) ? `text-[${validateInputTable(data.item, index).color}]` : ''">
+                                        <span class="text-xs" :class="validateInputTable(data.item, index) ? `${validateInputTable(data.item, index)?.color}` : ''">
                                             {{validateInputTable(data.item, index) ? validateInputTable(data.item, index).text : ''}}
                                         </span>
                                     </td>
                                 </template>
-                               
                             </tr>
                         </template>
                     </v-data-table>
@@ -147,6 +146,9 @@ export default {
             return this.headersParent.map(header => ({ text: header, value: header }));
         }
     },
+    mounted(){
+        this.setReturnFile(null)
+    },
     watch:{
         "returnFile": function(val){
             this.file = null
@@ -162,7 +164,7 @@ export default {
             uploadUser : "importUserModules/uploadUser"
         }),
         ...mapMutations({
-            setReturnFile: "importUserModules/returnFile"
+            setReturnFile: "importUserModules/setReturnFile"
         }),
         downloadTemplateFile () {
             this.downloadfile()
@@ -196,10 +198,10 @@ export default {
                     break;
                 case 'REMARK':
                     if (error.includes(data[index].value)) {
-                        return  {text :this.$t(data[index].value), color: "#ee3333"}
+                        return  {text :this.$t(data[index].value), color: "text-[#ee3333]"}
                     } 
                     if (!error.includes(data[index].value)) { 
-                        return  {text :this.$t(data[index].value), color: "#c8eab2"}
+                        return  {text :this.$t(data[index].value), color: "text-[#4b8333]"}
                     }
                     break;
             }

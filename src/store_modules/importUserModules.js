@@ -2,6 +2,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import VueCookie from "vue-cookie";
 import VueI18n from "../i18n";
+const XLSX = require('xlsx');
 
 function convertObjectToString(object) {
     for (let key in object) {
@@ -52,7 +53,7 @@ const importUserModules = {
                 window.URL.revokeObjectURL(url);
             }
         },
-        async uploadUser(context, {payload}){
+        async uploadUser(context, {payload}){          
           context.commit("setUploadIsloading", true)
           const endpoint = `${process.env.VUE_APP_URL}/api/v1/account/import/excel-data-user`
           const config = {
@@ -69,28 +70,6 @@ const importUserModules = {
             const error = ['Username is already used.', 'The username or password or tel format is invalid.','Duplicate username', 'Parameter missing. Required username.', 'Username relation not found. Or this username role not match.']
             const errorData = []
             if (data.statusCode === 201) {
-              data.data.STUDENT.map( v => {
-                for( const key of Object.keys(v)){
-                  if( key === 'REMARK' ){
-                    if(error.includes(v[key])){
-                      errorData.push('x')
-                    }
-                  }
-                  v[key] = {value : v[key]}
-                }
-                return v
-              })
-              data.data.PARENT.map( v => {
-                for( const key of Object.keys(v)){
-                  if( key === 'REMARK' ){
-                    if(error.includes(v[key])){
-                      errorData.push('x')
-                    }
-                  }
-                  v[key] = {value : v[key]}
-                }
-                return v
-              })
               if(errorData.length === 0){
                 Swal.fire({
                   icon: 'success',
@@ -100,6 +79,57 @@ const importUserModules = {
                   timerProgressBar: true,
                   showCancelButton: false,
                   showConfirmButton: false,
+                })
+                const workbook = XLSX.utils.book_new();
+                const parentSheet = XLSX.utils.json_to_sheet(data.data.PARENT);
+                XLSX.utils.book_append_sheet(workbook, parentSheet, 'PARENT');
+                const studentSheet = XLSX.utils.json_to_sheet(data.data.STUDENT);
+                XLSX.utils.book_append_sheet(workbook, studentSheet, 'STUDENT');
+                XLSX.writeFile(workbook, "userComplete.xlsx");
+                data.data.STUDENT.map( v => {
+                  for( const key of Object.keys(v)){
+                    if( key === 'REMARK' ){
+                      if(error.includes(v[key])){
+                        errorData.push('x')
+                      }
+                    }
+                    v[key] = {value : v[key]}
+                  }
+                  return v
+                })
+                data.data.PARENT.map( v => {
+                  for( const key of Object.keys(v)){
+                    if( key === 'REMARK' ){
+                      if(error.includes(v[key])){
+                        errorData.push('x')
+                      }
+                    }
+                    v[key] = {value : v[key]}
+                  }
+                  return v
+                })
+              } else {
+                data.data.STUDENT.map( v => {
+                  for( const key of Object.keys(v)){
+                    if( key === 'REMARK' ){
+                      if(error.includes(v[key])){
+                        errorData.push('x')
+                      }
+                    }
+                    v[key] = {value : v[key]}
+                  }
+                  return v
+                })
+                data.data.PARENT.map( v => {
+                  for( const key of Object.keys(v)){
+                    if( key === 'REMARK' ){
+                      if(error.includes(v[key])){
+                        errorData.push('x')
+                      }
+                    }
+                    v[key] = {value : v[key]}
+                  }
+                  return v
                 })
               }
               context.commit("setReturnFile", data.data);
