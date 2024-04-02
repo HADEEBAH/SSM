@@ -69,6 +69,26 @@ const importUserModules = {
             let { data } = await axios.post(`${endpoint}`, payload, config)
             const error = ['Username is already used.', 'The username or password or tel format is invalid.','Duplicate username', 'Parameter missing. Required username.', 'Username relation not found. Or this username role not match.']
             const errorData = []
+            data.data.STUDENT.map( v => {
+              for( const key of Object.keys(v)){
+                if( key === 'REMARK' ){
+                  if(error.includes(v[key])){
+                    errorData.push('x')
+                  }
+                }
+              }
+              return v
+            })
+            data.data.PARENT.map( v => {
+              for( const key of Object.keys(v)){
+                if( key === 'REMARK' ){
+                  if(error.includes(v[key])){
+                    errorData.push('x')
+                  }
+                }
+              }
+              return v
+            })
             if (data.statusCode === 201) {
               if(errorData.length === 0){
                 Swal.fire({
@@ -88,22 +108,12 @@ const importUserModules = {
                 XLSX.writeFile(workbook, "userComplete.xlsx");
                 data.data.STUDENT.map( v => {
                   for( const key of Object.keys(v)){
-                    if( key === 'REMARK' ){
-                      if(error.includes(v[key])){
-                        errorData.push('x')
-                      }
-                    }
                     v[key] = {value : v[key]}
                   }
                   return v
                 })
                 data.data.PARENT.map( v => {
                   for( const key of Object.keys(v)){
-                    if( key === 'REMARK' ){
-                      if(error.includes(v[key])){
-                        errorData.push('x')
-                      }
-                    }
                     v[key] = {value : v[key]}
                   }
                   return v
@@ -111,22 +121,12 @@ const importUserModules = {
               } else {
                 data.data.STUDENT.map( v => {
                   for( const key of Object.keys(v)){
-                    if( key === 'REMARK' ){
-                      if(error.includes(v[key])){
-                        errorData.push('x')
-                      }
-                    }
                     v[key] = {value : v[key]}
                   }
                   return v
                 })
                 data.data.PARENT.map( v => {
                   for( const key of Object.keys(v)){
-                    if( key === 'REMARK' ){
-                      if(error.includes(v[key])){
-                        errorData.push('x')
-                      }
-                    }
                     v[key] = {value : v[key]}
                   }
                   return v
