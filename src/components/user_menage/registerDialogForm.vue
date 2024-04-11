@@ -556,12 +556,10 @@ export default {
     passwordRules() {
       return [
         (val) =>
-          (val || "").length > 7 ||
-          `${this.$t('password must contain at least one lowercase letter, one uppercase letter, one number, and one special character')}\n
-          ${this.$t("please enter a password that is at least 8 characters long")}
-          `,
-        (v) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/.test(v) || 
-          this.$t('password must contain at least one lowercase letter, one uppercase letter, one number, and one special character'),
+          (val || "").length > 7 || `${this.$t("please enter a password that is at least 8 characters long")}`,
+        (v) => /^(?=.*[0-9])(?=.*[a-zA-Z])([A-Za-z\d@$!%*?&]+)$/.test(v) || 
+        // (v) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/.test(v) || 
+          this.$t('password must consist of at least one English alphabet. Using special characters'),
       ];
     },
   },

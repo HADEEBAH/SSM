@@ -464,7 +464,7 @@
     "password" : "รหัสผ่าน",
     "passwords do not match" : "รหัสผ่านไม่ตรงกัน",
     "password must not contain special characters" : "รหัสผ่านต้องไม่มีอักขระพิเศษ",
-    "password must contain at least one lowercase letter, one uppercase letter, one number, and one special character" : "รหัสผ่านจะต้องมีตัวอักษรพิมพ์เล็กอย่างน้อยหนึ่งตัว ตัวพิมพ์ใหญ่หนึ่งตัว ตัวเลขหนึ่งตัว และอักขระพิเศษหนึ่งตัว",
+    "password must consist of at least one English alphabet. Using special characters" : "รหัสผ่านต้องประกอบด้วยตัวอักษรภาษาอังกฤษผสมตัวเลขอย่างน้อยหนึ่งหลัก โดยใช้อักขระพิเศษได้",
     "pay again" : "ชำระอีกครั้ง",
     "payment type" : "ประเภทการชำระเงิน",
     "payment amount" : "จำนวนที่ชำระ",

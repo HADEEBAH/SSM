@@ -494,7 +494,7 @@
     "password" : "Password",
     "passwords do not match" : "Passwords do not match",
     "password must not contain special characters" : "Password must not contain special characters",
-    "password must contain at least one lowercase letter, one uppercase letter, one number, and one special character" : "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character",
+    "password must consist of at least one English alphabet. Using special characters" : "Password must consist of at least one English alphabet. Using special characters",
     "pay again" : "Pay again", 
     "payment type" : "Payment type",
     "payment amount" : "Payment amount",
