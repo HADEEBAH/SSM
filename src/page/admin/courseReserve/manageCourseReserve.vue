@@ -218,6 +218,7 @@
         </template>
       </v-data-table>
     </v-card>
+    <!-- EXPORT:: RESERVE -->
     <v-dialog v-model="dialogExport">
       <v-card class="pa-3">
         <v-row>
@@ -557,6 +558,7 @@
               <v-btn
                 outlined
                 color="#ff6b81"
+                @click="closeDialogExport()"
               >
                 {{ $t('cancel') }}
               </v-btn>
@@ -573,7 +575,6 @@
             </v-col>
           </v-row>
         </v-card-text>
-
       </v-card>
     </v-dialog>
   </v-container>
@@ -623,7 +624,7 @@ export default {
       student_id: [],
       course_id: [],
       course_type_id: [],
-      menu_reserve_date : true,
+      menu_reserve_date : false,
       reserve_date : "",
       package_id: [],
       day_of_week_id: [],
@@ -647,7 +648,9 @@ export default {
       }
     },
     "export_filter.course_id": function (val) {
-      this.filterDowAndTime({courses: val})
+      if(val.length > 0){
+        this.filterDowAndTime({courses: val})
+      }
     }
   },
   created() {
@@ -797,6 +800,18 @@ export default {
     },
     closeDialogExport(){
       this.dialogExport = false
+      this.export_filter = {
+        option_id: [],
+        student_id: [],
+        course_id: [],
+        course_type_id: [],
+        menu_reserve_date : false,
+        reserve_date : "",
+        package_id: [],
+        day_of_week_id: [],
+        time_id: [],
+        coach_id: [],
+      }
     },
     async clickTab() {
       this.search_bool = true;

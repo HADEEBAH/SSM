@@ -3,6 +3,8 @@ import moment from "moment";
 import VueCookie from "vue-cookie";
 import Swal from "sweetalert2";
 import VueI18n from "../i18n";
+var XLSX = require("xlsx");
+
 function dayOfWeekArray(day) {
   let days = day;
   const weekdays = [
@@ -99,7 +101,7 @@ const reserveCourseModules = {
           },
         }
 
-        const { data } = await axios.get(`http://localhost:3000/api/v1/course/reserve${query}`,config)
+        const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/reserve${query}`,config)
         if(data.statusCode === 200){
           console.log(data.data)
           const dow_filter = []
@@ -198,10 +200,36 @@ const reserveCourseModules = {
         if(reserve_date){
           query += `reserveDate=${reserve_date}`
         }
-        console.log(query)
-        const {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve?${query}`, config)
+        const {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/export${query}`, config)
         if(data.statusCode === 200){
-          console.log(data)
+          if (data.data.length > 0) {
+            const reports = []
+            for await ( const reserve of data.data ){
+              const dowName = dayOfWeekArray(reserve.dayOfWeekName.split(','))
+              reports.push({
+                "วันที่จอง": moment(reserve.createdDate).format("DD/MM/YYYY HH:mm"),
+                "คอร์สเรียน": reserve.courseNameTh,
+                "แพคเก็จ": reserve.packageName,
+                "ระยะเวลา": reserve.optionName,
+                "วันที่เรียน": dowName,
+                "เวลาเรียน": `${reserve.start} - ${reserve.end}น.`,
+                "โค้ช": `${reserve.coachFirstNameTh} ${reserve.coachLastNameTh}`,
+                "นักเรียน": `${reserve.studentFirstNameTh} ${reserve.studentLastNameTh}`,
+                "สถานะ": reserve.status === 'waiting' ? 'รอการติดต่อ' : reserve.status === 'contacted' ? 'ติดต่อแล้ว' : "ยกเลิกการจอง",
+              })
+            }
+            var workbook = XLSX.utils.book_new();
+            var worksheet = XLSX.utils.json_to_sheet(reports);
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'sheet1');
+            var excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+            var blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+            var url = URL.createObjectURL(blob);
+            var link = document.createElement("a");
+            link.href = url;
+            link.download = `reserveReport.xlsx`;
+            link.click();
+            URL.revokeObjectURL(url);
+          } 
         }
       }catch(error){
         console.log(error)
