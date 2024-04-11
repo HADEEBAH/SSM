@@ -47,11 +47,11 @@
                 </v-row>
                 <v-card outlined class="mb-3">
                     <v-data-table
-                    v-if="fileParent && headersParent.length > 0"
-                    :headers="formattedHeadersParent"
-                    :items="fileParent"
-                    hide-default-footer
-                    disable-pagination
+                        v-if="fileParent && headersParent.length > 0"
+                        :headers="formattedHeadersParent"
+                        :items="fileParent"
+                        hide-default-footer
+                        disable-pagination
                     >
                         <template #item="data">
                             <tr>
@@ -184,18 +184,18 @@ export default {
         validateInputTable(data, index){
             const error = ['Username is already used.', 'The username or password or tel format is invalid.','Duplicate username', 'Parameter missing. Required username.', 'Username relation not found. Or this username role not match.']
             switch (index) {
-                case 'USERNAME':
-                    if (!data[index].value || data[index].value.length < 6) {
-                        return {text : this.$t('please enter a username at least 6 characters long'), color: "#ee3333"} 
-                    }
-                    break;
-                case 'PASSWORD':
-                    if (!data[index].value || data[index].value.length < 8 ) {
-                        return {text : this.$t('please enter a password that is at least 8 characters long'), color: "#ee3333"}
-                    } else if ( !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/.test(data[index].value)) {
-                        return {text :this.$t('password must contain at least one lowercase letter, one uppercase letter, one number, and one special character'), color: "#ee3333"}
-                    }
-                    break;
+                // case 'USERNAME':
+                //     if (!data[index].value || data[index].value.length < 6) {
+                //         return {text : this.$t('please enter a username at least 6 characters long'), color: "#ee3333"} 
+                //     }
+                //     break;
+                // case 'PASSWORD':
+                //     if (!data[index].value || data[index].value.length < 8 ) {
+                //         return {text : this.$t('please enter a password that is at least 8 characters long'), color: "#ee3333"}
+                //     } else if ( !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/.test(data[index].value)) {
+                //         return {text :this.$t('password must contain at least one lowercase letter, one uppercase letter, one number, and one special character'), color: "#ee3333"}
+                //     }
+                //     break;
                 case 'REMARK':
                     if (error.includes(data[index].value)) {
                         return  {text :this.$t(data[index].value), color: "text-[#ee3333]"}
@@ -248,6 +248,7 @@ export default {
             reader.readAsArrayBuffer(this.file);
         },
         save() {
+
             this.uploadUser({
                 payload: {
                     STUDENT: this.fileStudent,

@@ -2,19 +2,30 @@
   <v-container>
     <loading-overlay :loading="reserve_is_loadings"></loading-overlay>
     <header-page slot_tag :title="$t(`manage course booking`)">
-      <v-text-field
-        class="w-full"
-        outlined
+      <v-btn
+        dark
         dense
-        hide-details
-        :placeholder="$t(`search`)"
-        v-model="search_filter"
-        append-outer-icon="mdi-magnify"
-        @click:append-outer="clickTab(search_filter)"
-        @keyup.enter="clickTab(search_filter)"
-      ></v-text-field>
+        depressed
+        color="#ff6b81"
+        @click="OpenDialogExport()"
+      >{{ $t('export') }}</v-btn>
     </header-page>
-
+    <v-row dense class="mb-3">
+      <v-col></v-col>
+      <v-col cols="12" md="6">
+        <v-text-field
+          class="w-full"
+          outlined
+          dense
+          hide-details
+          :placeholder="$t(`search`)"
+          v-model="search_filter"
+          append-outer-icon="mdi-magnify"
+          @click:append-outer="clickTab(search_filter)"
+          @keyup.enter="clickTab(search_filter)"
+        ></v-text-field>
+      </v-col>
+    </v-row>
     <v-row dense class="mb-3">
       <v-col cols="12" sm="3" @click="(tab_selected = ''), clickTab()">
         <img-card
@@ -207,6 +218,365 @@
         </template>
       </v-data-table>
     </v-card>
+    <!-- EXPORT:: RESERVE -->
+    <v-dialog v-model="dialogExport">
+      <v-card class="pa-3">
+        <v-row>
+          <v-col cols="12" align="right">
+            <v-btn icon @click="closeDialogExport()">
+              <v-icon color="#ff6b81">mdi-close</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-card-title>
+          <v-row dense>
+            <v-col cols="12" align="center" class="font-semibold">{{
+              $t("export")
+            }}</v-col>
+          </v-row>
+        </v-card-title>
+        <v-card-text>
+          <v-row dense>
+            <v-col cols="12" sm="6">
+              {{ $t('student name') }}
+              <v-autocomplete
+                dense
+                color="#FF6B81"
+                item-color="#ff6b81"
+                chips
+                class="py-1"
+                deletable-chips
+                :loading="loading"
+                prepend-inner-icon="mdi-magnify"
+                v-model="export_filter.student_id"
+                cache-items
+                :items="username_list"
+                :search-input.sync="search"
+                :placeholder="$t(`search/Please select a student`)"
+                :label="$t(`search`)"
+                item-text="fullname"
+                item-value="userOneId"
+                outlined
+                multiple
+                clearable
+                @input="search = null"
+              >
+                <template v-slot:no-data>
+                  <v-list-item>
+                    <v-list-item-title>
+                      {{
+                        search
+                          ? $t(`data not found`)
+                          : $t(`please enter the student's name`)
+                      }}
+                    </v-list-item-title>
+                  </v-list-item>
+                </template>
+                <template v-slot:selection="data">
+                  <v-chip
+                    v-bind="data.attrs"
+                    :input-value="data.selected"
+                    color="#FBF3F5"
+                  >
+                    {{ $i18n.locale == 'th' ? `${data.item.firstNameTh} ${data.item.lastNameTh}` : `${data.item.firstNameEng} ${data.item.lastNameEng}` }}
+                    <v-icon
+                      @click="remove(data.item.userOneId)"
+                      color="#ff6b81"
+                      >mdi-close-circle</v-icon
+                    >
+                  </v-chip>
+                </template>
+                <template v-slot:item="{ item }">
+                  {{  $i18n.locale == 'th' ? `${item.firstNameTh} ${item.lastNameTh}` : `${item.firstNameEng} ${item.lastNameEng}` }}
+                </template>
+              </v-autocomplete>
+            </v-col>
+            <v-col cols="12" sm="6">
+              {{$t('course name')}}
+              <v-autocomplete
+                  dense
+                  :items="courses"
+                  :item-text="$i18n.locale == 'th' ? 'course_th' : 'course_en'"
+                  item-value="course_id"
+                  v-model="export_filter.course_id"
+                  :placeholder="$t('please select a course')"
+                  outlined
+                  multiple
+                  hide-details
+                  class="py-1"
+                  color="#FF6B81"
+                  item-color="#FF6B81"
+                >
+                  <template v-slot:no-data>
+                    <v-list-item>
+                      <v-list-item-title>
+                        {{ $t(`data not found`) }}
+                      </v-list-item-title>
+                    </v-list-item>
+                  </template>
+                  <template v-slot:selection="{ item, index }">
+                    <v-chip dark v-if="index === 0" color="#FF6B81">
+                      <span>{{
+                        $i18n.locale == "th" ? item.course_th : item.course_en
+                      }}</span>
+                    </v-chip>
+                    <span v-if="index === 1" class="grey--text text-caption">
+                      (+{{ export_filter.course_id.length - 1 }}
+                      {{ $t("others") }})
+                    </span>
+                  </template>
+                </v-autocomplete>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col>
+              {{ $t('course type') }}
+              <v-autocomplete
+                outlined
+                dense
+                multiple
+                hide-details
+                class="py-1"
+                v-model="export_filter.course_type_id"
+                :items="courseType"
+                :item-text="$i18n.locale == 'th' ? 'typeName' : 'typeNameEn'"
+                item-value="typeOfValue"
+                color="#FF6B81"
+                item-color="#FF6B81"
+                :placeholder="$t('please select a course type')"
+              >
+                <template v-slot:no-data>
+                  <v-list-item>
+                    <v-list-item-title>
+                      {{ $t(`data not found`) }}
+                    </v-list-item-title>
+                  </v-list-item>
+                </template>
+                <template v-slot:selection="{ item }">
+                  <v-chip dark color="#FF6B81">
+                    <span>{{
+                      $i18n.locale == "th" ? item.typeName : item.typeNameEn
+                    }}</span>
+                  </v-chip>
+                </template>
+              </v-autocomplete>
+            </v-col>
+            <v-col>
+              {{ $t("package") }}
+              <v-autocomplete
+              dense
+              :items="packages"
+              item-text="packageName"
+              item-value="packageId"
+              v-model="export_filter.package_id"
+              class="py-1"
+              :label="$t('please select a package')"
+              outlined
+              multiple
+              color="#FF6B81"
+              item-color="#FF6B81"
+            >
+              <template v-slot:selection="{ item, index }">
+                <v-chip dark v-if="index === 0" color="#FF6B81">
+                  <span>{{ item.packageName }}</span>
+                </v-chip>
+                <span
+                  v-if="index === 1"
+                  class="grey--text text-caption"
+                >
+                  (+{{ export_filter.package_id.length - 1 }}
+                  {{ $t("others") }})
+                </span>
+              </template>
+            </v-autocomplete>
+            </v-col>
+            <v-col>
+              {{ $t('period') }}
+              <v-autocomplete
+                dense
+                :items="options_data"
+                :item-text="
+                  $i18n.locale == 'th' ? 'optionName' : 'optionNameEn'
+                "
+                item-value="optionId"
+                v-model="export_filter.option_id"
+                class="py-1"
+                :label="$t('please select a period')"
+                outlined
+                hide-details
+                multiple
+                color="#FF6B81"
+                item-color="#FF6B81"
+              >
+                <template v-slot:selection="{ item, index }">
+                  <v-chip dark v-if="index === 0" color="#FF6B81">
+                    <span>{{
+                      $i18n.locale == "th"
+                        ? item.optionName
+                        : item.optionNameEn
+                    }}</span>
+                  </v-chip>
+                  <span
+                    v-if="index === 1"
+                    class="grey--text text-caption"
+                  >
+                    (+{{ export_filter.option_id.length - 1 }}
+                    {{ $t("others") }})
+                  </span>
+                </template>
+              </v-autocomplete>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col>
+              {{ $t('reservation date range') }}
+              <v-menu
+                v-model="export_filter.menu_reserve_date"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    dense
+                    class="py-1"
+                    :value="
+                      !export_filter.reserve_date
+                        ? export_filter.reserve_date
+                        : GenDate(export_filter.reserve_date)
+                    "
+                    :placeholder="$t('please select a date')"
+                    outlined
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
+                    color="#FF6B81"
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                  v-model="export_filter.reserve_date"
+                  @input="export_filter.menu_reserve_date = false"
+                  locale="th-TH"
+                ></v-date-picker>
+              </v-menu>
+            </v-col>
+            <v-col>
+              {{ $t('class date') }}
+              <v-autocomplete
+                dense
+                :items="dow_filter"
+                item-text="dowName"
+                item-value="dowId"
+                v-model="export_filter.day_of_week_id"
+                class="py-1"
+                :placeholder="$t('please select a class date')"
+                outlined
+                hide-details
+                multiple
+                color="#FF6B81"
+                item-color="#FF6B81"
+              >
+                <template v-slot:selection="{ item, index }">
+                  <v-chip dark v-if="index === 0" color="#FF6B81">
+                    <span>{{ item.dowName }}</span>
+                  </v-chip>
+                  <span
+                    v-if="index === 1"
+                    class="grey--text text-caption"
+                  >
+                    (+{{ export_filter.day_of_week_id.length - 1 }}
+                    {{ $t("others") }})
+                  </span>
+                </template>
+              </v-autocomplete>
+            </v-col>
+            <v-col>
+              {{ $t('class time') }}
+              <v-autocomplete
+                dense
+                :items="time_filter"
+                item-text="timeName"
+                item-value="timeId"
+                v-model="export_filter.time_id"
+                class="py-1"
+                :placeholder="$t('please select a class time')"
+                outlined
+                hide-details
+                multiple
+                color="#FF6B81"
+                item-color="#FF6B81"
+              >
+                <template v-slot:selection="{ item, index }">
+                  <v-chip dark v-if="index === 0" color="#FF6B81">
+                    <span>{{ item.timeName }}</span>
+                  </v-chip>
+                  <span
+                    v-if="index === 1"
+                    class="grey--text text-caption"
+                  >
+                    (+{{ export_filter.time_id.length - 1 }}
+                    {{ $t("others") }})
+                  </span>
+                </template>
+              </v-autocomplete>
+            </v-col>
+            <v-col>
+              {{ $t('coach') }}
+              <v-autocomplete
+                dense
+                :items="coach_filter"
+                item-text="fullName"
+                item-value="accountId"
+                v-model="export_filter.coach_id"
+                class="py-1"
+                :placeholder="$t('please select a class time')"
+                outlined
+                hide-details
+                multiple
+                color="#FF6B81"
+                item-color="#FF6B81"
+              >
+                <template v-slot:selection="{ item, index }">
+                  <v-chip dark v-if="index === 0" color="#FF6B81">
+                    <span>{{ $i18n.locale === 'th' ? item.fullNameTh : item.fullNameEn }}</span>
+                  </v-chip>
+                  <span
+                    v-if="index === 1"
+                    class="grey--text text-caption"
+                  >
+                    (+{{ export_filter.coach_id.length - 1 }}
+                    {{ $t("others") }})
+                  </span>
+                </template>
+              </v-autocomplete>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col align="right">
+              <v-btn
+                outlined
+                color="#ff6b81"
+                @click="closeDialogExport()"
+              >
+                {{ $t('cancel') }}
+              </v-btn>
+            </v-col>
+            <v-col align="left">
+              <v-btn
+                depressed
+                dark
+                color="#ff6b81"
+                @click="exportReserve()"
+              >
+                {{ $t('export') }}
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
   
@@ -233,7 +603,35 @@ export default {
     itemsPerPage: 10,
     reserve_is_loadings: false,
     disable_pagination_btn: false,
+    today: new Date(),
     options: {},
+    dialogExport: false,
+    courseType: [
+      {
+        typeName: "คอร์สทั่วไป",
+        typeNameEn: "General course",
+        typeOfValue: "CT_1",
+      },
+      {
+        typeName: "คอร์สระยะสั้น",
+        typeNameEn: "Short course",
+        typeOfValue: "CT_2",
+      },
+    ],
+    loading: false,
+    export_filter : {
+      option_id: [],
+      student_id: [],
+      course_id: [],
+      course_type_id: [],
+      menu_reserve_date : false,
+      reserve_date : "",
+      package_id: [],
+      day_of_week_id: [],
+      time_id: [],
+      coach_id: [],
+    },
+    search: "",
   }),
   watch: {
     options: {
@@ -241,14 +639,38 @@ export default {
         this.loadItems();
       },
     },
+    search(val) {
+      if (val?.length > 3) {
+        this.loading = true;
+        this.searchNameUser({ search_name: val }).then(() => {
+          this.loading = false;
+        });
+      }
+    },
+    "export_filter.course_id": function (val) {
+      if(val.length > 0){
+        this.filterDowAndTime({courses: val})
+      }
+    }
   },
-  created() {},
+  created() {
+    this.GetCoursesList()
+    this.GetPackages()
+    this.GetOptions()
+    this.GetUserByRole()
+  },
   mounted() {},
-
   computed: {
     ...mapGetters({
       reserve_list: "reserveCourseModules/reserveList",
       reserve_list_is_loading: "reserveCourseModules/reserveListIsLoading",
+      username_list: "loginModules/getUsernameList",
+      courses: "CourseModules/getCourses",
+      packages: "CourseModules/getPackages",
+      options_data: "CourseModules/getOptions",
+      time_filter: "reserveCourseModules/timeFilter",
+      dow_filter: "reserveCourseModules/dowFilter",
+      coach_filter: "reserveCourseModules/coachFilter",
     }),
     course_type() {
       return [
@@ -342,8 +764,55 @@ export default {
     ...mapActions({
       GetReserveList: "reserveCourseModules/GetReserveList",
       UpdateStatusReserve: "reserveCourseModules/UpdateStatusReserve",
+      searchNameUser: "loginModules/searchNameUser",
+      GetPackages: "CourseModules/GetPackages",
+      GetOptions: "CourseModules/GetOptions",
+      ExportReserveList: "reserveCourseModules/ExportReserveList",
+      GetCoursesList: "CourseModules/GetCoursesList",
+      filterDowAndTime: "reserveCourseModules/filterDowAndTime",
+      GetUserByRole : "reserveCourseModules/GetUserByRole"
     }),
-
+    exportReserve(){
+      this.ExportReserveList({
+        students: this.export_filter.student_id,
+        courses: this.export_filter.course_id,
+        course_types: this.export_filter.course_type_id,
+        packages: this.export_filter.package_id,
+        options: this.export_filter.option_id,
+        reserve_date: this.export_filter.reserve_date,
+        dows: this.export_filter.day_of_week_id,
+        coachs: this.export_filter.coach_id,
+        times: this.export_filter.time_id
+      })
+    },
+    GenDate(date) {
+      return new Date(date).toLocaleDateString(
+        this.$i18n.locale == "th" ? "th-TH" : "en-US",
+        {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }
+      );
+    },
+    OpenDialogExport(){
+      this.dialogExport = true
+    },
+    closeDialogExport(){
+      this.dialogExport = false
+      this.export_filter = {
+        option_id: [],
+        student_id: [],
+        course_id: [],
+        course_type_id: [],
+        menu_reserve_date : false,
+        reserve_date : "",
+        package_id: [],
+        day_of_week_id: [],
+        time_id: [],
+        coach_id: [],
+      }
+    },
     async clickTab() {
       this.search_bool = true;
       if (this.tabs_temp !== this.tab_selected) {
