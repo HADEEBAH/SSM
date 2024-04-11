@@ -3,12 +3,51 @@ import moment from "moment";
 import VueCookie from "vue-cookie";
 import Swal from "sweetalert2";
 import VueI18n from "../i18n";
+function dayOfWeekArray(day) {
+  let days = day;
+  const weekdays = [
+    VueI18n.t("sunday"),
+    VueI18n.t("monday"),
+    VueI18n.t("tuesday"),
+    VueI18n.t("wednesday"),
+    VueI18n.t("thursday"),
+    VueI18n.t("friday"),
+    VueI18n.t("saturday"),
+  ];
+  days.sort();
+  let ranges = [];
+  if (days[0]) {
+    let rangeStart = parseInt(days[0]);
+    let prevDay = rangeStart;
+    for (let i = 1; i < days.length; i++) {
+      const day = parseInt(days[i]);
+      if (day === prevDay + 1) {
+        prevDay = day;
+      } else {
+        const rangeEnd = prevDay;
+        ranges.push({ start: rangeStart, end: rangeEnd });
+        rangeStart = day;
+        prevDay = day;
+      }
+    }
+    ranges.push({ start: rangeStart, end: prevDay });
+    return ranges
+      .map(({ start, end }) =>
+        start === end
+          ? weekdays[start]
+          : `${weekdays[start]} - ${weekdays[end]}`
+      )
+      .join(", ");
+  }
+}
 const reserveCourseModules = {
   namespaced: true,
   state: {
     reserve_list: [],
     reserve_list_is_loading: false,
-
+    dow_filter: [],
+    time_filter: [],
+    coach_filter: [],
   },
   mutations: {
     SetReserveList(state, payload) {
@@ -16,9 +55,158 @@ const reserveCourseModules = {
     },
     SetReserveListIsLoading(state, payload) {
       state.reserve_list_is_loading = payload
+    },
+    SetDowFilter(state, payload) {
+      state.dow_filter = payload
+    },
+    SetTimeFilter(state, payload){
+      state.time_filter = payload
+    },
+    SetCoachFilter(state, payload){
+      state.coach_filter = payload
     }
   },
   actions: {
+    async GetUserByRole(context){
+      try {
+        const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/role/R_3`)
+        if( data.statusCode === 200 ){
+          data.data.map(v => {
+            v.fullNameEn = `${v.firstNameEng} ${v.lastNameEng}`
+            v.fullNameTh = `${v.firstNameTh} ${v.lastNameTh}`
+            v.fullName = `${v.firstNameTh} ${v.lastNameTh} ( ${v.firstNameEng} ${v.lastNameEng} )`
+            return v
+          })
+          context.commit('SetCoachFilter', data.data)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async filterDowAndTime(context, { courses }){
+      try{
+        let query = "?"
+        if(courses.length > 0){
+          for (const course_id of courses) {
+            query += `courseId=${course_id}&`
+          }
+        }
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        }
+
+        const { data } = await axios.get(`http://localhost:3000/api/v1/course/reserve${query}`,config)
+        if(data.statusCode === 200){
+          console.log(data.data)
+          const dow_filter = []
+          const time_filter = []
+          for(const course of data.data){
+            for (const dow of course.dow) {
+              const dowName = dayOfWeekArray(dow.dowName.split(','))
+              if (dow_filter.some( v => v.dowName == dowName)) {
+                const dowIndex = dow_filter.findIndex( v => v.dowName == dowName)
+                if(!dow_filter[dowIndex].dowId.some( v => v === dow.dowId)){
+                  dow_filter[dowIndex].dowId.push(dow.dowId)
+                }
+              } else {
+                dow_filter.push({
+                  dowId : [dow.dowId],
+                  dowName : dowName
+                })
+              }
+              for (const time of dow.times){
+                const timeName = `${time.start} - ${time.end}`
+                if (time_filter.some( v => v.timeName == timeName)) {
+                  const timeIndex = time_filter.findIndex( v => v.timeName == timeName)
+                  if(!time_filter[timeIndex].timeId.some( v => v === time.timeId)){
+                    time_filter[timeIndex].timeId.push(time.timeId)
+                  }
+                } else {
+                  time_filter.push({
+                    timeId : [time.timeId],
+                    timeName : `${time.start} - ${time.end}`,
+                  })
+                }
+              }
+            }
+          }
+          context.commit('SetDowFilter', dow_filter)
+          context.commit('SetTimeFilter', time_filter)
+        }
+      }catch(error){
+        console.log(error)
+      }
+    },
+    async ExportReserveList(context, {students, courses, course_types, packages, options, reserve_date, dows, coachs, times}){
+      try{
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        }
+        let query = "?"
+        if(students.length > 0){
+          for (const student_id of students) {
+            query += `studentId=${student_id}&`
+          }
+        }
+        if(courses.length > 0){
+          for (const course_id of courses) {
+            query += `courseId=${course_id}&`
+          }
+        }
+        if(course_types.length > 0){
+          for (const course_type_id of course_types) {
+            query += `courseTypeId=${course_type_id}&`
+          }
+        } 
+        if(packages.length > 0){
+          for (const package_id of packages) {
+            query += `courseTypeId=${package_id}&`
+          }
+        }
+        if(options.length > 0){
+          for (const option_id of options) {
+            query += `optionId=${option_id}&`
+          }
+        }
+        if(dows.length > 0){
+          for (const dows_id of dows) {
+            for (const dow_id of dows_id){
+              query += `dayOfWeekId=${dow_id}&`
+            }
+          }
+        }
+        if(coachs.length > 0){
+          for (const coach_id of coachs) {
+            query += `coachId=${coach_id}&`
+          }
+        }
+        if(times.length > 0){
+          for (const times_id of times) {
+            for (const time_id of times_id){
+              query += `timeId=${time_id}&`
+            }
+          }
+        }
+        if(reserve_date){
+          query += `reserveDate=${reserve_date}`
+        }
+        console.log(query)
+        const {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve?${query}`, config)
+        if(data.statusCode === 200){
+          console.log(data)
+        }
+      }catch(error){
+        console.log(error)
+      } 
+    },
     async GetReserveList(context, { search, limit, page, status }) {
       let startIndex = 0;
       let endIndex = 0;
@@ -380,6 +568,15 @@ const reserveCourseModules = {
     reserveListIsLoading(state) {
       return state.reserve_list_is_loading;
     },
+    dowFilter(state){
+      return state.dow_filter
+    },
+    timeFilter(state){
+      return state.time_filter
+    },
+    coachFilter(state){
+      return state.coach_filter
+    }
   },
 };
 
