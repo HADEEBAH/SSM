@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <loading-overlay :loading="course_list_is_loading"></loading-overlay>
-    <div v-if="my_course_detail.countCheckIn == 0">
+    <div v-if="!my_course_detail.countCheckIn">
       <v-card-text
         class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
       >
