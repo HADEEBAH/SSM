@@ -554,11 +554,11 @@ const CourseModules = {
       }
     },
     // STUDENT :: LIST BY COACH
-    async GetStudentByDate(context, { course_id, date, start_time, end_time, time_id, coach_id, coach_data }) {
+    async GetStudentByDate(context, { course_id, date, start_time, end_time, time_id, coach_id }) {
       context.commit("SetStudentListIsLoadIng", true)
       try {
-        const count_check_In_date = coach_data.filter(v => v.start === start_time && v.end === end_time)
-        const current_check_in = count_check_In_date.findIndex(v => v.date == date) + 1
+        // const count_check_In_date = coach_data.filter(v => v.start === start_time && v.end === end_time)
+        // const current_check_in = count_check_In_date.findIndex(v => v.date == date) + 1
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -578,11 +578,11 @@ const CourseModules = {
             let scheduleStudent = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course-student/${course_id}/${date}?starTime=${start_time}&endTime=${end_time}&coachId=${coach_id}`, config)
             if (scheduleStudent.data.statusCode == 200) {
               let scheduleStudentData = scheduleStudent.data.data.filter(v => v.endTime == end_time && v.startTime == start_time && v.coachId == coach_id)         
-              scheduleStudentData.map(v=>{
-                v.countCheckIn = current_check_in
-                v.totalDay = count_check_In_date.length
-                return v
-              })
+              // scheduleStudentData.map(v=>{
+              //   v.countCheckIn = current_check_in
+              //   v.totalDay = count_check_In_date.length
+              //   return v
+              // })
               console.log("scheduleStudentData",scheduleStudentData)
               context.commit("SetNoChackInStudentList", scheduleStudentData)
             }
