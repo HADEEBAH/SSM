@@ -246,6 +246,12 @@ export default {
         child: [],
         roles: ["R_1"],
       },
+      {
+        title: "satisfaction",
+        to: "satisfactionReport",
+        child: [],
+        roles: ["R_1"],
+      },
     ],
     menu_locale: false,
   }),
