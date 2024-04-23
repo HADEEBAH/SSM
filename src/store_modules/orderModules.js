@@ -1623,7 +1623,6 @@ const orderModules = {
       if (page == 1) {
         context.commit("SetOrderHistoryIsLoading", true);
       }
-
       try {
         let config = {
           headers: {
@@ -1645,20 +1644,30 @@ const orderModules = {
               thaiLocale,
               options
             );
-          });
-          for (const item of data.data) {
-            if (item.courseImg && item.courseImg !== "") {
-              item.courseImg = process.env.VUE_APP_URL.concat(
-                `/api/v1/files/${item.courseImg}`
+            if (items.courseImg && items.courseImg !== "") {
+              items.courseImg = process.env.VUE_APP_URL.concat(
+                `/api/v1/files/${items.courseImg}`
               );
             }
-            item.show_student = false;
-
+            items.show_student = false;
+            return items
+          });
+          const history = []
+          for (const item of data.data) {
+            if(!history.some(v => v.orderNumber === item.orderNumber)){
+              history.push({
+                orderId: item.orderId,
+                orderNumber: item.orderNumber,
+                createdDate: item.createdDate,
+                createdByData: item.createdByData,
+                totalPrice: item.totalPrice,
+                paymentStatus : item.paymentStatus,
+                courses: data.data.filter(v => v.orderNumber === item.orderNumber)
+              })
+            }
           }
-          context.commit("SetHistoryList", data.data);
+          context.commit("SetHistoryList", history);
           context.commit("SetHistoryListOption", { limit: limit, page: page, count: data.data.length })
-
-
           setTimeout(() => {
             context.commit("SetOrderHistoryIsLoading", false);
           }, 200);
