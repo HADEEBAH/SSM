@@ -75,13 +75,13 @@
                       </v-chip>
                     </v-col>
                   </v-row>
-                  <v-card outlined class="mb-3">
+                  <v-card v-for="( course, courseIndex ) in order.courses" :key="`${courseIndex}-course`" outlined class="mb-3">
                     <v-card-text>
                       <v-row>
                         <v-col cols="12" sm="4" md="4" lg="4" class="pa-2">
                           <v-img
-                            v-if="order.courseImg"
-                            :src="order.courseImg"
+                            v-if="course.courseImg"
+                            :src="course.courseImg"
                             :aspect-ratio="16 / 9"
                             class="rounded-lg"
                             absolute
@@ -115,8 +115,8 @@
                                   class="align-self-center text-lg font-bold"
                                   >{{
                                     $i18n.locale == "th"
-                                      ? order.courseNameTh
-                                      : order.courseNameEn
+                                      ? course.courseNameTh
+                                      : course.courseNameEn
                                   }}</v-col
                                 >
                               </v-row>
@@ -128,11 +128,11 @@
                                     </v-col>
                                     <v-col>{{
                                       $i18n.locale == "th"
-                                        ? order.coachName
-                                          ? order.coachName
+                                        ? course.coachName
+                                          ? course.coachName
                                           : "-"
-                                        : order.coachNameEn
-                                        ? order.coachNameEn
+                                        : course.coachNameEn
+                                        ? course.coachNameEn
                                         : "-"
                                     }}</v-col>
                                   </v-row>
@@ -144,14 +144,14 @@
                                     >
                                     <v-col>{{
                                       `${
-                                        order.timeStartOrder &&
-                                        order.timeStartOrder !== ""
-                                          ? order.timeStartOrder
+                                        course.timeStartOrder &&
+                                        course.timeStartOrder !== ""
+                                          ? course.timeStartOrder
                                           : "-"
                                       } - ${
-                                        order.timeEndOrder &&
-                                        order.timeEndOrder !== ""
-                                          ? order.timeEndOrder
+                                        course.timeEndOrder &&
+                                        course.timeEndOrder !== ""
+                                          ? course.timeEndOrder
                                           : "-"
                                       } ${$t("o'clock")}`
                                     }}</v-col>
@@ -162,19 +162,19 @@
                           </v-row>
                           <v-row
                             dense
-                            :class="order.show_student ? 'mb-2' : ''"
+                            :class="course.show_student ? 'mb-2' : ''"
                             class="d-flex align-center"
                           >
                             <v-col align="center">
                               <v-btn
                                 @click="
-                                  order.show_student = !order.show_student
+                                  course.show_student = !course.show_student
                                 "
                                 text
                                 class="font-bold"
                                 >{{ $t("show student list")
                                 }}<v-icon color="#ff6b81">{{
-                                  order.show_student
+                                  course.show_student
                                     ? "mdi-chevron-up"
                                     : "mdi-chevron-down"
                                 }}</v-icon></v-btn
@@ -183,12 +183,12 @@
                           </v-row>
                           <v-expand-transition>
                             <div
-                              v-if="order.show_student"
+                              v-if="course.show_student"
                               class="rounded-md pa-2"
                             >
                               <v-row
                                 dense
-                                v-for="(student, index) in order.students"
+                                v-for="(student, index) in course.students"
                                 :key="`${index}-student`"
                               >
                                 <v-card flat class="w-full mb-2">
