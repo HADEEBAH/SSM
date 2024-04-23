@@ -1,6 +1,6 @@
 {   
     "a relationship cannot be established because they are in the same role" : "A relationship cannot be established because they are in the same role",
-    
+    "average": "Average",
     "admin has added a course for you":"Admin has added a course for you",
     "admin applies for course": "Admin already applies course",
     "admin" : "Admin",
@@ -630,6 +630,7 @@
     "reason for leave" : "Reason for leave",
     "read more":"Read more",
     "race day": "Race day",
+    "rate" : "Rate",
     "receipt language" : "Receipt language",
     "reason for refusal": "Reason for refusal",
     "reset password":"Reset password",

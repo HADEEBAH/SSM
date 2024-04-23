@@ -1,4 +1,5 @@
 {   "a relationship cannot be established because they are in the same role" : "ไม่สามารถสร้างความสัมพันธ์ได้เนื่องจากอยู่ในบทบาทเดียวกัน",
+    "average": "เฉลี่ย",
     "admin has added a course for you":"แอดมินได้เพิ่มคอร์สเรียนให้คุณ",
     "admin applies for course": "แอดมินสมัครคอร์ส",
     "admin" : "ผู้ดูแลระบบ",
@@ -603,6 +604,7 @@
     "reason for refusal": "สาเหตุการปฏิเสธ",
     "reset password":"รีเซ็ตรหัสผ่าน",
     "race day": "วันที่แข่ง",
+    "rate" : "คะแนน",
     "refuse": "ปฏิเสธ",
     "refuse leave request": "ปฏิเสธคำขอลา",
     "refusal reason": "เหตุผลการปฏิเสธ",

@@ -74,6 +74,8 @@ import ManageCheckInLater from './page/admin/checkIn/checkInOrder.vue'
 import AdminCheckin from './page/admin/checkIn/adminCheckin.vue'
 //IMPORT USER
 import ImportUser from './page/admin/importUser/importUser.vue'
+//SATISFACTION 
+import satisfactionReport from './page/admin/satisfaction/satisfactionReport.vue'
 const routes = [
   {
     path: '/auth',
@@ -113,6 +115,11 @@ const routes = [
     name: 'Admin',
     component: NavBarAdmin,
     children: [
+      {
+        path: 'satisfactionReport',
+        name: 'satisfactionReport',
+        component: satisfactionReport,
+      },
       {
         path:"ManageCheckInLater",
         name:"ManageCheckInLater",
