@@ -102,10 +102,10 @@
               link
               v-if="
                 list.child.length === 0 &&
-                (list.roles.length > 0
+                ((list.roles.length > 0
                   ? list.roles.filter((v) => user_detail?.roles.includes(v))
                       .length > 0
-                  : false)
+                  : false) || list.username.includes(user_detail?.username))
               "
             >
               <v-list-item-title>{{ $t(list.title) }}</v-list-item-title>
@@ -250,7 +250,8 @@ export default {
         title: "satisfaction",
         to: "satisfactionReport",
         child: [],
-        roles: ["R_1"],
+        roles: [],
+        username: ['yuthyuth']
       },
     ],
     menu_locale: false,

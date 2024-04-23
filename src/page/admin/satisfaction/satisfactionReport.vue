@@ -138,6 +138,10 @@ export default {
         },
     },
     created(){
+        const user_detail = JSON.parse(localStorage.getItem("userDetail"));
+        if(!['yuthyuth'].includes(user_detail.username)){
+            this.$router.push({ name: "Dashboard" });
+        }
         this.GetSatisfactionList()
     },
     methods: {
