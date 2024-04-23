@@ -51,7 +51,7 @@ const satisfactionModules = {
         },
         async GetSatisfactionList(context){
             try {
-                const {data} = await axios.get(`http://localhost:3000/api/v1/satisfaction`, config)
+                const {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/satisfaction`, config)
                 if (data.statusCode === 200) {
                     context.commit("SetSatisfactions", data.data)
                 }
