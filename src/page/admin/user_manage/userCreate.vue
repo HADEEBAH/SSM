@@ -855,8 +855,14 @@ export default {
                   return val.roleId;
                 })
                 .join();
-              this.checkData.school = this.global_data_relation_checked.school;
-              this.checkData.class = this.global_data_relation_checked.class;
+              this.checkData.school = this.global_data_relation_checked?.school? this.global_data_relation_checked.school : {
+                schoolNameEn: "",
+                schoolNameTh: "",
+              };
+              this.checkData.class = this.global_data_relation_checked?.class? this.global_data_relation_checked?.class : {
+                classNameTh: "",
+                classNameEn: ""
+              };
               this.roles.map((val) => {
                 if (this.global_role_code === val.roleNumber) {
                   this.seledtedRole = val.roleNumber;

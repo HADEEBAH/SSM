@@ -177,6 +177,10 @@ const userModules = {
                         classNameTh : "",
                         classNameEn : ""
                     } 
+                    data.data.school = data.data.school ? data.data.school : {
+                        schoolNameTh : "",
+                        schoolNameEn : ""
+                    } 
                     context.commit("SetShowById", data.data)
                 }
             } catch (error) {
