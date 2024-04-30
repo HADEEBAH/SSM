@@ -457,7 +457,6 @@
         </div>
       </template>
       <!-- STUDENT -->
-      {{course_order.students}}
       <div
         v-for="(student, index_student) in course_order.students.filter(
           (v) => v.is_other === true
