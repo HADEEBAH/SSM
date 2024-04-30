@@ -253,13 +253,25 @@
       </v-row>
       <!-- Apply For Parent -->
       <v-row dense>
-        <v-col cols="12" sm="6">
+        <v-col cols="12" sm="6" class="d-flex align-center">
           <v-checkbox
             :disabled="course_order.apply_for_others ? true : course_order.apply_for_parent ? false : checkMaximumStudent()"
             v-model="course_order.apply_for_parent"
             color="#ff6B81"
             :label="$t('register to student of parent')"
           ></v-checkbox>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn 
+                icon 
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon>mdi-information-outline</v-icon>
+              </v-btn>
+            </template>  
+            <span>{{$t('for parents to purchase for students')}}</span>
+          </v-tooltip>
         </v-col>
       </v-row>
       <!-- PARENT RELATION -->
