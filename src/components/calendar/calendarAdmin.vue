@@ -196,10 +196,10 @@
                   readonly
                   :value="
                     $i18n.locale == 'th'
-                      ? details.itmeData?.itmeData?.coachName
-                      : details.itmeData?.itmeData?.coachNameEn
-                      ? details.itmeData?.itmeData?.coachNameEn
-                      : details.itmeData?.itmeData?.coachName
+                      ? details.itmeData?.coachName
+                      : details.itmeData?.coachNameEn
+                      ? details.itmeData?.coachNameEn
+                      : details.itmeData?.coachName
                   "
                   hide-details
                   color="#ff6b81"

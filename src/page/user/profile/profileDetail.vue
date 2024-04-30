@@ -72,6 +72,18 @@
           >
           </v-text-field>
         </v-col>
+        <!-- nickname -->
+        <v-col cols="12" sm="6">
+          <label-custom :text="$t('nickname')"></label-custom>
+          <v-text-field
+            placeholder="-"
+            v-model="profile_detail.nicknameTh"
+            outlined
+            dense
+            :disabled="!isEnabled"
+          >
+          </v-text-field>
+        </v-col>
         <!-- nationality -->
         <!-- @keydown="validate($event, 'th-special')" -->
         <v-col cols="12" sm="6">
@@ -110,6 +122,48 @@
             outlined
             dense
             disabled
+          >
+          </v-text-field>
+        </v-col>
+        <!-- nickname -->
+        <v-col cols="12" sm="6">
+          <label-custom :text="$t('school')"></label-custom>
+          <v-text-field
+            placeholder="-"
+            v-model="profile_detail.school.schoolNameTh"
+            outlined
+            dense
+            :disabled="!isEnabled"
+          >
+          </v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <label-custom :text="$t('class')"></label-custom>
+          <v-autocomplete
+            v-model="profile_detail.class.classNameTh"
+            :items="class_list"
+            item-text="classNameTh"
+            color="#ff6B81"
+            item-color="#ff6b81"
+            outlined
+            :disabled="!isEnabled"
+            dense
+          >
+            <template #no-data>
+              <v-list-item>
+                {{ $t('data not found') }}
+              </v-list-item>
+            </template>
+          </v-autocomplete>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <label-custom :text="$t('congenital disease')"></label-custom>
+          <v-text-field
+            placeholder="-"
+            v-model="profile_detail.congenitalDisease"
+            outlined
+            dense
+            :disabled="!isEnabled"
           >
           </v-text-field>
         </v-col>
@@ -229,8 +283,9 @@ export default {
       this.changeProfileFail(true);
     }
   },
-  created() {
+  async created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+    await this.GetClassList()
   },
   mounted() {
     this.$store.dispatch(
@@ -241,6 +296,7 @@ export default {
 
   methods: {
     ...mapActions({
+      GetClassList : "ProfileModules/GetClassList",
       loginOneId: "loginModules/loginOneId",
       GetUserData: "ProfileModules/GetUserData",
       GetAll: "ProfileModules/GetAll",
@@ -313,6 +369,10 @@ export default {
                 nation: this.profile_detail.nation,
                 mobileNo: this.profile_detail.mobileNo,
                 email: this.profile_detail.email,
+                schoolTh: this.profile_detail.school.schoolNameTh,
+                nicknameTh: this.profile_detail.nicknameTh,
+                congenitalDiseaseTh:  this.profile_detail.congenitalDisease,
+                className:  this.profile_detail.class.classNameTh,
               };
 
               this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
@@ -445,6 +505,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      class_list: "ProfileModules/classList",
       user_one_id: "loginModules/getUserOneId",
       user_data: "ProfileModules/getUserData",
       profile_user: "ProfileModules/getProfileUser",

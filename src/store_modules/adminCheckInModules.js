@@ -73,7 +73,10 @@ const adminCheckInModules = {
         },
         SetCheckInCoach(state,{index, students}){
             state.scheduleCheckin[index].checkedIn = 1
-            state.scheduleCheckin[index].checkInStudent = students
+            state.scheduleCheckin[index].checkInStudent = students.map( v => { 
+                v.status = 'punctual' 
+                return v
+            })
         },
         async SetCheckInStudent(state,{ payload }){
             await state.scheduleCheckin.forEach((checkIn, Index) => {

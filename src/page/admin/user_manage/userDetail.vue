@@ -18,7 +18,7 @@
                   <v-card-text>
                     <v-row>
                       <v-col cols="12" sm="6">
-                        <labelCustom :text="this.$t('username')"></labelCustom>
+                        <labelCustom :text="$t('username')"></labelCustom>
                         <v-text-field
                           v-model="show_by_id.userName"
                           dense
@@ -82,7 +82,7 @@
                         <v-row>
                           <v-col cols="12" sm="6">
                             <label-custom
-                              :text="this.$t('first name(thai)')"
+                              :text="$t('first name(thai)')"
                             ></label-custom>
                             <v-text-field
                               :disabled="!isEnabled"
@@ -97,7 +97,7 @@
 
                           <v-col cols="12" sm="6">
                             <label-custom
-                              :text="this.$t('last name(thai)')"
+                              :text="$t('last name(thai)')"
                             ></label-custom>
                             <v-text-field
                               :disabled="!isEnabled"
@@ -115,7 +115,7 @@
                         <v-row>
                           <v-col cols="12" sm="6">
                             <label-custom
-                              :text="this.$t('first name(english)')"
+                              :text="$t('first name(english)')"
                             ></label-custom>
                             <v-text-field
                               :disabled="!isEnabled"
@@ -129,7 +129,7 @@
                           </v-col>
                           <v-col cols="12" sm="6">
                             <label-custom
-                              :text="this.$t('last name(english)')"
+                              :text="$t('last name(english)')"
                             ></label-custom>
                             <v-text-field
                               :disabled="!isEnabled"
@@ -143,11 +143,42 @@
                             </v-text-field>
                           </v-col>
                         </v-row>
-
                         <v-row>
                           <v-col cols="12" sm="6">
                             <label-custom
-                              :text="this.$t('email')"
+                              :text="$t('nickname(thai)')"
+                            ></label-custom>
+                            <v-text-field
+                              :disabled="!isEnabled"
+                              @keydown="validate($event, 'th')"
+                              placeholder="-"
+                              v-model="show_by_id.nicknameTh"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                          </v-col>
+
+                          <v-col cols="12" sm="6">
+                            <label-custom
+                              :text="$t('nickname(en)')"
+                            ></label-custom>
+                            <v-text-field
+                              :disabled="!isEnabled"
+                              @keydown="validate($event, 'en')"
+                              placeholder="-"
+                              v-model="show_by_id.nicknameEn"
+                              :rules="rules.name"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="12" sm="6">
+                            <label-custom
+                              :text="$t('email')"
                             ></label-custom>
                             <v-text-field
                               disabled
@@ -161,7 +192,7 @@
                           </v-col>
                           <v-col cols="12" sm="6">
                             <label-custom
-                              :text="this.$t('phone number')"
+                              :text="$t('phone number')"
                             ></label-custom>
                             <v-text-field
                               disabled
@@ -173,6 +204,76 @@
                               required
                               @input="checkPhoneNumber"
                               maxlength="12"
+                            >
+                            </v-text-field>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="12" sm="6">
+                            <label-custom
+                              :text="$t('school(thai)')"
+                            ></label-custom>
+                            <v-text-field
+                              :disabled="!isEnabled"
+                              @keydown="validate($event, 'th')"
+                              placeholder="-"
+                              v-model="show_by_id.school.schoolNameTh"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                          </v-col>
+
+                          <v-col cols="12" sm="6">
+                            <label-custom
+                              :text="$t('school(en)')"
+                            ></label-custom>
+                            <v-text-field
+                              :disabled="!isEnabled"
+                              @keydown="validate($event, 'en')"
+                              placeholder="-"
+                              v-model="show_by_id.school.schoolNameEn"
+                              :rules="rules.name"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="12" sm="6">
+                            <label-custom
+                              :text="$t('class')"
+                            ></label-custom>
+                            <v-autocomplete
+                              v-model="show_by_id.class.classNameTh"
+                              :items="class_list"
+                              item-text="classNameTh"
+                              color="#ff6B81"
+                              item-color="#ff6b81"
+                              outlined
+                              :disabled="!isEnabled"
+                              dense
+                            >
+                              <template #no-data>
+                                <v-list-item>
+                                  {{ $t('data not found') }}
+                                </v-list-item>
+                              </template>
+                            </v-autocomplete>
+                          </v-col>
+
+                          <v-col cols="12" sm="6">
+                            <label-custom
+                              :text="$t('congenital disease')"
+                            ></label-custom>
+                            <v-text-field
+                              :disabled="!isEnabled"
+                              placeholder="-"
+                              v-model="show_by_id.congenitalDisease"
+                              :rules="rules.name"
+                              outlined
+                              dense
                             >
                             </v-text-field>
                           </v-col>
@@ -306,7 +407,38 @@
                             </v-text-field>
                           </v-col>
                         </v-row>
+                        <v-row>
+                          <v-col cols="12" sm="6">
+                            <label-custom
+                              :text="$t('nickname(thai)')"
+                            ></label-custom>
+                            <v-text-field
+                              :disabled="!isEnabled"
+                              @keydown="validate($event, 'th')"
+                              placeholder="-"
+                              v-model="show_by_id.nicknameTh"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                          </v-col>
 
+                          <v-col cols="12" sm="6">
+                            <label-custom
+                              :text="$t('nickname(en)')"
+                            ></label-custom>
+                            <v-text-field
+                              :disabled="!isEnabled"
+                              @keydown="validate($event, 'en')"
+                              placeholder="-"
+                              v-model="show_by_id.nicknameEn"
+                              :rules="rules.name"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                          </v-col>
+                        </v-row>
                         <v-row>
                           <v-col cols="12" sm="6">
                             <label-custom :text="$t('email')"></label-custom>
@@ -334,6 +466,76 @@
                               required
                               @input="checkPhoneNumber"
                               maxlength="12"
+                            >
+                            </v-text-field>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="12" sm="6">
+                            <label-custom
+                              :text="$t('school(thai)')"
+                            ></label-custom>
+                            <v-text-field
+                              :disabled="!isEnabled"
+                              @keydown="validate($event, 'th')"
+                              placeholder="-"
+                              v-model="show_by_id.school.schoolNameTh"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                          </v-col>
+
+                          <v-col cols="12" sm="6">
+                            <label-custom
+                              :text="$t('school(en)')"
+                            ></label-custom>
+                            <v-text-field
+                              :disabled="!isEnabled"
+                              @keydown="validate($event, 'en')"
+                              placeholder="-"
+                              v-model="show_by_id.school.schoolNameEn"
+                              :rules="rules.name"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="12" sm="6">
+                            <label-custom
+                              :text="$t('class')"
+                            ></label-custom>
+                            <v-autocomplete
+                              v-model="show_by_id.class.classNameTh"
+                              :items="class_list"
+                              item-text="classNameTh"
+                              color="#ff6B81"
+                              item-color="#ff6b81"
+                              outlined
+                              :disabled="!isEnabled"
+                              dense
+                            >
+                              <template #no-data>
+                                <v-list-item>
+                                  {{ $t('data not found') }}
+                                </v-list-item>
+                              </template>
+                            </v-autocomplete>
+                          </v-col>
+
+                          <v-col cols="12" sm="6">
+                            <label-custom
+                              :text="$t('congenital disease')"
+                            ></label-custom>
+                            <v-text-field
+                              :disabled="!isEnabled"
+                              placeholder="-"
+                              v-model="show_by_id.congenitalDisease"
+                              :rules="rules.name"
+                              outlined
+                              dense
                             >
                             </v-text-field>
                           </v-col>
@@ -479,7 +681,38 @@
                                     </v-text-field>
                                   </v-col>
                                 </v-row>
+                                <v-row>
+                                  <v-col cols="12" sm="6">
+                                    <label-custom
+                                      :text="$t('nickname(thai)')"
+                                    ></label-custom>
+                                    <v-text-field
+                                      :disabled="!isEnabled"
+                                      @keydown="validate($event, 'th')"
+                                      placeholder="-"
+                                      v-model="show_by_id.nicknameTh"
+                                      outlined
+                                      dense
+                                    >
+                                    </v-text-field>
+                                  </v-col>
 
+                                  <v-col cols="12" sm="6">
+                                    <label-custom
+                                      :text="$t('nickname(en)')"
+                                    ></label-custom>
+                                    <v-text-field
+                                      :disabled="!isEnabled"
+                                      @keydown="validate($event, 'en')"
+                                      placeholder="-"
+                                      v-model="show_by_id.nicknameEn"
+                                      :rules="rules.name"
+                                      outlined
+                                      dense
+                                    >
+                                    </v-text-field>
+                                  </v-col>
+                                </v-row>
                                 <v-row>
                                   <v-col cols="12" sm="6">
                                     <label-custom
@@ -514,6 +747,75 @@
                                       required
                                       @input="checkPhoneNumber"
                                       maxlength="12"
+                                    >
+                                    </v-text-field>
+                                  </v-col>
+                                </v-row>
+                                <v-row>
+                                  <v-col cols="12" sm="6">
+                                    <label-custom
+                                      :text="$t('school(thai)')"
+                                    ></label-custom>
+                                    <v-text-field
+                                      :disabled="!isEnabled"
+                                      @keydown="validate($event, 'th')"
+                                      placeholder="-"
+                                      v-model="show_by_id.school.schoolNameTh"
+                                      outlined
+                                      dense
+                                    >
+                                    </v-text-field>
+                                  </v-col>
+
+                                  <v-col cols="12" sm="6">
+                                    <label-custom
+                                      :text="$t('school(en)')"
+                                    ></label-custom>
+                                    <v-text-field
+                                      :disabled="!isEnabled"
+                                      @keydown="validate($event, 'en')"
+                                      placeholder="-"
+                                      v-model="show_by_id.school.schoolNameEn"
+                                      :rules="rules.name"
+                                      outlined
+                                      dense
+                                    >
+                                    </v-text-field>
+                                  </v-col>
+                                </v-row>
+                                <v-row>
+                                  <v-col cols="12" sm="6">
+                                    <label-custom
+                                      :text="$t('class')"
+                                    ></label-custom>
+                                    <v-autocomplete
+                                      v-model="show_by_id.class.classNameTh"
+                                      :items="class_list"
+                                      item-text="classNameTh"
+                                      color="#ff6B81"
+                                      item-color="#ff6b81"
+                                      outlined
+                                      :disabled="!isEnabled"
+                                      dense
+                                    >
+                                      <template #no-data>
+                                        <v-list-item>
+                                          {{ $t('data not found') }}
+                                        </v-list-item>
+                                      </template>
+                                    </v-autocomplete>
+                                  </v-col>
+                                  <v-col cols="12" sm="6">
+                                    <label-custom
+                                      :text="$t('congenital disease')"
+                                    ></label-custom>
+                                    <v-text-field
+                                      :disabled="!isEnabled"
+                                      placeholder="-"
+                                      v-model="show_by_id.congenitalDisease"
+                                      :rules="rules.name"
+                                      outlined
+                                      dense
                                     >
                                     </v-text-field>
                                   </v-col>
@@ -1434,6 +1736,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      GetClassList : "ProfileModules/GetClassList",
       changeDialogRegisterOneId: "RegisterModules/changeDialogRegisterOneId",
       changeStudentsData: "UserManageModules/changeStudentsData",
       changeUserData: "UserManageModules/changeUserData",
@@ -1742,50 +2045,23 @@ export default {
           type: type,
         }).then(() => {
           if (type === "student") {
+            let student = this.course_order.students.filter((v) => v.username === username)[0]
             if (this.user_student_data.length > 0) {
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].firstname_en = this.user_student_data[0].firstNameEng;
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].lastname_en = this.user_student_data[0].lastNameEng;
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].firstname_th = this.user_student_data[0].firstNameTh;
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].lastname_th = this.user_student_data[0].lastNameTh;
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].student_name = `${this.user_student_data[0].firstNameEng} ${this.user_student_data[0].lastNameEng} `;
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].tel = this.user_student_data[0].mobileNo;
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].username = username;
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].account_id = this.user_student_data[0].userOneId;
+              student.firstname_en = this.user_student_data[0].firstNameEng;
+              student.lastname_en = this.user_student_data[0].lastNameEng;
+              student.firstname_th = this.user_student_data[0].firstNameTh;
+              student.lastname_th = this.user_student_data[0].lastNameTh;
+              student.student_name = `${this.user_student_data[0].firstNameEng} ${this.user_student_data[0].lastNameEng} `;
+              student.tel = this.user_student_data[0].mobileNo;
+              student.username = username;
+              student.account_id = this.user_student_data[0]?.userOneId;
             } else {
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].firstname_en = "";
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].lastname_en = "";
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].student_name = "";
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].tel = "";
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].username = username;
-              this.course_order.students.filter(
-                (v) => v.username === username
-              )[0].account_id = "";
+              student.firstname_en = "";
+              student.lastname_en = "";
+              student.student_name = "";
+              student.tel = "";
+              student.username = username;
+              student.account_id = "";
             }
           } else {
             if (this.user_data.length > 0) {
@@ -1793,7 +2069,7 @@ export default {
                 this.edit_parent = false;
               }
               this.parent = {
-                account_id: this.user_data[0].userOneId,
+                account_id: this.user_data[0]?.userOneId,
                 username: username,
                 firstname_en: this.user_data[0].firstNameEng,
                 lastname_en: this.user_data[0].lastNameEng,
@@ -1811,7 +2087,7 @@ export default {
                 parents[0].firstname_en = this.user_data[0].firstNameEng;
                 parents[0].lastname_en = this.user_data[0].lastNameEng;
                 parents[0].tel = this.user_data[0].mobileNo;
-                parents[0].account_id = this.user_data[0].userOneId;
+                parents[0].account_id = this.user_data[0]?.userOneId;
                 parents[0].username = username;
               }
             }
@@ -1846,7 +2122,7 @@ export default {
             this.user_login = JSON.parse(localStorage.getItem("userDetail"));
 
             for (const data of this.user_data) {
-              this.set_parent_id = data.userOneId;
+              this.set_parent_id = data?.userOneId;
             }
             let payload = {
               studentId: this.user_login.account_id,
@@ -1932,6 +2208,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      class_list : "ProfileModules/classList",
       show_dialog_register_one_id: "RegisterModules/getShowDialogRegisterOneId",
       students: "UserManageModules/getStudent",
       user_data: "UserManageModules/getUserData",
@@ -2161,7 +2438,7 @@ export default {
               this.GetStudentSchedule(item_relation.studentId);
             }
           } else {
-            this.GetStudentSchedule(this.show_by_id.userOneId);
+            this.GetStudentSchedule(this.show_by_id?.userOneId);
           }
         } else if (show_data.roleId == "R_5") {
           if (this.data_user_relation_management.length > 0) {
@@ -2169,7 +2446,7 @@ export default {
               this.GetStudentSchedule(item_relation.studentId);
             }
           } else {
-            this.GetStudentSchedule(this.show_by_id.userOneId);
+            this.GetStudentSchedule(this.show_by_id?.userOneId);
           }
         }
       }

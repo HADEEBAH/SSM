@@ -83,7 +83,7 @@ const loginModules = {
                 }
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/search/username/one?username=${username}`, config)
                 if (data.statusCode === 200) {
-                    if (data.data.userOneId) {
+                    if (data.data?.userOneId) {
                         if (type === 'student') {
                             let roles = ["R_1", "R_2", "R_3"]
                             if (!data.data.roles || !roles.includes(data.data.roles?.roleId)) {
@@ -195,8 +195,15 @@ const loginModules = {
             try {
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/search/username?username=${username}`, config)
                 if (data.statusCode === 200) {
-                    if (data.data.userOneId) {
-                        console.log(data.data)
+                    if (data.data?.userOneId) {
+                        data.data.school = data.data?.school ? data.data.school : {
+                            schoolNameTh : "",
+                            schoolNameEn : "",
+                        }
+                        data.data.class = data.data?.class ? data.data.class : {
+                            classNameTh : "",
+                            classNameEn : "",
+                        }
                         if (type === 'student') {
                             context.commit("SetUserStudentData", [data.data])
                         } else {
@@ -268,6 +275,12 @@ const loginModules = {
                         image: data.data.image !== "" ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}` : "",
                         isSatisfaction: data.data.isSatisfaction,
                         isEvaluate: data.data.isEvaluate,
+                        school: data.data.school,
+                        nicknameTh: data.data.nicknameTh,
+                        nicknameEn: data.data.nicknameEn,
+                        class: data.data?.class,
+                        congenitalDisease: data.data.congenitalDisease,
+
                     }
                     VueCookie.set("token", data.data.token, 1)
                     localStorage.setItem("userDetail", JSON.stringify(payload))
@@ -342,6 +355,11 @@ const loginModules = {
                         image: data.data.image !== "" ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}` : "",
                         isSatisfaction: data.data.isSatisfaction,
                         isEvaluate: data.data.isEvaluate,
+                        school: data.data.school,
+                        nicknameTh: data.data.nicknameTh,
+                        nicknameEn: data.data.nicknameEn,
+                        class:data.data.class,
+                        congenitalDisease: data.data.congenitalDisease,
                     }
                     localStorage.setItem("userDetail", JSON.stringify(payload))
                     if (route.name === "Login") {

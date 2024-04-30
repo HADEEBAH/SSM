@@ -369,7 +369,7 @@ const coachModules = {
         // let localhost = "http://localhost:3000"
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}/date/${date}/${time_id}/${time_start}/${time_end}`, config)
         if (data.statusCode === 200) {
-          // console.log(data.data)
+          // console.log("GetCoachCheckIn", data.data)
           if( data.data?.checkInCoachId){
             const check_in = data.data
             let img_url = []
@@ -516,6 +516,7 @@ const coachModules = {
             student.compensationEndTime = student.compensationEndTime ? moment(student.compensationEndTime, "HH:mm") : null
             student.files = []
             student.potentialfiles = []
+            student.status = 'punctual'
             i = i + 1
           }
           await context.commit("SetStudentCheckIn", data.data.filter(v => v.timeId === time_id))

@@ -251,7 +251,7 @@ export default {
         to: "satisfactionReport",
         child: [],
         roles: [],
-        username: ['yuthyuth']
+        username: ['yuthyuth', 'jirayut2539']
       },
     ],
     menu_locale: false,

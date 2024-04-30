@@ -429,8 +429,8 @@ const orderModules = {
               // order.course_name = `${order.course?.courseNameTh}(${order.course?.courseNameEn})`;
               order.course_nameTh = order.course?.courseNameTh;
               order.course_nameEn = order.course?.courseNameEn;
-              order.student_name = `${order.user?.firstNameTh} ${order.user?.lastNameTh}`;
-              order.student_name_en = `${order.user?.firstNameEng} ${order.user?.lastNameEng}`;
+              order.student_name = `${order.user[0]?.firstNameTh} ${order.user[0]?.lastNameTh}`;
+              order.student_name_en = `${order.user[0]?.firstNameEng} ${order.user[0]?.lastNameEng}`;
             }
           }
 
@@ -635,7 +635,6 @@ const orderModules = {
                 student,
                 configs
               );
-
             }
           }
         } else {
@@ -655,9 +654,24 @@ const orderModules = {
           regisType: regis_type,
         };
         let total_price = 0;
+        const studentUpdate = []
         await order.courses.forEach((course) => {
           let students = [];
           course.students.forEach((student) => {
+            if(!studentUpdate.some(v => v.studentId === student.account_id)){
+              if(student.nicknameTh && student.class){
+                studentUpdate.push(
+                  {
+                    "studentId": student.account_id,
+                    "nicknameTh": student.nicknameTh,
+                    "class": student.class
+                  },
+                )
+              } else {
+                throw "please enter your name and class"
+              }
+             
+            }
             if (student.parents[0]) {
               students.push({
                 accountId: student.account_id ? student.account_id : "",
@@ -745,6 +759,22 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
+        try{
+          await axios.post(`${process.env.VUE_APP_URL}/api/v1/account/student/list`, studentUpdate, config)
+        }catch(error){
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("update user"),
+            text: VueI18n.t(
+              "flid update nickname and class"
+            ),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        }
+       
         let { data } = await axios.post(
           `${process.env.VUE_APP_URL}/api/v1/order/regis/course`,
           payload,
@@ -978,6 +1008,18 @@ const orderModules = {
             ),
             text: VueI18n.t(
               "cannot register , The seats are full"
+            ),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if(error === "please enter your name and class") {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("unable to register"),
+            text: VueI18n.t(
+              "please enter your name and class"
             ),
             timer: 3000,
             timerProgressBar: true,
