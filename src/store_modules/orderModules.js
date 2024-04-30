@@ -49,6 +49,7 @@ const orderModules = {
     course_order: {
       apply_for_yourself: false,
       apply_for_others: false,
+      apply_for_parent: false,
       course_id: "",
       kingdom: {},
       course_type: "",
@@ -156,6 +157,7 @@ const orderModules = {
       state.course_order = {
         apply_for_yourself: false,
         apply_for_others: false,
+        apply_for_parent: false,
         kingdom: {},
         course_id: "",
         course_type: "",
@@ -517,9 +519,23 @@ const orderModules = {
           totalPrice: 0,
         };
         let total_price = 0;
+        let studentUpdate = []
         await order.courses.forEach((course) => {
           let students = [];
           course.students.forEach((student) => {
+            if(!studentUpdate.some(v => v.studentId === student.account_id)){
+              if(student.nicknameTh && student.class){
+                studentUpdate.push(
+                  {
+                    "studentId": student.account_id,
+                    "nicknameTh": student.nicknameTh,
+                    "class": student.class
+                  },
+                )
+              } else {
+                throw "please enter your name and class"
+              }
+            }
             if (student.parents[0]) {
               students.push({
                 accountId: student.account_id ? student.account_id : "",
@@ -614,6 +630,19 @@ const orderModules = {
         }
       } catch (error) {
         console.log(error);
+        if(error === "please enter your name and class") {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("unable to register"),
+            text: VueI18n.t(
+              "please enter your name and class"
+            ),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        }
       }
     },
     async saveOrder(context, { regis_type }) {
@@ -658,19 +687,20 @@ const orderModules = {
         await order.courses.forEach((course) => {
           let students = [];
           course.students.forEach((student) => {
-            if(!studentUpdate.some(v => v.studentId === student.account_id)){
-              if(student.nicknameTh && student.class){
-                studentUpdate.push(
-                  {
-                    "studentId": student.account_id,
-                    "nicknameTh": student.nicknameTh,
-                    "class": student.class
-                  },
-                )
-              } else {
-                throw "please enter your name and class"
+            if(regis_type !== "cart"){
+              if(!studentUpdate.some(v => v.studentId === student.account_id)){
+                if(student.nicknameTh && student.class){
+                  studentUpdate.push(
+                    {
+                      "studentId": student.account_id,
+                      "nicknameTh": student.nicknameTh,
+                      "class": student.class
+                    },
+                  )
+                } else {
+                  throw "please enter your name and class"
+                }
               }
-             
             }
             if (student.parents[0]) {
               students.push({
@@ -916,7 +946,7 @@ const orderModules = {
       } catch (error) {
         context.commit("SetOrderIsLoading", false);
         context.commit("SetOrderIsStatus", false);
-        if (error.response.data.message == "over study end date") {
+        if (error?.response?.data?.message == "over study end date") {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("unable to register"),
@@ -928,7 +958,7 @@ const orderModules = {
             showCancelButton: false,
             showConfirmButton: false,
           });
-        } else if (error.response.data.message == "over register date") {
+        } else if ( error?.response?.data?.message == "over register date") {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("unable to register"),
@@ -940,10 +970,7 @@ const orderModules = {
             showCancelButton: false,
             showConfirmButton: false,
           });
-        } else if (
-          error.response.data.message ==
-          "Cannot register , fail at course monitor , course-coach or seats are full"
-        ) {
+        } else if ( error?.response?.data?.message == "Cannot register , fail at course monitor , course-coach or seats are full" ) {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("unable to register"),
@@ -955,7 +982,7 @@ const orderModules = {
             showCancelButton: false,
             showConfirmButton: false,
           });
-        } else if (error.response.data.message === "duplicate pending order") {
+        } else if (error?.response?.data?.message === "duplicate pending order") {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("unable to register"),
@@ -967,10 +994,7 @@ const orderModules = {
             showCancelButton: false,
             showConfirmButton: false,
           });
-        } else if (
-          error.response.data.message ===
-          "User is duplicate in this course. Cannot enroll again"
-        ) {
+        } else if ( error?.response?.data?.message === "User is duplicate in this course. Cannot enroll again" ) {
           Swal.fire({
             icon: "error",
             title: VueI18n.t(
@@ -984,9 +1008,7 @@ const orderModules = {
             showCancelButton: false,
             showConfirmButton: false,
           });
-        } else if (
-          error.response.data.message === "The price is not correct!!"
-        ) {
+        } else if ( error?.response?.data?.message === "The price is not correct!!" ) {
           Swal.fire({
             icon: "error",
             title: VueI18n.t(
@@ -1000,7 +1022,7 @@ const orderModules = {
             showCancelButton: false,
             showConfirmButton: false,
           });
-        } else if (error.response.data.message === "Cannot register , The seats are full.") {
+        } else if (error?.response?.data?.message === "Cannot register , The seats are full.") {
           Swal.fire({
             icon: "error",
             title: VueI18n.t(
