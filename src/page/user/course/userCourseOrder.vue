@@ -202,6 +202,51 @@
           >
         </v-col>
       </v-row>
+      <v-row dense v-if="course_order.apply_for_yourself">
+        <v-col cols="12" sm="6" >
+          <labelCustom
+            required
+            :text="$t('nickname')"
+          ></labelCustom>
+          <v-text-field
+            v-model="course_order.students.find(v => !v.is_other).nicknameTh"
+            color="#ff6B81"
+            outlined
+            dense
+            :disabled="profile_detail?.nicknameTh"
+          >  
+          </v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <labelCustom
+            required
+            :text="$t('class')"
+          ></labelCustom>
+          <v-autocomplete
+            v-model="course_order.students.find(v => !v.is_other).class"
+            :items="class_list"
+            item-text="classNameTh"
+            outlined
+            color="#ff6B81"
+            item-color="#ff6b81"
+            dense
+            :disabled="profile_detail.class.classNameTh !== ''"
+          >
+            <template #no-data>
+              <v-list-item>
+                {{ $t('data not found') }}
+              </v-list-item>
+            </template>
+          </v-autocomplete>
+          <!-- <v-text-field
+            v-model="course_order.students.find(v => !v.is_other).class"
+            color="#ff6B81"
+            outlined
+            dense
+          >
+          </v-text-field> -->
+        </v-col>
+      </v-row>
       <v-row dense>
         <v-col cols="12" sm="6">
           <v-checkbox
@@ -522,6 +567,43 @@
                     v-model="student.lastname_en"
                     :placeholder="$t('english last name')"
                   ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row dense>
+                <v-col cols="12" sm="6">
+                  <labelCustom
+                    required
+                    :text="$t('nickname')"
+                  ></labelCustom>
+                  <v-text-field
+                    dense
+                    outlined
+                    v-model="student.nicknameTh"
+                    :placeholder="$t('nickname')"
+                    :disabled="student?.nicknameData"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <labelCustom
+                    required
+                    :text="$t('class')"
+                  ></labelCustom>
+                  <v-autocomplete
+                    v-model="student.class"
+                    :items="class_list"
+                    item-text="classNameTh"
+                    color="#ff6B81"
+                    item-color="#ff6b81"
+                    outlined
+                    dense
+                    :disabled="student?.classData"
+                  >
+                    <template #no-data>
+                      <v-list-item>
+                        {{ $t('data not found') }}
+                      </v-list-item>
+                    </template>
+                  </v-autocomplete>
                 </v-col>
               </v-row>
             </template>
@@ -937,9 +1019,12 @@ export default {
     disable_checkout: false,
     coachSelect: false,
   }),
-  created() {
+  async created() {
     this.order_data = JSON.parse(localStorage.getItem("Order"));
     this.user_login = JSON.parse(localStorage.getItem("userDetail"));
+    await this.GetProfileDetail(this.user_login.account_id);
+    await this.GetClassList()
+
   },
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "register");
@@ -965,6 +1050,8 @@ export default {
           parents: [],
           is_account: false,
           is_other: false,
+          nicknameTh: this.profile_detail.nicknameTh,
+          class: this.profile_detail?.class?.classNameTh,
         });
       } else {
         this.course_order.students.forEach((student, index) => {
@@ -986,6 +1073,8 @@ export default {
           parents: [],
           is_account: false,
           is_other: true,
+          class : "",
+          nickName : "",
         });
       } else {
         this.course_order.students.forEach((student, index) => {
@@ -1026,38 +1115,22 @@ export default {
             });
         }
       } else if (this.last_user_registered.type === "student") {
-        this.course_order.students[
-          this.course_order.students.length - 1
-        ].account_id = this.last_user_registered.account_id;
-        this.course_order.students[
-          this.course_order.students.length - 1
-        ].firstname_en = this.last_user_registered.firstname_en;
-        this.course_order.students[
-          this.course_order.students.length - 1
-        ].lastname_en = this.last_user_registered.lastname_en;
-        this.course_order.students[
-          this.course_order.students.length - 1
-        ].firstname_th = this.last_user_registered.firstname_th;
-        this.course_order.students[
-          this.course_order.students.length - 1
-        ].lastname_th = this.last_user_registered.lastname_th;
-        this.course_order.students[
-          this.course_order.students.length - 1
-        ].student_name = `${this.last_user_registered.firstname_en} ${this.last_user_registered.lastname_en} `;
-        this.course_order.students[this.course_order.students.length - 1].tel =
-          this.last_user_registered.phone_number;
-        this.course_order.students[
-          this.course_order.students.length - 1
-        ].username = this.last_user_registered.username;
-        this.course_order.students[
-          this.course_order.students.length - 1
-        ].is_other = true;
-        this.course_order.students[
-          this.course_order.students.length - 1
-        ].is_account = true;
-        this.course_order.students[
-          this.course_order.students.length - 1
-        ].parents = [];
+        let student = this.course_order.students[this.course_order.students.length - 1]
+        student.account_id = this.last_user_registered.account_id;
+        student.firstname_en = this.last_user_registered.firstname_en;
+        student.lastname_en = this.last_user_registered.lastname_en;
+        student.firstname_th = this.last_user_registered.firstname_th;
+        student.lastname_th = this.last_user_registered.lastname_th;
+        student.student_name = `${this.last_user_registered.firstname_en} ${this.last_user_registered.lastname_en} `;
+        student.tel = this.last_user_registered.phone_number;
+        student.username = this.last_user_registered.username;
+        student.is_other = true;
+        student.is_account = true;
+        student.parents = [];
+        student.classData = this.last_user_registered?.class?.classNameTh
+        student.nicknameData = this.last_user_registered.nickNameTh
+        student.class = this.last_user_registered?.class?.classNameTh
+        student.nicknameTh = this.last_user_registered.nickNameTh
       }
       this.dialog_parent = false;
     },
@@ -1067,6 +1140,8 @@ export default {
   },
   computed: {
     ...mapGetters({
+      class_list: "ProfileModules/classList",
+      profile_detail: "ProfileModules/getProfileDetail",
       course_order: "OrderModules/getCourseOrder",
       course_data: "CourseModules/getCourseData",
       order: "OrderModules/getOrder",
@@ -1172,6 +1247,8 @@ export default {
   },
   methods: {
     ...mapActions({
+      GetClassList: "ProfileModules/GetClassList",
+      GetProfileDetail: "ProfileModules/GetProfileDetail",
       GetCourseStudent: "CourseModules/GetCourseStudent",
       GetRelations: "OrderModules/GetRelations",
       GetCourse: "CourseModules/GetCourse",
@@ -1633,6 +1710,10 @@ export default {
                   student.username = username;
                   student.account_id = this.user_student_data[0].userOneId;
                   student.IsWaraphat = this.user_student_data[0].IsWaraphat
+                  student.nicknameTh = this.user_student_data[0].nicknameTh;
+                  student.class = this.user_student_data[0]?.class?.classNameTh
+                  student.nicknameData = this.user_student_data[0].nicknameTh;
+                  student.classData = this.user_student_data[0]?.class?.classNameTh
                 } else {
                   if (student) {
                     student.firstname_en = "";

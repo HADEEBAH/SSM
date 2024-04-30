@@ -206,6 +206,38 @@
                           <v-row>
                             <v-col cols="12" sm="6">
                               <label-custom
+                                :text="this.$t('nickname(thai)')"
+                              ></label-custom>
+                              <v-text-field
+                                v-model="show_by_id.nicknameTh"
+                                v-bind:disabled="isDisabled"
+                                @keydown="validate($event, 'th')"
+                                placeholder="-"
+                                outlined
+                                dense
+                                color="#ff6b81"
+                              >
+                              </v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                              <label-custom
+                                :text="this.$t('nickname(en)')"
+                              ></label-custom>
+                              <v-text-field
+                                v-model="show_by_id.nicknameEn"
+                                v-bind:disabled="isDisabled"
+                                @keydown="validate($event, 'en-special')"
+                                placeholder="-"
+                                outlined
+                                dense
+                                color="#ff6b81"
+                               >
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+                          <v-row>
+                            <v-col cols="12" sm="6">
+                              <label-custom
                                 :text="this.$t('email')"
                               ></label-custom>
                               <v-text-field
@@ -232,6 +264,71 @@
                                 @input="checkPhoneNumber"
                                 maxlength="12"
                                 color="#ff6b81"
+                              >
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+                          <v-row>
+                            <v-col cols="12" sm="6">
+                              <label-custom
+                                :text="this.$t('school(en)')"
+                              ></label-custom>
+                              <v-text-field
+                                v-bind:disabled="isDisabled"
+                                @keydown="validate($event, 'en')"
+                                placeholder="-"
+                                v-model="show_by_id.school.schoolNameEn"
+                                outlined
+                                dense
+                                color="#ff6b81">
+                              </v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                              <label-custom
+                                :text="this.$t('school(thai)')"
+                              ></label-custom>
+                              <v-text-field
+                                v-bind:disabled="isDisabled"
+                                @keydown="validate($event, 'th')"
+                                placeholder="-"
+                                v-model="show_by_id.school.schoolNameTh"
+                                outlined
+                                dense
+                                color="#ff6b81"
+                              >
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+                          <v-row>
+                            <v-col cols="12" sm="6">
+                              <label-custom
+                                :text="this.$t('class')"
+                              ></label-custom>
+                              <v-autocomplete
+                                v-model="show_by_id.class.classNameTh"
+                                :items="class_list"
+                                item-text="classNameTh"
+                                color="#ff6B81"
+                                item-color="#ff6b81"
+                                outlined
+                                :disabled="isDisabled"
+                                dense
+                              >
+                                <template #no-data>
+                                  {{ $t('data not found') }}
+                                </template>
+                              </v-autocomplete>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                              <label-custom
+                                :text="$t('congenital disease')"
+                              ></label-custom>
+                              <v-text-field
+                                :disabled="!isEnabled"
+                                placeholder="-"
+                                v-model="show_by_id.congenitalDisease"
+                                outlined
+                                dense
                               >
                               </v-text-field>
                             </v-col>
@@ -863,12 +960,15 @@ export default {
 
     this.GetDataRelationsManagement(this.show_by_id);
   },
-
+  async created(){
+    this.GetClassList()
+  },
   mounted() {
     this.GetDataRelationsManagement(this.show_by_id);
   },
   methods: {
     ...mapActions({
+      GetClassList: "ProfileModules/GetClassList",
       changeDialogRegisterOneId: "RegisterModules/changeDialogRegisterOneId",
       changeStudentsData: "UserManageModules/changeStudentsData",
       changeParentData: "UserManageModules/changeParentData",
@@ -1248,6 +1348,12 @@ export default {
                   this.seledtedRole != ""
                     ? [{ roleId: this.seledtedRole }]
                     : [],
+                schoolTh: this.show_by_id.school.schoolNameTh,
+                schoolEn: this.show_by_id.school.schoolNameEn,
+                nicknameTh: this.show_by_id.nicknameTh,
+                nicknameEn: this.show_by_id.nicknameEn,
+                className: this.show_by_id.class.classNameTh,
+                congenitalDiseaseTh: this.show_by_id.congenitalDisease
               };
               let bodyFormData = new FormData();
               bodyFormData.append("image", this.send_image_profile);
@@ -1411,6 +1517,7 @@ export default {
 
   computed: {
     ...mapGetters({
+      class_list : "ProfileModules/classList",
       show_dialog_register_one_id: "RegisterModules/getShowDialogRegisterOneId",
       students: "UserManageModules/getStudent",
       parents: "UserManageModules/getParent",

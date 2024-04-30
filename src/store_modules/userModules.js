@@ -173,6 +173,10 @@ const userModules = {
                 if (data.statusCode === 200) {
                     data.data.image = data.data.image && data.data.image != "" ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}` : ""
                     context.commit("SetShowById", [])
+                    data.data.class = data.data.class ? data.data.class : {
+                        classNameTh : "",
+                        classNameEn : ""
+                    } 
                     context.commit("SetShowById", data.data)
                 }
             } catch (error) {

@@ -165,7 +165,36 @@
                             </v-text-field>
                           </v-col>
                         </v-row>
-
+                        <v-row>
+                          <v-col cols="12" sm="6">
+                            <label-custom
+                              :text="this.$t('nickname(thai)')"
+                            ></label-custom>
+                            <v-text-field
+                              disabled
+                              @keydown="validate($event, 'th')"
+                              placeholder="-"
+                              v-model="checkData.nicknameEn"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="6">
+                            <label-custom
+                              :text="this.$t('nickname(en)')"
+                            ></label-custom>
+                            <v-text-field
+                              disabled
+                              @keydown="validate($event, 'en')"
+                              placeholder="-"
+                              v-model="checkData.nicknameTh"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                          </v-col>
+                        </v-row>
                         <v-row>
                           <v-col cols="12" sm="6">
                             <label-custom
@@ -193,6 +222,72 @@
                               dense
                               @input="checkPhoneNumber"
                               maxlength="12"
+                            >
+                            </v-text-field>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="12" sm="6">
+                            <label-custom
+                              :text="this.$t('school(thai)')"
+                            ></label-custom>
+                            <v-text-field
+                              disabled
+                              @keydown="validate($event, 'th')"
+                              placeholder="-"
+                              v-model="checkData.school.schoolNameTh"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="6">
+                            <label-custom
+                              :text="this.$t('school(en)')"
+                            ></label-custom>
+                            <v-text-field
+                              disabled
+                              @keydown="validate($event, 'th')"
+                              placeholder="-"
+                              v-model="checkData.school.schoolNameEn"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="12" sm="6">
+                            <label-custom
+                              :text="this.$t('class')"
+                            ></label-custom>
+                            <v-autocomplete
+                              v-model="checkData.class.classNameTh"
+                              :items="class_list"
+                              item-text="classNameTh"
+                              color="#ff6B81"
+                              item-color="#ff6b81"
+                              outlined
+                              :disabled="!isEnabled"
+                              dense
+                            >
+                              <template #no-data>
+                                <v-list-item>
+                                  {{ $t('data not found') }}
+                                </v-list-item>
+                              </template>
+                            </v-autocomplete>
+                          </v-col>
+                          <v-col cols="12" sm="6">
+                            <label-custom
+                              :text="this.$t('congenital disease')"
+                            ></label-custom>
+                            <v-text-field
+                              disabled
+                              placeholder="-"
+                              v-model="checkData.congenitalDiseaseTh"
+                              outlined
+                              dense
                             >
                             </v-text-field>
                           </v-col>
@@ -640,7 +735,6 @@ export default {
       username: "",
       tel: "",
     },
-
     checkData: {
       account_id: "",
       firstname_th: "",
@@ -678,14 +772,16 @@ export default {
       }
     }
   },
-
+  async created(){
+    await this.GetClassList()
+  },
   methods: {
     ...mapActions({
+      GetClassList: "ProfileModules/GetClassList",
       changeDialogRegisterOneId: "RegisterModules/changeDialogRegisterOneId",
       checkUsernameOneid: "loginModules/checkUsernameOneid",
       AddRelations: "RegisterModules/AddRelations",
-      GetDataRelationsManagement:
-        "UserManageModules/GetDataRelationsManagement",
+      GetDataRelationsManagement: "UserManageModules/GetDataRelationsManagement",
       GetUserById: "UserModules/GetUserById",
       GetShowById: "UserModules/GetShowById",
       ChangeUserOneTemp: "UserModules/ChangeUserOneTemp",
@@ -700,7 +796,7 @@ export default {
         name: "UserDetail",
         params: {
           action: "edit",
-          account_id: items.userOneId,
+          account_id: items?.userOneId,
           from: "userList",
         },
       });
@@ -713,9 +809,9 @@ export default {
           status: null,
           type: type,
         }).then(() => {
-          this.global_data_relation =
-            type == "student" ? this.user_student_data[0] : this.user_data[0];
-          this.relation.account_id = this.global_data_relation.userOneId;
+          console.log("global_data_relation");
+          this.global_data_relation = type == "student" ? this.user_student_data[0] : this.user_data[0];
+          this.relation.account_id = this.global_data_relation?.userOneId;
           this.relation.firstname_en = this.global_data_relation.firstNameEng;
           this.relation.lastname_en = this.global_data_relation.lastNameEng;
           this.relation.tel = this.global_data_relation.mobileNo;
@@ -741,42 +837,37 @@ export default {
           status: null,
           type: type,
         }).then(async () => {
-          this.user_data_temp = this.user_data[0];
-          this.seledtedRole = "";
-          this.preview_img = "";
-          this.global_data_relation_checked =
-            type == "" ? this.user_student_data[0] : this.user_data[0];
-          this.checkData.account_id =
-            this.global_data_relation_checked.userOneId;
-          this.checkData.firstname_en =
-            this.global_data_relation_checked.firstNameEng;
-          this.checkData.lastname_en =
-            this.global_data_relation_checked.lastNameEng;
-          this.checkData.firstname_th =
-            this.global_data_relation_checked.firstNameTh;
-          this.checkData.lastname_th =
-            this.global_data_relation_checked.lastNameTh;
-          this.checkData.tel = this.global_data_relation_checked.mobileNo;
-          this.checkData.email = this.global_data_relation_checked.email;
-          this.checkData.image = this.global_data_relation_checked.imgUrl;
+            if(type == "" ? this.user_student_data[0] : this.user_data[0]){
+              this.user_data_temp = this.user_data[0];
+              this.seledtedRole = "";
+              this.preview_img = "";
+              this.global_data_relation_checked = type == "" ? this.user_student_data[0] : this.user_data[0];
+              this.checkData.account_id = this.global_data_relation_checked.userOneId;
+              this.checkData.firstname_en = this.global_data_relation_checked.firstNameEng;
+              this.checkData.lastname_en = this.global_data_relation_checked.lastNameEng;
+              this.checkData.firstname_th = this.global_data_relation_checked.firstNameTh;
+              this.checkData.lastname_th = this.global_data_relation_checked.lastNameTh;
+              this.checkData.tel = this.global_data_relation_checked.mobileNo;
+              this.checkData.email = this.global_data_relation_checked.email;
+              this.checkData.image = this.global_data_relation_checked.imgUrl;
+              this.global_role_code = this.global_data_relation_checked.roles
+                .map((val) => {
+                  return val.roleId;
+                })
+                .join();
+              this.checkData.school = this.global_data_relation_checked.school;
+              this.checkData.class = this.global_data_relation_checked.class;
+              this.roles.map((val) => {
+                if (this.global_role_code === val.roleNumber) {
+                  this.seledtedRole = val.roleNumber;
+                }
+              });
 
-          this.global_role_code = this.global_data_relation_checked.roles
-            .map((val) => {
-              return val.roleId;
-            })
-            .join();
-
-          this.roles.map((val) => {
-            if (this.global_role_code === val.roleNumber) {
-              this.seledtedRole = val.roleNumber;
+              this.global_data_relation_checked.userRoles = this.global_data_relation_checked.roles;
+              await this.GetDataRelationsManagement(
+                this.global_data_relation_checked
+              );
             }
-          });
-
-          this.global_data_relation_checked.userRoles =
-            this.global_data_relation_checked.roles;
-          await this.GetDataRelationsManagement(
-            this.global_data_relation_checked
-          );
         });
       } else {
         Swal.fire({
@@ -1033,6 +1124,12 @@ export default {
               mobileNo: this.checkData.tel,
               roles:
                 this.seledtedRole != "" ? [{ roleId: this.seledtedRole }] : [],
+              schoolTh: this.checkData.school.schoolNameTh,
+              schoolEn: this.checkData.school.schoolNameEn,
+              nicknameTh: this.checkData.nicknameTh,
+              nicknameEn: this.checkData.nicknameEn,
+              className: this.checkData.class.classNameTh,
+              congenitalDiseaseTh: this.checkData.congenitalDisease
             };
             let bodyFormData = new FormData();
             bodyFormData.append("image", this.send_image_profile);
@@ -1110,6 +1207,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      class_list : "ProfileModules/classList",
       user_one_id: "loginModules/getUserOneId",
       user_data: "loginModules/getUserData",
       is_loading: "loginModules/getIsLoading",
