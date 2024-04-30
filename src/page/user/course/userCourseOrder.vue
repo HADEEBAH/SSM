@@ -178,7 +178,7 @@
         <v-col>
           <v-checkbox
             :disabled="
-              course_order.apply_for_yourself
+              course_order.apply_for_parent ? true : course_order.apply_for_yourself
                 ? false
                 : checkMaximumStudent() || checkApplyForYourselfRole()
             "
@@ -238,24 +238,27 @@
               </v-list-item>
             </template>
           </v-autocomplete>
-          <!-- <v-text-field
-            v-model="course_order.students.find(v => !v.is_other).class"
-            color="#ff6B81"
-            outlined
-            dense
-          >
-          </v-text-field> -->
         </v-col>
       </v-row>
+      <!-- Apply For Others -->
       <v-row dense>
         <v-col cols="12" sm="6">
           <v-checkbox
-            :disabled="
-              course_order.apply_for_others ? false : checkMaximumStudent()
-            "
+            :disabled="course_order.apply_for_parent ? true : course_order.apply_for_others ? false : checkMaximumStudent() "
             v-model="course_order.apply_for_others"
             color="#ff6B81"
             :label="$t('register to study for others')"
+          ></v-checkbox>
+        </v-col>
+      </v-row>
+      <!-- Apply For Parent -->
+      <v-row dense>
+        <v-col cols="12" sm="6">
+          <v-checkbox
+            :disabled="course_order.apply_for_others ? true : course_order.apply_for_parent ? false : checkMaximumStudent()"
+            v-model="course_order.apply_for_parent"
+            color="#ff6B81"
+            :label="$t('register to student of parent')"
           ></v-checkbox>
         </v-col>
       </v-row>
@@ -454,6 +457,7 @@
         </div>
       </template>
       <!-- STUDENT -->
+      {{course_order.students}}
       <div
         v-for="(student, index_student) in course_order.students.filter(
           (v) => v.is_other === true
@@ -509,21 +513,6 @@
                     >
                   </template>
                 </v-text-field>
-                <!-- <v-btn
-                  :loading="is_loading"
-                  :dark="!student.username.length < 3"
-                  :disabled="student.username.length < 3"
-                  color="#ff6b81"
-                  @click="
-                    checkUsername(student.username, 'student', index_student)
-                  "
-                  @keyup.enter="
-                    checkUsername(student.username, 'student', index_student)
-                  "
-                  depressed
-                >
-                  {{ $t("agree") }}
-                </v-btn> -->
               </v-col>
             </v-row>
             <v-row dense>
@@ -1038,6 +1027,39 @@ export default {
       this.course_order.coach_id = null;
       this.coachSelect = false;
     },
+    "course_order.apply_for_parent": function () {
+      if (this.course_order.apply_for_parent) {
+        this.course_order.students.push({
+          student_name: "",
+          account_id: "",
+          username: "",
+          firstname_en: "",
+          lastname_en: "",
+          tel: "",
+          parents: [
+            {
+              account_id: this.profile_detail.userOneId,
+              firstname_en: this.profile_detail.firstNameEng,
+              lastname_en: this.profile_detail.lastNameEng,
+              firstname_th: this.profile_detail.firstNameTh,
+              lastname_th: this.profile_detail.lastNameTh,
+              tel: this.profile_detail.mobileNo,
+              username: this.profile_detail.userName,
+            }
+          ],
+          is_account: false,
+          is_other: true,
+          class : "",
+          nickName : "",
+        });
+      } else {
+        this.course_order.students.forEach((student, index) => {
+          if (student.is_other === true) {
+            this.course_order.students.splice(index, 1);
+          }
+        });
+      }
+    },
     "course_order.apply_for_yourself": function () {
       if (this.course_order.apply_for_yourself) {
         this.course_order.students.push({
@@ -1047,7 +1069,15 @@ export default {
           firstname_en: this.user_login.first_name_th,
           lastname_en: this.user_login.last_name_th,
           tel: this.user_login.tel,
-          parents: [],
+          parents: [{
+              account_id: this.last_user_registered.account_id,
+              firstname_en: this.last_user_registered.firstname_en,
+              lastname_en: this.last_user_registered.lastname_en,
+              firstname_th: this.last_user_registered.firstname_th,
+              lastname_th: this.last_user_registered.lastname_th,
+              tel: this.last_user_registered.phone_number,
+              username: this.last_user_registered.username,
+          }],
           is_account: false,
           is_other: false,
           nicknameTh: this.profile_detail.nicknameTh,
@@ -1503,17 +1533,42 @@ export default {
       this.dialog_parent = false;
     },
     addStudent() {
-      this.course_order.students.push({
-        account_id: "",
-        student_name: "",
-        username: "",
-        firstname_en: "",
-        lastname_en: "",
-        tel: "",
-        is_other: true,
-        is_account: false,
-        parents: [],
-      });
+      console.log(this.course_order.apply_for_parent)
+      if( this.course_order.apply_for_parent ){
+        this.course_order.students.push({
+          account_id: "",
+          student_name: "",
+          username: "",
+          firstname_en: "",
+          lastname_en: "",
+          tel: "",
+          is_other: true,
+          is_account: false,
+          parents: [
+            {
+              account_id: this.profile_detail.userOneId,
+              firstname_en: this.profile_detail.firstNameEng,
+              lastname_en: this.profile_detail.lastNameEng,
+              firstname_th: this.profile_detail.firstNameTh,
+              lastname_th: this.profile_detail.lastNameTh,
+              tel: this.profile_detail.mobileNo,
+              username: this.profile_detail.userName,
+            }
+          ],
+        });
+      }else{
+        this.course_order.students.push({
+          account_id: "",
+          student_name: "",
+          username: "",
+          firstname_en: "",
+          lastname_en: "",
+          tel: "",
+          is_other: true,
+          is_account: false,
+          parents: [],
+        });
+      }
     },
     closeDialogCart() {
       this.show_dialog_cart = false;
