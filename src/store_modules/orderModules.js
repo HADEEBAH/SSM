@@ -703,17 +703,19 @@ const orderModules = {
           let students = [];
           course.students.forEach((student) => {
             if (regis_type !== "cart") {
-              if (!studentUpdate.some(v => v.studentId === student.account_id)) {
-                if (student.nicknameTh && student.class) {
-                  studentUpdate.push(
-                    {
-                      "studentId": student.account_id,
-                      "nicknameTh": student.nicknameTh,
-                      "class": student.class
-                    },
-                  )
-                } else {
-                  throw "please enter your name and class"
+              if (order.type !== "addStudent") {
+                if (!studentUpdate.some(v => v.studentId === student.account_id)) {
+                  if (student.nicknameTh && student.class) {
+                    studentUpdate.push(
+                      {
+                        "studentId": student.account_id,
+                        "nicknameTh": student.nicknameTh,
+                        "class": student.class
+                      },
+                    )
+                  } else {
+                    throw "please enter your name and class"
+                  }
                 }
               }
             }
