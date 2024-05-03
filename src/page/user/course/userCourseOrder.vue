@@ -1310,7 +1310,7 @@ export default {
       GetReserceCourse: "OrderModules/GetReserceCourse",
     }),
     checkRoleParent(){
-      return ["R_3", ""].includes(this.profile_detail.userRoles.roleId)
+      return ["R_4", ""].includes(this.profile_detail.userRoles.roleId)
     },
     closePolicy() {
       this.policy = false;
