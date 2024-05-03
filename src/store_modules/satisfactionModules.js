@@ -3,13 +3,7 @@ import Swal from "sweetalert2"
 import VueCookie from "vue-cookie"
 import VueI18n from "../i18n";
 
-const config = {
-    headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "Application/json",
-        Authorization: `Bearer ${VueCookie.get("token")}`,
-    },
-};
+
 const satisfactionModules = {
     namespaced: true,
     state: {
@@ -23,7 +17,13 @@ const satisfactionModules = {
     actions: {
         async sendSatisfaction(context, { payload }){
             try{
-              
+                const config = {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Content-type": "Application/json",
+                        Authorization: `Bearer ${VueCookie.get("token")}`,
+                    },
+                };
                 const {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/satisfaction`, payload, config)
                 if(data.statusCode === 201){
                     Swal.fire({
@@ -51,6 +51,13 @@ const satisfactionModules = {
         },
         async GetSatisfactionList(context){
             try {
+                const config = {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Content-type": "Application/json",
+                        Authorization: `Bearer ${VueCookie.get("token")}`,
+                    },
+                };
                 const {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/satisfaction`, config)
                 if (data.statusCode === 200) {
                     context.commit("SetSatisfactions", data.data)
