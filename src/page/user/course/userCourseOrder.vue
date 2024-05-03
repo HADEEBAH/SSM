@@ -256,8 +256,8 @@
         </v-col>
       </v-row>
       <!-- Apply For Parent -->
-      <v-row dense>
-        <v-col cols="12" sm="6" class="d-flex align-center">
+      <v-row dense v-if="checkRoleParent()">
+        <v-col cols="12" sm="6" class="d-flex align-center" >
           <v-checkbox
             :disabled="
               course_order.apply_for_others
@@ -1309,7 +1309,9 @@ export default {
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
       GetReserceCourse: "OrderModules/GetReserceCourse",
     }),
-
+    checkRoleParent(){
+      return ["R_3", ""].includes(this.profile_detail.userRoles.roleId)
+    },
     closePolicy() {
       this.policy = false;
       this.policy_show = false;
