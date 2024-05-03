@@ -7,7 +7,9 @@
           <v-col cols="12" sm="3" class="d-flex align-center">
             <v-img
               class="rounded-lg my-3 mx-3"
-              :class="$vuetify.breakpoint.smAndUp ? 'width-img' : 'width-img-sm'"
+              :class="
+                $vuetify.breakpoint.smAndUp ? 'width-img' : 'width-img-sm'
+              "
               :src="
                 course_data.course_img || course_data.course_img !== ''
                   ? course_data.course_img
@@ -178,7 +180,9 @@
         <v-col>
           <v-checkbox
             :disabled="
-              course_order.apply_for_parent ? true : course_order.apply_for_yourself
+              course_order.apply_for_parent
+                ? true
+                : course_order.apply_for_yourself
                 ? false
                 : checkMaximumStudent() || checkApplyForYourselfRole()
             "
@@ -203,27 +207,21 @@
         </v-col>
       </v-row>
       <v-row dense v-if="course_order.apply_for_yourself">
-        <v-col cols="12" sm="6" >
-          <labelCustom
-            required
-            :text="$t('nickname')"
-          ></labelCustom>
+        <v-col cols="12" sm="6">
+          <labelCustom required :text="$t('nickname')"></labelCustom>
           <v-text-field
-            v-model="course_order.students.find(v => !v.is_other).nicknameTh"
+            v-model="course_order.students.find((v) => !v.is_other).nicknameTh"
             color="#ff6B81"
             outlined
             dense
             :disabled="profile_detail?.nicknameTh"
-          >  
+          >
           </v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
-          <labelCustom
-            required
-            :text="$t('class')"
-          ></labelCustom>
+          <labelCustom required :text="$t('class')"></labelCustom>
           <v-autocomplete
-            v-model="course_order.students.find(v => !v.is_other).class"
+            v-model="course_order.students.find((v) => !v.is_other).class"
             :items="class_list"
             item-text="classNameTh"
             outlined
@@ -234,7 +232,7 @@
           >
             <template #no-data>
               <v-list-item>
-                {{ $t('data not found') }}
+                {{ $t("data not found") }}
               </v-list-item>
             </template>
           </v-autocomplete>
@@ -244,7 +242,13 @@
       <v-row dense>
         <v-col cols="12" sm="6">
           <v-checkbox
-            :disabled="course_order.apply_for_parent ? true : course_order.apply_for_others ? false : checkMaximumStudent() "
+            :disabled="
+              course_order.apply_for_parent
+                ? true
+                : course_order.apply_for_others
+                ? false
+                : checkMaximumStudent()
+            "
             v-model="course_order.apply_for_others"
             color="#ff6B81"
             :label="$t('register to study for others')"
@@ -255,22 +259,24 @@
       <v-row dense>
         <v-col cols="12" sm="6" class="d-flex align-center">
           <v-checkbox
-            :disabled="course_order.apply_for_others ? true : course_order.apply_for_parent ? false : checkMaximumStudent()"
+            :disabled="
+              course_order.apply_for_others
+                ? true
+                : course_order.apply_for_parent
+                ? false
+                : checkMaximumStudent()
+            "
             v-model="course_order.apply_for_parent"
             color="#ff6B81"
             :label="$t('register to student of parent')"
           ></v-checkbox>
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
-              <v-btn 
-                icon 
-                v-bind="attrs"
-                v-on="on"
-              >
+              <v-btn icon v-bind="attrs" v-on="on">
                 <v-icon>mdi-information-outline</v-icon>
               </v-btn>
-            </template>  
-            <span>{{$t('for parents to purchase for students')}}</span>
+            </template>
+            <span>{{ $t("for parents to purchase for students") }}</span>
           </v-tooltip>
         </v-col>
       </v-row>
@@ -571,10 +577,7 @@
               </v-row>
               <v-row dense>
                 <v-col cols="12" sm="6">
-                  <labelCustom
-                    required
-                    :text="$t('nickname')"
-                  ></labelCustom>
+                  <labelCustom required :text="$t('nickname')"></labelCustom>
                   <v-text-field
                     dense
                     outlined
@@ -584,10 +587,7 @@
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <labelCustom
-                    required
-                    :text="$t('class')"
-                  ></labelCustom>
+                  <labelCustom required :text="$t('class')"></labelCustom>
                   <v-autocomplete
                     v-model="student.class"
                     :items="class_list"
@@ -600,7 +600,7 @@
                   >
                     <template #no-data>
                       <v-list-item>
-                        {{ $t('data not found') }}
+                        {{ $t("data not found") }}
                       </v-list-item>
                     </template>
                   </v-autocomplete>
@@ -1023,8 +1023,7 @@ export default {
     this.order_data = JSON.parse(localStorage.getItem("Order"));
     this.user_login = JSON.parse(localStorage.getItem("userDetail"));
     await this.GetProfileDetail(this.user_login.account_id);
-    await this.GetClassList()
-
+    await this.GetClassList();
   },
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "register");
@@ -1056,12 +1055,12 @@ export default {
               lastname_th: this.profile_detail.lastNameTh,
               tel: this.profile_detail.mobileNo,
               username: this.profile_detail.userName,
-            }
+            },
           ],
           is_account: false,
           is_other: true,
-          class : "",
-          nickName : "",
+          class: "",
+          nickName: "",
         });
       } else {
         this.course_order.students.forEach((student, index) => {
@@ -1080,7 +1079,8 @@ export default {
           firstname_en: this.user_login.first_name_th,
           lastname_en: this.user_login.last_name_th,
           tel: this.user_login.tel,
-          parents: [{
+          parents: [
+            {
               account_id: this.last_user_registered.account_id,
               firstname_en: this.last_user_registered.firstname_en,
               lastname_en: this.last_user_registered.lastname_en,
@@ -1088,7 +1088,8 @@ export default {
               lastname_th: this.last_user_registered.lastname_th,
               tel: this.last_user_registered.phone_number,
               username: this.last_user_registered.username,
-          }],
+            },
+          ],
           is_account: false,
           is_other: false,
           nicknameTh: this.profile_detail.nicknameTh,
@@ -1114,8 +1115,8 @@ export default {
           parents: [],
           is_account: false,
           is_other: true,
-          class : "",
-          nickName : "",
+          class: "",
+          nickName: "",
         });
       } else {
         this.course_order.students.forEach((student, index) => {
@@ -1156,7 +1157,8 @@ export default {
             });
         }
       } else if (this.last_user_registered.type === "student") {
-        let student = this.course_order.students[this.course_order.students.length - 1]
+        let student =
+          this.course_order.students[this.course_order.students.length - 1];
         student.account_id = this.last_user_registered.account_id;
         student.firstname_en = this.last_user_registered.firstname_en;
         student.lastname_en = this.last_user_registered.lastname_en;
@@ -1168,10 +1170,10 @@ export default {
         student.is_other = true;
         student.is_account = true;
         student.parents = [];
-        student.classData = this.last_user_registered?.class?.classNameTh
-        student.nicknameData = this.last_user_registered.nickNameTh
-        student.class = this.last_user_registered?.class?.classNameTh
-        student.nicknameTh = this.last_user_registered.nickNameTh
+        student.classData = this.last_user_registered?.class?.classNameTh;
+        student.nicknameData = this.last_user_registered.nickNameTh;
+        student.class = this.last_user_registered?.class?.classNameTh;
+        student.nicknameTh = this.last_user_registered.nickNameTh;
       }
       this.dialog_parent = false;
     },
@@ -1316,9 +1318,16 @@ export default {
       inputValidation(e, lang);
     },
     ValidateReserve() {
-      if(this.course_data.course_status == "Reserve"){
-        const today = moment(new Date()).format("YYYY-MM-DD")
-        if(!moment(today).isBetween(this.course_data.reservation_start_date, this.course_data.reservation_end_date, null, '[]')){
+      if (this.course_data.course_status == "Reserve") {
+        const today = moment(new Date()).format("YYYY-MM-DD");
+        if (
+          !moment(today).isBetween(
+            this.course_data.reservation_start_date,
+            this.course_data.reservation_end_date,
+            null,
+            "[]"
+          )
+        ) {
           let validate_reserve = [];
           if (this.course_order.students.length > 0) {
             for (let student of this.course_order.students) {
@@ -1332,10 +1341,10 @@ export default {
           } else {
             return false;
           }
-        }else{
+        } else {
           return false;
         }
-      }else{
+      } else {
         let validate_reserve = [];
         if (this.course_order.students.length > 0) {
           for (let student of this.course_order.students) {
@@ -1373,9 +1382,9 @@ export default {
     },
     GenMonitors() {
       if (this.course_monitors) {
-        if(this.course_data.course_status === "Reserve"){
-          return "Close"
-        }else{
+        if (this.course_data.course_status === "Reserve") {
+          return "Close";
+        } else {
           if (this.course_order.time && this.course_order.coach_id) {
             let time_data = this.course_order.time;
             let dayOfWeekId = time_data?.timeData
@@ -1418,7 +1427,6 @@ export default {
             }
           }
         }
-       
       } else {
         return "Open";
       }
@@ -1544,8 +1552,8 @@ export default {
       this.dialog_parent = false;
     },
     addStudent() {
-      console.log(this.course_order.apply_for_parent)
-      if( this.course_order.apply_for_parent ){
+      console.log(this.course_order.apply_for_parent);
+      if (this.course_order.apply_for_parent) {
         this.course_order.students.push({
           account_id: "",
           student_name: "",
@@ -1564,10 +1572,10 @@ export default {
               lastname_th: this.profile_detail.lastNameTh,
               tel: this.profile_detail.mobileNo,
               username: this.profile_detail.userName,
-            }
+            },
           ],
         });
-      }else{
+      } else {
         this.course_order.students.push({
           account_id: "",
           student_name: "",
@@ -1623,22 +1631,22 @@ export default {
               JSON.stringify(this.order)
             );
             this.saveCart({ cart_data: this.order });
-            this.resetCourseData();
+            // this.resetCourseData();
             // this.show_dialog_cart = true;
-            Swal.fire({
-              icon: "success",
-              title: this.$t("succeed"),
-              text: this.$t(
-                "the course has been successfully added to the cart"
-              ),
-              showCancelButton: false,
-              showConfirmButton: false,
-              showDenyButton: false,
-              timer: 3000,
-              timerProgressBar: true,
-            }).finally(() => {
-              this.$router.push({ name: "CartList" });
-            });
+            // Swal.fire({
+            //   icon: "success",
+            //   title: this.$t("succeed"),
+            //   text: this.$t(
+            //     "the course has been successfully added to the cart"
+            //   ),
+            //   showCancelButton: false,
+            //   showConfirmButton: false,
+            //   showDenyButton: false,
+            //   timer: 3000,
+            //   timerProgressBar: true,
+            // }).finally(() => {
+            //   this.$router.push({ name: "CartList" });
+            // });
           }
         });
       }
@@ -1775,11 +1783,12 @@ export default {
                   student.tel = this.user_student_data[0].mobileNo;
                   student.username = username;
                   student.account_id = this.user_student_data[0].userOneId;
-                  student.IsWaraphat = this.user_student_data[0].IsWaraphat
+                  student.IsWaraphat = this.user_student_data[0].IsWaraphat;
                   student.nicknameTh = this.user_student_data[0].nicknameTh;
-                  student.class = this.user_student_data[0]?.class?.classNameTh
+                  student.class = this.user_student_data[0]?.class?.classNameTh;
                   student.nicknameData = this.user_student_data[0].nicknameTh;
-                  student.classData = this.user_student_data[0]?.class?.classNameTh
+                  student.classData =
+                    this.user_student_data[0]?.class?.classNameTh;
                 } else {
                   if (student) {
                     student.firstname_en = "";
@@ -1875,5 +1884,4 @@ export default {
 };
 </script>
 <style>
- 
 </style>
