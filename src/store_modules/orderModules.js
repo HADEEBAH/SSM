@@ -102,10 +102,10 @@ const orderModules = {
     history_list_is_loading: false,
     history_list_option: {},
     filter_finance_data: [],
-    order_number_detail : [],
+    order_number_detail: [],
   },
   mutations: {
-    SetOrderNumberDetail(state, payload){
+    SetOrderNumberDetail(state, payload) {
       state.order_number_detail = payload
     },
     SetOrderHistory(state, payload) {
@@ -523,8 +523,8 @@ const orderModules = {
         await order.courses.forEach((course) => {
           let students = [];
           course.students.forEach((student) => {
-            if(!studentUpdate.some(v => v.studentId === student.account_id)){
-              if(student.nicknameTh && student.class){
+            if (!studentUpdate.some(v => v.studentId === student.account_id)) {
+              if (student.nicknameTh && student.class) {
                 studentUpdate.push(
                   {
                     "studentId": student.account_id,
@@ -616,6 +616,20 @@ const orderModules = {
           config
         );
         if (data.statusCode === 201) {
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t(
+              "the course has been successfully added to the cart"
+            ),
+            showCancelButton: false,
+            showConfirmButton: false,
+            showDenyButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+          }).finally(() => {
+            router.push({ name: "CartList" });
+          });
           localStorage.removeItem("Order");
           context.commit("SetResetCourseData");
           context.commit("SetOrder", {
@@ -627,10 +641,11 @@ const orderModules = {
             payment_type: "",
             total_price: 0,
           });
+
         }
       } catch (error) {
         console.log(error);
-        if(error === "please enter your name and class") {
+        if (error === "please enter your name and class") {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("unable to register"),
@@ -687,9 +702,9 @@ const orderModules = {
         await order.courses.forEach((course) => {
           let students = [];
           course.students.forEach((student) => {
-            if(regis_type !== "cart"){
-              if(!studentUpdate.some(v => v.studentId === student.account_id)){
-                if(student.nicknameTh && student.class){
+            if (regis_type !== "cart") {
+              if (!studentUpdate.some(v => v.studentId === student.account_id)) {
+                if (student.nicknameTh && student.class) {
                   studentUpdate.push(
                     {
                       "studentId": student.account_id,
@@ -768,8 +783,8 @@ const orderModules = {
           let price = 0
           if (order.type == "addStudent") {
             price = course.price;
-            total_price  = order.total_price * course.students.length;
-          }else{
+            total_price = order.total_price * course.students.length;
+          } else {
             price = course.option?.net_price
               ? course.option.net_price
               : course.price;
@@ -779,7 +794,7 @@ const orderModules = {
               total_price = total_price + price;
             }
           }
-         
+
         });
         payload.totalPrice = total_price;
         let config = {
@@ -789,9 +804,9 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        try{
+        try {
           await axios.post(`${process.env.VUE_APP_URL}/api/v1/account/student/list`, studentUpdate, config)
-        }catch(error){
+        } catch (error) {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("update user"),
@@ -804,7 +819,7 @@ const orderModules = {
             showConfirmButton: false,
           });
         }
-       
+
         let { data } = await axios.post(
           `${process.env.VUE_APP_URL}/api/v1/order/regis/course`,
           payload,
@@ -958,7 +973,7 @@ const orderModules = {
             showCancelButton: false,
             showConfirmButton: false,
           });
-        } else if ( error?.response?.data?.message == "over register date") {
+        } else if (error?.response?.data?.message == "over register date") {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("unable to register"),
@@ -970,7 +985,7 @@ const orderModules = {
             showCancelButton: false,
             showConfirmButton: false,
           });
-        } else if ( error?.response?.data?.message == "Cannot register , fail at course monitor , course-coach or seats are full" ) {
+        } else if (error?.response?.data?.message == "Cannot register , fail at course monitor , course-coach or seats are full") {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("unable to register"),
@@ -994,7 +1009,7 @@ const orderModules = {
             showCancelButton: false,
             showConfirmButton: false,
           });
-        } else if ( error?.response?.data?.message === "User is duplicate in this course. Cannot enroll again" ) {
+        } else if (error?.response?.data?.message === "User is duplicate in this course. Cannot enroll again") {
           Swal.fire({
             icon: "error",
             title: VueI18n.t(
@@ -1008,7 +1023,7 @@ const orderModules = {
             showCancelButton: false,
             showConfirmButton: false,
           });
-        } else if ( error?.response?.data?.message === "The price is not correct!!" ) {
+        } else if (error?.response?.data?.message === "The price is not correct!!") {
           Swal.fire({
             icon: "error",
             title: VueI18n.t(
@@ -1036,7 +1051,7 @@ const orderModules = {
             showCancelButton: false,
             showConfirmButton: false,
           });
-        } else if(error === "please enter your name and class") {
+        } else if (error === "please enter your name and class") {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("unable to register"),
@@ -1460,7 +1475,7 @@ const orderModules = {
       try {
         let count = 0;
         let CheckStudentIsWaraphat = true
-        if(course_data.students.some(v => !v.IsWaraphat && v.is_other  )){
+        if (course_data.students.some(v => !v.IsWaraphat && v.is_other)) {
           CheckStudentIsWaraphat = false
           Swal.fire({
             icon: "question",
@@ -1472,11 +1487,11 @@ const orderModules = {
           }).then(async (result) => {
             if (result.isConfirmed) {
               CheckStudentIsWaraphat = true
-            }else{
+            } else {
               course_data.students = course_data.students.filter(v => v.IsWaraphat === true)
               CheckStudentIsWaraphat = true
             }
-            if(CheckStudentIsWaraphat){
+            if (CheckStudentIsWaraphat) {
               for await (let student of course_data.students) {
                 let payload = {
                   studentId: student.account_id,
@@ -1487,8 +1502,8 @@ const orderModules = {
                   parentId: null,
                   coachId: course_data.coach_id ? course_data.coach_id : null,
                   orderTmpId: null,
-                  IsWaraphat : student.IsWaraphat,
-                  username : student.username,
+                  IsWaraphat: student.IsWaraphat,
+                  username: student.username,
                 };
                 if (course_data.course_type_id === "CT_1") {
                   payload.dayOfWeekId = course_data?.time?.timeData
@@ -1541,8 +1556,8 @@ const orderModules = {
               }
             }
           })
-        }else{
-          if(CheckStudentIsWaraphat){
+        } else {
+          if (CheckStudentIsWaraphat) {
             for await (let student of course_data.students) {
               let payload = {
                 studentId: student.account_id,
@@ -1553,8 +1568,8 @@ const orderModules = {
                 parentId: null,
                 coachId: course_data.coach_id ? course_data.coach_id : null,
                 orderTmpId: null,
-                IsWaraphat : student.IsWaraphat,
-                username : student.username,
+                IsWaraphat: student.IsWaraphat,
+                username: student.username,
               };
               if (course_data.course_type_id === "CT_1") {
                 payload.dayOfWeekId = course_data?.time?.timeData
@@ -1718,14 +1733,14 @@ const orderModules = {
           });
           const history = []
           for (const item of data.data) {
-            if(!history.some(v => v.orderNumber === item.orderNumber)){
+            if (!history.some(v => v.orderNumber === item.orderNumber)) {
               history.push({
                 orderId: item.orderId,
                 orderNumber: item.orderNumber,
                 createdDate: item.createdDate,
                 createdByData: item.createdByData,
                 totalPrice: item.totalPrice,
-                paymentStatus : item.paymentStatus,
+                paymentStatus: item.paymentStatus,
                 courses: data.data.filter(v => v.orderNumber === item.orderNumber)
               })
             }
@@ -1742,13 +1757,13 @@ const orderModules = {
         context.commit("SetOrderHistoryIsLoading", false);
       }
     },
-    async GetOrderDetailByOrderNumber(context, {orderNumber}){
-      try{
-          const {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/order?orderNumber=${orderNumber}`)
-          if(data.statusCode === 200){
-            context.commit("SetOrderNumberDetail",data.data)
-          }
-      }catch(error){
+    async GetOrderDetailByOrderNumber(context, { orderNumber }) {
+      try {
+        const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/order?orderNumber=${orderNumber}`)
+        if (data.statusCode === 200) {
+          context.commit("SetOrderNumberDetail", data.data)
+        }
+      } catch (error) {
         await Swal.fire({
           icon: "error",
           title: VueI18n.t("something went wrong"),
@@ -1761,8 +1776,8 @@ const orderModules = {
         });
       }
     },
-    async UpdateScheduleAndCheckIn(context, {orderNumber , lastTime, type, endDate}){
-      try{
+    async UpdateScheduleAndCheckIn(context, { orderNumber, lastTime, type, endDate }) {
+      try {
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -1771,13 +1786,13 @@ const orderModules = {
           },
         };
         // let localhost = "http://localhost:3000"
-        const {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/schedule/AutoResetScheldule`,{
+        const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/schedule/AutoResetScheldule`, {
           orderNumber,
-          lastCount : lastTime,
+          lastCount: lastTime,
           type,
           endDate,
         }, config)
-        if(data.statusCode === 201){
+        if (data.statusCode === 201) {
           await Swal.fire({
             icon: "success",
             title: VueI18n.t("succeed"),
@@ -1789,7 +1804,7 @@ const orderModules = {
             timerProgressBar: true,
           });
         }
-      }catch(error){
+      } catch (error) {
         await Swal.fire({
           icon: "error",
           title: VueI18n.t("something went wrong"),
@@ -1868,7 +1883,7 @@ const orderModules = {
     getFilterFinanceData(state) {
       return state.filter_finance_data
     },
-    getOrderNumberDetail(state){
+    getOrderNumberDetail(state) {
       return state.order_number_detail
     }
   },
