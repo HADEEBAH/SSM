@@ -6,6 +6,7 @@ import store from '@/store'
 import './assets/tailwind.css'
 import 'ant-design-vue/dist/antd.css'
 import './assets/main-css.css'
+import '@mdi/font/css/materialdesignicons.min.css'
 import { FormModel } from 'ant-design-vue';
 import i18n from "./i18n";
 var VueCookie = require('vue-cookie');
