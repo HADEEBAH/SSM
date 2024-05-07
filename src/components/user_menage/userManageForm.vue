@@ -231,7 +231,7 @@
                                 outlined
                                 dense
                                 color="#ff6b81"
-                               >
+                              >
                               </v-text-field>
                             </v-col>
                           </v-row>
@@ -280,7 +280,8 @@
                                 v-model="show_by_id.school.schoolNameEn"
                                 outlined
                                 dense
-                                color="#ff6b81">
+                                color="#ff6b81"
+                              >
                               </v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6">
@@ -315,7 +316,7 @@
                                 dense
                               >
                                 <template #no-data>
-                                  {{ $t('data not found') }}
+                                  {{ $t("data not found") }}
                                 </template>
                               </v-autocomplete>
                             </v-col>
@@ -960,8 +961,8 @@ export default {
 
     this.GetDataRelationsManagement(this.show_by_id);
   },
-  async created(){
-    this.GetClassList()
+  async created() {
+    this.GetClassList();
   },
   mounted() {
     this.GetDataRelationsManagement(this.show_by_id);
@@ -1246,7 +1247,10 @@ export default {
               this.error_message = this.$t(
                 "parent and student usernames must be unique"
               );
-            } else if( response?.data?.message === "Can not use the same accountID to create Relations."){
+            } else if (
+              response?.data?.message ===
+              "Can not use the same accountID to create Relations."
+            ) {
               this.error_message = this.$t(
                 "Can not use the same accountID to create Relations."
               );
@@ -1353,7 +1357,7 @@ export default {
                 nicknameTh: this.show_by_id.nicknameTh,
                 nicknameEn: this.show_by_id.nicknameEn,
                 className: this.show_by_id.class.classNameTh,
-                congenitalDiseaseTh: this.show_by_id.congenitalDisease
+                congenitalDiseaseTh: this.show_by_id.congenitalDisease,
               };
               let bodyFormData = new FormData();
               bodyFormData.append("image", this.send_image_profile);
@@ -1399,7 +1403,6 @@ export default {
                   this.GetShowById(this.$route.params.account_id);
                 }
               } else {
-                
                 throw { message: data.data };
               }
             } catch ({ response }) {
@@ -1517,7 +1520,7 @@ export default {
 
   computed: {
     ...mapGetters({
-      class_list : "ProfileModules/classList",
+      class_list: "ProfileModules/classList",
       show_dialog_register_one_id: "RegisterModules/getShowDialogRegisterOneId",
       students: "UserManageModules/getStudent",
       parents: "UserManageModules/getParent",

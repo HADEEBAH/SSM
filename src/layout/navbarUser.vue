@@ -26,10 +26,22 @@
           {{ $t(titel_navber) }}
         </v-app-bar-title>
         <v-spacer></v-spacer>
-        <v-btn v-if="$vuetify.breakpoint.smAndUp" depressed text color="#ffffff" @click="ReportProblem" >{{ $t("ReportProblem") }}</v-btn>
+        <v-btn
+          v-if="$vuetify.breakpoint.smAndUp"
+          depressed
+          text
+          color="#ffffff"
+          @click="ReportProblem"
+          >{{ $t("ReportProblem") }}</v-btn
+        >
         <v-menu v-model="menu_locale" offset-y>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn :class="$vuetify.breakpoint.smAndUp ? 'mr-2' : ''" text v-bind="attrs" v-on="on">
+            <v-btn
+              :class="$vuetify.breakpoint.smAndUp ? 'mr-2' : ''"
+              text
+              v-bind="attrs"
+              v-on="on"
+            >
               <v-img
                 :class="$vuetify.breakpoint.smAndUp ? 'mr-2' : ''"
                 v-if="$i18n.locale == 'en'"
@@ -132,6 +144,19 @@
                     </v-list-item-action>
                   </v-list-item>
                 </v-list>
+                <v-row>
+                  <v-col cols="12" align="center">
+                    <v-btn
+                      outlined
+                      color="#FF6B81"
+                      class="text-center"
+                      @click="seeMoreNoti"
+                    >
+                      <!-- <v-icon>mdi-plus-circle-outline</v-icon> -->
+                      {{ $t("see more") }}
+                    </v-btn>
+                  </v-col>
+                </v-row>
               </v-card-text>
               <v-card-text v-else class="text-center">
                 {{ $t("no notifications") }}
@@ -268,7 +293,9 @@
         </v-row>
         <v-list nav>
           <div v-for="(list, list_index) in menu_drawer_list" :key="list_index">
-            <template v-if="list.to !== 'logOut' && list.to !== 'ReportProblem'">
+            <template
+              v-if="list.to !== 'logOut' && list.to !== 'ReportProblem'"
+            >
               <v-list-item
                 v-if="
                   list.to == 'StudentsSchedule'
@@ -395,22 +422,34 @@
       </v-container>
     </v-footer>
     <!-- DIALOG :: SATISFACTION -->
-    <v-dialog v-model="dialogSatisfaction" class="rounded-xl" max-width="460" persistent>
+    <v-dialog
+      v-model="dialogSatisfaction"
+      class="rounded-xl"
+      max-width="460"
+      persistent
+    >
       <v-card>
         <v-card-title primary-title class="justify-end">
-          <v-btn absolute class="top-0 right-0" icon @click="closeDialogSatisfaction()">
-              <v-icon>mdi-close</v-icon>
+          <v-btn
+            absolute
+            class="top-0 right-0"
+            icon
+            @click="closeDialogSatisfaction()"
+          >
+            <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-card-title>
         <v-card-text>
           <v-row dense>
             <v-col class="text-xl text-[#ff6b81] text-center">
-              <strong>{{ $t('evaluate satisfaction with using the system') }}</strong>
+              <strong>{{
+                $t("evaluate satisfaction with using the system")
+              }}</strong>
             </v-col>
           </v-row>
           <v-row dense>
             <v-col>
-              <span>{{ $t('satisfaction score') }}</span>
+              <span>{{ $t("satisfaction score") }}</span>
               <v-rating
                 v-model="satisfaction.rate"
                 background-color="grey lighten-2"
@@ -423,16 +462,32 @@
           </v-row>
           <v-row dense>
             <v-col>
-              <span>{{ $t('suggestions') }}</span>
-              <v-textarea v-model="satisfaction.remark" outlined :placeholder="$t('enter suggestions')"></v-textarea>
+              <span>{{ $t("suggestions") }}</span>
+              <v-textarea
+                v-model="satisfaction.remark"
+                outlined
+                :placeholder="$t('enter suggestions')"
+              ></v-textarea>
             </v-col>
           </v-row>
           <v-row>
             <v-col align="right">
-              <v-btn outlined color="#ff6b81" @click="closeDialogSatisfaction()">{{$t('cancel')}}</v-btn>
+              <v-btn
+                outlined
+                color="#ff6b81"
+                @click="closeDialogSatisfaction()"
+                >{{ $t("cancel") }}</v-btn
+              >
             </v-col>
             <v-col cols="auto">
-              <v-btn depressed :dark="!disableSendSatisfaction" :disabled="disableSendSatisfaction" color="#ff6b81" @click="send()">{{$t('send')}}</v-btn>
+              <v-btn
+                depressed
+                :dark="!disableSendSatisfaction"
+                :disabled="disableSendSatisfaction"
+                color="#ff6b81"
+                @click="send()"
+                >{{ $t("send") }}</v-btn
+              >
             </v-col>
           </v-row>
         </v-card-text>
@@ -451,8 +506,8 @@ export default {
   data: () => ({
     dialogSatisfaction: true,
     satisfaction: {
-      rate : 0,
-      remark : ""
+      rate: 0,
+      remark: "",
     },
     menu: false,
     drawer: true,
@@ -526,12 +581,14 @@ export default {
       ? localStorage.getItem("lang")
       : "th";
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    this.dialogSatisfaction = this.user_detail?.isEvaluate
+    this.dialogSatisfaction = this.user_detail?.isEvaluate;
     if (this.user_detail?.account_id) {
       this.GetProfileDetail(this.user_detail?.account_id);
     }
     this.active_menu = this.$route.name;
-    this.GetAmountCartList();
+    if (this.user_detail) {
+      this.GetAmountCartList();
+    }
   },
   beforeMount() {
     this.drawer = false;
@@ -542,13 +599,18 @@ export default {
     }
     if (this.user_detail?.account_id) {
       // this.GetCartList({account_id :this.user_detail.account_id, limit : 12, page:1 });
-      this.GetNotificationsAll(this.user_detail?.account_id);
+      this.GetNotificationsAll({
+        account_id: this.user_detail?.account_id,
+        limit: 10,
+      });
     }
 
     setTimeout(() => {
       this.alertVisible = false;
     }, 3000); // Set the timeout to 3 seconds
-    this.GetAmountCartList();
+    if (this.user_detail) {
+      this.GetAmountCartList();
+    }
     // this.GetAmountCartList({ account_id: this.user_detail?.account_id });
   },
   beforeUpdate() {
@@ -575,8 +637,8 @@ export default {
       const { xs } = this.$vuetify.breakpoint;
       return !!xs;
     },
-    disableSendSatisfaction(){
-      return !this.satisfaction.rate || !this.satisfaction.remark
+    disableSendSatisfaction() {
+      return !this.satisfaction.rate || !this.satisfaction.remark;
     },
   },
   methods: {
@@ -588,17 +650,25 @@ export default {
       GetNotificationsAll: "NotificationsModules/GetNotificationsAll",
       ReadNotifications: "NotificationsModules/ReadNotifications",
       GetAmountCartList: "OrderModules/GetAmountCartList",
-      sendSatisfaction: "satisfactionModules/sendSatisfaction"
+      sendSatisfaction: "satisfactionModules/sendSatisfaction",
     }),
+    seeMoreNoti() {
+      const totalCount = this.get_notifications_all?.length + 10;
+      this.GetNotificationsAll({
+        account_id: this.user_detail?.account_id,
+        limit: totalCount,
+      });
+    },
     ReportProblem() {
-      window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSdayLva9MELypybakCFtdVfMbjVESI9dGN6y_yYDETkQWV33w/viewform?usp=sharing"
+      window.location.href =
+        "https://docs.google.com/forms/d/e/1FAIpQLSdayLva9MELypybakCFtdVfMbjVESI9dGN6y_yYDETkQWV33w/viewform?usp=sharing";
     },
-    closeDialogSatisfaction(){
-      this.dialogSatisfaction = false
-      this.user_detail.isEvaluate = false
-      localStorage.setItem("userDetail", JSON.stringify(this.user_detail))
+    closeDialogSatisfaction() {
+      this.dialogSatisfaction = false;
+      this.user_detail.isEvaluate = false;
+      localStorage.setItem("userDetail", JSON.stringify(this.user_detail));
     },
-    send(){
+    send() {
       Swal.fire({
         icon: "question",
         title: this.$t("confirm sending of satisfaction assessment?"),
@@ -608,12 +678,12 @@ export default {
         cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
-          this.sendSatisfaction({payload : this.satisfaction})
-          this.dialogSatisfaction = false
-          this.user_detail.isEvaluate = false
-          localStorage.setItem("userDetail", JSON.stringify(this.user_detail))
+          this.sendSatisfaction({ payload: this.satisfaction });
+          this.dialogSatisfaction = false;
+          this.user_detail.isEvaluate = false;
+          localStorage.setItem("userDetail", JSON.stringify(this.user_detail));
         }
-      })
+      });
     },
     setLocale(locale) {
       this.$i18n.locale = locale;

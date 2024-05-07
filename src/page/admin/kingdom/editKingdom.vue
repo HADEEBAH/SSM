@@ -234,6 +234,7 @@
             <v-btn
               class="white--text mb-5"
               depressed
+              color="#ff6b81"
               :disabled="isButtonDisabled"
               :class="$vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'"
               @click="openDialog()"

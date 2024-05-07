@@ -36,7 +36,7 @@
     >
       <v-row dense ref="banner_bar">
         <v-carousel
-          class="rounded-xl max-w-[1920px!important] max-h-[1080px!important]"
+          class="rounded-xl max-w-[1920px!important] max-h-[575px!important]"
           cycle
           height="auto"
           hide-delimiter-background
@@ -45,12 +45,12 @@
           <v-carousel-item
             v-for="(slide, i) in banner_list"
             :key="i"
-            class="max-w-[1920px] max-h-[1080px]"
+            class="max-w-[1920px] max-h-[575px]"
           >
             <v-img
               :src="slide.bannerPath"
               :aspect-ratio="16 / 9"
-              class="max-w-[1920px] max-h-[1080px]"
+              class="max-w-[1920px] max-h-[575px]"
             >
             </v-img>
           </v-carousel-item>
