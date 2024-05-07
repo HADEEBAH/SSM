@@ -518,10 +518,12 @@
     "personal" : "Personal",
     "phone number" : "Phone number",
     "personal information" : "personal information",
+    
     "please complete personal information":"Please complete personal information completely or press the cancel button if you do not want to edit your information",
     "please confirm the new password again" : "Please confirm the new password again",
     "please confirm your passwords are the same" : "Please confirm your passwords are the same",
     "please enter a checkbox" : "Please enter a checkbox",
+    "please enter the class" : "Please enter the class",
     "please enter a 10-digit phone number" : "Please enter a 10-digit phone number",
     "please enter a confirmation password that is at least 8 characters long" : "Please enter a confirmation password that is at least 8 characters long",
     "please enter a phone number starting with 0" : "Please enter a phone number starting with 0",

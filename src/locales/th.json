@@ -502,6 +502,7 @@
     "please enter a username no longer than 30 characters" : "กรุณาระบุชื่อผู้ใชความยาวไม่เกิน 30 ตัวอักษร",
     "please enter OTP correctly" : "กรุณาระบุ OTP ให้ถูกต้อง",
     "please enter the student name" : "กรุณากรอกชื่อผู้เรียน",
+    "please enter the class" : "กรุณากรอกมูลระดับชั้น",
     "please enter the service value" : "กรุณากรอกมูลค่าบริการ",
     "please enter the service value end" : "กรุณากรอกมูลค่าบริการสิ้นสุด",
     "please enter the service value start" : "กรุณากรอกมูลค่าบริการเริ่มต้น",

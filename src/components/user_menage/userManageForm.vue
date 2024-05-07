@@ -306,13 +306,18 @@
                                 :text="this.$t('class')"
                               ></label-custom>
                               <v-autocomplete
-                                v-model="show_by_id.class.classNameTh"
+                                :value="
+                                  show_by_id?.class?.classNameTh === ''
+                                    ? $t('please enter the class')
+                                    : show_by_id?.class?.classNameTh
+                                "
                                 :items="class_list"
                                 item-text="classNameTh"
                                 color="#ff6B81"
                                 item-color="#ff6b81"
                                 outlined
                                 :disabled="isDisabled"
+                                :placeholder="$t('please enter the class')"
                                 dense
                               >
                                 <template #no-data>

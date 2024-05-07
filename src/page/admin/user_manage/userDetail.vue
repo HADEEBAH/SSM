@@ -245,7 +245,6 @@
                               :disabled="!isEnabled"
                               placeholder="-"
                               v-model="show_by_id.class.classNameTh"
-                              :rules="rules.name"
                               outlined
                               dense
                             >
@@ -520,7 +519,6 @@
                               :disabled="!isEnabled"
                               placeholder="-"
                               v-model="show_by_id.class.classNameTh"
-                              :rules="rules.name"
                               outlined
                               dense
                             >
@@ -810,7 +808,6 @@
                                       :disabled="!isEnabled"
                                       placeholder="-"
                                       v-model="show_by_id.class.classNameTh"
-                                      :rules="rules.name"
                                       outlined
                                       dense
                                     >
