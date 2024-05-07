@@ -28,9 +28,8 @@ const notificatiosModules = {
 
         async GetNotificationsAll(context, { account_id, limit }) {
             try {
-                let { data } = await axios.get(`http://localhost:3004/api/v1/notification/byId/${account_id}?limit=${limit}`)
-                // http://localhost:3004/api/v1/notification/byId/337070920276760?limit=15
-                // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/notification/byId/${account_id}`)
+                // let { data } = await axios.get(`http://localhost:3004/api/v1/notification/byId/${account_id}?limit=${limit}`)
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/notification/byId/${account_id}?limit=${limit}`)
                 if (data.statusCode === 200) {
                     context.commit("setgetNotificationsAll", data.data)
                 }
