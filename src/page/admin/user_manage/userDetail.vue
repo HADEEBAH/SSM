@@ -279,7 +279,6 @@
                               :disabled="!isEnabled"
                               placeholder="-"
                               v-model="show_by_id.congenitalDisease"
-                              :rules="rules.name"
                               outlined
                               dense
                             >
@@ -549,7 +548,6 @@
                               :disabled="!isEnabled"
                               placeholder="-"
                               v-model="show_by_id.congenitalDisease"
-                              :rules="rules.name"
                               outlined
                               dense
                             >
@@ -837,7 +835,6 @@
                                       :disabled="!isEnabled"
                                       placeholder="-"
                                       v-model="show_by_id.congenitalDisease"
-                                      :rules="rules.name"
                                       outlined
                                       dense
                                     >
