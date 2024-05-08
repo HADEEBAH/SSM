@@ -305,11 +305,27 @@
                               <label-custom
                                 :text="this.$t('class')"
                               ></label-custom>
+                              <!-- <v-autocomplete
+                                v-if="show_by_id.class.classNameTh"
+                                v-model="show_by_id.class.classNameTh"
+                                :items="class_list"
+                                item-text="classNameTh"
+                                color="#ff6B81"
+                                item-color="#ff6b81"
+                                outlined
+                                :disabled="isDisabled"
+                                dense
+                              >
+                                <template #no-data>
+                                  {{ $t("data not found") }}
+                                </template>
+                              </v-autocomplete> -->
+
                               <v-autocomplete
                                 :value="
-                                  show_by_id?.class?.classNameTh === ''
+                                  show_by_id.class.classNameTh === ''
                                     ? $t('please enter the class')
-                                    : show_by_id?.class?.classNameTh
+                                    : show_by_id.class.classNameTh
                                 "
                                 :items="class_list"
                                 item-text="classNameTh"
@@ -319,6 +335,7 @@
                                 :disabled="isDisabled"
                                 :placeholder="$t('please enter the class')"
                                 dense
+                                @change="handleChange($event)"
                               >
                                 <template #no-data>
                                   {{ $t("data not found") }}
@@ -950,6 +967,8 @@ export default {
     ],
     error_message: "",
     user_form: false,
+    className: "",
+    activeClass: false,
   }),
 
   beforeMount() {
@@ -992,6 +1011,11 @@ export default {
     }),
     openFileSelector() {
       this.$refs.fileInput.click();
+    },
+    handleChange(item) {
+      this.activeClass = true;
+      this.className = item;
+      console.log("this.className :>> ", this.className);
     },
     selectRole() {
       this.selectRoles;
@@ -1346,6 +1370,9 @@ export default {
                   Authorization: `Bearer ${VueCookie.get("token")}`,
                 },
               };
+              // if (this.activeClass= true) {
+
+              // }
               let payload = {
                 firstNameTh: this.show_by_id.firstNameTh,
                 lastNameTh: this.show_by_id.lastNameTh,
@@ -1361,7 +1388,10 @@ export default {
                 schoolEn: this.show_by_id.school.schoolNameEn,
                 nicknameTh: this.show_by_id.nicknameTh,
                 nicknameEn: this.show_by_id.nicknameEn,
-                className: this.show_by_id.class.classNameTh,
+                className:
+                  this.activeClass === true
+                    ? this.className
+                    : this.show_by_id.class.classNameTh,
                 congenitalDiseaseTh: this.show_by_id.congenitalDisease,
               };
               let bodyFormData = new FormData();
