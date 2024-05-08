@@ -231,7 +231,7 @@
                                 outlined
                                 dense
                                 color="#ff6b81"
-                               >
+                              >
                               </v-text-field>
                             </v-col>
                           </v-row>
@@ -280,7 +280,8 @@
                                 v-model="show_by_id.school.schoolNameEn"
                                 outlined
                                 dense
-                                color="#ff6b81">
+                                color="#ff6b81"
+                              >
                               </v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6">
@@ -304,7 +305,8 @@
                               <label-custom
                                 :text="this.$t('class')"
                               ></label-custom>
-                              <v-autocomplete
+                              <!-- <v-autocomplete
+                                v-if="show_by_id.class.classNameTh"
                                 v-model="show_by_id.class.classNameTh"
                                 :items="class_list"
                                 item-text="classNameTh"
@@ -315,7 +317,28 @@
                                 dense
                               >
                                 <template #no-data>
-                                  {{ $t('data not found') }}
+                                  {{ $t("data not found") }}
+                                </template>
+                              </v-autocomplete> -->
+
+                              <v-autocomplete
+                                :value="
+                                  show_by_id.class.classNameTh === ''
+                                    ? $t('please enter the class')
+                                    : show_by_id.class.classNameTh
+                                "
+                                :items="class_list"
+                                item-text="classNameTh"
+                                color="#ff6B81"
+                                item-color="#ff6b81"
+                                outlined
+                                :disabled="isDisabled"
+                                :placeholder="$t('please enter the class')"
+                                dense
+                                @change="handleChange($event)"
+                              >
+                                <template #no-data>
+                                  {{ $t("data not found") }}
                                 </template>
                               </v-autocomplete>
                             </v-col>
@@ -944,6 +967,8 @@ export default {
     ],
     error_message: "",
     user_form: false,
+    className: "",
+    activeClass: false,
   }),
 
   beforeMount() {
@@ -960,8 +985,8 @@ export default {
 
     this.GetDataRelationsManagement(this.show_by_id);
   },
-  async created(){
-    this.GetClassList()
+  async created() {
+    this.GetClassList();
   },
   mounted() {
     this.GetDataRelationsManagement(this.show_by_id);
@@ -986,6 +1011,11 @@ export default {
     }),
     openFileSelector() {
       this.$refs.fileInput.click();
+    },
+    handleChange(item) {
+      this.activeClass = true;
+      this.className = item;
+      console.log("this.className :>> ", this.className);
     },
     selectRole() {
       this.selectRoles;
@@ -1246,7 +1276,10 @@ export default {
               this.error_message = this.$t(
                 "parent and student usernames must be unique"
               );
-            } else if( response?.data?.message === "Can not use the same accountID to create Relations."){
+            } else if (
+              response?.data?.message ===
+              "Can not use the same accountID to create Relations."
+            ) {
               this.error_message = this.$t(
                 "Can not use the same accountID to create Relations."
               );
@@ -1337,6 +1370,9 @@ export default {
                   Authorization: `Bearer ${VueCookie.get("token")}`,
                 },
               };
+              // if (this.activeClass= true) {
+
+              // }
               let payload = {
                 firstNameTh: this.show_by_id.firstNameTh,
                 lastNameTh: this.show_by_id.lastNameTh,
@@ -1352,8 +1388,11 @@ export default {
                 schoolEn: this.show_by_id.school.schoolNameEn,
                 nicknameTh: this.show_by_id.nicknameTh,
                 nicknameEn: this.show_by_id.nicknameEn,
-                className: this.show_by_id.class.classNameTh,
-                congenitalDiseaseTh: this.show_by_id.congenitalDisease
+                className:
+                  this.activeClass === true
+                    ? this.className
+                    : this.show_by_id.class.classNameTh,
+                congenitalDiseaseTh: this.show_by_id.congenitalDisease,
               };
               let bodyFormData = new FormData();
               bodyFormData.append("image", this.send_image_profile);
@@ -1399,7 +1438,6 @@ export default {
                   this.GetShowById(this.$route.params.account_id);
                 }
               } else {
-                
                 throw { message: data.data };
               }
             } catch ({ response }) {
@@ -1517,7 +1555,7 @@ export default {
 
   computed: {
     ...mapGetters({
-      class_list : "ProfileModules/classList",
+      class_list: "ProfileModules/classList",
       show_dialog_register_one_id: "RegisterModules/getShowDialogRegisterOneId",
       students: "UserManageModules/getStudent",
       parents: "UserManageModules/getParent",

@@ -151,7 +151,7 @@
           >
             <template #no-data>
               <v-list-item>
-                {{ $t('data not found') }}
+                {{ $t("data not found") }}
               </v-list-item>
             </template>
           </v-autocomplete>
@@ -285,7 +285,7 @@ export default {
   },
   async created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    await this.GetClassList()
+    await this.GetClassList();
   },
   mounted() {
     this.$store.dispatch(
@@ -296,7 +296,7 @@ export default {
 
   methods: {
     ...mapActions({
-      GetClassList : "ProfileModules/GetClassList",
+      GetClassList: "ProfileModules/GetClassList",
       loginOneId: "loginModules/loginOneId",
       GetUserData: "ProfileModules/GetUserData",
       GetAll: "ProfileModules/GetAll",
@@ -370,9 +370,15 @@ export default {
                 mobileNo: this.profile_detail.mobileNo,
                 email: this.profile_detail.email,
                 schoolTh: this.profile_detail.school.schoolNameTh,
-                nicknameTh: this.profile_detail?.nicknameTh ?  this.profile_detail.nicknameTh : '',
-                congenitalDiseaseTh:  this.profile_detail?.congenitalDisease ? this.profile_detail.congenitalDisease : '',
-                className:  this.profile_detail?.class?.classNameTh ? this.profile_detail.class.classNameTh : '',
+                nicknameTh: this.profile_detail?.nicknameTh
+                  ? this.profile_detail.nicknameTh
+                  : "",
+                congenitalDiseaseTh: this.profile_detail?.congenitalDisease
+                  ? this.profile_detail.congenitalDisease
+                  : "",
+                className: this.profile_detail?.class?.classNameTh
+                  ? this.profile_detail.class.classNameTh
+                  : "",
               };
 
               this.user_detail = JSON.parse(localStorage.getItem("userDetail"));

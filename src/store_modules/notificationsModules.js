@@ -26,9 +26,10 @@ const notificatiosModules = {
             context.dispatch("GetNotificationsAll", user_detail.account_id)
         },
 
-        async GetNotificationsAll(context, account_id) {
+        async GetNotificationsAll(context, { account_id, limit }) {
             try {
-                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/notification/byId/${account_id}`)
+                // let { data } = await axios.get(`http://localhost:3004/api/v1/notification/byId/${account_id}?limit=${limit}`)
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/notification/byId/${account_id}?limit=${limit}`)
                 if (data.statusCode === 200) {
                     context.commit("setgetNotificationsAll", data.data)
                 }
@@ -41,7 +42,7 @@ const notificatiosModules = {
             try {
                 let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/notification/read/${item.notification_id}`)
                 if (data.statusCode === 200) {
-                  context.dispatch("GetNotificationsAll",item.account_id)
+                    context.dispatch("GetNotificationsAll", item.account_id)
                 }
             } catch (error) {
                 console.log(error);

@@ -177,9 +177,7 @@
                         </v-row>
                         <v-row>
                           <v-col cols="12" sm="6">
-                            <label-custom
-                              :text="$t('email')"
-                            ></label-custom>
+                            <label-custom :text="$t('email')"></label-custom>
                             <v-text-field
                               disabled
                               @keydown="validate($event, 'en', 'number')"
@@ -242,25 +240,35 @@
                         </v-row>
                         <v-row>
                           <v-col cols="12" sm="6">
-                            <label-custom
-                              :text="$t('class')"
-                            ></label-custom>
-                            <v-autocomplete
+                            <label-custom :text="$t('class')"></label-custom>
+                            <v-text-field
+                              :disabled="!isEnabled"
+                              placeholder="-"
                               v-model="show_by_id.class.classNameTh"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                            <!-- <v-autocomplete
+                              :value="
+                                show_by_id.class?.classNameTh
+                                  ? show_by_id.class?.classNameTh
+                                  : show_by_id.class?.classNameEn
+                                  ? show_by_id.class?.classNameEn
+                                  : show_by_id.class?.classNameTh
+                              "
                               :items="class_list"
                               item-text="classNameTh"
                               color="#ff6B81"
                               item-color="#ff6b81"
                               outlined
-                              :disabled="!isEnabled"
+                              :disabled="isDisabled"
                               dense
                             >
                               <template #no-data>
-                                <v-list-item>
-                                  {{ $t('data not found') }}
-                                </v-list-item>
+                                {{ $t("data not found") }}
                               </template>
-                            </v-autocomplete>
+                            </v-autocomplete> -->
                           </v-col>
 
                           <v-col cols="12" sm="6">
@@ -271,7 +279,6 @@
                               :disabled="!isEnabled"
                               placeholder="-"
                               v-model="show_by_id.congenitalDisease"
-                              :rules="rules.name"
                               outlined
                               dense
                             >
@@ -503,12 +510,20 @@
                           </v-col>
                         </v-row>
                         <v-row>
+                          <!-- <pre>{{ show_by_id?.class?.classNameTh }}</pre> -->
+                          <!-- >> {{ show_by_id.class.classNameTh }} -->
                           <v-col cols="12" sm="6">
-                            <label-custom
-                              :text="$t('class')"
-                            ></label-custom>
-                            <v-autocomplete
+                            <label-custom :text="$t('class')"></label-custom>
+                            <v-text-field
+                              :disabled="!isEnabled"
+                              placeholder="-"
                               v-model="show_by_id.class.classNameTh"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                            <!-- <v-autocomplete
+                              v-model="show_by_id.class.classNameEn"
                               :items="class_list"
                               item-text="classNameTh"
                               color="#ff6B81"
@@ -519,10 +534,10 @@
                             >
                               <template #no-data>
                                 <v-list-item>
-                                  {{ $t('data not found') }}
+                                  {{ $t("data not found") }}
                                 </v-list-item>
                               </template>
-                            </v-autocomplete>
+                            </v-autocomplete> -->
                           </v-col>
 
                           <v-col cols="12" sm="6">
@@ -533,7 +548,6 @@
                               :disabled="!isEnabled"
                               placeholder="-"
                               v-model="show_by_id.congenitalDisease"
-                              :rules="rules.name"
                               outlined
                               dense
                             >
@@ -788,7 +802,15 @@
                                     <label-custom
                                       :text="$t('class')"
                                     ></label-custom>
-                                    <v-autocomplete
+                                    <v-text-field
+                                      :disabled="!isEnabled"
+                                      placeholder="-"
+                                      v-model="show_by_id.class.classNameTh"
+                                      outlined
+                                      dense
+                                    >
+                                    </v-text-field>
+                                    <!-- <v-autocomplete
                                       v-model="show_by_id.class.classNameTh"
                                       :items="class_list"
                                       item-text="classNameTh"
@@ -800,10 +822,10 @@
                                     >
                                       <template #no-data>
                                         <v-list-item>
-                                          {{ $t('data not found') }}
+                                          {{ $t("data not found") }}
                                         </v-list-item>
                                       </template>
-                                    </v-autocomplete>
+                                    </v-autocomplete> -->
                                   </v-col>
                                   <v-col cols="12" sm="6">
                                     <label-custom
@@ -813,7 +835,6 @@
                                       :disabled="!isEnabled"
                                       placeholder="-"
                                       v-model="show_by_id.congenitalDisease"
-                                      :rules="rules.name"
                                       outlined
                                       dense
                                     >
@@ -1369,8 +1390,20 @@
           </v-container>
 
           <!-- Button -->
-          <v-container v-if="tab == 0" fluid>
-            <v-row>
+          <v-container
+            v-for="(itemBtn, indexBtn) in show_by_id.userRoles"
+            :key="indexBtn"
+            fluid
+          >
+            <v-row
+              v-if="
+                (itemBtn.roleId == 'R_5' && tab == 0) ||
+                itemBtn.roleId == 'R_4' ||
+                itemBtn.roleId == 'R_3' ||
+                itemBtn.roleId == 'R_2' ||
+                itemBtn.roleId == 'R_1'
+              "
+            >
               <v-col v-if="!isEnabled" align="right" cols="12">
                 <v-btn
                   class="white--text mb-5"
@@ -1736,7 +1769,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      GetClassList : "ProfileModules/GetClassList",
+      GetClassList: "ProfileModules/GetClassList",
       changeDialogRegisterOneId: "RegisterModules/changeDialogRegisterOneId",
       changeStudentsData: "UserManageModules/changeStudentsData",
       changeUserData: "UserManageModules/changeUserData",
@@ -2045,7 +2078,9 @@ export default {
           type: type,
         }).then(() => {
           if (type === "student") {
-            let student = this.course_order.students.filter((v) => v.username === username)[0]
+            let student = this.course_order.students.filter(
+              (v) => v.username === username
+            )[0];
             if (this.user_student_data.length > 0) {
               student.firstname_en = this.user_student_data[0].firstNameEng;
               student.lastname_en = this.user_student_data[0].lastNameEng;
@@ -2208,7 +2243,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      class_list : "ProfileModules/classList",
+      class_list: "ProfileModules/classList",
       show_dialog_register_one_id: "RegisterModules/getShowDialogRegisterOneId",
       students: "UserManageModules/getStudent",
       user_data: "UserManageModules/getUserData",
