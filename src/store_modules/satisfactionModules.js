@@ -7,14 +7,51 @@ import VueI18n from "../i18n";
 const satisfactionModules = {
     namespaced: true,
     state: {
+        survey : [],
         satisfactions: []
     },
     mutations: {
         SetSatisfactions(state, payload){
             state.satisfactions = payload
+        },
+        SetSurvey(state, payload){
+            state.survey = payload
         }
     },
     actions: {
+        async GetSurvey(context){
+            try{
+                const config ={
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Content-type": "Application/json",
+                        Authorization: `Bearer ${VueCookie.get("token")}`,
+                    },
+                }
+                const {data} = await axios.get(`http://localhost:3000/api/v1/satisfaction/survey`, config)
+                if(data.statusCode === 200){
+                    data.data.map(( survey )=>{
+                        survey.remark = ""
+                        survey.questions.map( (question) => {
+                            question.rate = 0
+                            return question
+                        } )
+                    })
+                    context.commit("SetSurvey", data.data)
+                }
+            }catch(error){
+                console.log(error)
+                Swal.fire({
+                    icon: "error",
+                    title: VueI18n.t("fail"),
+                    showDenyButton: false,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                })
+            }
+        },
         async sendSatisfaction(context, { payload }){
             try{
                 const config = {
@@ -24,7 +61,7 @@ const satisfactionModules = {
                         Authorization: `Bearer ${VueCookie.get("token")}`,
                     },
                 };
-                const {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/satisfaction`, payload, config)
+                const {data} = await axios.post(`http://localhost:3000/api/v1/satisfaction`, payload, config)
                 if(data.statusCode === 201){
                     Swal.fire({
                         icon: "success",
@@ -70,6 +107,9 @@ const satisfactionModules = {
     getters: {
         satisfactions(state){
             return state.satisfactions
+        },
+        survey(state){
+            return state.survey
         }
     },
   };

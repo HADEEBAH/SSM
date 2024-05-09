@@ -425,7 +425,7 @@
     <v-dialog
       v-model="dialogSatisfaction"
       class="rounded-xl"
-      max-width="460"
+      max-width="500"
       persistent
     >
       <v-card>
@@ -447,29 +447,52 @@
               }}</strong>
             </v-col>
           </v-row>
-          <v-row dense>
-            <v-col>
-              <span>{{ $t("satisfaction score") }}</span>
-              <v-rating
-                v-model="satisfaction.rate"
-                background-color="grey lighten-2"
-                color="warning"
-                hover
-                length="5"
-                size="30"
-              ></v-rating>
+          <v-row dense> 
+            <v-col class="text-wrap">
+              จากที่ได้เข้าร่วมบริการระบบ Smart School Managemet กรุณาประเมินความพึงพอใจ เพื่อให้ทางระบบที่ท่านเข้าใช้บริการนำความคิดเห็นของท่านไปปรับปรุงการให้บริการต่อไป
             </v-col>
           </v-row>
-          <v-row dense>
-            <v-col>
-              <span>{{ $t("suggestions") }}</span>
-              <v-textarea
-                v-model="satisfaction.remark"
-                outlined
-                :placeholder="$t('enter suggestions')"
-              ></v-textarea>
-            </v-col>
-          </v-row>
+          <div
+            v-for="(surveyData, surveyIndex) in survey"
+            :key="`${surveyIndex}-survey`"
+          >
+            <v-row dense>
+              <v-col class="font-bold">
+                {{ `${surveyData.index}.${surveyData.title}` }}
+              </v-col>
+            </v-row>
+            <div
+              v-for="(question, questionIndex) in surveyData.questions"
+              :key="`${questionIndex}-question`"
+            >
+              <v-row dense :class="$vuetify.breakpoint.mdAndUp ? 'pl-5' : ''">
+                <v-col cols="12" md="6" class="d-flex align-center">
+                  {{ `${surveyData.index}.${question.index}.${question.text}` }}
+                </v-col>
+                <v-col cols="12" md="6" class="d-flex align-center">
+                  <v-rating
+                    v-model="question.rate"
+                    background-color="grey lighten-2"
+                    color="warning"
+                    hover
+                    length="5"
+                    size="30"
+                  ></v-rating>
+                </v-col>
+              </v-row>
+              <v-divider v-if="questionIndex !== surveyData.questions.length - 1"></v-divider>
+            </div>
+            <v-row dense class="mb-3">
+              <v-col>
+                <v-textarea
+                  v-model="surveyData.remark"
+                  outlined
+                  hide-details
+                  :placeholder="$t('suggestions')"
+                ></v-textarea>
+              </v-col>
+            </v-row>
+          </div>
           <v-row>
             <v-col align="right">
               <v-btn
@@ -581,7 +604,8 @@ export default {
       ? localStorage.getItem("lang")
       : "th";
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    this.dialogSatisfaction = this.user_detail?.isEvaluate;
+    this.GetSurvey();
+    this.dialogSatisfaction = this.user_detail?.isEvaluate
     if (this.user_detail?.account_id) {
       this.GetProfileDetail(this.user_detail?.account_id);
     }
@@ -632,13 +656,22 @@ export default {
       notifications_read: "NotificationsModules/readNotifications",
       loading: "LoadingModules/getLoading",
       amount_cart_list: "OrderModules/getAmountCartList",
+      survey: "satisfactionModules/survey",
     }),
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
       return !!xs;
     },
     disableSendSatisfaction() {
-      return !this.satisfaction.rate || !this.satisfaction.remark;
+      const validate = []
+      if(this.survey){
+        for(const surveyData of this.survey){
+          for(const question of  surveyData.questions){
+            validate.push(!question.rate)
+          }
+        }
+      }
+      return validate.includes(true) 
     },
   },
   methods: {
@@ -651,6 +684,7 @@ export default {
       ReadNotifications: "NotificationsModules/ReadNotifications",
       GetAmountCartList: "OrderModules/GetAmountCartList",
       sendSatisfaction: "satisfactionModules/sendSatisfaction",
+      GetSurvey: "satisfactionModules/GetSurvey",
     }),
     seeMoreNoti() {
       const totalCount = this.get_notifications_all?.length + 10;
@@ -678,7 +712,7 @@ export default {
         cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
-          this.sendSatisfaction({ payload: this.satisfaction });
+          this.sendSatisfaction({ payload: this.survey });
           this.dialogSatisfaction = false;
           this.user_detail.isEvaluate = false;
           localStorage.setItem("userDetail", JSON.stringify(this.user_detail));
