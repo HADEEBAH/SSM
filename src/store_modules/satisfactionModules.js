@@ -28,7 +28,7 @@ const satisfactionModules = {
                         Authorization: `Bearer ${VueCookie.get("token")}`,
                     },
                 }
-                const {data} = await axios.get(`http://localhost:3000/api/v1/satisfaction/survey`, config)
+                const {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/satisfaction/survey`, config)
                 if(data.statusCode === 200){
                     data.data.map(( survey )=>{
                         survey.remark = ""
@@ -61,7 +61,7 @@ const satisfactionModules = {
                         Authorization: `Bearer ${VueCookie.get("token")}`,
                     },
                 };
-                const {data} = await axios.post(`http://localhost:3000/api/v1/satisfaction`, payload, config)
+                const {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/satisfaction`, payload, config)
                 if(data.statusCode === 201){
                     Swal.fire({
                         icon: "success",
