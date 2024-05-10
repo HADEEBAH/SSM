@@ -604,9 +604,9 @@ export default {
       ? localStorage.getItem("lang")
       : "th";
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    this.GetSurvey();
     this.dialogSatisfaction = this.user_detail?.isEvaluate
     if (this.user_detail?.account_id) {
+      this.GetSurvey();
       this.GetProfileDetail(this.user_detail?.account_id);
     }
     this.active_menu = this.$route.name;
