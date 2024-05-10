@@ -64,7 +64,8 @@
                     : 'text-[#B3B3B3]'
                 "
               >
-                {{
+              {{ type.total_course }}
+                <!-- {{
                   search_results.filter(
                     (v) => v.course_type_id === type_selected
                   ).length > 0
@@ -76,7 +77,7 @@
                         (v) => v.course_type_id === type.course_type_id
                       ).length
                     : type.total_course
-                }}
+                }} -->
               </v-avatar>
             </v-card-text>
           </v-card>

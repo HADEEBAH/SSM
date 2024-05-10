@@ -1663,28 +1663,10 @@ const CourseModules = {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/limit?category_id=${category_id}&status=${status}&course_type_id=${course_type_id}&limit=${limit}&page=${page}`)
         if (data.statusCode === 200) {
           for (const course of data.data) {
-            let course_studant_amount = 0
+            // let course_studant_amount = 0
             course.student_course_data = []
             course.show = false
             course.course_url = course.course_img ? `${process.env.VUE_APP_URL}/api/v1/files/${course.course_img}` : ""
-            let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/count/student?courseId=${course.course_id}`)
-            if (data.statusCode === 200) {
-              for (const student_data of data.data) {
-                course_studant_amount = course_studant_amount + parseInt(student_data.sum_student)
-                course.student_course_data.push({ student_data })
-              }
-              let endpoint = process.env.VUE_APP_URL
-              let potential = await axios.get(`${endpoint}/api/v1/coachmanagement/course/potential/${course.course_id}`)
-              if (potential.data.statusCode === 200) {
-                if (potential.data.data?.course_id) {
-                  course.course_studant_amount = course_studant_amount - potential.data.data.sum_student
-                } else {
-                  course.course_studant_amount = course_studant_amount
-                }
-              } else {
-                course.course_studant_amount = course_studant_amount
-              }
-            }
           }
           context.commit("SetFilterCourseOption", { limit: limit, page: page, count: data.data.length })
           context.commit("SetCoursesIsLoading", false)

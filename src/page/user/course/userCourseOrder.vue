@@ -1079,17 +1079,7 @@ export default {
           firstname_en: this.user_login.first_name_th,
           lastname_en: this.user_login.last_name_th,
           tel: this.user_login.tel,
-          parents: [
-            {
-              account_id: this.last_user_registered.account_id,
-              firstname_en: this.last_user_registered.firstname_en,
-              lastname_en: this.last_user_registered.lastname_en,
-              firstname_th: this.last_user_registered.firstname_th,
-              lastname_th: this.last_user_registered.lastname_th,
-              tel: this.last_user_registered.phone_number,
-              username: this.last_user_registered.username,
-            },
-          ],
+          parents: [],
           is_account: false,
           is_other: false,
           nicknameTh: this.profile_detail.nicknameTh,

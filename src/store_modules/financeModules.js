@@ -86,6 +86,8 @@ const financeModules = {
                 "ระยะเวลา": order.optionName,
                 "โค้ช": order.coach_name,
                 "นักเรียน": order.student_name,
+                "ชื่อเล่นนักเรียน" : order.nickname,
+                "ระดับชั้น" : order.class_name,
                 "ผู้ซื้อ": order.created_by_name,
                 "วันที่ออกเอกสาร": moment().format("DD/MM/YYYY HH:mm"),
 
@@ -106,6 +108,8 @@ const financeModules = {
                 "ระยะเวลา": '',
                 "โค้ช": '',
                 "นักเรียน": '',
+                "ชื่อเล่นนักเรียน" : '',
+                "ระดับชั้น" : '',
                 "ผู้ซื้อ": '',
               })
             }
