@@ -89,13 +89,7 @@
           <v-col
             cols="6"
             sm="4"
-            v-for="(course, course_index) in search_results.filter(
-              (v) => v.course_type_id === type_selected
-            ).length > 0
-              ? search_results.filter((v) => v.course_type_id === type_selected)
-              : search_course
-              ? search_results
-              : courses"
+            v-for="(course, course_index) in courses"
             :key="course_index"
           >
             <v-card class="overflow-hidden h-full rounded-lg box-shadows">
@@ -167,9 +161,7 @@
             </v-card>
           </v-col>
           <v-col
-            v-if="
-              search_course ? search_results.length == 0 : courses.length == 0
-            "
+            v-if="courses.length == 0"
           >
             <v-card outlined>
               <v-card-text align="center">
@@ -346,23 +338,33 @@ export default {
         }
       }
     },
-    searchCourse(event) {
-      const searchQuery = event.toLowerCase();
-      this.search_results = this.courses.filter((course) => {
-        const courseNameTh = course.course_name_th.toLowerCase();
-        const courseNameEn = course.course_name_en.toLowerCase();
-        if (
-          !courseNameTh.includes(searchQuery) &&
-          !courseNameEn.includes(searchQuery)
-        ) {
-          return false;
-        } else {
-          return (
-            courseNameTh.includes(searchQuery) ||
-            courseNameEn.includes(searchQuery)
-          );
-        }
+    async searchCourse(event) {
+      await this.GetCoursesFilter({
+        category_id: this.$route.params.category_id,
+        status: "Active",
+        course_type_id: this.type_selected,
+        limit: this.filter_course_option.limit,
+        page: this.filter_course_option.page + 1,
+        search : event
       });
+      // if(event){
+      //   const searchQuery = event.toLowerCase();
+      //   this.search_results = this.courses.filter((course) => {
+      //     const courseNameTh = course.course_name_th.toLowerCase();
+      //     const courseNameEn = course.course_name_en.toLowerCase();
+      //     if (
+      //       !courseNameTh.includes(searchQuery) &&
+      //       !courseNameEn.includes(searchQuery)
+      //     ) {
+      //       return false;
+      //     } else {
+      //       return (
+      //         courseNameTh.includes(searchQuery) ||
+      //         courseNameEn.includes(searchQuery)
+      //       );
+      //     }
+      //   });
+      // }
     },
     CutWold(course) {
       return course.course_detail.slice(0, 122) + "...";
