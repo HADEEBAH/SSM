@@ -509,7 +509,7 @@ export default {
                 showConfirmButton: false,
               });
             } else {
-              this.saveOrder({ regis_type: "cart" }).then(() => {
+              this.saveOrder({ regis_type: "cart" }).finally(() => {
                 for (const cart of this.cart_list) {
                   for (const id of cart.order_tmp_id) {
                     this.DeleteCart({
