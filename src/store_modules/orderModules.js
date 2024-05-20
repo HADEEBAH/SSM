@@ -524,7 +524,7 @@ const orderModules = {
           let students = [];
           course.students.forEach((student) => {
             if (!studentUpdate.some(v => v.studentId === student.account_id)) {
-              if (student.nicknameTh && student.class) {
+              if (student.account_id && student.nicknameTh && student.class) {
                 studentUpdate.push(
                   {
                     "studentId": student.account_id,

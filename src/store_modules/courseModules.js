@@ -1649,18 +1649,22 @@ const CourseModules = {
       }
     },
     // COURSE :: FILTER
-    async GetCoursesFilter(context, { category_id, status, course_type_id, limit, page }) {
+    async GetCoursesFilter(context, { category_id, status, course_type_id, limit, page, search }) {
       if (page == 1) {
         context.commit("SetCoursesIsLoading", true)
       }
       try {
-        if (status) {
+        if (!status) {
           status = ["Active","Reserve"]
         }
         if (!course_type_id) {
           course_type_id = 'CT_1'
         }
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/limit?category_id=${category_id}&status=${status}&course_type_id=${course_type_id}&limit=${limit}&page=${page}`)
+        let query = ''
+        if(search){
+          query = `&search=${search}`
+        }
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/limit?category_id=${category_id}&status=${status}&course_type_id=${course_type_id}&limit=${limit}&page=${page}${query}`)
         if (data.statusCode === 200) {
           for (const course of data.data) {
             // let course_studant_amount = 0
