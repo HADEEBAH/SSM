@@ -488,7 +488,7 @@ const CourseModules = {
                 }
               }
               for await (const date of coachDate.dates.date) {
-                if (datesList.filter(v => v.date === date).length === 0) {
+                // if (datesList.filter(v => v.date === date).length === 0) {
                   datesList.push({
                     coachId: coach.coachId,
                     date: date,
@@ -503,7 +503,7 @@ const CourseModules = {
                     students: coachDate.studentArr.filter(v => v.date == date && v.startTime == coachDate.time.start && v.endTime == coachDate.time.end),
                     checked: false,
                   })
-                }
+                // }
               }
             } else {
               for await (const date of coachDate.dates.date) {
@@ -546,7 +546,7 @@ const CourseModules = {
             }
           }
           context.commit("SetCoachListIsLoading", false)
-          // console.log(coachList)
+          // console.log("coachList ",coachList)
           await context.commit("SetCoachList", coachList)
         }
       } catch (error) {
