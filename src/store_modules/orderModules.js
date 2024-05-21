@@ -1472,6 +1472,57 @@ const orderModules = {
         });
       }
     },
+    async CancelOrderDeleteScheduleAndMonitor(context, {order_number}){
+      try{
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        const {data} = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/order/cancel-order/${order_number}`, config)
+        if (data.statusCode === 200) {
+          await Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("order canceled successfully"),
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+          }).finally(() => {
+            context.dispatch("GetOrderDetail", {
+              order_number: order_number,
+            });
+          });
+        }
+      }catch(error){
+        context.dispatch("GetOrderDetail", {
+          order_number: order_number,
+        });
+        if (error?.response?.data?.message == "order is not success") {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("order is not success"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("something went wrong"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        }
+      }
+    },
     // RESERVE COURSE
     async CreateReserveCourse(context, { course_data }) {
       try {
