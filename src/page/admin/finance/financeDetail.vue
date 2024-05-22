@@ -413,8 +413,24 @@
                   >
                 </v-col>
               </v-row>
+             
             </v-card-actions>
+            <v-card-text class="pa-2" v-if="order_detail.paymentStatus == 'success'">
+              <v-row dense>
+                <v-col>
+                  <v-btn
+                    class="w-full"
+                    text
+                    :disabled="order_detail.paymentStatus == 'cancel'"
+                    color="#ff6b81"
+                    :dark="!order_detail.paymentStatus == 'cancel'"
+                    @click="cancelOrderSuccess()"
+                  >{{ $t("cancel course purchase") }}</v-btn>
+                </v-col>
+              </v-row>
+            </v-card-text>
           </v-card>
+          
         </v-col>
       </v-row>
       <v-dialog v-model="pdf_open" fullscreen>
@@ -510,7 +526,28 @@ export default {
       GetOrderDetail: "OrderModules/GetOrderDetail",
       updatePayment: "OrderModules/updatePayment",
       updateOrderStatus: "OrderModules/updateOrderStatus",
+      CancelOrderDeleteScheduleAndMonitor : "OrderModules/CancelOrderDeleteScheduleAndMonitor",
     }),
+    cancelOrderSuccess(){
+      Swal.fire({
+        icon: "question",
+        title: this.$t("order cancellation"),
+        text: `${this.$t("want to cancel order no.")} ${
+          this.order_detail.orderNumber
+        }`,
+        showDenyButton: false,
+        showCancelButton: true,
+        cancelButtonText: this.$t("no"),
+        confirmButtonText: this.$t("agree"),
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          this.order_detail.paymentStatus = "cancel";
+          this.CancelOrderDeleteScheduleAndMonitor({ order_number: this.$route.params.order_id });
+        } else {
+          this.GetOrderDetail({ order_number: this.$route.params.order_id });
+        }
+      });
+    },
     GenDate(date) {
       return new Date(date).toLocaleDateString(
         this.$i18n.locale == "th" ? "th-TH" : "en-US",
@@ -1147,7 +1184,6 @@ export default {
       this.order_detail.paymentType = status.value;
     },
     cancelOrder() {
-      this.order_detail.paymentStatus = "cancel";
       Swal.fire({
         icon: "question",
         title: this.$t("order cancellation"),
@@ -1160,6 +1196,7 @@ export default {
         confirmButtonText: this.$t("agree"),
       }).then(async (result) => {
         if (result.isConfirmed) {
+          this.order_detail.paymentStatus = "cancel";
           this.updateOrderStatus({ order_detail: this.order_detail });
         } else {
           this.GetOrderDetail({ order_number: this.$route.params.order_id });

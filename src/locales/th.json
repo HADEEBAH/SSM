@@ -455,6 +455,7 @@
     "OTP verification failed" : "ยืนยัน OTP ไม่สำเร็จ",
     "order cancellation" : "การยกเลิกคำสั่งซื้อ",
     "order canceled successfully": "( ยกเลิกคำสั่งซื้อเรียบร้อยแล้ว )",
+    "order is not success" : "ออเดอร์ยังไม่ชำระเงิน",
     "others" : "อื่นๆ",
     "october": "ตุลาคม",
 

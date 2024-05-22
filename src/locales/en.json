@@ -485,6 +485,7 @@
     "OTP verification failed" : "OTP verification failed",
     "order cancellation" : "Order cancellation",
     "order canceled successfully": "( Order canceled successfully )",
+    "order is not success" : "Order is not success",
     "others" : "Others",
     "october": "October",
 

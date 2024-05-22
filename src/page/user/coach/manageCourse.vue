@@ -1078,7 +1078,7 @@
         </template>
       </v-data-table>
     </div>
-    <!-- TAB 4 -->
+    <!-- TAB : STUDENT LIST -->
     <div v-if="tab === 'student lists'">
       <loading-overlay :loading="student_list_load"> </loading-overlay>
       <v-row>
@@ -1158,6 +1158,9 @@
           'disable-pagination': disable_pagination_btn,
         }"
       >
+        <template v-slot:[`item.nickname`]="{ item }">
+          {{ $i18n.locale == "th" ? item.nicknameTh : item.nicknameEn }}
+        </template>
         <template v-slot:[`item.firstName`]="{ item }">
           {{ $i18n.locale == "th" ? item.firstNameTh : item.firstNameEn }}
         </template>
@@ -2240,7 +2243,18 @@ export default {
           sortable: false,
           value: "index",
         },
-
+        {
+          text: this.$t("nickname"),
+          align: "start",
+          sortable: false,
+          value: "nickname",
+        },
+        {
+          text: this.$t("class"),
+          align: "start",
+          sortable: false,
+          value: "class.classNameTh",
+        },
         {
           text: this.$t("first name"),
           align: "start",
