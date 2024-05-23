@@ -5,9 +5,43 @@
       MobileSize ? `background-size: contain;` : `background-size: cover;`
     "
   >
-    <v-container fluid class="my-5" ref="hello">
-      {{ setFunctions }}
-      <v-row class="row">
+    {{ setFunctions }}
+    <v-card ref="banner_bar" class="mb-3" flat tile>
+      <v-window show-arrows>
+        <template #next="{ on, attrs }">
+          <v-btn
+            class="bg-[#fff] btn-slide"
+            color="#FF7518"
+            icon
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon>mdi-chevron-right</v-icon>
+          </v-btn>
+        </template>
+        <template #prev="{ on, attrs }">
+          <v-btn
+            class="bg-[#fff] btn-slide"
+            color="#FF7518"
+            icon
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon>mdi-chevron-left</v-icon>
+          </v-btn>
+        </template>
+        <v-window-item v-for="(slide, i) in banner_list" :key="i">
+            <v-img 
+              cover
+              :height="BannerHeight"
+              max-width="1920px"
+              :src="slide.bannerPath"
+            ></v-img>
+        </v-window-item>
+      </v-window>
+    </v-card>
+    <v-container ref="hello">
+      <v-row class="row mb-3">
         <v-col cols="12">
           <div class="text-2xl font-bold text-white">
             {{ $t("hello") }}
@@ -21,159 +55,73 @@
           </div>
         </v-col>
       </v-row>
-    </v-container>
-
-    <v-card
-      class="rounded-xl pa-2"
-      :style="
-        !MobileSize
-          ? {
-              'border-bottom-right-radius': '0px !important',
-              'border-bottom-left-radius': '0px !important',
-            }
-          : ''
-      "
-    >
-      <v-row dense ref="banner_bar">
-        <v-carousel
-          class="rounded-xl max-w-[1920px!important] max-h-[575px!important]"
-          cycle
-          height="auto"
-          hide-delimiter-background
-          hide-delimiters
-        >
-          <v-carousel-item
-            v-for="(slide, i) in banner_list"
-            :key="i"
-            class="max-w-[1920px] max-h-[575px]"
-          >
-            <v-img
-              :src="slide.bannerPath"
-              :aspect-ratio="16 / 9"
-              class="max-w-[1920px] max-h-[575px]"
+      <v-card class="rounded-xl pa-2">
+        <v-card-text>
+          <v-row ref="filter_bar">
+            <v-col
+              cols="12"
+              sm="4"
+              class="text-2xl align-self-center font-weight-bold"
             >
-            </v-img>
-          </v-carousel-item>
-        </v-carousel>
-      </v-row>
-
-      <v-card-text>
-        <v-row ref="filter_bar">
-          <v-col
-            cols="12"
-            sm="4"
-            class="text-2xl align-self-center font-weight-bold"
-          >
-            {{ $t("warraphat learning sphere") }}
-          </v-col>
-          <v-col cols="12" sm="8" style="text-align: -webkit-right">
-            <v-text-field
-              v-model="search_kingdom"
-              :class="`bg-white rounded-full ${
-                !MobileSize ? 'w-2/5' : 'w-full'
-              } `"
-              hide-details
-              dense
-              outlined
-              :label="$t('find the learning wls that interests you here')"
-              prepend-inner-icon="mdi-magnify"
-            />
-          </v-col>
-        </v-row>
-        <v-row ref="category_list">
-          <v-col
-            cols="6"
-            md="4"
-            sm="6"
-            class="pa-1"
-            v-for="(item, index_item) in searchKingdom(search_kingdom)"
-            :key="index_item"
-          >
-            <v-card class="h-full rounded-lg box-shadows">
-              <v-img
-                @click="selectedCategory(item)"
-                :aspect-ratio="16 / 9"
-                :src="
-                  item.categoryImg && item.categoryImg !== ''
-                    ? item.categoryImg
-                    : require('@/assets/userKingdom/default_category_img.svg')
-                "
-                class="cursor-pointer"
-              >
-                <template v-slot:placeholder>
-                  <v-row
-                    class="fill-height ma-0"
-                    align="center"
-                    justify="center"
-                  >
-                    <v-progress-circular
-                      indeterminate
-                      color="#ff6b81"
-                    ></v-progress-circular>
-                  </v-row>
-                </template>
-              </v-img>
-              <v-card-title
-                :class="$vuetify.breakpoint.smAndUp ? 'text-md' : 'text-sm'"
-                class="font-bold cursor-pointer"
-                @click="selectedCategory(item)"
-              >
-                {{
-                  $i18n.locale == "th"
-                    ? item.categoryNameTh
-                    : item.categoryNameEng
-                }}
-              </v-card-title>
-
-              <v-card-subtitle>
-                <div class="mb-2">{{ $t("by") }} {{ item.taughtBy }}</div>
-                <div>
-                  {{
-                    item.show
-                      ? `${item.categoryDescription}`
-                      : `${item.categoryDescription?.slice(0, 15).trim()}`
-                  }}
-                  <span
-                    v-if="item.categoryDescription?.length > 15"
-                    class="text-red-500 cursor-pointer"
-                    @click="item.show = !item.show"
-                    >{{
-                      item.show ? $t("lesser") : $t("read more") + `...`
-                    }}</span
-                  >
-                </div>
-              </v-card-subtitle>
-            </v-card>
-          </v-col>
-          <v-col
-            cols="12"
-            v-if="searchKingdom(search_kingdom)?.length === 0"
-            class="font-weight-bold text-center text-xl"
-          >
-            {{ $t("wls not found") }}
-          </v-col>
-        </v-row>
-        <v-row v-if="isDataReceived">
-          <v-col cols="12" align="center">
-            <v-progress-circular
-              indeterminate
-              color="#ff6b81"
-              size="50"
-            ></v-progress-circular>
-          </v-col>
-        </v-row>
-        <loading-overlay :loading="categorys_is_loading"></loading-overlay>
-      </v-card-text>
-    </v-card>
+              {{ $t("warraphat learning sphere") }}
+            </v-col>
+            <v-col cols="12" sm="8" style="text-align: -webkit-right">
+              <v-text-field
+                v-model="search_kingdom"
+                :class="`bg-white rounded-full ${
+                  !MobileSize ? 'w-2/5' : 'w-full'
+                } `"
+                hide-details
+                dense
+                outlined
+                :label="$t('find the learning wls that interests you here')"
+                prepend-inner-icon="mdi-magnify"
+              />
+            </v-col>
+          </v-row>
+          <v-row ref="category_list">
+            <v-col
+              cols="6"
+              md="3"
+              sm="6"
+              class="pa-1 mb-3 d-flex justify-center"
+              v-for="(item, index_item) in searchKingdom(search_kingdom)"
+              :key="index_item"
+            >
+              <categoryCardVue :category="item"></categoryCardVue>
+            </v-col>
+            <v-col
+              cols="12"
+              v-if="searchKingdom(search_kingdom)?.length === 0"
+              class="font-weight-bold text-center text-xl"
+            >
+              {{ $t("wls not found") }}
+            </v-col>
+          </v-row>
+          <v-row v-if="isDataReceived">
+            <v-col cols="12" align="center">
+              <v-progress-circular
+                indeterminate
+                color="#ff6b81"
+                size="50"
+              ></v-progress-circular>
+            </v-col>
+          </v-row>
+          <loading-overlay :loading="categorys_is_loading"></loading-overlay>
+        </v-card-text>
+      </v-card>
+    </v-container>
   </v-app>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
 import loadingOverlay from "@/components/loading/loadingOverlay.vue";
+import categoryCardVue from '@/components/card/categoryCard.vue';
 export default {
   components: {
     loadingOverlay,
+    categoryCardVue
   },
   data: () => ({
     showCategorys: [],
@@ -211,16 +159,13 @@ export default {
     sameHistoryLength: false,
   }),
 
-  created() {
+  async created() {
     this.dataStorage = JSON.parse(localStorage.getItem("userDetail"));
     if (this.dataStorage) {
-      this.GetAll(this.dataStorage.account_id);
+      await this.GetAll(this.dataStorage.account_id);
+      await this.GetBannerList();
     }
     localStorage.removeItem("Order");
-  },
-
-  beforeMount() {
-    this.GetBannerList();
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll);
@@ -246,26 +191,21 @@ export default {
       logOut: "loginModules/logOut",
       GetBannerList: "BannerModules/GetBannerList",
     }),
-
     handleScroll() {
       this.scrollTop = window.scrollY; // ตัวเลขเมื่อ scroll ตัวเลขเริ่มนับจากบนสุด = 0
-      let ref = this.$refs.category_list?.clientHeight; // ค่ามาจาก ref detail
-      let banner = this.$refs.banner_bar?.clientHeight; // ค่ามาจาก ref banner
-      let filter = this.$refs.filter_bar?.clientHeight; // ค่ามาจาก ref filter
       let hello = this.$refs.hello?.clientHeight; // ค่ามาจาก ref filter
-      let device = document.body.offsetHeight - (56 + hello + banner + filter); // ค่าของหน้าจอ device
+      let device = (document.body.offsetHeight) - (56 + hello); // ค่าของหน้าจอ device
       let countA = this.scrollTop + device;
-
-      if (countA >= ref && !this.sameHistoryLength) {
+      if (countA >= 0 && !this.sameHistoryLength) {
         this.loadMoreData();
       }
-
-      if (countA < ref) {
+      if (countA < hello) {
         this.sameHistoryLength = false;
       }
     },
 
     async loadMoreData() {
+      console.log("loadMoreData");
       this.countDatePerPage = this.category_list?.length;
 
       if (!this.isDataReceived) {
@@ -342,6 +282,13 @@ export default {
       profile_detail: "ProfileModules/getProfileDetail",
       banner_list: "BannerModules/getBannerList",
     }),
+    BannerHeight() {
+      if (this.$vuetify.breakpoint.mdAndUp) {
+        return 480;
+      } else {
+        return 320;
+      }
+    },
     setFunctions() {
       if (this.dataStorage) {
         this.GetProfileDetail(this.dataStorage.account_id);

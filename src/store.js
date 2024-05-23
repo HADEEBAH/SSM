@@ -25,10 +25,12 @@ import ResetPasswordModules from '@/store_modules/resetPasswordModules'
 import adminCheckInModules from '@/store_modules/adminCheckInModules'
 import importUserModules from '@/store_modules/importUserModules'
 import satisfactionModules from '@/store_modules/satisfactionModules'
+import alertMaintainModules from '@/store_modules/alertMaintainModules'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   modules: {
+    alertMaintainModules : alertMaintainModules,
     satisfactionModules: satisfactionModules,
     importUserModules: importUserModules,
     portfolioModules: portfolioModules,
