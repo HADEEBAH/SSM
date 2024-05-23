@@ -117,6 +117,17 @@
                                     {{$t('check in teach')}} 
                                 </v-btn>
                             </v-col>
+                            <v-col cols="auto">
+                                <v-btn 
+                                    icon
+                                    v-if="schedule.checkedIn == 1"
+                                    color="#ff6b81"
+                                    :dark="schedule.checkedIn == 1"
+                                    @click="CheckedInCoach(schedule, IndexSchedule)"
+                                > 
+                                    <v-icon>mdi-refresh</v-icon>
+                                </v-btn>
+                            </v-col>
                         </v-row>
                     </v-card-text>
                 </v-card>
