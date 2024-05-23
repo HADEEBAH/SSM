@@ -516,6 +516,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+    <dialogMaintain v-if="!user_detail?.closeIsAlert && !dialogSatisfaction" :alert-maintain="alertData"></dialogMaintain>
   </v-app>
 </template>
 
@@ -523,9 +524,11 @@
 import mixin from "@/mixin";
 import { mapActions, mapGetters } from "vuex";
 import Swal from "sweetalert2";
+import dialogMaintain from "@/components/dialog/dialogMaintain.vue";
 export default {
   mixins: [mixin],
   name: "navbarUser",
+  components: {dialogMaintain},
   data: () => ({
     dialogSatisfaction: true,
     satisfaction: {
@@ -606,6 +609,7 @@ export default {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     this.dialogSatisfaction = this.user_detail?.isEvaluate
     if (this.user_detail?.account_id) {
+      this.GetAlertMaintain()
       this.GetSurvey();
       this.GetProfileDetail(this.user_detail?.account_id);
     }
@@ -648,6 +652,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      alertData : "alertMaintainModules/alertData",
       cart_list: "OrderModules/getCartList",
       titel_navber: "NavberUserModules/getTitleNavber",
       profile_detail: "ProfileModules/getProfileDetail",
@@ -676,6 +681,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      GetAlertMaintain : "alertMaintainModules/GetAlertMaintain",
       GetCartList: "OrderModules/GetCartList",
       logOut: "loginModules/logOut",
       GetProfileDetail: "ProfileModules/GetProfileDetail",
