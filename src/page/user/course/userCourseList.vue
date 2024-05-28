@@ -278,7 +278,7 @@ export default {
     async searchCourse(event) {
       await this.GetCoursesFilter({
         category_id: this.$route.params.category_id,
-        status: "Active",
+        status: ["Active","Reserve"],
         course_type_id: this.type_selected,
         limit: this.filter_course_option.limit,
         page: this.filter_course_option.page + 1,
@@ -311,7 +311,7 @@ export default {
       this.search_course = "";
       this.GetCoursesFilter({
         category_id: this.$route.params.category_id,
-        status: "Active",
+        status: ["Active","Reserve"],
         course_type_id: course_type.course_type_id,
         limit: 6,
         page: 1,
