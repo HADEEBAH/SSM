@@ -12,6 +12,10 @@ const categoryModules = {
         categorys_is_loading: false,
     },
     mutations: {
+        SetShowMore(state, payload){
+            const showMore = state.categorys.find((v)=>v.categoryId  === payload.categoryId).show
+            state.categorys.find((v)=>v.categoryId  === payload.categoryId).show = !showMore
+        },
         SetCategoryOption(state, payload) {
             state.category_option = payload
         },

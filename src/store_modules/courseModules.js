@@ -187,7 +187,10 @@ const CourseModules = {
     student_reserve_list: [],
     student_potential_list: [],
     student_potential_list_is_loading: false,
-    filter_course_option: {}
+    filter_course_option: {
+      limit : 6,
+      page : 1
+    }
 
   },
   mutations: {

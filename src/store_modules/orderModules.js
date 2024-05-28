@@ -1829,7 +1829,7 @@ const orderModules = {
         });
       }
     },
-    async UpdateScheduleAndCheckIn(context, { orderNumber, lastTime, type, endDate }) {
+    async UpdateScheduleAndCheckIn(context, { orderNumber, orderItemId,lastTime, type, endDate }) {
       try {
         let config = {
           headers: {
@@ -1841,6 +1841,7 @@ const orderModules = {
         // let localhost = "http://localhost:3000"
         const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/schedule/AutoResetScheldule`, {
           orderNumber,
+          orderItemId,
           lastCount: lastTime,
           type,
           endDate,

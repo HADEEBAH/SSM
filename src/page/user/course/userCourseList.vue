@@ -87,78 +87,13 @@
       <v-row dense ref="course_list">
         <template v-if="!courses_is_loading">
           <v-col
+            class="mb-3 d-flex justify-center"
             cols="6"
-            sm="4"
+            md="3"
             v-for="(course, course_index) in courses"
             :key="course_index"
           >
-            <v-card class="overflow-hidden h-full rounded-lg box-shadows">
-              <v-img
-                @click="selectedCourse(course)"
-                :aspect-ratio="16 / 9"
-                cover
-                :src="
-                  course.course_url || course.course_url !== ''
-                    ? course.course_url
-                    : require(`@/assets/course/default_course_img.svg`)
-                "
-              >
-                <v-row>
-                  <v-col class="pa-4" align="right">
-                    <v-chip color="#F9B320" text-color="white">{{
-                      `${GerPeriod(course.period)} ${$t("hour")} `
-                    }}</v-chip></v-col
-                  >
-                </v-row>
-                <template v-slot:placeholder>
-                  <v-row
-                    class="fill-height ma-0"
-                    align="center"
-                    justify="center"
-                  >
-                    <v-progress-circular
-                      indeterminate
-                      color="#ff6b81"
-                    ></v-progress-circular>
-                  </v-row>
-                </template>
-              </v-img>
-              <v-card-title
-                @click="selectedCourse(course)"
-                class="font-bold text-sm pa-2"
-              >
-                <v-row
-                  @click="selectedCourse(course)"
-                  dense
-                  class="d-flex align-center"
-                >
-                  <v-col>{{
-                    `${
-                      $i18n.locale == "th"
-                        ? course.course_name_th
-                        : course.course_name_en
-                    }`
-                  }}</v-col>
-                </v-row>
-              </v-card-title>
-              <v-card-text class="text-xs pa-2">
-                <div>
-                  <div v-if="course.show" v-html="course.course_detail"></div>
-                  <div
-                    v-else
-                    v-html="course.course_detail.slice(0, 150).trim()"
-                  ></div>
-                  <span
-                    v-if="course.course_detail?.length > 150"
-                    class="text-red-500 cursor-pointer"
-                    @click="course.show = !course.show"
-                    >{{
-                      course.show ? $t("lesser") : $t("read more") + `...`
-                    }}</span
-                  >
-                </div>
-              </v-card-text>
-            </v-card>
+            <courseListCard :course="course"></courseListCard>
           </v-col>
           <v-col
             v-if="courses.length == 0"
@@ -198,9 +133,10 @@
   </v-app>
 </template>
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions ,mapMutations } from "vuex";
+import courseListCard from '@/components/card/courseListCard.vue';
 export default {
-  components: {},
+  components: { courseListCard },
   name: "userCourseList",
   data: () => ({
     search_course: "",
@@ -228,29 +164,27 @@ export default {
     waitingProcess: false,
     sameHistoryLength: false,
   }),
-  created() {
-    this.GetCourseTypes({ category_id: this.$route.params.category_id });
+  async created() {
+    await this.GetCourseTypes({ category_id: this.$route.params.category_id });
     if (this.course_types?.length > 0) {
       this.type_selected = this.course_types[0].course_type_id;
+      await this.GetCategory(this.$route.params.category_id);
+      this.SetFilterCourseOption({
+        limit : 6,
+        page : 1
+      })
+      await this.GetCoursesFilter({
+        category_id: this.$route.params.category_id,
+        status: ["Active","Reserve"],
+        course_type_id: this.type_selected,
+        limit: 12,
+        page: 1,
+      });
     }
   },
   async mounted() {
     window.addEventListener("scroll", this.handleScroll);
-    this.GetCategory(this.$route.params.category_id);
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "course");
-    await this.GetCoursesFilter({
-      category_id: this.$route.params.category_id,
-      status: "Active",
-      course_type_id: this.type_selected,
-      limit: this.filter_course_option.limit,
-      page: this.filter_course_option.page + 1,
-    });
-    // this.$store.dispatch("CourseModules/GetCoursesFilter", {
-    //   category_id: this.$route.params.category_id,
-    //   status: "Active",
-    //   limit: 12,
-    //   page: 1,
-    // });
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll);
@@ -268,6 +202,9 @@ export default {
     }),
   },
   methods: {
+    ...mapMutations({
+      SetFilterCourseOption : "CourseModules/SetFilterCourseOption",
+    }),
     ...mapActions({
       GetCourseTypes: "CourseModules/GetCourseTypes",
       GetCategory: "CategoryModules/GetCategory",
@@ -309,7 +246,7 @@ export default {
 
           await this.GetCoursesFilter({
             category_id: this.$route.params.category_id,
-            status: "Active",
+            status: ["Active","Reserve"],
             course_type_id: this.type_selected,
             limit: this.filter_course_option.limit,
             page: this.filter_course_option.page + 1,
@@ -341,7 +278,7 @@ export default {
     async searchCourse(event) {
       await this.GetCoursesFilter({
         category_id: this.$route.params.category_id,
-        status: "Active",
+        status: ["Active","Reserve"],
         course_type_id: this.type_selected,
         limit: this.filter_course_option.limit,
         page: this.filter_course_option.page + 1,
@@ -374,7 +311,7 @@ export default {
       this.search_course = "";
       this.GetCoursesFilter({
         category_id: this.$route.params.category_id,
-        status: "Active",
+        status: ["Active","Reserve"],
         course_type_id: course_type.course_type_id,
         limit: 6,
         page: 1,

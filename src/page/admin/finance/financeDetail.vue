@@ -182,6 +182,19 @@
                       >
                     </v-col>
                   </v-row>
+                  <v-row>
+                    <v-col>
+                      <rowData
+                        col_header="12"
+                        col_detail="12"
+                        :title="$t('remark')"
+                      >
+                        {{
+                          data?.remark ? data?.remark : "-"
+                        }}</rowData
+                      >
+                    </v-col>
+                  </v-row>
                 </v-card-text>
               </v-card>
             </v-card-text>
@@ -736,7 +749,7 @@ export default {
             {
               table: {
                 headerRows: 1,
-                widths: ["auto", "*", "auto", "auto"],
+                widths: ["auto", "*", "auto", "auto", "auto"],
                 body: this.GenCourseItem(),
               },
               margin: [0, 0, 0, 20],
@@ -1048,6 +1061,11 @@ export default {
             fillColor: "#dedede",
             alignment: "center",
           },
+          {
+            text: this.pdf_lang == "th" ? "หมายเหตุ" : "Remark",
+            fillColor: "#dedede",
+            alignment: "center",
+          },
         ],
       ];
       this.order_detail.orderItem.forEach((course, index) => {
@@ -1102,6 +1120,11 @@ export default {
             })}`,
             color: "#ff6b81",
             alignment: "right",
+          },
+          {
+            text: `${course.remark}`,
+            color: "#ff6b81",
+            alignment: "center",
           },
         ]);
       });
