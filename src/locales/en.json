@@ -103,6 +103,7 @@
     "can not update course" : "Can not update course",
     "can not delete coach" : "Can not delete coach",
     "cannot register , The seats are full": "Cannot register , The seats are full.",
+    "cannot use file extensions other than XLSX": "Cannot use other type of files xlsx wher downloaded from template",
     "cancel" : "Cancel",
     "canceled" : "Canceled",
     "cancel course purchase" : "Cancel course purchase",
@@ -772,7 +773,7 @@
     "super admin": "Super Admin",
 
 
-
+    "the system will not display information if the user does not enter student and parent information" :"The system will not display the information if the user does not fill in the student and parent information according to the template",
     "take annual leave" : "Take annual leave",
     "take leave form" : "Take leave form",
     "take leave date": "Take leave date",

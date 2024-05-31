@@ -92,6 +92,7 @@
     "can not update course" : "ไม่สามารถแก้ไขคอร์ได้",
     "can not delete coach" : "ไม่สามารถลบโค้ชได้",
     "cannot register , The seats are full": "ไม่สามารถลงทะเบียนได้ ที่นั่งเต็มแล้ว",
+    "cannot use file extensions other than XLSX": "ไม่สามารถใช้นามสกุลอื่นได้นอกจาก xlsx ที่ดาวน์โหลดจากปุ่มเทมเพลต",
     "cancel" : "ยกเลิก",
     "canceled" : "ยกเลิกการจอง",
     "cancel course purchase" : "ยกเลิกการซื้อคอร์ส",
@@ -815,6 +816,8 @@
     "tuesday" : "วันอังคาร",
     "to day" : "ไปวันที่",
     "teaching days cannot be closed": "ไม่สามารถปิดวันสอนได้",
+    "the system will not display information if the user does not enter student and parent information" :"ระบบจะไม่แสดงข้อมูลหากผู้ใช้ไม่ทำการกรอกข้อมูลของนักเรียนและผู้ปกครองตามเทมเพลต",
+
 
 
     "unable to study on the specified date. because there are already classes on the specified date" : "ไม่สามารถเรียนชดเชยวันที่ระบุได้ เนื่องจากวันที่ระบุมีเรียนอยู่แล้ว",
