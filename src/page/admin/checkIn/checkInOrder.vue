@@ -32,7 +32,7 @@
         <v-card
           v-for="(order, index) in order_number_detail"
           :key="`${index}-order`"
-          :class="seletedCourse ? 'card-selected' : ''"
+          :class="seletedCourse ? 'card-selected list-hover' : 'list-hover'"
           outlined
           @click="SelectCourse(order.orderItemId)"
         >
@@ -98,91 +98,104 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-row v-if="seletedCourse">
-      <v-col>
-        <v-radio-group v-model="type">
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-radio
-                :label="$t('specify graduation date')"
-                value="end-class"
-              ></v-radio>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-radio
-                :label="$t('specify the remaining number of times')"
-                value="last-time"
-              ></v-radio>
-            </v-col>
-          </v-row>
-        </v-radio-group>
-        <template v-if="type">
-          <v-card outlined class="mb-3">
-            <v-card-text>
-              <v-row dense>
-                <v-col class="font-bold">
-                  {{
-                    type == "end-class"
-                      ? $t("specify graduation date")
-                      : $t("specify the remaining number of times")
-                  }}
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <v-menu
-                    v-if="type === 'end-class'"
-                    v-model="menuEndClassDate"
-                    :close-on-content-click="false"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="auto"
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field
+    <v-form ref="form" v-model="valid">
+      <v-row v-if="seletedCourse">
+        <v-col>
+          <v-radio-group v-model="type">
+            <v-row>
+              <v-col cols="12" md="6">
+                <v-radio
+                  :label="$t('specify graduation date')"
+                  value="end-class"
+                ></v-radio>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-radio
+                  :label="$t('specify the remaining number of times')"
+                  value="last-time"
+                ></v-radio>
+              </v-col>
+            </v-row>
+          </v-radio-group>
+          <template v-if="type">
+            <v-card outlined class="mb-3">
+              <v-card-text>
+                <v-row dense>
+                  <v-col class="font-bold">
+                    {{
+                      type == "end-class"
+                        ? $t("specify graduation date")
+                        : $t("specify the remaining number of times")
+                    }}
+                  </v-col>
+                </v-row>
+                <!-- <pre>{{ order_number_detail }}</pre> -->
+                <v-row>
+                  <v-col>
+                    <v-menu
+                      v-if="type === 'end-class'"
+                      v-model="menuEndClassDate"
+                      :close-on-content-click="false"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="auto"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                          v-model="endClassDate"
+                          dense
+                          outlined
+                          readonly
+                          :placeholder="$t('choose a date')"
+                          v-bind="attrs"
+                          v-on="on"
+                          color="#FF6B81"
+                        >
+                          <template v-slot:append>
+                            <v-icon>mdi-calendar</v-icon>
+                          </template>
+                        </v-text-field>
+                      </template>
+                      <v-date-picker
                         v-model="endClassDate"
-                        dense
-                        outlined
-                        readonly
-                        :placeholder="$t('choose a date')"
-                        v-bind="attrs"
-                        v-on="on"
-                        color="#FF6B81"
-                      >
-                        <template v-slot:append>
-                          <v-icon>mdi-calendar</v-icon>
-                        </template>
-                      </v-text-field>
-                    </template>
-                    <v-date-picker
-                      v-model="endClassDate"
-                      locale="th-TH"
-                    ></v-date-picker>
-                  </v-menu>
-                  <v-text-field
-                    v-if="type === 'last-time'"
-                    v-model="lastTime"
-                    :rules="RulesLastTime"
-                    dense
-                    outlined
-                    type="number"
-                    :placeholder="$t('specify the remaining number of times')"
-                  >
-                  </v-text-field>
-                </v-col>
-              </v-row>
-            </v-card-text>
-          </v-card>
-          <v-btn class="w-full" depressed color="#ff6b81" dark @click="save()">
-            {{ $t("save") }}
-          </v-btn>
-        </template>
-      </v-col>
-    </v-row>
+                        locale="th-TH"
+                      ></v-date-picker>
+                    </v-menu>
+                    <v-text-field
+                      v-if="type === 'last-time'"
+                      v-model="lastTime"
+                      :rules="RulesLastTime"
+                      dense
+                      outlined
+                      type="number"
+                      @input="checkInput"
+                      :max="maximumCountCourse(order_number_detail)"
+                      :min="0"
+                      :placeholder="$t('specify the remaining number of times')"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+            <v-btn
+              class="w-full"
+              depressed
+              @click="save()"
+              :disabled="!valid"
+              :dark="valid"
+              :color="!valid ? '' : '#ff6b81'"
+            >
+              {{ $t("save") }}
+            </v-btn>
+          </template>
+        </v-col>
+      </v-row>
+    </v-form>
   </v-container>
 </template>
 
 <script>
+import { inputValidation } from "@/functions/functions";
 import headerPage from "@/components/header/headerPage.vue";
 import { mapActions, mapGetters } from "vuex";
 export default {
@@ -198,14 +211,36 @@ export default {
       endClassDate: "",
       lastTime: "",
       seletedCourse: "",
+      countNumber: "",
+      valid: false,
     };
+  },
+  mounted() {
+    this.valid = false;
+  },
+  watch: {
+    order_number_detail: {
+      handler() {
+        this.$forceUpdate(); // Force update to re-evaluate the computed property
+      },
+      deep: true,
+      immediate: true,
+    },
   },
   computed: {
     ...mapGetters({
       order_number_detail: "OrderModules/getOrderNumberDetail",
     }),
     RulesLastTime() {
-      return [(val) => (val || "").length > 0 || this.$t("enter last time")];
+      const maxRemain = this.getMaxRemain();
+      return [
+        (val) => (val || "").length > 0 || this.$t("enter last time"),
+        (val) =>
+          parseInt(val) <= maxRemain ||
+          `${this.$t("number must be")} ${maxRemain}`,
+        (val) => parseInt(val) >= 0 || this.$t("number must be 1"),
+        (val) => !this.containsDecimal(val) || this.$t("can not use"),
+      ];
     },
     RulesOrderNumber() {
       return [(val) => (val || "").length > 0 || this.$t("enter order number")];
@@ -219,6 +254,40 @@ export default {
       GetOrderDetailByOrderNumber: "OrderModules/GetOrderDetailByOrderNumber",
       UpdateScheduleAndCheckIn: "OrderModules/UpdateScheduleAndCheckIn",
     }),
+    validate(e, type) {
+      inputValidation(e, type);
+    },
+    checkInput(value) {
+      const maxRemain = this.getMaxRemain();
+      if (parseInt(value) > maxRemain) {
+        this.lastTime = ""; // Clear the input if it exceeds the maxRemain
+      } else {
+        this.lastTime = value; // Set the input if it's valid
+      }
+    },
+    containsDecimal(value) {
+      return value.includes(".");
+    },
+    getMaxRemain() {
+      let maxRemain = 0;
+      for (const itemData of this.order_number_detail) {
+        for (const itemStudent of itemData?.students) {
+          if (itemStudent.remain > maxRemain) {
+            maxRemain = itemStudent.remain;
+          }
+        }
+      }
+      return maxRemain;
+    },
+
+    maximumCountCourse() {
+      for (const itemData of this.order_number_detail) {
+        for (const itemStudent of itemData?.students) {
+          this.countNumber = itemData.cpo ? itemStudent.remain : 99;
+        }
+      }
+      return this.countNumber;
+    },
     SelectCourse(orderItemId) {
       this.seletedCourse = orderItemId;
     },
@@ -267,13 +336,15 @@ export default {
       }
     },
     save() {
-      this.UpdateScheduleAndCheckIn({
-        orderNumber: this.orderNumder,
-				orderItemId: this.seletedCourse,
-        lastTime: this.lastTime,
-        type: this.type,
-        endDate: this.endClassDate,
-      });
+      if (this.$refs.form.validate()) {
+        this.UpdateScheduleAndCheckIn({
+          orderNumber: this.orderNumder,
+          orderItemId: this.seletedCourse,
+          lastTime: this.lastTime,
+          type: this.type,
+          endDate: this.endClassDate,
+        });
+      }
     },
   },
 };
@@ -282,5 +353,8 @@ export default {
 <style>
 .card-selected {
   border: 4px #ff6b81 solid !important;
+}
+.list-hover :hover {
+  background: #e4eae8;
 }
 </style>
