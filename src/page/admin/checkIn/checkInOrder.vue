@@ -233,11 +233,14 @@ export default {
     }),
     RulesLastTime() {
       const maxRemain = this.getMaxRemain();
+      const checkCpo = this.getCpo();
       return [
         (val) => (val || "").length > 0 || this.$t("enter last time"),
         (val) =>
-          parseInt(val) <= maxRemain ||
-          `${this.$t("number must be")} ${maxRemain}`,
+          checkCpo === null
+            ? parseInt(val) <= 100 || `${this.$t("number must be")} ${100}`
+            : parseInt(val) <= maxRemain ||
+              `${this.$t("number must be")} ${maxRemain}`,
         (val) => parseInt(val) >= 0 || this.$t("number must be 1"),
         (val) => !this.containsDecimal(val) || this.$t("can not use"),
       ];
@@ -279,11 +282,23 @@ export default {
       }
       return maxRemain;
     },
+    getCpo() {
+      let dataCpo = {};
+      for (const itemData of this.order_number_detail) {
+        dataCpo = itemData.cpo;
+        // for (const itemStudent of itemData?.students) {
+        //   if (itemStudent.remain > maxRemain) {
+        //     maxRemain = itemStudent.remain;
+        //   }
+        // }
+      }
+      return dataCpo;
+    },
 
     maximumCountCourse() {
       for (const itemData of this.order_number_detail) {
         for (const itemStudent of itemData?.students) {
-          this.countNumber = itemData.cpo ? itemStudent.remain : 99;
+          this.countNumber = itemData.cpo ? itemStudent.remain : 100;
         }
       }
       return this.countNumber;
