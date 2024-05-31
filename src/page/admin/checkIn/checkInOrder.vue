@@ -168,11 +168,11 @@
                       dense
                       outlined
                       type="number"
-                      @input="checkInput"
                       :max="maximumCountCourse(order_number_detail)"
                       :min="0"
                       :placeholder="$t('specify the remaining number of times')"
                     ></v-text-field>
+                    <!-- @input="checkInput" -->
                   </v-col>
                 </v-row>
               </v-card-text>
@@ -257,14 +257,14 @@ export default {
     validate(e, type) {
       inputValidation(e, type);
     },
-    checkInput(value) {
-      const maxRemain = this.getMaxRemain();
-      if (parseInt(value) > maxRemain) {
-        this.lastTime = ""; // Clear the input if it exceeds the maxRemain
-      } else {
-        this.lastTime = value; // Set the input if it's valid
-      }
-    },
+    // checkInput(value) {
+    //   const maxRemain = this.getMaxRemain();
+    //   if (parseInt(value) > maxRemain) {
+    //     this.lastTime = ""; // Clear the input if it exceeds the maxRemain
+    //   } else {
+    //     this.lastTime = value; // Set the input if it's valid
+    //   }
+    // },
     containsDecimal(value) {
       return value.includes(".");
     },

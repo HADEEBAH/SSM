@@ -91,7 +91,7 @@
     "can't find information on students in care": "ไม่พบข้อมูลของนักเรียนในความดูแล",
     "can not update course" : "ไม่สามารถแก้ไขคอร์ได้",
     "can not delete coach" : "ไม่สามารถลบโค้ชได้",
-    "can not use" : "ไม่สามารถลบใช้ . ได้",
+    "can not use" : "ไม่สามารถใช้ . ได้",
     "cannot register , The seats are full": "ไม่สามารถลงทะเบียนได้ ที่นั่งเต็มแล้ว",
     "cancel" : "ยกเลิก",
     "canceled" : "ยกเลิกการจอง",
