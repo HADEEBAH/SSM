@@ -105,10 +105,13 @@
                 ((list.roles.length > 0
                   ? list.roles.filter((v) => user_detail?.roles.includes(v))
                       .length > 0
-                  : false) || list.username.includes(user_detail?.username))
+                  : false) ||
+                  list.username.includes(user_detail?.username))
               "
             >
-              <v-list-item-title>{{ $t(list.title) }}</v-list-item-title>
+              <v-list-item-title class="text-[14px]">{{
+                $t(list.title)
+              }}</v-list-item-title>
             </v-list-item>
             <v-list-group
               v-else-if="
@@ -125,7 +128,9 @@
             >
               <template v-slot:activator>
                 <v-list-item-content>
-                  <v-list-item-title>{{ $t(list.title) }}</v-list-item-title>
+                  <v-list-item-title class="text-[14px]">{{
+                    $t(list.title)
+                  }}</v-list-item-title>
                 </v-list-item-content>
               </template>
               <v-list-item
@@ -139,7 +144,9 @@
                 :key="index_child"
                 link
               >
-                <v-list-item-title>{{ $t(child.title) }}</v-list-item-title>
+                <v-list-item-title class="text-[14px]">{{
+                  $t(child.title)
+                }}</v-list-item-title>
               </v-list-item>
             </v-list-group>
           </div>
@@ -229,10 +236,18 @@ export default {
         title: "manage check in later",
         to: "",
         child: [
-          { title: "check in later by order number", to: "ManageCheckInLater", roles: ["R_1","R_2"] },
-          { title: "admin check in later", to: "AdminCheckin", roles: ["R_1","R_2"] },
+          {
+            title: "check in later by order number",
+            to: "ManageCheckInLater",
+            roles: ["R_1", "R_2"],
+          },
+          {
+            title: "admin check in later",
+            to: "AdminCheckin",
+            roles: ["R_1", "R_2"],
+          },
         ],
-        roles: ["R_1","R_2"],
+        roles: ["R_1", "R_2"],
       },
       {
         title: "banner setting",
@@ -251,7 +266,7 @@ export default {
         to: "satisfactionReport",
         child: [],
         roles: [],
-        username: ['yuthyuth', 'jirayut2539']
+        username: ["yuthyuth", "jirayut2539"],
       },
     ],
     menu_locale: false,

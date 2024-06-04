@@ -86,7 +86,7 @@
         </v-col>
         <!-- nationality -->
         <!-- @keydown="validate($event, 'th-special')" -->
-        <v-col cols="12" sm="6">
+        <!-- <v-col cols="12" sm="6">
           <label-custom :text="$t('nationality')"></label-custom>
           <v-text-field
             placeholder="-"
@@ -97,7 +97,7 @@
             color="#ff6b81"
           >
           </v-text-field>
-        </v-col>
+        </v-col> -->
         <v-col cols="12" sm="6">
           <label-custom :text="$t('phone number')"></label-custom>
           <v-text-field

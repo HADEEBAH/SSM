@@ -7,39 +7,39 @@ import VueI18n from "../i18n";
 const satisfactionModules = {
     namespaced: true,
     state: {
-        survey : [],
+        survey: [],
         satisfactions: []
     },
     mutations: {
-        SetSatisfactions(state, payload){
+        SetSatisfactions(state, payload) {
             state.satisfactions = payload
         },
-        SetSurvey(state, payload){
+        SetSurvey(state, payload) {
             state.survey = payload
         }
     },
     actions: {
-        async GetSurvey(context){
-            try{
-                const config ={
+        async GetSurvey(context) {
+            try {
+                const config = {
                     headers: {
                         "Access-Control-Allow-Origin": "*",
                         "Content-type": "Application/json",
                         Authorization: `Bearer ${VueCookie.get("token")}`,
                     },
                 }
-                const {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/satisfaction/survey`, config)
-                if(data.statusCode === 200){
-                    data.data.map(( survey )=>{
+                const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/satisfaction/survey`, config)
+                if (data.statusCode === 200) {
+                    data.data.map((survey) => {
                         survey.remark = ""
-                        survey.questions.map( (question) => {
+                        survey.questions.map((question) => {
                             question.rate = 0
                             return question
-                        } )
+                        })
                     })
                     context.commit("SetSurvey", data.data)
                 }
-            }catch(error){
+            } catch (error) {
                 console.log(error)
                 Swal.fire({
                     icon: "error",
@@ -52,8 +52,8 @@ const satisfactionModules = {
                 })
             }
         },
-        async sendSatisfaction(context, { payload }){
-            try{
+        async sendSatisfaction(context, { payload }) {
+            try {
                 const config = {
                     headers: {
                         "Access-Control-Allow-Origin": "*",
@@ -61,8 +61,8 @@ const satisfactionModules = {
                         Authorization: `Bearer ${VueCookie.get("token")}`,
                     },
                 };
-                const {data} = await axios.post(`${process.env.VUE_APP_URL}/api/v1/satisfaction`, payload, config)
-                if(data.statusCode === 201){
+                const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/satisfaction`, payload, config)
+                if (data.statusCode === 201) {
                     Swal.fire({
                         icon: "success",
                         title: VueI18n.t("succeed"),
@@ -74,7 +74,7 @@ const satisfactionModules = {
                         timerProgressBar: true
                     })
                 }
-            }catch(error){
+            } catch (error) {
                 Swal.fire({
                     icon: "error",
                     title: VueI18n.t("fail"),
@@ -86,7 +86,7 @@ const satisfactionModules = {
                 })
             }
         },
-        async GetSatisfactionList(context){
+        async GetSatisfactionList(context) {
             try {
                 const config = {
                     headers: {
@@ -95,7 +95,8 @@ const satisfactionModules = {
                         Authorization: `Bearer ${VueCookie.get("token")}`,
                     },
                 };
-                const {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/satisfaction`, config)
+                // const { data } = await axios.get(`http://localhost:3000/api/v1/satisfaction`, config)
+                const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/satisfaction`, config)
                 if (data.statusCode === 200) {
                     context.commit("SetSatisfactions", data.data)
                 }
@@ -105,14 +106,13 @@ const satisfactionModules = {
         }
     },
     getters: {
-        satisfactions(state){
+        satisfactions(state) {
             return state.satisfactions
         },
-        survey(state){
+        survey(state) {
             return state.survey
         }
     },
-  };
-  
-  export default satisfactionModules;
-  
+};
+
+export default satisfactionModules;

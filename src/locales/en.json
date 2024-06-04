@@ -102,6 +102,7 @@
     "can't find available course information" :"Can't find available course information",
     "can not update course" : "Can not update course",
     "can not delete coach" : "Can not delete coach",
+    "can not use" : "Can not use . in this case",
     "cannot register , The seats are full": "Cannot register , The seats are full.",
     "cancel" : "Cancel",
     "canceled" : "Canceled",
@@ -297,6 +298,8 @@
     "excessive study hours" : "Excessive study hours",
     "export" : "Export",
     "evaluate satisfaction with using the system" : "Evaluate satisfaction with using the system",
+    "ease of use":"Ease of use",
+
     "ReportProblem" : "Report the problem of use",
 
     "fail" : "Fail",
@@ -474,6 +477,9 @@
     "number of times/person" : "Number of class/person",
     "number of courses" : "Number of courses",
     "november": "November",
+    "number must be": "Number must be Equal or less than",
+    "number must be 0": "Number must be 0 or more",
+
 
     "o'clock" : "O'clock",
     "optional": "optional",
@@ -488,6 +494,7 @@
     "order is not success" : "Order is not success",
     "others" : "Others",
     "october": "October",
+    "overview":"Overview of service use",
 
     "package" : "Package",
     "package no." :"Package No.",
@@ -770,6 +777,7 @@
     "show comment" : "Show comment",
     "september": "September",
     "super admin": "Super Admin",
+    "service stability":"Service stability",
 
 
 

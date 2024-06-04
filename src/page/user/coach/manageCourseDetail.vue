@@ -1574,7 +1574,6 @@ export default {
         time_id: this.$route.params.timeId,
         time_start: this.$route.params.timeStart,
         time_end: this.$route.params.timeEnd,
-
       });
 
       return "";
@@ -1706,12 +1705,9 @@ export default {
             );
           }
         }
-      } else if(this.course_data.course_type_id === "CT_2"){
-          return this.check_in_status_options.filter(
-            (v) => v.value !== "leave"
-          );
+      } else if (this.course_data.course_type_id === "CT_2") {
+        return this.check_in_status_options.filter((v) => v.value !== "leave");
       }
-      
     },
     clearTeachingNote() {
       this.coach_check_in.summary = null;
@@ -1810,8 +1806,8 @@ export default {
               files: this.coach_check_in.summary_files,
               course_id: this.$route.params.courseId,
               date: this.$route.params.date,
-            }).then(()=>{
-              setTimeout(()=>{
+            }).then(() => {
+              setTimeout(() => {
                 this.CheckInCoach({
                   course_id: this.course_data.course_id,
                   date: this.$route.params.date,
@@ -1819,10 +1815,10 @@ export default {
                   time_start: this.$route.params.timeStart,
                   time_end: this.$route.params.timeEnd,
                   type: this.$route.params.typeEvent,
-                })
-              },200)
-            })
-           
+                });
+              }, 200);
+            });
+
             this.is_loading = false;
             if (student_id.length > 0) {
               let payload = {

@@ -91,6 +91,7 @@
     "can't find information on students in care": "ไม่พบข้อมูลของนักเรียนในความดูแล",
     "can not update course" : "ไม่สามารถแก้ไขคอร์ได้",
     "can not delete coach" : "ไม่สามารถลบโค้ชได้",
+    "can not use" : "ไม่สามารถใช้ . ได้",
     "cannot register , The seats are full": "ไม่สามารถลงทะเบียนได้ ที่นั่งเต็มแล้ว",
     "cancel" : "ยกเลิก",
     "canceled" : "ยกเลิกการจอง",
@@ -279,6 +280,7 @@
     "excessive study hours" : "ชั่วโมงการเรียนเกินกว่าที่กำหนด",
     "export" : "นำออก",
     "evaluate satisfaction with using the system" : "ประเมินความพึงพอใจการใช้งานระบบ",
+    "ease of use":"ความง่ายและดวกในการใช้งาน",
     "ReportProblem" : "รายงานปัญหาการใช้งาน",
     "for parents to purchase for students" : "สำหรับผู้ปกครองซื้อให้นักเรียนในการดูแล",
     "forgot your password?" : "ลืมรหัสผ่านใช่หรือไม่?",
@@ -383,7 +385,7 @@
     
     "management":"การจัดการ",
     "manage":"จัดการ",
-    "manage check in later" : "จัดการการเช็คอินในย้อนหลัง",
+    "manage check in later" : "จัดการเช็คอินย้อนหลัง",
     "month" : "เดือน",
     "monday" : "วันจันทร์",
     "monthly" : "รายเดือน",
@@ -444,6 +446,8 @@
     "number of times/person" : "จำนวนครั้ง/คน",
     "nationality must not have emojis": "สันชาติต้องไม่มีอิโมจิ",
     "november": "พฤศจิกายน",
+    "number must be": "ตัวเลขควรที่จะเท่ากันหรือน้อยกว่า",
+    "number must be 1": "ตัวเลขควรที่จะเท่ากับ 0 หรือมากกว่า",
     
     "o'clock" : "น.",
     "outside the register date" : "อยู่นอกระยะเวลารับสมัคร",
@@ -458,6 +462,8 @@
     "order is not success" : "ออเดอร์ยังไม่ชำระเงิน",
     "others" : "อื่นๆ",
     "october": "ตุลาคม",
+    "overview":"ภาพรวมการใช้บริการ",
+
 
     "package" : "แพ็คเกจ",
     "package no." :"แพ็คเกจที่",
@@ -742,6 +748,7 @@
     "show comment" : "แสดงความคิดเห็น",
     "september": "กันยายน",
     "super admin": "ผู้ดูแลระบบสูงสุด",
+    "service stability":"ความเสถียรภาพของบริการ",
 
     
     "take annual leave" : "ลาพักร้อนประจำปี",
