@@ -3,7 +3,7 @@
     "admin has added a course for you":"แอดมินได้เพิ่มคอร์สเรียนให้คุณ",
     "admin applies for course": "แอดมินสมัครคอร์ส",
     "admin" : "ผู้ดูแลระบบ",
-    "admin check in later" : "แอดมินเช็คอินย้อนหลัง",
+    "admin check in later" : "เช็คอินย้อนหลังตามคอร์สเรียน",
     "add coach" : "เพิ่มโค้ช",
     "add user" : "เพิ่มผู้ใช้",
     "add learner" : "เพิ่มผู้เรียน",
@@ -93,6 +93,7 @@
     "can not delete coach" : "ไม่สามารถลบโค้ชได้",
     "can not use" : "ไม่สามารถใช้ . ได้",
     "cannot register , The seats are full": "ไม่สามารถลงทะเบียนได้ ที่นั่งเต็มแล้ว",
+    "cannot use file extensions other than XLSX": "ไม่สามารถใช้นามสกุลอื่นได้นอกจาก xlsx ที่ดาวน์โหลดจากปุ่มเทมเพลต",
     "cancel" : "ยกเลิก",
     "canceled" : "ยกเลิกการจอง",
     "cancel course purchase" : "ยกเลิกการซื้อคอร์ส",
@@ -513,7 +514,10 @@
     "please enter the service value" : "กรุณากรอกมูลค่าบริการ",
     "please enter the service value end" : "กรุณากรอกมูลค่าบริการสิ้นสุด",
     "please enter the service value start" : "กรุณากรอกมูลค่าบริการเริ่มต้น",
-    "please enter your name and class" : "กรุณากรอกชื่อและระดับชั้น",
+    "please enter your name and class" : "กรุณากรอกชื่อเล่นและระดับชั้น",
+    "please enter your nickName with a length of at least 2 characters":"กรุณาระบุชื่อเล่นความยาวอย่างน้อย 2 ตัวอักษร",
+    "please enter your nickName length not exceeding 20 characters":"กรุณาระบุชื่อเล่นความยาวไม่เกิน 20 ตัวอักษร",
+    "please select your class":"กรุณาระบุระดับชั้น",
     "please enter your last name (Thai), at least 2 characters long" : "กรุณาระบุนามสกุล (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร",
     "please enter your last name (Thai) not more than 20 characters" : "กรุณาระบุนามสกุล (ภาษาไทย) ความยาวไม่เกิน 20 ตัวอักษร",
     "please enter your last name (English), at least 2 characters long" : "กรุณาระบุนามสกุล (ภาษาอังกฤษ) ความยาวอย่างน้อย 2 ตัวอักษร",
@@ -822,6 +826,8 @@
     "tuesday" : "วันอังคาร",
     "to day" : "ไปวันที่",
     "teaching days cannot be closed": "ไม่สามารถปิดวันสอนได้",
+    "the system will not display information if the user does not enter student and parent information" :"ระบบจะไม่แสดงข้อมูลหากผู้ใช้ไม่ทำการกรอกข้อมูลของนักเรียนและผู้ปกครองตามเทมเพลต",
+
 
 
     "unable to study on the specified date. because there are already classes on the specified date" : "ไม่สามารถเรียนชดเชยวันที่ระบุได้ เนื่องจากวันที่ระบุมีเรียนอยู่แล้ว",

@@ -2071,6 +2071,8 @@ export default {
       }`;
     },
     selectCheckInStatus(item, status) {
+      console.log("item :>> ", item);
+      console.log("status :>> ", status);
       if (status === "leave") {
         this.expanded_index.push(item);
       } else {

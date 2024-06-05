@@ -104,6 +104,7 @@
     "can not delete coach" : "Can not delete coach",
     "can not use" : "Can not use . in this case",
     "cannot register , The seats are full": "Cannot register , The seats are full.",
+    "cannot use file extensions other than XLSX": "Cannot use other type of files xlsx wher downloaded from template",
     "cancel" : "Cancel",
     "canceled" : "Canceled",
     "cancel course purchase" : "Cancel course purchase",
@@ -545,6 +546,9 @@
     "please enter the service value end" : "Please enter the service value end",
     "please enter the service value start" : "Please enter the service value start",
     "please enter your name and class" : "Please enter your name and class",
+    "please enter your nickName with a length of at least 2 characters":"Please enter your nickName with a length of at least 2 characters",
+    "please enter your nickName length not exceeding 20 characters":"Please enter your nickName length not exceeding 20 characters",
+    "please select your class":"Please select your class",
     "please enter your last name (Thai), at least 2 characters long" : "Please enter your last name (Thai), at least 2 characters long",
     "please enter your last name (Thai) not more than 20 characters" : "Please enter your last name (Thai) not more than 20 characters",
     "please enter your last name (English), at least 2 characters long" : "Please enter your last name (English), at least 2 characters long",
@@ -780,7 +784,7 @@
     "service stability":"Service stability",
 
 
-
+    "the system will not display information if the user does not enter student and parent information" :"The system will not display the information if the user does not fill in the student and parent information according to the template",
     "take annual leave" : "Take annual leave",
     "take leave form" : "Take leave form",
     "take leave date": "Take leave date",
