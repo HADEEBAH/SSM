@@ -1558,7 +1558,7 @@ export default {
           value: "class_time",
         },
         {
-          text: this.$t("attendance 33"),
+          text: this.$t("attendance"),
           align: "center",
           width: "200",
           sortable: false,

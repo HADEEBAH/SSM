@@ -101,6 +101,7 @@
           </v-row>
         </v-card-text>
       </v-card>
+
       <div
         v-for="(schedule, IndexSchedule) in scheduleCheckin"
         :key="`${IndexSchedule}-schedule`"
@@ -237,7 +238,9 @@
                         outlined
                         dense
                         color="#ff6b81"
-                        :items="check_in_status_options"
+                        :items="
+                          FilterStatusCheckIn(check_in_status_options, student)
+                        "
                         item-text="label"
                         item-value="value"
                       >
@@ -339,7 +342,6 @@
                         "
                       >
                       </v-text-field>
-                      {{ student.compensationEndTime }}
 
                       <TimePicker
                         class="time-picker-hidden"
@@ -542,6 +544,18 @@ export default {
       UpdateCheckinStudents: "adminCheckInModules/UpdateCheckinStudents",
       CheckInCoach: "adminCheckInModules/CheckInCoach",
     }),
+    FilterStatusCheckIn() {
+      for (const items of this.scheduleCheckin) {
+        if (items.courseTypeId === "CT_2") {
+          return this.check_in_status_options.filter(
+            (v) => v.value !== "leave"
+          );
+        } else {
+          return this.check_in_status_options;
+        }
+      }
+      // console.log("selected_data :>> ", this.scheduleCheckin);
+    },
     GenDate(date) {
       return new Date(date).toLocaleDateString(
         this.$i18n.locale == "th" ? "th-TH" : "en-US",
@@ -585,7 +599,6 @@ export default {
         .click();
     },
     genTime(time) {
-      console.log("time :>> ", time);
       if (time) {
         return moment(time).format("HH:mm");
       } else {
