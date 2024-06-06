@@ -142,7 +142,7 @@
                     >
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
-                          v-model="endClassDate"
+                          v-model="endClassDates"
                           dense
                           outlined
                           readonly
@@ -150,6 +150,7 @@
                           v-bind="attrs"
                           v-on="on"
                           color="#FF6B81"
+                          :rules="ruleSelectDate"
                         >
                           <template v-slot:append>
                             <v-icon>mdi-calendar</v-icon>
@@ -159,6 +160,7 @@
                       <v-date-picker
                         v-model="endClassDate"
                         locale="th-TH"
+                        @input="inputDate(endClassDate)"
                       ></v-date-picker>
                     </v-menu>
                     <v-text-field
@@ -209,6 +211,7 @@ export default {
       type: "",
       menuEndClassDate: false,
       endClassDate: "",
+      endClassDates: "",
       lastTime: "",
       seletedCourse: "",
       countNumber: "",
@@ -231,6 +234,9 @@ export default {
     ...mapGetters({
       order_number_detail: "OrderModules/getOrderNumberDetail",
     }),
+    ruleSelectDate() {
+      return [(val) => (val || "").length > 0 || this.$t("enter last time")];
+    },
     RulesLastTime() {
       const maxRemain = this.getMaxRemain();
       const checkCpo = this.getCpo();
@@ -259,6 +265,27 @@ export default {
     }),
     validate(e, type) {
       inputValidation(e, type);
+    },
+    inputDate(item) {
+      let options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+      this.endClassDates = new Date(item).toLocaleDateString(
+        this.$i18n.locale == "th" ? "th-TH" : "en-US",
+        options
+      );
+    },
+    GenDate(date) {
+      return new Date(date).toLocaleDateString(
+        this.$i18n.locale == "th" ? "th-TH" : "en-US",
+        {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }
+      );
     },
     // checkInput(value) {
     //   const maxRemain = this.getMaxRemain();
@@ -359,6 +386,7 @@ export default {
           type: this.type,
           endDate: this.endClassDate,
         });
+        this.lastTime = "";
       }
     },
   },

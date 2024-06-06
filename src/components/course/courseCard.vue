@@ -811,19 +811,24 @@
         <v-divider class="mb-3"></v-divider>
         <v-row dense>
           <v-col class="py-0">
-            <v-checkbox 
-              v-model="course_data.reservation" 
+            <v-checkbox
+              v-model="course_data.reservation"
               :disabled="disable"
-              @change="ChengeReservation($event)" 
-              :label="$t('course reservations open before the class start date')"
+              @change="ChengeReservation($event)"
+              :label="
+                $t('course reservations open before the class start date')
+              "
               color="#ff6b81"
             >
             </v-checkbox>
           </v-col>
         </v-row>
-        <v-row v-if="course_data.reservation" dense >
+        <v-row v-if="course_data.reservation" dense>
           <v-col cols="12">
-            <label-custom required :text="$t('reservation date range')"></label-custom>
+            <label-custom
+              required
+              :text="$t('reservation date range')"
+            ></label-custom>
           </v-col>
           <v-col cols="12" sm="6" class="pt-0">
             <v-menu
@@ -846,10 +851,13 @@
                   v-bind="attrs"
                   v-on="on"
                   color="#ff6b81"
+                  :rules="reservation_start_date"
                 >
                   <template v-slot:append>
                     <v-icon
-                      :color="course_data.reservation_start_date ? '#FF6B81' : ''"
+                      :color="
+                        course_data.reservation_start_date ? '#FF6B81' : ''
+                      "
                       >mdi-calendar</v-icon
                     >
                   </template>
@@ -884,6 +892,7 @@
                   v-bind="attrs"
                   v-on="on"
                   color="#ff6b81"
+                  :rules="reservation_end_date"
                 >
                   <template v-slot:append>
                     <v-icon
@@ -894,7 +903,11 @@
                 </v-text-field>
               </template>
               <v-date-picker
-                :min="course_data.reservation_start_date ? course_data.reservation_start_date : today.toISOString()"
+                :min="
+                  course_data.reservation_start_date
+                    ? course_data.reservation_start_date
+                    : today.toISOString()
+                "
                 v-model="course_data.reservation_end_date"
                 @input="inputDate($event, 'reservation end')"
                 locale="th-TH"
@@ -903,7 +916,7 @@
           </v-col>
         </v-row>
       </v-card-text>
-    </v-card> 
+    </v-card>
   </div>
 </template>
 
@@ -1049,6 +1062,20 @@ export default {
           this.$t("please select a course opening date"),
       ];
     },
+    reservation_start_date() {
+      return [
+        (val) =>
+          (val || "").length > 0 ||
+          this.$t("please select a reservation start date"),
+      ];
+    },
+    reservation_end_date() {
+      return [
+        (val) =>
+          (val || "").length > 0 ||
+          this.$t("please select a reservation end date"),
+      ];
+    },
     course_hours() {
       return [
         (val) => (val || "") > 0 || this.$t("please specify class hours/time"),
@@ -1110,14 +1137,14 @@ export default {
     ...mapActions({
       ChangeCourseData: "CourseModules/ChangeCourseData",
     }),
-    ChengeReservation(e){
-      if(!e){
-        this.course_data.menu_reservation_start_date = false
-        this.course_data.menu_reservation_end_date = false
-        this.course_data.reservation_start_date_str = ""
-        this.course_data.reservation_start_date = ""
-        this.course_data.reservation_end_date_str = ""
-        this.course_data.reservation_end_date = ""
+    ChengeReservation(e) {
+      if (!e) {
+        this.course_data.menu_reservation_start_date = false;
+        this.course_data.menu_reservation_end_date = false;
+        this.course_data.reservation_start_date_str = "";
+        this.course_data.reservation_start_date = "";
+        this.course_data.reservation_end_date_str = "";
+        this.course_data.reservation_end_date = "";
       }
     },
     getErrorMessage(text, language) {
@@ -1269,19 +1296,19 @@ export default {
     inputDate(e, data) {
       switch (data) {
         case "reservation start":
-          this.course_data.menu_reservation_start_date = false
+          this.course_data.menu_reservation_start_date = false;
           this.course_data.reservation_start_date_str = dateFormatter(
             e,
             "DD MMT YYYYT"
           );
           break;
         case "reservation end":
-          this.course_data.menu_reservation_end_date = false
+          this.course_data.menu_reservation_end_date = false;
           this.course_data.reservation_end_date_str = dateFormatter(
             e,
             "DD MMT YYYYT"
           );
-          break; 
+          break;
         case "course open":
           this.course_data.course_open_date_str = dateFormatter(
             e,

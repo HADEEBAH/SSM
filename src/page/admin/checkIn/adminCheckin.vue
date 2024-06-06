@@ -21,7 +21,11 @@
               <template v-slot:no-data>
                 <v-list-item>
                   <v-list-item-title>
-                    {{ $t("enter course name") }}
+                    {{
+                      searchCourse?.length > 4
+                        ? $t("enter course name")
+                        : $t("please enter course name")
+                    }}
                   </v-list-item-title>
                 </v-list-item>
               </template>
@@ -41,7 +45,12 @@
               <template v-slot:no-data>
                 <v-list-item>
                   <v-list-item-title>
-                    {{ $t("no data found") }}
+                    {{
+                      !filter.course
+                        ? $t("please select a course")
+                        : $t("no data found")
+                    }}
+                    <!-- {{ $t("please select a course") }} -->
                   </v-list-item-title>
                 </v-list-item>
               </template>
@@ -61,7 +70,12 @@
               <template v-slot:no-data>
                 <v-list-item>
                   <v-list-item-title>
-                    {{ $t("no data found") }}
+                    <!-- {{ $t("no data found") }} -->
+                    {{
+                      !filter.course && !filter.coach
+                        ? $t("please select a course")
+                        : $t("no data found")
+                    }}
                   </v-list-item-title>
                 </v-list-item>
               </template>
@@ -78,6 +92,18 @@
               item-text="time"
               :placeholder="$t('times')"
             >
+              <template v-slot:no-data>
+                <v-list-item>
+                  <v-list-item-title>
+                    <!-- {{ $t("no data found") }} -->
+                    {{
+                      !filter.course && !filter.coach && !filter.dayOfWeek
+                        ? $t("please select a course")
+                        : $t("no data found")
+                    }}
+                  </v-list-item-title>
+                </v-list-item>
+              </template>
             </v-autocomplete>
           </v-col>
         </v-row>
@@ -231,6 +257,7 @@
                         } ${student.countCheckIn}/${student.totalCheckIn}`
                       }}</v-col
                     >
+                    <!-- <v-form v-model="validate_form" ref="validate_form"> -->
                     <v-col cols="12" sm="3">
                       <v-select
                         v-model="student.status"
@@ -243,6 +270,7 @@
                         "
                         item-text="label"
                         item-value="value"
+                        :rules="status_text"
                       >
                         <template #item="{ item }">
                           <v-list-item-content>
@@ -258,6 +286,7 @@
                         </template>
                       </v-select>
                     </v-col>
+                    <!-- </v-form> -->
                   </v-row>
                   <v-row v-if="student.status === 'leave' && openCard" dense>
                     <v-col
@@ -393,6 +422,7 @@ import moment from "moment";
 import { Input, TimePicker } from "ant-design-vue";
 import { dateFormatter } from "@/functions/functions";
 import Swal from "sweetalert2";
+// import { inputValidation } from "@/functions/functions";
 
 export default {
   name: "AdminCheckin",
@@ -422,10 +452,12 @@ export default {
           color: "#ED7D2B",
         },
       ],
+      // searchCoachNmae: null,
       searchCourse: null,
       searchCoach: null,
       loadingFilter: false,
       openCard: true,
+      validate_form: false,
     };
   },
   computed: {
@@ -476,6 +508,9 @@ export default {
           bg_color: "#F4CCCC",
         },
       ];
+    },
+    status_text() {
+      return [(val) => !!val || this.$t("please state your attendance status")];
     },
   },
   watch: {
@@ -634,7 +669,12 @@ export default {
     //     }
 
     // },
+    // validate(e, type) {
+    //   inputValidation(e, type);
+    // },
     saveStudentCheckIn(scheduleData) {
+      // this.$refs.validate_form.validate();
+      // if (this.validate_form) {
       Swal.fire({
         icon: "question",
         title: this.$t("want to save?"),
@@ -652,6 +692,7 @@ export default {
         }
       });
     },
+    // },
   },
 };
 </script>

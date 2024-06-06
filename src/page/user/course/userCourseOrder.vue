@@ -971,6 +971,38 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <!-- Dialog !nickname && !class -->
+    <v-dialog
+      persistent
+      v-model="chaeckConditions"
+      :width="$vuetify.breakpoint.smAndUp ? '60vw' : ''"
+    >
+      <v-card flat class="pa-2">
+        <v-row dense>
+          <v-col class="pa-2" align="right">
+            <v-btn icon @click="chaeckConditions = false">
+              <v-icon color="red"> mdi-close </v-icon>
+            </v-btn>
+          </v-col>
+
+          <!-- <v-col cols="12" align-self="center" align="center">
+            <v-icon style="max-width: 300px; max-height: 300px"
+              >mdi-alert-circle</v-icon
+            >
+          </v-col> -->
+          <v-col cols="12" align-self="center" align="center">
+            <strong class="text-red-500 text-[30px]">{{
+              $t("warning")
+            }}</strong>
+          </v-col>
+          <v-col cols="12" align-self="center" align="center">
+            <div class="text-red-500 text-[25px]">
+              {{ $t("please filter yourse nickname and class") }}
+            </div>
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
@@ -1018,6 +1050,7 @@ export default {
     disable_add_to_cart: false,
     disable_checkout: false,
     coachSelect: false,
+    chaeckConditions: false,
   }),
   async created() {
     this.order_data = JSON.parse(localStorage.getItem("Order"));
@@ -1435,47 +1468,68 @@ export default {
       return originalArray;
     },
     CreateReserve() {
-      if (this.course_order.course_type_id == "CT_1") {
-        this.$refs.form_coach.validate();
-      } else {
-        this.validate_coach = true;
+      let checkNickname = "";
+      let checkClass = "";
+      for (const items of this.course_order?.students) {
+        checkNickname = items.nicknameTh;
+        checkClass = items.class;
       }
-      if (this.validate_coach) {
-        Swal.fire({
-          icon: "question",
-          title: this.$t("want to book this course?"),
-          showDenyButton: false,
-          showCancelButton: true,
-          confirmButtonText: this.$t("agree"),
-          cancelButtonText: this.$t("no"),
-        }).then(async (result) => {
-          if (result.isConfirmed) {
-            if (this.course_order.course_type_id == "CT_1") {
-              this.course_order.coach = this.course_order.coach_id;
-              this.course_order.coach_name =
-                this.course_order.time.timeData.filter(
-                  (v) => v.coach_id === this.course_order.coach_id
-                )[0].coach_name;
-            } else {
-              this.course_order.time =
-                this.course_data.days_of_class[0].times[0];
-              this.course_order.coach_name =
-                this.course_data.coachs[0].coach_name;
-              this.course_order.coach = this.course_data.coachs[0].coach_id;
-              this.course_order.coach_id = this.course_data.coachs[0].coach_id;
+      if (
+        (checkNickname !== null && checkClass !== null) ||
+        (checkClass === "" && checkNickname !== null) ||
+        (checkClass === "" && checkNickname === "") ||
+        (checkClass !== null && checkNickname === "")
+      ) {
+        if (this.course_order.course_type_id == "CT_1") {
+          this.$refs.form_coach.validate();
+        } else {
+          this.validate_coach = true;
+        }
+        if (this.validate_coach) {
+          Swal.fire({
+            icon: "question",
+            title: this.$t("want to book this course?"),
+            showDenyButton: false,
+            showCancelButton: true,
+            confirmButtonText: this.$t("agree"),
+            cancelButtonText: this.$t("no"),
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              if (this.course_order.course_type_id == "CT_1") {
+                this.course_order.coach = this.course_order.coach_id;
+                this.course_order.coach_name =
+                  this.course_order.time.timeData.filter(
+                    (v) => v.coach_id === this.course_order.coach_id
+                  )[0].coach_name;
+              } else {
+                this.course_order.time =
+                  this.course_data.days_of_class[0].times[0];
+                this.course_order.coach_name =
+                  this.course_data.coachs[0].coach_name;
+                this.course_order.coach = this.course_data.coachs[0].coach_id;
+                this.course_order.coach_id =
+                  this.course_data.coachs[0].coach_id;
+              }
+              if (
+                this.order.courses.filter(
+                  (v) => v.course_id === this.course_order.course_id
+                ).length === 0
+              ) {
+                this.order.courses.push({ ...this.course_order });
+              }
+              this.order.created_by = this.user_login.account_id;
+              this.changeOrderData(this.order);
+              this.CreateReserveCourse({ course_data: this.course_order });
             }
-            if (
-              this.order.courses.filter(
-                (v) => v.course_id === this.course_order.course_id
-              ).length === 0
-            ) {
-              this.order.courses.push({ ...this.course_order });
-            }
-            this.order.created_by = this.user_login.account_id;
-            this.changeOrderData(this.order);
-            this.CreateReserveCourse({ course_data: this.course_order });
-          }
-        });
+          });
+        }
+      } else if (
+        (checkClass !== "" && checkNickname === "") ||
+        (checkNickname !== "" && checkClass === "")
+      ) {
+        this.chaeckConditions = true;
+      } else {
+        this.chaeckConditions = true;
       }
     },
     checkApplyForYourselfRole() {
@@ -1544,7 +1598,6 @@ export default {
       this.dialog_parent = false;
     },
     addStudent() {
-      console.log(this.course_order.apply_for_parent);
       if (this.course_order.apply_for_parent) {
         this.course_order.students.push({
           account_id: "",
