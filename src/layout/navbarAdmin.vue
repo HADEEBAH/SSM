@@ -106,7 +106,7 @@
                   ? list.roles.filter((v) => user_detail?.roles.includes(v))
                       .length > 0
                   : false) ||
-                  list.username.includes(user_detail?.username))
+                  list?.username?.includes(user_detail?.username))
               "
             >
               <v-list-item-title class="text-[14px]">{{
