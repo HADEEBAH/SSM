@@ -252,7 +252,7 @@ const adminCheckInModules = {
                     Swal.fire({
                         icon: "success",
                         title: VueI18n.t("succeed"),
-                        text: VueI18n.t("save data successfully"),
+                        text: VueI18n.t("saved successfully"),
                         timer: 3000,
                         showDenyButton: false,
                         showCancelButton: false,

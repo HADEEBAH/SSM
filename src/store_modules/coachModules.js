@@ -367,6 +367,7 @@ const coachModules = {
         };
         let user_detail = JSON.parse(localStorage.getItem("userDetail"));
         // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}/date/${date}/${time_id}/${time_start}/${time_end}`, config)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}/date/${date}/${time_id}/${time_start}/${time_end}`, config)
         if (data.statusCode === 200) {
           // console.log("GetCoachCheckIn", data.data)
