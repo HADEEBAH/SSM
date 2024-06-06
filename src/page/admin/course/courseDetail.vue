@@ -1323,17 +1323,19 @@
                     <template v-slot:[`item.course_name`]="{ item }">
                       {{ `${item.courseNameTh}(${item.courseNameEn})` }}
                     </template>
-                    <template v-slot:[`item.package`]="{ item }">
-                      {{
+             <template v-slot:[`item.package`]="{ item }">
+                    {{
+                      item.packageName ? 
                         `${item.packageName}-${
                           $i18n.locale == "th"
                             ? item.optionName
                             : item.optionNameEn
                         }/${dayOfWeekArray(item.dayOfWeekName)}${
                           item.startTime
-                        }-${item.endTime}`
-                      }}
-                    </template>
+                        }-${item.endTime}` :
+                        "-"
+                    }}
+                  </template>
                     <template v-slot:[`item.coach`]="{ item }">
                       {{
                         $i18n.locale == "th"
@@ -2390,8 +2392,9 @@ export default {
   mounted() {},
   watch: {
     student_tab: function () {
+      const course_id = this.$route.params.course_id;
       this.GetStudentReserveByCourseId({
-        course_id: this.$route.params.course_id,
+        course_id: course_id,
       });
     },
     course_artwork: function () {
@@ -2823,6 +2826,9 @@ export default {
       data.checked = !data.checked;
     },
     dayOfWeekArray(day) {
+        if (!day) {
+        return "";
+      }
       let days = day.split(",");
       const weekdays = [
         this.$t("sunday"),
