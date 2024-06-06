@@ -102,7 +102,9 @@
     "can't find available course information" :"Can't find available course information",
     "can not update course" : "Can not update course",
     "can not delete coach" : "Can not delete coach",
+    "can not use" : "Can not use . in this case",
     "cannot register , The seats are full": "Cannot register , The seats are full.",
+    "cannot use file extensions other than XLSX": "Cannot use other type of files xlsx wher downloaded from template",
     "cancel" : "Cancel",
     "canceled" : "Canceled",
     "cancel course purchase" : "Cancel course purchase",
@@ -283,7 +285,7 @@
     "enter last time" : "Enter last time",
     "enter order number" : "Enter order number",
     "enter course details" : "Enter course details",
-    "enter course name" : "Enter course name",
+    "enter course name" : "Please enter the correct course name.",
     "enter details" : "Enter details",
     "enter password" : "Enter password",
     "enter suggestions" : "Enter suggestions",
@@ -297,6 +299,8 @@
     "excessive study hours" : "Excessive study hours",
     "export" : "Export",
     "evaluate satisfaction with using the system" : "Evaluate satisfaction with using the system",
+    "ease of use":"Ease of use",
+
     "ReportProblem" : "Report the problem of use",
 
     "fail" : "Fail",
@@ -474,6 +478,9 @@
     "number of times/person" : "Number of class/person",
     "number of courses" : "Number of courses",
     "november": "November",
+    "number must be": "Number must be Equal or less than",
+    "number must be 0": "Number must be 0 or more",
+
 
     "o'clock" : "O'clock",
     "optional": "optional",
@@ -488,6 +495,7 @@
     "order is not success" : "Order is not success",
     "others" : "Others",
     "october": "October",
+    "overview":"Overview of service use",
 
     "package" : "Package",
     "package no." :"Package No.",
@@ -518,8 +526,12 @@
     "permission management": "Permission management",
     "personal" : "Personal",
     "phone number" : "Phone number",
+    "please enter course name":"Please enter course name",
+    "please select course":"Please select a course",
+    "please select a reservation start date":"Please select a reservation start date",
+    "please select a reservation end date":"Please select a reservation end date",
     "personal information" : "personal information",
-    
+    "please filter yourse nickname and class":"please filter your Nickname and Class",
     "please complete personal information":"Please complete personal information completely or press the cancel button if you do not want to edit your information",
     "please confirm the new password again" : "Please confirm the new password again",
     "please confirm your passwords are the same" : "Please confirm your passwords are the same",
@@ -538,6 +550,9 @@
     "please enter the service value end" : "Please enter the service value end",
     "please enter the service value start" : "Please enter the service value start",
     "please enter your name and class" : "Please enter your name and class",
+    "please enter your nickName with a length of at least 2 characters":"Please enter your nickName with a length of at least 2 characters",
+    "please enter your nickName length not exceeding 20 characters":"Please enter your nickName length not exceeding 20 characters",
+    "please select your class":"Please select your class",
     "please enter your last name (Thai), at least 2 characters long" : "Please enter your last name (Thai), at least 2 characters long",
     "please enter your last name (Thai) not more than 20 characters" : "Please enter your last name (Thai) not more than 20 characters",
     "please enter your last name (English), at least 2 characters long" : "Please enter your last name (English), at least 2 characters long",
@@ -770,9 +785,10 @@
     "show comment" : "Show comment",
     "september": "September",
     "super admin": "Super Admin",
+    "service stability":"Service stability",
 
 
-
+    "the system will not display information if the user does not enter student and parent information" :"The system will not display the information if the user does not fill in the student and parent information according to the template",
     "take annual leave" : "Take annual leave",
     "take leave form" : "Take leave form",
     "take leave date": "Take leave date",

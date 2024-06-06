@@ -61,18 +61,18 @@ const reserveCourseModules = {
     SetDowFilter(state, payload) {
       state.dow_filter = payload
     },
-    SetTimeFilter(state, payload){
+    SetTimeFilter(state, payload) {
       state.time_filter = payload
     },
-    SetCoachFilter(state, payload){
+    SetCoachFilter(state, payload) {
       state.coach_filter = payload
     }
   },
   actions: {
-    async GetUserByRole(context){
+    async GetUserByRole(context) {
       try {
         const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/role/R_3`)
-        if( data.statusCode === 200 ){
+        if (data.statusCode === 200) {
           data.data.map(v => {
             v.fullNameEn = `${v.firstNameEng} ${v.lastNameEng}`
             v.fullNameTh = `${v.firstNameTh} ${v.lastNameTh}`
@@ -85,10 +85,10 @@ const reserveCourseModules = {
         console.log(error)
       }
     },
-    async filterDowAndTime(context, { courses }){
-      try{
+    async filterDowAndTime(context, { courses }) {
+      try {
         let query = "?"
-        if(courses.length > 0){
+        if (courses.length > 0) {
           for (const course_id of courses) {
             query += `courseId=${course_id}&`
           }
@@ -101,36 +101,36 @@ const reserveCourseModules = {
           },
         }
 
-        const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/reserve${query}`,config)
-        if(data.statusCode === 200){
+        const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/reserve${query}`, config)
+        if (data.statusCode === 200) {
           console.log(data.data)
           const dow_filter = []
           const time_filter = []
-          for(const course of data.data){
+          for (const course of data.data) {
             for (const dow of course.dow) {
               const dowName = dayOfWeekArray(dow.dowName.split(','))
-              if (dow_filter.some( v => v.dowName == dowName)) {
-                const dowIndex = dow_filter.findIndex( v => v.dowName == dowName)
-                if(!dow_filter[dowIndex].dowId.some( v => v === dow.dowId)){
+              if (dow_filter.some(v => v.dowName == dowName)) {
+                const dowIndex = dow_filter.findIndex(v => v.dowName == dowName)
+                if (!dow_filter[dowIndex].dowId.some(v => v === dow.dowId)) {
                   dow_filter[dowIndex].dowId.push(dow.dowId)
                 }
               } else {
                 dow_filter.push({
-                  dowId : [dow.dowId],
-                  dowName : dowName
+                  dowId: [dow.dowId],
+                  dowName: dowName
                 })
               }
-              for (const time of dow.times){
+              for (const time of dow.times) {
                 const timeName = `${time.start} - ${time.end}`
-                if (time_filter.some( v => v.timeName == timeName)) {
-                  const timeIndex = time_filter.findIndex( v => v.timeName == timeName)
-                  if(!time_filter[timeIndex].timeId.some( v => v === time.timeId)){
+                if (time_filter.some(v => v.timeName == timeName)) {
+                  const timeIndex = time_filter.findIndex(v => v.timeName == timeName)
+                  if (!time_filter[timeIndex].timeId.some(v => v === time.timeId)) {
                     time_filter[timeIndex].timeId.push(time.timeId)
                   }
                 } else {
                   time_filter.push({
-                    timeId : [time.timeId],
-                    timeName : `${time.start} - ${time.end}`,
+                    timeId: [time.timeId],
+                    timeName: `${time.start} - ${time.end}`,
                   })
                 }
               }
@@ -139,12 +139,12 @@ const reserveCourseModules = {
           context.commit('SetDowFilter', dow_filter)
           context.commit('SetTimeFilter', time_filter)
         }
-      }catch(error){
+      } catch (error) {
         console.log(error)
       }
     },
-    async ExportReserveList(context, {students, courses, course_types, packages, options, reserve_date, dows, coachs, times}){
-      try{
+    async ExportReserveList(context, { students, courses, course_types, packages, options, reserve_date, dows, coachs, times }) {
+      try {
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -153,58 +153,58 @@ const reserveCourseModules = {
           },
         }
         let query = "?"
-        if(students.length > 0){
+        if (students.length > 0) {
           for (const student_id of students) {
             query += `studentId=${student_id}&`
           }
         }
-        if(courses.length > 0){
+        if (courses.length > 0) {
           for (const course_id of courses) {
             query += `courseId=${course_id}&`
           }
         }
-        if(course_types.length > 0){
+        if (course_types.length > 0) {
           for (const course_type_id of course_types) {
             query += `courseTypeId=${course_type_id}&`
           }
-        } 
-        if(packages.length > 0){
+        }
+        if (packages.length > 0) {
           for (const package_id of packages) {
             query += `courseTypeId=${package_id}&`
           }
         }
-        if(options.length > 0){
+        if (options.length > 0) {
           for (const option_id of options) {
             query += `optionId=${option_id}&`
           }
         }
-        if(dows.length > 0){
+        if (dows.length > 0) {
           for (const dows_id of dows) {
-            for (const dow_id of dows_id){
+            for (const dow_id of dows_id) {
               query += `dayOfWeekId=${dow_id}&`
             }
           }
         }
-        if(coachs.length > 0){
+        if (coachs.length > 0) {
           for (const coach_id of coachs) {
             query += `coachId=${coach_id}&`
           }
         }
-        if(times.length > 0){
+        if (times.length > 0) {
           for (const times_id of times) {
-            for (const time_id of times_id){
+            for (const time_id of times_id) {
               query += `timeId=${time_id}&`
             }
           }
         }
-        if(reserve_date){
+        if (reserve_date) {
           query += `reserveDate=${reserve_date}`
         }
-        const {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/export${query}`, config)
-        if(data.statusCode === 200){
+        const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/export${query}`, config)
+        if (data.statusCode === 200) {
           if (data.data.length > 0) {
             const reports = []
-            for await ( const reserve of data.data ){
+            for await (const reserve of data.data) {
               const dowName = dayOfWeekArray(reserve.dayOfWeekName.split(','))
               reports.push({
                 "วันที่จอง": moment(reserve.createdDate).format("DD/MM/YYYY HH:mm"),
@@ -229,11 +229,11 @@ const reserveCourseModules = {
             link.download = `reserveReport.xlsx`;
             link.click();
             URL.revokeObjectURL(url);
-          } 
+          }
         }
-      }catch(error){
+      } catch (error) {
         console.log(error)
-      } 
+      }
     },
     async GetReserveList(context, { search, limit, page, status }) {
       let startIndex = 0;
@@ -283,6 +283,8 @@ const reserveCourseModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
+        // let localhost = "http://localhost:3002"
+        // let { data } = await axios.patch(`${localhost}/api/v1/order/reserve/update/${reserve_id}`, reserve_data, config)
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/reserve/update/${reserve_id}`, reserve_data, config)
         if (data.statusCode == 200) {
           await Swal.fire({
@@ -488,8 +490,8 @@ const reserveCourseModules = {
         }
       }
     },
-    async UpdateAllStatusReserve(context, { courseId }){
-      try{
+    async UpdateAllStatusReserve(context, { courseId }) {
+      try {
         const config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -497,8 +499,8 @@ const reserveCourseModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        const { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/reserve/update/all/${courseId}`,{}, config)
-        if(data.statusCode === 200){
+        const { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/reserve/update/all/${courseId}`, {}, config)
+        if (data.statusCode === 200) {
           await Swal.fire({
             icon: "success",
             title: VueI18n.t("succeed"),
@@ -509,7 +511,7 @@ const reserveCourseModules = {
             showConfirmButton: false,
           })
         }
-      }catch(error){
+      } catch (error) {
         if (error.response?.data.statusCode == 400) {
 
           if (error.response.data.message == "Cannot register , fail at course monitor , course-coach or seats are full") {
@@ -596,13 +598,13 @@ const reserveCourseModules = {
     reserveListIsLoading(state) {
       return state.reserve_list_is_loading;
     },
-    dowFilter(state){
+    dowFilter(state) {
       return state.dow_filter
     },
-    timeFilter(state){
+    timeFilter(state) {
       return state.time_filter
     },
-    coachFilter(state){
+    coachFilter(state) {
       return state.coach_filter
     }
   },

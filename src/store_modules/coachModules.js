@@ -367,10 +367,11 @@ const coachModules = {
         };
         let user_detail = JSON.parse(localStorage.getItem("userDetail"));
         // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}/date/${date}/${time_id}/${time_start}/${time_end}`, config)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}/date/${date}/${time_id}/${time_start}/${time_end}`, config)
         if (data.statusCode === 200) {
           // console.log("GetCoachCheckIn", data.data)
-          if( data.data?.checkInCoachId){
+          if (data.data?.checkInCoachId) {
             const check_in = data.data
             let img_url = []
             if (check_in.attachment.length > 0) {
@@ -390,16 +391,16 @@ const coachModules = {
               checkInCoachId: check_in.checkInCoachId,
               courseId: check_in.courseId,
               date: check_in.date,
-              time_id : check_in.timeId,
-              time_start : check_in.timeStart,
-              time_end : check_in.timeEnd,
+              time_id: check_in.timeId,
+              time_start: check_in.timeStart,
+              time_end: check_in.timeEnd,
               summary: check_in.summary,
               homework: check_in.homework,
               attachment: img_url,
               summary_files: [],
             }
           }
-          
+
           context.commit("SetCoachCheckIn", payload)
           context.commit("SetStudentCheckInIsLoading", false)
         } else {
@@ -489,8 +490,8 @@ const coachModules = {
 
       }
     },
-    async GetStudentByTimeId(context, { course_id, date ,time_id}) {
-      context.commit("SetStudentCheckIn",[])
+    async GetStudentByTimeId(context, { course_id, date, time_id }) {
+      context.commit("SetStudentCheckIn", [])
       try {
         let config = {
           headers: {
@@ -516,7 +517,7 @@ const coachModules = {
             student.compensationEndTime = student.compensationEndTime ? moment(student.compensationEndTime, "HH:mm") : null
             student.files = []
             student.potentialfiles = []
-            student.status = 'punctual'
+            // student.status = 'punctual'
             i = i + 1
           }
           await context.commit("SetStudentCheckIn", data.data.filter(v => v.timeId === time_id))
@@ -525,7 +526,7 @@ const coachModules = {
         console.log(error)
       }
     },
-    async CheckInCoach(context, { course_id, time_id, date, type , time_start, time_end }) {
+    async CheckInCoach(context, { course_id, time_id, date, type, time_start, time_end }) {
       context.commit("SetCoachCheckInIsLoading", true)
       try {
         let config = {
@@ -545,9 +546,9 @@ const coachModules = {
           "type": type
         }, config)
         if (data.statusCode === 201) {
-          context.dispatch("GetStudentByTimeId",{
+          context.dispatch("GetStudentByTimeId", {
             course_id: course_id,
-            date : date,
+            date: date,
             time_id: time_id,
           })
           context.commit("SetCoachCheckInIsLoading", false)

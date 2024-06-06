@@ -1472,8 +1472,8 @@ const orderModules = {
         });
       }
     },
-    async CancelOrderDeleteScheduleAndMonitor(context, {order_number}){
-      try{
+    async CancelOrderDeleteScheduleAndMonitor(context, { order_number }) {
+      try {
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -1481,7 +1481,7 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        const {data} = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/order/cancel-order/${order_number}`, config)
+        const { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/order/cancel-order/${order_number}`, config)
         if (data.statusCode === 200) {
           await Swal.fire({
             icon: "success",
@@ -1498,7 +1498,7 @@ const orderModules = {
             });
           });
         }
-      }catch(error){
+      } catch (error) {
         context.dispatch("GetOrderDetail", {
           order_number: order_number,
         });
@@ -1812,6 +1812,7 @@ const orderModules = {
     },
     async GetOrderDetailByOrderNumber(context, { orderNumber }) {
       try {
+        // const { data } = await axios.get(`http://localhost:3000/api/v1/schedule/order?orderNumber=${orderNumber}`)
         const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/order?orderNumber=${orderNumber}`)
         if (data.statusCode === 200) {
           context.commit("SetOrderNumberDetail", data.data)
@@ -1829,7 +1830,7 @@ const orderModules = {
         });
       }
     },
-    async UpdateScheduleAndCheckIn(context, { orderNumber, orderItemId,lastTime, type, endDate }) {
+    async UpdateScheduleAndCheckIn(context, { orderNumber, orderItemId, lastTime, type, endDate }) {
       try {
         let config = {
           headers: {
@@ -1850,7 +1851,7 @@ const orderModules = {
           await Swal.fire({
             icon: "success",
             title: VueI18n.t("succeed"),
-            text: VueI18n.t("created scedule and check in"),
+            text: VueI18n.t("saved successfully"),
             timer: 3000,
             showDenyButton: false,
             showCancelButton: false,

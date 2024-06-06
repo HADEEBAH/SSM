@@ -671,13 +671,17 @@
             </v-expand-transition>
             <v-expand-transition>
               <template v-if="course.show_summary">
+                <!-- <pre>{{ coach_check_in }}</pre> -->
                 <v-card-text>
                   <v-card
                     flat
                     v-if="
-                      !coach_check_in.summary &&
-                      !coach_check_in.homework &&
-                      !coach_check_in.attachment
+                      (!coach_check_in.summary &&
+                        !coach_check_in.homework &&
+                        !coach_check_in.attachment) ||
+                      (!coach_check_in.summary &&
+                        !coach_check_in.homework &&
+                        coach_check_in.attachment?.length <= 0)
                     "
                   >
                     <v-card-text
@@ -1910,6 +1914,9 @@ export default {
       this.GetCoachCheckIn({
         course_id: course.course_id,
         date: course.start_date,
+        time_id: course.time_id,
+        time_start: course.start_time,
+        time_end: course.end_time,
       });
       course.show_summary = !course.show_summary;
       course.show_assessment = false;

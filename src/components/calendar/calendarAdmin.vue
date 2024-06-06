@@ -1,6 +1,21 @@
 
 <template>
   <v-container>
+    <v-row class="mt-[-94px]">
+      <v-col class="w-full">
+        <v-text-field
+          dense
+          class="w-full"
+          outlined
+          :label="$t('search')"
+          color="pink"
+          hide-details
+          v-model="search"
+          prepend-inner-icon="mdi-magnify"
+          @change="GetSchedule({ start: dateSelected, search: $event })"
+        ></v-text-field>
+      </v-col>
+    </v-row>
     <v-card-title>
       <v-row>
         <v-col cols="auto">
@@ -19,13 +34,7 @@
       color="#ff6b81"
       type="month"
       v-model="focus"
-      :events="
-        data_search_schedule
-          ? data_search_schedule
-          : data_filter_schedule
-          ? data_filter_schedule
-          : data_in_schedule
-      "
+      :events="data_in_schedule"
       event-text-color="#000000"
       event-overlap-mode="column"
       :first-interval="1"
@@ -271,8 +280,14 @@ export default {
   props: {
     type: { type: String, default: "month" },
     events: { type: Array },
+    searchFilter: {
+      type: String,
+      default: "",
+      required: false,
+    },
   },
   data: () => ({
+    search: "",
     eventss: [],
     showModal: false,
     test_course_id: "",
@@ -290,6 +305,7 @@ export default {
     dialog_detail: false,
     details: "",
     holidaySwitch: true,
+    dateSelected: { month: "", year: "" },
   }),
 
   watch: {},
@@ -349,9 +365,21 @@ export default {
       GetAllHolidays: "ManageScheduleModules/GetAllHolidays",
       GetDataInSchedule: "ManageScheduleModules/GetDataInSchedule",
     }),
-    GetSchedule({ start }) {
-      if (!this.data_search_schedule && !this.data_filter_schedule) {
-        this.GetDataInSchedule({ month: start.month, year: start.year });
+    GetSchedule({ start, search }) {
+      if (!search) {
+        this.GetDataInSchedule({
+          month: start.month,
+          year: start.year,
+          search: this.search,
+        });
+        this.dateSelected.month = start.month;
+        this.dateSelected.year = start.year;
+      } else {
+        this.GetDataInSchedule({
+          month: start.month,
+          year: start.year,
+          search,
+        });
       }
     },
     convertDate(item) {

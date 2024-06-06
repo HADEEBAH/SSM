@@ -6,44 +6,99 @@
       <header-page :breadcrumbs="breadcrumbs"></header-page>
       <v-row class="mb-3">
         <v-col cols="12" sm @click="tab = 'course'">
-          <img-card vertical class="cursor-pointer" :class="tab === 'course' ? 'img-card-active' : ''">
+          <img-card
+            vertical
+            class="cursor-pointer"
+            :class="tab === 'course' ? 'img-card-active' : ''"
+          >
             <template v-slot:img>
-              <v-img height="72" width="72" src="@/assets/course/course.png"></v-img>
+              <v-img
+                height="72"
+                width="72"
+                src="@/assets/course/course.png"
+              ></v-img>
               <span class="text-lg font-bold"> {{ $t("course") }} </span>
             </template>
           </img-card>
         </v-col>
-        <v-col v-if="course_data.course_type_id === 'CT_1'" cols="12" sm @click="tab = 'time and coach'">
-          <img-card vertical class="cursor-pointer" :class="tab === 'time and coach' ? 'img-card-active' : ''">
+        <v-col
+          v-if="course_data.course_type_id === 'CT_1'"
+          cols="12"
+          sm
+          @click="tab = 'time and coach'"
+        >
+          <img-card
+            vertical
+            class="cursor-pointer"
+            :class="tab === 'time and coach' ? 'img-card-active' : ''"
+          >
             <template v-slot:img>
-              <v-img height="72" width="72" src="@/assets/course/time_and_coach.png"></v-img>
+              <v-img
+                height="72"
+                width="72"
+                src="@/assets/course/time_and_coach.png"
+              ></v-img>
               <span class="text-lg font-bold">
                 {{ $t("time and coach") }}
               </span>
             </template>
           </img-card>
         </v-col>
-        <v-col v-if="course_data.course_type_id === 'CT_1'" cols="12" sm @click="tab = 'package'">
-          <img-card vertical class="cursor-pointer" :class="tab === 'package' ? 'img-card-active' : ''">
+        <v-col
+          v-if="course_data.course_type_id === 'CT_1'"
+          cols="12"
+          sm
+          @click="tab = 'package'"
+        >
+          <img-card
+            vertical
+            class="cursor-pointer"
+            :class="tab === 'package' ? 'img-card-active' : ''"
+          >
             <template v-slot:img>
-              <v-img height="72" width="72" src="@/assets/course/package.png"></v-img>
+              <v-img
+                height="72"
+                width="72"
+                src="@/assets/course/package.png"
+              ></v-img>
               <span class="text-lg font-bold"> {{ $t("package") }} </span>
             </template>
           </img-card>
         </v-col>
-        <v-col v-if="course_data.course_type_id === 'CT_1'" cols="12" sm @click="tab = 'arkwork'">
-          <img-card vertical class="cursor-pointer" :class="tab === 'arkwork' ? 'img-card-active' : ''">
+        <v-col
+          v-if="course_data.course_type_id === 'CT_1'"
+          cols="12"
+          sm
+          @click="tab = 'arkwork'"
+        >
+          <img-card
+            vertical
+            class="cursor-pointer"
+            :class="tab === 'arkwork' ? 'img-card-active' : ''"
+          >
             <template v-slot:img>
-              <v-img height="72" width="72" src="@/assets/course/upload_file.png"></v-img>
+              <v-img
+                height="72"
+                width="72"
+                src="@/assets/course/upload_file.png"
+              ></v-img>
               <span class="text-lg font-bold"> Learning Journey </span>
             </template>
           </img-card>
         </v-col>
 
         <v-col cols="12" sm @click="tab = 'student list'">
-          <img-card vertical class="cursor-pointer" :class="tab === 'student list' ? 'img-card-active' : ''">
+          <img-card
+            vertical
+            class="cursor-pointer"
+            :class="tab === 'student list' ? 'img-card-active' : ''"
+          >
             <template v-slot:img>
-              <v-img height="72" width="72" src="@/assets/course/student_list.png"></v-img>
+              <v-img
+                height="72"
+                width="72"
+                src="@/assets/course/student_list.png"
+              ></v-img>
               <span class="text-lg font-bold"> {{ $t("student list") }} </span>
             </template>
           </img-card>
@@ -57,23 +112,44 @@
 
             <v-tab-item value="course">
               <v-form ref="course_form" v-model="courseValidate">
-                <course-card :disable="!course_edit" edited :categorys="categorys" :coachs="coachs"></course-card>
+                <course-card
+                  :disable="!course_edit"
+                  edited
+                  :categorys="categorys"
+                  :coachs="coachs"
+                ></course-card>
               </v-form>
               <!-- ACTION -->
               <v-row class="px-4" v-if="!course_edit">
                 <v-col align="right">
-                  <v-btn color="#FF6B81" class="white--text btn-size-lg" depressed @click="course_edit = true">
+                  <v-btn
+                    color="#FF6B81"
+                    class="white--text btn-size-lg"
+                    depressed
+                    @click="course_edit = true"
+                  >
                     {{ $t("edit") }}
                   </v-btn>
                 </v-col>
               </v-row>
               <v-row class="px-4" v-if="course_edit">
                 <v-col align="right">
-                  <v-btn color="#FF6B81" class="btn-size-lg" outlined @click="cancelEdit()">{{ $t("cancel") }}</v-btn>
+                  <v-btn
+                    color="#FF6B81"
+                    class="btn-size-lg"
+                    outlined
+                    @click="cancelEdit()"
+                    >{{ $t("cancel") }}</v-btn
+                  >
                 </v-col>
                 <v-col cols="auto">
-                  <v-btn color="#FF6B81" class="white--text btn-size-lg" depressed @click="CourseUpdateDetail()"
-                    :disabled="!courseValidate">
+                  <v-btn
+                    color="#FF6B81"
+                    class="white--text btn-size-lg"
+                    depressed
+                    @click="CourseUpdateDetail()"
+                    :disabled="!courseValidate"
+                  >
                     {{ $t("save") }}
                   </v-btn>
                 </v-col>
@@ -84,7 +160,12 @@
               <v-card flat class="mb-3">
                 <headerCard :title="$t('details of time and coach')">
                   <template v-slot:actions>
-                    <v-btn outlined :disabled="!course_edit" color="#FF6B81" @click="addCoach">
+                    <v-btn
+                      outlined
+                      :disabled="!course_edit"
+                      color="#FF6B81"
+                      @click="addCoach"
+                    >
                       <v-icon>mdi-plus-circle-outline</v-icon>
                       {{ $t("add coach") }}
                     </v-btn>
@@ -94,26 +175,45 @@
                   <v-divider class="mb-3"></v-divider>
                   <v-form ref="coach_form" v-model="coachValidate">
                     <!-- COACH -->
-                    <coachs-card :disable="!course_edit" :coachs="coachs" edited></coachs-card>
+                    <coachs-card
+                      :disable="!course_edit"
+                      :coachs="coachs"
+                      edited
+                    ></coachs-card>
                   </v-form>
                 </v-card-text>
               </v-card>
               <!-- ACTION -->
               <v-row class="px-4" v-if="!course_edit">
                 <v-col align="right">
-                  <v-btn color="#FF6B81" class="white--text btn-size-lg" depressed @click="course_edit = true">
+                  <v-btn
+                    color="#FF6B81"
+                    class="white--text btn-size-lg"
+                    depressed
+                    @click="course_edit = true"
+                  >
                     {{ $t("edit") }}
                   </v-btn>
                 </v-col>
               </v-row>
               <v-row class="px-4" v-if="course_edit">
                 <v-col align="right">
-                  <v-btn color="#FF6B81" class="btn-size-lg" outlined @click="cancelEdit()">
-                    {{ $t("cancel") }}</v-btn>
+                  <v-btn
+                    color="#FF6B81"
+                    class="btn-size-lg"
+                    outlined
+                    @click="cancelEdit()"
+                  >
+                    {{ $t("cancel") }}</v-btn
+                  >
                 </v-col>
                 <v-col cols="auto">
-                  <v-btn color="#FF6B81" class="white--text btn-size-lg" depressed @click="CourseUpdateCoach()">{{
-                    $t("save") }}
+                  <v-btn
+                    color="#FF6B81"
+                    class="white--text btn-size-lg"
+                    depressed
+                    @click="CourseUpdateCoach()"
+                    >{{ $t("save") }}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -125,26 +225,46 @@
               </v-form>
               <v-row dense>
                 <v-col align="center">
-                  <v-btn :disabled="!course_edit" outlined color="#ff6b81"
-                    @click="addPackage(course_data.packages)"><v-icon>mdi-plus</v-icon> {{ $t("add package") }}</v-btn>
+                  <v-btn
+                    :disabled="!course_edit"
+                    outlined
+                    color="#ff6b81"
+                    @click="addPackage(course_data.packages)"
+                    ><v-icon>mdi-plus</v-icon> {{ $t("add package") }}</v-btn
+                  >
                 </v-col>
               </v-row>
               <!-- ACTION -->
               <v-row class="px-4" v-if="!course_edit">
                 <v-col align="right">
-                  <v-btn color="#FF6B81" class="white--text btn-size-lg" depressed @click="course_edit = true">
+                  <v-btn
+                    color="#FF6B81"
+                    class="white--text btn-size-lg"
+                    depressed
+                    @click="course_edit = true"
+                  >
                     {{ $t("edit") }}
                   </v-btn>
                 </v-col>
               </v-row>
               <v-row class="px-4" v-if="course_edit">
                 <v-col align="right">
-                  <v-btn color="#FF6B81" class="btn-size-lg" outlined @click="cancelEdit()">
+                  <v-btn
+                    color="#FF6B81"
+                    class="btn-size-lg"
+                    outlined
+                    @click="cancelEdit()"
+                  >
                     {{ $t("cancel") }}
                   </v-btn>
                 </v-col>
                 <v-col cols="auto">
-                  <v-btn color="#FF6B81" class="white--text btn-size-lg" depressed @click="CourseUpdatePackage()">
+                  <v-btn
+                    color="#FF6B81"
+                    class="white--text btn-size-lg"
+                    depressed
+                    @click="CourseUpdatePackage()"
+                  >
                     {{ $t("save") }}
                   </v-btn>
                 </v-col>
@@ -154,77 +274,198 @@
             <v-tab-item value="arkwork">
               <v-card class="mx-3 mb-3" flat>
                 <headerCard :title="$t('special rights')"></headerCard>
-                <v-card-text class="border-dashed border-2 border-blue-600 rounded-lg">
-                  <v-row v-if="course_data.course_img_privilege || preview_privilege_url
-                    ">
+                <v-card-text
+                  class="border-dashed border-2 border-blue-600 rounded-lg"
+                >
+                  <v-row
+                    v-if="
+                      course_data.course_img_privilege || preview_privilege_url
+                    "
+                  >
                     <v-col align="center" class="rounded-lg pa-0">
-                      <v-img :src="course_data.course_img_privilege
-                          ? course_data.course_img_privilege
-                          : preview_privilege_url
-                        " style="max-width: 300px" :aspect-ratio="16 / 9" class="rounded-lg" contain align="right">
-                        <v-btn v-if="course_edit && course_data.course_img_privilege" icon class="bg-[#f00]" dark
-                          @click="removePrivilegeFileData"><v-icon>mdi-close</v-icon></v-btn>
-                        <v-btn v-else-if="course_edit && preview_privilege_url" icon class="bg-[#f00]" dark
-                          @click="removePrivilegeFile"><v-icon>mdi-close</v-icon></v-btn>
+                      <v-img
+                        :src="
+                          course_data.course_img_privilege
+                            ? course_data.course_img_privilege
+                            : preview_privilege_url
+                        "
+                        style="max-width: 300px"
+                        :aspect-ratio="16 / 9"
+                        class="rounded-lg"
+                        contain
+                        align="right"
+                      >
+                        <v-btn
+                          v-if="course_edit && course_data.course_img_privilege"
+                          icon
+                          class="bg-[#f00]"
+                          dark
+                          @click="removePrivilegeFileData"
+                          ><v-icon>mdi-close</v-icon></v-btn
+                        >
+                        <v-btn
+                          v-else-if="course_edit && preview_privilege_url"
+                          icon
+                          class="bg-[#f00]"
+                          dark
+                          @click="removePrivilegeFile"
+                          ><v-icon>mdi-close</v-icon></v-btn
+                        >
                       </v-img>
                     </v-col>
                   </v-row>
-                  <v-row v-if="!preview_privilege_url &&
-                    !course_data.course_img_privilege
-                    ">
+                  <v-row
+                    v-if="
+                      !preview_privilege_url &&
+                      !course_data.course_img_privilege
+                    "
+                  >
                     <v-col cols="12" class="flex align-center justify-center">
-                      <v-img src="@/assets/course/upload_file.png" max-height="105" max-width="122"></v-img>
+                      <v-img
+                        src="@/assets/course/upload_file.png"
+                        max-height="105"
+                        max-width="122"
+                      ></v-img>
                     </v-col>
-                    <v-col cols="12" class="flex align-center justify-center text-h5">
+                    <v-col
+                      cols="12"
+                      class="flex align-center justify-center text-h5"
+                    >
                       {{ $t("upload privileged images") }}
                     </v-col>
-                    <v-col cols="12" class="flex align-center justify-center text-caption">
-                      ({{ $t("suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file")}})
+                    <v-col
+                      cols="12"
+                      class="flex align-center justify-center text-caption"
+                    >
+                      ({{
+                        $t(
+                          "suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file"
+                        )
+                      }})
                     </v-col>
-                    <v-col cols="12" class="flex align-center justify-center mt-5">
-                      <v-btn outlined color="blue" :disabled="!course_edit" @click="openFilePrivilegeSelector">{{
-                        $t("select file") }}</v-btn>
-                      <input id="fileInputPrivilege" ref="fileInputPrivilege" type="file" @change="uploadPrivilegeFile"
-                        accept="image/png, image/jpeg" style="display: none" />
+                    <v-col
+                      cols="12"
+                      class="flex align-center justify-center mt-5"
+                    >
+                      <v-btn
+                        outlined
+                        color="blue"
+                        :disabled="!course_edit"
+                        @click="openFilePrivilegeSelector"
+                        >{{ $t("select file") }}</v-btn
+                      >
+                      <input
+                        id="fileInputPrivilege"
+                        ref="fileInputPrivilege"
+                        type="file"
+                        @change="uploadPrivilegeFile"
+                        accept="image/png, image/jpeg"
+                        style="display: none"
+                      />
                     </v-col>
                   </v-row>
                 </v-card-text>
                 <headerCard title="Learning Journey"></headerCard>
-                <v-card-text class="border-dashed border-2 border-blue-600 rounded-lg">
-                  <v-row v-if="preview_artwork_files && preview_artwork_files?.length > 0
-                    ">
-                    <v-col cols="3" align="center" class="rounded-lg pa-2" v-for="(file, index) in preview_artwork_files"
-                      :key="index">
-                      <v-img v-if="file?.artworkCourseId" :src="file.attachmentUrl" contain style="max-width: 300px"
-                        :aspect-ratio="16 / 9" class="rounded-lg" align="right">
-                        <v-btn v-if="course_edit" icon class="bg-[#f00]" dark
-                          @click="removeArtworkFileData(file, index)"><v-icon>mdi-close</v-icon></v-btn>
+                <v-card-text
+                  class="border-dashed border-2 border-blue-600 rounded-lg"
+                >
+                  <v-row
+                    v-if="
+                      preview_artwork_files && preview_artwork_files?.length > 0
+                    "
+                  >
+                    <v-col
+                      cols="3"
+                      align="center"
+                      class="rounded-lg pa-2"
+                      v-for="(file, index) in preview_artwork_files"
+                      :key="index"
+                    >
+                      <v-img
+                        v-if="file?.artworkCourseId"
+                        :src="file.attachmentUrl"
+                        contain
+                        style="max-width: 300px"
+                        :aspect-ratio="16 / 9"
+                        class="rounded-lg"
+                        align="right"
+                      >
+                        <v-btn
+                          v-if="course_edit"
+                          icon
+                          class="bg-[#f00]"
+                          dark
+                          @click="removeArtworkFileData(file, index)"
+                          ><v-icon>mdi-close</v-icon></v-btn
+                        >
                       </v-img>
-                      <v-img v-else :src="file" style="max-width: 300px" :aspect-ratio="16 / 9" class="rounded-lg" contain
-                        align="right">
-                        <v-btn v-if="course_edit" icon class="bg-[#f00]" dark
-                          @click="removeArtworkFile(index)"><v-icon>mdi-close</v-icon></v-btn>
+                      <v-img
+                        v-else
+                        :src="file"
+                        style="max-width: 300px"
+                        :aspect-ratio="16 / 9"
+                        class="rounded-lg"
+                        contain
+                        align="right"
+                      >
+                        <v-btn
+                          v-if="course_edit"
+                          icon
+                          class="bg-[#f00]"
+                          dark
+                          @click="removeArtworkFile(index)"
+                          ><v-icon>mdi-close</v-icon></v-btn
+                        >
                       </v-img>
                     </v-col>
                   </v-row>
-                  <v-row v-if="!preview_artwork_files ||
-                    preview_artwork_files?.length == 0
-                    ">
+                  <v-row
+                    v-if="
+                      !preview_artwork_files ||
+                      preview_artwork_files?.length == 0
+                    "
+                  >
                     <v-col cols="12" class="flex align-center justify-center">
-                      <v-img src="@/assets/course/upload_file.png" max-height="105" max-width="122"></v-img>
+                      <v-img
+                        src="@/assets/course/upload_file.png"
+                        max-height="105"
+                        max-width="122"
+                      ></v-img>
                     </v-col>
-                    <v-col cols="12" class="flex align-center justify-center text-h5">
+                    <v-col
+                      cols="12"
+                      class="flex align-center justify-center text-h5"
+                    >
                       {{ $t("upload Learning Journey") }}
                     </v-col>
-                    <v-col cols="12" class="flex align-center justify-center text-caption">
-                      ({{$t("suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file")}})
+                    <v-col
+                      cols="12"
+                      class="flex align-center justify-center text-caption"
+                    >
+                      ({{
+                        $t(
+                          "suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file"
+                        )
+                      }})
                     </v-col>
                   </v-row>
                   <v-row dense>
                     <v-col align="center">
-                      <input ref="fileInputArtwork" type="file" @change="previewArtWorkFile"
-                        accept="image/png, image/jpeg" multiple style="display: none" />
-                      <v-btn :disabled="!course_edit" outlined color="blue" @click="openFileArtworSelector">{{ $t("select file") }}</v-btn>
+                      <input
+                        ref="fileInputArtwork"
+                        type="file"
+                        @change="previewArtWorkFile"
+                        accept="image/png, image/jpeg"
+                        multiple
+                        style="display: none"
+                      />
+                      <v-btn
+                        :disabled="!course_edit"
+                        outlined
+                        color="blue"
+                        @click="openFileArtworSelector"
+                        >{{ $t("select file") }}</v-btn
+                      >
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -232,17 +473,33 @@
               <!-- ACTION -->
               <v-row class="px-4" v-if="!course_edit">
                 <v-col align="right">
-                  <v-btn color="#FF6B81" class="white--text btn-size-lg" depressed @click="course_edit = true">
+                  <v-btn
+                    color="#FF6B81"
+                    class="white--text btn-size-lg"
+                    depressed
+                    @click="course_edit = true"
+                  >
                     {{ $t("edit") }}
                   </v-btn>
                 </v-col>
               </v-row>
               <v-row class="px-4" v-if="course_edit">
                 <v-col align="right">
-                  <v-btn color="#FF6B81" class="btn-size-lg" outlined @click="cancelEdit()">{{ $t("cancel") }}</v-btn>
+                  <v-btn
+                    color="#FF6B81"
+                    class="btn-size-lg"
+                    outlined
+                    @click="cancelEdit()"
+                    >{{ $t("cancel") }}</v-btn
+                  >
                 </v-col>
                 <v-col cols="auto">
-                  <v-btn color="#FF6B81" class="white--text btn-size-lg" depressed @click="CourseUpdateArkwork()">
+                  <v-btn
+                    color="#FF6B81"
+                    class="white--text btn-size-lg"
+                    depressed
+                    @click="CourseUpdateArkwork()"
+                  >
                     {{ $t("save") }}
                   </v-btn>
                 </v-col>
@@ -265,23 +522,36 @@
                   </v-tabs>
                 </v-col>
                 <v-col cols="auto">
-                  <v-btn v-if="student_tab == 0" :disabled="!coach_list.some((v) => v.checked === true)" depressed
-                    color="#ff6b81" :loading="export_is_loading" :dark="coach_list.some((v) => v.checked === true)"
-                    @click="show_dialog_export_student = true">
+                  <v-btn
+                    v-if="student_tab == 0"
+                    :disabled="!coach_list.some((v) => v.checked === true)"
+                    depressed
+                    color="#ff6b81"
+                    :loading="export_is_loading"
+                    :dark="coach_list.some((v) => v.checked === true)"
+                    @click="show_dialog_export_student = true"
+                  >
                     {{ $t("export") }}
                   </v-btn>
-                  <v-btn 
-                    v-if="student_tab == 1" 
-                    depressed 
+                  <v-btn
+                    v-if="student_tab == 1"
+                    depressed
                     color="#ff6b81"
                     :disabled="!student_reserve_list.length > 0"
-                    :dark="student_reserve_list.length > 0" 
-                    @click="show_dialog_export_reserve_student = true">
+                    :dark="student_reserve_list.length > 0"
+                    @click="show_dialog_export_reserve_student = true"
+                  >
                     {{ $t("export") }}
                   </v-btn>
-                  <v-btn v-if="student_tab == 2" depressed color="#ff6b81" :dark="!DisableButtonExport()"
-                    :disabled="DisableButtonExport()" :loading="export_is_loading"
-                    @click="show_dialog_export_end_student = true">
+                  <v-btn
+                    v-if="student_tab == 2"
+                    depressed
+                    color="#ff6b81"
+                    :dark="!DisableButtonExport()"
+                    :disabled="DisableButtonExport()"
+                    :loading="export_is_loading"
+                    @click="show_dialog_export_end_student = true"
+                  >
                     {{ $t("export") }}
                   </v-btn>
                 </v-col>
@@ -296,8 +566,8 @@
                           <v-btn icon @click="selectAllCoach()">
                             <v-icon color="#ff6b81">{{
                               selected_all_coach
-                              ? "mdi-checkbox-marked"
-                              : "mdi-checkbox-blank-outline"
+                                ? "mdi-checkbox-marked"
+                                : "mdi-checkbox-blank-outline"
                             }}</v-icon>
                           </v-btn>
                         </v-col>
@@ -305,26 +575,40 @@
                           $t("coach list")
                         }}</v-col>
                         <v-col cols="auto">
-                          <v-text-field class="bg-white rounded-lg" v-model="search_student_list" dense outlined
-                            hide-details :placeholder="$t('search for student name, coach name')
-                              " prepend-inner-icon="mdi-magnify"
-                            @input="searchStudentList(search_student_list)"></v-text-field>
+                          <v-text-field
+                            class="bg-white rounded-lg"
+                            v-model="search_student_list"
+                            dense
+                            outlined
+                            hide-details
+                            :placeholder="
+                              $t('search for student name, coach name')
+                            "
+                            prepend-inner-icon="mdi-magnify"
+                            @input="searchStudentList(search_student_list)"
+                          ></v-text-field>
                         </v-col>
                       </v-row>
                     </v-card-text>
                   </v-card>
                   <v-row dense v-if="coach_list_is_loading">
                     <v-col align="center">
-                      <v-progress-circular indeterminate color="red"></v-progress-circular>
+                      <v-progress-circular
+                        indeterminate
+                        color="red"
+                      ></v-progress-circular>
                     </v-col>
                   </v-row>
 
                   <template v-else>
-                    <div v-if="search_student_list
-                        ? search_student_datas?.length === 0
-                        : coach_list?.filter((v) => v?.datesList.length > 0)
-                          .length === 0
-                      ">
+                    <div
+                      v-if="
+                        search_student_list
+                          ? search_student_datas?.length === 0
+                          : coach_list?.filter((v) => v?.datesList.length > 0)
+                              .length === 0
+                      "
+                    >
                       <v-card dense outlined>
                         <v-card-text>
                           <v-row>
@@ -336,69 +620,123 @@
                       </v-card>
                     </div>
                     <template v-else>
-                      <div v-for="(coach, coach_index) in search_student_list
-                        ? search_student_datas
-                        : coach_list?.filter(
-                          (v) =>v?.datesList?.length > 0
-                        )" :key="`${coach_index}-coach_index`">
-                        <v-card v-if="coach?.datesList?.length > 0" outlined dense
-                          class="rounded-lg cursor-pointer mb-3 bg-[#FCFCFC]">
+                      <div
+                        v-for="(coach, coach_index) in search_student_list
+                          ? search_student_datas
+                          : coach_list?.filter((v) => v?.datesList?.length > 0)"
+                        :key="`${coach_index}-coach_index`"
+                      >
+                        <v-card
+                          v-if="coach?.datesList?.length > 0"
+                          outlined
+                          dense
+                          class="rounded-lg cursor-pointer mb-3 bg-[#FCFCFC]"
+                        >
                           <v-card-text class="pa-2">
                             <v-row dense class="d-flex align-center">
                               <v-col cols="auto">
                                 <v-btn icon @click="selectCoachChecked(coach)">
                                   <v-icon color="#ff6b81">{{
                                     coach.checked
-                                    ? "mdi-checkbox-marked"
-                                    : "mdi-checkbox-blank-outline"
+                                      ? "mdi-checkbox-marked"
+                                      : "mdi-checkbox-blank-outline"
                                   }}</v-icon>
                                 </v-btn>
                               </v-col>
-                              <v-col cols="auto" @click="selectCoach(coach, coach_index)">
+                              <v-col
+                                cols="auto"
+                                @click="selectCoach(coach, coach_index)"
+                              >
                                 <v-icon color="#ff6b81">mdi-account</v-icon>
                               </v-col>
-                              <v-col @click="selectCoach(coach, coach_index)" class="font-bold">
+                              <v-col
+                                @click="selectCoach(coach, coach_index)"
+                                class="font-bold"
+                              >
                                 {{ $t("coach") }}:
                                 {{
                                   $i18n.locale == "th"
-                                  ? `${coach.coachName}`
-                                  : `${coach.coachNameEn}`
+                                    ? `${coach.coachName}`
+                                    : `${coach.coachNameEn}`
                                 }}
                               </v-col>
-                              <v-col cols="auto" @click="selectCoach(coach, coach_index)">
-                                <v-icon>{{
-                                  selected_coach === coach_index
-                                  ? "mdi-chevron-up"
-                                  : "mdi-chevron-down"
-                                }}
+                              <v-col
+                                cols="auto"
+                                @click="selectCoach(coach, coach_index)"
+                              >
+                                <v-icon
+                                  >{{
+                                    selected_coach === coach_index
+                                      ? "mdi-chevron-up"
+                                      : "mdi-chevron-down"
+                                  }}
                                 </v-icon>
                               </v-col>
                             </v-row>
                           </v-card-text>
                         </v-card>
                         <v-expand-transition>
-                          <div v-if="selected_coach === coach_index" class="pa-3 bg-[#FCFCFC] rounded-b-lg">
+                          <div
+                            v-if="selected_coach === coach_index"
+                            class="pa-3 bg-[#FCFCFC] rounded-b-lg"
+                          >
                             <!-- FILTER -->
                             <v-row dense class="mb-3">
                               <v-col>
-                                <v-autocomplete dense v-model="filter.dow" outlined hide-details item-text="label"
-                                  item-value="value" :items="dow_option" :placeholder="$t('day')"
-                                  @change="filterDateByCoach(coach_index)"></v-autocomplete>
+                                <v-autocomplete
+                                  dense
+                                  v-model="filter.dow"
+                                  outlined
+                                  hide-details
+                                  item-text="label"
+                                  item-value="value"
+                                  :items="dow_option"
+                                  :placeholder="$t('day')"
+                                  @change="filterDateByCoach(coach_index)"
+                                ></v-autocomplete>
                               </v-col>
                               <v-col>
-                                <v-menu ref="menu1" v-model="filter.date_menu" :close-on-content-click="false"
-                                  transition="scale-transition" offset-y max-width="290px" min-width="auto">
+                                <v-menu
+                                  ref="menu1"
+                                  v-model="filter.date_menu"
+                                  :close-on-content-click="false"
+                                  transition="scale-transition"
+                                  offset-y
+                                  max-width="290px"
+                                  min-width="auto"
+                                >
                                   <template v-slot:activator="{ on, attrs }">
-                                    <v-text-field dense outlined v-model="filter.date" :placeholder="$t('date')"
-                                      persistent-hint append-icon="mdi-calendar" v-bind="attrs" v-on="on"></v-text-field>
+                                    <v-text-field
+                                      dense
+                                      outlined
+                                      v-model="filter.date"
+                                      :placeholder="$t('date')"
+                                      persistent-hint
+                                      append-icon="mdi-calendar"
+                                      v-bind="attrs"
+                                      v-on="on"
+                                    ></v-text-field>
                                   </template>
-                                  <v-date-picker v-model="filter.date" no-title @change="filterDateByCoach(coach_index)"
-                                    @input="filter.date_menu = false" locale="th-TH"></v-date-picker>
+                                  <v-date-picker
+                                    v-model="filter.date"
+                                    no-title
+                                    @change="filterDateByCoach(coach_index)"
+                                    @input="filter.date_menu = false"
+                                    locale="th-TH"
+                                  ></v-date-picker>
                                 </v-menu>
                               </v-col>
                               <v-col>
-                                <v-autocomplete v-model="filter.time" :items="time_option" outlined item-value="timeId"
-                                  dense :placeholder="$t('times')" cache-items @change="filterDateByCoach(coach_index)">
+                                <v-autocomplete
+                                  v-model="filter.time"
+                                  :items="time_option"
+                                  outlined
+                                  item-value="timeId"
+                                  dense
+                                  :placeholder="$t('times')"
+                                  cache-items
+                                  @change="filterDateByCoach(coach_index)"
+                                >
                                   <template v-slot:selection="{ item }">
                                     {{
                                       `${item.start} - ${item.end} ${$t(
@@ -419,17 +757,36 @@
                                   </template>
                                 </v-autocomplete>
                               </v-col>
-                              <v-col v-if="course_data.course_type_id == 'CT_1'">
-                                <v-autocomplete dense v-model="filter.package" outlined hide-details
-                                  item-text="packageName" item-value="packageId" :items="package_option"
-                                  :placeholder="$t('package')" @change="filterDateByCoach(coach_index)"></v-autocomplete>
+                              <v-col
+                                v-if="course_data.course_type_id == 'CT_1'"
+                              >
+                                <v-autocomplete
+                                  dense
+                                  v-model="filter.package"
+                                  outlined
+                                  hide-details
+                                  item-text="packageName"
+                                  item-value="packageId"
+                                  :items="package_option"
+                                  :placeholder="$t('package')"
+                                  @change="filterDateByCoach(coach_index)"
+                                ></v-autocomplete>
                               </v-col>
                               <v-col cols="auto">
-                                <v-btn color="#ff6b81" @click="resetFilter()" icon><v-icon>mdi-refresh</v-icon></v-btn>
+                                <v-btn
+                                  color="#ff6b81"
+                                  @click="resetFilter()"
+                                  icon
+                                  ><v-icon>mdi-refresh</v-icon></v-btn
+                                >
                               </v-col>
                             </v-row>
                             <!-- Herder -->
-                            <v-row dense class="mb-3 font-bold" v-if="coach.datesList?.length > 0">
+                            <v-row
+                              dense
+                              class="mb-3 font-bold"
+                              v-if="coach.datesList?.length > 0"
+                            >
                               <v-col cols="auto">
                                 <div style="width: 44px"></div>
                               </v-col>
@@ -439,83 +796,140 @@
                               <v-col cols="3" align="center">{{
                                 $t("class time")
                               }}</v-col>
-                              <v-col cols="3" align="center" v-if="course_data.course_type_id === 'CT_1'">{{ $t("package")
-                              }}</v-col>
+                              <v-col
+                                cols="3"
+                                align="center"
+                                v-if="course_data.course_type_id === 'CT_1'"
+                                >{{ $t("package") }}</v-col
+                              >
                               <v-col align="right"></v-col>
                             </v-row>
-                            <v-card v-if="coach.datesList?.length === 0" outlined class="my-3">
-                              <v-card-text class="text-lg font-bold" align="center">
+                            <v-card
+                              v-if="coach.datesList?.length === 0"
+                              outlined
+                              class="my-3"
+                            >
+                              <v-card-text
+                                class="text-lg font-bold"
+                                align="center"
+                              >
                                 {{ $t("student information not found") }}
                               </v-card-text>
                             </v-card>
                             <div v-if="coach.datesList?.length > 0">
-                              <div v-for="(date, index_date) in filterDateByCoach(
-                                coach_index
-                              )" :key="`${index_date}-date`">
-                                <v-card @click="selectSchedule(index_date, date, filterDateByCoach(coach_index))" outlined
-                                  class="rounded-lg cursor-pointer mb-3" dense>
+                              <div
+                                v-for="(date, index_date) in filterDateByCoach(
+                                  coach_index
+                                )"
+                                :key="`${index_date}-date`"
+                              >
+                                <v-card
+                                  @click="
+                                    selectSchedule(
+                                      index_date,
+                                      date,
+                                      filterDateByCoach(coach_index)
+                                    )
+                                  "
+                                  outlined
+                                  class="rounded-lg cursor-pointer mb-3"
+                                  dense
+                                >
                                   <v-card-text class="pa-2">
                                     <v-row dense class="d-flex align-center">
                                       <v-col cols="auto">
-                                        <v-btn icon @click="selectDateChecked(date)">
+                                        <v-btn
+                                          icon
+                                          @click="selectDateChecked(date)"
+                                        >
                                           <v-icon color="#ff6b81">{{
                                             date.checked
-                                            ? "mdi-checkbox-marked"
-                                            : "mdi-checkbox-blank-outline"
+                                              ? "mdi-checkbox-marked"
+                                              : "mdi-checkbox-blank-outline"
                                           }}</v-icon>
                                         </v-btn>
                                       </v-col>
-                                      <v-col cols="3" class="font-bold" align="center">{{
-                                        getDateFormattor(
-                                          date.date,
-                                          "DW DD MMT YYYYT"
-                                        )
-                                      }}
+                                      <v-col
+                                        cols="3"
+                                        class="font-bold"
+                                        align="center"
+                                        >{{
+                                          getDateFormattor(
+                                            date.date,
+                                            "DW DD MMT YYYYT"
+                                          )
+                                        }}
                                       </v-col>
-                                      <v-col cols="3" class="font-bold" align="center">
+                                      <v-col
+                                        cols="3"
+                                        class="font-bold"
+                                        align="center"
+                                      >
                                         {{ date.time }}
                                       </v-col>
-                                      <v-col cols="3" align="center" v-if="course_data.course_type_id === 'CT_1'
-                                        ">
-                                        <v-chip text-color="white" :color="date.cpo.packageId === 'PACK_1'
-                                            ? 'primary'
-                                            : date.cpo.packageId === 'PACK_2'
+                                      <v-col
+                                        cols="3"
+                                        align="center"
+                                        v-if="
+                                          course_data.course_type_id === 'CT_1'
+                                        "
+                                      >
+                                        <v-chip
+                                          text-color="white"
+                                          :color="
+                                            date.cpo.packageId === 'PACK_1'
+                                              ? 'primary'
+                                              : date.cpo.packageId === 'PACK_2'
                                               ? 'pink'
                                               : '#ED7D2B'
-                                          ">
+                                          "
+                                        >
                                           {{ date.cpo.packageName }}
                                         </v-chip>
                                       </v-col>
                                       <v-col align="right">
-                                        <v-icon>{{
-                                          selected_schedule === index_date
-                                          ? "mdi-chevron-up"
-                                          : "mdi-chevron-down"
-                                        }}
+                                        <v-icon
+                                          >{{
+                                            selected_schedule === index_date
+                                              ? "mdi-chevron-up"
+                                              : "mdi-chevron-down"
+                                          }}
                                         </v-icon>
                                       </v-col>
                                     </v-row>
                                   </v-card-text>
                                 </v-card>
                                 <v-expand-transition>
-                                  <div v-if="selected_schedule === index_date" class="px-3 mb-3">
+                                  <div
+                                    v-if="selected_schedule === index_date"
+                                    class="px-3 mb-3"
+                                  >
                                     <v-row dense v-if="student_list_is_loading">
                                       <v-col align="center">
-                                        <v-progress-circular indeterminate color="red"></v-progress-circular>
+                                        <v-progress-circular
+                                          indeterminate
+                                          color="red"
+                                        ></v-progress-circular>
                                       </v-col>
                                     </v-row>
                                     <template v-else>
-                                      <div v-if="student_list.filter(
-                                        (v) =>
-                                          v.cpo?.packageName ===
-                                          date.cpo?.packageName
-                                      ).length === 0 &&
-                                        coach.dateLists?.length === 0
-                                        ">
+                                      <div
+                                        v-if="
+                                          student_list.filter(
+                                            (v) =>
+                                              v.cpo?.packageName ===
+                                              date.cpo?.packageName
+                                          ).length === 0 &&
+                                          coach.dateLists?.length === 0
+                                        "
+                                      >
                                         <v-card dense outlined>
                                           <v-card-text>
                                             <v-row>
-                                              <v-col class="font-bold" align="center">
+                                              <v-col
+                                                class="font-bold"
+                                                align="center"
+                                              >
                                                 {{
                                                   $t(
                                                     "student information not found"
@@ -527,7 +941,10 @@
                                         </v-card>
                                       </div>
                                       <div v-else>
-                                        <v-row dense class="d-flex align-center mb-2">
+                                        <v-row
+                                          dense
+                                          class="d-flex align-center mb-2"
+                                        >
                                           <v-col>
                                             <v-divider></v-divider>
                                           </v-col>
@@ -540,20 +957,48 @@
                                         </v-row>
                                         <!-- STUDENT HEADER -->
                                         <v-card class="mb-2" flat dense>
-                                          <v-card-text class="pa-2 bg-[#FCE0E7] rounded-lg">
-                                            <v-row dense class="text-md font-bold">
-                                              <v-col cols="1" align="center">{{ $t("no.") }}</v-col>
-                                              <v-col cols align="center">{{ $t("first name") }} - {{ $t("last name") }}
+                                          <v-card-text
+                                            class="pa-2 bg-[#FCE0E7] rounded-lg"
+                                          >
+                                            <v-row
+                                              dense
+                                              class="text-md font-bold"
+                                            >
+                                              <v-col cols="1" align="center">{{
+                                                $t("no.")
+                                              }}</v-col>
+                                              <v-col cols align="center"
+                                                >{{ $t("first name") }} -
+                                                {{ $t("last name") }}
                                               </v-col>
-                                              <v-col cols="2" align="center" v-if="course_data.course_type_id === 'CT_1'">
+                                              <v-col
+                                                cols="2"
+                                                align="center"
+                                                v-if="
+                                                  course_data.course_type_id ===
+                                                  'CT_1'
+                                                "
+                                              >
                                                 {{ $t("period") }}
                                               </v-col>
-                                              <v-col v-if="course_data.course_type_id === 'CT_1'" cols="2"
-                                                align="center">
+                                              <v-col
+                                                v-if="
+                                                  course_data.course_type_id ===
+                                                  'CT_1'
+                                                "
+                                                cols="2"
+                                                align="center"
+                                              >
                                                 {{ $t("number of times") }}
                                               </v-col>
-                                              <v-col v-else cols="4" align="center">
-                                                {{ $t("start date - end date") }}
+                                              <v-col
+                                                v-else
+                                                cols="4"
+                                                align="center"
+                                              >
+                                                {{
+                                                  $t("start date - end date")
+                                                }}
                                               </v-col>
                                               <v-col cols>
                                                 {{ $t("status") }}
@@ -562,62 +1007,123 @@
                                             </v-row>
                                           </v-card-text>
                                         </v-card>
-                                        <div v-if="student_list.filter(
-                                          (v) =>
-                                            v.cpo?.packageName ===
-                                            date.cpo?.packageName
-                                        )?.length > 0
-                                          ">
-                                          <v-card class="mb-2" outlined dense v-for="(
+                                        <div
+                                          v-if="
+                                            student_list.filter(
+                                              (v) =>
+                                                v.cpo?.packageName ===
+                                                date.cpo?.packageName
+                                            )?.length > 0
+                                          "
+                                        >
+                                          <v-card
+                                            class="mb-2"
+                                            outlined
+                                            dense
+                                            v-for="(
                                               student, student_index
                                             ) in student_list.filter(
                                               (v) =>
                                                 v.cpo?.packageName ===
                                                 date.cpo?.packageName
-                                            )" :key="student_index">
+                                            )"
+                                            :key="student_index"
+                                          >
                                             <v-card-text class="pa-2">
-                                              <v-row dense class="text-md font-bold flex align-center">
-                                                <v-col cols="1" align="center">{{ student_index + 1 }}
+                                              <v-row
+                                                dense
+                                                class="text-md font-bold flex align-center"
+                                              >
+                                                <v-col cols="1" align="center"
+                                                  >{{ student_index + 1 }}
                                                 </v-col>
-                                                <v-col cols align="center">{{
-                                                  $i18n.locale == "th"
-                                                  ? `${student.firstNameTh} ${student.lastNameTh}`
-                                                  : `${student.firstNameEn} ${student.lastNameEn}`
-                                                }}
+                                                <v-col cols align="center"
+                                                  >{{
+                                                    $i18n.locale == "th"
+                                                      ? `${student.firstNameTh} ${student.lastNameTh}`
+                                                      : `${student.firstNameEn} ${student.lastNameEn}`
+                                                  }}
                                                 </v-col>
-                                                <v-col cols="4" align="center" v-if="course_data.course_type_id ==='CT_2'">
-                                                  {{`${date.startDate} - ${date.endDate}`}}
+                                                <v-col
+                                                  cols="4"
+                                                  align="center"
+                                                  v-if="
+                                                    course_data.course_type_id ===
+                                                    'CT_2'
+                                                  "
+                                                >
+                                                  {{
+                                                    `${date.startDate} - ${date.endDate}`
+                                                  }}
                                                 </v-col>
-                                                <v-col cols="2" align="center" v-else>{{
-                                                  $i18n.locale == "th"
-                                                  ? student.cpo?.optionName
-                                                  : student.cpo
-                                                    ?.optionNameEn
-                                                }}
+                                                <v-col
+                                                  cols="2"
+                                                  align="center"
+                                                  v-else
+                                                  >{{
+                                                    $i18n.locale == "th"
+                                                      ? student.cpo?.optionName
+                                                      : student.cpo
+                                                          ?.optionNameEn
+                                                  }}
                                                 </v-col>
-                                                <v-col cols="2" align="center" v-if="course_data.course_type_id ===
+                                                <v-col
+                                                  cols="2"
+                                                  align="center"
+                                                  v-if="
+                                                    course_data.course_type_id ===
                                                     'CT_1'
-                                                    ">
+                                                  "
+                                                >
                                                   {{ student.countCheckIn }}/{{
                                                     student.totalDay
                                                   }}
                                                 </v-col>
                                                 <v-col cols>
-                                                  <v-chip align="center" class="font-bold" :color="check_in_status_options.filter((v) => v.value === student.status)[0].bg_color
-                                                    " :style="`color:${check_in_status_options.filter((v) => v.value === student.status)[0].color}`" v-if="check_in_status_options.filter((v) => v.value === student.status)?.length > 0">
-                                                    {{$t(student.status)}}
+                                                  <v-chip
+                                                    align="center"
+                                                    class="font-bold"
+                                                    :color="
+                                                      check_in_status_options.filter(
+                                                        (v) =>
+                                                          v.value ===
+                                                          student.status
+                                                      )[0].bg_color
+                                                    "
+                                                    :style="`color:${
+                                                      check_in_status_options.filter(
+                                                        (v) =>
+                                                          v.value ===
+                                                          student.status
+                                                      )[0].color
+                                                    }`"
+                                                    v-if="
+                                                      check_in_status_options.filter(
+                                                        (v) =>
+                                                          v.value ===
+                                                          student.status
+                                                      )?.length > 0
+                                                    "
+                                                  >
+                                                    {{ $t(student.status) }}
                                                   </v-chip>
                                                 </v-col>
                                                 <v-col cols="4">
                                                   <v-row dense>
                                                     <v-col class="pa-0">
-                                                      <v-btn text class="px-1" color="#ff6b81" @click="
-                                                      showDialogAssessment(
-                                                        student,
-                                                        date
-                                                      )
-                                                        ">
-                                                        <v-icon>mdi-check-decagram-outline
+                                                      <v-btn
+                                                        text
+                                                        class="px-1"
+                                                        color="#ff6b81"
+                                                        @click="
+                                                          showDialogAssessment(
+                                                            student,
+                                                            date
+                                                          )
+                                                        "
+                                                      >
+                                                        <v-icon
+                                                          >mdi-check-decagram-outline
                                                         </v-icon>
                                                         {{
                                                           $t("view evaluation")
@@ -625,17 +1131,22 @@
                                                       </v-btn>
                                                     </v-col>
                                                     <v-col class="pa-0">
-                                                      <v-btn text @click="
-                                                      $router.push({
-                                                        name: 'UserDetail',
-                                                        params: {
-                                                          account_id:
-                                                            student.studentId,
-                                                          action: 'view',
-                                                          from: 'courseDetail',
-                                                        },
-                                                      })
-                                                        " class="px-1" color="#ff6b81">
+                                                      <v-btn
+                                                        text
+                                                        @click="
+                                                          $router.push({
+                                                            name: 'UserDetail',
+                                                            params: {
+                                                              account_id:
+                                                                student.studentId,
+                                                              action: 'view',
+                                                              from: 'courseDetail',
+                                                            },
+                                                          })
+                                                        "
+                                                        class="px-1"
+                                                        color="#ff6b81"
+                                                      >
                                                         <v-icon>
                                                           mdi-clipboard-text-search-outline
                                                         </v-icon>
@@ -650,47 +1161,83 @@
                                         </div>
                                         <!-- NO student check in -->
                                         <div v-else>
-                                          <v-card class="mb-2" outlined dense v-for="(
+                                          <v-card
+                                            class="mb-2"
+                                            outlined
+                                            dense
+                                            v-for="(
                                               student, student_index
-                                            ) in no_check_in_student_list" :key="`${student_index}-index`">
+                                            ) in no_check_in_student_list"
+                                            :key="`${student_index}-index`"
+                                          >
                                             <!-- {{student }} -->
                                             <v-card-text class="pa-2">
-                                              <v-row dense class="text-md font-bold flex align-center">
-                                                <v-col cols="1" align="center">{{ student_index + 1 }}
+                                              <v-row
+                                                dense
+                                                class="text-md font-bold flex align-center"
+                                              >
+                                                <v-col cols="1" align="center"
+                                                  >{{ student_index + 1 }}
                                                 </v-col>
-                                                <v-col cols align="center">{{
-                                                  $i18n.locale == "th"
-                                                  ? `${student.studentName}`
-                                                  : `${student.studentNameEn}`
-                                                }}
-                                                </v-col>
-
-                                                <v-col cols="2" align="center" v-if="course_data.course_type_id ===
-                                                    'CT_1'
-                                                    ">
-                                                  {{
+                                                <v-col cols align="center"
+                                                  >{{
                                                     $i18n.locale == "th"
-                                                    ? student.optionName
-                                                    : student.optionNameEn
+                                                      ? `${student.studentName}`
+                                                      : `${student.studentNameEn}`
                                                   }}
                                                 </v-col>
-                                                <v-col v-if="course_data.course_type_id === 'CT_1'" cols="2"
-                                                  align="center">
-                                                  {{ `${student.countCheckIn}/${student.totalDay}` }}
+
+                                                <v-col
+                                                  cols="2"
+                                                  align="center"
+                                                  v-if="
+                                                    course_data.course_type_id ===
+                                                    'CT_1'
+                                                  "
+                                                >
+                                                  {{
+                                                    $i18n.locale == "th"
+                                                      ? student.optionName
+                                                      : student.optionNameEn
+                                                  }}
                                                 </v-col>
-                                                <v-col v-else cols="4" align="center">
+                                                <v-col
+                                                  v-if="
+                                                    course_data.course_type_id ===
+                                                    'CT_1'
+                                                  "
+                                                  cols="2"
+                                                  align="center"
+                                                >
+                                                  {{
+                                                    `${student.countCheckIn}/${student.totalDay}`
+                                                  }}
+                                                </v-col>
+                                                <v-col
+                                                  v-else
+                                                  cols="4"
+                                                  align="center"
+                                                >
                                                   <span class="font-bold">{{
                                                     `${date.startDate} - ${date.endDate}`
                                                   }}</span>
                                                 </v-col>
                                                 <v-col>
-                                                  <span class="text-sm">{{ $t("no check in admin") }}</span>
+                                                  <span class="text-sm">{{
+                                                    $t("no check in admin")
+                                                  }}</span>
                                                 </v-col>
                                                 <v-col cols="4">
                                                   <v-row dense>
                                                     <v-col class="pa-0">
-                                                      <v-btn text class="px-1" color="#ff6b81" disabled>
-                                                        <v-icon>mdi-check-decagram-outline
+                                                      <v-btn
+                                                        text
+                                                        class="px-1"
+                                                        color="#ff6b81"
+                                                        disabled
+                                                      >
+                                                        <v-icon
+                                                          >mdi-check-decagram-outline
                                                         </v-icon>
                                                         {{
                                                           $t("view evaluation")
@@ -698,17 +1245,22 @@
                                                       </v-btn>
                                                     </v-col>
                                                     <v-col class="pa-0">
-                                                      <v-btn text @click="
-                                                      $router.push({
-                                                        name: 'UserDetail',
-                                                        params: {
-                                                          account_id:
-                                                            student.studentId,
-                                                          action: 'view',
-                                                          from: 'courseDetail',
-                                                        },
-                                                      })
-                                                        " class="px-1" color="#ff6b81">
+                                                      <v-btn
+                                                        text
+                                                        @click="
+                                                          $router.push({
+                                                            name: 'UserDetail',
+                                                            params: {
+                                                              account_id:
+                                                                student.studentId,
+                                                              action: 'view',
+                                                              from: 'courseDetail',
+                                                            },
+                                                          })
+                                                        "
+                                                        class="px-1"
+                                                        color="#ff6b81"
+                                                      >
                                                         <v-icon>
                                                           mdi-clipboard-text-search-outline
                                                         </v-icon>
@@ -737,19 +1289,23 @@
                 <v-tab-item valus="student booking">
                   <v-row dense v-if="course_data.reservation">
                     <v-col class="pr-3" cols="12" align="right">
-                      <v-btn 
+                      <v-btn
                         @click="UpdateReserveAll()"
-                        class="mb-3" 
-                        dense 
-                        dark 
-                        depressed 
+                        class="mb-3"
+                        dense
+                        dark
+                        depressed
                         color="#ff6b81"
                       >
-                         {{ $t("all contacted") }}
+                        {{ $t("all contacted") }}
                       </v-btn>
                     </v-col>
                   </v-row>
-                  <v-data-table class="header-table rounded-lg" :headers="column" :items="student_reserve_list">
+                  <v-data-table
+                    class="header-table rounded-lg"
+                    :headers="column"
+                    :items="student_reserve_list"
+                  >
                     <template v-slot:no-data>
                       <v-row dense>
                         <v-col align="center">
@@ -760,40 +1316,56 @@
                     <template v-slot:[`item.fullname`]="{ item }">
                       {{
                         $i18n.locale == "th"
-                        ? `${item.firstNameTh} ${item.lastNameTh}`
-                        : `${item.firsNameEn} ${item.lastNameEn}`
+                          ? `${item.firstNameTh} ${item.lastNameTh}`
+                          : `${item.firsNameEn} ${item.lastNameEn}`
                       }}
                     </template>
                     <template v-slot:[`item.course_name`]="{ item }">
                       {{ `${item.courseNameTh}(${item.courseNameEn})` }}
                     </template>
                     <template v-slot:[`item.package`]="{ item }">
-                      {{
-                        `${item.packageName}-${$i18n.locale == "th"
-                            ? item.optionName
-                            : item.optionNameEn
-                          }/${dayOfWeekArray(item.dayOfWeekName)}${item.startTime
-                          }-${item.endTime}`
-                      }}
+                    {{
+                    (item.packageName !== null && item.packageName !== undefined &&
+                    item.optionName !== null && item.optionName !== undefined &&
+                    item.optionNameEn !== null && item.optionNameEn !== undefined &&
+                    item.dayOfWeekName !== null && item.dayOfWeekName !== undefined &&
+                    item.startTime !== null && item.startTime !== undefined &&
+                    item.endTime !== null && item.endTime !== undefined)
+                  ? `${item.packageName}-${
+                      $i18n.locale == 'th'
+                        ? item.optionName
+                        : item.optionNameEn
+                    }/${dayOfWeekArray(item.dayOfWeekName)}${
+                      item.startTime
+                    }-${item.endTime}`
+                  : '-'
+                    }}
                     </template>
                     <template v-slot:[`item.coach`]="{ item }">
                       {{
                         $i18n.locale == "th"
-                        ? `${item.coachFirstNameTh} ${item.coachLastNameTh}`
-                        : `${item.coachFirsNameEn} ${item.coachLastNameEn}`
+                          ? `${item.coachFirstNameTh} ${item.coachLastNameTh}`
+                          : `${item.coachFirsNameEn} ${item.coachLastNameEn}`
                       }}
                     </template>
                     <template v-slot:[`item.createdDate`]="{ item }">
                       {{ genDate(item.createdDate) }}
                     </template>
                     <template v-slot:[`item.status`]="{ item }">
-                      <v-chip class="w-full flex justify-center" label :text-color="item.status === 'contacted' ? '#58A144' : '#FCC419'
-                        " :color="item.status === 'contacted' ? '#F0F9EE' : '#FFF9E8'
-                        ">{{
-                        item.status === "waiting"
-                        ? $t("waiting for contact")
-                        : $t(item.status)
-                      }}
+                      <v-chip
+                        class="w-full flex justify-center"
+                        label
+                        :text-color="
+                          item.status === 'contacted' ? '#58A144' : '#FCC419'
+                        "
+                        :color="
+                          item.status === 'contacted' ? '#F0F9EE' : '#FFF9E8'
+                        "
+                        >{{
+                          item.status === "waiting"
+                            ? $t("waiting for contact")
+                            : $t(item.status)
+                        }}
                       </v-chip>
                       <!-- <v-select
                         v-model="item.status"
@@ -838,25 +1410,42 @@
                           $t("coach list")
                         }}</v-col>
                         <v-col cols="auto">
-                          <v-text-field v-model="search_student_potential" class="bg-white rounded-lg" dense outlined
-                            hide-details :placeholder="$t('search for student name, coach name')
-                              " prepend-inner-icon="mdi-magnify" @input="searchStudentPotential(search_student_potential)"></v-text-field>
+                          <v-text-field
+                            v-model="search_student_potential"
+                            class="bg-white rounded-lg"
+                            dense
+                            outlined
+                            hide-details
+                            :placeholder="
+                              $t('search for student name, coach name')
+                            "
+                            prepend-inner-icon="mdi-magnify"
+                            @input="
+                              searchStudentPotential(search_student_potential)
+                            "
+                          ></v-text-field>
                         </v-col>
                       </v-row>
                     </v-card-text>
                   </v-card>
                   <v-row dense v-if="coach_list_is_loading">
                     <v-col align="center">
-                      <v-progress-circular indeterminate color="red"></v-progress-circular>
+                      <v-progress-circular
+                        indeterminate
+                        color="red"
+                      ></v-progress-circular>
                     </v-col>
                   </v-row>
                   <template v-else>
-                    <div v-if="search_student_potential
-                        ? search_student_potential_datas?.length === 0
-                        : coach_list.filter(
-                          (v) => v.studentPotentialArr?.length > 0
-                        ).length === 0
-                      ">
+                    <div
+                      v-if="
+                        search_student_potential
+                          ? search_student_potential_datas?.length === 0
+                          : coach_list.filter(
+                              (v) => v.studentPotentialArr?.length > 0
+                            ).length === 0
+                      "
+                    >
                       <v-card dense outlined>
                         <v-card-text>
                           <v-row>
@@ -868,12 +1457,18 @@
                       </v-card>
                     </div>
                     <template v-else>
-                      <div v-for="(coach, coach_index) in search_student_potential
-                        ? search_student_potential_datas
-                        : coachListPotential(coach_list)"
-                        :key="`${coach_index}-potential_index`">
-                        <v-card @click="seletedCoachPotential(coach, coach_index)" outlined dense
-                          class="rounded-lg cursor-pointer mb-3 bg-[#FCFCFC]">
+                      <div
+                        v-for="(coach, coach_index) in search_student_potential
+                          ? search_student_potential_datas
+                          : coachListPotential(coach_list)"
+                        :key="`${coach_index}-potential_index`"
+                      >
+                        <v-card
+                          @click="seletedCoachPotential(coach, coach_index)"
+                          outlined
+                          dense
+                          class="rounded-lg cursor-pointer mb-3 bg-[#FCFCFC]"
+                        >
                           <v-card-text class="pa-2">
                             <v-row dense class="d-flex align-center">
                               <v-col cols="auto">
@@ -883,26 +1478,36 @@
                                 {{ $t("coach") }}:
                                 {{
                                   $i18n.locale == "th"
-                                  ? `${coach.coachName}`
-                                  : `${coach.coachNameEn}`
+                                    ? `${coach.coachName}`
+                                    : `${coach.coachNameEn}`
                                 }}
                               </v-col>
                               <v-col cols="auto">
-                                <v-icon>{{
-                                  selected_coach_potential === coach_index
-                                  ? "mdi-chevron-up"
-                                  : "mdi-chevron-down"
-                                }}
+                                <v-icon
+                                  >{{
+                                    selected_coach_potential === coach_index
+                                      ? "mdi-chevron-up"
+                                      : "mdi-chevron-down"
+                                  }}
                                 </v-icon>
                               </v-col>
                             </v-row>
                           </v-card-text>
                         </v-card>
                         <v-expand-transition>
-                          <div v-if="selected_coach_potential === coach_index" class="pa-3 bg-[#FCFCFC] rounded-b-lg">
-                            <v-row dense v-if="student_potential_list_is_loading">
+                          <div
+                            v-if="selected_coach_potential === coach_index"
+                            class="pa-3 bg-[#FCFCFC] rounded-b-lg"
+                          >
+                            <v-row
+                              dense
+                              v-if="student_potential_list_is_loading"
+                            >
                               <v-col align="center">
-                                <v-progress-circular indeterminate color="red"></v-progress-circular>
+                                <v-progress-circular
+                                  indeterminate
+                                  color="red"
+                                ></v-progress-circular>
                               </v-col>
                             </v-row>
                             <div v-else>
@@ -932,42 +1537,59 @@
                                   </v-col>
                                 </v-row>
                                 <v-card class="mb-2" flat dense>
-                                  <v-card-text class="pa-2 bg-[#FCE0E7] rounded-lg">
+                                  <v-card-text
+                                    class="pa-2 bg-[#FCE0E7] rounded-lg"
+                                  >
                                     <v-row dense class="text-md font-bold">
                                       <v-col cols="1" align="center">{{
                                         $t("no.")
                                       }}</v-col>
-                                      <v-col cols align="center">{{
-                                        $t("first name") +
-                                        " - " +
-                                        $t("last name")
-                                      }}
+                                      <v-col cols align="center"
+                                        >{{
+                                          $t("first name") +
+                                          " - " +
+                                          $t("last name")
+                                        }}
                                       </v-col>
-                                      <v-col cols="2" align="center">{{ $t("period") }}
+                                      <v-col cols="2" align="center"
+                                        >{{ $t("period") }}
                                       </v-col>
-                                      <v-col cols="2" align="center">{{ $t("number of times") }}
+                                      <v-col cols="2" align="center"
+                                        >{{ $t("number of times") }}
                                       </v-col>
                                       <v-col cols="4"></v-col>
                                     </v-row>
                                   </v-card-text>
                                 </v-card>
                                 <div v-if="student_potential_list?.length > 0">
-                                  <v-card class="mb-2" outlined dense v-for="(
+                                  <v-card
+                                    class="mb-2"
+                                    outlined
+                                    dense
+                                    v-for="(
                                       potential, potential_index
-                                    ) in student_potential_list" :key="`${potential_index}-potential`">
+                                    ) in student_potential_list"
+                                    :key="`${potential_index}-potential`"
+                                  >
                                     <v-card-text class="pa-2">
-                                      <v-row dense class="text-md font-bold flex align-center">
-                                        <v-col cols="1" align="center">{{ potential_index + 1 }}
+                                      <v-row
+                                        dense
+                                        class="text-md font-bold flex align-center"
+                                      >
+                                        <v-col cols="1" align="center"
+                                          >{{ potential_index + 1 }}
                                         </v-col>
-                                        <v-col cols align="center">{{
-                                          `${potential.firstNameTh} ${potential.lastNameTh}`
-                                        }}
+                                        <v-col cols align="center"
+                                          >{{
+                                            `${potential.firstNameTh} ${potential.lastNameTh}`
+                                          }}
                                         </v-col>
-                                        <v-col cols="2" align="center">{{
-                                          $i18n.locale == "th"
-                                          ? potential.cpo?.optionName
-                                          : potential.cpo?.optionNameEn
-                                        }}
+                                        <v-col cols="2" align="center"
+                                          >{{
+                                            $i18n.locale == "th"
+                                              ? potential.cpo?.optionName
+                                              : potential.cpo?.optionNameEn
+                                          }}
                                         </v-col>
                                         <v-col cols="2" align="center">
                                           {{ potential.countCheckIn }}/{{
@@ -977,28 +1599,39 @@
                                         <v-col cols="4">
                                           <v-row dense>
                                             <v-col class="pa-0">
-                                              <v-btn text class="px-1" color="#ff6b81" @click="
-                                              showDialogAssessment(
-                                                potential
-                                              )
-                                                ">
-                                                <v-icon>mdi-check-decagram-outline
+                                              <v-btn
+                                                text
+                                                class="px-1"
+                                                color="#ff6b81"
+                                                @click="
+                                                  showDialogAssessment(
+                                                    potential
+                                                  )
+                                                "
+                                              >
+                                                <v-icon
+                                                  >mdi-check-decagram-outline
                                                 </v-icon>
                                                 {{ $t("view evaluation") }}
                                               </v-btn>
                                             </v-col>
                                             <v-col class="pa-0">
-                                              <v-btn text @click="
-                                                $router.push({
-                                                  name: 'UserDetail',
-                                                  params: {
-                                                    account_id:
-                                                      potential.studentId,
-                                                    action: 'view',
-                                                    from: 'courseDetail',
-                                                  },
-                                                })
-                                                " class="px-1" color="#ff6b81">
+                                              <v-btn
+                                                text
+                                                @click="
+                                                  $router.push({
+                                                    name: 'UserDetail',
+                                                    params: {
+                                                      account_id:
+                                                        potential.studentId,
+                                                      action: 'view',
+                                                      from: 'courseDetail',
+                                                    },
+                                                  })
+                                                "
+                                                class="px-1"
+                                                color="#ff6b81"
+                                              >
                                                 <v-icon>
                                                   mdi-clipboard-text-search-outline
                                                 </v-icon>
@@ -1025,13 +1658,19 @@
         </v-card-text>
       </v-card>
       <!-- DIALOG ASSESSMENT -->
-      <v-dialog width="60vw" v-if="show_dialog_assessmet" v-model="show_dialog_assessmet">
+      <v-dialog
+        width="60vw"
+        v-if="show_dialog_assessmet"
+        v-model="show_dialog_assessmet"
+      >
         <v-card>
           <v-card-text class="pa-2">
             <v-row dense>
               <v-col></v-col>
               <v-col class="pa-0" cols="auto">
-                <v-btn icon color="red" @click="closeDialogAssessment()"><v-icon>mdi-close</v-icon></v-btn>
+                <v-btn icon color="red" @click="closeDialogAssessment()"
+                  ><v-icon>mdi-close</v-icon></v-btn
+                >
               </v-col>
             </v-row>
             <v-row dense class="mb-3">
@@ -1039,16 +1678,22 @@
                 {{ $t("assessment") }}
               </v-col>
             </v-row>
-            <v-card v-if="student_data_assessment?.checkInPotentialId"  
+            <v-card
+              v-if="student_data_assessment?.checkInPotentialId"
               class="mb-3"
               outlined
             >
               <v-card-text>
                 <v-row>
                   <v-col cols="auto">
-                    <v-img width="40" height="40" src="@/assets/course/potential.png"></v-img>
+                    <v-img
+                      width="40"
+                      height="40"
+                      src="@/assets/course/potential.png"
+                    ></v-img>
                   </v-col>
-                  <v-col cols class="font-bold text-lg">{{ $t("assess the overview") }}
+                  <v-col cols class="font-bold text-lg"
+                    >{{ $t("assess the overview") }}
                   </v-col>
                 </v-row>
                 <v-row>
@@ -1060,55 +1705,87 @@
                         </v-row>
                         <v-row dense>
                           <v-col>
-                            <v-select outlined dense v-model="student_data_assessment.evolution"
-                              :items="evolution_options" hide-details readonly>
+                            <v-select
+                              outlined
+                              dense
+                              v-model="student_data_assessment.evolution"
+                              :items="evolution_options"
+                              hide-details
+                              readonly
+                            >
                               <template v-slot:item="{ item }">
                                 <v-list-item-content>
                                   <v-list-item-title>
-                                    <v-rating readonly :length="item.num_value" :value="item.num_value"
-                                      color="#ff6b81"></v-rating>
+                                    <v-rating
+                                      readonly
+                                      :length="item.num_value"
+                                      :value="item.num_value"
+                                      color="#ff6b81"
+                                    ></v-rating>
                                   </v-list-item-title>
                                 </v-list-item-content>
                               </template>
                               <template v-slot:selection="{ item }">
-                                <v-rating readonly :length="item.num_value" :value="item.num_value"
-                                  color="#ff6b81"></v-rating>
+                                <v-rating
+                                  readonly
+                                  :length="item.num_value"
+                                  :value="item.num_value"
+                                  color="#ff6b81"
+                                ></v-rating>
                               </template>
                             </v-select>
                           </v-col>
                         </v-row>
                         <v-row dense>
                           <v-col>
-                            <span class="text-[#999999]"> {{ $t("interest level") }}: </span>
+                            <span class="text-[#999999]">
+                              {{ $t("interest level") }}:
+                            </span>
                             {{ student_data_assessment.Interest || "-" }}
                           </v-col>
                         </v-row>
                         <v-row dense>
                           <v-col>
-                            <span class="text-[#999999]">{{ $t("comments") }}: </span>
+                            <span class="text-[#999999]"
+                              >{{ $t("comments") }}:
+                            </span>
                             {{ student_data_assessment.remark || "-" }}
                           </v-col>
                         </v-row>
                         <v-row dense>
                           <v-col cols="12">
                             <b>{{ $t("attachments") }}: </b>
-                            <v-card outlined @click="openFile(file.attachmentFiles)" flat class="mb-3" v-for="(
+                            <v-card
+                              outlined
+                              @click="openFile(file.attachmentFiles)"
+                              flat
+                              class="mb-3"
+                              v-for="(
                                 file, index_file
-                              ) in student_data_assessment.attachmentPotential" :key="index_file">
-                              <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
+                              ) in student_data_assessment.attachmentPotential"
+                              :key="index_file"
+                            >
+                              <v-card-text
+                                class="border-2 border-[#ff6b81] rounded-lg"
+                              >
                                 <v-row>
                                   <v-col align="center">
-                                    <imgFileType :mime_type="file.filesType"></imgFileType>
+                                    <imgFileType
+                                      :mime_type="file.filesType"
+                                    ></imgFileType>
                                   </v-col>
                                   <v-col cols="12" sm="10" align="start">
                                     <span class="font-bold">{{
                                       file.originalFilesName
-                                    }}</span><br />
-                                    <span class="text-caption">{{ $t("file size") }} :
+                                    }}</span
+                                    ><br />
+                                    <span class="text-caption"
+                                      >{{ $t("file size") }} :
                                       {{
                                         (file.filesSize / 1000000).toFixed(2)
                                       }}
-                                      MB</span>
+                                      MB</span
+                                    >
                                   </v-col>
                                 </v-row>
                               </v-card-text>
@@ -1122,8 +1799,11 @@
               </v-card-text>
             </v-card>
             <div v-if="student_data_assessment?.assessment?.length > 0">
-              <v-card class="mb-3" v-for="(assess, index) in student_data_assessment?.assessment"
-                :key="`${index}-assess`">
+              <v-card
+                class="mb-3"
+                v-for="(assess, index) in student_data_assessment?.assessment"
+                :key="`${index}-assess`"
+              >
                 <v-card-text>
                   <v-row dense>
                     <v-col cols="auto">
@@ -1142,16 +1822,24 @@
                       }}
                     </v-col>
                     <v-col cols="auto">
-                      <v-chip class="font-bold" :color="check_in_status_options.filter(
-                        (v) => v.value === assess.status
-                      )[0].bg_color
-                        " :style="`color:${check_in_status_options.filter(
-                        (v) => v.value === assess.status
-                      )[0].color
-                        }`" v-if="check_in_status_options.filter(
+                      <v-chip
+                        class="font-bold"
+                        :color="
+                          check_in_status_options.filter(
+                            (v) => v.value === assess.status
+                          )[0].bg_color
+                        "
+                        :style="`color:${
+                          check_in_status_options.filter(
+                            (v) => v.value === assess.status
+                          )[0].color
+                        }`"
+                        v-if="
+                          check_in_status_options.filter(
                             (v) => v.value === assess.status
                           )?.length > 0
-                          ">{{
+                        "
+                        >{{
                           $t(
                             check_in_status_options.filter(
                               (v) => v.value === assess.status
@@ -1166,18 +1854,33 @@
                   </v-row>
                   <v-row dense>
                     <v-col>
-                      <v-select outlined dense v-model="assess.assessment.evolution" :items="evolution_options"
-                        hide-details readonly>
+                      <v-select
+                        outlined
+                        dense
+                        v-model="assess.assessment.evolution"
+                        :items="evolution_options"
+                        hide-details
+                        readonly
+                      >
                         <template v-slot:item="{ item }">
                           <v-list-item-content>
                             <v-list-item-title>
-                              <v-rating readonly :length="item.num_value" :value="item.num_value"
-                                color="#ff6b81"></v-rating>
+                              <v-rating
+                                readonly
+                                :length="item.num_value"
+                                :value="item.num_value"
+                                color="#ff6b81"
+                              ></v-rating>
                             </v-list-item-title>
                           </v-list-item-content>
                         </template>
                         <template v-slot:selection="{ item }">
-                          <v-rating readonly :length="item.num_value" :value="item.num_value" color="#ff6b81"></v-rating>
+                          <v-rating
+                            readonly
+                            :length="item.num_value"
+                            :value="item.num_value"
+                            color="#ff6b81"
+                          ></v-rating>
                         </template>
                       </v-select>
                     </v-col>
@@ -1187,41 +1890,68 @@
                   </v-row>
                   <v-row dense>
                     <v-col>
-                      <v-select outlined dense v-model="assess.assessment.interest" :items="interest_options" hide-details
-                        readonly>
+                      <v-select
+                        outlined
+                        dense
+                        v-model="assess.assessment.interest"
+                        :items="interest_options"
+                        hide-details
+                        readonly
+                      >
                         <template v-slot:item="{ item }">
                           <v-list-item-content>
                             <v-list-item-title>
-                              <v-rating readonly :length="item.num_value" :value="item.num_value"
-                                color="#ff6b81"></v-rating>
+                              <v-rating
+                                readonly
+                                :length="item.num_value"
+                                :value="item.num_value"
+                                color="#ff6b81"
+                              ></v-rating>
                             </v-list-item-title>
                           </v-list-item-content>
                         </template>
                         <template v-slot:selection="{ item }">
-                          <v-rating readonly :length="item.num_value" :value="item.num_value" color="#ff6b81"></v-rating>
+                          <v-rating
+                            readonly
+                            :length="item.num_value"
+                            :value="item.num_value"
+                            color="#ff6b81"
+                          ></v-rating>
                         </template>
                       </v-select>
                     </v-col>
                   </v-row>
                   <v-row dense>
                     <v-col>
-                      <span class="text-[#999999]"> {{ $t("comments") }}: </span>{{ assess.assessment.remark }}
+                      <span class="text-[#999999]"> {{ $t("comments") }}: </span
+                      >{{ assess.assessment.remark }}
                     </v-col>
                   </v-row>
-                  <v-card outlined @click="openFile(file.attFiles)" flat class="mb-3"
-                    v-for="(file, index_file) in assess.assessment.attachment" :key="index_file">
+                  <v-card
+                    outlined
+                    @click="openFile(file.attFiles)"
+                    flat
+                    class="mb-3"
+                    v-for="(file, index_file) in assess.assessment.attachment"
+                    :key="index_file"
+                  >
                     <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                       <v-row>
                         <v-col align="center">
-                          <imgFileType :mime_type="file.filesType"></imgFileType>
+                          <imgFileType
+                            :mime_type="file.filesType"
+                          ></imgFileType>
                         </v-col>
                         <v-col cols="12" sm="10" align="start">
                           <span class="font-bold">{{
                             file.originalFilesName
-                          }}</span><br />
-                          <span class="text-caption">{{ $t("file size") }} :
+                          }}</span
+                          ><br />
+                          <span class="text-caption"
+                            >{{ $t("file size") }} :
                             {{ (file.filesSize / 1000000).toFixed(2) }}
-                            MB</span>
+                            MB</span
+                          >
                         </v-col>
                       </v-row>
                     </v-card-text>
@@ -1251,20 +1981,30 @@
                       }}
                     </v-col>
                     <v-col cols="auto">
-                      <v-chip class="font-bold" :color="check_in_status_options.filter(
-                        (v) => v.value === student_data_assessment.status
-                      )[0].bg_color
-                        " :style="`color:${check_in_status_options.filter((v) => v.value === student_data_assessment.status)[0].color
-                          }`" v-if="check_in_status_options.filter(
+                      <v-chip
+                        class="font-bold"
+                        :color="
+                          check_in_status_options.filter(
+                            (v) => v.value === student_data_assessment.status
+                          )[0].bg_color
+                        "
+                        :style="`color:${
+                          check_in_status_options.filter(
+                            (v) => v.value === student_data_assessment.status
+                          )[0].color
+                        }`"
+                        v-if="
+                          check_in_status_options.filter(
+                            (v) => v.value === student_data_assessment.status
+                          )?.length > 0
+                        "
+                        >{{
+                          $t(
+                            check_in_status_options.filter(
                               (v) => v.value === student_data_assessment.status
-                            )?.length > 0
-                            ">{{
-                            $t(
-                              check_in_status_options.filter(
-                                (v) => v.value === student_data_assessment.status
-                              )[0].label
-                            )
-                          }}
+                            )[0].label
+                          )
+                        }}
                       </v-chip>
                     </v-col>
                   </v-row>
@@ -1273,18 +2013,33 @@
                   </v-row>
                   <v-row dense>
                     <v-col>
-                      <v-select outlined dense v-model="student_data_assessment.assessment.evolution"
-                        :items="evolution_options" hide-details readonly>
+                      <v-select
+                        outlined
+                        dense
+                        v-model="student_data_assessment.assessment.evolution"
+                        :items="evolution_options"
+                        hide-details
+                        readonly
+                      >
                         <template v-slot:item="{ item }">
                           <v-list-item-content>
                             <v-list-item-title>
-                              <v-rating readonly :length="item.num_value" :value="item.num_value"
-                                color="#ff6b81"></v-rating>
+                              <v-rating
+                                readonly
+                                :length="item.num_value"
+                                :value="item.num_value"
+                                color="#ff6b81"
+                              ></v-rating>
                             </v-list-item-title>
                           </v-list-item-content>
                         </template>
                         <template v-slot:selection="{ item }">
-                          <v-rating readonly :length="item.num_value" :value="item.num_value" color="#ff6b81"></v-rating>
+                          <v-rating
+                            readonly
+                            :length="item.num_value"
+                            :value="item.num_value"
+                            color="#ff6b81"
+                          ></v-rating>
                         </template>
                       </v-select>
                     </v-col>
@@ -1294,42 +2049,69 @@
                   </v-row>
                   <v-row dense>
                     <v-col>
-                      <v-select outlined dense v-model="student_data_assessment.assessment.interest"
-                        :items="interest_options" hide-details readonly>
+                      <v-select
+                        outlined
+                        dense
+                        v-model="student_data_assessment.assessment.interest"
+                        :items="interest_options"
+                        hide-details
+                        readonly
+                      >
                         <template v-slot:item="{ item }">
                           <v-list-item-content>
                             <v-list-item-title>
-                              <v-rating readonly :length="item.num_value" :value="item.num_value"
-                                color="#ff6b81"></v-rating>
+                              <v-rating
+                                readonly
+                                :length="item.num_value"
+                                :value="item.num_value"
+                                color="#ff6b81"
+                              ></v-rating>
                             </v-list-item-title>
                           </v-list-item-content>
                         </template>
                         <template v-slot:selection="{ item }">
-                          <v-rating readonly :length="item.num_value" :value="item.num_value" color="#ff6b81"></v-rating>
+                          <v-rating
+                            readonly
+                            :length="item.num_value"
+                            :value="item.num_value"
+                            color="#ff6b81"
+                          ></v-rating>
                         </template>
                       </v-select>
                     </v-col>
                   </v-row>
                   <v-row dense>
                     <v-col>
-                      <span class="text-[#999999]"> {{ $t("comments") }}: </span>{{
-                        student_data_assessment.assessment.remark }}
+                      <span class="text-[#999999]"> {{ $t("comments") }}: </span
+                      >{{ student_data_assessment.assessment.remark }}
                     </v-col>
                   </v-row>
-                  <v-card outlined @click="openFile(file.attFiles)" flat class="mb-3" v-for="(file, index_file) in student_data_assessment
-                    .assessment.attachment" :key="index_file">
+                  <v-card
+                    outlined
+                    @click="openFile(file.attFiles)"
+                    flat
+                    class="mb-3"
+                    v-for="(file, index_file) in student_data_assessment
+                      .assessment.attachment"
+                    :key="index_file"
+                  >
                     <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
                       <v-row>
                         <v-col align="center">
-                          <imgFileType :mime_type="file.filesType"></imgFileType>
+                          <imgFileType
+                            :mime_type="file.filesType"
+                          ></imgFileType>
                         </v-col>
                         <v-col cols="12" sm="10" align="start">
                           <span class="font-bold">{{
                             file.originalFilesName
-                          }}</span><br />
-                          <span class="text-caption">{{ $t("file size") }} :
+                          }}</span
+                          ><br />
+                          <span class="text-caption"
+                            >{{ $t("file size") }} :
                             {{ (file.filesSize / 1000000).toFixed(2) }}
-                            MB</span>
+                            MB</span
+                          >
                         </v-col>
                       </v-row>
                     </v-card-text>
@@ -1337,34 +2119,50 @@
                 </v-card-text>
               </v-card>
             </div>
-            <v-card outlined class="mb-3" v-if="!student_data_assessment?.potential &&
-              student_data_assessment?.assessment?.length == 0
-              ">
+            <v-card
+              outlined
+              class="mb-3"
+              v-if="
+                !student_data_assessment?.potential &&
+                student_data_assessment?.assessment?.length == 0
+              "
+            >
               <v-card-text>
                 <v-row dense>
-                  <v-col align="center">{{ $t("assessment not found") }}
+                  <v-col align="center"
+                    >{{ $t("assessment not found") }}
                   </v-col>
                 </v-row>
               </v-card-text>
             </v-card>
             <v-row dense>
               <v-col align="center">
-                <v-btn color="#ff6b81" @click="closeDialogAssessment()" depressed dark class="btn-size-lg">{{ $t("agree")
-                }}</v-btn>
+                <v-btn
+                  color="#ff6b81"
+                  @click="closeDialogAssessment()"
+                  depressed
+                  dark
+                  class="btn-size-lg"
+                  >{{ $t("agree") }}</v-btn
+                >
               </v-col>
             </v-row>
           </v-card-text>
         </v-card>
       </v-dialog>
       <!-- EXPORT : STUDENT -->
-      <v-dialog width="40vw" v-if="show_dialog_export_student" v-model="show_dialog_export_student">
+      <v-dialog
+        width="40vw"
+        v-if="show_dialog_export_student"
+        v-model="show_dialog_export_student"
+      >
         <v-card>
           <v-card-title>
             <v-row>
               <v-col>
-                {{ $t('language') }}
+                {{ $t("language") }}
               </v-col>
-              <v-col cols=auto>
+              <v-col cols="auto">
                 <v-btn icon @click="show_dialog_export_student = false">
                   <v-icon color="#ff6b81">mdi-close</v-icon>
                 </v-btn>
@@ -1382,8 +2180,14 @@
             </v-row>
             <v-row>
               <v-col>
-                <v-btn class="w-full" depressed color="#ff6b81" dark @click="exportStudents(exportStudentLang)">
-                  {{ $t('export') }}
+                <v-btn
+                  class="w-full"
+                  depressed
+                  color="#ff6b81"
+                  dark
+                  @click="exportStudents(exportStudentLang)"
+                >
+                  {{ $t("export") }}
                 </v-btn>
               </v-col>
             </v-row>
@@ -1391,14 +2195,18 @@
         </v-card>
       </v-dialog>
       <!-- EXPORT : END STUDENT -->
-      <v-dialog width="40vw" v-if="show_dialog_export_end_student" v-model="show_dialog_export_end_student">
+      <v-dialog
+        width="40vw"
+        v-if="show_dialog_export_end_student"
+        v-model="show_dialog_export_end_student"
+      >
         <v-card>
           <v-card-title>
             <v-row>
               <v-col>
-                {{ $t('language') }}
+                {{ $t("language") }}
               </v-col>
-              <v-col cols=auto>
+              <v-col cols="auto">
                 <v-btn icon @click="show_dialog_export_end_student = false">
                   <v-icon color="#ff6b81">mdi-close</v-icon>
                 </v-btn>
@@ -1416,8 +2224,14 @@
             </v-row>
             <v-row>
               <v-col>
-                <v-btn class="w-full" depressed color="#ff6b81" dark @click="exportStudentsEndCourse(exportStudentLang)">
-                  {{ $t('export') }}
+                <v-btn
+                  class="w-full"
+                  depressed
+                  color="#ff6b81"
+                  dark
+                  @click="exportStudentsEndCourse(exportStudentLang)"
+                >
+                  {{ $t("export") }}
                 </v-btn>
               </v-col>
             </v-row>
@@ -1425,14 +2239,18 @@
         </v-card>
       </v-dialog>
       <!-- EXPORT : RESERVE -->
-      <v-dialog width="40vw" v-if="show_dialog_export_reserve_student" v-model="show_dialog_export_reserve_student">
+      <v-dialog
+        width="40vw"
+        v-if="show_dialog_export_reserve_student"
+        v-model="show_dialog_export_reserve_student"
+      >
         <v-card>
           <v-card-title>
             <v-row>
               <v-col>
-                {{ $t('language') }}
+                {{ $t("language") }}
               </v-col>
-              <v-col cols=auto>
+              <v-col cols="auto">
                 <v-btn icon @click="show_dialog_export_reserve_student = false">
                   <v-icon color="#ff6b81">mdi-close</v-icon>
                 </v-btn>
@@ -1450,8 +2268,14 @@
             </v-row>
             <v-row>
               <v-col>
-                <v-btn class="w-full" depressed color="#ff6b81" dark @click="exportStudentsReserveCourse(exportStudentLang)">
-                  {{ $t('export') }}
+                <v-btn
+                  class="w-full"
+                  depressed
+                  color="#ff6b81"
+                  dark
+                  @click="exportStudentsReserveCourse(exportStudentLang)"
+                >
+                  {{ $t("export") }}
                 </v-btn>
               </v-col>
             </v-row>
@@ -1568,13 +2392,14 @@ export default {
     select_export_end: false,
     show_dialog_export_student: false,
     show_dialog_export_end_student: false,
-    show_dialog_export_reserve_student : false,
+    show_dialog_export_reserve_student: false,
   }),
-  mounted() { },
+  mounted() {},
   watch: {
     student_tab: function () {
+      const course_id = this.$route.params.course_id;
       this.GetStudentReserveByCourseId({
-        course_id: this.$route.params.course_id,
+        course_id: course_id,
       });
     },
     course_artwork: function () {
@@ -1613,7 +2438,7 @@ export default {
       student_potential_list_is_loading:
         "CourseModules/getStudentPotentialListIsLoading",
       no_check_in_student_list: "CourseModules/getNoChackInStudentList",
-      export_is_loading: "CourseModules/export_is_loading"
+      export_is_loading: "CourseModules/export_is_loading",
     }),
     breadcrumbs() {
       return [
@@ -1719,30 +2544,30 @@ export default {
       RemovePrivilageByCourseID: "CourseModules/RemovePrivilageByCourseID",
       ExportStudentList: "CourseModules/ExportStudentList",
       ExportEndStudentList: "CourseModules/ExportEndStudentList",
-      ExportReserveCourse : "CourseModules/ExportReserveCourse",
-      UpdateStatusReserveAdmin : "reserveCourseModules/UpdateStatusReserveAdmin",
-      UpdateAllStatusReserve : "reserveCourseModules/UpdateAllStatusReserve",
+      ExportReserveCourse: "CourseModules/ExportReserveCourse",
+      UpdateStatusReserveAdmin: "reserveCourseModules/UpdateStatusReserveAdmin",
+      UpdateAllStatusReserve: "reserveCourseModules/UpdateAllStatusReserve",
     }),
-    UpdateReserveAll(){
-      if( this.course_data.course_status === "Active" ){
+    UpdateReserveAll() {
+      if (this.course_data.course_status === "Active") {
         Swal.fire({
           icon: "question",
           title: this.$t("do you want to change your status?"),
           showDenyButton: false,
           showCancelButton: true,
           cancelButtonText: this.$t("no"),
-          confirmButtonText: this.$t("agree"),  
+          confirmButtonText: this.$t("agree"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             await this.UpdateAllStatusReserve({
-              courseId : this.$route.params.course_id,
-            })
+              courseId: this.$route.params.course_id,
+            });
             await this.GetStudentReserveByCourseId({
               course_id: this.$route.params.course_id,
             });
           }
-        })
-      }else{
+        });
+      } else {
         Swal.fire({
           icon: "error",
           title: this.$t("something went wrong"),
@@ -1751,23 +2576,22 @@ export default {
           timerProgressBar: true,
           showCancelButton: false,
           showConfirmButton: false,
-        }).then(()=>{
+        }).then(() => {
           this.GetStudentReserveByCourseId({
             course_id: this.$route.params.course_id,
           });
-        })
+        });
       }
-        
     },
     updateReserve(reserve_id, reserve_data) {
-      if( this.course_data.course_status === "Active" ){
+      if (this.course_data.course_status === "Active") {
         Swal.fire({
           icon: "question",
           title: this.$t("do you want to change your status?"),
           showDenyButton: false,
           showCancelButton: true,
           cancelButtonText: this.$t("no"),
-          confirmButtonText: this.$t("agree"),  
+          confirmButtonText: this.$t("agree"),
         }).then(async (result) => {
           if (result.isConfirmed) {
             this.UpdateStatusReserveAdmin({
@@ -1775,8 +2599,8 @@ export default {
               reserve_data: reserve_data,
             });
           }
-        })
-      }else{
+        });
+      } else {
         Swal.fire({
           icon: "error",
           title: this.$t("something went wrong"),
@@ -1785,15 +2609,18 @@ export default {
           timerProgressBar: true,
           showCancelButton: false,
           showConfirmButton: false,
-        }).then(()=>{
+        }).then(() => {
           this.GetStudentReserveByCourseId({
             course_id: this.$route.params.course_id,
           });
-        })
+        });
       }
     },
     DisableButtonExport() {
-      return this.search_student_potential ? !this.search_student_potential_datas.length > 0 : !this.coach_list.filter((v) => v.studentPotentialArr?.length > 0).length > 0
+      return this.search_student_potential
+        ? !this.search_student_potential_datas.length > 0
+        : !this.coach_list.filter((v) => v.studentPotentialArr?.length > 0)
+            .length > 0;
     },
     searchStudentPotential(search) {
       let coach_list_search = [];
@@ -1944,23 +2771,23 @@ export default {
         course_id: this.$route.params.course_id,
         course_name: this.course_data.course_name_th,
         course_type_id: this.course_data.course_type_id,
-        lang
+        lang,
       });
     },
     //EXPORT STUDENT RESERVE
-    exportStudentsReserveCourse(lang){
+    exportStudentsReserveCourse(lang) {
       this.ExportReserveCourse({
-        studentReserveList : this.student_reserve_list,
-        lang
-      })
+        studentReserveList: this.student_reserve_list,
+        lang,
+      });
     },
     //EXPORT STUDENT END COURSES
     exportStudentsEndCourse(lang) {
       this.ExportEndStudentList({
         coach_list: this.coach_list,
         course_id: this.$route.params.course_id,
-        lang
-      })
+        lang,
+      });
     },
     readFile(file) {
       return `${process.env.VUE_APP_URL}/api/v1/files/${file}`;
@@ -2004,6 +2831,9 @@ export default {
       data.checked = !data.checked;
     },
     dayOfWeekArray(day) {
+        if (!day) {
+        return "";
+      }
       let days = day.split(",");
       const weekdays = [
         this.$t("sunday"),
@@ -2213,10 +3043,11 @@ export default {
 
               let payload = {
                 notificationName: "แจ้งเตือนเลื่อนวันเปิดเรียน",
-                notificationDescription: `คอร์ส ${this.course_data.course_name_th
-                  } เลื่อนเป็นวันที่ ${new Date(
-                    student_list.afterDate
-                  )?.toLocaleDateString("th-TH", options)}`,
+                notificationDescription: `คอร์ส ${
+                  this.course_data.course_name_th
+                } เลื่อนเป็นวันที่ ${new Date(
+                  student_list.afterDate
+                )?.toLocaleDateString("th-TH", options)}`,
                 accountId: student_list.students,
                 path: null,
               };
@@ -2229,18 +3060,20 @@ export default {
         });
       }
     },
-    coachListPotential(coach_list){
-      let coachList = []
-      const coachs = coach_list.filter(v => v.studentPotentialArr?.length > 0)
-      if(coachs.length > 0){
-        for (const coach of coachs){
+    coachListPotential(coach_list) {
+      let coachList = [];
+      const coachs = coach_list.filter(
+        (v) => v.studentPotentialArr?.length > 0
+      );
+      if (coachs.length > 0) {
+        for (const coach of coachs) {
           // console.log(coach)
-          if(!coachList.some(v => v.coachId == coach.coachId)){
-            coachList.push(coach)
+          if (!coachList.some((v) => v.coachId == coach.coachId)) {
+            coachList.push(coach);
           }
         }
       }
-      return coachList
+      return coachList;
     },
     CourseUpdateCoach() {
       this.$refs.coach_form.validate();
@@ -2391,7 +3224,7 @@ export default {
         end_time: date.end,
         time_id: date.timeId,
         coach_id: date.coachId,
-        coach_data
+        coach_data,
       });
       if (this.selected_schedule !== index) {
         this.selected_schedule = index;

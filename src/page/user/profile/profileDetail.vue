@@ -80,13 +80,14 @@
             v-model="profile_detail.nicknameTh"
             outlined
             dense
+            :rules="rules.nickName"
             :disabled="!isEnabled"
           >
           </v-text-field>
         </v-col>
         <!-- nationality -->
         <!-- @keydown="validate($event, 'th-special')" -->
-        <v-col cols="12" sm="6">
+        <!-- <v-col cols="12" sm="6">
           <label-custom :text="$t('nationality')"></label-custom>
           <v-text-field
             placeholder="-"
@@ -97,7 +98,7 @@
             color="#ff6b81"
           >
           </v-text-field>
-        </v-col>
+        </v-col> -->
         <v-col cols="12" sm="6">
           <label-custom :text="$t('phone number')"></label-custom>
           <v-text-field
@@ -146,6 +147,7 @@
             color="#ff6B81"
             item-color="#ff6b81"
             outlined
+            :rules="rules.class"
             :disabled="!isEnabled"
             dense
           >
@@ -733,6 +735,37 @@ export default {
             (val || "").length < 20 ||
             "โปรดระบุรหัสผ่านความยาวไม่เกิน 20 ตัวอักษร",
           (val) => !/[ ]/g.test(val) || "ชื่อผู้ใช้ต้องไม่มีอักขระพิเศษ",
+        ],
+        nickName: [
+          (val) =>
+            (val || "").length > 1 ||
+            this.$t(
+              "please enter your nickName with a length of at least 2 characters"
+            ),
+          (val) =>
+            (val || "").length < 20 ||
+            this.$t(
+              "please enter your nickName length not exceeding 20 characters"
+            ),
+          // (val) =>
+          //   /[ก-๏\s]/g.test(val) || this.$t("please enter your thai name"),
+          // (val) =>
+          //   !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+          //   this.$t("please enter your thai name"),
+        ],
+        class: [
+          (val) =>
+            (val || "").length > 1 || this.$t("please select your class"),
+          // (val) =>
+          //   (val || "").length < 20 ||
+          //   this.$t(
+          //     "please enter your nickName length not exceeding 20 characters"
+          //   ),
+          // (val) =>
+          //   /[ก-๏\s]/g.test(val) || this.$t("please enter your thai name"),
+          // (val) =>
+          //   !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+          //   this.$t("please enter your thai name"),
         ],
         confirm_password: (val) =>
           (val && val.length > 7) ||
