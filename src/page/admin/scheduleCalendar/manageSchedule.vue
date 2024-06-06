@@ -5,7 +5,7 @@
     <headerPage :title="$t('manage tables')"></headerPage>
     <v-row class="py-2">
       <v-col cols="12" sm="8" class="w-full">
-        <v-text-field
+        <!-- <v-text-field
           dense
           class="w-full"
           outlined
@@ -15,7 +15,7 @@
           v-model="search"
           prepend-inner-icon="mdi-magnify"
           @keyup="GetSearchSchedule(search)"
-        ></v-text-field>
+        ></v-text-field> -->
       </v-col>
       <v-col cols="6" sm="2" align="center" class="w-full">
         <v-btn
@@ -61,7 +61,7 @@
         md="8"
         sm="8"
       >
-        <calendarAdmin></calendarAdmin>
+        <calendarAdmin :searchFilter="search"></calendarAdmin>
       </v-col>
       <v-col cols="12" md="4" sm="4">
         <v-card class="my-3 pa-2 max-h-[300px] overflow-auto rounded-lg">

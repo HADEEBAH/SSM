@@ -325,7 +325,7 @@ const manageScheduleModules = {
       }
     },
 
-    async GetDataInSchedule(context, { month, year }) {
+    async GetDataInSchedule(context, { month, year, search }) {
       let dataInSchadule = [];
       context.commit("SetGetAllHolidaysIsLoading", true)
       try {
@@ -338,7 +338,9 @@ const manageScheduleModules = {
         };
         // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/admincourse/courseholiday`, config);
         // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/courseholiday`, config);
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/courseholiday-limit?month=${month}&year=${year}`, config);
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/schedule/courseholiday-limit?month=${month}&year=${year}&search=${search}`, config);
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/courseholiday-limit?month=${month}&year=${year}&search=${search}`, config);
 
         if (data.statusCode === 200) {
           let eventSchadule = [];

@@ -1851,7 +1851,7 @@ const orderModules = {
           await Swal.fire({
             icon: "success",
             title: VueI18n.t("succeed"),
-            text: VueI18n.t("created scedule and check in"),
+            text: VueI18n.t("saved successfully"),
             timer: 3000,
             showDenyButton: false,
             showCancelButton: false,
