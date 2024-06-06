@@ -685,7 +685,7 @@
         <v-col cols="12" sm="6">
           <v-btn
             v-if="
-              course_order.time && course_order.coach_id
+              course_order?.time && course_order?.coach_id
                 ? GenMonitors() === 'Close'
                 : false
             "
@@ -694,6 +694,19 @@
             elevation="0"
             dense
             @click="CreateReserve"
+            :color="disable_checkout ? '#C4C4C4' : '#ff6b81'"
+            >{{ $t("reserve") }}</v-btn
+          >
+         <v-btn
+            v-else-if="course_data?.course_status === 'Reserve'
+            ? GenMonitors() === 'Close'
+                : false
+            "
+            class="w-full white--text"
+            :disabled="validateButton || ValidateReserve()"
+            elevation="0"
+            dense
+             @click="CreateReserve"
             :color="disable_checkout ? '#C4C4C4' : '#ff6b81'"
             >{{ $t("reserve") }}</v-btn
           >

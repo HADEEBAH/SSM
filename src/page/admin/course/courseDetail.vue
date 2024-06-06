@@ -2397,8 +2397,9 @@ export default {
   mounted() {},
   watch: {
     student_tab: function () {
+      const course_id = this.$route.params.course_id;
       this.GetStudentReserveByCourseId({
-        course_id: this.$route.params.course_id,
+        course_id: course_id,
       });
     },
     course_artwork: function () {
@@ -2830,6 +2831,9 @@ export default {
       data.checked = !data.checked;
     },
     dayOfWeekArray(day) {
+        if (!day) {
+        return "";
+      }
       let days = day.split(",");
       const weekdays = [
         this.$t("sunday"),
