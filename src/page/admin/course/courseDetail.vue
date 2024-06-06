@@ -1324,15 +1324,22 @@
                       {{ `${item.courseNameTh}(${item.courseNameEn})` }}
                     </template>
                     <template v-slot:[`item.package`]="{ item }">
-                      {{
-                        `${item.packageName}-${
-                          $i18n.locale == "th"
-                            ? item.optionName
-                            : item.optionNameEn
-                        }/${dayOfWeekArray(item.dayOfWeekName)}${
-                          item.startTime
-                        }-${item.endTime}`
-                      }}
+                    {{
+                    (item.packageName !== null && item.packageName !== undefined &&
+                    item.optionName !== null && item.optionName !== undefined &&
+                    item.optionNameEn !== null && item.optionNameEn !== undefined &&
+                    item.dayOfWeekName !== null && item.dayOfWeekName !== undefined &&
+                    item.startTime !== null && item.startTime !== undefined &&
+                    item.endTime !== null && item.endTime !== undefined)
+                  ? `${item.packageName}-${
+                      $i18n.locale == 'th'
+                        ? item.optionName
+                        : item.optionNameEn
+                    }/${dayOfWeekArray(item.dayOfWeekName)}${
+                      item.startTime
+                    }-${item.endTime}`
+                  : '-'
+                    }}
                     </template>
                     <template v-slot:[`item.coach`]="{ item }">
                       {{
