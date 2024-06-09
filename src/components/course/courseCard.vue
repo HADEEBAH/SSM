@@ -847,7 +847,7 @@
                   :outlined="!disable"
                   :filled="disable"
                   readonly
-                  :placeholder="$t('specify the reservation date range')"
+                  :placeholder="$t('please select a reservation start date')"
                   v-bind="attrs"
                   v-on="on"
                   color="#ff6b81"
@@ -888,7 +888,7 @@
                   :filled="disable"
                   dense
                   readonly
-                  :placeholder="$t('specify the reservation date range')"
+                  :placeholder="$t('please select a reservation end date')"
                   v-bind="attrs"
                   v-on="on"
                   color="#ff6b81"

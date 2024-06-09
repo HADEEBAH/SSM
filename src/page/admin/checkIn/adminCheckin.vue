@@ -515,10 +515,19 @@ export default {
   },
   watch: {
     searchCourse(val) {
-      if (val?.length > 3) {
+      if (val !== "") {
         this.loadingFilter = true;
         this.SearchCourses({
           search: val,
+        }).then(() => {
+          this.loadingFilter = false;
+        });
+      } else {
+        // console.log("val :>> ", val);
+
+        this.loadingFilter = true;
+        this.SearchCourses({
+          search: "",
         }).then(() => {
           this.loadingFilter = false;
         });
@@ -533,6 +542,15 @@ export default {
           time: "",
           dayOfWeek: "",
         };
+      } else {
+        console.log("val :>> ", val);
+        this.SearchCoach({ courseId: "" });
+        this.filter = {
+          course: "",
+          coach: "",
+          time: "",
+          dayOfWeek: "",
+        };
       }
     },
     "filter.coach": function (val) {
@@ -540,6 +558,11 @@ export default {
         this.SearchDayOfWeek({
           courseId: this.filter.course,
           coachId: val,
+        });
+      } else {
+        this.SearchDayOfWeek({
+          courseId: "",
+          coachId: "",
         });
       }
     },
@@ -549,6 +572,12 @@ export default {
           courseId: this.filter.course,
           coachId: this.filter.coach,
           dowId: val,
+        });
+      } else {
+        this.SearchTime({
+          courseId: "",
+          coachId: "",
+          dowId: "",
         });
       }
     },

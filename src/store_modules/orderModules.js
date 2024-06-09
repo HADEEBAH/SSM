@@ -392,9 +392,9 @@ const orderModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        // let localhost = "http://localhost:3000"
-        // let { data } = await axios.get(`${localhost}/api/v1/adminpayment/finance?search=${name}&limit=${limit}&page=${page}&status=${status}`, config)
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/finance?search=${name}&limit=${limit}&page=${page}&status=${status}`, config)
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${localhost}/api/v1/adminpayment/finance?search=${name}&limit=${limit}&page=${page}&status=${status}`, config)
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/finance?search=${name}&limit=${limit}&page=${page}&status=${status}`, config)
 
         if (data.statusCode === 200) {
 
@@ -424,9 +424,37 @@ const orderModules = {
                 let mm = cutTime?.slice(2, 4);
                 order.paid_date = `${formatted}`
                 order.paid_time = `${HH + ":" + mm}`
+              } else if (order.payment_status === "cancel") {
+                let inputDate = order.updatedDate
+                let cutTime = order.updatedTime
+                const year = parseInt(inputDate?.substring(0, 4));
+                const month = parseInt(inputDate?.substring(4, 6));
+                const day = inputDate?.substring(6, 8);
+                const formatted = `${year}-${month}-${day}`;
+                let HH = cutTime?.slice(0, 2);
+                let mm = cutTime?.slice(2, 4);
+                order.cancel_date = `${formatted}`
+                order.cancel_time = `${HH + ":" + mm}`
+                // paid date & time
+                if (order.payment?.paymentDate) {
+                  let inputDatePaid = order.payment?.paymentDate
+                  let cutTimePaid = order.payment?.paymentTime
+                  const yearPaid = parseInt(inputDatePaid?.substring(0, 4));
+                  const monthPaid = parseInt(inputDatePaid?.substring(4, 6));
+                  const dayPaid = inputDatePaid?.substring(6, 8);
+                  const formattedPaid = `${yearPaid}-${monthPaid}-${dayPaid}`;
+                  let HHPaid = cutTimePaid?.slice(0, 2);
+                  let mmPaid = cutTimePaid?.slice(2, 4);
+                  order.paid_date = `${formattedPaid}`
+                  order.paid_time = `${HHPaid + ":" + mmPaid}`
+                }
+
+
               } else {
                 order.paid_date = ""
                 order.paid_time = ""
+                order.cancel_date = ""
+                order.cancel_time = ""
               }
               // order.course_name = `${order.course?.courseNameTh}(${order.course?.courseNameEn})`;
               order.course_nameTh = order.course?.courseNameTh;
@@ -1481,7 +1509,10 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        const { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/order/cancel-order/${order_number}`, config)
+        let localhost = "http://localhost:3002"
+
+        const { data } = await axios.delete(`${localhost}/api/v1/order/cancel-order/${order_number}`, config)
+        // const { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/order/cancel-order/${order_number}`, config)
         if (data.statusCode === 200) {
           await Swal.fire({
             icon: "success",
@@ -1524,7 +1555,7 @@ const orderModules = {
       }
     },
     // RESERVE COURSE
-    async CreateReserveCourse(context, { course_data }) {
+    async CreateReserveCourse(context, { course_data, profile_id }) {
       try {
         let count = 0;
         let CheckStudentIsWaraphat = true
@@ -1546,18 +1577,20 @@ const orderModules = {
             }
             if (CheckStudentIsWaraphat) {
               for await (let student of course_data.students) {
+
                 let payload = {
                   studentId: student.account_id,
                   coursePackageOptionId: null,
                   dayOfWeekId: null,
                   timeId: null,
                   courseId: course_data.course_id,
-                  parentId: null,
+                  parentId: profile_id,
                   coachId: course_data.coach_id ? course_data.coach_id : null,
                   orderTmpId: null,
                   IsWaraphat: student.IsWaraphat,
                   username: student.username,
                 };
+
                 if (course_data.course_type_id === "CT_1") {
                   payload.dayOfWeekId = course_data?.time?.timeData
                     ? course_data.time.timeData.filter(
@@ -1580,7 +1613,8 @@ const orderModules = {
                   },
                 };
                 let { data } = await axios.post(
-                  `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
+                  `http://localhost:3002/api/v1/order/reserve/create`,
+                  // `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
                   payload,
                   config
                 );
@@ -1618,12 +1652,13 @@ const orderModules = {
                 dayOfWeekId: null,
                 timeId: null,
                 courseId: course_data.course_id,
-                parentId: null,
+                parentId: profile_id,
                 coachId: course_data.coach_id ? course_data.coach_id : null,
                 orderTmpId: null,
                 IsWaraphat: student.IsWaraphat,
                 username: student.username,
               };
+
               if (course_data.course_type_id === "CT_1") {
                 payload.dayOfWeekId = course_data?.time?.timeData
                   ? course_data.time.timeData.filter(
@@ -1646,7 +1681,9 @@ const orderModules = {
                 },
               };
               let { data } = await axios.post(
-                `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
+                `http://localhost:3002/api/v1/order/reserve/create`,
+
+                // `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
                 payload,
                 config
               );

@@ -179,16 +179,19 @@
                 </v-row>
               </v-card-text>
             </v-card>
-            <v-btn
-              class="w-full"
-              depressed
-              @click="save()"
-              :disabled="!valid"
-              :dark="valid"
-              :color="!valid ? '' : '#ff6b81'"
-            >
-              {{ $t("save") }}
-            </v-btn>
+            <v-row>
+              <v-col cols="12" align="end">
+                <v-btn
+                  depressed
+                  @click="save()"
+                  :disabled="!valid"
+                  :dark="valid"
+                  :color="!valid ? '' : '#ff6b81'"
+                >
+                  {{ $t("save") }}
+                </v-btn>
+              </v-col>
+            </v-row>
           </template>
         </v-col>
       </v-row>
@@ -235,7 +238,7 @@ export default {
       order_number_detail: "OrderModules/getOrderNumberDetail",
     }),
     ruleSelectDate() {
-      return [(val) => (val || "").length > 0 || this.$t("enter last time")];
+      return [(val) => (val || "").length > 0 || this.$t("enter last date")];
     },
     RulesLastTime() {
       const maxRemain = this.getMaxRemain();
