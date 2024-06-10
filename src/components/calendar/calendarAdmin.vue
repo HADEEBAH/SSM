@@ -366,11 +366,15 @@ export default {
       GetDataInSchedule: "ManageScheduleModules/GetDataInSchedule",
     }),
     GetSchedule({ start, search }) {
+      // console.log("start :>> ", start);
       if (!search) {
         this.GetDataInSchedule({
           month: start.month,
           year: start.year,
-          search: this.search,
+          search: this.search ? this.search : "",
+          courseId: "",
+          coachId: "",
+          status: "",
         });
         this.dateSelected.month = start.month;
         this.dateSelected.year = start.year;
@@ -378,9 +382,18 @@ export default {
         this.GetDataInSchedule({
           month: start.month,
           year: start.year,
-          search,
+          search: this.search ? this.search : "",
+          courseId: "",
+          coachId: "",
+          status: "",
         });
       }
+      this.$emit(
+        "schedule-data",
+        this.dateSelected.month,
+        this.dateSelected.year,
+        search
+      );
     },
     convertDate(item) {
       const oriDate = new Date(item);

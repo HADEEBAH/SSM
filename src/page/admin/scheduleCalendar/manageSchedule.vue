@@ -61,7 +61,7 @@
         md="8"
         sm="8"
       >
-        <calendarAdmin :searchFilter="search"></calendarAdmin>
+        <calendarAdmin @schedule-data="handleScheduleData"></calendarAdmin>
       </v-col>
       <v-col cols="12" md="4" sm="4">
         <v-card class="my-3 pa-2 max-h-[300px] overflow-auto rounded-lg">
@@ -950,6 +950,9 @@ export default {
     courseToday: [],
     resultSearchSchedule: null,
     form_dialog: false,
+    select_month: "",
+    select_year: "",
+    select_search: "",
   }),
 
   created() {
@@ -974,11 +977,24 @@ export default {
       ResetFilte: "ManageScheduleModules/ResetFilte",
       ResetSearch: "ManageScheduleModules/ResetSearch",
     }),
+    handleScheduleData(month, year, search) {
+      this.select_month = month;
+      this.select_year = year;
+      this.select_search = search;
+    },
     ClarData() {
       this.ResetFilte();
+      // this.GetDataInSchedule({
+      //   month: new Date().getMonth() + 1,
+      //   year: new Date().getFullYear(),
+      // });
       this.GetDataInSchedule({
-        month: new Date().getMonth() + 1,
-        year: new Date().getFullYear(),
+        month: this.select_month,
+        year: this.select_year,
+        search: this.select_search ? this.select_search : "",
+        courseId: "",
+        coachId: "",
+        status: "",
       });
       this.filter_dialog = false;
       this.selectedCourseType = [];
@@ -1057,7 +1073,15 @@ export default {
     },
 
     async filterSchedules(courseId, coachId, status) {
-      this.GetFilterSchedule({ courseId, coachId, status });
+      // this.GetFilterSchedule({ courseId, coachId, status });
+      this.GetDataInSchedule({
+        month: this.select_month,
+        year: this.select_year,
+        search: this.select_search ? this.select_search : "",
+        courseId: courseId,
+        coachId: coachId,
+        status: status,
+      });
       this.filter_dialog = false;
     },
 
@@ -1085,9 +1109,17 @@ export default {
             );
             if (data.statusCode === 200) {
               (this.show_dialog_edit_holoday = false), this.GetAllHolidays();
+              // this.GetDataInSchedule({
+              //   month: new Date().getMonth() + 1,
+              //   year: new Date().getFullYear(),
+              // });
               this.GetDataInSchedule({
-                month: new Date().getMonth() + 1,
-                year: new Date().getFullYear(),
+                month: this.select_month,
+                year: this.select_year,
+                search: this.select_search ? this.select_search : "",
+                courseId: "",
+                coachId: "",
+                status: "",
               });
               Swal.fire({
                 icon: "success",
@@ -1164,9 +1196,17 @@ export default {
               this.holidayEndTime = "";
               this.nameHoliday = "";
               this.GetAllHolidays();
+              // this.GetDataInSchedule({
+              //   month: new Date().getMonth() + 1,
+              //   year: new Date().getFullYear(),
+              // });
               this.GetDataInSchedule({
-                month: new Date().getMonth() + 1,
-                year: new Date().getFullYear(),
+                month: this.select_month,
+                year: this.select_year,
+                search: this.select_search ? this.select_search : "",
+                courseId: "",
+                coachId: "",
+                status: "",
               });
               this.holidaydatesTh = "";
 
@@ -1286,9 +1326,17 @@ export default {
               let payload = {};
               payload = { ...this.setDataEditDialog };
               this.GetEditHolidays(payload);
+              // this.GetDataInSchedule({
+              //   month: new Date().getMonth() + 1,
+              //   year: new Date().getFullYear(),
+              // });
               this.GetDataInSchedule({
-                month: new Date().getMonth() + 1,
-                year: new Date().getFullYear(),
+                month: this.select_month,
+                year: this.select_year,
+                search: this.select_search ? this.select_search : "",
+                courseId: "",
+                coachId: "",
+                status: "",
               });
               this.show_dialog_edit_holoday = false;
               this.editHolidayDates = null;
