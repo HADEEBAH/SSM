@@ -363,13 +363,9 @@ const manageScheduleModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/admincourse/courseholiday`, config);
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/courseholiday`, config);
-        let localhost = "http://localhost:3000"
-        // let { data } = await axios.get(`${localhost}/api/v1/schedule/courseholiday-limit?${queryParams}`, config);
-        // let { data } = await axios.get(`${localhost}/api/v1/schedule/courseholiday-limit?month=${month}&year=${year}&search=${search}`, config);
-        let { data } = await axios.get(`${localhost}/api/v1/schedule/courseholiday-limit?month=${month}&year=${year}&search=${search}${queryCourseId}${queryCoachId}${queryStatus}`, config);
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/courseholiday-limit?month=${month}&year=${year}&search=${search}&courseId=${courseId}&coachId=${coachId}&status=${status}`, config);
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/schedule/courseholiday-limit?month=${month}&year=${year}&search=${search}${queryCourseId}${queryCoachId}${queryStatus}`, config);
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/courseholiday-limit?month=${month}&year=${year}&search=${search}${queryCourseId}${queryCoachId}${queryStatus}`, config);
 
         if (data.statusCode === 200) {
           let eventSchadule = [];
