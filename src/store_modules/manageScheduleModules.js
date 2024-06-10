@@ -456,9 +456,9 @@ const manageScheduleModules = {
           }
           params.push(`${key[index]}=${query[items].join(`&&${key[index]}=`)}`);
         });
-        let localhost = "http://localhost:3000"
-        const endpoint = `${localhost}/api/v1/schedule/filter-schedule?${params.join("&&")}`
-        // const endpoint = `${process.env.VUE_APP_URL}/api/v1/schedule/filter-schedule?${params.join("&&")}`
+        // let localhost = "http://localhost:3000"
+        // const endpoint = `${localhost}/api/v1/schedule/filter-schedule?${params.join("&&")}`
+        const endpoint = `${process.env.VUE_APP_URL}/api/v1/schedule/filter-schedule?${params.join("&&")}`
         let { data } = await axios.get(endpoint, config);
         const res = data.data;
 
