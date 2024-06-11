@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col cols="6">
-        <headerPage :title="$t('manage check in later')" slot_tag />
+        <headerPage :title="$t('check in later by order number')" slot_tag />
       </v-col>
     </v-row>
     <v-row>
@@ -98,6 +98,8 @@
         </v-card>
       </v-col>
     </v-row>
+    {{ seletedCourse }}
+    {{ type }}
     <v-form ref="form" v-model="valid">
       <v-row v-if="seletedCourse">
         <v-col>
@@ -377,16 +379,16 @@ export default {
           .join(", ");
       }
     },
-    save() {
+    async save() {
       if (this.$refs.form.validate()) {
-        this.UpdateScheduleAndCheckIn({
+        await this.UpdateScheduleAndCheckIn({
           orderNumber: this.orderNumder,
           orderItemId: this.seletedCourse,
           lastTime: this.lastTime,
           type: this.type,
           endDate: this.endClassDate,
         });
-        this.lastTime = "";
+        this.type = "";
       }
     },
   },
