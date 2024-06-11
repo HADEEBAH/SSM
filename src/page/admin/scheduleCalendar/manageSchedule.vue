@@ -5,6 +5,17 @@
     <headerPage :title="$t('manage tables')"></headerPage>
     <v-row class="py-2">
       <v-col cols="12" sm="8" class="w-full">
+        <v-text-field
+          dense
+          class="w-full"
+          outlined
+          :label="$t('search')"
+          color="pink"
+          hide-details
+          v-model="filter_search"
+          prepend-inner-icon="mdi-magnify"
+          @keypress.enter="filterSchedules()"
+        ></v-text-field>
         <!-- <v-text-field
           dense
           class="w-full"
@@ -856,6 +867,7 @@ export default {
     headerPage,
   },
   data: () => ({
+    filter_search: "",
     dialog: true,
     search: "",
     thaiDaysOfWeek: [
@@ -994,10 +1006,11 @@ export default {
       this.GetDataInSchedule({
         month: this.select_month,
         year: this.select_year,
-        search: this.select_search ? this.select_search : "",
-        courseId: "",
-        coachId: "",
-        status: "",
+        // search: this.select_search ? this.select_search : "",
+        search: this.filter_search,
+        courseId: [],
+        coachId: [],
+        status: [],
       });
       this.filter_dialog = false;
       this.selectedCourseType = [];
@@ -1075,15 +1088,21 @@ export default {
       );
     },
 
-    async filterSchedules(courseId, coachId, status) {
+    async filterSchedules() {
+      // courseId, coachId, status
+
       // this.GetFilterSchedule({ courseId, coachId, status });
       this.GetDataInSchedule({
         month: this.select_month,
         year: this.select_year,
-        search: this.select_search ? this.select_search : "",
-        courseId: courseId,
-        coachId: coachId,
-        status: status,
+        // search: this.select_search ? this.select_search : "",
+        search: this.filter_search,
+        courseId: this.selectedCourse,
+        coachId: this.selectedCoach,
+        status: this.selectedCourseType,
+        // courseId: courseId,
+        // coachId: coachId,
+        // status: status,
       });
       this.filter_dialog = false;
     },
@@ -1119,10 +1138,12 @@ export default {
               this.GetDataInSchedule({
                 month: this.select_month,
                 year: this.select_year,
-                search: this.select_search ? this.select_search : "",
-                courseId: "",
-                coachId: "",
-                status: "",
+                // search: this.select_search ? this.select_search : "",
+                search: this.filter_search,
+
+                courseId: this.selectedCourse,
+                coachId: this.selectedCoach,
+                status: this.selectedCourseType,
               });
               Swal.fire({
                 icon: "success",
@@ -1206,10 +1227,11 @@ export default {
               this.GetDataInSchedule({
                 month: this.select_month,
                 year: this.select_year,
-                search: this.select_search ? this.select_search : "",
-                courseId: "",
-                coachId: "",
-                status: "",
+                // search: this.select_search ? this.select_search : "",
+                search: this.filter_search,
+                courseId: this.selectedCourse,
+                coachId: this.selectedCoach,
+                status: this.selectedCourseType,
               });
               this.holidaydatesTh = "";
 
@@ -1336,10 +1358,11 @@ export default {
               this.GetDataInSchedule({
                 month: this.select_month,
                 year: this.select_year,
-                search: this.select_search ? this.select_search : "",
-                courseId: "",
-                coachId: "",
-                status: "",
+                // search: this.select_search ? this.select_search : "",
+                search: this.filter_search,
+                courseId: this.selectedCourse,
+                coachId: this.selectedCoach,
+                status: this.selectedCourseType,
               });
               this.show_dialog_edit_holoday = false;
               this.editHolidayDates = null;

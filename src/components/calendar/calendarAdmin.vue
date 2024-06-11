@@ -1,10 +1,7 @@
 
 <template>
   <v-container>
-    <v-row class="mt-[-94px]">
-      <!-- {{ searchCourse }} <br />
-      {{ searchCourseType }} <br />
-      {{ searchChose }} -->
+    <!-- <v-row class="mt-[-94px]">
       <v-col class="w-full">
         <v-text-field
           dense
@@ -18,7 +15,7 @@
           @keypress.enter="GetSchedule({ start: dateSelected, search: $event })"
         ></v-text-field>
       </v-col>
-    </v-row>
+    </v-row> -->
     <v-card-title>
       <v-row>
         <v-col cols="auto">
