@@ -346,14 +346,12 @@ const manageScheduleModules = {
           queryStatus += `&status=${item}`
         }
       }
-      // let queryParams = [
-      //   `month=${month}`,
-      //   `year=${year}`,
-      //   search ? `search=${search}` : '',
-      //   courseId ? `courseId=${courseId}` : '',
-      //   coachId ? `coachId=${coachId}` : '',
-      //   status ? `status=${status}` : ''
-      // ].filter(param => param).join('&');
+      let queryParams = [
+        `month=${month}`,
+        `year=${year}`,
+        search ? `search=${search}` : '',
+
+      ].filter(param => param).join('&');
       context.commit("SetGetAllHolidaysIsLoading", true)
       try {
         let config = {
@@ -363,9 +361,9 @@ const manageScheduleModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // let localhost = "http://localhost:3000"
-        // let { data } = await axios.get(`${localhost}/api/v1/schedule/courseholiday-limit?month=${month}&year=${year}&search=${search}${queryCourseId}${queryCoachId}${queryStatus}`, config);
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/courseholiday-limit?month=${month}&year=${year}&search=${search}${queryCourseId}${queryCoachId}${queryStatus}`, config);
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${localhost}/api/v1/schedule/courseholiday-limit?${queryParams}${queryCourseId}${queryCoachId}${queryStatus}`, config);
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/courseholiday-limit?month=${month}&year=${year}&search=${search}${queryCourseId}${queryCoachId}${queryStatus}`, config);
 
         if (data.statusCode === 200) {
           let eventSchadule = [];

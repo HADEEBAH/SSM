@@ -61,6 +61,9 @@
         md="8"
         sm="8"
       >
+        <!-- :searchCourse="selectedCourse"
+          :searchCourseType="selectedCourseType"
+          :searchChose="selectedCoach" -->
         <calendarAdmin @schedule-data="handleScheduleData"></calendarAdmin>
       </v-col>
       <v-col cols="12" md="4" sm="4">

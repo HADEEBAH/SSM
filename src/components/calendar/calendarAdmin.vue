@@ -2,6 +2,9 @@
 <template>
   <v-container>
     <v-row class="mt-[-94px]">
+      <!-- {{ searchCourse }} <br />
+      {{ searchCourseType }} <br />
+      {{ searchChose }} -->
       <v-col class="w-full">
         <v-text-field
           dense
@@ -12,7 +15,7 @@
           hide-details
           v-model="search"
           prepend-inner-icon="mdi-magnify"
-          @change="GetSchedule({ start: dateSelected, search: $event })"
+          @keypress.enter="GetSchedule({ start: dateSelected, search: $event })"
         ></v-text-field>
       </v-col>
     </v-row>
@@ -285,6 +288,18 @@ export default {
       default: "",
       required: false,
     },
+    searchCourse: {
+      type: Array,
+      required: false,
+    },
+    searchCourseType: {
+      type: String,
+      required: false,
+    },
+    searchChose: {
+      type: Array,
+      required: false,
+    },
   },
   data: () => ({
     search: "",
@@ -366,15 +381,16 @@ export default {
       GetDataInSchedule: "ManageScheduleModules/GetDataInSchedule",
     }),
     GetSchedule({ start, search }) {
+      console.log("this.selectedCourse :>> ", this.searchCourse);
       // console.log("start :>> ", start);
       if (!search) {
         this.GetDataInSchedule({
           month: start.month,
           year: start.year,
           search: this.search ? this.search : "",
-          courseId: "",
-          coachId: "",
-          status: "",
+          courseId: this.selectedCourse,
+          coachId: this.selectedCourseType,
+          status: this.selectedCoach,
         });
         this.dateSelected.month = start.month;
         this.dateSelected.year = start.year;
@@ -383,16 +399,16 @@ export default {
           month: start.month,
           year: start.year,
           search: this.search ? this.search : "",
-          courseId: "",
-          coachId: "",
-          status: "",
+          courseId: this.selectedCourse,
+          coachId: this.selectedCourseType,
+          status: this.selectedCoach,
         });
       }
       this.$emit(
         "schedule-data",
         this.dateSelected.month,
         this.dateSelected.year,
-        search
+        this.search
       );
     },
     convertDate(item) {
