@@ -209,6 +209,14 @@
             item.paid_date ? GenDate(item.paid_date) + " " + item.paid_time : ""
           }}
         </template>
+        <template v-slot:[`item.updated_date`]="{ item }">
+          <!-- <pre>{{ item }}</pre> -->
+          {{
+            item.cancel_date
+              ? GenDate(item.cancel_date) + " " + item.cancel_time
+              : ""
+          }}
+        </template>
         <template v-slot:[`item.payment_status`]="{ item }">
           <div
             class="d-flex align-center pa-1 rounded-lg"
@@ -952,16 +960,23 @@ export default {
           value: "payment_status",
         },
         {
+          text: this.$t("created date"),
+          align: "start",
+          sortable: false,
+          value: "created_date",
+        },
+        {
           text: this.$t("payment date"),
           align: "start",
           sortable: false,
           value: "paid_date",
         },
+
         {
-          text: this.$t("created date"),
+          text: this.$t("canceled date"),
           align: "start",
           sortable: false,
-          value: "created_date",
+          value: "updated_date",
         },
         { text: "", align: "start", value: "actions", sortable: false },
       ];

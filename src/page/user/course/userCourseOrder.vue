@@ -697,16 +697,17 @@
             :color="disable_checkout ? '#C4C4C4' : '#ff6b81'"
             >{{ $t("reserve") }}</v-btn
           >
-         <v-btn
-            v-else-if="course_data?.course_status === 'Reserve'
-            ? GenMonitors() === 'Close'
+          <v-btn
+            v-else-if="
+              course_data?.course_status === 'Reserve'
+                ? GenMonitors() === 'Close'
                 : false
             "
             class="w-full white--text"
             :disabled="validateButton || ValidateReserve()"
             elevation="0"
             dense
-             @click="CreateReserve"
+            @click="CreateReserve"
             :color="disable_checkout ? '#C4C4C4' : '#ff6b81'"
             >{{ $t("reserve") }}</v-btn
           >
@@ -1532,7 +1533,10 @@ export default {
               }
               this.order.created_by = this.user_login.account_id;
               this.changeOrderData(this.order);
-              this.CreateReserveCourse({ course_data: this.course_order });
+              this.CreateReserveCourse({
+                course_data: this.course_order,
+                profile_id: this.profile_detail?.userOneId,
+              });
             }
           });
         }

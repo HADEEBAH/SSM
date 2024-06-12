@@ -5,6 +5,17 @@
     <headerPage :title="$t('manage tables')"></headerPage>
     <v-row class="py-2">
       <v-col cols="12" sm="8" class="w-full">
+        <v-text-field
+          dense
+          class="w-full"
+          outlined
+          :label="$t('search')"
+          color="pink"
+          hide-details
+          v-model="filter_search"
+          prepend-inner-icon="mdi-magnify"
+          @keypress.enter="filterSchedules()"
+        ></v-text-field>
         <!-- <v-text-field
           dense
           class="w-full"
@@ -61,7 +72,10 @@
         md="8"
         sm="8"
       >
-        <calendarAdmin :searchFilter="search"></calendarAdmin>
+        <!-- :searchCourse="selectedCourse"
+          :searchCourseType="selectedCourseType"
+          :searchChose="selectedCoach" -->
+        <calendarAdmin @schedule-data="handleScheduleData"></calendarAdmin>
       </v-col>
       <v-col cols="12" md="4" sm="4">
         <v-card class="my-3 pa-2 max-h-[300px] overflow-auto rounded-lg">
@@ -853,6 +867,7 @@ export default {
     headerPage,
   },
   data: () => ({
+    filter_search: "",
     dialog: true,
     search: "",
     thaiDaysOfWeek: [
@@ -950,6 +965,9 @@ export default {
     courseToday: [],
     resultSearchSchedule: null,
     form_dialog: false,
+    select_month: "",
+    select_year: "",
+    select_search: "",
   }),
 
   created() {
@@ -974,11 +992,25 @@ export default {
       ResetFilte: "ManageScheduleModules/ResetFilte",
       ResetSearch: "ManageScheduleModules/ResetSearch",
     }),
+    handleScheduleData(month, year, search) {
+      this.select_month = month;
+      this.select_year = year;
+      this.select_search = search;
+    },
     ClarData() {
       this.ResetFilte();
+      // this.GetDataInSchedule({
+      //   month: new Date().getMonth() + 1,
+      //   year: new Date().getFullYear(),
+      // });
       this.GetDataInSchedule({
-        month: new Date().getMonth() + 1,
-        year: new Date().getFullYear(),
+        month: this.select_month,
+        year: this.select_year,
+        // search: this.select_search ? this.select_search : "",
+        search: this.filter_search,
+        courseId: [],
+        coachId: [],
+        status: [],
       });
       this.filter_dialog = false;
       this.selectedCourseType = [];
@@ -1056,8 +1088,22 @@ export default {
       );
     },
 
-    async filterSchedules(courseId, coachId, status) {
-      this.GetFilterSchedule({ courseId, coachId, status });
+    async filterSchedules() {
+      // courseId, coachId, status
+
+      // this.GetFilterSchedule({ courseId, coachId, status });
+      this.GetDataInSchedule({
+        month: this.select_month,
+        year: this.select_year,
+        // search: this.select_search ? this.select_search : "",
+        search: this.filter_search,
+        courseId: this.selectedCourse,
+        coachId: this.selectedCoach,
+        status: this.selectedCourseType,
+        // courseId: courseId,
+        // coachId: coachId,
+        // status: status,
+      });
       this.filter_dialog = false;
     },
 
@@ -1085,9 +1131,19 @@ export default {
             );
             if (data.statusCode === 200) {
               (this.show_dialog_edit_holoday = false), this.GetAllHolidays();
+              // this.GetDataInSchedule({
+              //   month: new Date().getMonth() + 1,
+              //   year: new Date().getFullYear(),
+              // });
               this.GetDataInSchedule({
-                month: new Date().getMonth() + 1,
-                year: new Date().getFullYear(),
+                month: this.select_month,
+                year: this.select_year,
+                // search: this.select_search ? this.select_search : "",
+                search: this.filter_search,
+
+                courseId: this.selectedCourse,
+                coachId: this.selectedCoach,
+                status: this.selectedCourseType,
               });
               Swal.fire({
                 icon: "success",
@@ -1164,9 +1220,18 @@ export default {
               this.holidayEndTime = "";
               this.nameHoliday = "";
               this.GetAllHolidays();
+              // this.GetDataInSchedule({
+              //   month: new Date().getMonth() + 1,
+              //   year: new Date().getFullYear(),
+              // });
               this.GetDataInSchedule({
-                month: new Date().getMonth() + 1,
-                year: new Date().getFullYear(),
+                month: this.select_month,
+                year: this.select_year,
+                // search: this.select_search ? this.select_search : "",
+                search: this.filter_search,
+                courseId: this.selectedCourse,
+                coachId: this.selectedCoach,
+                status: this.selectedCourseType,
               });
               this.holidaydatesTh = "";
 
@@ -1286,9 +1351,18 @@ export default {
               let payload = {};
               payload = { ...this.setDataEditDialog };
               this.GetEditHolidays(payload);
+              // this.GetDataInSchedule({
+              //   month: new Date().getMonth() + 1,
+              //   year: new Date().getFullYear(),
+              // });
               this.GetDataInSchedule({
-                month: new Date().getMonth() + 1,
-                year: new Date().getFullYear(),
+                month: this.select_month,
+                year: this.select_year,
+                // search: this.select_search ? this.select_search : "",
+                search: this.filter_search,
+                courseId: this.selectedCourse,
+                coachId: this.selectedCoach,
+                status: this.selectedCourseType,
               });
               this.show_dialog_edit_holoday = false;
               this.editHolidayDates = null;
