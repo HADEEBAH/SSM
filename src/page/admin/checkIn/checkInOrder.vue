@@ -98,8 +98,6 @@
         </v-card>
       </v-col>
     </v-row>
-    {{ seletedCourse }}
-    {{ type }}
     <v-form ref="form" v-model="valid">
       <v-row v-if="seletedCourse">
         <v-col>
