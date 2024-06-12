@@ -392,9 +392,9 @@ const orderModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/adminpayment/finance?search=${name}&limit=${limit}&page=${page}&status=${status}`, config)
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/finance?search=${name}&limit=${limit}&page=${page}&status=${status}`, config)
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/adminpayment/finance?search=${name}&limit=${limit}&page=${page}&status=${status}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/finance?search=${name}&limit=${limit}&page=${page}&status=${status}`, config)
 
         if (data.statusCode === 200) {
 
@@ -554,7 +554,8 @@ const orderModules = {
           let students = [];
           for (const student of course.students) {
             let { data } = await axios.get(
-              `http://localhost:3000/api/v1/account/auth/${student.account_id}`
+
+              `${process.env.VUE_APP_URL}/api/v1/account/auth/${student.account_id}`
             );
             let itemRole = '';
 
@@ -970,7 +971,8 @@ const orderModules = {
           let students = [];
           for (const student of course.students) {
             let { data } = await axios.get(
-              `http://localhost:3000/api/v1/account/auth/${student.account_id}`
+
+              `${process.env.VUE_APP_URL}/api/v1/account/auth/${student.account_id}`
             );
             let itemRole = '';
 
@@ -1917,10 +1919,10 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let localhost = "http://localhost:3002"
+        // let localhost = "http://localhost:3002"
 
-        const { data } = await axios.delete(`${localhost}/api/v1/order/cancel-order/${order_number}`, config)
-        // const { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/order/cancel-order/${order_number}`, config)
+        // const { data } = await axios.delete(`${localhost}/api/v1/order/cancel-order/${order_number}`, config)
+        const { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/order/cancel-order/${order_number}`, config)
         if (data.statusCode === 200) {
           await Swal.fire({
             icon: "success",
@@ -2021,8 +2023,8 @@ const orderModules = {
                   },
                 };
                 let { data } = await axios.post(
-                  `http://localhost:3002/api/v1/order/reserve/create`,
-                  // `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
+                  // `http://localhost:3002/api/v1/order/reserve/create`,
+                  `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
                   payload,
                   config
                 );
@@ -2089,9 +2091,9 @@ const orderModules = {
                 },
               };
               let { data } = await axios.post(
-                `http://localhost:3002/api/v1/order/reserve/create`,
+                // `http://localhost:3002/api/v1/order/reserve/create`,
 
-                // `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
+                `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
                 payload,
                 config
               );
