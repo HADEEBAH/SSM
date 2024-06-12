@@ -247,6 +247,8 @@ const reserveCourseModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
+
+        // let { data } = await axios.get(`http://localhost:3002/api/v1/order/reserve/search-limit?searchData=${search}&limit=${limit}&page=${page}&status=${status}`, config)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/search-limit?searchData=${search}&limit=${limit}&page=${page}&status=${status}`, config)
         if (data?.statusCode === 200) {
           startIndex = (page - 1) * limit;
@@ -283,9 +285,9 @@ const reserveCourseModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // let localhost = "http://localhost:3002"
-        // let { data } = await axios.patch(`${localhost}/api/v1/order/reserve/update/${reserve_id}`, reserve_data, config)
-        let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/reserve/update/${reserve_id}`, reserve_data, config)
+        let localhost = "http://localhost:3002"
+        let { data } = await axios.patch(`${localhost}/api/v1/order/reserve/update/${reserve_id}`, reserve_data, config)
+        // let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/reserve/update/${reserve_id}`, reserve_data, config)
         if (data.statusCode == 200) {
           await Swal.fire({
             icon: "success",
@@ -399,7 +401,9 @@ const reserveCourseModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/reserve/update/${reserve_id}`, reserve_data, config)
+        let localhost = "http://localhost:3002"
+        let { data } = await axios.patch(`${localhost}/api/v1/order/reserve/update/${reserve_id}`, reserve_data, config)
+        // let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/reserve/update/${reserve_id}`, reserve_data, config)
         if (data.statusCode == 200) {
           await Swal.fire({
             icon: "success",
