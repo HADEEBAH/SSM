@@ -575,6 +575,7 @@
                   ></v-text-field>
                 </v-col>
               </v-row>
+
               <v-row dense>
                 <v-col cols="12" sm="6">
                   <labelCustom required :text="$t('nickname')"></labelCustom>
@@ -586,7 +587,7 @@
                     :disabled="student?.nicknameData"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" sm="6">
+                <v-col cols="12" sm="6" v-if="student.role === 'R_5'">
                   <labelCustom required :text="$t('class')"></labelCustom>
                   <v-autocomplete
                     v-model="student.class"
@@ -1851,6 +1852,7 @@ export default {
                   student.nicknameData = this.user_student_data[0].nicknameTh;
                   student.classData =
                     this.user_student_data[0]?.class?.classNameTh;
+                  student.role = this.user_student_data[0]?.roles?.roleId;
                 } else {
                   if (student) {
                     student.firstname_en = "";
