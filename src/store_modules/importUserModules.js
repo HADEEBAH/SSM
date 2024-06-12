@@ -7,9 +7,7 @@ const XLSX = require('xlsx');
 function convertObjectToString(object) {
   for (let key in object) {
     if (Object.prototype.hasOwnProperty.call(object, key)) {
-      console.log('key :>> ', key);
-      // console.log('object', object)
-      // console.log('key', key)
+
       // Check if the value is an object with a 'value' property
       if (typeof object[key] === 'object' && object[key] !== null && 'value' in object[key]) {
         // Replace the nested object with its value or an empty string if 'value' is missing
@@ -66,12 +64,9 @@ const importUserModules = {
       }
       try {
         payload.STUDENT = payload.STUDENT.map(convertObjectToString)
-        console.log('payload.STUDENT :>> ', payload.STUDENT);
         payload.PARENT = payload.PARENT.map(convertObjectToString)
-        console.log('payload.PARENT :>> ', payload.PARENT);
 
         let { data } = await axios.post(`${endpoint}`, payload, config)
-        console.log('data :>> ', data);
         const error = ['Username is already used.', 'The username or password or tel format is invalid.', 'Duplicate username', 'Parameter missing. Required username.', 'Username relation not found. Or this username role not match.']
         const errorData = []
         data.data.STUDENT.map(v => {
