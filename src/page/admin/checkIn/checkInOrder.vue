@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col cols="6">
-        <headerPage :title="$t('manage check in later')" slot_tag />
+        <headerPage :title="$t('check in later by order number')" slot_tag />
       </v-col>
     </v-row>
     <v-row>
@@ -179,16 +179,19 @@
                 </v-row>
               </v-card-text>
             </v-card>
-            <v-btn
-              class="w-full"
-              depressed
-              @click="save()"
-              :disabled="!valid"
-              :dark="valid"
-              :color="!valid ? '' : '#ff6b81'"
-            >
-              {{ $t("save") }}
-            </v-btn>
+            <v-row>
+              <v-col cols="12" align="end">
+                <v-btn
+                  depressed
+                  @click="save()"
+                  :disabled="!valid"
+                  :dark="valid"
+                  :color="!valid ? '' : '#ff6b81'"
+                >
+                  {{ $t("save") }}
+                </v-btn>
+              </v-col>
+            </v-row>
           </template>
         </v-col>
       </v-row>
@@ -235,7 +238,7 @@ export default {
       order_number_detail: "OrderModules/getOrderNumberDetail",
     }),
     ruleSelectDate() {
-      return [(val) => (val || "").length > 0 || this.$t("enter last time")];
+      return [(val) => (val || "").length > 0 || this.$t("enter last date")];
     },
     RulesLastTime() {
       const maxRemain = this.getMaxRemain();
@@ -377,16 +380,16 @@ export default {
           .join(", ");
       }
     },
-    save() {
+    async save() {
       if (this.$refs.form.validate()) {
-        this.UpdateScheduleAndCheckIn({
+        await this.UpdateScheduleAndCheckIn({
           orderNumber: this.orderNumder,
           orderItemId: this.seletedCourse,
           lastTime: this.lastTime,
           type: this.type,
           endDate: this.endClassDate,
         });
-        this.lastTime = "";
+        this.type = "";
       }
     },
   },

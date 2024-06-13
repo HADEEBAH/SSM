@@ -257,7 +257,7 @@ const manageScheduleModules = {
             timerProgressBar: true,
           });
           context.dispatch("GetAllHolidays");
-          context.dispatch("GetDataInSchedule", { month: new Date().getMonth() + 1, yaer: new Date().getFullYear() });
+          // context.dispatch("GetDataInSchedule", { month: new Date().getMonth() + 1, yaer: new Date().getFullYear() });
         } else {
           Swal.fire({
             icon: "warning",
@@ -325,8 +325,32 @@ const manageScheduleModules = {
       }
     },
 
-    async GetDataInSchedule(context, { month, year, search }) {
+    async GetDataInSchedule(context, { month, year, search, courseId, coachId, status }) {
       let dataInSchadule = [];
+      let queryCourseId = ''
+      let queryCoachId = ''
+      let queryStatus = ''
+      if (courseId) {
+        for (const idCourseId of courseId) {
+          queryCourseId += `&courseId=${idCourseId}`
+        }
+      }
+      if (coachId) {
+        for (const value of coachId) {
+          queryCoachId += `&coachId=${value}`
+        }
+      }
+      if (status) {
+        for (const item of status) {
+          queryStatus += `&status=${item}`
+        }
+      }
+      let queryParams = [
+        `month=${month}`,
+        `year=${year}`,
+        search ? `search=${search}` : '',
+
+      ].filter(param => param).join('&');
       context.commit("SetGetAllHolidaysIsLoading", true)
       try {
         let config = {
@@ -336,11 +360,10 @@ const manageScheduleModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/admincourse/courseholiday`, config);
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/courseholiday`, config);
         // let localhost = "http://localhost:3000"
-        // let { data } = await axios.get(`${localhost}/api/v1/schedule/courseholiday-limit?month=${month}&year=${year}&search=${search}`, config);
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/courseholiday-limit?month=${month}&year=${year}&search=${search}`, config);
+        // let { data } = await axios.get(`${localhost}/api/v1/schedule/courseholiday-limit?${queryParams}${queryCourseId}${queryCoachId}${queryStatus}`, config);
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/courseholiday-limit?${queryParams}${queryCourseId}${queryCoachId}${queryStatus}`, config);
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/courseholiday-limit?month=${month}&year=${year}&search=${search}${queryCourseId}${queryCoachId}${queryStatus}`, config);
 
         if (data.statusCode === 200) {
           let eventSchadule = [];
@@ -397,6 +420,7 @@ const manageScheduleModules = {
             });
             dataInSchadule = eventSchadule;
           });
+
           context.commit("SetGetAllHolidaysIsLoading", false)
           context.commit("SetDataInSchedule", dataInSchadule);
           context.commit("SetDataFilterSchedule", null);
@@ -430,6 +454,8 @@ const manageScheduleModules = {
           }
           params.push(`${key[index]}=${query[items].join(`&&${key[index]}=`)}`);
         });
+        // let localhost = "http://localhost:3000"
+        // const endpoint = `${localhost}/api/v1/schedule/filter-schedule?${params.join("&&")}`
         const endpoint = `${process.env.VUE_APP_URL}/api/v1/schedule/filter-schedule?${params.join("&&")}`
         let { data } = await axios.get(endpoint, config);
         const res = data.data;
@@ -491,9 +517,12 @@ const manageScheduleModules = {
             dataInSchadule = eventSchadule;
           });
           if (query_length > 0) {
+            // context.commit("SetDataInSchedule", dataInSchadule);
             context.commit("SetDataFilterSchedule", dataInSchadule);
             context.commit("SetGetAllHolidaysIsLoading", false)
           } else {
+            // context.commit("SetDataInSchedule", []);
+
             context.commit("SetDataFilterSchedule", null);
             context.commit("SetGetAllHolidaysIsLoading", false)
           }

@@ -424,9 +424,37 @@ const orderModules = {
                 let mm = cutTime?.slice(2, 4);
                 order.paid_date = `${formatted}`
                 order.paid_time = `${HH + ":" + mm}`
+              } else if (order.payment_status === "cancel") {
+                let inputDate = order.updatedDate
+                let cutTime = order.updatedTime
+                const year = parseInt(inputDate?.substring(0, 4));
+                const month = parseInt(inputDate?.substring(4, 6));
+                const day = inputDate?.substring(6, 8);
+                const formatted = `${year}-${month}-${day}`;
+                let HH = cutTime?.slice(0, 2);
+                let mm = cutTime?.slice(2, 4);
+                order.cancel_date = `${formatted}`
+                order.cancel_time = `${HH + ":" + mm}`
+                // paid date & time
+                if (order.payment?.paymentDate) {
+                  let inputDatePaid = order.payment?.paymentDate
+                  let cutTimePaid = order.payment?.paymentTime
+                  const yearPaid = parseInt(inputDatePaid?.substring(0, 4));
+                  const monthPaid = parseInt(inputDatePaid?.substring(4, 6));
+                  const dayPaid = inputDatePaid?.substring(6, 8);
+                  const formattedPaid = `${yearPaid}-${monthPaid}-${dayPaid}`;
+                  let HHPaid = cutTimePaid?.slice(0, 2);
+                  let mmPaid = cutTimePaid?.slice(2, 4);
+                  order.paid_date = `${formattedPaid}`
+                  order.paid_time = `${HHPaid + ":" + mmPaid}`
+                }
+
+
               } else {
                 order.paid_date = ""
                 order.paid_time = ""
+                order.cancel_date = ""
+                order.cancel_time = ""
               }
               // order.course_name = `${order.course?.courseNameTh}(${order.course?.courseNameEn})`;
               order.course_nameTh = order.course?.courseNameTh;
@@ -519,23 +547,45 @@ const orderModules = {
           totalPrice: 0,
         };
         let total_price = 0;
-        let studentUpdate = []
-        await order.courses.forEach((course) => {
+        let studentUpdate = [];
+        let allStudentsValid = true; // Flag to check if all students meet the criteria
+
+        for (const course of order.courses) {
           let students = [];
-          course.students.forEach((student) => {
+          for (const student of course.students) {
+            let { data } = await axios.get(
+
+              `${process.env.VUE_APP_URL}/api/v1/account/auth/${student.account_id}`
+            );
+            let itemRole = '';
+
+            for (const items of data.data.roles) {
+              itemRole = items.roleId;
+            }
+
             if (!studentUpdate.some(v => v.studentId === student.account_id)) {
-              if (student.account_id && student.nicknameTh && student.class) {
-                studentUpdate.push(
-                  {
+              if (itemRole === 'R_5') {
+                if (student.nicknameTh && student.class) {
+                  studentUpdate.push({
                     "studentId": student.account_id,
                     "nicknameTh": student.nicknameTh,
                     "class": student.class
-                  },
-                )
+                  });
+                } else {
+                  allStudentsValid = false;
+                  break; // Exit the loop if the criteria are not met
+                }
               } else {
-                throw "please enter your name and class"
+                if (student.nicknameTh) {
+                  studentUpdate.push({
+                    "studentId": student.account_id,
+                    "nicknameTh": student.nicknameTh,
+                    "class": ''
+                  });
+                }
               }
             }
+
             if (student.parents[0]) {
               students.push({
                 accountId: student.account_id ? student.account_id : "",
@@ -568,7 +618,12 @@ const orderModules = {
                 parent: {},
               });
             }
-          });
+          }
+
+          if (!allStudentsValid) {
+            break; // Exit the loop if the criteria are not met
+          }
+
           payload.courses = {
             courseId: course.course_id,
             courseName: course.course_name,
@@ -601,7 +656,12 @@ const orderModules = {
             ? course.option.net_price
             : course.price;
           total_price = total_price + price * course.students.length;
-        });
+        }
+
+        if (!allStudentsValid) {
+          throw "please enter your name and class";
+        }
+
         payload.totalPrice = total_price;
         let config = {
           headers: {
@@ -610,13 +670,15 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
+
         let { data } = await axios.post(
           `${process.env.VUE_APP_URL}/api/v1/order/cart`,
           payload,
           config
         );
+
         if (data.statusCode === 201) {
-          Swal.fire({
+          await Swal.fire({
             icon: "success",
             title: VueI18n.t("succeed"),
             text: VueI18n.t(
@@ -641,8 +703,8 @@ const orderModules = {
             payment_type: "",
             total_price: 0,
           });
-
         }
+
       } catch (error) {
         console.log(error);
         if (error === "please enter your name and class") {
@@ -660,6 +722,211 @@ const orderModules = {
         }
       }
     },
+
+    // async saveCart(context, { cart_data }) {
+    //   try {
+    //     let order = cart_data;
+    //     let payload = {
+    //       order_id: "",
+    //       courses: {},
+    //       created_by: "",
+    //       paymentStatus: "pending",
+    //       paymentType: "",
+    //       totalPrice: 0,
+    //     };
+    //     let total_price = 0;
+    //     let studentUpdate = []
+    //     await order.courses.forEach((course) => {
+    //       let students = [];
+    //       course.students.forEach(async (student) => {
+    //         let { data } = await axios.get(
+    //           `http://localhost:3000/api/v1/account/auth/${student.account_id}`
+    //         );
+    //         let itemRole = ''
+
+    //         for (const items of data.data.roles) {
+    //           itemRole = items.roleId
+    //         }
+
+    //         if (!studentUpdate.some(v => v.studentId === student.account_id)) {
+    //           if (itemRole === 'R_5') {
+    //             if (student.nicknameTh && student.class) {
+    //               studentUpdate.push(
+    //                 {
+    //                   "studentId": student.account_id,
+    //                   "nicknameTh": student.nicknameTh,
+    //                   "class": student.class
+    //                 },
+    //               )
+    //             } else {
+    //               console.log('itemRole  :>> ', itemRole);
+    //               throw "please enter your name and class"
+    //             }
+    //           } else {
+    //             if (student.nicknameTh) {
+    //               studentUpdate.push(
+    //                 {
+    //                   "studentId": student.account_id,
+    //                   "nicknameTh": student.nicknameTh,
+    //                   "class": ''
+    //                 },
+    //               )
+    //             }
+    //           }
+    //           // if (student.account_id && student.nicknameTh && student.class) {
+
+    //           //   if (student.role === 'R_5') {
+    //           //     console.log('student :>> ', student);
+
+    //           //     studentUpdate.push(
+    //           //       {
+    //           //         "studentId": student.account_id,
+    //           //         "nicknameTh": student.nicknameTh,
+    //           //         "class": student.class
+    //           //       },
+    //           //     )
+    //           //   } else {
+    //           //     studentUpdate.push(
+    //           //       {
+    //           //         "studentId": student.account_id,
+    //           //         "nicknameTh": student.nicknameTh,
+    //           //         "class": ''
+    //           //       },
+    //           //     )
+    //           //   }
+
+    //           // } else {
+    //           //   throw "please enter your name and class"
+    //           // }
+    //         }
+    //         if (student.parents[0]) {
+    //           students.push({
+    //             accountId: student.account_id ? student.account_id : "",
+    //             userName: student.username,
+    //             firstNameTh: student.firstname,
+    //             lastNameTh: student.lastname,
+    //             tel: student.tel,
+    //             isOther: student.is_other,
+    //             parent: {
+    //               accountId: student.parents[0].account_id,
+    //               parentFirstnameTh: student.parents[0].firstname_th
+    //                 ? student.parents[0].firstname_th
+    //                 : "",
+    //               parentLastnameTh: student.parents[0].lastname_th
+    //                 ? student.parents[0].lastname_th
+    //                 : "",
+    //               parentFirstnameEn: student.parents[0].firstname_en,
+    //               parentLastnameEn: student.parents[0].lastname_en,
+    //               parentTel: student.parents[0].tel,
+    //             },
+    //           });
+    //         } else {
+    //           students.push({
+    //             accountId: student.account_id ? student.account_id : "",
+    //             userName: student.username,
+    //             firstNameTh: student.firstname,
+    //             lastNameTh: student.lastname,
+    //             tel: student.tel,
+    //             isOther: student.is_other,
+    //             parent: {},
+    //           });
+    //         }
+    //       });
+    //       payload.courses = {
+    //         courseId: course.course_id,
+    //         courseName: course.course_name,
+    //         coursePackageOptionId: course.option.course_package_option_id
+    //           ? course.option.course_package_option_id
+    //           : "",
+    //         dayOfWeekId: course?.time?.timeData
+    //           ? course.time.timeData.filter(
+    //             (v) => v.coach_id === course.coach_id
+    //           )[0].dayOfWeekId
+    //           : course.time.dayOfWeekId,
+    //         timeId: course?.time?.timeData
+    //           ? course.time.timeData.filter(
+    //             (v) => v.coach_id === course.coach_id
+    //           )[0].timeId
+    //           : course.time.timeId,
+    //         time: course.time ? course.time : "",
+    //         startDate: "",
+    //         remark: "",
+    //         price: course.option.net_price
+    //           ? course.option.net_price
+    //           : course.price,
+    //         coach: {
+    //           accountId: course.coach_id,
+    //           fullName: course.coach_name,
+    //         },
+    //         student: students,
+    //       };
+    //       let price = course.option?.net_price
+    //         ? course.option.net_price
+    //         : course.price;
+    //       total_price = total_price + price * course.students.length;
+    //     });
+    //     payload.totalPrice = total_price;
+    //     let config = {
+    //       headers: {
+    //         "Access-Control-Allow-Origin": "*",
+    //         "Content-type": "Application/json",
+    //         Authorization: `Bearer ${VueCookie.get("token")}`,
+    //       },
+    //     };
+    //     let { data } = await axios.post(
+    //       `${process.env.VUE_APP_URL}/api/v1/order/cart`,
+    //       payload,
+    //       config
+    //     );
+    //      if (data.statusCode === 201) {
+
+    //       await Swal.fire({
+    //         icon: "success",
+    //         title: VueI18n.t("succeed"),
+    //         text: VueI18n.t(
+    //           "the course has been successfully added to the cart"
+    //         ),
+    //         showCancelButton: false,
+    //         showConfirmButton: false,
+    //         showDenyButton: false,
+    //         timer: 3000,
+    //         timerProgressBar: true,
+    //       }).finally(() => {
+    //         router.push({ name: "CartList" });
+    //       });
+    //       localStorage.removeItem("Order");
+    //       context.commit("SetResetCourseData");
+    //       context.commit("SetOrder", {
+    //         order_step: 0,
+    //         order_number: "",
+    //         courses: [],
+    //         created_by: "",
+    //         payment_status: "",
+    //         payment_type: "",
+    //         total_price: 0,
+    //       });
+
+    //     }
+
+    //   } catch (error) {
+    //     console.log(error);
+    //     if (error === "please enter your name and class") {
+    //       Swal.fire({
+    //         icon: "error",
+    //         title: VueI18n.t("unable to register"),
+    //         text: VueI18n.t(
+    //           "please enter your name and class"
+    //         ),
+    //         timer: 3000,
+    //         timerProgressBar: true,
+    //         showCancelButton: false,
+    //         showConfirmButton: false,
+    //       });
+    //     }
+    //   }
+    // },
+
+
     async saveOrder(context, { regis_type }) {
       context.commit("SetOrderIsLoading", true);
       try {
@@ -699,24 +966,69 @@ const orderModules = {
         };
         let total_price = 0;
         const studentUpdate = []
-        await order.courses.forEach((course) => {
+        let allStudentsValid = true;
+        for (const course of order.courses) {
           let students = [];
-          course.students.forEach((student) => {
+          for (const student of course.students) {
+            let { data } = await axios.get(
+
+              `${process.env.VUE_APP_URL}/api/v1/account/auth/${student.account_id}`
+            );
+            let itemRole = '';
+
+            for (const items of data.data.roles) {
+              itemRole = items.roleId;
+            }
             if (regis_type !== "cart") {
               if (order.type !== "addStudent") {
                 if (!studentUpdate.some(v => v.studentId === student.account_id)) {
-                  if (student.nicknameTh && student.class) {
-                    studentUpdate.push(
-                      {
+                  if (itemRole === 'R_5') {
+                    if (student.nicknameTh && student.class) {
+                      studentUpdate.push({
                         "studentId": student.account_id,
                         "nicknameTh": student.nicknameTh,
                         "class": student.class
-                      },
-                    )
+                      });
+                    } else {
+                      allStudentsValid = false;
+                      break; // Exit the loop if the criteria are not met
+                    }
                   } else {
-                    throw "please enter your name and class"
+                    if (student.nicknameTh) {
+                      studentUpdate.push({
+                        "studentId": student.account_id,
+                        "nicknameTh": student.nicknameTh,
+                        "class": ''
+                      });
+                    }
                   }
                 }
+                // if (!studentUpdate.some(v => v.studentId === student.account_id)) {
+
+                //   if (itemRole === 'R_5') {
+                //     if (student.nicknameTh && student.class) {
+                //       studentUpdate.push(
+                //         {
+                //           "studentId": student.account_id,
+                //           "nicknameTh": student.nicknameTh,
+                //           "class": student.class
+                //         },
+                //       )
+                //     } else {
+                //       throw "please enter your name and class"
+                //     }
+                //   } else {
+                //     if (student.nicknameTh) {
+                //       studentUpdate.push(
+                //         {
+                //           "studentId": student.account_id,
+                //           "nicknameTh": student.nicknameTh,
+                //           "class": ''
+                //         },
+                //       )
+                //     }
+                //   }
+                // }
               }
             }
             if (student.parents[0]) {
@@ -751,7 +1063,10 @@ const orderModules = {
                 parent: {},
               });
             }
-          });
+            if (!allStudentsValid) {
+              break; // Exit the loop if the criteria are not met
+            }
+          }
           payload.courses.push({
             courseId: course.course_id,
             coursePackageOptionId: course.option.course_package_option_id ? course.option.course_package_option_id : null,
@@ -796,8 +1111,131 @@ const orderModules = {
               total_price = total_price + price;
             }
           }
+        }
+        if (!allStudentsValid) {
+          throw "please enter your name and class";
+        }
+        // await order.courses.forEach((course) => {
+        //   let students = [];
+        //   course.students.forEach(async (student) => {
+        //     let { data } = await axios.get(
+        //       `http://localhost:3000/api/v1/account/auth/${student.account_id}`
+        //     );
+        //     console.log('data :>> ', data.data.roles);
 
-        });
+        //     let itemRole = ''
+        //     for (const items of data.data.roles) {
+        //       itemRole = items.roleId
+        //     }
+        //     if (regis_type !== "cart") {
+        //       if (order.type !== "addStudent") {
+        //         if (!studentUpdate.some(v => v.studentId === student.account_id)) {
+
+        //           if (itemRole === 'R_5') {
+        //             if (student.nicknameTh && student.class) {
+        //               studentUpdate.push(
+        //                 {
+        //                   "studentId": student.account_id,
+        //                   "nicknameTh": student.nicknameTh,
+        //                   "class": student.class
+        //                 },
+        //               )
+        //             } else {
+        //               throw "please enter your name and class"
+        //             }
+        //           } else {
+        //             if (student.nicknameTh) {
+        //               studentUpdate.push(
+        //                 {
+        //                   "studentId": student.account_id,
+        //                   "nicknameTh": student.nicknameTh,
+        //                   "class": ''
+        //                 },
+        //               )
+        //             }
+        //           }
+        //         }
+        //       }
+        //     }
+        //     if (student.parents[0]) {
+        //       students.push({
+        //         accountId: student.account_id ? student.account_id : "",
+        //         userName: student.username,
+        //         firstNameTh: student.firstname,
+        //         lastNameTh: student.lastname,
+        //         tel: student.tel,
+        //         isOther: student.is_other,
+        //         parent: {
+        //           accountId: student.parents[0].account_id,
+        //           parentFirstnameTh: student.parents[0].firstname_th
+        //             ? student.parents[0].firstname_th
+        //             : "",
+        //           parentLastnameTh: student.parents[0].lastname_en
+        //             ? student.parents[0].lastname_en
+        //             : "",
+        //           parentFirstnameEn: student.parents[0].firstname_en,
+        //           parentLastnameEn: student.parents[0].lastname_en,
+        //           parentTel: student.parents[0].tel,
+        //         },
+        //       });
+        //     } else {
+        //       students.push({
+        //         accountId: student.account_id ? student.account_id : "",
+        //         userName: student.username,
+        //         firstNameTh: student.firstname,
+        //         lastNameTh: student.lastname,
+        //         tel: student.tel,
+        //         isOther: student.is_other,
+        //         parent: {},
+        //       });
+        //     }
+        //   });
+        //   payload.courses.push({
+        //     courseId: course.course_id,
+        //     coursePackageOptionId: course.option.course_package_option_id ? course.option.course_package_option_id : null,
+        //     dayName: course.day?.dayName
+        //       ? course.day.dayName
+        //       : course.day.day
+        //         ? dayOfWeekArray(course.day.day)
+        //         : "",
+        //     dayOfWeekId: course?.time?.timeData
+        //       ? course.time.timeData.filter(
+        //         (v) => v.coach_id === course.coach_id
+        //       )[0].dayOfWeekId
+        //       : course.time.dayOfWeekId,
+        //     timeId: course?.time?.timeData
+        //       ? course.time.timeData.filter(
+        //         (v) => v.coach_id === course.coach_id
+        //       )[0].timeId
+        //       : course.time.timeId,
+        //     time: course.time,
+        //     startDate: course.start_date ? course.start_date : moment(new Date()).format("YYYY-MM-DD"),
+        //     remark: course.remark ? course.remark : "",
+        //     price: course.option?.net_price
+        //       ? course.option.net_price
+        //       : course.price,
+        //     coach: {
+        //       accountId: course.coach_id ? course.coach_id : course.coach,
+        //       fullName: course.coach_name,
+        //     },
+        //     student: students,
+        //   });
+        //   let price = 0
+        //   if (order.type == "addStudent") {
+        //     price = course.price;
+        //     total_price = order.total_price * course.students.length;
+        //   } else {
+        //     price = course.option?.net_price
+        //       ? course.option.net_price
+        //       : course.price;
+        //     if (course.price * course.students.length !== price) {
+        //       total_price = total_price + price * course.students.length;
+        //     } else {
+        //       total_price = total_price + price;
+        //     }
+        //   }
+
+        // });
         payload.totalPrice = total_price;
         let config = {
           headers: {
@@ -1481,6 +1919,9 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
+        // let localhost = "http://localhost:3002"
+
+        // const { data } = await axios.delete(`${localhost}/api/v1/order/cancel-order/${order_number}`, config)
         const { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/order/cancel-order/${order_number}`, config)
         if (data.statusCode === 200) {
           await Swal.fire({
@@ -1524,7 +1965,7 @@ const orderModules = {
       }
     },
     // RESERVE COURSE
-    async CreateReserveCourse(context, { course_data }) {
+    async CreateReserveCourse(context, { course_data, profile_id }) {
       try {
         let count = 0;
         let CheckStudentIsWaraphat = true
@@ -1546,18 +1987,20 @@ const orderModules = {
             }
             if (CheckStudentIsWaraphat) {
               for await (let student of course_data.students) {
+
                 let payload = {
                   studentId: student.account_id,
                   coursePackageOptionId: null,
                   dayOfWeekId: null,
                   timeId: null,
                   courseId: course_data.course_id,
-                  parentId: null,
+                  parentId: profile_id,
                   coachId: course_data.coach_id ? course_data.coach_id : null,
                   orderTmpId: null,
                   IsWaraphat: student.IsWaraphat,
                   username: student.username,
                 };
+
                 if (course_data.course_type_id === "CT_1") {
                   payload.dayOfWeekId = course_data?.time?.timeData
                     ? course_data.time.timeData.filter(
@@ -1580,6 +2023,7 @@ const orderModules = {
                   },
                 };
                 let { data } = await axios.post(
+                  // `http://localhost:3002/api/v1/order/reserve/create`,
                   `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
                   payload,
                   config
@@ -1618,12 +2062,13 @@ const orderModules = {
                 dayOfWeekId: null,
                 timeId: null,
                 courseId: course_data.course_id,
-                parentId: null,
+                parentId: profile_id,
                 coachId: course_data.coach_id ? course_data.coach_id : null,
                 orderTmpId: null,
                 IsWaraphat: student.IsWaraphat,
                 username: student.username,
               };
+
               if (course_data.course_type_id === "CT_1") {
                 payload.dayOfWeekId = course_data?.time?.timeData
                   ? course_data.time.timeData.filter(
@@ -1646,6 +2091,8 @@ const orderModules = {
                 },
               };
               let { data } = await axios.post(
+                // `http://localhost:3002/api/v1/order/reserve/create`,
+
                 `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
                 payload,
                 config
@@ -1945,3 +2392,5 @@ const orderModules = {
 };
 
 export default orderModules;
+
+// orderModule

@@ -575,6 +575,7 @@
                   ></v-text-field>
                 </v-col>
               </v-row>
+
               <v-row dense>
                 <v-col cols="12" sm="6">
                   <labelCustom required :text="$t('nickname')"></labelCustom>
@@ -586,7 +587,7 @@
                     :disabled="student?.nicknameData"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" sm="6">
+                <v-col cols="12" sm="6" v-if="student.role === 'R_5'">
                   <labelCustom required :text="$t('class')"></labelCustom>
                   <v-autocomplete
                     v-model="student.class"
@@ -697,16 +698,17 @@
             :color="disable_checkout ? '#C4C4C4' : '#ff6b81'"
             >{{ $t("reserve") }}</v-btn
           >
-         <v-btn
-            v-else-if="course_data?.course_status === 'Reserve'
-            ? GenMonitors() === 'Close'
+          <v-btn
+            v-else-if="
+              course_data?.course_status === 'Reserve'
+                ? GenMonitors() === 'Close'
                 : false
             "
             class="w-full white--text"
             :disabled="validateButton || ValidateReserve()"
             elevation="0"
             dense
-             @click="CreateReserve"
+            @click="CreateReserve"
             :color="disable_checkout ? '#C4C4C4' : '#ff6b81'"
             >{{ $t("reserve") }}</v-btn
           >
@@ -1532,7 +1534,10 @@ export default {
               }
               this.order.created_by = this.user_login.account_id;
               this.changeOrderData(this.order);
-              this.CreateReserveCourse({ course_data: this.course_order });
+              this.CreateReserveCourse({
+                course_data: this.course_order,
+                profile_id: this.profile_detail?.userOneId,
+              });
             }
           });
         }
@@ -1847,6 +1852,7 @@ export default {
                   student.nicknameData = this.user_student_data[0].nicknameTh;
                   student.classData =
                     this.user_student_data[0]?.class?.classNameTh;
+                  student.role = this.user_student_data[0]?.roles?.roleId;
                 } else {
                   if (student) {
                     student.firstname_en = "";

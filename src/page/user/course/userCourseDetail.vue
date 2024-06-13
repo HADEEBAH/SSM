@@ -144,7 +144,7 @@
                 <v-icon color="#ff6b81"> $expand </v-icon>
               </template>
             </v-expansion-panel-header>
-            <v-expansion-panel-content class="border-t pt-3  overflow-hidden">
+            <v-expansion-panel-content class="border-t pt-3 overflow-hidden">
               <label v-html="course_data.music_performance"></label>
             </v-expansion-panel-content>
           </v-expansion-panel>
@@ -155,7 +155,7 @@
                 <v-icon color="#ff6b81"> $expand </v-icon>
               </template>
             </v-expansion-panel-header>
-            <v-expansion-panel-content class="border-t pt-3  overflow-hidden">
+            <v-expansion-panel-content class="border-t pt-3 overflow-hidden">
               <label v-html="course_data.catification"></label>
             </v-expansion-panel-content>
           </v-expansion-panel>

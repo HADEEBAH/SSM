@@ -72,6 +72,7 @@
           >
           </v-text-field>
         </v-col>
+        <pre></pre>
         <!-- nickname -->
         <v-col cols="12" sm="6">
           <label-custom :text="$t('nickname')"></label-custom>
@@ -138,7 +139,13 @@
           >
           </v-text-field>
         </v-col>
-        <v-col cols="12" sm="6">
+        <!-- {{ profile_detail.userRoles }} -->
+
+        <v-col
+          cols="12"
+          sm="6"
+          v-if="profile_detail?.userRoles?.roleId === 'R_5'"
+        >
           <label-custom :text="$t('class')"></label-custom>
           <v-autocomplete
             v-model="profile_detail.class.classNameTh"
