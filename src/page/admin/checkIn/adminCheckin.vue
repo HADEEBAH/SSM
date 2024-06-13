@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <headerPage :title="$t('check in later')" />
+    <headerPage :title="$t('admin check in later')" />
     <v-card class="mb-3" outlined rounded="lg">
       <v-card-text>
         <v-row>
@@ -127,283 +127,294 @@
           </v-row>
         </v-card-text>
       </v-card>
-
-      <div
-        v-for="(schedule, IndexSchedule) in scheduleCheckin"
-        :key="`${IndexSchedule}-schedule`"
-      >
-        <v-card
-          dense
-          outlined
-          class="mb-3"
-          rounded="lg"
-          @click="openExpand(IndexSchedule)"
+      <v-form v-model="validate_form" ref="validate_form">
+        <div
+          v-for="(schedule, IndexSchedule) in scheduleCheckin"
+          :key="`${IndexSchedule}-schedule`"
         >
-          <v-card-text class="border-left-10">
-            <v-row>
-              <v-col class="d-flex align-center font-bold text-base"
-                >{{ GenDate(schedule.date) }}
-              </v-col>
-              <v-col cols="auto">
-                <v-btn
-                  depressed
-                  color="#ff6b81"
-                  :dark="!schedule.checkedIn == 1"
-                  :disabled="schedule.checkedIn == 1"
-                  @click="CheckedInCoach(schedule, IndexSchedule)"
+          <v-card
+            dense
+            outlined
+            class="mb-3"
+            rounded="lg"
+            @click="openExpand(IndexSchedule)"
+          >
+            <v-card-text class="border-left-10">
+              <v-row>
+                <v-col class="d-flex align-center font-bold text-base"
+                  >{{ GenDate(schedule.date) }}
+                </v-col>
+                <v-col cols="auto">
+                  <v-btn
+                    depressed
+                    color="#ff6b81"
+                    :dark="!schedule.checkedIn == 1"
+                    :disabled="schedule.checkedIn == 1"
+                    @click="CheckedInCoach(schedule, IndexSchedule)"
+                  >
+                    {{ $t("check in teach") }}
+                  </v-btn>
+                </v-col>
+                <v-col cols="auto">
+                  <v-btn
+                    icon
+                    v-if="schedule.checkedIn == 1"
+                    color="#ff6b81"
+                    :dark="schedule.checkedIn == 1"
+                    @click="CheckedInCoach(schedule, IndexSchedule)"
+                  >
+                    <v-icon>mdi-refresh</v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+          <template v-if="schedule.checkedIn">
+            <v-expand-transition v-show="schedule.openStudents">
+              <div class="pl-6 mb-3">
+                <v-card
+                  v-if="$vuetify.breakpoint.smAndUp"
+                  class="mb-3"
+                  dense
+                  outlined
+                  rounded="lg"
+                  color="#ffe1e5"
                 >
-                  {{ $t("check in teach") }}
-                </v-btn>
-              </v-col>
-              <v-col cols="auto">
-                <v-btn
-                  icon
-                  v-if="schedule.checkedIn == 1"
-                  color="#ff6b81"
-                  :dark="schedule.checkedIn == 1"
-                  @click="CheckedInCoach(schedule, IndexSchedule)"
-                >
-                  <v-icon>mdi-refresh</v-icon>
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-        <template v-if="schedule.checkedIn">
-          <v-expand-transition v-show="schedule.openStudents">
-            <div class="pl-6 mb-3">
-              <v-card
-                v-if="$vuetify.breakpoint.smAndUp"
-                class="mb-3"
-                dense
-                outlined
-                rounded="lg"
-                color="#ffe1e5"
-              >
-                <v-card-text>
-                  <v-row>
-                    <v-col
-                      cols=""
-                      class="font-bold text-[#ff6b81]"
-                      align="center"
-                      >{{ $t("first name - last name") }}</v-col
-                    >
-                    <v-col
-                      cols="3"
-                      class="font-bold text-[#ff6b81]"
-                      align="center"
-                      >{{
-                        schedule?.checkInStudent[0].packageId
-                          ? $t("package")
-                          : ""
-                      }}</v-col
-                    >
-                    <v-col
-                      cols="2"
-                      class="font-bold text-[#ff6b81]"
-                      align="center"
-                      >{{ $t("number of times studied") }}</v-col
-                    >
-                    <v-col cols="3"></v-col>
-                  </v-row>
-                </v-card-text>
-              </v-card>
-              <v-card
-                v-for="(student, indexStudent) in schedule?.checkInStudent"
-                :key="`${indexStudent}-student`"
-                class="mb-3"
-                dense
-                outlined
-                rounded="lg"
-              >
-                <v-card-text>
-                  <v-row>
-                    <v-col
-                      cols="12"
-                      sm=""
-                      class="d-flex align-center"
-                      :class="
-                        $vuetify.breakpoint.smAndUp ? 'justify-center' : ''
-                      "
-                      >{{ student.studentName }}</v-col
-                    >
-                    <v-col
-                      cols="12"
-                      sm="3"
-                      class="d-flex align-center"
-                      :class="
-                        $vuetify.breakpoint.smAndUp ? 'justify-center' : ''
-                      "
-                    >
-                      <v-chip
-                        v-if="student.packageId"
-                        dark
-                        :color="packageColor(student.packageId)"
-                        >{{ student.packageName }}</v-chip
+                  <v-card-text>
+                    <v-row>
+                      <v-col
+                        cols=""
+                        class="font-bold text-[#ff6b81]"
+                        align="center"
+                        >{{ $t("first name - last name") }}</v-col
                       >
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      sm="2"
-                      class="d-flex align-center"
-                      :class="
-                        $vuetify.breakpoint.smAndUp ? 'justify-center' : ''
-                      "
-                      >{{
-                        `${
-                          $vuetify.breakpoint.smAndUp
-                            ? ""
-                            : $t("number of times studied") + ": "
-                        } ${student.countCheckIn}/${student.totalCheckIn}`
-                      }}</v-col
-                    >
-                    <!-- <v-form v-model="validate_form" ref="validate_form"> -->
-                    <v-col cols="12" sm="3">
-                      <v-select
-                        v-model="student.status"
-                        hide-details
-                        outlined
-                        dense
-                        color="#ff6b81"
-                        :items="
-                          FilterStatusCheckIn(check_in_status_options, student)
+                      <v-col
+                        cols="3"
+                        class="font-bold text-[#ff6b81]"
+                        align="center"
+                        >{{
+                          schedule?.checkInStudent[0].packageId
+                            ? $t("package")
+                            : ""
+                        }}</v-col
+                      >
+                      <v-col
+                        cols="2"
+                        class="font-bold text-[#ff6b81]"
+                        align="center"
+                        >{{ $t("number of times studied") }}</v-col
+                      >
+                      <v-col cols="3"></v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+                <v-card
+                  v-for="(student, indexStudent) in schedule?.checkInStudent"
+                  :key="`${indexStudent}-student`"
+                  class="mb-3"
+                  dense
+                  outlined
+                  rounded="lg"
+                >
+                  <v-card-text>
+                    <v-row>
+                      <v-col
+                        cols="12"
+                        sm=""
+                        class="d-flex align-center"
+                        :class="
+                          $vuetify.breakpoint.smAndUp ? 'justify-center' : ''
                         "
-                        item-text="label"
-                        item-value="value"
-                        :rules="status_text"
+                        >{{ student.studentName }}</v-col
                       >
-                        <template #item="{ item }">
-                          <v-list-item-content>
+                      <v-col
+                        cols="12"
+                        sm="3"
+                        class="d-flex align-center"
+                        :class="
+                          $vuetify.breakpoint.smAndUp ? 'justify-center' : ''
+                        "
+                      >
+                        <v-chip
+                          v-if="student.packageId"
+                          dark
+                          :color="packageColor(student.packageId)"
+                          >{{ student.packageName }}</v-chip
+                        >
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        sm="2"
+                        class="d-flex align-center"
+                        :class="
+                          $vuetify.breakpoint.smAndUp ? 'justify-center' : ''
+                        "
+                        >{{
+                          `${
+                            $vuetify.breakpoint.smAndUp
+                              ? ""
+                              : $t("number of times studied") + ": "
+                          } ${student.countCheckIn}/${student.totalCheckIn}`
+                        }}</v-col
+                      >
+                      <!-- <v-form v-model="validate_form" ref="validate_form"> -->
+                      <v-col cols="12" sm="3">
+                        <v-select
+                          v-model="student.status"
+                          hide-details
+                          outlined
+                          dense
+                          color="#ff6b81"
+                          :items="
+                            FilterStatusCheckIn(
+                              check_in_status_options,
+                              student
+                            )
+                          "
+                          item-text="label"
+                          item-value="value"
+                          :rules="status_text"
+                        >
+                          <template #item="{ item }">
+                            <v-list-item-content>
+                              <v-list-item-title
+                                :style="`color:${item.color}`"
+                                >{{ item.label }}</v-list-item-title
+                              >
+                            </v-list-item-content>
+                          </template>
+                          <template #selection="{ item }">
                             <v-list-item-title :style="`color:${item.color}`">{{
                               item.label
                             }}</v-list-item-title>
-                          </v-list-item-content>
-                        </template>
-                        <template #selection="{ item }">
-                          <v-list-item-title :style="`color:${item.color}`">{{
-                            item.label
-                          }}</v-list-item-title>
-                        </template>
-                      </v-select>
-                    </v-col>
-                    <!-- </v-form> -->
-                  </v-row>
-                  <v-row v-if="student.status === 'leave' && openCard" dense>
-                    <v-col
-                      cols="12"
-                      sm="2"
-                      class="d-flex jusify-center align-center"
-                      >{{ $t("compensatory study day") }}</v-col
-                    >
-                    <v-col cols="12" sm="4">
-                      <v-menu
-                        v-model="student.menuCompensationDate"
-                        :close-on-content-click="false"
-                        transition="scale-transition"
-                        min-width="auto"
+                          </template>
+                        </v-select>
+                      </v-col>
+                      <!-- </v-form> -->
+                    </v-row>
+                    <v-row v-if="student.status === 'leave' && openCard" dense>
+                      <v-col
+                        cols="12"
+                        sm="2"
+                        class="d-flex jusify-center align-center"
+                        >{{ $t("compensatory study day") }}</v-col
                       >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-text-field
-                            dense
-                            outlined
-                            hide-details
-                            v-model="student.compensationDateStr"
-                            readonly
-                            :placeholder="$t('choose a compensation date')"
-                            v-bind="attrs"
-                            v-on="on"
-                          >
-                            <template v-slot:append>
-                              <v-icon
-                                :color="
-                                  student.compensationDate ? '#FF6B81' : ''
-                                "
-                                >mdi-calendar</v-icon
-                              >
-                            </template>
-                          </v-text-field>
-                        </template>
-                        <v-date-picker
-                          @input="
-                            inputDate(IndexSchedule, indexStudent, student)
+                      <v-col cols="12" sm="4">
+                        <v-menu
+                          v-model="student.menuCompensationDate"
+                          :close-on-content-click="false"
+                          transition="scale-transition"
+                          min-width="auto"
+                        >
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-text-field
+                              dense
+                              outlined
+                              hide-details
+                              v-model="student.compensationDateStr"
+                              readonly
+                              :placeholder="$t('choose a compensation date')"
+                              :rules="compensation_date"
+                              v-bind="attrs"
+                              v-on="on"
+                            >
+                              <template v-slot:append>
+                                <v-icon
+                                  :color="
+                                    student.compensationDate ? '#FF6B81' : ''
+                                  "
+                                  >mdi-calendar</v-icon
+                                >
+                              </template>
+                            </v-text-field>
+                          </template>
+                          <v-date-picker
+                            @input="
+                              inputDate(IndexSchedule, indexStudent, student)
+                            "
+                            v-model="student.compensationDate"
+                            locale="th-TH"
+                          ></v-date-picker>
+                        </v-menu>
+                      </v-col>
+                      <v-col cols="auto" class="pr-2">
+                        <v-text-field
+                          outlined
+                          dense
+                          hide-details
+                          :style="`width:${width()}px;`"
+                          :rules="start_time"
+                          style="position: absolute; display: block; z-index: 4"
+                          @focus="
+                            SelectedStartDate(
+                              $event,
+                              student.compensationStartTime
+                            )
                           "
-                          v-model="student.compensationDate"
-                          locale="th-TH"
-                        ></v-date-picker>
-                      </v-menu>
-                    </v-col>
-                    <v-col cols="auto" class="pr-2">
-                      <v-text-field
-                        outlined
-                        dense
-                        hide-details
-                        :style="`width:${width()}px;`"
-                        style="position: absolute; display: block; z-index: 4"
-                        @focus="
-                          SelectedStartDate(
-                            $event,
-                            student.compensationStartTime
-                          )
-                        "
-                        :value="genTime(student.compensationStartTime)"
-                      >
-                      </v-text-field>
-                      <TimePicker
-                        class="time-picker-hidden"
-                        :minuteStep="30"
-                        :placeholder="$t('start time')"
-                        :style="`width:${width()}px;`"
-                        :class="student.startTime ? 'active' : ''"
-                        format="HH:mm"
-                        v-model="student.compensationStartTime"
-                      >
-                      </TimePicker>
-                    </v-col>
-                    <v-col cols="auto" class="pl-2">
-                      <v-text-field
-                        outlined
-                        dense
-                        :style="`width:${width()}px;`"
-                        style="position: absolute; display: block; z-index: 4"
-                        :value="genTime(student.compensationEndTime)"
-                        @focus="
-                          SelectedStartDate($event, student.compensationEndTime)
-                        "
-                      >
-                      </v-text-field>
+                          :value="genTime(student.compensationStartTime)"
+                        >
+                        </v-text-field>
+                        <TimePicker
+                          class="time-picker-hidden"
+                          :minuteStep="30"
+                          :placeholder="$t('start time')"
+                          :style="`width:${width()}px;`"
+                          :class="student.startTime ? 'active' : ''"
+                          format="HH:mm"
+                          v-model="student.compensationStartTime"
+                        >
+                        </TimePicker>
+                      </v-col>
+                      <v-col cols="auto" class="pl-2">
+                        <v-text-field
+                          outlined
+                          dense
+                          :rules="end_time"
+                          :style="`width:${width()}px;`"
+                          style="position: absolute; display: block; z-index: 4"
+                          :value="genTime(student.compensationEndTime)"
+                          @focus="
+                            SelectedStartDate(
+                              $event,
+                              student.compensationEndTime
+                            )
+                          "
+                        >
+                        </v-text-field>
 
-                      <TimePicker
-                        class="time-picker-hidden"
-                        :minuteStep="30"
-                        :style="`width:${width()}px;`"
-                        format="HH:mm"
-                        :class="student.endTime ? 'active' : ''"
-                        :placeholder="$t('end time')"
-                        v-model="student.compensationEndTime"
-                      ></TimePicker>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-              </v-card>
-              <v-row>
-                <v-col cols="12" class="d-flex justify-end">
-                  <v-btn
-                    :class="
-                      $vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'
-                    "
-                    dark
-                    rounded
-                    depressed
-                    color="#ff6b81"
-                    @click="saveStudentCheckIn(schedule)"
-                    >{{ $t("save") }}</v-btn
-                  >
-                </v-col>
-              </v-row>
-            </div>
-          </v-expand-transition>
-        </template>
-      </div>
+                        <TimePicker
+                          class="time-picker-hidden"
+                          :minuteStep="30"
+                          :style="`width:${width()}px;`"
+                          format="HH:mm"
+                          :class="student.endTime ? 'active' : ''"
+                          :placeholder="$t('end time')"
+                          v-model="student.compensationEndTime"
+                        ></TimePicker>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+                <v-row>
+                  <v-col cols="12" class="d-flex justify-end">
+                    <v-btn
+                      :class="
+                        $vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'
+                      "
+                      dark
+                      rounded
+                      depressed
+                      color="#ff6b81"
+                      @click="saveStudentCheckIn(schedule)"
+                      >{{ $t("save") }}</v-btn
+                    >
+                  </v-col>
+                </v-row>
+              </div>
+            </v-expand-transition>
+          </template>
+        </div>
+      </v-form>
     </template>
     <div v-else>
       <v-card dense outlined>
@@ -432,6 +443,7 @@ export default {
   },
   data() {
     return {
+      validate_form: false,
       filter: {
         course: "",
         coach: "",
@@ -457,7 +469,6 @@ export default {
       searchCoach: null,
       loadingFilter: false,
       openCard: true,
-      validate_form: false,
     };
   },
   computed: {
@@ -511,6 +522,15 @@ export default {
     },
     status_text() {
       return [(val) => !!val || this.$t("please state your attendance status")];
+    },
+    compensation_date() {
+      return [(val) => !!val || this.$t("please specify a compensation date")];
+    },
+    start_time() {
+      return [(val) => !!val || this.$t("please specify start time")];
+    },
+    end_time() {
+      return [(val) => !!val || this.$t("please specify end time")];
     },
   },
   watch: {
@@ -702,26 +722,26 @@ export default {
     //   inputValidation(e, type);
     // },
     saveStudentCheckIn(scheduleData) {
-      // this.$refs.validate_form.validate();
-      // if (this.validate_form) {
-      Swal.fire({
-        icon: "question",
-        title: this.$t("want to save?"),
-        showDenyButton: false,
-        showCancelButton: true,
-        confirmButtonText: this.$t("agree"),
-        cancelButtonText: this.$t("no"),
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          this.openCard = false;
-          await this.UpdateCheckinStudents({
-            payload: scheduleData.checkInStudent,
-          });
-          this.openCard = true;
-        }
-      });
+      this.$refs.validate_form.validate();
+      if (this.validate_form) {
+        Swal.fire({
+          icon: "question",
+          title: this.$t("want to save?"),
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("no"),
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            this.openCard = false;
+            await this.UpdateCheckinStudents({
+              payload: scheduleData.checkInStudent,
+            });
+            this.openCard = true;
+          }
+        });
+      }
     },
-    // },
   },
 };
 </script>

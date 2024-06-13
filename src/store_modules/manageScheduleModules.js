@@ -330,7 +330,6 @@ const manageScheduleModules = {
       let queryCourseId = ''
       let queryCoachId = ''
       let queryStatus = ''
-      // console.log('courseId :>> ', courseId);
       if (courseId) {
         for (const idCourseId of courseId) {
           queryCourseId += `&courseId=${idCourseId}`
@@ -517,13 +516,8 @@ const manageScheduleModules = {
 
             dataInSchadule = eventSchadule;
           });
-          console.log('eventSchadule :>> ', eventSchadule);
-          console.log('dataInSchadule :>> ', dataInSchadule);
           if (query_length > 0) {
-            console.log('query_length :>> ', query_length?.length);
             // context.commit("SetDataInSchedule", dataInSchadule);
-            // console.log('query_length :>> ', 22);
-
             context.commit("SetDataFilterSchedule", dataInSchadule);
             context.commit("SetGetAllHolidaysIsLoading", false)
           } else {

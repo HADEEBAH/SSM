@@ -82,6 +82,8 @@
           </v-col>
         </v-row>
         <v-card outlined class="mb-3">
+          <!-- {{ formattedHeadersParent }} <BR />
+          {{ fileParent }} -->
           <v-data-table
             v-if="fileParent && headersParent.length > 0"
             :headers="formattedHeadersParent"
@@ -128,6 +130,7 @@
           </v-col>
         </v-row>
         <v-card outlined class="mb-3">
+          <!-- {{ formattedHeadersStudent }} -->
           <v-data-table
             v-if="fileStudent && headersStudent.length > 0"
             :headers="formattedHeadersStudent"
@@ -205,6 +208,36 @@ export default {
       file: null,
       headersStudent: [],
       headersParent: [],
+      // formattedHeadersStudent: [
+      //   {
+      //     text: "INDEX",
+      //     value: "INDEX",
+
+      //     // sortable: false,
+      //   },
+      // ],
+      // formattedHeadersParent: [
+      //   {
+      //     text: "INDEX",
+      //     value: "INDEX",
+
+      //     // sortable: false,
+      //   },
+      //   {
+      //     text: "TEL",
+      //     value: "TEL",
+
+      //     // sortable: false,
+      //   },
+      //   { text: "USERNAME", value: "USERNAME" },
+      //   { text: "PASSWORD", value: "PASSWORD" },
+      //   { text: "TITLE_NAME_TH", value: "TITLE_NAME_TH" },
+      //   { text: "FIRST_NAME_TH", value: "FIRST_NAME_TH" },
+      //   { text: "LAST_NAME_TH", value: "LAST_NAME_TH" },
+      //   { text: "TITLE_NAME_EN", value: "TITLE_NAME_EN" },
+      //   { text: "FIRST_NAME_EN", value: "FIRST_NAME_EN" },
+      //   { text: "LAST_NAME_EN", value: "LAST_NAME_EN" },
+      // ],
       unHeader: ["ROLE", "ROLE_ID", "ACCOUNT_ID"],
     };
   },
@@ -313,51 +346,67 @@ export default {
       }
     },
     handleFileChange(event) {
-      this.file = event.target.files[0];
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const arrayBuffer = e.target.result;
-        const workbook = XLSX.read(arrayBuffer, { type: "array" });
-        const sheetNames = workbook.SheetNames;
-        for (const sheetName of sheetNames) {
-          if (sheetName === "STUDENT") {
-            const worksheet = workbook.Sheets[sheetName];
-            console.log("worksheet :>> ", worksheet);
-            const data = XLSX.utils.sheet_to_json(worksheet);
-            if (data?.length >= 1) {
-              this.headersStudent = Object.keys(data[0]);
-              // Create an array of objects with a 'value' property for each cell
+      try {
+        this.file = event.target.files[0];
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const arrayBuffer = e.target.result;
+          const workbook = XLSX.read(arrayBuffer, { type: "array" });
+          const sheetNames = workbook.SheetNames;
+          for (const sheetName of sheetNames) {
+            if (sheetName === "STUDENT") {
+              const worksheet = workbook.Sheets[sheetName];
+              console.log("worksheet :>> ", worksheet);
+              // const data = XLSX.utils.sheet_to_json(worksheet);
+              const data = XLSX.utils.sheet_to_json(worksheet, {
+                // header: 1, // Use this if you want to use the first row as headers, or specify an array of headers.
+                defval: null, // Default value for empty cells
+                raw: false, // Keep original values, including null
+              });
               if (data?.length >= 1) {
-                this.fileStudent = data.map((row) => {
-                  const rowData = {};
-                  this.headersStudent.forEach((header) => {
-                    rowData[header] = { value: row[header] }; // Initialize value property
+                this.headersStudent = Object.keys(data[0]);
+                // Create an array of objects with a 'value' property for each cell
+                if (data?.length >= 1) {
+                  this.fileStudent = data.map((row) => {
+                    const rowData = {};
+                    this.headersStudent.forEach((header) => {
+                      rowData[header] = { value: row[header] }; // Initialize value property
+                    });
+                    return rowData;
                   });
-                  return rowData;
-                });
+                }
               }
-            }
-          } else if (sheetName === "PARENT") {
-            const worksheet = workbook.Sheets[sheetName];
-            const data = XLSX.utils.sheet_to_json(worksheet);
+            } else if (sheetName === "PARENT") {
+              const worksheet = workbook.Sheets[sheetName];
+              // const data = XLSX.utils.sheet_to_json(worksheet);
+              const data = XLSX.utils.sheet_to_json(worksheet, {
+                // header: 1, // Use this if you want to use the first row as headers, or specify an array of headers.
+                defval: null, // Default value for empty cells
+                raw: false, // Keep original values, including null
+              });
 
-            if (data?.length >= 1) {
-              this.headersParent = Object.keys(data[0]);
-              // Create an array of objects with a 'value' property for each cell
               if (data?.length >= 1) {
-                this.fileParent = data.map((row) => {
-                  const rowData = {};
-                  this.headersParent.forEach((header) => {
-                    rowData[header] = { value: row[header] }; // Initialize value property
+                this.headersParent = Object.keys(data[0]);
+                console.log("data[0] :>> ", data[0]);
+                // Create an array of objects with a 'value' property for each cell
+                if (data?.length >= 1) {
+                  this.fileParent = data.map((row) => {
+                    const rowData = {};
+                    this.headersParent.forEach((header) => {
+                      // rowData[header] =  row[header] // Initialize value property
+                      rowData[header] = { value: row[header] }; // Initialize value property
+                    });
+                    return rowData;
                   });
-                  return rowData;
-                });
+                }
               }
             }
           }
-        }
-      };
-      reader.readAsArrayBuffer(this.file);
+        };
+        reader.readAsArrayBuffer(this.file);
+      } catch (error) {
+        console.log("error :>> ", error);
+      }
     },
     save() {
       this.uploadUser({
