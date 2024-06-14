@@ -215,6 +215,11 @@
             outlined
             dense
             :disabled="profile_detail?.nicknameTh"
+            @input="
+              realtimeCheckNickname(
+                course_order.students.find((v) => !v.is_other).nicknameTh
+              )
+            "
           >
           </v-text-field>
         </v-col>
@@ -229,6 +234,11 @@
             item-color="#ff6b81"
             dense
             :disabled="profile_detail.class.classNameTh !== ''"
+            @input="
+              realtimeCheckClass(
+                course_order.students.find((v) => !v.is_other).class
+              )
+            "
           >
             <template #no-data>
               <v-list-item>
@@ -585,6 +595,7 @@
                     v-model="student.nicknameTh"
                     :placeholder="$t('nickname')"
                     :disabled="student?.nicknameData"
+                    @input="realtimeCheckNickname(student.nicknameTh)"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" v-if="student.role === 'R_5'">
@@ -598,6 +609,7 @@
                     outlined
                     dense
                     :disabled="student?.classData"
+                    @input="realtimeCheckClass(student.class)"
                   >
                     <template #no-data>
                       <v-list-item>
@@ -1066,6 +1078,8 @@ export default {
     disable_checkout: false,
     coachSelect: false,
     chaeckConditions: false,
+    inputClass: "",
+    inputNickName: "",
   }),
   async created() {
     this.order_data = JSON.parse(localStorage.getItem("Order"));
@@ -1347,6 +1361,14 @@ export default {
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
       GetReserceCourse: "OrderModules/GetReserceCourse",
     }),
+    realtimeCheckNickname(items) {
+      this.inputNickName = items;
+      console.log("this.inputNickName :>> ", this.inputNickName);
+    },
+    realtimeCheckClass(items) {
+      this.inputClass = items;
+      console.log("this.inputClass :>> ", this.inputClass);
+    },
     checkRoleParent() {
       return ["R_4", ""].includes(this.profile_detail.userRoles.roleId);
     },
@@ -1487,13 +1509,19 @@ export default {
       let checkClass = "";
       for (const items of this.course_order?.students) {
         checkNickname = items.nicknameTh;
-        checkClass = items.class;
+        checkClass = items.class?.classNameTh;
       }
       if (
-        (checkNickname !== null && checkClass !== null) ||
-        (checkClass === "" && checkNickname !== null) ||
-        (checkClass === "" && checkNickname === "") ||
-        (checkClass !== null && checkNickname === "")
+        (this.profile_detail?.userRoles?.roleId === "R_5" &&
+          checkNickname !== null &&
+          checkClass !== null) ||
+        (this.inputNickName !== "" && this.inputClass !== "") ||
+        (this.inputNickName !== "" && checkClass !== null) ||
+        (this.inputClass !== "" &&
+          checkNickname !== null &&
+          this.profile_detail?.userRoles?.roleId !== "R_5" &&
+          checkNickname !== null) ||
+        this.inputNickName !== ""
       ) {
         if (this.course_order.course_type_id == "CT_1") {
           this.$refs.form_coach.validate();
@@ -1542,11 +1570,22 @@ export default {
           });
         }
       } else if (
-        (checkClass !== "" && checkNickname === "") ||
-        (checkNickname !== "" && checkClass === "")
+        (this.profile_detail?.userRoles?.roleId === "R_5" &&
+          checkClass !== null &&
+          checkNickname === null) ||
+        (this.inputNickName !== "" && this.inputClass === "") ||
+        (this.inputNickName !== "" && checkClass === null) ||
+        (checkNickname === null && this.inputClass !== "") ||
+        (checkNickname !== null && checkClass === null) ||
+        (this.profile_detail?.userRoles?.roleId !== "R_5" &&
+          checkNickname === "") ||
+        checkNickname !== ""
       ) {
+        console.log("22 :>> ", 22);
         this.chaeckConditions = true;
       } else {
+        console.log("33 :>> ", 33);
+
         this.chaeckConditions = true;
       }
     },
