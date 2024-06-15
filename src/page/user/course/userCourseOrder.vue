@@ -1251,6 +1251,9 @@ export default {
       course_is_loading: "CourseModules/getCourseIsLoading",
       course_monitors: "CourseMonitorModules/getCourseMonitor",
       reserve_list: "OrderModules/getReserveList",
+      get_user_oneId: "loginModules/getUserOneId",
+
+      // getUserOneId
     }),
     coachRules() {
       return [
@@ -1363,11 +1366,9 @@ export default {
     }),
     realtimeCheckNickname(items) {
       this.inputNickName = items;
-      console.log("this.inputNickName :>> ", this.inputNickName);
     },
     realtimeCheckClass(items) {
       this.inputClass = items;
-      console.log("this.inputClass :>> ", this.inputClass);
     },
     checkRoleParent() {
       return ["R_4", ""].includes(this.profile_detail.userRoles.roleId);
@@ -1507,21 +1508,25 @@ export default {
     CreateReserve() {
       let checkNickname = "";
       let checkClass = "";
+      let roles = "";
+      let yourself = this.course_order.apply_for_yourself;
+
       for (const items of this.course_order?.students) {
-        checkNickname = items.nicknameTh;
-        checkClass = items.class?.classNameTh;
+        checkNickname = items.nicknameTh ? items.nicknameTh : null;
+        checkClass =
+          items.class || items.class?.classNameTh
+            ? items.class || items.class?.classNameTh
+            : null;
       }
+      for (const items of this.user_student_data) {
+        roles = items?.roles?.roleId;
+      }
+
       if (
-        (this.profile_detail?.userRoles?.roleId === "R_5" &&
-          checkNickname !== null &&
-          checkClass !== null) ||
-        (this.inputNickName !== "" && this.inputClass !== "") ||
-        (this.inputNickName !== "" && checkClass !== null) ||
-        (this.inputClass !== "" &&
-          checkNickname !== null &&
-          this.profile_detail?.userRoles?.roleId !== "R_5" &&
-          checkNickname !== null) ||
-        this.inputNickName !== ""
+        (roles !== "R_5" && yourself === false && checkNickname) ||
+        (roles === "R_5" && checkNickname && checkClass) ||
+        (roles === undefined && checkNickname) ||
+        (yourself === true && checkNickname && checkClass)
       ) {
         if (this.course_order.course_type_id == "CT_1") {
           this.$refs.form_coach.validate();
@@ -1569,23 +1574,7 @@ export default {
             }
           });
         }
-      } else if (
-        (this.profile_detail?.userRoles?.roleId === "R_5" &&
-          checkClass !== null &&
-          checkNickname === null) ||
-        (this.inputNickName !== "" && this.inputClass === "") ||
-        (this.inputNickName !== "" && checkClass === null) ||
-        (checkNickname === null && this.inputClass !== "") ||
-        (checkNickname !== null && checkClass === null) ||
-        (this.profile_detail?.userRoles?.roleId !== "R_5" &&
-          checkNickname === "") ||
-        checkNickname !== ""
-      ) {
-        console.log("22 :>> ", 22);
-        this.chaeckConditions = true;
       } else {
-        console.log("33 :>> ", 33);
-
         this.chaeckConditions = true;
       }
     },
@@ -1611,7 +1600,6 @@ export default {
             this.course_order.students.length;
         }
       } else if (this.course_order.course_type_id === "CT_2") {
-        // console.log()
         max =
           this.course_data.student_recived <= this.course_order.students.length;
       }
@@ -1696,61 +1684,87 @@ export default {
       this.$router.push({ name: "UserKingdom" });
     },
     addToCart() {
-      if (this.course_order.course_type_id == "CT_1") {
-        this.$refs.form_coach.validate();
-      } else {
-        this.validate_coach = true;
+      let checkNickname = "";
+      let checkClass = "";
+      let roles = "";
+      let yourself = this.course_order.apply_for_yourself;
+
+      for (const items of this.course_order?.students) {
+        checkNickname = items.nicknameTh ? items.nicknameTh : null;
+        checkClass =
+          items.class || items.class?.classNameTh
+            ? items.class || items.class?.classNameTh
+            : null;
       }
-      if (this.validate_coach) {
-        Swal.fire({
-          icon: "question",
-          title: this.$t("want to add to cart?"),
-          showDenyButton: false,
-          showCancelButton: true,
-          confirmButtonText: this.$t("agree"),
-          cancelButtonText: this.$t("no"),
-        }).then(async (result) => {
-          if (result.isConfirmed) {
-            if (this.course_order.course_type_id == "CT_2") {
-              let days_of_class = this.course_data.days_of_class[0];
-              this.course_order.time = days_of_class.times[0];
-              this.course_order.coach_name =
-                this.course_data.coachs[0].coach_name;
-              this.course_order.coach_id = this.course_data.coachs[0].coach_id;
-              this.course_order.coach = this.course_data.coachs[0].coach_id;
-            } else {
-              this.course_order.coach = this.course_order.coach_id;
-              this.course_order.coach_name =
-                this.course_order.time.timeData.filter(
-                  (v) => v.coach_id === this.course_order.coach_id
-                )[0].coach_name;
+      for (const items of this.user_student_data) {
+        roles = items?.roles?.roleId;
+      }
+
+      if (
+        (roles !== "R_5" && yourself === false && checkNickname) ||
+        (roles === "R_5" && checkNickname && checkClass) ||
+        (roles === undefined && checkNickname) ||
+        (yourself === true && checkNickname && checkClass)
+      ) {
+        if (this.course_order.course_type_id == "CT_1") {
+          this.$refs.form_coach.validate();
+        } else {
+          this.validate_coach = true;
+        }
+        if (this.validate_coach) {
+          Swal.fire({
+            icon: "question",
+            title: this.$t("want to add to cart?"),
+            showDenyButton: false,
+            showCancelButton: true,
+            confirmButtonText: this.$t("agree"),
+            cancelButtonText: this.$t("no"),
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              if (this.course_order.course_type_id == "CT_2") {
+                let days_of_class = this.course_data.days_of_class[0];
+                this.course_order.time = days_of_class.times[0];
+                this.course_order.coach_name =
+                  this.course_data.coachs[0].coach_name;
+                this.course_order.coach_id =
+                  this.course_data.coachs[0].coach_id;
+                this.course_order.coach = this.course_data.coachs[0].coach_id;
+              } else {
+                this.course_order.coach = this.course_order.coach_id;
+                this.course_order.coach_name =
+                  this.course_order.time.timeData.filter(
+                    (v) => v.coach_id === this.course_order.coach_id
+                  )[0].coach_name;
+              }
+              this.order.courses.push({ ...this.course_order });
+              this.order.created_by = this.user_login.account_id;
+              this.changeOrderData(this.order);
+              localStorage.setItem(
+                this.user_login.account_id,
+                JSON.stringify(this.order)
+              );
+              this.saveCart({ cart_data: this.order });
+              // this.resetCourseData();
+              // this.show_dialog_cart = true;
+              // Swal.fire({
+              //   icon: "success",
+              //   title: this.$t("succeed"),
+              //   text: this.$t(
+              //     "the course has been successfully added to the cart"
+              //   ),
+              //   showCancelButton: false,
+              //   showConfirmButton: false,
+              //   showDenyButton: false,
+              //   timer: 3000,
+              //   timerProgressBar: true,
+              // }).finally(() => {
+              //   this.$router.push({ name: "CartList" });
+              // });
             }
-            this.order.courses.push({ ...this.course_order });
-            this.order.created_by = this.user_login.account_id;
-            this.changeOrderData(this.order);
-            localStorage.setItem(
-              this.user_login.account_id,
-              JSON.stringify(this.order)
-            );
-            this.saveCart({ cart_data: this.order });
-            // this.resetCourseData();
-            // this.show_dialog_cart = true;
-            // Swal.fire({
-            //   icon: "success",
-            //   title: this.$t("succeed"),
-            //   text: this.$t(
-            //     "the course has been successfully added to the cart"
-            //   ),
-            //   showCancelButton: false,
-            //   showConfirmButton: false,
-            //   showDenyButton: false,
-            //   timer: 3000,
-            //   timerProgressBar: true,
-            // }).finally(() => {
-            //   this.$router.push({ name: "CartList" });
-            // });
-          }
-        });
+          });
+        }
+      } else {
+        this.chaeckConditions = true;
       }
     },
     removeParent(student) {
@@ -1776,86 +1790,113 @@ export default {
       this.dialog_parent = false;
     },
     checkOut() {
-      if (this.course_order.course_type_id == "CT_1") {
-        this.$refs.form_coach.validate();
-      } else {
-        this.validate_coach = true;
+      let checkNickname = "";
+      let checkClass = "";
+      let roles = "";
+      let yourself = this.course_order.apply_for_yourself;
+
+      for (const items of this.course_order?.students) {
+        checkNickname = items.nicknameTh ? items.nicknameTh : null;
+        checkClass =
+          items.class || items.class?.classNameTh
+            ? items.class || items.class?.classNameTh
+            : null;
       }
-      if (this.validate_coach) {
-        if (!this.policy) {
-          this.policy_show = true;
+      for (const items of this.user_student_data) {
+        roles = items?.roles?.roleId;
+      }
+
+      if (
+        (roles !== "R_5" && yourself === false && checkNickname) ||
+        (roles === "R_5" && checkNickname && checkClass) ||
+        (roles === undefined && checkNickname) ||
+        (yourself === true && checkNickname && checkClass)
+      ) {
+        if (this.course_order.course_type_id == "CT_1") {
+          this.$refs.form_coach.validate();
         } else {
-          Swal.fire({
-            icon: "question",
-            title: this.$t("proceed with payment?"),
-            showDenyButton: false,
-            showCancelButton: true,
-            confirmButtonText: this.$t("agree"),
-            cancelButtonText: this.$t("no"),
-          }).then(async (result) => {
-            if (result.isConfirmed) {
-              if (this.course_order.course_type_id == "CT_1") {
-                if (new Date(this.course_data.course_open_date) > new Date()) {
-                  this.course_order.start_date =
-                    this.course_data.course_open_date;
+          this.validate_coach = true;
+        }
+        if (this.validate_coach) {
+          if (!this.policy) {
+            this.policy_show = true;
+          } else {
+            Swal.fire({
+              icon: "question",
+              title: this.$t("proceed with payment?"),
+              showDenyButton: false,
+              showCancelButton: true,
+              confirmButtonText: this.$t("agree"),
+              cancelButtonText: this.$t("no"),
+            }).then(async (result) => {
+              if (result.isConfirmed) {
+                if (this.course_order.course_type_id == "CT_1") {
+                  if (
+                    new Date(this.course_data.course_open_date) > new Date()
+                  ) {
+                    this.course_order.start_date =
+                      this.course_data.course_open_date;
+                  } else {
+                    this.course_order.start_date = "";
+                  }
+                  this.course_order.coach = this.course_order.coach_id;
+                  this.course_order.coach_name =
+                    this.course_order.time.timeData.filter(
+                      (v) => v.coach_id === this.course_order.coach_id
+                    )[0].coach_name;
                 } else {
-                  this.course_order.start_date = "";
+                  //  CT_2
+                  if (
+                    new Date(this.course_data.course_study_start_date) >
+                    new Date()
+                  ) {
+                    this.course_order.start_date =
+                      this.course_data.course_study_start_date;
+                  } else {
+                    this.course_order.start_date = "";
+                  }
+                  this.course_order.time =
+                    this.course_data.days_of_class[0].times[0];
+                  this.course_order.coach_name =
+                    this.course_data.coachs[0].coach_name;
+                  this.course_order.coach = this.course_data.coachs[0].coach_id;
+                  this.course_order.coach_id =
+                    this.course_data.coachs[0].coach_id;
                 }
-                this.course_order.coach = this.course_order.coach_id;
-                this.course_order.coach_name =
-                  this.course_order.time.timeData.filter(
-                    (v) => v.coach_id === this.course_order.coach_id
-                  )[0].coach_name;
-              } else {
-                //  CT_2
-                if (
-                  new Date(this.course_data.course_study_start_date) >
-                  new Date()
-                ) {
-                  this.course_order.start_date =
-                    this.course_data.course_study_start_date;
+                if (this.order.courses.length === 0) {
+                  if (
+                    this.order.courses.filter(
+                      (v) => v.course_id === this.course_order.course_id
+                    ).length === 0
+                  ) {
+                    this.order.courses.push({ ...this.course_order });
+                  }
                 } else {
-                  this.course_order.start_date = "";
-                }
-                this.course_order.time =
-                  this.course_data.days_of_class[0].times[0];
-                this.course_order.coach_name =
-                  this.course_data.coachs[0].coach_name;
-                this.course_order.coach = this.course_data.coachs[0].coach_id;
-                this.course_order.coach_id =
-                  this.course_data.coachs[0].coach_id;
-              }
-              if (this.order.courses.length === 0) {
-                if (
-                  this.order.courses.filter(
-                    (v) => v.course_id === this.course_order.course_id
-                  ).length === 0
-                ) {
+                  this.order.courses = [];
                   this.order.courses.push({ ...this.course_order });
                 }
-              } else {
-                this.order.courses = [];
-                this.order.courses.push({ ...this.course_order });
-              }
-              this.order.created_by = this.user_login.account_id;
-              this.changeOrderData(this.order);
-              if (this.course_order.course_type_id == "CT_1") {
-                if (this.course_order.day && this.course_order.time) {
-                  this.saveOrder({ regis_type: "" });
+                this.order.created_by = this.user_login.account_id;
+                this.changeOrderData(this.order);
+                if (this.course_order.course_type_id == "CT_1") {
+                  if (this.course_order.day && this.course_order.time) {
+                    this.saveOrder({ regis_type: "" });
+                  } else {
+                    Swal.fire({
+                      icon: "error",
+                      text: `${this.$t("invalid data")} ${
+                        this.course_order.day
+                      } : ${this.course_order.time}`,
+                    });
+                  }
                 } else {
-                  Swal.fire({
-                    icon: "error",
-                    text: `${this.$t("invalid data")} ${
-                      this.course_order.day
-                    } : ${this.course_order.time}`,
-                  });
+                  this.saveOrder({ regis_type: "" });
                 }
-              } else {
-                this.saveOrder({ regis_type: "" });
               }
-            }
-          });
+            });
+          }
         }
+      } else {
+        this.chaeckConditions = true;
       }
     },
     checkUsername(username, type) {

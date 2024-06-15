@@ -103,14 +103,14 @@ const importUserModules = {
             const parentData = data.data.PARENT.map(row => {
               const newRow = {};
               for (const key in row) {
-                newRow[key] = row[key] === null ? "NULL" : row[key];
+                newRow[key] = row[key] === null ? "-" : row[key];
               }
               return newRow;
             });
             const studentData = data.data.STUDENT.map(row => {
               const newRow = {};
               for (const key in row) {
-                newRow[key] = row[key] === null ? "NULL" : row[key];
+                newRow[key] = row[key] === null ? "-" : row[key];
               }
               return newRow;
             });
