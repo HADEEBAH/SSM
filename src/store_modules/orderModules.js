@@ -982,6 +982,7 @@ const orderModules = {
             if (regis_type !== "cart") {
               if (order.type !== "addStudent") {
                 if (!studentUpdate.some(v => v.studentId === student.account_id)) {
+                  console.log('itemRole :>> ', itemRole);
                   if (itemRole === 'R_5') {
                     if (student.nicknameTh && student.class) {
                       studentUpdate.push({
