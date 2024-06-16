@@ -1575,7 +1575,17 @@ export default {
           });
         }
       } else {
-        this.chaeckConditions = true;
+        // this.chaeckConditions = true;
+        Swal.fire({
+          icon: "warning",
+          title: this.$t("something went wrong"),
+          text: this.$t("please filter yourse nickname and class"),
+          timer: 3000,
+          showDenyButton: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        });
       }
     },
     checkApplyForYourselfRole() {
@@ -1764,7 +1774,17 @@ export default {
           });
         }
       } else {
-        this.chaeckConditions = true;
+        // this.chaeckConditions = true;
+        Swal.fire({
+          icon: "warning",
+          title: this.$t("something went wrong"),
+          text: this.$t("please filter yourse nickname and class"),
+          timer: 3000,
+          showDenyButton: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        });
       }
     },
     removeParent(student) {
@@ -1896,7 +1916,17 @@ export default {
           }
         }
       } else {
-        this.chaeckConditions = true;
+        // this.chaeckConditions = true;
+        Swal.fire({
+          icon: "warning",
+          title: this.$t("something went wrong"),
+          text: this.$t("please filter yourse nickname and class"),
+          timer: 3000,
+          showDenyButton: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        });
       }
     },
     checkUsername(username, type) {
