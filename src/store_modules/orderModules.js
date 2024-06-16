@@ -1259,8 +1259,11 @@ const orderModules = {
             showConfirmButton: false,
           });
         }
+        // let localhost = "http://localhost:3002"
+
 
         let { data } = await axios.post(
+          // `${localhost}/api/v1/order/regis/course`,
           `${process.env.VUE_APP_URL}/api/v1/order/regis/course`,
           payload,
           config
@@ -1401,7 +1404,19 @@ const orderModules = {
       } catch (error) {
         context.commit("SetOrderIsLoading", false);
         context.commit("SetOrderIsStatus", false);
-        if (error?.response?.data?.message == "over study end date") {
+        if (error?.response?.data?.message == "Parents cannot purchase courses for them") {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("unable to register"),
+            text: VueI18n.t(
+              "parents cannot resave the course to their parents"
+            ),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message == "over study end date") {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("unable to register"),
@@ -2028,6 +2043,8 @@ const orderModules = {
                   payload,
                   config
                 );
+                console.log('data :>> ', data);
+
                 if (data.statusCode === 201) {
                   count = count + 1;
                 } else {
@@ -2099,6 +2116,7 @@ const orderModules = {
               );
               if (data.statusCode === 201) {
                 count = count + 1;
+
               } else {
                 throw { error: data.data };
               }
@@ -2122,15 +2140,29 @@ const orderModules = {
           });
         }
       } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: VueI18n.t("something went wrong"),
-          showDenyButton: false,
-          showCancelButton: false,
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-        });
+        if (error.response?.data?.message === 'Parents cannot resave the course to their parents.') {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("something went wrong"),
+            text: VueI18n.t("parents cannot resave the course to their parents"),
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("something went wrong"),
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+          });
+        }
+
       }
     },
     async GetReserceCourse(context, { course_id }) {

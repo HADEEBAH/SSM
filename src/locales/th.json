@@ -469,6 +469,8 @@
 
 
     "package" : "แพ็คเกจ",
+    "parents cannot resave the course to their parents" : "ผู้ปกครองไม่สามารถทำรายการให้ผู้ปกครองท่านอื่น",
+    
     "package no." :"แพ็คเกจที่",
     "page not found" : "ไม่พบหน้านี้",
     "paid price" : "ราคาชำระ",
