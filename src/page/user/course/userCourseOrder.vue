@@ -215,6 +215,11 @@
             outlined
             dense
             :disabled="profile_detail?.nicknameTh"
+            @input="
+              realtimeCheckNickname(
+                course_order.students.find((v) => !v.is_other).nicknameTh
+              )
+            "
           >
           </v-text-field>
         </v-col>
@@ -229,6 +234,11 @@
             item-color="#ff6b81"
             dense
             :disabled="profile_detail.class.classNameTh !== ''"
+            @input="
+              realtimeCheckClass(
+                course_order.students.find((v) => !v.is_other).class
+              )
+            "
           >
             <template #no-data>
               <v-list-item>
@@ -585,6 +595,7 @@
                     v-model="student.nicknameTh"
                     :placeholder="$t('nickname')"
                     :disabled="student?.nicknameData"
+                    @input="realtimeCheckNickname(student.nicknameTh)"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" v-if="student.role === 'R_5'">
@@ -598,6 +609,7 @@
                     outlined
                     dense
                     :disabled="student?.classData"
+                    @input="realtimeCheckClass(student.class)"
                   >
                     <template #no-data>
                       <v-list-item>
@@ -1066,6 +1078,8 @@ export default {
     disable_checkout: false,
     coachSelect: false,
     chaeckConditions: false,
+    inputClass: "",
+    inputNickName: "",
   }),
   async created() {
     this.order_data = JSON.parse(localStorage.getItem("Order"));
@@ -1237,6 +1251,9 @@ export default {
       course_is_loading: "CourseModules/getCourseIsLoading",
       course_monitors: "CourseMonitorModules/getCourseMonitor",
       reserve_list: "OrderModules/getReserveList",
+      get_user_oneId: "loginModules/getUserOneId",
+
+      // getUserOneId
     }),
     coachRules() {
       return [
@@ -1347,6 +1364,12 @@ export default {
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
       GetReserceCourse: "OrderModules/GetReserceCourse",
     }),
+    realtimeCheckNickname(items) {
+      this.inputNickName = items;
+    },
+    realtimeCheckClass(items) {
+      this.inputClass = items;
+    },
     checkRoleParent() {
       return ["R_4", ""].includes(this.profile_detail.userRoles.roleId);
     },
@@ -1485,15 +1508,25 @@ export default {
     CreateReserve() {
       let checkNickname = "";
       let checkClass = "";
+      let roles = "";
+      let yourself = this.course_order.apply_for_yourself;
+
       for (const items of this.course_order?.students) {
-        checkNickname = items.nicknameTh;
-        checkClass = items.class;
+        checkNickname = items.nicknameTh ? items.nicknameTh : null;
+        checkClass =
+          items.class || items.class?.classNameTh
+            ? items.class || items.class?.classNameTh
+            : null;
       }
+      for (const items of this.user_student_data) {
+        roles = items?.roles?.roleId;
+      }
+
       if (
-        (checkNickname !== null && checkClass !== null) ||
-        (checkClass === "" && checkNickname !== null) ||
-        (checkClass === "" && checkNickname === "") ||
-        (checkClass !== null && checkNickname === "")
+        (roles !== "R_5" && yourself === false && checkNickname) ||
+        (roles === "R_5" && checkNickname && checkClass) ||
+        (roles === undefined && checkNickname) ||
+        (yourself === true && checkNickname && checkClass)
       ) {
         if (this.course_order.course_type_id == "CT_1") {
           this.$refs.form_coach.validate();
@@ -1541,13 +1574,18 @@ export default {
             }
           });
         }
-      } else if (
-        (checkClass !== "" && checkNickname === "") ||
-        (checkNickname !== "" && checkClass === "")
-      ) {
-        this.chaeckConditions = true;
       } else {
-        this.chaeckConditions = true;
+        // this.chaeckConditions = true;
+        Swal.fire({
+          icon: "warning",
+          title: this.$t("something went wrong"),
+          text: this.$t("please filter yourse nickname and class"),
+          timer: 3000,
+          showDenyButton: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        });
       }
     },
     checkApplyForYourselfRole() {
@@ -1572,7 +1610,6 @@ export default {
             this.course_order.students.length;
         }
       } else if (this.course_order.course_type_id === "CT_2") {
-        // console.log()
         max =
           this.course_data.student_recived <= this.course_order.students.length;
       }
@@ -1657,60 +1694,96 @@ export default {
       this.$router.push({ name: "UserKingdom" });
     },
     addToCart() {
-      if (this.course_order.course_type_id == "CT_1") {
-        this.$refs.form_coach.validate();
-      } else {
-        this.validate_coach = true;
+      let checkNickname = "";
+      let checkClass = "";
+      let roles = "";
+      let yourself = this.course_order.apply_for_yourself;
+
+      for (const items of this.course_order?.students) {
+        checkNickname = items.nicknameTh ? items.nicknameTh : null;
+        checkClass =
+          items.class || items.class?.classNameTh
+            ? items.class || items.class?.classNameTh
+            : null;
       }
-      if (this.validate_coach) {
-        Swal.fire({
-          icon: "question",
-          title: this.$t("want to add to cart?"),
-          showDenyButton: false,
-          showCancelButton: true,
-          confirmButtonText: this.$t("agree"),
-          cancelButtonText: this.$t("no"),
-        }).then(async (result) => {
-          if (result.isConfirmed) {
-            if (this.course_order.course_type_id == "CT_2") {
-              let days_of_class = this.course_data.days_of_class[0];
-              this.course_order.time = days_of_class.times[0];
-              this.course_order.coach_name =
-                this.course_data.coachs[0].coach_name;
-              this.course_order.coach_id = this.course_data.coachs[0].coach_id;
-              this.course_order.coach = this.course_data.coachs[0].coach_id;
-            } else {
-              this.course_order.coach = this.course_order.coach_id;
-              this.course_order.coach_name =
-                this.course_order.time.timeData.filter(
-                  (v) => v.coach_id === this.course_order.coach_id
-                )[0].coach_name;
+      for (const items of this.user_student_data) {
+        roles = items?.roles?.roleId;
+      }
+
+      if (
+        (roles !== "R_5" && yourself === false && checkNickname) ||
+        (roles === "R_5" && checkNickname && checkClass) ||
+        (roles === undefined && checkNickname) ||
+        (yourself === true && checkNickname && checkClass)
+      ) {
+        if (this.course_order.course_type_id == "CT_1") {
+          this.$refs.form_coach.validate();
+        } else {
+          this.validate_coach = true;
+        }
+        if (this.validate_coach) {
+          Swal.fire({
+            icon: "question",
+            title: this.$t("want to add to cart?"),
+            showDenyButton: false,
+            showCancelButton: true,
+            confirmButtonText: this.$t("agree"),
+            cancelButtonText: this.$t("no"),
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              if (this.course_order.course_type_id == "CT_2") {
+                let days_of_class = this.course_data.days_of_class[0];
+                this.course_order.time = days_of_class.times[0];
+                this.course_order.coach_name =
+                  this.course_data.coachs[0].coach_name;
+                this.course_order.coach_id =
+                  this.course_data.coachs[0].coach_id;
+                this.course_order.coach = this.course_data.coachs[0].coach_id;
+              } else {
+                this.course_order.coach = this.course_order.coach_id;
+                this.course_order.coach_name =
+                  this.course_order.time.timeData.filter(
+                    (v) => v.coach_id === this.course_order.coach_id
+                  )[0].coach_name;
+              }
+              this.order.courses.push({ ...this.course_order });
+              this.order.created_by = this.user_login.account_id;
+              this.changeOrderData(this.order);
+              localStorage.setItem(
+                this.user_login.account_id,
+                JSON.stringify(this.order)
+              );
+              this.saveCart({ cart_data: this.order });
+              // this.resetCourseData();
+              // this.show_dialog_cart = true;
+              // Swal.fire({
+              //   icon: "success",
+              //   title: this.$t("succeed"),
+              //   text: this.$t(
+              //     "the course has been successfully added to the cart"
+              //   ),
+              //   showCancelButton: false,
+              //   showConfirmButton: false,
+              //   showDenyButton: false,
+              //   timer: 3000,
+              //   timerProgressBar: true,
+              // }).finally(() => {
+              //   this.$router.push({ name: "CartList" });
+              // });
             }
-            this.order.courses.push({ ...this.course_order });
-            this.order.created_by = this.user_login.account_id;
-            this.changeOrderData(this.order);
-            localStorage.setItem(
-              this.user_login.account_id,
-              JSON.stringify(this.order)
-            );
-            this.saveCart({ cart_data: this.order });
-            // this.resetCourseData();
-            // this.show_dialog_cart = true;
-            // Swal.fire({
-            //   icon: "success",
-            //   title: this.$t("succeed"),
-            //   text: this.$t(
-            //     "the course has been successfully added to the cart"
-            //   ),
-            //   showCancelButton: false,
-            //   showConfirmButton: false,
-            //   showDenyButton: false,
-            //   timer: 3000,
-            //   timerProgressBar: true,
-            // }).finally(() => {
-            //   this.$router.push({ name: "CartList" });
-            // });
-          }
+          });
+        }
+      } else {
+        // this.chaeckConditions = true;
+        Swal.fire({
+          icon: "warning",
+          title: this.$t("something went wrong"),
+          text: this.$t("please filter yourse nickname and class"),
+          timer: 3000,
+          showDenyButton: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          timerProgressBar: true,
         });
       }
     },
@@ -1737,86 +1810,123 @@ export default {
       this.dialog_parent = false;
     },
     checkOut() {
-      if (this.course_order.course_type_id == "CT_1") {
-        this.$refs.form_coach.validate();
-      } else {
-        this.validate_coach = true;
+      let checkNickname = "";
+      let checkClass = "";
+      let roles = "";
+      let yourself = this.course_order.apply_for_yourself;
+
+      for (const items of this.course_order?.students) {
+        checkNickname = items.nicknameTh ? items.nicknameTh : null;
+        checkClass =
+          items.class || items.class?.classNameTh
+            ? items.class || items.class?.classNameTh
+            : null;
       }
-      if (this.validate_coach) {
-        if (!this.policy) {
-          this.policy_show = true;
+      for (const items of this.user_student_data) {
+        roles = items?.roles?.roleId;
+      }
+
+      if (
+        (roles !== "R_5" && yourself === false && checkNickname) ||
+        (roles === "R_5" && checkNickname && checkClass) ||
+        (roles === undefined && checkNickname) ||
+        (yourself === true && checkNickname && checkClass)
+      ) {
+        if (this.course_order.course_type_id == "CT_1") {
+          this.$refs.form_coach.validate();
         } else {
-          Swal.fire({
-            icon: "question",
-            title: this.$t("proceed with payment?"),
-            showDenyButton: false,
-            showCancelButton: true,
-            confirmButtonText: this.$t("agree"),
-            cancelButtonText: this.$t("no"),
-          }).then(async (result) => {
-            if (result.isConfirmed) {
-              if (this.course_order.course_type_id == "CT_1") {
-                if (new Date(this.course_data.course_open_date) > new Date()) {
-                  this.course_order.start_date =
-                    this.course_data.course_open_date;
+          this.validate_coach = true;
+        }
+        if (this.validate_coach) {
+          if (!this.policy) {
+            this.policy_show = true;
+          } else {
+            Swal.fire({
+              icon: "question",
+              title: this.$t("proceed with payment?"),
+              showDenyButton: false,
+              showCancelButton: true,
+              confirmButtonText: this.$t("agree"),
+              cancelButtonText: this.$t("no"),
+            }).then(async (result) => {
+              if (result.isConfirmed) {
+                if (this.course_order.course_type_id == "CT_1") {
+                  if (
+                    new Date(this.course_data.course_open_date) > new Date()
+                  ) {
+                    this.course_order.start_date =
+                      this.course_data.course_open_date;
+                  } else {
+                    this.course_order.start_date = "";
+                  }
+                  this.course_order.coach = this.course_order.coach_id;
+                  this.course_order.coach_name =
+                    this.course_order.time.timeData.filter(
+                      (v) => v.coach_id === this.course_order.coach_id
+                    )[0].coach_name;
                 } else {
-                  this.course_order.start_date = "";
+                  //  CT_2
+                  if (
+                    new Date(this.course_data.course_study_start_date) >
+                    new Date()
+                  ) {
+                    this.course_order.start_date =
+                      this.course_data.course_study_start_date;
+                  } else {
+                    this.course_order.start_date = "";
+                  }
+                  this.course_order.time =
+                    this.course_data.days_of_class[0].times[0];
+                  this.course_order.coach_name =
+                    this.course_data.coachs[0].coach_name;
+                  this.course_order.coach = this.course_data.coachs[0].coach_id;
+                  this.course_order.coach_id =
+                    this.course_data.coachs[0].coach_id;
                 }
-                this.course_order.coach = this.course_order.coach_id;
-                this.course_order.coach_name =
-                  this.course_order.time.timeData.filter(
-                    (v) => v.coach_id === this.course_order.coach_id
-                  )[0].coach_name;
-              } else {
-                //  CT_2
-                if (
-                  new Date(this.course_data.course_study_start_date) >
-                  new Date()
-                ) {
-                  this.course_order.start_date =
-                    this.course_data.course_study_start_date;
+                if (this.order.courses.length === 0) {
+                  if (
+                    this.order.courses.filter(
+                      (v) => v.course_id === this.course_order.course_id
+                    ).length === 0
+                  ) {
+                    this.order.courses.push({ ...this.course_order });
+                  }
                 } else {
-                  this.course_order.start_date = "";
-                }
-                this.course_order.time =
-                  this.course_data.days_of_class[0].times[0];
-                this.course_order.coach_name =
-                  this.course_data.coachs[0].coach_name;
-                this.course_order.coach = this.course_data.coachs[0].coach_id;
-                this.course_order.coach_id =
-                  this.course_data.coachs[0].coach_id;
-              }
-              if (this.order.courses.length === 0) {
-                if (
-                  this.order.courses.filter(
-                    (v) => v.course_id === this.course_order.course_id
-                  ).length === 0
-                ) {
+                  this.order.courses = [];
                   this.order.courses.push({ ...this.course_order });
                 }
-              } else {
-                this.order.courses = [];
-                this.order.courses.push({ ...this.course_order });
-              }
-              this.order.created_by = this.user_login.account_id;
-              this.changeOrderData(this.order);
-              if (this.course_order.course_type_id == "CT_1") {
-                if (this.course_order.day && this.course_order.time) {
-                  this.saveOrder({ regis_type: "" });
+                this.order.created_by = this.user_login.account_id;
+                this.changeOrderData(this.order);
+                if (this.course_order.course_type_id == "CT_1") {
+                  if (this.course_order.day && this.course_order.time) {
+                    this.saveOrder({ regis_type: "" });
+                  } else {
+                    Swal.fire({
+                      icon: "error",
+                      text: `${this.$t("invalid data")} ${
+                        this.course_order.day
+                      } : ${this.course_order.time}`,
+                    });
+                  }
                 } else {
-                  Swal.fire({
-                    icon: "error",
-                    text: `${this.$t("invalid data")} ${
-                      this.course_order.day
-                    } : ${this.course_order.time}`,
-                  });
+                  this.saveOrder({ regis_type: "" });
                 }
-              } else {
-                this.saveOrder({ regis_type: "" });
               }
-            }
-          });
+            });
+          }
         }
+      } else {
+        // this.chaeckConditions = true;
+        Swal.fire({
+          icon: "warning",
+          title: this.$t("something went wrong"),
+          text: this.$t("please filter yourse nickname and class"),
+          timer: 3000,
+          showDenyButton: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        });
       }
     },
     checkUsername(username, type) {

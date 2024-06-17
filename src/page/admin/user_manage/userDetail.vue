@@ -512,7 +512,8 @@
                         <v-row>
                           <!-- <pre>{{ show_by_id?.class?.classNameTh }}</pre> -->
                           <!-- >> {{ show_by_id.class.classNameTh }} -->
-                          <v-col cols="12" sm="6">
+
+                          <!-- <v-col cols="12" sm="6">
                             <label-custom :text="$t('class')"></label-custom>
                             <v-text-field
                               :disabled="!isEnabled"
@@ -522,7 +523,7 @@
                               dense
                             >
                             </v-text-field>
-                            <!-- <v-autocomplete
+                            <v-autocomplete
                               v-model="show_by_id.class.classNameEn"
                               :items="class_list"
                               item-text="classNameTh"
@@ -537,8 +538,8 @@
                                   {{ $t("data not found") }}
                                 </v-list-item>
                               </template>
-                            </v-autocomplete> -->
-                          </v-col>
+                            </v-autocomplete>
+                          </v-col> -->
 
                           <v-col cols="12" sm="6">
                             <label-custom
