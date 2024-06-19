@@ -1570,6 +1570,8 @@ export default {
               this.CreateReserveCourse({
                 course_data: this.course_order,
                 profile_id: this.profile_detail?.userOneId,
+                profile_data: this.profile_detail,
+                yourself: yourself,
               });
             }
           });
@@ -1610,8 +1612,10 @@ export default {
             this.course_order.students.length;
         }
       } else if (this.course_order.course_type_id === "CT_2") {
-        max =
-          this.course_data.student_recived <= this.course_order.students.length;
+        let check = this.course_monitors[0]?.m_current_student;
+        let count = (check += this.course_order.students.length);
+        max = this.course_data.student_recived <= count;
+        // this.course_data.student_recived <= this.course_order.students.length;
       }
       return max;
     },
