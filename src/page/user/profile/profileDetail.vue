@@ -673,7 +673,7 @@ export default {
               "please enter your name (thai) with a length of at least 2 characters"
             ),
           (val) =>
-            (val || "").length < 20 ||
+            (val || "").length < 100 ||
             this.$t(
               "please enter your name (thai) length not exceeding 20 characters"
             ),
@@ -708,7 +708,7 @@ export default {
               "please enter your last name (Thai), at least 2 characters long"
             ),
           (val) =>
-            (val || "").length < 20 ||
+            (val || "").length < 100 ||
             this.$t(
               "please enter your last name (Thai) not more than 20 characters"
             ),
