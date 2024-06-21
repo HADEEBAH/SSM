@@ -18,12 +18,10 @@
                   <v-card-text>
                     <v-row>
                       <v-col cols="12" sm="6">
-                        <label-custom
-                          :text="this.$t('username')"
-                        ></label-custom>
+                        <label-custom :text="$t('username')"></label-custom>
                         <v-text-field
                           :placeholder="
-                            this.$t('please enter your username (English)')
+                            $t('please enter your username (English)')
                           "
                           @keydown="validate($event, 'en-number')"
                           v-model="show_by_id.userName"
@@ -138,7 +136,7 @@
                           <v-row>
                             <v-col cols="12" sm="6">
                               <label-custom
-                                :text="this.$t('first name(thai)')"
+                                :text="$t('first name(thai)')"
                               ></label-custom>
 
                               <v-text-field
@@ -154,7 +152,7 @@
                             </v-col>
                             <v-col cols="12" sm="6">
                               <label-custom
-                                :text="this.$t('last name(thai)')"
+                                :text="$t('last name(thai)')"
                               ></label-custom>
                               <v-text-field
                                 @keydown="validate($event, 'th-special')"
@@ -172,7 +170,7 @@
                           <v-row>
                             <v-col cols="12" sm="6">
                               <label-custom
-                                :text="this.$t('first name(english)')"
+                                :text="$t('first name(english)')"
                               ></label-custom>
                               <v-text-field
                                 v-bind:disabled="isDisabled"
@@ -188,7 +186,7 @@
                             </v-col>
                             <v-col cols="12" sm="6">
                               <label-custom
-                                :text="this.$t('last name(english)')"
+                                :text="$t('last name(english)')"
                               ></label-custom>
                               <v-text-field
                                 v-bind:disabled="isDisabled"
@@ -206,7 +204,7 @@
                           <v-row>
                             <v-col cols="12" sm="6">
                               <label-custom
-                                :text="this.$t('nickname(thai)')"
+                                :text="$t('nickname(thai)')"
                               ></label-custom>
                               <v-text-field
                                 v-model="show_by_id.nicknameTh"
@@ -221,7 +219,7 @@
                             </v-col>
                             <v-col cols="12" sm="6">
                               <label-custom
-                                :text="this.$t('nickname(en)')"
+                                :text="$t('nickname(en)')"
                               ></label-custom>
                               <v-text-field
                                 v-model="show_by_id.nicknameEn"
@@ -237,9 +235,7 @@
                           </v-row>
                           <v-row>
                             <v-col cols="12" sm="6">
-                              <label-custom
-                                :text="this.$t('email')"
-                              ></label-custom>
+                              <label-custom :text="$t('email')"></label-custom>
                               <v-text-field
                                 disabled
                                 placeholder="-"
@@ -252,7 +248,7 @@
                             </v-col>
                             <v-col cols="12" sm="6">
                               <label-custom
-                                :text="this.$t('phone number')"
+                                :text="$t('phone number')"
                               ></label-custom>
                               <v-text-field
                                 disabled
@@ -268,43 +264,16 @@
                               </v-text-field>
                             </v-col>
                           </v-row>
-                          <v-row>
-                            <v-col cols="12" sm="6">
-                              <label-custom
-                                :text="this.$t('school(en)')"
-                              ></label-custom>
-                              <v-text-field
-                                v-bind:disabled="isDisabled"
-                                @keydown="validate($event, 'en')"
-                                placeholder="-"
-                                v-model="show_by_id.school.schoolNameEn"
-                                outlined
-                                dense
-                                color="#ff6b81"
-                              >
-                              </v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="6">
-                              <label-custom
-                                :text="this.$t('school(thai)')"
-                              ></label-custom>
-                              <v-text-field
-                                v-bind:disabled="isDisabled"
-                                @keydown="validate($event, 'th')"
-                                placeholder="-"
-                                v-model="show_by_id.school.schoolNameTh"
-                                outlined
-                                dense
-                                color="#ff6b81"
-                              >
-                              </v-text-field>
-                            </v-col>
-                          </v-row>
-                          <v-row>
-                            <v-col cols="12" sm="6">
-                              <label-custom
-                                :text="this.$t('class')"
-                              ></label-custom>
+                          <v-row
+                            v-for="items of show_by_id.userRoles"
+                            :key="items"
+                          >
+                            <v-col
+                              cols="12"
+                              sm="6"
+                              v-if="items.roleId === 'R_5'"
+                            >
+                              <label-custom :text="$t('class')"></label-custom>
                               <!-- <v-autocomplete
                                 v-if="show_by_id.class.classNameTh"
                                 v-model="show_by_id.class.classNameTh"
@@ -342,6 +311,7 @@
                                 </template>
                               </v-autocomplete>
                             </v-col>
+
                             <v-col cols="12" sm="6">
                               <label-custom
                                 :text="$t('congenital disease')"
@@ -355,7 +325,77 @@
                               >
                               </v-text-field>
                             </v-col>
+                            <v-col
+                              cols="12"
+                              sm="6"
+                              v-if="items.roleId !== 'R_5'"
+                            >
+                              <label-custom
+                                :text="$t('school(thai)')"
+                              ></label-custom>
+                              <v-text-field
+                                v-bind:disabled="isDisabled"
+                                @keydown="validate($event, 'th')"
+                                placeholder="-"
+                                v-model="show_by_id.school.schoolNameTh"
+                                outlined
+                                dense
+                                color="#ff6b81"
+                              >
+                              </v-text-field>
+                            </v-col>
+                            <v-col
+                              cols="12"
+                              sm="6"
+                              v-if="items.roleId === 'R_5'"
+                            >
+                              <label-custom
+                                :text="$t('school(thai)')"
+                              ></label-custom>
+                              <v-text-field
+                                v-bind:disabled="isDisabled"
+                                @keydown="validate($event, 'th')"
+                                placeholder="-"
+                                v-model="show_by_id.school.schoolNameTh"
+                                outlined
+                                dense
+                                color="#ff6b81"
+                              >
+                              </v-text-field>
+                            </v-col>
                           </v-row>
+                          <!-- <v-row>
+                            <v-col cols="12" sm="6">
+                              <label-custom
+                                :text="$t('school(en)')"
+                              ></label-custom>
+                              <v-text-field
+                                v-bind:disabled="isDisabled"
+                                @keydown="validate($event, 'en')"
+                                placeholder="-"
+                                v-model="show_by_id.school.schoolNameEn"
+                                outlined
+                                dense
+                                color="#ff6b81"
+                              >
+                              </v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                              <label-custom
+                                :text="$t('school(thai)')"
+                              ></label-custom>
+                              <v-text-field
+                                v-bind:disabled="isDisabled"
+                                @keydown="validate($event, 'th')"
+                                placeholder="-"
+                                v-model="show_by_id.school.schoolNameTh"
+                                outlined
+                                dense
+                                color="#ff6b81"
+                              >
+                              </v-text-field>
+                            </v-col>
+                          </v-row> -->
                         </v-col>
                       </v-row>
                     </v-form>
@@ -372,23 +412,21 @@
                 <headerCard
                   :icon="'mdi-card-account-details-outline'"
                   :icon_color="'#FF6B81'"
-                  :title="this.$t('permission management')"
+                  :title="$t('permission management')"
                 ></headerCard>
                 <v-divider></v-divider>
                 <v-card class="rounded-lg my-3" color="#FCFCFC">
                   <v-card-text>
                     <v-row class="mr-3 ml-3">
                       <v-col cols="12" sm="5">
-                        <label-custom
-                          :text="this.$t('user role')"
-                        ></label-custom>
+                        <label-custom :text="$t('user role')"></label-custom>
                         <v-autocomplete
                           dense
                           v-model="seledtedRole"
                           :items="roles"
                           item-text="role"
                           item-value="roleNumber"
-                          :label="this.$t('select user role')"
+                          :label="$t('select user role')"
                           solo
                           item-color="#ff6b81"
                           color="#ff6b81"
@@ -718,7 +756,7 @@
         <v-card-text class="pb-2">
           <v-row dense class="mb-5">
             <v-col cols="12">
-              <labelCustom required :text="this.$t('username')"></labelCustom>
+              <labelCustom required :text="$t('username')"></labelCustom>
               <v-text-field
                 :rules="rules.usernameRules"
                 dense
@@ -743,7 +781,7 @@
                     global_role_id === 'R_4' ? 'parent' : 'student'
                   )
                 "
-                :placeholder="this.$t('username')"
+                :placeholder="$t('username')"
                 color="#ff6b81"
               >
                 <template v-slot:append>
@@ -779,39 +817,39 @@
           </v-row>
           <v-row dense>
             <v-col cols="12">
-              <labelCustom :text="this.$t('first name(english)')"></labelCustom>
+              <labelCustom :text="$t('first name(english)')"></labelCustom>
               <v-text-field
                 disabled
                 dense
                 outlined
                 v-model="relation.firstname_en"
-                :placeholder="this.$t('first name(english)')"
+                :placeholder="$t('first name(english)')"
                 color="#ff6b81"
               ></v-text-field>
             </v-col>
           </v-row>
           <v-row dense>
             <v-col cols="12">
-              <labelCustom :text="this.$t('last name(english)')"></labelCustom>
+              <labelCustom :text="$t('last name(english)')"></labelCustom>
               <v-text-field
                 disabled
                 dense
                 outlined
                 v-model="relation.lastname_en"
-                :placeholder="this.$t('last name(english)')"
+                :placeholder="$t('last name(english)')"
                 color="#ff6b81"
               ></v-text-field>
             </v-col>
           </v-row>
           <v-row dense>
             <v-col cols="12">
-              <labelCustom :text="this.$t('phone number')"></labelCustom>
+              <labelCustom :text="$t('phone number')"></labelCustom>
               <v-text-field
                 disabled
                 dense
                 outlined
                 v-model="relation.tel"
-                :placeholder="this.$t('phone number')"
+                :placeholder="$t('phone number')"
                 color="#ff6b81"
               ></v-text-field>
             </v-col>
@@ -853,7 +891,7 @@
     >
       <registerDialogForm
         dialog
-        :title="this.$t('sign up for One ID')"
+        :title="$t('sign up for One ID')"
         :state="register_type"
       ></registerDialogForm>
     </v-dialog>

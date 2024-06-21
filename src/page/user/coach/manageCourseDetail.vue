@@ -733,7 +733,9 @@
             </v-row>
             <v-row dense>
               <v-col>
-                <labelCustom :text="$t('development / homework')"></labelCustom>
+                <labelCustom
+                  :text="$t('development / homework22')"
+                ></labelCustom>
                 <v-textarea
                   outlined
                   :rules="homework"
@@ -1806,17 +1808,24 @@ export default {
               files: this.coach_check_in.summary_files,
               course_id: this.$route.params.courseId,
               date: this.$route.params.date,
-            }).then(() => {
-              setTimeout(() => {
-                this.CheckInCoach({
-                  course_id: this.course_data.course_id,
-                  date: this.$route.params.date,
-                  time_id: this.$route.params.timeId,
-                  time_start: this.$route.params.timeStart,
-                  time_end: this.$route.params.timeEnd,
-                  type: this.$route.params.typeEvent,
-                });
-              }, 200);
+            }).then(async () => {
+              // setTimeout (() => {
+              // await this.GetCheckInCoach({
+              //   course_id: this.course_data.course_id,
+              //   date: this.$route.params.date,
+              //   time_id: this.$route.params.timeId,
+              //   time_start: this.$route.params.timeStart,
+              //   time_end: this.$route.params.timeEnd,
+              //   type: this.$route.params.typeEvent,
+              // });
+              await this.GetCoachCheckIn({
+                course_id: this.$route.params.courseId,
+                date: this.$route.params.date,
+                time_id: this.$route.params.timeId,
+                time_start: this.$route.params.timeStart,
+                time_end: this.$route.params.timeEnd,
+              });
+              // }, 200);
             });
 
             this.is_loading = false;
