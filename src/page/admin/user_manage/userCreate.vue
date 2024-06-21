@@ -10,7 +10,7 @@
                 <headerCard
                   :icon="'mdi-card-account-details-outline'"
                   :icon_color="'#FF6B81'"
-                  :title="this.$t('user information')"
+                  :title="$t('user information')"
                 ></headerCard>
                 <v-divider></v-divider>
 
@@ -18,7 +18,7 @@
                   <v-card-text>
                     <v-row>
                       <v-col cols="12" sm="4">
-                        <labelCustom :text="this.$t('username')"></labelCustom>
+                        <labelCustom :text="$t('username')"></labelCustom>
                         <v-text-field
                           :rules="rules.usernameRules"
                           dense
@@ -26,7 +26,7 @@
                           @keydown="validate($event, 'en-number')"
                           v-model="checkData.username"
                           @keyup.enter="checkDataRelation(checkData.username)"
-                          :placeholder="this.$t('username')"
+                          :placeholder="$t('username')"
                           color="#FF6B81"
                         >
                           <template v-slot:append>
@@ -107,7 +107,7 @@
                         <v-row>
                           <v-col cols="12" sm="6">
                             <label-custom
-                              :text="this.$t('first name(thai)')"
+                              :text="$t('first name(thai)')"
                             ></label-custom>
                             <v-text-field
                               disabled
@@ -121,7 +121,7 @@
                           </v-col>
                           <v-col cols="12" sm="6">
                             <label-custom
-                              :text="this.$t('last name(thai)')"
+                              :text="$t('last name(thai)')"
                             ></label-custom>
                             <v-text-field
                               disabled
@@ -138,7 +138,7 @@
                         <v-row>
                           <v-col cols="12" sm="6">
                             <label-custom
-                              :text="this.$t('first name(english)')"
+                              :text="$t('first name(english)')"
                             ></label-custom>
                             <v-text-field
                               disabled
@@ -152,7 +152,7 @@
                           </v-col>
                           <v-col cols="12" sm="6">
                             <label-custom
-                              :text="this.$t('last name(english)')"
+                              :text="$t('last name(english)')"
                             ></label-custom>
                             <v-text-field
                               disabled
@@ -168,13 +168,13 @@
                         <v-row>
                           <v-col cols="12" sm="6">
                             <label-custom
-                              :text="this.$t('nickname(thai)')"
+                              :text="$t('nickname(thai)')"
                             ></label-custom>
                             <v-text-field
                               disabled
                               @keydown="validate($event, 'th')"
                               placeholder="-"
-                              v-model="checkData.nicknameEn"
+                              v-model="checkData.nicknameTh"
                               outlined
                               dense
                             >
@@ -182,13 +182,13 @@
                           </v-col>
                           <v-col cols="12" sm="6">
                             <label-custom
-                              :text="this.$t('nickname(en)')"
+                              :text="$t('nickname(en)')"
                             ></label-custom>
                             <v-text-field
                               disabled
                               @keydown="validate($event, 'en')"
                               placeholder="-"
-                              v-model="checkData.nicknameTh"
+                              v-model="checkData.nicknameEn"
                               outlined
                               dense
                             >
@@ -197,9 +197,7 @@
                         </v-row>
                         <v-row>
                           <v-col cols="12" sm="6">
-                            <label-custom
-                              :text="this.$t('email')"
-                            ></label-custom>
+                            <label-custom :text="$t('email')"></label-custom>
                             <v-text-field
                               @keydown="validate($event, 'en', 'number')"
                               placeholder="-"
@@ -212,7 +210,7 @@
                           </v-col>
                           <v-col cols="12" sm="6">
                             <label-custom
-                              :text="this.$t('phone number')"
+                              :text="$t('phone number')"
                             ></label-custom>
                             <v-text-field
                               disabled
@@ -226,10 +224,33 @@
                             </v-text-field>
                           </v-col>
                         </v-row>
-                        <v-row>
+                        <v-row
+                          v-for="items of global_data_relation_checked?.userRoles"
+                          :key="items"
+                        >
+                          <v-col cols="12" sm="6" v-if="items.roleId === 'R_5'">
+                            <label-custom :text="$t('class')"></label-custom>
+                            <v-autocomplete
+                              v-model="checkData.class.classNameTh"
+                              :items="class_list"
+                              item-text="classNameTh"
+                              color="#ff6B81"
+                              item-color="#ff6b81"
+                              outlined
+                              :disabled="!isEnabled"
+                              dense
+                            >
+                              <template #no-data>
+                                <v-list-item>
+                                  {{ $t("data not found") }}
+                                </v-list-item>
+                              </template>
+                            </v-autocomplete>
+                          </v-col>
+
                           <v-col cols="12" sm="6">
                             <label-custom
-                              :text="this.$t('school(thai)')"
+                              :text="$t('school(thai)')"
                             ></label-custom>
                             <v-text-field
                               disabled
@@ -241,9 +262,9 @@
                             >
                             </v-text-field>
                           </v-col>
-                          <v-col cols="12" sm="6">
+                          <!-- <v-col cols="12" sm="6">
                             <label-custom
-                              :text="this.$t('school(en)')"
+                              :text="$t('school(en)')"
                             ></label-custom>
                             <v-text-field
                               disabled
@@ -254,13 +275,28 @@
                               dense
                             >
                             </v-text-field>
-                          </v-col>
-                        </v-row>
-                        <v-row>
+                          </v-col> -->
                           <v-col cols="12" sm="6">
                             <label-custom
-                              :text="this.$t('class')"
+                              :text="$t('congenital disease')"
                             ></label-custom>
+                            <v-text-field
+                              disabled
+                              placeholder="-"
+                              v-model="checkData.congenitalDisease"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                          </v-col>
+                        </v-row>
+                        <!-- <pre>{{ global_data_relation_checked }}</pre> -->
+                        <!-- <v-row
+                          v-for="items of global_data_relation_checked?.userRoles"
+                          :key="items"
+                        >
+                          <v-col cols="12" sm="6" v-if="items.roleId === 'R_5'">
+                            <label-custom :text="$t('class')"></label-custom>
                             <v-autocomplete
                               v-model="checkData.class.classNameTh"
                               :items="class_list"
@@ -280,18 +316,18 @@
                           </v-col>
                           <v-col cols="12" sm="6">
                             <label-custom
-                              :text="this.$t('congenital disease')"
+                              :text="$t('congenital disease')"
                             ></label-custom>
                             <v-text-field
                               disabled
                               placeholder="-"
-                              v-model="checkData.congenitalDiseaseTh"
+                              v-model="checkData.congenitalDisease"
                               outlined
                               dense
                             >
                             </v-text-field>
                           </v-col>
-                        </v-row>
+                        </v-row> -->
                       </v-col>
                     </v-row>
                   </v-card-text>
@@ -303,16 +339,14 @@
                   class=""
                   :icon="'mdi-card-account-details-outline'"
                   :icon_color="'#FF6B81'"
-                  :title="this.$t('permission management')"
+                  :title="$t('permission management')"
                 ></headerCard>
                 <v-divider></v-divider>
                 <v-card class="rounded-lg my-5" color="#FCFCFC">
                   <v-card-text>
                     <v-row class="mr-3 ml-3">
                       <v-col cols="12" sm="5">
-                        <label-custom
-                          :text="this.$t('user role')"
-                        ></label-custom>
+                        <label-custom :text="$t('user role')"></label-custom>
 
                         <v-autocomplete
                           disabled
@@ -323,7 +357,7 @@
                           :items="roles"
                           item-text="role"
                           item-value="roleNumber"
-                          :placeholder="this.$t('select user role')"
+                          :placeholder="$t('select user role')"
                           item-color="#ff6b81"
                           color="#ff6b81"
                         >
@@ -350,8 +384,8 @@
                   :icon_color="'#FF6B81'"
                   :title="
                     global_role_code === 'R_4'
-                      ? this.$t('add student information in charge')
-                      : this.$t('add parent information')
+                      ? $t('add student information in charge')
+                      : $t('add parent information')
                   "
                 ></headerCard>
                 <v-divider></v-divider>
@@ -470,10 +504,8 @@
                       <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
                       {{
                         global_role_code === "R_4"
-                          ? this.$t(
-                              "can't find information on students in care"
-                            )
-                          : this.$t("parent information not found")
+                          ? $t("can't find information on students in care")
+                          : $t("parent information not found")
                       }}
                     </span>
                   </v-card-text>
@@ -524,7 +556,7 @@
         <v-card-text>
           <v-row dense>
             <v-col cols="9">
-              <labelCustom :text="this.$t('username')"></labelCustom>
+              <labelCustom :text="$t('username')"></labelCustom>
               <v-text-field
                 :rules="rules.usernameRules"
                 dense
@@ -549,7 +581,7 @@
                     global_role_id === 'R_4' ? 'parent' : 'student'
                   )
                 "
-                :placeholder="this.$t('username')"
+                :placeholder="$t('username')"
                 color="#ff6b81"
               >
                 <template v-slot:append>
@@ -589,43 +621,39 @@
           <template>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom
-                  :text="this.$t('first name(english)')"
-                ></labelCustom>
+                <labelCustom :text="$t('first name(english)')"></labelCustom>
                 <v-text-field
                   disabled
                   dense
                   outlined
                   v-model="relation.firstname_en"
-                  :placeholder="this.$t('first name(english)')"
+                  :placeholder="$t('first name(english)')"
                   color="#ff6b81"
                 ></v-text-field>
               </v-col>
             </v-row>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom
-                  :text="this.$t('last name(english)')"
-                ></labelCustom>
+                <labelCustom :text="$t('last name(english)')"></labelCustom>
                 <v-text-field
                   disabled
                   dense
                   outlined
                   v-model="relation.lastname_en"
-                  :placeholder="this.$t('last name(english)')"
+                  :placeholder="$t('last name(english)')"
                   color="#ff6b81"
                 ></v-text-field>
               </v-col>
             </v-row>
             <v-row dense>
               <v-col cols="12">
-                <labelCustom :text="this.$t('phone number')"></labelCustom>
+                <labelCustom :text="$t('phone number')"></labelCustom>
                 <v-text-field
                   disabled
                   dense
                   outlined
                   v-model="relation.tel"
-                  :placeholder="this.$t('phone number')"
+                  :placeholder="$t('phone number')"
                   color="#ff6b81"
                 ></v-text-field>
               </v-col>
@@ -667,7 +695,7 @@
     >
       <registerDialogForm
         dialog
-        :title="this.$t('sign up for One ID')"
+        :title="$t('sign up for One ID')"
         :state="register_type"
       ></registerDialogForm>
     </v-dialog>
@@ -810,7 +838,6 @@ export default {
           status: null,
           type: type,
         }).then(() => {
-          console.log("global_data_relation");
           this.global_data_relation =
             type == "student" ? this.user_student_data[0] : this.user_data[0];
           this.relation.account_id = this.global_data_relation?.userOneId;
@@ -858,6 +885,12 @@ export default {
             this.checkData.tel = this.global_data_relation_checked.mobileNo;
             this.checkData.email = this.global_data_relation_checked.email;
             this.checkData.image = this.global_data_relation_checked.imgUrl;
+            this.checkData.congenitalDisease =
+              this.global_data_relation_checked.congenitalDisease;
+            this.checkData.nicknameTh =
+              this.global_data_relation_checked.nicknameTh;
+            this.checkData.nicknameEn =
+              this.global_data_relation_checked.nicknameEn;
             this.global_role_code = this.global_data_relation_checked.roles
               .map((val) => {
                 return val.roleId;
@@ -869,6 +902,7 @@ export default {
                   schoolNameEn: "",
                   schoolNameTh: "",
                 };
+
             this.checkData.class = this.global_data_relation_checked?.class
               ? this.global_data_relation_checked?.class
               : {

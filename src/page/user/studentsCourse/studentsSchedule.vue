@@ -14,7 +14,9 @@
           <v-card
             flat
             @click="
-              data_local.roles.length > 0
+              data_local.roles.length > 0 ||
+              profile_detail?.userRoles?.roleId?.includes('R_5') ||
+              profile_detail?.userRoles?.roleId?.includes('R_4')
                 ? $router.push({
                     name: 'StudentsSchedule',
                     params: { action: 'MyCourse' },
@@ -47,7 +49,9 @@
           <v-card
             flat
             @click="
-              data_local.roles.length > 0
+              data_local.roles.length > 0 ||
+              profile_detail?.userRoles?.roleId?.includes('R_5') ||
+              profile_detail?.userRoles?.roleId?.includes('R_4')
                 ? $router.push({
                     name: 'StudentsSchedule',
                     params: { action: 'MySchedule' },
@@ -272,7 +276,12 @@
             </div>
           </div>
           <!-- Role Student -->
-          <div v-if="data_local.roles?.includes('R_5')">
+          <div
+            v-if="
+              data_local.roles?.includes('R_5') ||
+              profile_detail?.userRoles?.roleId?.includes('R_5')
+            "
+          >
             <v-card v-if="student_data.length == 0">
               <v-card-text
                 class="text-center border-2 border-[#ff6b81] rounded-lg"
@@ -489,7 +498,12 @@
             </div>
           </div>
           <!-- Role Student -->
-          <div v-if="data_local.roles?.includes('R_5')">
+          <div
+            v-if="
+              data_local.roles?.includes('R_5') ||
+              profile_detail?.userRoles?.roleId?.includes('R_5')
+            "
+          >
             <v-row class="mb-2">
               <v-col cols="12" align="center">
                 <v-card flat width="340px">
@@ -524,7 +538,6 @@
           </div>
         </div>
       </v-expand-x-transition>
-
       <!-- PAGE 3 -->
       <v-expand-x-transition transition="scale-transition">
         <div v-if="$route.params.action == 'MyBooking'">
@@ -775,9 +788,7 @@
                           </v-col>
                           <v-col cols="12" md="12" sm="12">
                             <div class="mt-8">
-                              <label-custom
-                                text="Performance"
-                              ></label-custom>
+                              <label-custom text="Performance"></label-custom>
                             </div>
                             <v-divider class=""></v-divider>
                             <span class="pa-2">
@@ -811,7 +822,12 @@
             </div>
           </div>
           <!-- Role student -->
-          <div v-if="!data_local.roles?.includes('R_4')">
+          <div
+            v-if="
+              data_local.roles?.includes('R_5') ||
+              profile_detail?.userRoles?.roleId?.includes('R_5')
+            "
+          >
             <v-card-text
               class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
               v-if="ReserveList().length == 0"
@@ -1006,9 +1022,7 @@
                           </v-col>
                           <v-col cols="12" md="12" sm="12">
                             <div class="mt-8">
-                              <label-custom
-                                text="Performance"
-                              ></label-custom>
+                              <label-custom text="Performance"></label-custom>
                             </div>
                             <v-divider class=""></v-divider>
                             <span class="pa-2">
@@ -1114,6 +1128,7 @@ export default {
   },
   async beforeMount() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+    this.GetProfileDetail(this.user_detail.account_id);
   },
   async mounted() {
     this.$store.dispatch("MyCourseModules/GetMyCourseArrayEmpty");
@@ -1123,7 +1138,10 @@ export default {
       limit: 2,
       page: 1,
     });
-    if (this.user_detail.roles?.includes("R_5")) {
+    if (
+      this.user_detail.roles?.includes("R_5") ||
+      this.profile_detail?.userRoles?.roleId?.includes("R_5")
+    ) {
       await this.GetStudentData(this.user_detail.account_id);
 
       this.loading_overlay = false;
@@ -1159,11 +1177,14 @@ export default {
       student_booking_is_loading: "MyCourseModules/getStudentsBookingLoading",
       my_course: "MyCourseModules/getMyCourse",
       reserve_option: "MyCourseModules/getReserveOption",
+      profile_detail: "ProfileModules/getProfileDetail",
     }),
     setFunctions() {
       if (this.user_detail.roles.includes("R_5")) {
         this.GetAll(this.user_detail.account_id);
       } else if (this.user_detail.roles.includes("R_4")) {
+        this.GetAll(this.user_detail.account_id);
+      } else if (this.profile_detail?.userRoles?.roleId?.includes("R_5")) {
         this.GetAll(this.user_detail.account_id);
       }
 
@@ -1198,6 +1219,7 @@ export default {
       GetStudentReserve: "MyCourseModules/GetStudentReserve",
       loginShareToken: "loginModules/loginShareToken",
       GetCourse: "CourseModules/GetCourse",
+      GetProfileDetail: "ProfileModules/GetProfileDetail",
     }),
 
     dayOfWeekArray(day) {

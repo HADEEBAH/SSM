@@ -206,38 +206,7 @@
                             </v-text-field>
                           </v-col>
                         </v-row>
-                        <v-row>
-                          <v-col cols="12" sm="6">
-                            <label-custom
-                              :text="$t('school(thai)')"
-                            ></label-custom>
-                            <v-text-field
-                              :disabled="!isEnabled"
-                              @keydown="validate($event, 'th')"
-                              placeholder="-"
-                              v-model="show_by_id.school.schoolNameTh"
-                              outlined
-                              dense
-                            >
-                            </v-text-field>
-                          </v-col>
 
-                          <v-col cols="12" sm="6">
-                            <label-custom
-                              :text="$t('school(en)')"
-                            ></label-custom>
-                            <v-text-field
-                              :disabled="!isEnabled"
-                              @keydown="validate($event, 'en')"
-                              placeholder="-"
-                              v-model="show_by_id.school.schoolNameEn"
-                              :rules="rules.name"
-                              outlined
-                              dense
-                            >
-                            </v-text-field>
-                          </v-col>
-                        </v-row>
                         <v-row>
                           <v-col cols="12" sm="6">
                             <label-custom :text="$t('class')"></label-custom>
@@ -284,6 +253,38 @@
                             >
                             </v-text-field>
                           </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="12" sm="6">
+                            <label-custom
+                              :text="$t('school(thai)')"
+                            ></label-custom>
+                            <v-text-field
+                              :disabled="!isEnabled"
+                              @keydown="validate($event, 'th')"
+                              placeholder="-"
+                              v-model="show_by_id.school.schoolNameTh"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                          </v-col>
+
+                          <!-- <v-col cols="12" sm="6">
+                            <label-custom
+                              :text="$t('school(en)')"
+                            ></label-custom>
+                            <v-text-field
+                              :disabled="!isEnabled"
+                              @keydown="validate($event, 'en')"
+                              placeholder="-"
+                              v-model="show_by_id.school.schoolNameEn"
+                              :rules="rules.name"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                          </v-col> -->
                         </v-row>
                       </v-col>
                     </v-row>
@@ -477,38 +478,7 @@
                             </v-text-field>
                           </v-col>
                         </v-row>
-                        <v-row>
-                          <v-col cols="12" sm="6">
-                            <label-custom
-                              :text="$t('school(thai)')"
-                            ></label-custom>
-                            <v-text-field
-                              :disabled="!isEnabled"
-                              @keydown="validate($event, 'th')"
-                              placeholder="-"
-                              v-model="show_by_id.school.schoolNameTh"
-                              outlined
-                              dense
-                            >
-                            </v-text-field>
-                          </v-col>
 
-                          <v-col cols="12" sm="6">
-                            <label-custom
-                              :text="$t('school(en)')"
-                            ></label-custom>
-                            <v-text-field
-                              :disabled="!isEnabled"
-                              @keydown="validate($event, 'en')"
-                              placeholder="-"
-                              v-model="show_by_id.school.schoolNameEn"
-                              :rules="rules.name"
-                              outlined
-                              dense
-                            >
-                            </v-text-field>
-                          </v-col>
-                        </v-row>
                         <v-row>
                           <!-- <pre>{{ show_by_id?.class?.classNameTh }}</pre> -->
                           <!-- >> {{ show_by_id.class.classNameTh }} -->
@@ -554,7 +524,53 @@
                             >
                             </v-text-field>
                           </v-col>
+                          <v-col cols="12" sm="6">
+                            <label-custom
+                              :text="$t('school(thai)')"
+                            ></label-custom>
+                            <v-text-field
+                              :disabled="!isEnabled"
+                              @keydown="validate($event, 'th')"
+                              placeholder="-"
+                              v-model="show_by_id.school.schoolNameTh"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                          </v-col>
                         </v-row>
+                        <!-- <v-row>
+                          <v-col cols="12" sm="6">
+                            <label-custom
+                              :text="$t('school(thai)')"
+                            ></label-custom>
+                            <v-text-field
+                              :disabled="!isEnabled"
+                              @keydown="validate($event, 'th')"
+                              placeholder="-"
+                              v-model="show_by_id.school.schoolNameTh"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                          </v-col>
+
+                          <v-col cols="12" sm="6">
+                            <label-custom
+                              :text="$t('school(en)')"
+                            ></label-custom>
+                            <v-text-field
+                              :disabled="!isEnabled"
+                              @keydown="validate($event, 'en')"
+                              placeholder="-"
+                              v-model="show_by_id.school.schoolNameEn"
+                              :rules="rules.name"
+                              outlined
+                              dense
+                            >
+                            </v-text-field>
+                          </v-col>
+                        </v-row> -->
                       </v-col>
                     </v-row>
                   </v-card-text>
@@ -766,38 +782,7 @@
                                     </v-text-field>
                                   </v-col>
                                 </v-row>
-                                <v-row>
-                                  <v-col cols="12" sm="6">
-                                    <label-custom
-                                      :text="$t('school(thai)')"
-                                    ></label-custom>
-                                    <v-text-field
-                                      :disabled="!isEnabled"
-                                      @keydown="validate($event, 'th')"
-                                      placeholder="-"
-                                      v-model="show_by_id.school.schoolNameTh"
-                                      outlined
-                                      dense
-                                    >
-                                    </v-text-field>
-                                  </v-col>
 
-                                  <v-col cols="12" sm="6">
-                                    <label-custom
-                                      :text="$t('school(en)')"
-                                    ></label-custom>
-                                    <v-text-field
-                                      :disabled="!isEnabled"
-                                      @keydown="validate($event, 'en')"
-                                      placeholder="-"
-                                      v-model="show_by_id.school.schoolNameEn"
-                                      :rules="rules.name"
-                                      outlined
-                                      dense
-                                    >
-                                    </v-text-field>
-                                  </v-col>
-                                </v-row>
                                 <v-row>
                                   <v-col cols="12" sm="6">
                                     <label-custom
@@ -841,6 +826,38 @@
                                     >
                                     </v-text-field>
                                   </v-col>
+                                </v-row>
+                                <v-row>
+                                  <v-col cols="12" sm="6">
+                                    <label-custom
+                                      :text="$t('school(thai)')"
+                                    ></label-custom>
+                                    <v-text-field
+                                      :disabled="!isEnabled"
+                                      @keydown="validate($event, 'th')"
+                                      placeholder="-"
+                                      v-model="show_by_id.school.schoolNameTh"
+                                      outlined
+                                      dense
+                                    >
+                                    </v-text-field>
+                                  </v-col>
+
+                                  <!-- <v-col cols="12" sm="6">
+                                    <label-custom
+                                      :text="$t('school(en)')"
+                                    ></label-custom>
+                                    <v-text-field
+                                      :disabled="!isEnabled"
+                                      @keydown="validate($event, 'en')"
+                                      placeholder="-"
+                                      v-model="show_by_id.school.schoolNameEn"
+                                      :rules="rules.name"
+                                      outlined
+                                      dense
+                                    >
+                                    </v-text-field>
+                                  </v-col> -->
                                 </v-row>
                               </v-col>
                             </v-row>

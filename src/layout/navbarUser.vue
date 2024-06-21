@@ -128,20 +128,20 @@
 
                     <v-list-item-content>
                       <v-list-item-title class="font-weight-bold">
-                        <!-- {{ item.notificationName }} -->
                         {{
                           $i18n.locale == "th"
                             ? item.notificationName
                             : item.notificationNameEn
                         }}
+                        <!-- {{ item.notificationName }} -->
                       </v-list-item-title>
                       <v-list-item-subtitle>
-                        <!-- {{item.notificationDescription}} -->
                         {{
                           $i18n.locale == "th"
                             ? item.notificationDescription
                             : item.notificationDescriptionEn
                         }}
+                        <!-- {{ item.notificationDescription }} -->
                       </v-list-item-subtitle>
                     </v-list-item-content>
                     <v-list-item-action>
