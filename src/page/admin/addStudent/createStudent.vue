@@ -47,7 +47,11 @@
                       :input-value="data.selected"
                       color="#FBF3F5"
                     >
-                      {{ $i18n.locale == 'th' ? `${data.item.firstNameTh} ${data.item.lastNameTh}` : `${data.item.firstNameEng} ${data.item.lastNameEng}` }}
+                      {{
+                        $i18n.locale == "th"
+                          ? `${data.item.firstNameTh} ${data.item.lastNameTh}`
+                          : `${data.item.firstNameEng} ${data.item.lastNameEng}`
+                      }}
                       <v-icon
                         @click="remove(data.item.userOneId)"
                         color="#ff6b81"
@@ -56,7 +60,11 @@
                     </v-chip>
                   </template>
                   <template v-slot:item="{ item }">
-                    {{  $i18n.locale == 'th' ? `${item.firstNameTh} ${item.lastNameTh}` : `${item.firstNameEng} ${item.lastNameEng}` }}
+                    {{
+                      $i18n.locale == "th"
+                        ? `${item.firstNameTh} ${item.lastNameTh}`
+                        : `${item.firstNameEng} ${item.lastNameEng}`
+                    }}
                   </template>
                 </v-autocomplete>
               </v-col>
@@ -844,7 +852,7 @@ import { dateFormatter, inputValidation } from "@/functions/functions";
 import Swal from "sweetalert2";
 import mixin from "@/mixin";
 import router from "@/router";
-import moment from 'moment';
+import moment from "moment";
 
 export default {
   name: "addlearnPage",
@@ -878,7 +886,7 @@ export default {
     pay: "",
   }),
   created() {
-    this.ClearData()
+    this.ClearData();
   },
   mounted() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
@@ -1001,12 +1009,12 @@ export default {
       searchNameUser: "loginModules/searchNameUser",
       GetAllCourseMonitor: "CourseMonitorModules/GetAllCourseMonitor",
     }),
-    minStartDate(startDate){
-      let date = new Date()
-      if(moment(startDate).isSameOrAfter(date)){
-        date = new Date(startDate)
-      } 
-      return date.toISOString()
+    minStartDate(startDate) {
+      let date = new Date();
+      if (moment(startDate).isSameOrAfter(date)) {
+        date = new Date(startDate);
+      }
+      return date.toISOString();
     },
     Validation(e, lang) {
       inputValidation(e, lang);
@@ -1298,11 +1306,16 @@ export default {
                   if (this.order_is_status) {
                     let payload = {
                       notificationName: this.notification_name,
+                      notificationNameEn: "Notification of course application",
                       notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(
                         course_name_noti?.length > 1 ? ", " : ""
                       )} ให้คุณแล้ว (รอชำระเงิน)`,
+                      notificationDescriptionEn: `Admin applies for course ${course_name_noti?.join(
+                        course_name_noti?.length > 1 ? ", " : ""
+                      )} already given to you (waiting for payment)`,
                       accountId: account,
-                      path: null,
+                      // path: null,
+                      path: "/order/history",
                     };
                     this.sendNotification(payload);
                     // router.replace({ name: "Finance" });
@@ -1341,9 +1354,13 @@ export default {
                   if (this.order_is_status) {
                     let payload = {
                       notificationName: this.notification_name,
+                      notificationNameEn: "Notification of course application",
                       notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(
                         course_name_noti?.length > 1 ? "และ" : ""
                       )} ให้คุณแล้ว`,
+                      notificationDescriptionEn: `Admin applies for course ${course_name_noti?.join(
+                        course_name_noti?.length > 1 ? "and" : ""
+                      )} already given to you`,
                       accountId: account,
                       path: null,
                     };
