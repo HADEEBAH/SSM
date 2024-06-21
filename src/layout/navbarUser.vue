@@ -127,11 +127,21 @@
 
                     <v-list-item-content>
                       <v-list-item-title class="font-weight-bold">
-                        {{ item.notificationName }}
+                        {{
+                          $i18n.locale == "th"
+                            ? item.notificationName
+                            : item.notificationNameEn
+                        }}
+                        <!-- {{ item.notificationName }} -->
                       </v-list-item-title>
-                      <v-list-item-subtitle>{{
-                        item.notificationDescription
-                      }}</v-list-item-subtitle>
+                      <v-list-item-subtitle>
+                        {{
+                          $i18n.locale == "th"
+                            ? item.notificationDescription
+                            : item.notificationDescriptionEn
+                        }}
+                        <!-- {{ item.notificationDescription }} -->
+                      </v-list-item-subtitle>
                     </v-list-item-content>
                     <v-list-item-action>
                       <v-icon
@@ -447,9 +457,11 @@
               }}</strong>
             </v-col>
           </v-row>
-          <v-row dense> 
+          <v-row dense>
             <v-col class="text-wrap">
-              จากที่ได้เข้าร่วมบริการระบบ Smart School Managemet กรุณาประเมินความพึงพอใจ เพื่อให้ทางระบบที่ท่านเข้าใช้บริการนำความคิดเห็นของท่านไปปรับปรุงการให้บริการต่อไป
+              จากที่ได้เข้าร่วมบริการระบบ Smart School Managemet
+              กรุณาประเมินความพึงพอใจ
+              เพื่อให้ทางระบบที่ท่านเข้าใช้บริการนำความคิดเห็นของท่านไปปรับปรุงการให้บริการต่อไป
             </v-col>
           </v-row>
           <div
@@ -480,7 +492,9 @@
                   ></v-rating>
                 </v-col>
               </v-row>
-              <v-divider v-if="questionIndex !== surveyData.questions.length - 1"></v-divider>
+              <v-divider
+                v-if="questionIndex !== surveyData.questions.length - 1"
+              ></v-divider>
             </div>
             <v-row dense class="mb-3">
               <v-col>
@@ -516,7 +530,10 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <dialogMaintain v-if="!user_detail?.closeIsAlert && !dialogSatisfaction" :alert-maintain="alertData"></dialogMaintain>
+    <dialogMaintain
+      v-if="!user_detail?.closeIsAlert && !dialogSatisfaction"
+      :alert-maintain="alertData"
+    ></dialogMaintain>
   </v-app>
 </template>
 
@@ -528,7 +545,7 @@ import dialogMaintain from "@/components/dialog/dialogMaintain.vue";
 export default {
   mixins: [mixin],
   name: "navbarUser",
-  components: {dialogMaintain},
+  components: { dialogMaintain },
   data: () => ({
     dialogSatisfaction: true,
     satisfaction: {
@@ -607,9 +624,9 @@ export default {
       ? localStorage.getItem("lang")
       : "th";
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
-    this.dialogSatisfaction = this.user_detail?.isEvaluate
+    this.dialogSatisfaction = this.user_detail?.isEvaluate;
     if (this.user_detail?.account_id) {
-      this.GetAlertMaintain()
+      this.GetAlertMaintain();
       this.GetSurvey();
       this.GetProfileDetail(this.user_detail?.account_id);
     }
@@ -652,7 +669,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      alertData : "alertMaintainModules/alertData",
+      alertData: "alertMaintainModules/alertData",
       cart_list: "OrderModules/getCartList",
       titel_navber: "NavberUserModules/getTitleNavber",
       profile_detail: "ProfileModules/getProfileDetail",
@@ -668,20 +685,20 @@ export default {
       return !!xs;
     },
     disableSendSatisfaction() {
-      const validate = []
-      if(this.survey){
-        for(const surveyData of this.survey){
-          for(const question of  surveyData.questions){
-            validate.push(!question.rate)
+      const validate = [];
+      if (this.survey) {
+        for (const surveyData of this.survey) {
+          for (const question of surveyData.questions) {
+            validate.push(!question.rate);
           }
         }
       }
-      return validate.includes(true) 
+      return validate.includes(true);
     },
   },
   methods: {
     ...mapActions({
-      GetAlertMaintain : "alertMaintainModules/GetAlertMaintain",
+      GetAlertMaintain: "alertMaintainModules/GetAlertMaintain",
       GetCartList: "OrderModules/GetCartList",
       logOut: "loginModules/logOut",
       GetProfileDetail: "ProfileModules/GetProfileDetail",

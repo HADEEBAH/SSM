@@ -1823,10 +1823,14 @@ export default {
             if (student_id.length > 0) {
               let payload = {
                 notificationName: "แจ้งเตือนการบันทึกสรุปการสอน",
+                notificationNameEn:
+                  "Notification for recording teaching summary",
                 notificationDescription: `โค้ชบันทึกสรุปของคอร์ส ${this.course_data.course_name_th} เรียบร้อยแล้ว`,
+                notificationDescriptionEn: `The coach has already recorded the summary of the ${this.course_data.course_name_en}`,
                 accountId: student_id,
                 path: null,
               };
+
               this.sendNotification(payload);
             }
           }
@@ -1861,10 +1865,14 @@ export default {
             if (potential_student.length > 0) {
               let payload = {
                 notificationName: "แจ้งเตือนการประเมินศักยภาพผู้เรียน",
-                notificationDescription: `โค้ชประเมินศักยภาพผู้เรียนของคอร์ส ${this.course_data.course_name_th} เรียบร้อยแล้ว`,
+                notificationNameEn:
+                  "Notification of student potential assessment",
+                notificationDescription: `โค้ชบันทึกสรุปของคอร์ส ${this.course_data.course_name_th} เรียบร้อยแล้ว`,
+                notificationDescriptionEn: `The coach assesses the potential of the course's students ${this.course_data.course_name_en} completed`,
                 accountId: potential_student,
                 path: null,
               };
+
               this.sendNotification(payload);
             }
           }
@@ -1908,10 +1916,14 @@ export default {
             });
             let payload = {
               notificationName: "แจ้งเตือนการประเมินผู้เรียน",
+              notificationNameEn: "Learner assessment notification",
               notificationDescription: "โค้ชได้ประเมินนักเรียนเรียบร้อยแล้ว",
+              notificationDescriptionEn:
+                "The coach has already assessed the student.",
               accountId: this.student_check_in,
               path: `/studentCourse/${this.$route.params.courseId}`,
             };
+
             this.sendNotification(payload);
           }
         });
@@ -1959,7 +1971,9 @@ export default {
             });
             let payload = {
               notificationName: "แจ้งเตือนการเช็คอิน",
+              notificationNameEn: "Check-in notification",
               notificationDescription: `เช็คอินคอร์ส ${this.course_data.course_name_th} เรียบร้อยแล้ว`,
+              notificationDescriptionEn: `Course ${this.course_data.course_name_en} has been successfully checked in.`,
               accountId: student_id,
               path: null,
             };
@@ -1968,10 +1982,13 @@ export default {
             if (graduate_student_id.length > 0) {
               let graduate_payload = {
                 notificationName: "แจ้งเตือนการเรียน",
+                notificationNameEn: "Study reminder",
                 notificationDescription: `คอร์ส${this.course_data.course_name_th} ของท่านใกล้จะครบแพ็คเกจแล้วสามารถเลือกซื้อคอร์สเพิ่มเติมได้ค่ะ`,
+                notificationDescriptionEn: `Your ${this.course_data.course_name_en} course is almost complete. You can choose to purchase additional courses.`,
                 accountId: graduate_student_id,
                 path: null,
               };
+
               this.sendNotification(graduate_payload);
             }
           }
@@ -2071,8 +2088,6 @@ export default {
       }`;
     },
     selectCheckInStatus(item, status) {
-      console.log("item :>> ", item);
-      console.log("status :>> ", status);
       if (status === "leave") {
         this.expanded_index.push(item);
       } else {
