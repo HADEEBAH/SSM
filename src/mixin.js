@@ -38,8 +38,8 @@ export default {
           if (notify) {
             Swal.fire({
               icon: "success",
-              title: "สำเร็จ",
-              text: "( ส่งการแจ้งเตือนเรียบร้อยแล้ว )",
+              title: this.$i18n.locale == "th" ? "สำเร็จ" : "success",
+              text: this.$i18n.locale == "th" ? "( ส่งการแจ้งเตือนเรียบร้อยแล้ว )" : "( Notification successfully sent )",
               timer: 3000,
               timerProgressBar: true,
               showCancelButton: false,
@@ -51,8 +51,8 @@ export default {
         } else {
           Swal.fire({
             icon: "warning",
-            title: "ไม่สำเร็จ",
-            text: "( ส่งการแจ้งเตือนไม่สำเร็จ )",
+            title: this.$i18n.locale == "th" ? "ไม่สำเร็จ" : "unsuccessful",
+            text: this.$i18n.locale == "th" ? "( ส่งการแจ้งเตือนไม่สำเร็จ )" : "( Failed to send notification )",
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
