@@ -572,7 +572,7 @@ export default {
               if (typeof data.data === "string") {
                 throw { message: data };
               } else {
-                this.$store.dispatch("UserModules/GetUserList");
+                // this.$store.dispatch("UserModules/GetUserList");
                 Swal.fire({
                   icon: "success",
                   title: this.$t("succeed"),
@@ -583,6 +583,25 @@ export default {
                   showConfirmButton: false,
                 });
               }
+              let { page, itemsPerPage } = this.options;
+              let search_arr = [];
+              this.disable_pagination_btn = true;
+              this.user_list.data = [];
+
+              if (this.selected_all_bool) {
+                this.searchQuery = this.roles.slice();
+                for await (let item of this.searchQuery) {
+                  search_arr.push(item.roleNumber);
+                }
+                this.searchQuery = search_arr;
+              }
+
+              this.FilteredData({
+                name: this.search,
+                role: this.searchQuery,
+                limit: this.select_roles ? 10 : itemsPerPage,
+                page: page,
+              });
             } else {
               throw { message: data.message };
             }
