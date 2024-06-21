@@ -982,7 +982,7 @@ const orderModules = {
             if (regis_type !== "cart") {
               if (order.type !== "addStudent") {
                 if (!studentUpdate.some(v => v.studentId === student.account_id)) {
-                  console.log('itemRole :>> ', itemRole);
+                  // console.log('itemRole :>> ', itemRole);
                   if (itemRole === 'R_5') {
                     if (student.nicknameTh && student.class) {
                       studentUpdate.push({
@@ -1455,11 +1455,16 @@ const orderModules = {
           });
         } else if (error?.response?.data?.message === "duplicate pending order") {
           Swal.fire({
-            icon: "error",
-            title: VueI18n.t("unable to register"),
+            // icon: "error",
+            // title: VueI18n.t("unable to register"),
+            icon: "warning",
+            title: VueI18n.t("warning"),
             text: VueI18n.t(
-              "unable to register Because the course is already in your registration history"
+              "duplicate user in this course Unable to register"
             ),
+            // text: VueI18n.t(
+            //   "unable to register Because the course is already in your registration history"
+            // ),
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -1981,7 +1986,18 @@ const orderModules = {
       }
     },
     // RESERVE COURSE
-    async CreateReserveCourse(context, { course_data, profile_id }) {
+    // async CreateReserveCourse(context, { course_data, profile_id, }) {
+    async CreateReserveCourse(context, { course_data, profile_id, yourself }) {
+      // console.log('profile_id :>> ', profile_id);
+      // profile_data
+      // console.log('profile_data :>> ', profile_data);
+      // profile_data
+      // let myParent = ''
+
+      // for (const items of profile_data?.myparents) {
+      //   myParent = items?.accountId
+      // }
+
       try {
         let count = 0;
         let CheckStudentIsWaraphat = true
@@ -2003,14 +2019,16 @@ const orderModules = {
             }
             if (CheckStudentIsWaraphat) {
               for await (let student of course_data.students) {
-
+                // console.log('student.account_id :>> ', student.account_id);
                 let payload = {
                   studentId: student.account_id,
                   coursePackageOptionId: null,
                   dayOfWeekId: null,
                   timeId: null,
                   courseId: course_data.course_id,
-                  parentId: profile_id,
+                  // parentId: profile_id,
+                  parentId: yourself == true ? null : profile_id,
+
                   coachId: course_data.coach_id ? course_data.coach_id : null,
                   orderTmpId: null,
                   IsWaraphat: student.IsWaraphat,
@@ -2044,8 +2062,6 @@ const orderModules = {
                   payload,
                   config
                 );
-                console.log('data :>> ', data);
-
                 if (data.statusCode === 201) {
                   count = count + 1;
                 } else {
@@ -2074,13 +2090,16 @@ const orderModules = {
         } else {
           if (CheckStudentIsWaraphat) {
             for await (let student of course_data.students) {
+
               let payload = {
-                studentId: student.account_id,
+                // studentId: student.account_id,
+                studentId: profile_id,
                 coursePackageOptionId: null,
                 dayOfWeekId: null,
                 timeId: null,
                 courseId: course_data.course_id,
-                parentId: profile_id,
+                // parentId: profile_id,
+                parentId: yourself == true ? null : student.account_id,
                 coachId: course_data.coach_id ? course_data.coach_id : null,
                 orderTmpId: null,
                 IsWaraphat: student.IsWaraphat,

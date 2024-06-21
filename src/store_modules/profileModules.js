@@ -4,7 +4,7 @@ const profileModules = {
   namespaced: true,
   state: {
     students: [],
-    class_list:[],
+    class_list: [],
     user_data: {
       fname_th: "dieb",
       lname_th: "dieb",
@@ -91,7 +91,7 @@ const profileModules = {
 
   },
   mutations: {
-    SetClass(state, payload){
+    SetClass(state, payload) {
       state.class_list = payload
     },
     SetUserData(state, payload) {
@@ -125,8 +125,8 @@ const profileModules = {
 
   },
   actions: {
-    async GetClassList(context){
-      try{
+    async GetClassList(context) {
+      try {
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -134,12 +134,12 @@ const profileModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        const {data} = await axios.get(`${process.env.VUE_APP_URL}/api/v1/class`, config)
-        if(data.statusCode === 200){
+        const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/class`, config)
+        if (data.statusCode === 200) {
           // console.log(data.data)
-          context.commit("SetClass",data.data)
+          context.commit("SetClass", data.data)
         }
-      }catch(error){
+      } catch (error) {
         console.log(error)
       }
     },
@@ -211,6 +211,9 @@ const profileModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
+        // let localhost = "http://localhost:3000"
+
+        // let { data } = await axios.get(`${localhost}/api/v1/profile/${account_id}`, config)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/profile/${account_id}`, config)
         let roles = {
           roleId: "",
@@ -220,22 +223,22 @@ const profileModules = {
         if (data.statusCode === 200) {
           const response = data.data
 
-          response.image = response.image && response.image != "" ? `${process.env.VUE_APP_URL}/api/v1/files/${response.image}` : ""
-          response.class = response.class ? response.class : {
-            classNameTh : "",
-            classNameEn : "",
+          response.image = await response.image && response.image != "" ? `${process.env.VUE_APP_URL}/api/v1/files/${response.image}` : ""
+          response.class = await response.class ? response.class : {
+            classNameTh: "",
+            classNameEn: "",
           }
-          response.school = response.school ? response.school : {
-            schoolNameTh : "",
-            schoolNameEn : "",
+          response.school = await response.school ? response.school : {
+            schoolNameTh: "",
+            schoolNameEn: "",
           }
-          for await (const role of response.userRoles) {
+          for await (const role of await response.userRoles) {
             roles.roleId = role.roleId
             roles.roleNameEng = role.roleNameEng
             roles.roleNameTh = role.roleNameTh
           }
 
-          response.userRoles = roles
+          response.userRoles = await roles
           context.commit("SetProfileDetail", response)
         } else {
           throw { error: data }
@@ -299,7 +302,7 @@ const profileModules = {
     getRelationData(state) {
       return state.relation_detail
     },
-    classList(state){
+    classList(state) {
       return state.class_list
     }
 

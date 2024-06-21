@@ -103,7 +103,7 @@ const reserveCourseModules = {
 
         const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/reserve${query}`, config)
         if (data.statusCode === 200) {
-          console.log(data.data)
+          // console.log(data.data)
           const dow_filter = []
           const time_filter = []
           for (const course of data.data) {
@@ -328,9 +328,14 @@ const reserveCourseModules = {
             })
           } else if (error.response.data.message === "duplicate pending order") {
             Swal.fire({
-              icon: "error",
-              title: VueI18n.t("unable to register"),
-              text: VueI18n.t("unable to register Because the course is already in your registration history"),
+              // icon: "error",
+              // title: VueI18n.t("unable to register"),
+              icon: "warning",
+              title: VueI18n.t("warning"),
+              text: VueI18n.t(
+                "duplicate user in this course Unable to register"
+              ),
+              // text: VueI18n.t("unable to register Because the course is already in your registration history"),
               showCancelButton: false,
               showDenyButton: false,
               showConfirmButton: false,
@@ -430,9 +435,14 @@ const reserveCourseModules = {
             })
           } else if (error.response.data.message === "duplicate pending order") {
             Swal.fire({
-              icon: "error",
-              title: VueI18n.t("unable to register"),
-              text: VueI18n.t("unable to register Because the course is already in your registration history"),
+              // icon: "error",
+              // title: VueI18n.t("unable to register"),
+              icon: "warning",
+              title: VueI18n.t("warning"),
+              text: VueI18n.t(
+                "duplicate user in this course Unable to register"
+              ),
+              // text: VueI18n.t("unable to register Because the course is already in your registration history"),
               showCancelButton: false,
               showDenyButton: false,
               showConfirmButton: false,
@@ -530,9 +540,14 @@ const reserveCourseModules = {
             })
           } else if (error.response.data.message === "duplicate pending order") {
             Swal.fire({
-              icon: "error",
-              title: VueI18n.t("unable to register"),
-              text: VueI18n.t("unable to register Because the course is already in your registration history"),
+              // icon: "error",
+              // title: VueI18n.t("unable to register"),
+              icon: "warning",
+              title: VueI18n.t("warning"),
+              text: VueI18n.t(
+                "duplicate user in this course Unable to register"
+              ),
+              // text: VueI18n.t("unable to register Because the course is already in your registration history"),
               showCancelButton: false,
               showDenyButton: false,
               showConfirmButton: false,

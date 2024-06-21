@@ -97,7 +97,7 @@
                   <v-row dense height="500">
                     <v-col cols="8">
                       <div class="my-2 font-bold">
-                        {{ $t("notifications") }}
+                        {{ $t("notifications55") }}
                       </div>
                     </v-col>
                     <v-col cols="4" align="end">
@@ -117,6 +117,7 @@
                     :key="index"
                     @click="readNotification(item)"
                   >
+                    <!-- <pre> {{ get_notifications_all }} </pre> -->
                     <v-list-item-avatar class="align-self-center">
                       <v-icon size="32" color="#ff6b81">
                         {{
