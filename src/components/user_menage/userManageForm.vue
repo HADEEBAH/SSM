@@ -264,6 +264,61 @@
                               </v-text-field>
                             </v-col>
                           </v-row>
+                          <v-row v-if="show_by_id.userRoles?.length <= 0">
+                            <v-col cols="12" sm="6">
+                              <label-custom :text="$t('class')"></label-custom>
+                              <v-autocomplete
+                                :value="
+                                  show_by_id.class.classNameTh === ''
+                                    ? $t('please enter the class')
+                                    : show_by_id.class.classNameTh
+                                "
+                                :items="class_list"
+                                item-text="classNameTh"
+                                color="#ff6B81"
+                                item-color="#ff6b81"
+                                outlined
+                                :disabled="isDisabled"
+                                :placeholder="$t('please enter the class')"
+                                dense
+                                @change="handleChange($event)"
+                              >
+                                <template #no-data>
+                                  {{ $t("data not found") }}
+                                </template>
+                              </v-autocomplete>
+                            </v-col>
+
+                            <v-col cols="12" sm="6">
+                              <label-custom
+                                :text="$t('congenital disease')"
+                              ></label-custom>
+                              <v-text-field
+                                :disabled="!isEnabled"
+                                placeholder="-"
+                                v-model="show_by_id.congenitalDisease"
+                                outlined
+                                dense
+                              >
+                              </v-text-field>
+                            </v-col>
+
+                            <v-col cols="12" sm="6">
+                              <label-custom
+                                :text="$t('school(thai)')"
+                              ></label-custom>
+                              <v-text-field
+                                v-bind:disabled="isDisabled"
+                                @keydown="validate($event, 'th')"
+                                placeholder="-"
+                                v-model="show_by_id.school.schoolNameTh"
+                                outlined
+                                dense
+                                color="#ff6b81"
+                              >
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
                           <v-row
                             v-for="items of show_by_id.userRoles"
                             :key="items"
