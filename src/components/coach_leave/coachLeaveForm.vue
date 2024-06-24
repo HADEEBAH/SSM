@@ -610,7 +610,7 @@ export default {
         ],
         compensation_start_time: [
           (val) =>
-            (val || "").length == 5 || this.$t("please select an end time"),
+            (val || "").length == 5 || this.$t("please select a start time"),
         ],
         compensation_end_time: [
           (val) =>

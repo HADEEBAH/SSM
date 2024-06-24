@@ -392,9 +392,9 @@ const orderModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        // let localhost = "http://localhost:3000"
-        // let { data } = await axios.get(`${localhost}/api/v1/adminpayment/finance?search=${name}&limit=${limit}&page=${page}&status=${status}`, config)
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/finance?search=${name}&limit=${limit}&page=${page}&status=${status}`, config)
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${localhost}/api/v1/adminpayment/finance?search=${name}&limit=${limit}&page=${page}&status=${status}`, config)
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/finance?search=${name}&limit=${limit}&page=${page}&status=${status}`, config)
 
         if (data.statusCode === 200) {
 
@@ -1987,7 +1987,7 @@ const orderModules = {
     },
     // RESERVE COURSE
     // async CreateReserveCourse(context, { course_data, profile_id, }) {
-    async CreateReserveCourse(context, { course_data, profile_id, yourself }) {
+    async CreateReserveCourse(context, { course_data, profile_id }) {
       // console.log('profile_id :>> ', profile_id);
       // profile_data
       // console.log('profile_data :>> ', profile_data);
@@ -2027,7 +2027,7 @@ const orderModules = {
                   timeId: null,
                   courseId: course_data.course_id,
                   // parentId: profile_id,
-                  parentId: yourself == true ? null : profile_id,
+                  parentId: course_data.apply_for_parent ? profile_id : null,
 
                   coachId: course_data.coach_id ? course_data.coach_id : null,
                   orderTmpId: null,
@@ -2092,14 +2092,15 @@ const orderModules = {
             for await (let student of course_data.students) {
 
               let payload = {
-                // studentId: student.account_id,
-                studentId: profile_id,
+                studentId: student.account_id,
+                // studentId: profile_id,
                 coursePackageOptionId: null,
                 dayOfWeekId: null,
                 timeId: null,
                 courseId: course_data.course_id,
                 // parentId: profile_id,
-                parentId: yourself == true ? null : student.account_id,
+                parentId: course_data.apply_for_parent ? profile_id : null,
+                // parentId: yourself == true ? null : student.account_id,
                 coachId: course_data.coach_id ? course_data.coach_id : null,
                 orderTmpId: null,
                 IsWaraphat: student.IsWaraphat,

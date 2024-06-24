@@ -25,6 +25,7 @@ const financeModules = {
   },
   actions: {
     async financeFilter(context, { filter }) {
+      console.log('filter :>> ', filter);
       context.commit("SetFinanceLoading", true)
       try {
         let config = {
@@ -48,6 +49,7 @@ const financeModules = {
         endpoint = endpoint + `paymentDateEnd=${filter.date_pay_end}&`
         endpoint = endpoint + `priceMin=${filter.service_charge_start}&`
         endpoint = endpoint + `priceMax=${filter.service_charge_end}`
+        endpoint = endpoint + `orderId=${filter.order_number}&`
         let { data } = await axios.get(endpoint, config)
         if (data.statusCode == 200) {
           let reports = []
@@ -86,8 +88,8 @@ const financeModules = {
                 "ระยะเวลา": order.optionName,
                 "โค้ช": order.coach_name,
                 "นักเรียน": order.student_name,
-                "ชื่อเล่นนักเรียน" : order.nickname,
-                "ระดับชั้น" : order.class_name,
+                "ชื่อเล่นนักเรียน": order.nickname,
+                "ระดับชั้น": order.class_name,
                 "ผู้ซื้อ": order.created_by_name,
                 "วันที่ออกเอกสาร": moment().format("DD/MM/YYYY HH:mm"),
 
@@ -108,8 +110,8 @@ const financeModules = {
                 "ระยะเวลา": '',
                 "โค้ช": '',
                 "นักเรียน": '',
-                "ชื่อเล่นนักเรียน" : '',
-                "ระดับชั้น" : '',
+                "ชื่อเล่นนักเรียน": '',
+                "ระดับชั้น": '',
                 "ผู้ซื้อ": '',
               })
             }

@@ -1286,11 +1286,12 @@
                   </template>
                 </v-tab-item>
                 <!-- นักเรียนจองคิว -->
+                <!-- <pre>{{ student_reserve_list }}</pre> -->
                 <v-tab-item valus="student booking">
                   <v-row dense v-if="course_data.reservation">
                     <v-col class="pr-3" cols="12" align="right">
                       <v-btn
-                        @click="UpdateReserveAll()"
+                        @click="UpdateReserveAll(student_reserve_list)"
                         class="mb-3"
                         dense
                         dark
@@ -1316,36 +1317,56 @@
                     <template v-slot:[`item.fullname`]="{ item }">
                       {{
                         $i18n.locale == "th"
-                          ? `${item.firstNameTh} ${item.lastNameTh}`
-                          : `${item.firsNameEn} ${item.lastNameEn}`
+                          ? `${item.firstNameTh ? item.firstNameTh : ""} ${
+                              item.lastNameTh ? item.lastNameTh : ""
+                            }`
+                          : `${item.firsNameEn ? item.firsNameEn : ""} ${
+                              item.lastNameEn ? item.lastNameEn : ""
+                            }`
                       }}
                     </template>
                     <template v-slot:[`item.course_name`]="{ item }">
                       {{ `${item.courseNameTh}(${item.courseNameEn})` }}
                     </template>
                     <template v-slot:[`item.package`]="{ item }">
-                    {{
-                    (item.packageName !== null && item.packageName !== undefined &&
-                    item.optionName !== null && item.optionName !== undefined &&
-                    item.optionNameEn !== null && item.optionNameEn !== undefined &&
-                    item.dayOfWeekName !== null && item.dayOfWeekName !== undefined &&
-                    item.startTime !== null && item.startTime !== undefined &&
-                    item.endTime !== null && item.endTime !== undefined)
-                  ? `${item.packageName}-${
-                      $i18n.locale == 'th'
-                        ? item.optionName
-                        : item.optionNameEn
-                    }/${dayOfWeekArray(item.dayOfWeekName)}${
-                      item.startTime
-                    }-${item.endTime}`
-                  : '-'
-                    }}
+                      {{
+                        item.packageName !== null &&
+                        item.packageName !== undefined &&
+                        item.optionName !== null &&
+                        item.optionName !== undefined &&
+                        item.optionNameEn !== null &&
+                        item.optionNameEn !== undefined &&
+                        item.dayOfWeekName !== null &&
+                        item.dayOfWeekName !== undefined &&
+                        item.startTime !== null &&
+                        item.startTime !== undefined &&
+                        item.endTime !== null &&
+                        item.endTime !== undefined
+                          ? `${item.packageName}-${
+                              $i18n.locale == "th"
+                                ? item.optionName
+                                : item.optionNameEn
+                            }/${dayOfWeekArray(item.dayOfWeekName)}${
+                              item.startTime
+                            }-${item.endTime}`
+                          : "-"
+                      }}
                     </template>
                     <template v-slot:[`item.coach`]="{ item }">
                       {{
                         $i18n.locale == "th"
-                          ? `${item.coachFirstNameTh} ${item.coachLastNameTh}`
-                          : `${item.coachFirsNameEn} ${item.coachLastNameEn}`
+                          ? `${
+                              item.coachFirstNameTh ? item.coachFirstNameTh : ""
+                            } ${
+                              item.coachLastNameTh ? item.coachLastNameTh : ""
+                            }`
+                          : `${
+                              item.coachFirsNameEn
+                                ? item.coachFirsNameEn
+                                : item.coachFirsNameEn
+                            } ${
+                              item.coachLastNameEn ? item.coachLastNameEn : ""
+                            }`
                       }}
                     </template>
                     <template v-slot:[`item.createdDate`]="{ item }">
@@ -2395,6 +2416,7 @@ export default {
     show_dialog_export_reserve_student: false,
   }),
   mounted() {},
+
   watch: {
     student_tab: function () {
       const course_id = this.$route.params.course_id;
@@ -2548,7 +2570,10 @@ export default {
       UpdateStatusReserveAdmin: "reserveCourseModules/UpdateStatusReserveAdmin",
       UpdateAllStatusReserve: "reserveCourseModules/UpdateAllStatusReserve",
     }),
+
     UpdateReserveAll() {
+      // items
+      // let hasWaitingStatus = items.some((item) => item.status === "waiting");
       if (this.course_data.course_status === "Active") {
         Swal.fire({
           icon: "question",
@@ -2559,9 +2584,11 @@ export default {
           confirmButtonText: this.$t("agree"),
         }).then(async (result) => {
           if (result.isConfirmed) {
+            // if (hasWaitingStatus) {
             await this.UpdateAllStatusReserve({
               courseId: this.$route.params.course_id,
             });
+            // }
             await this.GetStudentReserveByCourseId({
               course_id: this.$route.params.course_id,
             });
@@ -2831,7 +2858,7 @@ export default {
       data.checked = !data.checked;
     },
     dayOfWeekArray(day) {
-        if (!day) {
+      if (!day) {
         return "";
       }
       let days = day.split(",");
