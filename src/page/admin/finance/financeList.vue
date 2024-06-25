@@ -572,14 +572,14 @@
                   color="#FF6B81"
                   item-color="#FF6B81"
                 >
-                  <template v-slot:selection="{ item }">
+                  <template v-slot:selection="{ item, index }">
                     <v-chip dark color="#FF6B81">
                       <span>{{ item }}</span>
                     </v-chip>
-                    <!-- <span v-if="index === 1" class="grey--text text-caption">
-                      (+{{ export_filter.course_type_id.length - 1 }}
+                    <span v-if="index === 5" class="grey--text text-caption">
+                      (+{{ export_filter.order_number?.length - 5 }}
                       {{ $t("Others") }})
-                    </span> -->
+                    </span>
                   </template>
                 </v-combobox>
                 <!-- <v-text-field
@@ -1066,10 +1066,6 @@ export default {
         }
         if (!this.export_filter.order_number.includes(order.order_number)) {
           this.export_filter.order_number.push(order.order_number);
-          console.log(
-            "this.export_filter.order_number :>> ",
-            this.export_filter.order_number
-          );
         }
       });
       this.show_dialog = true;

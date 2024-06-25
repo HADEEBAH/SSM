@@ -25,7 +25,6 @@ const financeModules = {
   },
   actions: {
     async financeFilter(context, { filter }) {
-      console.log('filter :>> ', filter);
       context.commit("SetFinanceLoading", true)
       try {
         let config = {
@@ -48,8 +47,8 @@ const financeModules = {
         endpoint = endpoint + `paymentDateStart=${filter.date_pay_start}&`
         endpoint = endpoint + `paymentDateEnd=${filter.date_pay_end}&`
         endpoint = endpoint + `priceMin=${filter.service_charge_start}&`
-        endpoint = endpoint + `priceMax=${filter.service_charge_end}`
-        endpoint = endpoint + `orderId=${filter.order_number}&`
+        endpoint = endpoint + `priceMax=${filter.service_charge_end}&`
+        endpoint = endpoint + `orderId=${filter.order_number}`
         let { data } = await axios.get(endpoint, config)
         if (data.statusCode == 200) {
           let reports = []
@@ -125,7 +124,7 @@ const financeModules = {
               }
             }
             let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/admincourse/export-log`, {}, config)
-            console.log(data)
+
             var workbook = XLSX.utils.book_new();
             var worksheet = XLSX.utils.json_to_sheet(reports);
             XLSX.utils.book_append_sheet(workbook, worksheet, 'sheet1');

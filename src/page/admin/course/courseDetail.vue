@@ -3094,7 +3094,6 @@ export default {
       );
       if (coachs.length > 0) {
         for (const coach of coachs) {
-          // console.log(coach)
           if (!coachList.some((v) => v.coachId == coach.coachId)) {
             coachList.push(coach);
           }

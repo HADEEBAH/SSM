@@ -392,9 +392,9 @@ const orderModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/adminpayment/finance?search=${name}&limit=${limit}&page=${page}&status=${status}`, config)
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/finance?search=${name}&limit=${limit}&page=${page}&status=${status}`, config)
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/adminpayment/finance?search=${name}&limit=${limit}&page=${page}&status=${status}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/finance?search=${name}&limit=${limit}&page=${page}&status=${status}`, config)
 
         if (data.statusCode === 200) {
 
@@ -1987,7 +1987,7 @@ const orderModules = {
     },
     // RESERVE COURSE
     // async CreateReserveCourse(context, { course_data, profile_id, }) {
-    async CreateReserveCourse(context, { course_data, profile_id }) {
+    async CreateReserveCourse(context, { course_data, profile_id, coach_id }) {
       // console.log('profile_id :>> ', profile_id);
       // profile_data
       // console.log('profile_data :>> ', profile_data);
@@ -2029,13 +2029,29 @@ const orderModules = {
                   // parentId: profile_id,
                   parentId: course_data.apply_for_parent ? profile_id : null,
 
-                  coachId: course_data.coach_id ? course_data.coach_id : null,
+                  // coachId: course_data.coach_id ? course_data.coach_id : null,
+                  coachId: course_data.course_type_id === "CT_1" ? course_data.coach_id ? course_data.coach_id : null : coach_id ? coach_id : null,
+
                   orderTmpId: null,
                   IsWaraphat: student.IsWaraphat,
                   username: student.username,
                 };
 
                 if (course_data.course_type_id === "CT_1") {
+                  payload.dayOfWeekId = course_data?.time?.timeData
+                    ? course_data.time.timeData.filter(
+                      (v) => v.coach_id === course_data.coach_id
+                    )[0].dayOfWeekId
+                    : course_data.time.dayOfWeekId;
+                  payload.coursePackageOptionId =
+                    course_data.option.course_package_option_id;
+                  payload.timeId = course_data?.time?.timeData
+                    ? course_data.time.timeData.filter(
+                      (v) => v.coach_id === course_data.coach_id
+                    )[0].timeId
+                    : course_data.time.timeId;
+                }
+                if (course_data.course_type_id === "CT_2") {
                   payload.dayOfWeekId = course_data?.time?.timeData
                     ? course_data.time.timeData.filter(
                       (v) => v.coach_id === course_data.coach_id
@@ -2101,13 +2117,28 @@ const orderModules = {
                 // parentId: profile_id,
                 parentId: course_data.apply_for_parent ? profile_id : null,
                 // parentId: yourself == true ? null : student.account_id,
-                coachId: course_data.coach_id ? course_data.coach_id : null,
+                coachId: course_data.course_type_id === "CT_1" ? course_data.coach_id ? course_data.coach_id : null : coach_id ? coach_id : null,
                 orderTmpId: null,
                 IsWaraphat: student.IsWaraphat,
                 username: student.username,
+
               };
 
               if (course_data.course_type_id === "CT_1") {
+                payload.dayOfWeekId = course_data?.time?.timeData
+                  ? course_data.time.timeData.filter(
+                    (v) => v.coach_id === course_data.coach_id
+                  )[0].dayOfWeekId
+                  : course_data.time.dayOfWeekId;
+                payload.coursePackageOptionId =
+                  course_data.option.course_package_option_id;
+                payload.timeId = course_data?.time?.timeData
+                  ? course_data.time.timeData.filter(
+                    (v) => v.coach_id === course_data.coach_id
+                  )[0].timeId
+                  : course_data.time.timeId;
+              }
+              if (course_data.course_type_id === "CT_2") {
                 payload.dayOfWeekId = course_data?.time?.timeData
                   ? course_data.time.timeData.filter(
                     (v) => v.coach_id === course_data.coach_id
