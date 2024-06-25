@@ -48,7 +48,7 @@ const financeModules = {
         endpoint = endpoint + `paymentDateEnd=${filter.date_pay_end}&`
         endpoint = endpoint + `priceMin=${filter.service_charge_start}&`
         endpoint = endpoint + `priceMax=${filter.service_charge_end}&`
-        endpoint = endpoint + `orderId=${filter.order_number}`
+        endpoint = endpoint + `orderNumber=${filter.order_number}`
         let { data } = await axios.get(endpoint, config)
         if (data.statusCode == 200) {
           let reports = []

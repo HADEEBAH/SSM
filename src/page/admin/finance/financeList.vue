@@ -553,7 +553,7 @@
             </v-row>
           </v-card-text>
           <!-- รายละเอียดการชำระเงิน -->
-          <headerCard :title="$t('peyment detail55')"></headerCard>
+          <headerCard :title="$t('peyment detail')"></headerCard>
           <v-card-text class="py-0">
             <v-divider class="mb-3"></v-divider>
             <!-- วันที่สร้างเอกสาร -->
