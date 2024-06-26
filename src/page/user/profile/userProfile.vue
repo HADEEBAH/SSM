@@ -400,7 +400,7 @@
         <v-card-title>
           <v-row>
             <v-col cols="6" align="left">
-              {{ $t("parent information") }}
+              {{ $t("parent information55") }}
             </v-col>
             <v-col cols="6" align="right">
               <v-btn icon @click="closeDialog">
@@ -434,16 +434,17 @@
               </div>
             </div>
           </div>
-          <v-row dense>
+          <v-row dense class="indent-10">
             <!--TH NAME -->
             <v-col cols="12" sm="6">
               <label-custom :text="$t('first name(thai)')"></label-custom>
-              <br />
-              {{
-                $i18n.locale == "th"
-                  ? getParentDataDialog.parentFirstnameTh
-                  : getParentDataDialog.parentFirstnameEn
-              }}
+              <div>
+                {{
+                  $i18n.locale == "th"
+                    ? getParentDataDialog.parentFirstnameTh
+                    : getParentDataDialog.parentFirstnameEn
+                }}
+              </div>
 
               <!-- {{
                 !getParentDataDialog.parentFirstnameTh
@@ -454,12 +455,13 @@
             <!-- TH LNAME -->
             <v-col cols="12" sm="6">
               <label-custom :text="$t('last name(thai)')"></label-custom>
-              <br />
-              {{
-                $i18n.locale == "th"
-                  ? getParentDataDialog.parentLastnameTh
-                  : getParentDataDialog.parentLastnameEn
-              }}
+              <div>
+                {{
+                  $i18n.locale == "th"
+                    ? getParentDataDialog.parentLastnameTh
+                    : getParentDataDialog.parentLastnameEn
+                }}
+              </div>
 
               <!-- {{
                 !getParentDataDialog.parentLastnameTh
@@ -468,7 +470,7 @@
               }} -->
             </v-col>
             <!-- nationality -->
-            <v-col cols="12" sm="6">
+            <!-- <v-col cols="12" sm="6">
               <label-custom :text="$t('nationality')"></label-custom>
               <br />
               {{
@@ -476,26 +478,28 @@
                   ? "-"
                   : getParentDataDialog.parentNation
               }}
-            </v-col>
+            </v-col> -->
             <!-- tel -->
             <v-col cols="12" sm="6">
               <label-custom :text="$t('phone number')"></label-custom>
-              <br />
-              {{
-                !getParentDataDialog.parentTel
-                  ? "-"
-                  : getParentDataDialog.parentTel
-              }}
+              <div>
+                {{
+                  !getParentDataDialog.parentTel
+                    ? "-"
+                    : getParentDataDialog.parentTel
+                }}
+              </div>
             </v-col>
             <!-- email -->
             <v-col cols="12" sm="6">
               <label-custom :text="$t('email')"></label-custom>
-              <br />
-              {{
-                !getParentDataDialog.parentEmail
-                  ? "-"
-                  : getParentDataDialog.parentEmail
-              }}
+              <div>
+                {{
+                  !getParentDataDialog.parentEmail
+                    ? "-"
+                    : getParentDataDialog.parentEmail
+                }}
+              </div>
             </v-col>
           </v-row>
           <v-row dense>
@@ -548,16 +552,19 @@
             </div>
           </v-row>
 
-          <v-row dense>
+          <v-row dense class="indent-10">
             <!--TH NAME -->
             <v-col cols="12" sm="6">
               <label-custom :text="$t('first name(thai)')"></label-custom>
-              <br />
-              {{
-                $i18n.locale == "th"
-                  ? dialogGetStudentData.studentFirstnameTh
-                  : dialogGetStudentData.studentFirstnameEn
-              }}
+              <!-- <br /> -->
+              <div>
+                {{
+                  $i18n.locale == "th"
+                    ? dialogGetStudentData.studentFirstnameTh
+                    : dialogGetStudentData.studentFirstnameEn
+                }}
+              </div>
+
               <!-- {{
                 !dialogGetStudentData.studentFirstnameTh
                   ? "-"
@@ -567,12 +574,13 @@
             <!-- TH LNAME -->
             <v-col cols="12" sm="6">
               <label-custom :text="$t('last name(thai)')"></label-custom>
-              <br />
-              {{
-                $i18n.locale == "th"
-                  ? dialogGetStudentData.studentLastnameTh
-                  : dialogGetStudentData.studentLastnameEn
-              }}
+              <div>
+                {{
+                  $i18n.locale == "th"
+                    ? dialogGetStudentData.studentLastnameTh
+                    : dialogGetStudentData.studentLastnameEn
+                }}
+              </div>
 
               <!-- {{
                 !dialogGetStudentData.studentLastnameTh
@@ -581,7 +589,7 @@
               }} -->
             </v-col>
             <!-- nationality -->
-            <v-col cols="12" sm="6">
+            <!-- <v-col cols="12" sm="6">
               <label-custom :text="$t('nationality')"></label-custom>
               <br />
               {{
@@ -589,26 +597,29 @@
                   ? "-"
                   : dialogGetStudentData.studentNation
               }}
-            </v-col>
+            </v-col> -->
             <!-- tel -->
             <v-col cols="12" sm="6">
               <label-custom :text="$t('phone number')"></label-custom>
-              <br />
-              {{
-                !dialogGetStudentData.studentTel
-                  ? "-"
-                  : dialogGetStudentData.studentTel
-              }}
+              <div>
+                {{
+                  !dialogGetStudentData.studentTel
+                    ? "-"
+                    : dialogGetStudentData.studentTel
+                }}
+              </div>
             </v-col>
             <!-- email -->
             <v-col cols="12" sm="6">
               <label-custom :text="$t('email')"></label-custom>
-              <br />
-              {{
-                !dialogGetStudentData.studentEmail
-                  ? "-"
-                  : dialogGetStudentData.studentEmail
-              }}
+              <!-- <br /> -->
+              <div>
+                {{
+                  !dialogGetStudentData.studentEmail
+                    ? "-"
+                    : dialogGetStudentData.studentEmail
+                }}
+              </div>
             </v-col>
           </v-row>
 

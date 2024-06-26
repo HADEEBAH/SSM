@@ -1567,11 +1567,16 @@ export default {
               }
               this.order.created_by = this.user_login.account_id;
               this.changeOrderData(this.order);
+              let id_coach = "";
+              for (const item of this.course_data.coachs) {
+                id_coach = item.coach_id;
+              }
+
               this.CreateReserveCourse({
                 course_data: this.course_order,
                 profile_id: this.profile_detail?.userOneId,
-                profile_data: this.profile_detail,
-                yourself: yourself,
+                // profile_data: this.profile_detail,
+                coach_id: id_coach,
               });
             }
           });

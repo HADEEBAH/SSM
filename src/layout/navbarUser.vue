@@ -97,7 +97,7 @@
                   <v-row dense height="500">
                     <v-col cols="8">
                       <div class="my-2 font-bold">
-                        {{ $t("notifications55") }}
+                        {{ $t("notifications") }}
                       </div>
                     </v-col>
                     <v-col cols="4" align="end">

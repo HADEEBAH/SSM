@@ -37,11 +37,11 @@
             {{ profile.lastNameTh == "" ? "-" : profile.lastNameTh }}
           </v-col>
           <!-- nationality -->
-          <v-col cols="12" sm="6">
+          <!-- <v-col cols="12" sm="6">
             <label-custom text="สัญชาติ"></label-custom>
             <br />
             {{ profile.nation == null ? "-" : profile.nation }}
-          </v-col>
+          </v-col> -->
           <!-- id_card -->
           <v-col cols="12" sm="6">
             <label-custom text="เลขบัตรประชาชน"></label-custom>
@@ -150,11 +150,11 @@
             }}
           </v-col>
           <!-- nationality -->
-          <v-col cols="12" sm="6">
+          <!-- <v-col cols="12" sm="6">
             <label-custom text="สัญชาติ"></label-custom>
             <br />
             {{ profile.nation == null ? "-" : profile.nation }}
-          </v-col>
+          </v-col> -->
           <!-- id_card -->
           <v-col cols="12" sm="6">
             <label-custom text="เลขบัตรประชาชน"></label-custom>
