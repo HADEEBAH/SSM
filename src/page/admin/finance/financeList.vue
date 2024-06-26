@@ -558,7 +558,7 @@
             <v-divider class="mb-3"></v-divider>
             <!-- วันที่สร้างเอกสาร -->
             <v-row dense>
-              <v-col cols="12">
+              <v-col cols="12" sm="6">
                 <label-custom :text="$t('order number')"></label-custom>
                 <v-combobox
                   v-model="export_filter.order_number"
@@ -573,11 +573,11 @@
                   item-color="#FF6B81"
                 >
                   <template v-slot:selection="{ item, index }">
-                    <v-chip dark color="#FF6B81">
+                    <v-chip dark v-if="index === 0" color="#FF6B81">
                       <span>{{ item }}</span>
                     </v-chip>
-                    <span v-if="index === 5" class="grey--text text-caption">
-                      (+{{ export_filter.order_number?.length - 5 }}
+                    <span v-if="index === 1" class="grey--text text-caption">
+                      (+{{ export_filter.order_number?.length - 1 }}
                       {{ $t("Others") }})
                     </span>
                   </template>

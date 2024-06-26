@@ -2073,8 +2073,8 @@ const orderModules = {
                   },
                 };
                 let { data } = await axios.post(
-                  // `http://localhost:3002/api/v1/order/reserve/create`,
-                  `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
+                  `http://localhost:3002/api/v1/order/reserve/create`,
+                  // `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
                   payload,
                   config
                 );
@@ -2160,9 +2160,9 @@ const orderModules = {
                 },
               };
               let { data } = await axios.post(
-                // `http://localhost:3002/api/v1/order/reserve/create`,
+                `http://localhost:3002/api/v1/order/reserve/create`,
 
-                `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
+                // `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
                 payload,
                 config
               );
