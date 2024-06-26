@@ -285,9 +285,9 @@ const reserveCourseModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let localhost = "http://localhost:3002"
-        let { data } = await axios.patch(`${localhost}/api/v1/order/reserve/update/${reserve_id}`, reserve_data, config)
-        // let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/reserve/update/${reserve_id}`, reserve_data, config)
+        // let localhost = "http://localhost:3002"
+        // let { data } = await axios.patch(`${localhost}/api/v1/order/reserve/update/${reserve_id}`, reserve_data, config)
+        let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/reserve/update/${reserve_id}`, reserve_data, config)
         if (data.statusCode == 200) {
           await Swal.fire({
             icon: "success",

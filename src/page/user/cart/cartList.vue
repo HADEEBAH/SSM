@@ -462,6 +462,7 @@ export default {
           this.order.created_by = this.user_login.account_id;
           this.order.type = "cart";
           this.changeOrderData(this.order);
+
           this.GetAllCourseMonitor().then(() => {
             this.order.courses.forEach((course) => {
               if (
@@ -510,7 +511,7 @@ export default {
               });
             } else {
               this.saveOrder({ regis_type: "cart" }).finally(() => {
-                for (const cart of this.cart_list) {
+                for (const cart of this.order.courses) {
                   for (const id of cart.order_tmp_id) {
                     this.DeleteCart({
                       cart_id: id,
@@ -519,6 +520,7 @@ export default {
                   }
                 }
               });
+              this.total_price = 0;
             }
           });
         }
