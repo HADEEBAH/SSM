@@ -398,8 +398,10 @@ export default {
               if (this.image_profile.name) {
                 payloadData.append("imageProfile", this.image_profile);
               }
+              // let localhost = "http://localhost:3000";
 
               let { data } = await axios.patch(
+                // `${localhost}/api/v1/profile/${user_account_id}`,
                 `${process.env.VUE_APP_URL}/api/v1/profile/${user_account_id}`,
                 payloadData,
                 config
@@ -410,7 +412,7 @@ export default {
                 );
                 data_storage.first_name_th = data.data.firstNameTh;
                 data_storage.last_name_th = data.data.lastNameTh;
-                data_storage.image = `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}`;
+                data_storage.image = `${data.data.image}`;
                 localStorage.setItem(
                   "userDetail",
                   JSON.stringify(data_storage)

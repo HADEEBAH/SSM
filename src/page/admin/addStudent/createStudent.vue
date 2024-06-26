@@ -1276,8 +1276,12 @@ export default {
                 if (this.order.payment_status === "warn") {
                   let account = [];
                   let course_name_noti = [];
+                  let course_name_noti_en = [];
                   this.order.courses.forEach((course) => {
                     course_name_noti.push(course?.course_data?.course_name_th);
+                    course_name_noti_en.push(
+                      course?.course_data?.course_name_en
+                    );
                     course.students = [];
                     course.coach_id = course.coach.coach_id;
                     course.coach_name = course.coach.coach_name;
@@ -1310,8 +1314,8 @@ export default {
                       notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(
                         course_name_noti?.length > 1 ? ", " : ""
                       )} ให้คุณแล้ว (รอชำระเงิน)`,
-                      notificationDescriptionEn: `Admin applies for course ${course_name_noti?.join(
-                        course_name_noti?.length > 1 ? ", " : ""
+                      notificationDescriptionEn: `Admin applies for course ${course_name_noti_en?.join(
+                        course_name_noti_en?.length > 1 ? ", " : ""
                       )} already given to you (waiting for payment)`,
                       accountId: account,
                       // path: null,
@@ -1324,8 +1328,12 @@ export default {
                 } else {
                   let account = [];
                   let course_name_noti = [];
+                  let course_name_noti_en = [];
                   this.order.courses.forEach((course) => {
                     course_name_noti.push(course?.course_data?.course_name_th);
+                    course_name_noti_en.push(
+                      course?.course_data?.course_name_en
+                    );
                     course.students = [];
                     course.coach_id = course.coach.coach_id;
                     course.coach_name = course.coach.coach_name;
@@ -1358,8 +1366,8 @@ export default {
                       notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(
                         course_name_noti?.length > 1 ? "และ" : ""
                       )} ให้คุณแล้ว`,
-                      notificationDescriptionEn: `Admin applies for course ${course_name_noti?.join(
-                        course_name_noti?.length > 1 ? "and" : ""
+                      notificationDescriptionEn: `Admin applies for course ${course_name_noti_en?.join(
+                        course_name_noti_en?.length > 1 ? "and" : ""
                       )} already given to you`,
                       accountId: account,
                       path: null,

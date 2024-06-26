@@ -455,7 +455,7 @@
     <template>
       <v-row justify="center">
         <v-dialog v-model="show_dialog_holoday" persistent max-width="600px">
-          <v-form ref="form_dialog" v-model="form_dialog">
+          <v-form ref="add_holidat_dialog" v-model="add_holidat_dialog">
             <v-card>
               <v-container>
                 <v-card-title>
@@ -626,6 +626,7 @@
                         depressed
                         color="#FF6B81"
                         class="white--text w-full"
+                        :disabled="!add_holidat_dialog"
                         @click="CreateHolidays()"
                       >
                         {{ $t("save") }}
@@ -965,6 +966,7 @@ export default {
     courseToday: [],
     resultSearchSchedule: null,
     form_dialog: false,
+    add_holidat_dialog: false,
     select_month: "",
     select_year: "",
     select_search: "",
@@ -973,6 +975,58 @@ export default {
   created() {
     this.GetAllHolidays();
     this.GetAllCourse();
+  },
+  computed: {
+    ...mapGetters({
+      itemTime: "MyCourseModules/getcourseSchedule",
+      get_filter_course: "ManageScheduleModules/getFilterCourse", //get all course
+      get_all_course: "ManageScheduleModules/getAllCourse",
+      get_all_course_is_loading: "ManageScheduleModules/getAllCourseIsLoading",
+      date_arr: "ManageScheduleModules/getDateArray",
+      date_Holy_arr: "ManageScheduleModules/getHolidayDateArray",
+      get_coachs: "CourseModules/getCoachs",
+      get_all_holidays: "ManageScheduleModules/getAllHolidays",
+      get_all_holidays_is_loading:
+        "ManageScheduleModules/getAllHolidaysIsLoading",
+      get_holidays_by_id: "ManageScheduleModules/getHolidaysById",
+      data_in_schedule: "ManageScheduleModules/getdataInSchadule",
+      data_filter_schedule: "ManageScheduleModules/getFilterSchedule",
+      data_search_schedule: "ManageScheduleModules/getSearchFilterSchedule",
+    }),
+    dates() {
+      return [
+        (val) =>
+          (val || "").length > 0 ||
+          this.$t("please select at least 1 day before the holiday"),
+      ];
+    },
+    compensation_start_time() {
+      return [(val) => val > 0 || this.$t("please select a start time")];
+    },
+    compensation_end_time() {
+      return [
+        (val) => (val || "").length > 0 || this.$t("please select an end time"),
+      ];
+    },
+    holiday_name() {
+      return [
+        (val) =>
+          (val || "").length > 0 ||
+          this.$t("please specify the name of the holiday"),
+      ];
+    },
+    formattedDate() {
+      let date = new Date();
+      return date.toLocaleDateString(
+        this.$i18n.locale == "th" ? "th-TH" : "en-US",
+        {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          weekday: "long",
+        }
+      );
+    },
   },
   mounted() {
     this.GetCoachs();
@@ -1130,11 +1184,18 @@ export default {
               config
             );
             if (data.statusCode === 200) {
+              this.show_dialog_holoday = false;
+              this.holidaydates = "";
+              this.holidaySwitch = true;
+              this.holidayStartTime = "";
+              this.holidayEndTime = "";
+              this.nameHoliday = "";
+              this.show_dialog_edit_holoday = false;
+              this.setDataEditDialog = {};
+              this.editHolidayDates = null;
+              this.holidaydatesTh = null;
               (this.show_dialog_edit_holoday = false), this.GetAllHolidays();
-              // this.GetDataInSchedule({
-              //   month: new Date().getMonth() + 1,
-              //   year: new Date().getFullYear(),
-              // });
+
               this.GetDataInSchedule({
                 month: this.select_month,
                 year: this.select_year,
@@ -1174,8 +1235,8 @@ export default {
     },
 
     async CreateHolidays() {
-      this.$refs.form_dialog.validate();
-      if (this.form_dialog) {
+      this.$refs.add_holidat_dialog.validate();
+      if (this.add_holidat_dialog) {
         Swal.fire({
           icon: "question",
           title: this.$t("do you want to create a holiday?"),
@@ -1213,17 +1274,8 @@ export default {
                 payload,
                 config
               );
-              this.show_dialog_holoday = false;
-              this.holidaydates = "";
-              this.holidaySwitch = true;
-              this.holidayStartTime = "";
-              this.holidayEndTime = "";
-              this.nameHoliday = "";
+
               this.GetAllHolidays();
-              // this.GetDataInSchedule({
-              //   month: new Date().getMonth() + 1,
-              //   year: new Date().getFullYear(),
-              // });
               this.GetDataInSchedule({
                 month: this.select_month,
                 year: this.select_year,
@@ -1233,7 +1285,20 @@ export default {
                 coachId: this.selectedCoach,
                 status: this.selectedCourseType,
               });
-              this.holidaydatesTh = "";
+
+              // Reset validation state
+              this.$refs.add_holidat_dialog.reset();
+              // Reset form fields
+              this.show_dialog_holoday = false;
+              this.holidaydates = "";
+              this.holidaySwitch = true;
+              this.holidayStartTime = "";
+              this.holidayEndTime = "";
+              this.nameHoliday = "";
+              this.show_dialog_edit_holoday = false;
+              this.setDataEditDialog = {};
+              this.editHolidayDates = null;
+              this.holidaydatesTh = null;
 
               if (data.statusCode === 201) {
                 if (data.data && data.message == "Created Sucessful") {
@@ -1395,6 +1460,8 @@ export default {
     },
 
     closeDialog() {
+      this.$refs.add_holidat_dialog.reset();
+
       this.show_dialog_holoday = false;
       this.holidaydates = "";
       this.holidaySwitch = true;
@@ -1445,62 +1512,6 @@ export default {
         }
       }
       return allHolidaysData;
-    },
-  },
-
-  computed: {
-    ...mapGetters({
-      itemTime: "MyCourseModules/getcourseSchedule",
-      get_filter_course: "ManageScheduleModules/getFilterCourse", //get all course
-      get_all_course: "ManageScheduleModules/getAllCourse",
-      get_all_course_is_loading: "ManageScheduleModules/getAllCourseIsLoading",
-      date_arr: "ManageScheduleModules/getDateArray",
-      date_Holy_arr: "ManageScheduleModules/getHolidayDateArray",
-      get_coachs: "CourseModules/getCoachs",
-      get_all_holidays: "ManageScheduleModules/getAllHolidays",
-      get_all_holidays_is_loading:
-        "ManageScheduleModules/getAllHolidaysIsLoading",
-      get_holidays_by_id: "ManageScheduleModules/getHolidaysById",
-      data_in_schedule: "ManageScheduleModules/getdataInSchadule",
-      data_filter_schedule: "ManageScheduleModules/getFilterSchedule",
-      data_search_schedule: "ManageScheduleModules/getSearchFilterSchedule",
-    }),
-    dates() {
-      return [
-        (val) =>
-          (val || "").length > 0 ||
-          this.$t("please select at least 1 day before the holiday"),
-      ];
-    },
-    compensation_start_time() {
-      return [
-        (val) =>
-          (val || "").length > 0 || this.$t("please select a start time"),
-      ];
-    },
-    compensation_end_time() {
-      return [
-        (val) => (val || "").length > 0 || this.$t("please select an end time"),
-      ];
-    },
-    holiday_name() {
-      return [
-        (val) =>
-          (val || "").length > 0 ||
-          this.$t("please specify the name of the holiday"),
-      ];
-    },
-    formattedDate() {
-      let date = new Date();
-      return date.toLocaleDateString(
-        this.$i18n.locale == "th" ? "th-TH" : "en-US",
-        {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-          weekday: "long",
-        }
-      );
     },
   },
 };

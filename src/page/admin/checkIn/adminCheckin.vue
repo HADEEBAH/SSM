@@ -310,7 +310,6 @@
                             <v-text-field
                               dense
                               outlined
-                              hide-details
                               v-model="student.compensationDateStr"
                               readonly
                               :placeholder="$t('choose a compensation date')"
@@ -341,17 +340,16 @@
                         <v-text-field
                           outlined
                           dense
-                          hide-details
-                          :style="`width:${width()}px;`"
                           :rules="start_time"
+                          :style="`width:${width()}px;`"
                           style="position: absolute; display: block; z-index: 4"
+                          :value="genTime(student.compensationStartTime)"
                           @focus="
                             SelectedStartDate(
                               $event,
                               student.compensationStartTime
                             )
                           "
-                          :value="genTime(student.compensationStartTime)"
                         >
                         </v-text-field>
                         <TimePicker
@@ -563,7 +561,7 @@ export default {
           dayOfWeek: "",
         };
       } else {
-        console.log("val :>> ", val);
+        // console.log("val :>> ", val);
         this.SearchCoach({ courseId: "" });
         this.filter = {
           course: "",
@@ -615,8 +613,46 @@ export default {
       deep: true,
     },
   },
+  mounted() {
+    this.loadingFilter = true;
+    this.SearchCoach({ courseId: "" });
+    this.filter = {
+      course: "",
+      coach: "",
+      time: "",
+      dayOfWeek: "",
+    };
+    this.SearchDayOfWeek({
+      courseId: "",
+      coachId: "",
+    });
+    this.SearchTime({
+      courseId: "",
+      coachId: "",
+      dowId: "",
+    });
+    this.loadingFilter = false;
+  },
   created() {
+    this.loadingFilter = true;
+    this.SearchCoach({ courseId: "" });
+    this.filter = {
+      course: "",
+      coach: "",
+      time: "",
+      dayOfWeek: "",
+    };
+    this.SearchDayOfWeek({
+      courseId: "",
+      coachId: "",
+    });
+    this.SearchTime({
+      courseId: "",
+      coachId: "",
+      dowId: "",
+    });
     this.$store.commit("adminCheckInModules/SetScheduleCheckin", []);
+    this.loadingFilter = false;
   },
   methods: {
     ...mapActions({

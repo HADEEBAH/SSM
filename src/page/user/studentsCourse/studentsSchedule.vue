@@ -14,9 +14,7 @@
           <v-card
             flat
             @click="
-              data_local.roles.length > 0 ||
-              profile_detail?.userRoles?.roleId?.includes('R_5') ||
-              profile_detail?.userRoles?.roleId?.includes('R_4')
+              data_local.roles.length > 0
                 ? $router.push({
                     name: 'StudentsSchedule',
                     params: { action: 'MyCourse' },
@@ -49,9 +47,7 @@
           <v-card
             flat
             @click="
-              data_local.roles.length > 0 ||
-              profile_detail?.userRoles?.roleId?.includes('R_5') ||
-              profile_detail?.userRoles?.roleId?.includes('R_4')
+              data_local.roles.length > 0
                 ? $router.push({
                     name: 'StudentsSchedule',
                     params: { action: 'MySchedule' },
@@ -276,12 +272,7 @@
             </div>
           </div>
           <!-- Role Student -->
-          <div
-            v-if="
-              data_local.roles?.includes('R_5') ||
-              profile_detail?.userRoles?.roleId?.includes('R_5')
-            "
-          >
+          <div v-if="data_local.roles?.includes('R_5')">
             <v-card v-if="student_data.length == 0">
               <v-card-text
                 class="text-center border-2 border-[#ff6b81] rounded-lg"
@@ -498,12 +489,7 @@
             </div>
           </div>
           <!-- Role Student -->
-          <div
-            v-if="
-              data_local.roles?.includes('R_5') ||
-              profile_detail?.userRoles?.roleId?.includes('R_5')
-            "
-          >
+          <div v-if="data_local.roles?.includes('R_5')">
             <v-row class="mb-2">
               <v-col cols="12" align="center">
                 <v-card flat width="340px">
@@ -822,12 +808,7 @@
             </div>
           </div>
           <!-- Role student -->
-          <div
-            v-if="
-              data_local.roles?.includes('R_5') ||
-              profile_detail?.userRoles?.roleId?.includes('R_5')
-            "
-          >
+          <div v-if="!data_local.roles?.includes('R_4')">
             <v-card-text
               class="pa-5 text-center border-2 border-[#ff6b81] rounded-lg"
               v-if="ReserveList().length == 0"

@@ -75,7 +75,7 @@ export default {
           this.$i18n.locale == "th"
             ? category.categoryNameTh
             : category.categoryNameEng
-        }?`,
+        } ${this.$t("?")}`,
         showDenyButton: false,
         showCancelButton: true,
         confirmButtonText: this.$t("agree"),

@@ -47,7 +47,8 @@ const financeModules = {
         endpoint = endpoint + `paymentDateStart=${filter.date_pay_start}&`
         endpoint = endpoint + `paymentDateEnd=${filter.date_pay_end}&`
         endpoint = endpoint + `priceMin=${filter.service_charge_start}&`
-        endpoint = endpoint + `priceMax=${filter.service_charge_end}`
+        endpoint = endpoint + `priceMax=${filter.service_charge_end}&`
+        endpoint = endpoint + `orderNumber=${filter.order_number}`
         let { data } = await axios.get(endpoint, config)
         if (data.statusCode == 200) {
           let reports = []
@@ -86,8 +87,8 @@ const financeModules = {
                 "ระยะเวลา": order.optionName,
                 "โค้ช": order.coach_name,
                 "นักเรียน": order.student_name,
-                "ชื่อเล่นนักเรียน" : order.nickname,
-                "ระดับชั้น" : order.class_name,
+                "ชื่อเล่นนักเรียน": order.nickname,
+                "ระดับชั้น": order.class_name,
                 "ผู้ซื้อ": order.created_by_name,
                 "วันที่ออกเอกสาร": moment().format("DD/MM/YYYY HH:mm"),
 
@@ -108,8 +109,8 @@ const financeModules = {
                 "ระยะเวลา": '',
                 "โค้ช": '',
                 "นักเรียน": '',
-                "ชื่อเล่นนักเรียน" : '',
-                "ระดับชั้น" : '',
+                "ชื่อเล่นนักเรียน": '',
+                "ระดับชั้น": '',
                 "ผู้ซื้อ": '',
               })
             }
@@ -123,7 +124,7 @@ const financeModules = {
               }
             }
             let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/admincourse/export-log`, {}, config)
-            console.log(data)
+
             var workbook = XLSX.utils.book_new();
             var worksheet = XLSX.utils.json_to_sheet(reports);
             XLSX.utils.book_append_sheet(workbook, worksheet, 'sheet1');

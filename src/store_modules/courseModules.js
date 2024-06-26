@@ -47,7 +47,7 @@ function dayOfWeekArray(day, lang) {
   }
 
 
-  days.sort();
+  days?.sort();
   let ranges = [];
   if (days[0]) {
     let rangeStart = parseInt(days[0]);
@@ -528,7 +528,7 @@ const CourseModules = {
             }
           }
           data.data.map((v) => {
-            v.datesList = datesList.filter(f => f.coachId == v.coachId).sort(function (a, b) {
+            v.datesList = datesList?.filter(f => f.coachId == v.coachId)?.sort(function (a, b) {
               var dateA = new Date(a.date);
               var dateB = new Date(b.date);
               return dateA - dateB;
@@ -586,7 +586,6 @@ const CourseModules = {
               //   v.totalDay = count_check_In_date.length
               //   return v
               // })
-              console.log("scheduleStudentData", scheduleStudentData)
               context.commit("SetNoChackInStudentList", scheduleStudentData)
             }
           }
@@ -1205,7 +1204,7 @@ const CourseModules = {
       try {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
         if (data.statusCode === 200) {
-          let course_hours_part = data.data.coursePerTime.toFixed(2).split(".")
+          let course_hours_part = data?.data?.coursePerTime?.toFixed(2)?.split(".")
           let course_hours_object = {}
           if (course_hours_part.length > 1) {
             course_hours_object = {
@@ -1282,8 +1281,8 @@ const CourseModules = {
                 let class_dates = []
                 for await (const time of coach_date.times) {
 
-                  let startTimePart = time.start.split(":")
-                  let endTimePart = time.end.split(":")
+                  let startTimePart = time?.start?.split(":")
+                  let endTimePart = time?.end?.split(":")
                   let startTime = {
                     "HH": startTimePart[0].padStart(2, '0'),
                     "mm": startTimePart[1] ? startTimePart[1].padStart(2, '0') : "00"
@@ -1316,8 +1315,8 @@ const CourseModules = {
                   class_date: class_dates,
                 })
               }
-              let startTimePart = data.data.coursePeriodStartDate ? data.data.coursePeriodStartDate.split(":") : null
-              let endTimePart = data.data.coursePeriodStartDate ? data.data.coursePeriodEndDate.split(":") : null
+              let startTimePart = data.data.coursePeriodStartDate ? data?.data?.coursePeriodStartDate?.split(":") : null
+              let endTimePart = data.data.coursePeriodStartDate ? data?.data?.coursePeriodEndDate?.split(":") : null
               let startTime = startTimePart ? {
                 "HH": startTimePart[0],
                 "mm": startTimePart[1] ? startTimePart[1] : "00"
@@ -1454,7 +1453,7 @@ const CourseModules = {
             for await (let coach of payload.coachs) {
               let teach_day = teach_day_data.filter(v => v.course_coach_id === coach.course_coach_id)
               teach_day.map((v) => {
-                v.class_date.sort((a, b) => {
+                v?.class_date?.sort((a, b) => {
                   const startTimeA = moment(a.start_time);
                   const startTimeB = moment(b.start_time);
                   return startTimeA - startTimeB;
@@ -1495,7 +1494,7 @@ const CourseModules = {
               })
             })
             for (let package_data of payload.packages) {
-              package_data.options = options.filter(v => v.package_id === package_data.package_id).sort((a, b) => {
+              package_data.options = options?.filter(v => v.package_id === package_data.package_id)?.sort((a, b) => {
                 return a.amount - b.amount;
               });
             }
@@ -1963,7 +1962,6 @@ const CourseModules = {
                 }
               }
             }
-            console.log('coach.checked :>> ', coach.checked);
             checking.push(coach.checked)
           }
         }
@@ -2050,7 +2048,7 @@ const CourseModules = {
       try {
         let report = []
         for await (const student of studentReserveList) {
-          const dowName = student.dayOfWeekName.split(",")
+          const dowName = student?.dayOfWeekName?.split(",")
           const statusText = [
             { th: "รอกสนติดต่อ", en: "waiting" },
             { th: "ติดต่อแล้ว", en: "contacted" },
@@ -2069,7 +2067,7 @@ const CourseModules = {
             [lang == 'en' ? "date-time" : "วัน-เวลา"]: lang == 'en' ? `${dayOfWeekArray(dowName, lang)}(${student.startTime}-${student.endTime})` : `${dayOfWeekArray(dowName, lang)}(${student.startTime}-${student.endTime})`,
           })
         }
-        if (report.length > 0) {
+        if (report?.length > 0) {
           if (report.length === studentReserveList?.length) {
             var workbook = XLSX.utils.book_new();
             var worksheet = XLSX.utils.json_to_sheet(report);

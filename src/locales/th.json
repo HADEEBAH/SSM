@@ -66,6 +66,7 @@
     "average" : "เฉลี่ย",
     "april": "เมษายน",
     "august": "สิงหาคม",
+    "all students have been contacted": "ติดต่อนักเรียนทุกคนแล้ว",
 
     "date list": "รายการวันที่",
     "baht" : "บาท",
@@ -219,7 +220,7 @@
     "don't have an account yet?" : "ยังไม่มีบัญชีใช่หรือไม่?",
     "dashboard" : "แดชบอร์ด",
     "do you want to confirm your payment?" : "ต้องการยืนยันการชำระเงินใช่หรือไม่?",
-    "do you want to delete course?" : "คุณต้องการลบคอร์สหรือไม่?",
+    "do you want to delete course?" : "คุณต้องการลบคอร์สใช่หรือไม่?",
     "do you want to delete a holiday?" : "คุณต้องการลบวันหยุดใช่หรือไม่?",
     "do you want to create a holiday?": "คุณต้องการสร้างวันหยุดใช่หรือไม่?",
     "do you want to edit your holiday?": "คุณต้องการแก้ไขวันหยุดใช่หรือไม่?",
@@ -927,7 +928,7 @@
     "Duplicate username." : "ชื่อผู้ใช้นี้มีอยู่ใน OneId แล้ว",
     "The username or password or tel format is invalid." : "ชื่อผู้ใช้ หรือรหัสผ่าน หรือ เบอร์โทร ไม่ถูกต้อง",
     "Username relation not found. Or this username role not match." : "ชื่อผู้ใช้ของผู้ปกครองไม่ถูกต้อง",
-    "Insert relation incomplete." : "เพิ่มความสำพันธ์ไม่สำเร็จ",
+    "Insert relation incomplete." : "นำเข้าผู้ใช้สำเร็จ (ไม่มีการเพิ่มความสัมพันธ์)",
     "Insert ssm complete." : "สมัครสมาชิกสำเร็จ",
     "Insert role complete." : "เพิ่มบทบาทสำเร็จ",
     "Insert role incomplete." : "เพิ่มบทบาทไม่สำเร็จ",
@@ -1025,6 +1026,7 @@
     "upload Learning Journey":"อัปโหลดภาพ Learning Journey",
 
     "organized by":"จัดสอนโดย",
-    "z":"z"
+    "z":"z",
+    "?":"ใช่หรือไม่"
 
 }

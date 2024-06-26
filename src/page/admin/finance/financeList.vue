@@ -179,7 +179,6 @@
           </img-card>
         </v-col>
       </v-row>
-
       <v-data-table
         v-model="selected"
         :headers="columns"
@@ -559,6 +558,41 @@
             <v-divider class="mb-3"></v-divider>
             <!-- วันที่สร้างเอกสาร -->
             <v-row dense>
+              <v-col cols="12">
+                <label-custom :text="$t('order number')"></label-custom>
+                <v-combobox
+                  v-model="export_filter.order_number"
+                  :items="export_filter.order_number"
+                  :placeholder="$t('please enter order number')"
+                  outlined
+                  dense
+                  multiple
+                  chips
+                  clearable
+                  color="#FF6B81"
+                  item-color="#FF6B81"
+                >
+                  <template v-slot:selection="{ item, index }">
+                    <v-chip dark color="#FF6B81">
+                      <span>{{ item }}</span>
+                    </v-chip>
+                    <span v-if="index === 5" class="grey--text text-caption">
+                      (+{{ export_filter.order_number?.length - 5 }}
+                      {{ $t("Others") }})
+                    </span>
+                  </template>
+                </v-combobox>
+                <!-- <v-text-field
+                  :label="$t('please enter order number')"
+                  outlined
+                  v-ship
+                  dense
+                  v-model="export_filter.order_number"
+                >
+                </v-text-field> -->
+              </v-col>
+            </v-row>
+            <v-row dense>
               <v-col cols="12" sm="6">
                 <v-row>
                   <v-col cols="12" sm="6">
@@ -862,6 +896,7 @@ export default {
       payment_status: [],
       option_id: "",
       package_id: [],
+      order_number: [],
       select_date_doc_start: false,
       select_date_doc_end: false,
       date_doc_start: "",
@@ -1015,6 +1050,7 @@ export default {
       this.export_filter.students = [];
       this.export_filter.payment_type = [];
       this.export_filter.payment_status = [];
+      this.export_filter.order_number = [];
       this.selected.forEach((order) => {
         if (!this.export_filter.course_id.includes(order.course_id)) {
           this.export_filter.course_id.push(order.course_id);
@@ -1027,6 +1063,9 @@ export default {
         }
         if (!this.export_filter.payment_status.includes(order.payment_status)) {
           this.export_filter.payment_status.push(order.payment_status);
+        }
+        if (!this.export_filter.order_number.includes(order.order_number)) {
+          this.export_filter.order_number.push(order.order_number);
         }
       });
       this.show_dialog = true;

@@ -117,6 +117,7 @@
                     :key="index"
                     @click="readNotification(item)"
                   >
+                    <!-- <pre> {{ get_notifications_all }} </pre> -->
                     <v-list-item-avatar class="align-self-center">
                       <v-icon size="32" color="#ff6b81">
                         {{

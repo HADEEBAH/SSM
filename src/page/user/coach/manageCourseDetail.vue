@@ -733,9 +733,7 @@
             </v-row>
             <v-row dense>
               <v-col>
-                <labelCustom
-                  :text="$t('development / homework22')"
-                ></labelCustom>
+                <labelCustom :text="$t('development / homework')"></labelCustom>
                 <v-textarea
                   outlined
                   :rules="homework"

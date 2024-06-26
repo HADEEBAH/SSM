@@ -1567,9 +1567,16 @@ export default {
               }
               this.order.created_by = this.user_login.account_id;
               this.changeOrderData(this.order);
+              let id_coach = "";
+              for (const item of this.course_data.coachs) {
+                id_coach = item.coach_id;
+              }
+
               this.CreateReserveCourse({
                 course_data: this.course_order,
                 profile_id: this.profile_detail?.userOneId,
+                // profile_data: this.profile_detail,
+                coach_id: id_coach,
               });
             }
           });
@@ -1610,8 +1617,10 @@ export default {
             this.course_order.students.length;
         }
       } else if (this.course_order.course_type_id === "CT_2") {
-        max =
-          this.course_data.student_recived <= this.course_order.students.length;
+        let check = this.course_monitors[0]?.m_current_student;
+        let count = (check += this.course_order.students.length);
+        max = this.course_data.student_recived <= count;
+        // this.course_data.student_recived <= this.course_order.students.length;
       }
       return max;
     },
