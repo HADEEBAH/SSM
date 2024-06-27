@@ -1,8 +1,10 @@
 <template>
   <v-container class="h-full">
     {{ setFunctions }}
-    <loading-overlay :loading="cart_list_is_loading"></loading-overlay>
-    <div v-if="!cart_list_is_loading" class="h-full">
+    <loading-overlay
+      :loading="cart_list_is_loading || order_is_loading"
+    ></loading-overlay>
+    <div v-if="!cart_list_is_loading || order_is_loading" class="h-full">
       <v-row class="h-full content-center" v-if="cart_list.length == 0">
         <v-col cols="12" class="webkit-center">
           <span class="text-xl font-bold text-center my-5 pink--text">
@@ -18,6 +20,7 @@
             v-for="(item, index_item) in cart_list"
             :key="`${index_item}-cart`"
           >
+            <!-- <pre>{{ item }}</pre> -->
             <v-card class="rounded-lg mt-5">
               <v-row dense>
                 <!-- img -->
@@ -101,6 +104,43 @@
                             </v-row>
                           </v-col>
                         </v-row>
+                      </v-col>
+                    </v-row>
+                    <v-row dense>
+                      <v-col align="right" cols="8">{{
+                        $t("school day")
+                      }}</v-col>
+                      <v-col
+                        align="right"
+                        cols="4"
+                        class="text-md font-semibold text-[#FF6B81]"
+                      >
+                        {{ item.dayOff }}</v-col
+                      >
+                    </v-row>
+                    <v-row dense>
+                      <v-col align="right" cols="8">{{
+                        $t("class time")
+                      }}</v-col>
+                      <v-col
+                        align="right"
+                        cols="4"
+                        class="text-md font-semibold text-[#FF6B81]"
+                      >
+                        {{ item.time?.start }} - {{ item.time?.end }}</v-col
+                      >
+                    </v-row>
+                    <v-row dense>
+                      <v-col align="right" cols="8">{{
+                        $t("coach name")
+                      }}</v-col>
+                      <v-col
+                        align="right"
+                        cols="4"
+                        class="text-md font-semibold text-[#FF6B81]"
+                      >
+                        {{ item?.coach_name }}
+                        <!-- {{ item?. first_name }}  {{ item?.last_name }} -->
                       </v-col>
                     </v-row>
                     <v-row dense v-if="item.course_type_id === 'CT_1'">
@@ -318,21 +358,24 @@ export default {
     sameHistoryLength: false,
   }),
   created() {
+    this.GetAmountCartList();
+
     this.user_login = JSON.parse(localStorage.getItem("userDetail"));
   },
   mounted() {
-    window.addEventListener("scroll", this.handleScroll);
+    // window.addEventListener("scroll", this.handleScroll);
+    this.GetAmountCartList();
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "cart");
     this.cart_list.map((val) => {
       val.checked = false;
     });
     this.GetCartList({
-      limit: 5,
+      limit: 100,
       page: 1,
     });
   },
   destroyed() {
-    window.removeEventListener("scroll", this.handleScroll);
+    // window.removeEventListener("scroll", this.handleScroll);
   },
 
   methods: {
@@ -348,45 +391,45 @@ export default {
       this.policy = false;
       this.policy_show = false;
     },
-    handleScroll() {
-      this.scrollTop = window.scrollY; // ตัวเลขเมื่อ scroll ตัวเลขเริ่มนับจากบนสุด = 0
-      let device = document.body.offsetHeight - 56; // ค่าของหน้าจอ device
-      let ref = this.$refs.cart_list?.clientHeight; // ค่ามาจาก ref
-      let countA = this.scrollTop + device;
+    // handleScroll() {
+    //   this.scrollTop = window.scrollY; // ตัวเลขเมื่อ scroll ตัวเลขเริ่มนับจากบนสุด = 0
+    //   let device = document.body.offsetHeight - 56; // ค่าของหน้าจอ device
+    //   let ref = this.$refs.cart_list?.clientHeight; // ค่ามาจาก ref
+    //   let countA = this.scrollTop + device;
 
-      if (countA >= ref && !this.sameHistoryLength) {
-        this.loadMoreData();
-      }
+    //   if (countA >= ref && !this.sameHistoryLength) {
+    //     this.loadMoreData();
+    //   }
 
-      if (countA < ref) {
-        this.sameHistoryLength = false;
-      }
-    },
-    async loadMoreData() {
-      this.countDatePerPage = this.cart_list?.length;
+    //   if (countA < ref) {
+    //     this.sameHistoryLength = false;
+    //   }
+    // },
+    // async loadMoreData() {
+    //   this.countDatePerPage = this.cart_list?.length;
 
-      if (!this.isDataReceived) {
-        this.isDataReceived = true;
+    //   if (!this.isDataReceived) {
+    //     this.isDataReceived = true;
 
-        if (!this.waitingProcess) {
-          this.waitingProcess = true;
+    //     if (!this.waitingProcess) {
+    //       this.waitingProcess = true;
 
-          await this.GetCartList({
-            limit: this.cart_list_option.limit,
-            page: this.cart_list_option.page + 1,
-          });
+    //       await this.GetCartList({
+    //         limit: this.cart_list_option.limit,
+    //         page: this.cart_list_option.page + 1,
+    //       });
 
-          this.isDataReceived = false;
-          this.waitingProcess = false;
+    //       this.isDataReceived = false;
+    //       this.waitingProcess = false;
 
-          if (this.cart_list?.length === this.countDatePerPage) {
-            this.sameHistoryLength = true;
-          } else {
-            this.sameHistoryLength = false;
-          }
-        }
-      }
-    },
+    //       if (this.cart_list?.length === this.countDatePerPage) {
+    //         this.sameHistoryLength = true;
+    //       } else {
+    //         this.sameHistoryLength = false;
+    //       }
+    //     }
+    //   }
+    // },
     removeCart(cart_id) {
       Swal.fire({
         icon: "question",
@@ -450,10 +493,14 @@ export default {
 
       this.sumtotal();
     },
-    savePayment() {
+    async savePayment() {
+      this.order_is_loading = true;
+
       if (!this.policy) {
         this.policy_show = true;
       } else {
+        this.order_is_loading = true;
+
         if (this.cart_list.filter((v) => v.checked === true).length > 0) {
           let isValiDateCourse = [];
           this.order.courses = this.cart_list.filter((v) => v.checked === true);
@@ -463,7 +510,7 @@ export default {
           this.order.type = "cart";
           this.changeOrderData(this.order);
 
-          this.GetAllCourseMonitor().then(() => {
+          await this.GetAllCourseMonitor().then(async () => {
             this.order.courses.forEach((course) => {
               if (
                 this.course_monitors.filter(
@@ -510,7 +557,8 @@ export default {
                 showConfirmButton: false,
               });
             } else {
-              this.saveOrder({ regis_type: "cart" }).finally(() => {
+              this.order_is_loading = true;
+              await this.saveOrder({ regis_type: "cart" }).finally(() => {
                 for (const cart of this.order.courses) {
                   for (const id of cart.order_tmp_id) {
                     this.DeleteCart({
@@ -520,11 +568,15 @@ export default {
                   }
                 }
               });
+              this.order_is_loading = false;
+
               this.total_price = 0;
             }
           });
         }
+        this.order_is_loading = false;
       }
+      this.order_is_loading = false;
     },
   },
 
@@ -538,6 +590,7 @@ export default {
       course_monitors: "CourseMonitorModules/getCourseMonitor",
       order: "OrderModules/getOrder",
       amount_cart_list: "OrderModules/getAmountCartList",
+      order_is_loading: "OrderModules/getOrderIsLoading",
     }),
     setFunctions() {
       return "";

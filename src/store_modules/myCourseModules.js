@@ -247,9 +247,9 @@ const myCourseModules = {
                         'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                let test = `http://localhost:3002`
-                let { data } = await axios.get(`${test}/api/v1/order/reserve/${account_id}/limit?limit=${limit}&page=${page}`, config);
-                // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/${account_id}/limit?limit=${limit}&page=${page}`, config);
+                // let test = `http://localhost:3002`
+                // let { data } = await axios.get(`${test}/api/v1/order/reserve/${account_id}/limit?limit=${limit}&page=${page}`, config);
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/order/reserve/${account_id}/limit?limit=${limit}&page=${page}`, config);
                 // https://waraphat.alldemics.com/api/v1/order/reserve/337552592218227/limit?limit=2&page=1
                 if (data.statusCode === 200) {
                     for await (const item of data.data) {

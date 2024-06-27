@@ -1807,15 +1807,14 @@ const orderModules = {
         );
         if (data.statusCode === 200) {
           for await (const item of data.data) {
+            item.dayOff = dayOfWeekArray(item.day?.day)
             item.course_img = item.course_img ? `${process.env.VUE_APP_URL}/api/v1/files/${item.course_img}` : null;
             if (item.course_type_id === "CT_1") {
               let discount = item.option.discount
                 ? item.option.discount_price
                 : 0;
-              item.option.net_price_unit =
-                item.option.price_unit / item.option.amount;
-              item.option.net_price =
-                (item.option.price_unit - discount) * item.students.length;
+              item.option.net_price_unit = item.option.price_unit / item.option.amount;
+              item.option.net_price = (item.option.price_unit - discount) * item.students.length;
             } else {
               item.net_price = item.price * item.students.length;
             }
@@ -2073,8 +2072,8 @@ const orderModules = {
                   },
                 };
                 let { data } = await axios.post(
-                  `http://localhost:3002/api/v1/order/reserve/create`,
-                  // `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
+                  // `http://localhost:3002/api/v1/order/reserve/create`,
+                  `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
                   payload,
                   config
                 );
@@ -2160,9 +2159,9 @@ const orderModules = {
                 },
               };
               let { data } = await axios.post(
-                `http://localhost:3002/api/v1/order/reserve/create`,
+                // `http://localhost:3002/api/v1/order/reserve/create`,
 
-                // `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
+                `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
                 payload,
                 config
               );

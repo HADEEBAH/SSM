@@ -1171,7 +1171,6 @@ export default {
                 day: "numeric",
               }
             );
-            // console.log(this.course_data.coachs[0]);
             course.coach = this.course_data.coachs[0];
             let startTimePart =
               this.course_data.course_period_start_date.split(":");

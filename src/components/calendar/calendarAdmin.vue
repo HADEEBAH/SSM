@@ -300,6 +300,9 @@ export default {
   },
   data: () => ({
     search: "",
+    selectedCourse: [],
+    selectedCourseType: "",
+    selectedCoach: [],
     eventss: [],
     showModal: false,
     test_course_id: "",
@@ -320,7 +323,20 @@ export default {
     dateSelected: { month: "", year: "" },
   }),
 
-  watch: {},
+  watch: {
+    searchFilter(newFilter) {
+      this.search = newFilter;
+    },
+    searchCourse(newFilter) {
+      this.selectedCourse = newFilter;
+    },
+    searchCourseType(newFilter) {
+      this.selectedCourseType = newFilter;
+    },
+    searchChose(newFilter) {
+      this.selectedCoach = newFilter;
+    },
+  },
   computed: {
     ...mapGetters({
       get_all_holidays: "ManageScheduleModules/getAllHolidays",
@@ -378,16 +394,14 @@ export default {
       GetDataInSchedule: "ManageScheduleModules/GetDataInSchedule",
     }),
     GetSchedule({ start, search }) {
-      console.log("this.selectedCourse :>> ", this.searchCourse);
-      // console.log("start :>> ", start);
       if (!search) {
         this.GetDataInSchedule({
           month: start.month,
           year: start.year,
           search: this.search ? this.search : "",
           courseId: this.selectedCourse,
-          coachId: this.selectedCourseType,
-          status: this.selectedCoach,
+          coachId: this.selectedCoach,
+          status: this.selectedCourseType,
         });
         this.dateSelected.month = start.month;
         this.dateSelected.year = start.year;
@@ -397,8 +411,8 @@ export default {
           year: start.year,
           search: this.search ? this.search : "",
           courseId: this.selectedCourse,
-          coachId: this.selectedCourseType,
-          status: this.selectedCoach,
+          coachId: this.selectedCoach,
+          status: this.selectedCourseType,
         });
       }
       this.$emit(
