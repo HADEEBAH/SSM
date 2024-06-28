@@ -184,7 +184,7 @@
                       >
                     </v-col>
                   </v-row>
-                  <v-row>
+                  <!-- <v-row>
                     <v-col>
                       <rowData
                         col_header="12"
@@ -194,7 +194,7 @@
                         {{ data?.remark ? data?.remark : "-" }}</rowData
                       >
                     </v-col>
-                  </v-row>
+                  </v-row> -->
                 </v-card-text>
               </v-card>
             </v-card-text>
