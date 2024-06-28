@@ -356,7 +356,6 @@ export default {
           for (const sheetName of sheetNames) {
             if (sheetName === "STUDENT") {
               const worksheet = workbook.Sheets[sheetName];
-              console.log("worksheet :>> ", worksheet);
               // const data = XLSX.utils.sheet_to_json(worksheet);
               const data = XLSX.utils.sheet_to_json(worksheet, {
                 // header: 1, // Use this if you want to use the first row as headers, or specify an array of headers.
@@ -387,7 +386,6 @@ export default {
 
               if (data?.length >= 1) {
                 this.headersParent = Object.keys(data[0]);
-                console.log("data[0] :>> ", data[0]);
                 // Create an array of objects with a 'value' property for each cell
                 if (data?.length >= 1) {
                   this.fileParent = data.map((row) => {

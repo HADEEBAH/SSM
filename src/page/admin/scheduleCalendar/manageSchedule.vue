@@ -75,7 +75,13 @@
         <!-- :searchCourse="selectedCourse"
           :searchCourseType="selectedCourseType"
           :searchChose="selectedCoach" -->
-        <calendarAdmin @schedule-data="handleScheduleData"></calendarAdmin>
+        <calendarAdmin
+          @schedule-data="handleScheduleData"
+          :search-filter="filter_search"
+          :searchCourse="selectedCourse"
+          :searchCourseType="selectedCourseType"
+          :searchChose="selectedCoach"
+        ></calendarAdmin>
       </v-col>
       <v-col cols="12" md="4" sm="4">
         <v-card class="my-3 pa-2 max-h-[300px] overflow-auto rounded-lg">

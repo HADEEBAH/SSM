@@ -31,12 +31,12 @@
           </v-btn>
         </template>
         <v-window-item v-for="(slide, i) in banner_list" :key="i">
-            <v-img 
-              cover
-              :height="BannerHeight"
-              max-width="1920px"
-              :src="slide.bannerPath"
-            ></v-img>
+          <v-img
+            cover
+            :height="BannerHeight"
+            max-width="1920px"
+            :src="slide.bannerPath"
+          ></v-img>
         </v-window-item>
       </v-window>
     </v-card>
@@ -117,11 +117,11 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import loadingOverlay from "@/components/loading/loadingOverlay.vue";
-import categoryCardVue from '@/components/card/categoryCard.vue';
+import categoryCardVue from "@/components/card/categoryCard.vue";
 export default {
   components: {
     loadingOverlay,
-    categoryCardVue
+    categoryCardVue,
   },
   data: () => ({
     showCategorys: [],
@@ -194,7 +194,7 @@ export default {
     handleScroll() {
       this.scrollTop = window.scrollY; // ตัวเลขเมื่อ scroll ตัวเลขเริ่มนับจากบนสุด = 0
       let hello = this.$refs.hello?.clientHeight; // ค่ามาจาก ref filter
-      let device = (document.body.offsetHeight) - (56 + hello); // ค่าของหน้าจอ device
+      let device = document.body.offsetHeight - (56 + hello); // ค่าของหน้าจอ device
       let countA = this.scrollTop + device;
       if (countA >= 0 && !this.sameHistoryLength) {
         this.loadMoreData();
@@ -205,7 +205,6 @@ export default {
     },
 
     async loadMoreData() {
-      console.log("loadMoreData");
       this.countDatePerPage = this.category_list?.length;
 
       if (!this.isDataReceived) {

@@ -174,7 +174,9 @@
                         :title="$t('price')"
                       >
                         {{
-                          parseInt(data.price)?.toLocaleString(undefined, {
+                          parseInt(
+                            data.price ? data.price : "0"
+                          )?.toLocaleString(undefined, {
                             minimumFractionDigits: 2,
                           })
                         }}
@@ -182,19 +184,17 @@
                       >
                     </v-col>
                   </v-row>
-                  <v-row>
+                  <!-- <v-row>
                     <v-col>
                       <rowData
                         col_header="12"
                         col_detail="12"
                         :title="$t('remark')"
                       >
-                        {{
-                          data?.remark ? data?.remark : "-"
-                        }}</rowData
+                        {{ data?.remark ? data?.remark : "-" }}</rowData
                       >
                     </v-col>
-                  </v-row>
+                  </v-row> -->
                 </v-card-text>
               </v-card>
             </v-card-text>
@@ -426,9 +426,11 @@
                   >
                 </v-col>
               </v-row>
-             
             </v-card-actions>
-            <v-card-text class="pa-2" v-if="order_detail.paymentStatus == 'success'">
+            <v-card-text
+              class="pa-2"
+              v-if="order_detail.paymentStatus == 'success'"
+            >
               <v-row dense>
                 <v-col>
                   <v-btn
@@ -438,12 +440,12 @@
                     color="#ff6b81"
                     :dark="!order_detail.paymentStatus == 'cancel'"
                     @click="cancelOrderSuccess()"
-                  >{{ $t("cancel course purchase") }}</v-btn>
+                    >{{ $t("cancel course purchase") }}</v-btn
+                  >
                 </v-col>
               </v-row>
             </v-card-text>
           </v-card>
-          
         </v-col>
       </v-row>
       <v-dialog v-model="pdf_open" fullscreen>
@@ -539,9 +541,10 @@ export default {
       GetOrderDetail: "OrderModules/GetOrderDetail",
       updatePayment: "OrderModules/updatePayment",
       updateOrderStatus: "OrderModules/updateOrderStatus",
-      CancelOrderDeleteScheduleAndMonitor : "OrderModules/CancelOrderDeleteScheduleAndMonitor",
+      CancelOrderDeleteScheduleAndMonitor:
+        "OrderModules/CancelOrderDeleteScheduleAndMonitor",
     }),
-    cancelOrderSuccess(){
+    cancelOrderSuccess() {
       Swal.fire({
         icon: "question",
         title: this.$t("order cancellation"),
@@ -555,7 +558,9 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.order_detail.paymentStatus = "cancel";
-          this.CancelOrderDeleteScheduleAndMonitor({ order_number: this.$route.params.order_id });
+          this.CancelOrderDeleteScheduleAndMonitor({
+            order_number: this.$route.params.order_id,
+          });
         } else {
           this.GetOrderDetail({ order_number: this.$route.params.order_id });
         }

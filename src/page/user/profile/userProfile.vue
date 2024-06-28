@@ -399,10 +399,10 @@
       <v-card>
         <v-card-title>
           <v-row>
-            <v-col cols="6" align="left">
-              {{ $t("parent information55") }}
+            <v-col cols="11" class="informCenter">
+              {{ $t("parent information") }}
             </v-col>
-            <v-col cols="6" align="right">
+            <v-col cols="1" align="end">
               <v-btn icon @click="closeDialog">
                 <v-icon color="#ff6b81">mdi-close</v-icon>
               </v-btn>
@@ -434,7 +434,7 @@
               </div>
             </div>
           </div>
-          <v-row dense class="indent-10">
+          <v-row dense>
             <!--TH NAME -->
             <v-col cols="12" sm="6">
               <label-custom :text="$t('first name(thai)')"></label-custom>
@@ -528,10 +528,10 @@
       <v-card>
         <v-card-title>
           <v-row>
-            <v-col cols="6" align="left">
+            <v-col cols="11" class="informCenter">
               {{ $t("student information") }}
             </v-col>
-            <v-col cols="6" align="right">
+            <v-col cols="1" align="right">
               <v-btn icon @click="closeDialog">
                 <v-icon color="#ff6b81">mdi-close</v-icon>
               </v-btn>
@@ -552,7 +552,7 @@
             </div>
           </v-row>
 
-          <v-row dense class="indent-10">
+          <v-row dense>
             <!--TH NAME -->
             <v-col cols="12" sm="6">
               <label-custom :text="$t('first name(thai)')"></label-custom>
@@ -1424,6 +1424,17 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.informCenter {
+  /* min-height: 200px;
+  min-width: 200px;
+  max-height: 200px;
+  max-width: 200px; */
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-indent: 1rem;
 }
 .center {
   margin-left: auto;

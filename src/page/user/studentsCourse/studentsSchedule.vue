@@ -1290,11 +1290,19 @@ export default {
           this.waitingProcess = true;
 
           if (this.user_detail.roles?.includes("R_4")) {
-            await this.GetProfileBooked({
-              account_id: this.relations_account,
-              limit: this.reserve_option.limit,
-              page: this.reserve_option.page + 1,
-            });
+            if (!this.search_booked) {
+              await this.GetProfileBooked({
+                account_id: this.user_detail?.account_id,
+                limit: this.reserve_option.limit,
+                page: this.reserve_option.page + 1,
+              });
+            } else {
+              await this.GetProfileBooked({
+                account_id: this.relations_account,
+                limit: this.reserve_option.limit,
+                page: this.reserve_option.page + 1,
+              });
+            }
             this.isDataReceived = false;
             this.waitingProcess = false;
           } else {
