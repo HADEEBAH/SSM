@@ -20,7 +20,6 @@
             v-for="(item, index_item) in cart_list"
             :key="`${index_item}-cart`"
           >
-            <!-- <pre>{{ item }}</pre> -->
             <v-card class="rounded-lg mt-5">
               <v-row dense>
                 <!-- img -->
@@ -139,7 +138,11 @@
                         cols="4"
                         class="text-md font-semibold text-[#FF6B81]"
                       >
-                        {{ item?.coach_name }}
+                        {{
+                          $i18n.locale == "th"
+                            ? item.coach_name
+                            : item.coach_name_en
+                        }}
                         <!-- {{ item?. first_name }}  {{ item?.last_name }} -->
                       </v-col>
                     </v-row>
