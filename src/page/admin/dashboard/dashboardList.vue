@@ -1177,11 +1177,6 @@ export default {
     }),
 
     genPersentSucces() {
-      console.log(
-        this.get_donut.sumTotalSuccess,
-        this.get_donut.sumTotalPending
-      );
-
       let persent =
         parseFloat(this.get_donut.sumTotalSuccess) /
         (parseFloat(this.get_donut.sumTotalPending) +
