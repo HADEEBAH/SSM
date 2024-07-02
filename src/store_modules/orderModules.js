@@ -983,8 +983,9 @@ const orderModules = {
               if (order.type !== "addStudent") {
                 if (!studentUpdate.some(v => v.studentId === student.account_id)) {
                   // console.log('itemRole :>> ', itemRole);
-                  if (itemRole === 'R_5') {
+                  if (!itemRole || itemRole === 'R_5') {
                     if (student.nicknameTh && student.class) {
+                      console.log('student 1 :>> ', student);
                       studentUpdate.push({
                         "studentId": student.account_id,
                         "nicknameTh": student.nicknameTh,
@@ -1262,7 +1263,7 @@ const orderModules = {
         }
         // let localhost = "http://localhost:3002"
 
-
+        console.log('payload :>> ', payload);
         let { data } = await axios.post(
           // `${localhost}/api/v1/order/regis/course`,
           `${process.env.VUE_APP_URL}/api/v1/order/regis/course`,

@@ -1432,6 +1432,13 @@ export default {
         xaxis: {
           categories: labels,
         },
+        yaxis: {
+          labels: {
+            formatter: function (value) {
+              return value.toFixed(0);
+            },
+          },
+        },
         tooltip: {
           custom: function ({ series, seriesIndex, dataPointIndex }) {
             return (
