@@ -135,31 +135,37 @@
         <template v-slot:default>
           <thead fixed-header>
             <tr class="text-center">
-              <th class="text-center" colspan="8">ความพึงพอใจของระบบ</th>
+              <th class="text-center" colspan="8">
+                {{ $t("system satisfaction55") }}
+              </th>
 
-              <th colspan="4" class="text-center">ความพึงพอใจของ Dashboard</th>
+              <th colspan="4" class="text-center">
+                {{ $t("dashboard satisfaction") }}
+              </th>
             </tr>
           </thead>
           <thead>
             <tr>
-              <th class="text-center" colspan="1">ภาพรวมการใช้บริการ</th>
-              <th class="text-center" colspan="1">ความง่ายและดวกในการใช้งาน</th>
-              <th class="text-center" colspan="1">ความเสถียรภาพของบริการ</th>
+              <th class="text-center" colspan="1">{{ $t("overview") }}</th>
+              <th class="text-center" colspan="1">{{ $t("ease of use") }}</th>
+              <th class="text-center" colspan="1">
+                {{ $t("service stability") }}
+              </th>
               <th class="text-center" colspan="5">
-                คำแนะนำ ความพึงพอใจของระบบ
+                {{ $t("recommendations System satisfaction") }}
               </th>
               <th class="text-center" colspan="1">
-                การแสดงผลและการออกแบบระบบของ Dashboard
+                {{ $t("dashboard display and system design") }}
               </th>
               <th class="text-center" colspan="3">
-                คำแนะนำ ความพึงพอใจของ Dashboard
+                {{ $t("dashboard Satisfaction Recommendations") }}
               </th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="user in transformedData" :key="user.accountId">
               <td class="text-center" colspan="1">
-                {{ user["ภาพรวมการใช้บริการ"] || "0" }}
+                {{ user[$t("overview")] || "0" }}
               </td>
               <td class="text-center" colspan="1">
                 {{ user["ความง่ายและดวกในการใช้งาน"] || "0" }}

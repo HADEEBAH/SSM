@@ -38,7 +38,7 @@
                   :items="packageList(index)"
                   item-value="packageId"
                   item-text="packageName"
-                  item-color="pink"
+                  item-color="#ff6b81"
                   @change="checkPackage(package_data.package_id, package_data)"
                 >
                   <template v-slot:no-data>
@@ -116,7 +116,7 @@
                   "
                   item-value="optionId"
                   :items="optionsList(index, option_index)"
-                  item-color="pink"
+                  item-color="#ff6b81"
                   @change="checkOption(option, option_index, package_data)"
                 >
                   <template v-slot:no-data>
@@ -286,10 +286,14 @@
                   <v-col cols="12" sm="6">
                     <v-row dense>
                       <v-col>{{ $t("average") }}</v-col>
-                      <v-col cols="auto" class="text-[#FF6B81] font-bold text-right">{{
-                        option.net_price_unit.toLocaleString()
-                      }}</v-col>
-                      <v-col cols="auto">{{ $t("baht") }}/{{ $t("time") }}</v-col>
+                      <v-col
+                        cols="auto"
+                        class="text-[#FF6B81] font-bold text-right"
+                        >{{ option.net_price_unit.toLocaleString() }}</v-col
+                      >
+                      <v-col cols="auto"
+                        >{{ $t("baht") }}/{{ $t("time") }}</v-col
+                      >
                     </v-row>
                   </v-col>
                 </v-row>

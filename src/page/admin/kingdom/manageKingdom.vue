@@ -8,6 +8,7 @@
         hide-details
         prepend-inner-icon="mdi-magnify"
         v-model="search"
+        color="#FF6B81"
         :placeholder="$t('search')"
       ></v-text-field>
     </header-page>

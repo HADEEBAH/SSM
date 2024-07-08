@@ -2201,6 +2201,17 @@ const orderModules = {
             timer: 3000,
             timerProgressBar: true,
           });
+        } else if (error.response?.data?.message === 'You have already reserved this course.') {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("warning"),
+            text: VueI18n.t("duplicate user in this course Unable to register"),
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+          });
         } else {
           Swal.fire({
             icon: "error",

@@ -23,13 +23,13 @@
           <v-radio
             :label="$t('via mobile phone (SMS)')"
             value="phone"
-            color="#aeaeae"
+            color="#FF6B81"
             class="align-self-center ml-auto"
           ></v-radio>
           <v-radio
             :label="$t('via email')"
             value="email"
-            color="#aeaeae"
+            color="#FF6B81"
             class="align-self-center mr-auto"
           ></v-radio>
         </v-radio-group>
@@ -52,6 +52,7 @@
               ? Validation($event, 'email')
               : Validation($event, 'number')
           "
+          color="#FF6B81"
           solo
           @paste="preventPaste"
           @copy="preventCopy"
@@ -68,6 +69,7 @@
               : 'w-[50%!important] m-[auto!important]'
           "
           :label="$t('specify username')"
+          color="#FF6B81"
           solo
           @keydown="Validation($event, 'en-number')"
           @paste="preventPaste"

@@ -42,7 +42,7 @@
         </v-col>
         <!--TH NAME -->
         <v-col cols="12" sm="6">
-          <label-custom :text="$t('first name(thai)')"></label-custom>
+          <label-custom :text="$t('first name(thai)2')"></label-custom>
           <v-text-field
             placeholder="-"
             v-model="profile_detail.firstNameTh"
@@ -51,10 +51,11 @@
             :rules="rules.firstNameThRules"
             :disabled="!isEnabled"
             color="#ff6b81"
-            :error-messages="
-              getErrorMessage(profile_detail.firstNameTh, 'thai')
-            "
+            @keydown="validate($event, 'th-special')"
           >
+            <!-- :error-messages="
+              getErrorMessage(profile_detail.firstNameTh, 'thai')
+            " -->
           </v-text-field>
         </v-col>
         <!-- TH LNAME -->
@@ -68,7 +69,7 @@
             dense
             :disabled="!isEnabled"
             color="#ff6b81"
-            :error-messages="getErrorMessage(profile_detail.lastNameTh, 'thai')"
+            @keydown="validate($event, 'th-special')"
           >
           </v-text-field>
         </v-col>
@@ -82,6 +83,7 @@
             outlined
             dense
             :rules="rules.nickName"
+            @keydown="validate($event, 'free-nonum')"
             :disabled="!isEnabled"
           >
           </v-text-field>

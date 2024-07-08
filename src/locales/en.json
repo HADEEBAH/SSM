@@ -215,6 +215,7 @@
     "day and date" : "Day and date",
     "daily" : "Daily",
     "date" : "Date",
+    "dashboard satisfaction":"Dashboard satisfaction",
     "data not found" : "Data not found",
     "date of request": "Date of request",
     "data has been successfully deleted" : "( Data has been successfully deleted )",
@@ -276,6 +277,10 @@
     "do you want to delete this teaching day?": "Do you want to delete this teaching day?",
     "duration/coach" : "Duration/Coach",
     "details of take leave": "Details of take leave",
+    "dashboard display and system design":"Dashboard display and system design",
+    "dashboard Satisfaction Recommendations":"Dashboard Satisfaction Recommendations",
+
+
 
 
     "edit": "Edit",
@@ -302,6 +307,7 @@
     "example of pictures":"Example of pictures",
     "excessive study hours" : "Excessive study hours",
     "export" : "Export",
+    "evaluate": "After participating in the Smart School Managemet system service, please evaluate your satisfaction. In order for the system that you use to use the service to use your comments to improve the service further",
     "evaluate satisfaction with using the system" : "Evaluate satisfaction with using the system",
     "ease of use":"Ease of use",
 
@@ -688,6 +694,8 @@
     "return to home page" : "Go back to main page",
     "recommendation": "(Recommendation: Upload an image with dimensions 1024 x 576 (16:9) and The file size is not more than 5 Mb, must be JPG, PNG files )",
     "role": "Role",
+    "recommendations System satisfaction":"Recommendations System satisfaction",
+
 
     "save" : "Save",
     "save parent" : "Save parent",
@@ -792,6 +800,8 @@
     "super admin": "Super Admin",
     "service stability":"Service stability",
     "school day":"School Day",
+    "system satisfaction":"System satisfaction",
+
 
 
     "the system will not display information if the user does not enter student and parent information" :"The system will not display the information if the user does not fill in the student and parent information according to the template",

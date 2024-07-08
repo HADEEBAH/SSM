@@ -98,9 +98,7 @@
           <template v-slot:detail>
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
-                {{
-                  get_student_value?.potencialsStudent
-                }}
+                {{ get_student_value?.potencialsStudent }}
               </v-col>
               <v-col class="text-sm">{{ $t("person") }}</v-col>
             </v-row>
@@ -124,7 +122,7 @@
           <template v-slot:detail>
             <v-row class="d-flex align-end">
               <v-col align="center" class="text-3xl font-bold">
-                {{ get_student_value.countReserve}} 
+                {{ get_student_value.countReserve }}
               </v-col>
               <v-col class="text-sm">{{ $t("person") }}</v-col>
             </v-row>
@@ -300,18 +298,16 @@
     <!-- DIALOG END-->
     <v-dialog v-model="course_detail_dialog_end" persistent max-width="600px">
       <v-card>
-        <v-card-title>
+        <v-card-title class="sticky-header">
           <v-row dense>
-            <v-col cols="12" align="end">
+            <v-col align="center">
+              {{ $t("course details") }}
+            </v-col>
+            <v-col cols="auto" align="end">
               <v-btn icon @click="course_detail_dialog_end = false">
                 <v-icon color="#ff6b81">mdi-close</v-icon>
               </v-btn>
             </v-col>
-            <v-row dense>
-              <v-col cols="12" align="center">
-                {{ $t("course details") }}
-              </v-col>
-            </v-row>
           </v-row>
         </v-card-title>
 
@@ -412,18 +408,16 @@
       max-width="600px"
     >
       <v-card>
-        <v-card-title>
+        <v-card-title class="sticky-header">
           <v-row dense>
-            <v-col cols="12" align="end">
+            <v-col align="center">
+              {{ $t("course details") }}
+            </v-col>
+            <v-col cols="auto" align="end">
               <v-btn icon @click="course_detail_dialog_booked = false">
                 <v-icon color="#ff6b81">mdi-close</v-icon>
               </v-btn>
             </v-col>
-            <v-row dense>
-              <v-col cols="12" align="center">
-                {{ $t("course details") }}
-              </v-col>
-            </v-row>
           </v-row>
         </v-card-title>
 
@@ -432,6 +426,9 @@
             v-for="(item, index) in detail_dialog_booked.course"
             :key="index"
           >
+            <label class="text-[#FF6B81] font-bold"
+              >{{ $t("courses at") }} {{ index + 1 }}</label
+            >
             <!-- ชื่อคอร์ส -->
             <v-col cols="12">
               <v-text-field
@@ -489,7 +486,11 @@
               </v-text-field>
             </v-col>
             <!-- แพ็กเกจ -->
-            <v-col cols="12" sm="6">
+            <v-col
+              cols="12"
+              sm="6"
+              v-if="item.courseTypeNameTh === 'คอร์สเรียนทั่วไป'"
+            >
               <v-text-field
                 hide-details
                 outlined
@@ -610,7 +611,7 @@ export default {
   }),
   mounted() {
     this.GetStudentValue();
-    this.clickTab(this.tab)
+    this.clickTab(this.tab);
     // this.GetAllStudentList();
   },
   methods: {
@@ -795,11 +796,12 @@ export default {
 </script>
   
   <style scoped>
-/* .text-center {
-  text-align: end;
-} */
-
-/* >>> .header-table .v-data-table-header tr {
-  text-align-last: center !important;
-} */
+.sticky-header {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 1;
+  margin-bottom: 15px;
+  /* box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4); */
+}
 </style>

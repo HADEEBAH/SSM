@@ -174,6 +174,8 @@
                       item-value="value"
                       @change="selectCheckInStatus(item, $event)"
                       :disabled="item.disable === true"
+                      color="#ff6b81"
+                      item-color="#ff6b81"
                     >
                       <template #item="{ item }">
                         <v-list-item-content>
@@ -473,6 +475,8 @@
                         <v-select
                           outlined
                           dense
+                          item-color="#ff6b81"
+                          color="#ff6b81"
                           :rules="evolution"
                           v-model="student.assessment.evolution"
                           :items="evolution_options"
@@ -505,6 +509,8 @@
                           outlined
                           dense
                           :rules="interest"
+                          item-color="#ff6b81"
+                          color="#ff6b81"
                           v-model="student.assessment.interest"
                           :items="interest_options"
                         >
@@ -642,6 +648,8 @@
                         outlined
                         dense
                         :rules="evolution"
+                        item-color="#ff6b81"
+                        color="#ff6b81"
                         v-model="student.potential.evolution"
                         :items="evolution_options"
                       >
@@ -684,6 +692,8 @@
                       <v-textarea
                         outlined
                         :rules="interest_text"
+                        item-color="#ff6b81"
+                        color="#ff6b81"
                         v-model="student.potential.interest"
                       ></v-textarea>
                     </v-col>
@@ -725,6 +735,7 @@
                 <labelCustom :text="$t('teaching notes')"></labelCustom>
                 <v-textarea
                   outlined
+                  color="#ff6b81"
                   :rules="summary"
                   :placeholder="$t('specify your opinion') + '...'"
                   v-model="coach_check_in.summary"
@@ -736,6 +747,8 @@
                 <labelCustom :text="$t('development / homework')"></labelCustom>
                 <v-textarea
                   outlined
+                  item-color="#ff6b81"
+                  color="#ff6b81"
                   :rules="homework"
                   :placeholder="$t('specify your opinion') + '...'"
                   v-model="coach_check_in.homework"
@@ -980,6 +993,7 @@
                 <labelCustom :text="$t('add a comment')"></labelCustom>
                 <v-textarea
                   outlined
+                  color="#ff6b81"
                   v-model="comment_dialog_tmp.remark"
                 ></v-textarea>
               </v-col>

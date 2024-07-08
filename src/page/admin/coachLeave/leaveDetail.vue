@@ -182,7 +182,7 @@
                   </v-row>
                   <v-row dense v-else-if="course.type === 'date'">
                     <v-col>
-                      {{ $t("compensation date") }}
+                      {{ $t("compensation date22") }}
                       <v-menu
                         :disabled="
                           coach_leave.status === 'pending' ? false : true
@@ -202,6 +202,7 @@
                             :placeholder="$t('choose a compensation date')"
                             v-bind="attrs"
                             v-on="on"
+                            color="#ff6b81"
                           >
                             <template v-slot:append>
                               <v-icon
@@ -217,6 +218,7 @@
                           :disabled="
                             coach_leave.status === 'pending' ? false : true
                           "
+                          color="#ff6b81"
                           @input="InputDate(course.compensationDate, course)"
                           :min="new Date().toISOString()"
                           v-model="course.compensationDate"
@@ -234,6 +236,8 @@
                         <v-col class="px-2" cols="12" sm="6">
                           <v-text-field
                             outlined
+                            color="#ff6b81"
+                            item-color="#ff6b81"
                             dense
                             :style="`width:${width()}px;`"
                             style="
@@ -255,6 +259,8 @@
                             advanced-keyboard
                             hide-clear-button
                             v-model="course.compensationStartTimeObj"
+                            color="#ff6b81"
+                            item-color="#ff6b81"
                             close-on-complete
                             @change="
                               ChengeTimeMin(
@@ -324,6 +330,7 @@
                             dense
                             readonly
                             outlined
+                            color="#ff6b81"
                             v-model="course.compensationStartTime"
                           ></v-text-field>
                         </v-col>
@@ -332,6 +339,7 @@
                             dense
                             readonly
                             outlined
+                            color="#ff6b81"
                             v-model="course.compensationEndTime"
                           ></v-text-field>
                         </v-col>
@@ -644,7 +652,7 @@ export default {
         .focus();
     },
     InputDate(date, course) {
-      course.compensationDate_str = date
+      course.compensationDate_str = date;
     },
     closeDisapprovedDialog() {
       this.show_disapproved = false;

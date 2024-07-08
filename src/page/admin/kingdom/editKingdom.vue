@@ -151,6 +151,7 @@
             dense
             :placeholder="$t('fill in wls name')"
             outlined
+            color="#ff6b81"
             v-model="category.categoryNameTh"
             :error-messages="getErrorMessage(category.categoryNameTh, 'thai')"
           ></v-text-field>
@@ -167,6 +168,7 @@
             dense
             :placeholder="$t('fill in wls name')"
             outlined
+            color="#ff6b81"
             v-model="category.categoryNameEng"
             :error-messages="
               getErrorMessage(category.categoryNameEng, 'english')
@@ -180,6 +182,7 @@
             <v-text-field
               :rules="rules.taughtBy"
               :disabled="showData"
+              color="#ff6b81"
               dense
               :placeholder="
                 $t(
@@ -201,6 +204,7 @@
             class="form2"
             :placeholder="$t('fill in the details...')"
             auto-grow
+            color="#ff6b81"
             outlined
             v-model="category.categoryDescription"
           ></v-textarea>

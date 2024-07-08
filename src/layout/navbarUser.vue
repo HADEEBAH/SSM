@@ -155,7 +155,7 @@
                     </v-list-item-action>
                   </v-list-item>
                 </v-list>
-                <v-row>
+                <v-row v-if="get_notifications_all.length > 9">
                   <v-col cols="12" align="center">
                     <v-btn
                       outlined
@@ -460,9 +460,10 @@
           </v-row>
           <v-row dense>
             <v-col class="text-wrap">
-              จากที่ได้เข้าร่วมบริการระบบ Smart School Managemet
+              {{ $t("evaluate") }}
+              <!-- จากที่ได้เข้าร่วมบริการระบบ Smart School Managemet
               กรุณาประเมินความพึงพอใจ
-              เพื่อให้ทางระบบที่ท่านเข้าใช้บริการนำความคิดเห็นของท่านไปปรับปรุงการให้บริการต่อไป
+              เพื่อให้ทางระบบที่ท่านเข้าใช้บริการนำความคิดเห็นของท่านไปปรับปรุงการให้บริการต่อไป -->
             </v-col>
           </v-row>
           <div
@@ -502,6 +503,7 @@
                 <v-textarea
                   v-model="surveyData.remark"
                   outlined
+                  color="#ff6b81"
                   hide-details
                   :placeholder="$t('suggestions')"
                 ></v-textarea>

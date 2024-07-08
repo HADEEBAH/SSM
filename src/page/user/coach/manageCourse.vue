@@ -238,6 +238,8 @@
             :item-text="
               $i18n.locale == 'th' ? 'course_name_th' : 'course_name_en'
             "
+            color="#ff6b81"
+            item-color="#ff6b81"
             item-value="course_id"
             outlined
             dense
@@ -1128,6 +1130,8 @@
             :item-text="
               $i18n.locale == 'th' ? 'course_name_th' : 'course_name_en'
             "
+            color="#ff6b81"
+            item-color="#ff6b81"
             item-value="course_id"
             outlined
             dense

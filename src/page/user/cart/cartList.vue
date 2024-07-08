@@ -67,7 +67,7 @@
                               <v-col cols="auto">
                                 <v-checkbox
                                   class="card_checkbox"
-                                  color="error"
+                                  color="#ff6b81"
                                   hide-details
                                   @change="selectOne($event, item.course_id)"
                                   v-model="item.checked"
@@ -200,7 +200,7 @@
                     <div align="right">
                       <v-btn
                         outlined
-                        color="red"
+                        color="#ff6b81"
                         @click="removeCart(item.order_tmp_id)"
                         ><v-icon> mdi-delete</v-icon>
                         {{ $t("delete item") }}</v-btn
@@ -223,7 +223,7 @@
         </v-row>
         <v-row dense>
           <v-col>
-            <v-checkbox hide-details color="pink" v-model="policy">
+            <v-checkbox hide-details color="#ff6b81" v-model="policy">
               <template v-slot:label>
                 {{ $t("accept") }}
                 <a class="mx-2 font-weight-bold" @click="policy_show = true">
@@ -241,10 +241,10 @@
           <v-col cols="12" sm="4">
             <v-checkbox
               class="card_checkbox"
-              color="error"
               hide-details
               :label="$t('total')"
               @change="selectAll($event)"
+              color="#ff6b81"
               v-model="selected_all"
             ></v-checkbox>
           </v-col>
@@ -271,7 +271,7 @@
         <v-row dense>
           <v-col class="pa-2" align="right">
             <v-btn icon @click="policy_show = false">
-              <v-icon color="red"> mdi-close </v-icon>
+              <v-icon color="#ff6b81"> mdi-close </v-icon>
             </v-btn>
           </v-col>
         </v-row>
@@ -288,7 +288,7 @@
           </v-row>
           <v-row dense>
             <v-col>
-              <v-checkbox hide-details color="pink" v-model="policy">
+              <v-checkbox hide-details color="#ff6b81" v-model="policy">
                 <template v-slot:label>
                   {{ $t("accept") }}
                   <a class="mx-2 font-weight-bold">
