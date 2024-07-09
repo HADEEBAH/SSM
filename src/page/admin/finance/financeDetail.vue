@@ -1196,6 +1196,7 @@ export default {
     sendNotificationByAccount(account) {
       let payload = {
         notificationName: "แจ้งเตือนการชำระเงิน",
+        notificationNameEn: "Payment reminder",
         notificationDescription: `หมายเลขออร์เดอร์ที่ ${
           this.$route.params.order_id
         } ของคุณ ${account
@@ -1203,6 +1204,13 @@ export default {
             return `${val.firstNameTh} ${val.lastNameTh}`;
           })
           .join(account.length > 1 ? ", " : "")} ยังไม่ชำระเงิน`,
+        notificationDescriptionEn: `Order number at ${
+          this.$route.params.order_id
+        } ของคุณ ${account
+          .map((val) => {
+            return `${val.firstNameEn} ${val.lastNameEn}`;
+          })
+          .join(account.length > 1 ? ", " : "")} Not yet paid`,
         accountId: account,
         path: null,
       };
