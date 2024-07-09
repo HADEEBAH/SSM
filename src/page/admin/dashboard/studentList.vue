@@ -509,7 +509,13 @@
             </v-col>
 
             <!-- ชนิดคอร์ส -->
-            <v-col cols="12" sm="6" class="mb-5">
+            <v-col
+              cols="12"
+              sm="6"
+              :class="
+                item.courseTypeNameTh === 'คอร์สเรียนทั่วไป' ? 'mb-5' : ''
+              "
+            >
               <v-text-field
                 hide-details
                 outlined
