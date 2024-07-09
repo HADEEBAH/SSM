@@ -148,7 +148,7 @@
                 $i18n.locale == 'th' ? 'categoryNameTh' : 'categoryNameEng'
               "
               item-value="categoryId"
-              item-color="pink"
+              item-color="#ff6b81"
               :disabled="disable"
               :outlined="!disable"
               :filled="disable"
@@ -359,7 +359,7 @@
                 :items="coachs"
                 item-value="accountId"
                 :item-text="$i18n.locale == 'th' ? 'fullNameTh' : 'fullNameEh'"
-                item-color="pink"
+                item-color="#ff6b81"
                 :disabled="disable"
                 :outlined="!disable"
                 :filled="disable"
@@ -557,7 +557,7 @@
                 chips
                 :rules="class_date"
                 deletable-chips
-                item-color="pink"
+                item-color="#ff6b81"
                 multiple
                 color="#FF6B81"
                 :items="days_confix"

@@ -1177,11 +1177,6 @@ export default {
     }),
 
     genPersentSucces() {
-      console.log(
-        this.get_donut.sumTotalSuccess,
-        this.get_donut.sumTotalPending
-      );
-
       let persent =
         parseFloat(this.get_donut.sumTotalSuccess) /
         (parseFloat(this.get_donut.sumTotalPending) +
@@ -1431,6 +1426,13 @@ export default {
         grid: {},
         xaxis: {
           categories: labels,
+        },
+        yaxis: {
+          labels: {
+            formatter: function (value) {
+              return value.toFixed(0);
+            },
+          },
         },
         tooltip: {
           custom: function ({ series, seriesIndex, dataPointIndex }) {

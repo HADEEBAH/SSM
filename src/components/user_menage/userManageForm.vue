@@ -136,7 +136,7 @@
                           <v-row>
                             <v-col cols="12" sm="6">
                               <label-custom
-                                :text="$t('first name(thai)')"
+                                :text="$t('first name(thai)2')"
                               ></label-custom>
 
                               <v-text-field
@@ -699,7 +699,7 @@
                   "
                   value="Jacob"
                   color="pink"
-                  item-color="pink"
+                  item-color="#ff6b81"
                 ></v-checkbox>
               </v-col>
 

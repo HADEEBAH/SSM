@@ -16,6 +16,8 @@
               :items="courses"
               item-value="courseId"
               item-text="courseName"
+              color="#ff6B81"
+              item-color="#ff6b81"
               :placeholder="$t('course')"
             >
               <template v-slot:no-data>
@@ -40,6 +42,8 @@
               :items="coachs"
               item-value="coachId"
               item-text="coachName"
+              color="#ff6B81"
+              item-color="#ff6b81"
               :placeholder="$t('coach')"
             >
               <template v-slot:no-data>
@@ -65,6 +69,8 @@
               :items="dayOfWeekName"
               item-value="dayOfWeekId"
               item-text="dayOfWeekName"
+              color="#ff6B81"
+              item-color="#ff6b81"
               :placeholder="$t('date')"
             >
               <template v-slot:no-data>
@@ -90,6 +96,8 @@
               :items="time"
               item-value="timeId"
               item-text="time"
+              color="#ff6B81"
+              item-color="#ff6b81"
               :placeholder="$t('times')"
             >
               <template v-slot:no-data>
@@ -127,7 +135,7 @@
           </v-row>
         </v-card-text>
       </v-card>
-      <v-form v-model="validate_form" ref="validate_form">
+      <v-form v-model="validate" ref="validate_form">
         <div
           v-for="(schedule, IndexSchedule) in scheduleCheckin"
           :key="`${IndexSchedule}-schedule`"
@@ -193,8 +201,10 @@
                         class="font-bold text-[#ff6b81]"
                         align="center"
                         >{{
-                          schedule?.checkInStudent[0].packageId
-                            ? $t("package")
+                          schedule?.checkInStudent !== null
+                            ? schedule?.checkInStudent[0].packageId
+                              ? $t("package")
+                              : ""
                             : ""
                         }}</v-col
                       >
@@ -257,11 +267,9 @@
                           } ${student.countCheckIn}/${student.totalCheckIn}`
                         }}</v-col
                       >
-                      <!-- <v-form v-model="validate_form" ref="validate_form"> -->
                       <v-col cols="12" sm="3">
                         <v-select
                           v-model="student.status"
-                          hide-details
                           outlined
                           dense
                           color="#ff6b81"
@@ -290,7 +298,6 @@
                           </template>
                         </v-select>
                       </v-col>
-                      <!-- </v-form> -->
                     </v-row>
                     <v-row v-if="student.status === 'leave' && openCard" dense>
                       <v-col
@@ -399,10 +406,11 @@
                       :class="
                         $vuetify.breakpoint.smAndUp ? 'btn-size-lg' : 'w-full'
                       "
-                      dark
                       rounded
                       depressed
-                      color="#ff6b81"
+                      :disabled="!validate"
+                      :dark="validate"
+                      :color="!validate ? '' : '#ff6b81'"
                       @click="saveStudentCheckIn(schedule)"
                       >{{ $t("save") }}</v-btn
                     >
@@ -441,7 +449,7 @@ export default {
   },
   data() {
     return {
-      validate_form: false,
+      validate: false,
       filter: {
         course: "",
         coach: "",
@@ -759,7 +767,7 @@ export default {
     // },
     saveStudentCheckIn(scheduleData) {
       this.$refs.validate_form.validate();
-      if (this.validate_form) {
+      if (this.validate) {
         Swal.fire({
           icon: "question",
           title: this.$t("want to save?"),

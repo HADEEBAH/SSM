@@ -983,7 +983,7 @@ const orderModules = {
               if (order.type !== "addStudent") {
                 if (!studentUpdate.some(v => v.studentId === student.account_id)) {
                   // console.log('itemRole :>> ', itemRole);
-                  if (itemRole === 'R_5') {
+                  if (!itemRole || itemRole === 'R_5') {
                     if (student.nicknameTh && student.class) {
                       studentUpdate.push({
                         "studentId": student.account_id,
@@ -1261,7 +1261,6 @@ const orderModules = {
           });
         }
         // let localhost = "http://localhost:3002"
-
 
         let { data } = await axios.post(
           // `${localhost}/api/v1/order/regis/course`,
@@ -2196,6 +2195,17 @@ const orderModules = {
             icon: "error",
             title: VueI18n.t("something went wrong"),
             text: VueI18n.t("parents cannot resave the course to their parents"),
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+          });
+        } else if (error.response?.data?.message === 'You have already reserved this course.') {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("warning"),
+            text: VueI18n.t("duplicate user in this course Unable to register"),
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,

@@ -128,6 +128,7 @@
                   dense
                   filled
                   hide-details
+                  color="#ff6b81"
                   clearable
                   :label="$t('select your students here')"
                   @change="searchStudentCourse(search_course_detail)"
@@ -440,6 +441,7 @@
                   dense
                   filled
                   clearable
+                  color="#ff6b81"
                   hide-details
                   :label="$t('select your students here')"
                   @change="searchStudentCourse(search_course)"
@@ -543,6 +545,7 @@
                   item-value="studentId"
                   dense
                   filled
+                  color="#ff6b81"
                   hide-details
                   :label="$t('select your students here')"
                   @change="searchStudentBooked(search_booked)"

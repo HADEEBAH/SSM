@@ -126,7 +126,8 @@
             dense
             outlined
             hide-details
-            item-color="pink"
+            item-color="#ff6b81"
+            color="#ff6b81"
             :items="status"
             :item-text="$i18n.locale == 'th' ? 'label' : 'label_en'"
             item-value="value"

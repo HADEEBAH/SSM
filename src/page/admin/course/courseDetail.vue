@@ -1393,7 +1393,7 @@
                         dense
                         outlined
                         hide-details
-                        item-color="pink"
+                        item-color="#ff6b81"
                         :items="status"
                         item-text="label"
                         item-value="value"

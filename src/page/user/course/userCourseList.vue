@@ -13,6 +13,7 @@
               $t('find the learning course that interests you here')
             "
             v-model="search_course"
+            color="#ff6b81"
             @input="searchCourse($event)"
           ></v-text-field>
         </v-col>
@@ -64,7 +65,7 @@
                     : 'text-[#B3B3B3]'
                 "
               >
-              {{ type.total_course }}
+                {{ type.total_course }}
                 <!-- {{
                   search_results.filter(
                     (v) => v.course_type_id === type_selected
@@ -95,9 +96,7 @@
           >
             <courseListCard :course="course"></courseListCard>
           </v-col>
-          <v-col
-            v-if="courses.length == 0"
-          >
+          <v-col v-if="courses.length == 0">
             <v-card outlined>
               <v-card-text align="center">
                 <span class="font-bold">{{
@@ -133,8 +132,8 @@
   </v-app>
 </template>
 <script>
-import { mapGetters, mapActions ,mapMutations } from "vuex";
-import courseListCard from '@/components/card/courseListCard.vue';
+import { mapGetters, mapActions, mapMutations } from "vuex";
+import courseListCard from "@/components/card/courseListCard.vue";
 export default {
   components: { courseListCard },
   name: "userCourseList",
@@ -170,12 +169,12 @@ export default {
       this.type_selected = this.course_types[0].course_type_id;
       await this.GetCategory(this.$route.params.category_id);
       this.SetFilterCourseOption({
-        limit : 6,
-        page : 1
-      })
+        limit: 6,
+        page: 1,
+      });
       await this.GetCoursesFilter({
         category_id: this.$route.params.category_id,
-        status: ["Active","Reserve"],
+        status: ["Active", "Reserve"],
         course_type_id: this.type_selected,
         limit: 12,
         page: 1,
@@ -203,7 +202,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-      SetFilterCourseOption : "CourseModules/SetFilterCourseOption",
+      SetFilterCourseOption: "CourseModules/SetFilterCourseOption",
     }),
     ...mapActions({
       GetCourseTypes: "CourseModules/GetCourseTypes",
@@ -246,7 +245,7 @@ export default {
 
           await this.GetCoursesFilter({
             category_id: this.$route.params.category_id,
-            status: ["Active","Reserve"],
+            status: ["Active", "Reserve"],
             course_type_id: this.type_selected,
             limit: this.filter_course_option.limit,
             page: this.filter_course_option.page + 1,
@@ -265,7 +264,7 @@ export default {
     },
 
     GerPeriod(period) {
-      if(period){
+      if (period) {
         let str = period.toString();
         let part_period = str.split(".");
         if (part_period.length > 1) {
@@ -278,11 +277,11 @@ export default {
     async searchCourse(event) {
       await this.GetCoursesFilter({
         category_id: this.$route.params.category_id,
-        status: ["Active","Reserve"],
+        status: ["Active", "Reserve"],
         course_type_id: this.type_selected,
         limit: this.filter_course_option.limit,
         page: this.filter_course_option.page + 1,
-        search : event
+        search: event,
       });
       // if(event){
       //   const searchQuery = event.toLowerCase();
@@ -311,9 +310,9 @@ export default {
       this.search_course = "";
       this.GetCoursesFilter({
         category_id: this.$route.params.category_id,
-        status: ["Active","Reserve"],
+        status: ["Active", "Reserve"],
         course_type_id: course_type.course_type_id,
-        limit: 6,
+        limit: 12,
         page: 1,
       });
     },

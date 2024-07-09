@@ -23,6 +23,9 @@
               <v-col cols="12" sm="6">
                 <label>{{ $t("first name(thai)") }}</label>
                 <!-- @keydown="Validation($event, 'th-special')" -->
+                <!-- :error-messages="
+                    getErrorMessage(user_one_id.firstname_th, 'thai')
+                  " -->
                 <v-text-field
                   dense
                   ref="firstname_th"
@@ -33,9 +36,7 @@
                   @change="changeUserOneId(user_one_id)"
                   outlined
                   color="#FF6B81"
-                  :error-messages="
-                    getErrorMessage(user_one_id.firstname_th, 'thai')
-                  "
+                  @keydown="Validation($event, 'th-special')"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
@@ -51,9 +52,7 @@
                   @change="changeUserOneId(user_one_id)"
                   outlined
                   color="#FF6B81"
-                  :error-messages="
-                    getErrorMessage(user_one_id.lastname_th, 'thai')
-                  "
+                  @keydown="Validation($event, 'th-special')"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -61,7 +60,9 @@
               <v-col cols="12" sm="6">
                 <label>{{ $t("first name(english)") }}</label>
                 <!-- @keydown="Validation($event, 'en-special')" -->
-
+                <!-- :error-messages="
+                    getErrorMessage(user_one_id.firstname_en, 'english')
+                  " -->
                 <v-text-field
                   dense
                   ref="firstname_en"
@@ -72,9 +73,7 @@
                   @change="changeUserOneId(user_one_id)"
                   outlined
                   color="#FF6B81"
-                  :error-messages="
-                    getErrorMessage(user_one_id.firstname_en, 'english')
-                  "
+                  @keydown="Validation($event, 'en-special')"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
@@ -90,10 +89,12 @@
                   @change="changeUserOneId(user_one_id)"
                   outlined
                   color="#FF6B81"
-                  :error-messages="
+                  @keydown="Validation($event, 'en-special')"
+                >
+                  <!-- :error-messages="
                     getErrorMessage(user_one_id.lastname_en, 'english')
-                  "
-                ></v-text-field>
+                  " -->
+                </v-text-field>
               </v-col>
             </v-row>
             <v-row dense>

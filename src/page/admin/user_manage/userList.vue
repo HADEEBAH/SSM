@@ -65,7 +65,7 @@
                   multiple
                   hide-details
                   color="pink"
-                  item-color="pink"
+                  item-color="#ff6b81"
                 >
                   <template v-slot:prepend-item>
                     <v-list-item
@@ -142,9 +142,7 @@
 
             <template v-slot:[`item.roles`]="{ item }">
               <div v-for="(items, ind_itm) in item.userRoles" :key="ind_itm">
-                {{
-                  $i18n.locale == "th" ? items.roleNameTh : items.roleNameEng
-                }}
+                {{ $i18n.locale == "th" ? items.roleNameTh : items.roleNameEn }}
               </div>
             </template>
 

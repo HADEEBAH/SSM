@@ -59,6 +59,7 @@ const financeModules = {
           let sumfail = 0
           if (data.data.length > 0) {
             data.data.forEach(order => {
+
               sumPrice = sumPrice + parseFloat(order.price)
               if (order.payment_status === 'success') {
                 sumSuccess = sumSuccess + parseFloat(order.price)

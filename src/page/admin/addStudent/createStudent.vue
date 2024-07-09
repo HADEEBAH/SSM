@@ -149,7 +149,7 @@
                   :rules="rules.category"
                   outlined
                   color="pink"
-                  item-color="pink"
+                  item-color="#ff6b81"
                   @change="
                     selectCategory($event, course.course_type_id, course)
                   "
@@ -201,8 +201,8 @@
                   :rules="rules.course"
                   :placeholder="$t(`select course`)"
                   outlined
-                  color="pink"
-                  item-color="pink"
+                  color="#ff6b81"
+                  item-color="#ff6b81"
                   @change="selectCourse(course.course_id, course)"
                 >
                   <template v-slot:no-data>
@@ -253,7 +253,7 @@
                 <v-autocomplete
                   item-value="package_id"
                   item-text="package"
-                  item-color="pink"
+                  item-color="#ff6b81"
                   color="pink"
                   dense
                   :rules="rules.package"
@@ -365,7 +365,7 @@
                   :items="course.course_data.days"
                   :placeholder="$t('pick a day')"
                   outlined
-                  item-color="pink"
+                  item-color="#ff6b81"
                   color="pink"
                 >
                   <template v-slot:no-data>
@@ -438,7 +438,7 @@
                   v-model="course.coach"
                   :items="course.time.timeData"
                   :placeholder="$t('choose a coach')"
-                  item-color="pink"
+                  item-color="#ff6b81"
                   outlined
                   color="#FF6B81"
                 >
@@ -683,7 +683,7 @@
                             :placeholder="$t(`choose a payment method`)"
                             outlined
                             color="pink"
-                            item-color="pink"
+                            item-color="#ff6b81"
                           >
                             <template v-slot:no-data>
                               <v-list-item>
