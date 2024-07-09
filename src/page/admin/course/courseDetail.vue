@@ -3070,11 +3070,18 @@ export default {
 
               let payload = {
                 notificationName: "แจ้งเตือนเลื่อนวันเปิดเรียน",
+                notificationNameEn:
+                  "Notification of postponement of school opening date",
                 notificationDescription: `คอร์ส ${
                   this.course_data.course_name_th
                 } เลื่อนเป็นวันที่ ${new Date(
                   student_list.afterDate
                 )?.toLocaleDateString("th-TH", options)}`,
+                notificationDescriptionEn: `course ${
+                  this.course_data.course_name_en
+                } postponed to date ${new Date(
+                  student_list.afterDate
+                )?.toLocaleDateString("en-En", options)}`,
                 accountId: student_list.students,
                 path: null,
               };
