@@ -12,6 +12,7 @@
           :rules="RulesOrderNumber"
           dense
           outlined
+          color="#ff6b81"
           :placeholder="$t('enter order number')"
         >
         </v-text-field>
@@ -107,12 +108,14 @@
                 <v-radio
                   :label="$t('specify graduation date')"
                   value="end-class"
+                  color="#ff6b81"
                 ></v-radio>
               </v-col>
               <v-col cols="12" md="6">
                 <v-radio
                   :label="$t('specify the remaining number of times')"
                   value="last-time"
+                  color="#ff6b81"
                 ></v-radio>
               </v-col>
             </v-row>
@@ -165,6 +168,7 @@
                     </v-menu>
                     <v-text-field
                       v-if="type === 'last-time'"
+                      color="#ff6b81"
                       v-model="lastTime"
                       :rules="RulesLastTime"
                       dense

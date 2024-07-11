@@ -200,6 +200,7 @@
     "day and date" : "วันและวันที่",
     "daily" : "รายวัน",
     "date" : "วันที่",
+    "dashboard satisfaction":"ความพึงพอใจของ Dashboard",
     "date of request": "วันที่ส่งคำขอ",
     "data has been successfully deleted" : "( ลบข้อมูลเรียบร้อยแล้ว )",
     "data has been edited": "แก้ไขข้อมูลเรียบร้อย",
@@ -259,6 +260,8 @@
     "duplicate roles or the user does not yet have a role" : "บทบาทซ้ำกัน หรือ ผู้ใช้ยังไม่มีบทบาท",
     "december":"ธันวาคม",
     "details of take leave": "รายละเอียดการลา",
+    "dashboard display and system design":"การแสดงผลและการออกแบบระบบของ Dashboard",
+    "dashboard Satisfaction Recommendations":"คำแนะนำ ความพึงพอใจของ Dashboard",
 
     "edit": "แก้ไข",
     "edit wls": "แก้ไขอาณาจักร",
@@ -283,6 +286,7 @@
     "end time" : "เวลาสิ้นสุด",
     "excessive study hours" : "ชั่วโมงการเรียนเกินกว่าที่กำหนด",
     "export" : "นำออก",
+    "evaluate": "จากที่ได้เข้าร่วมบริการระบบ Smart School Managemet กรุณาประเมินความพึงพอใจ เพื่อให้ทางระบบที่ท่านเข้าใช้บริการนำความคิดเห็นของท่านไปปรับปรุงการให้บริการต่อไป",
     "evaluate satisfaction with using the system" : "ประเมินความพึงพอใจการใช้งานระบบ",
     "ease of use":"ความง่ายและดวกในการใช้งาน",
     "ReportProblem" : "รายงานปัญหาการใช้งาน",
@@ -625,6 +629,7 @@
     "parent and student usernames must be unique" : "ชื่อผู้ใช้ของผู้ปกครองและนักเรียนต้องไม่ซ้ำกัน",
     "print receipt" : "ออกใบเสร็จฉบับเต็ม",
     "postpone the course opening date": "เลื่อนวันเปิดคอร์ส",
+    
 
     "receipt language" : "ใบเสร็จภาษา",
     "reason for leave" : "เหตุผลการลา",
@@ -657,6 +662,7 @@
     "return to home page" : "กลับสู่หน้าหลัก",
     "recommendation": "( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ ขนาดไฟล์ไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG )",
     "role": "บทบาท",
+    "recommendations System satisfaction":"คำแนะนำ ความพึงพอใจของระบบ",
 
 
 
@@ -764,6 +770,7 @@
     "super admin": "ผู้ดูแลระบบสูงสุด",
     "service stability":"ความเสถียรภาพของบริการ",
     "school day":"วันเรียน",
+    "system satisfaction":"ความพึงพอใจของระบบ",
 
     
     "take annual leave" : "ลาพักร้อนประจำปี",

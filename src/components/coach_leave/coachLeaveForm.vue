@@ -361,6 +361,7 @@
                             class="time-picker-hidden"
                             hide-clear-button
                             input-class="input-size-lg"
+                            color="#ff6b81"
                             advanced-keyboard
                             @change="
                               ChengeTimeMin(
@@ -400,7 +401,11 @@
         <v-row dense>
           <v-col>
             {{ $t("details of take leave") }}
-            <v-textarea v-model="coach_leave_data.remark" outlined></v-textarea>
+            <v-textarea
+              v-model="coach_leave_data.remark"
+              color="#FF6b81"
+              outlined
+            ></v-textarea>
           </v-col>
         </v-row>
         <v-card flat class="mb-3">

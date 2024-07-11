@@ -76,7 +76,7 @@
                   :item-text="
                     $i18n.locale == 'th' ? 'fullNameTh' : 'fullNameEh'
                   "
-                  item-color="pink"
+                  item-color="#ff6b81"
                   @change="findTeachDays(coach, coach_index)"
                   :rules="course"
                   :placeholder="$t('coach')"
@@ -125,7 +125,7 @@
                   chips
                   :rules="class_date"
                   deletable-chips
-                  item-color="pink"
+                  item-color="#ff6b81"
                   multiple
                   color="#FF6B81"
                   :items="filteredDays(coach_index, teach_day_index, state)"

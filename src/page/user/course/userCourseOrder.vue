@@ -60,6 +60,7 @@
           </v-col>
         </v-row>
       </v-card>
+      <!-- <pre>{{ course_order }}</pre> -->
 
       <!-- SELECT CLASS DATE -->
       <template v-if="course_order.course_type_id == 'CT_1'">
@@ -127,7 +128,7 @@
               :items="course_order.time.timeData"
               :item-text="$i18n.locale == 'th' ? 'coach_name' : 'coach_name_en'"
               item-value="coach_id"
-              item-color="pink"
+              item-color="#ff6b81"
               outlined
               :placeholder="$t('choose a coach')"
             >
@@ -213,6 +214,7 @@
             v-model="course_order.students.find((v) => !v.is_other).nicknameTh"
             color="#ff6B81"
             outlined
+            @keydown="Validation($event, 'free-nonum')"
             dense
             :disabled="profile_detail?.nicknameTh"
             @input="
@@ -370,6 +372,7 @@
                     @keyup.enter="
                       parent.username > 3 ? checkUsername(parent.username) : ''
                     "
+                    color="#ff6b81"
                     dense
                     :rules="usernameRules"
                     @keydown="Validation($event, 'en-number')"
@@ -399,6 +402,7 @@
                     :hide-details="!parent.account_id"
                     dense
                     outlined
+                    color="#ff6b81"
                     :rules="usernameRules"
                     @keydown="Validation($event, 'en-number')"
                     v-model="parent.username"
@@ -516,6 +520,7 @@
                 <v-text-field
                   dense
                   outlined
+                  color="#ff6b81"
                   :rules="usernameRules"
                   @keydown="Validation($event, 'en-number')"
                   v-model="student.username"
@@ -588,13 +593,15 @@
 
               <v-row dense>
                 <v-col cols="12" sm="6">
-                  <labelCustom required :text="$t('nickname')"></labelCustom>
+                  <labelCustom required :text="$t('nickname2')"></labelCustom>
                   <v-text-field
                     dense
                     outlined
                     v-model="student.nicknameTh"
                     :placeholder="$t('nickname')"
                     :disabled="student?.nicknameData"
+                    color="#ff6B81"
+                    @keydown="Validation($event, 'free-nonum')"
                     @input="realtimeCheckNickname(student.nicknameTh)"
                   ></v-text-field>
                 </v-col>
@@ -785,6 +792,7 @@
                 :rules="usernameRules"
                 dense
                 outlined
+                color="#ff6b81"
                 v-model="parent.username"
                 @keydown="Validation($event, 'en-number')"
                 @change="

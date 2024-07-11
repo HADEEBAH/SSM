@@ -128,6 +128,7 @@
                   dense
                   filled
                   hide-details
+                  color="#ff6b81"
                   clearable
                   :label="$t('select your students here')"
                   @change="searchStudentCourse(search_course_detail)"
@@ -385,7 +386,6 @@
                       </v-col>
                     </v-row>
                     <v-row dense>
-                      <!-- <pre>{{ item }}</pre> -->
                       <v-col cols="12">
                         <v-chip color="#F9B320" dark>
                           {{
@@ -440,6 +440,7 @@
                   dense
                   filled
                   clearable
+                  color="#ff6b81"
                   hide-details
                   :label="$t('select your students here')"
                   @change="searchStudentCourse(search_course)"
@@ -543,6 +544,7 @@
                   item-value="studentId"
                   dense
                   filled
+                  color="#ff6b81"
                   hide-details
                   :label="$t('select your students here')"
                   @change="searchStudentBooked(search_booked)"

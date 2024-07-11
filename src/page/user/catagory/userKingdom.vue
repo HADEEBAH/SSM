@@ -74,6 +74,7 @@
                 hide-details
                 dense
                 outlined
+                color="#ff6b81"
                 :label="$t('find the learning wls that interests you here')"
                 prepend-inner-icon="mdi-magnify"
               />

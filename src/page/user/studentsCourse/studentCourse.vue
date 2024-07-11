@@ -21,9 +21,10 @@
                 :aspect-ratio="16 / 9"
                 class="rounded-lg"
                 :src="
-                  my_course_detail.courseImg
-                    ? my_course_detail.courseImg
-                    : require(`@/assets/course/default_course_img.svg`)
+                  my_course_detail.courseImg ===
+                  'https://waraphat.alldemics.com/api/v1/files/'
+                    ? require(`@/assets/course/default_course_img.svg`)
+                    : my_course_detail.courseImg
                 "
               >
                 <template v-slot:placeholder>

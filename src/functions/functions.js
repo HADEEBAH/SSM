@@ -59,6 +59,13 @@ export const inputValidation = (e, type) => {
                 e.preventDefault()
             }
             break;
+        case "free-nonum":
+            if ((/^[a-zA-Zก-๙\s]+$/).test(e.key) || e.keyCode === 8 || e.keyCode === 46 || e.keyCode === 9) {
+                // TODO
+            } else {
+                e.preventDefault()
+            }
+            break;
 
     }
 }
