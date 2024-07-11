@@ -386,7 +386,6 @@
                       </v-col>
                     </v-row>
                     <v-row dense>
-                      <!-- <pre>{{ item }}</pre> -->
                       <v-col cols="12">
                         <v-chip color="#F9B320" dark>
                           {{

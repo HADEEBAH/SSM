@@ -60,6 +60,7 @@
           </v-col>
         </v-row>
       </v-card>
+      <!-- <pre>{{ course_order }}</pre> -->
 
       <!-- SELECT CLASS DATE -->
       <template v-if="course_order.course_type_id == 'CT_1'">

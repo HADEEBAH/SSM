@@ -1070,6 +1070,7 @@ const orderModules = {
           }
           payload.courses.push({
             courseId: course.course_id,
+            courseTypeId: course.course_type_id,
             coursePackageOptionId: course.option.course_package_option_id ? course.option.course_package_option_id : null,
             dayName: course.day?.dayName
               ? course.day.dayName
@@ -1260,6 +1261,7 @@ const orderModules = {
             showConfirmButton: false,
           });
         }
+        // console.log('payload :>> ', payload);
         // let localhost = "http://localhost:3002"
 
         let { data } = await axios.post(
