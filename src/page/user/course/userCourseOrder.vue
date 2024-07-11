@@ -157,7 +157,8 @@
                         GenCoachNumberStudent(
                           item.coach_id,
                           item.dayOfWeekId,
-                          item.timeId
+                          item.timeId,
+                          course_order
                         )
                       }}</span
                     ></v-list-item-title
@@ -593,7 +594,7 @@
 
               <v-row dense>
                 <v-col cols="12" sm="6">
-                  <labelCustom required :text="$t('nickname2')"></labelCustom>
+                  <labelCustom required :text="$t('nickname')"></labelCustom>
                   <v-text-field
                     dense
                     outlined
@@ -702,6 +703,7 @@
             >
           </template>
         </v-col>
+        <!-- <pre>{{ course_order }}</pre> -->
         <v-col cols="12" sm="6">
           <v-btn
             v-if="
@@ -1431,7 +1433,11 @@ export default {
         }
       }
     },
-    GenCoachNumberStudent(coach_id, dayOfWeekId, timeId) {
+    GenCoachNumberStudent(coach_id, dayOfWeekId, timeId, item) {
+      let checkPackage = "";
+      for (const items of item?.package_data?.options) {
+        checkPackage = items.package_id;
+      }
       let current_student = 0;
       let maximum_student = 0;
       let course_monitors_filter = this.course_monitors.filter(
@@ -1439,7 +1445,8 @@ export default {
           v.m_coach_id == coach_id &&
           v.m_course_id == this.course_order.course_id &&
           v.m_day_of_week_id === dayOfWeekId &&
-          v.m_time_id == timeId
+          v.m_time_id == timeId &&
+          v.m_package_id == checkPackage
       );
       if (course_monitors_filter.length > 0) {
         for (const monitor of course_monitors_filter) {
@@ -1473,8 +1480,13 @@ export default {
                 (v) =>
                   v.m_course_id == this.course_order.course_id &&
                   v.m_day_of_week_id === dayOfWeekId &&
-                  v.m_time_id == timeId
+                  v.m_time_id == timeId &&
+                  v.m_package_id == this.course_order.option.package_id
               );
+              // console.log(
+              //   "course_monitors_filter :>> ",
+              //   course_monitors_filter
+              // );
               if (course_monitors_filter.length > 0) {
                 if (
                   this.course_order.students.length +
