@@ -1262,11 +1262,11 @@ const orderModules = {
           });
         }
         // console.log('payload :>> ', payload);
-        // let localhost = "http://localhost:3002"
+        let localhost = "http://localhost:3002"
 
         let { data } = await axios.post(
-          // `${localhost}/api/v1/order/regis/course`,
-          `${process.env.VUE_APP_URL}/api/v1/order/regis/course`,
+          `${localhost}/api/v1/order/regis/course`,
+          // `${process.env.VUE_APP_URL}/api/v1/order/regis/course`,
           payload,
           config
         );

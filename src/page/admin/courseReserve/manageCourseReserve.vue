@@ -156,7 +156,7 @@
         @update:sort-desc="updateSortDesc"
         :items-per-page.sync="itemsPerPage"
         :server-items-length="
-          search_bool ? reserve_list.totalRows : reserve_list.count
+          search_filter !== '' ? reserve_list.totalRows : reserve_list.count
         "
         :options.sync="options"
         ref="reserveLists"
