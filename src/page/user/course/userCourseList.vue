@@ -317,6 +317,7 @@ export default {
       });
     },
     selectedCourse(course) {
+      console.log("course.course_detail :>> ", course.course_detail);
       this.course_order.option = {};
       this.course_order.option_data = "";
       this.course_order.package = "";

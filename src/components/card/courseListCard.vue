@@ -55,50 +55,51 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 export default {
-    props: {
-        course: {
-            type: Object,
+  props: {
+    course: {
+      type: Object,
+    },
+  },
+  computed: {
+    ...mapGetters({
+      course_order: "OrderModules/getCourseOrder",
+    }),
+  },
+  methods: {
+    ...mapActions({
+      changeCourseOrderData: "OrderModules/changeCourseOrderData",
+    }),
+    GenPeriod(period) {
+      if (period) {
+        let str = period.toString();
+        let part_period = str.split(".");
+        if (part_period.length > 1) {
+          return period.toLocaleString("en-US", { minimumFractionDigits: 2 });
+        } else {
+          return period;
         }
+      }
     },
-    computed: {
-        ...mapGetters({
-            course_order: "OrderModules/getCourseOrder" 
-        })
+    selectedCourse(course) {
+      this.course_order.option = {};
+      this.course_order.option_data = "";
+      this.course_order.package = "";
+      this.course_order.package_data = {};
+      this.course_order.course_id = course.course_id;
+      this.course_order.course_name = `${course.course_name_th}(${course.course_name_en})`;
+      this.course_order.course_type = course.course_type_th;
+      this.course_order.course_type_id = course.course_type_id;
+      this.course_order.detail = course.course_detail;
+      this.course_order.period = course.period;
+      this.changeCourseOrderData(this.course_order);
+      console.log("object :>> ", course);
+      localStorage.setItem("Order", JSON.stringify(this.course_order));
+      this.$router.push({
+        name: "userCourseDetail_courseId",
+        params: { course_id: course.course_id },
+      });
     },
-    methods:{
-        ...mapActions({
-            changeCourseOrderData: "OrderModules/changeCourseOrderData",
-        }),
-        GenPeriod(period) {
-            if(period){
-                let str = period.toString();
-                let part_period = str.split(".");
-                if (part_period.length > 1) {
-                return period.toLocaleString("en-US", { minimumFractionDigits: 2 });
-                } else {
-                return period;
-                }
-            }
-        },
-        selectedCourse(course) {
-            this.course_order.option = {};
-            this.course_order.option_data = "";
-            this.course_order.package = "";
-            this.course_order.package_data = {};
-            this.course_order.course_id = course.course_id;
-            this.course_order.course_name = `${course.course_name_th}(${course.course_name_en})`;
-            this.course_order.course_type = course.course_type_th;
-            this.course_order.course_type_id = course.course_type_id;
-            this.course_order.detail = course.course_detail;
-            this.course_order.period = course.period;
-            this.changeCourseOrderData(this.course_order);
-            localStorage.setItem("Order", JSON.stringify(this.course_order));
-            this.$router.push({
-                name: "userCourseDetail_courseId",
-                params: { course_id: course.course_id },
-            });
-        },
-    }
+  },
 };
 </script>
 
