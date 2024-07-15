@@ -154,13 +154,17 @@
                           : item.coach_name_en
                       }}
                       {{
+                        `(${course_seat?.countSeatByCourse}/${course_seat?.maxStudentByCourse})`
+                      }}
+                      <!-- {{
                         GenCoachNumberStudent(
                           item.coach_id,
                           item.dayOfWeekId,
-                          item.timeId
+                          item.timeId,
+                          course_order
                         )
-                      }}</span
-                    ></v-list-item-title
+                      }} -->
+                    </span></v-list-item-title
                   >
                 </v-list-item-content>
                 <v-list-item-action>
@@ -593,7 +597,7 @@
 
               <v-row dense>
                 <v-col cols="12" sm="6">
-                  <labelCustom required :text="$t('nickname2')"></labelCustom>
+                  <labelCustom required :text="$t('nickname')"></labelCustom>
                   <v-text-field
                     dense
                     outlined
@@ -702,6 +706,8 @@
             >
           </template>
         </v-col>
+        <!-- <pre>{{ course_order }}</pre> -->
+
         <v-col cols="12" sm="6">
           <v-btn
             v-if="
@@ -1260,6 +1266,8 @@ export default {
       course_monitors: "CourseMonitorModules/getCourseMonitor",
       reserve_list: "OrderModules/getReserveList",
       get_user_oneId: "loginModules/getUserOneId",
+      course_seat: "CourseModules/getCourseSeats",
+      check_date: "CourseModules/getCheckDate",
 
       // getUserOneId
     }),
@@ -1295,6 +1303,29 @@ export default {
             course_id: this.course_order.course_id,
             cpo_id: this.course_order.option.course_package_option_id,
           });
+          // console.log("course_order :>> ", this.course_order);
+
+          if (this.course_order.time) {
+            let checkDayId = "";
+            let checkTimeId = "";
+            let checkCoachId = "";
+            for (const items of this.course_order.time.timeData) {
+              checkDayId = items.dayOfWeekId;
+              checkTimeId = items.timeId;
+              checkCoachId = items.coach_id;
+            }
+            this.GetCourseSeats({
+              courseId: this.course_order?.course_id,
+              coursePackageOptionsId:
+                this.course_order?.option?.course_package_option_id,
+              dayOfWeekId: checkDayId,
+              timeId: checkTimeId,
+              coachId: checkCoachId,
+              studentId: "",
+              courseTypeId: this.course_order?.course_type_id,
+            });
+          }
+
           if (this.course_order.course_id) {
             this.GetShortCourseMonitor({
               course_id: this.course_order.course_id,
@@ -1371,6 +1402,8 @@ export default {
       GetGeneralCourseMonitor: "CourseMonitorModules/GetGeneralCourseMonitor",
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
       GetReserceCourse: "OrderModules/GetReserceCourse",
+      GetCourseSeats: "CourseModules/GetCourseSeats",
+      GetCheckDate: "CourseModules/GetCheckDate",
     }),
     realtimeCheckNickname(items) {
       this.inputNickName = items;
@@ -1431,7 +1464,11 @@ export default {
         }
       }
     },
-    GenCoachNumberStudent(coach_id, dayOfWeekId, timeId) {
+    GenCoachNumberStudent(coach_id, dayOfWeekId, timeId, item) {
+      let checkPackage = "";
+      for (const items of item?.package_data?.options) {
+        checkPackage = items.package_id;
+      }
       let current_student = 0;
       let maximum_student = 0;
       let course_monitors_filter = this.course_monitors.filter(
@@ -1439,7 +1476,8 @@ export default {
           v.m_coach_id == coach_id &&
           v.m_course_id == this.course_order.course_id &&
           v.m_day_of_week_id === dayOfWeekId &&
-          v.m_time_id == timeId
+          v.m_time_id == timeId &&
+          v.m_package_id == checkPackage
       );
       if (course_monitors_filter.length > 0) {
         for (const monitor of course_monitors_filter) {
@@ -1473,13 +1511,38 @@ export default {
                 (v) =>
                   v.m_course_id == this.course_order.course_id &&
                   v.m_day_of_week_id === dayOfWeekId &&
-                  v.m_time_id == timeId
+                  v.m_time_id == timeId &&
+                  v.m_package_id == this.course_order.option.package_id
               );
+              // if (course_monitors_filter.length > 0) {
+              //   if (
+              //     this.course_order.students.length +
+              //       course_monitors_filter[0].m_current_student <=
+              //     course_monitors_filter[0].m_maximum_student
+              //   ) {
+              //     if (
+              //       this.course_order.option.package_id ===
+              //       course_monitors_filter[0].m_package_id
+              //     ) {
+              //       return course_monitors_filter[0]?.m_status;
+              //     } else {
+              //       return "Close";
+              //     }
+              //   } else {
+              //     return "Close";
+              //   }
+              // } else {
+              //   return "Open";
+              // }
+              // console.log(
+              //   this.course_order.students.length +
+              //     this.course_seat?.countSeatByCourse
+              // );
               if (course_monitors_filter.length > 0) {
                 if (
                   this.course_order.students.length +
-                    course_monitors_filter[0].m_current_student <=
-                  course_monitors_filter[0].m_maximum_student
+                    this.course_seat?.countSeatByCourse <=
+                  this.course_seat?.maxStudentByCourse
                 ) {
                   if (
                     this.course_order.option.package_id ===
@@ -1503,8 +1566,27 @@ export default {
       }
     },
     coachSelected(coach_id) {
-      this.coachSelect = true;
+      this.coachSelect = false;
       this.course_order.coach_id = coach_id;
+
+      let checkDayId = "";
+      let checkTimeId = "";
+      let checkCoachId = "";
+      for (const items of this.course_order?.time?.timeData) {
+        checkDayId = items.dayOfWeekId;
+        checkTimeId = items.timeId;
+        checkCoachId = items.coach_id;
+      }
+      this.GetCourseSeats({
+        courseId: this.course_order?.course_id,
+        coursePackageOptionsId:
+          this.course_order?.option?.course_package_option_id,
+        dayOfWeekId: checkDayId,
+        timeId: checkTimeId,
+        coachId: checkCoachId,
+        studentId: "",
+        courseTypeId: this.course_order?.course_type_id,
+      });
     },
     resetTime() {
       this.course_order.time = null;
@@ -1826,7 +1908,7 @@ export default {
     closeDialogParent() {
       this.dialog_parent = false;
     },
-    checkOut() {
+    async checkOut() {
       let checkNickname = "";
       let checkClass = "";
       let roles = "";
@@ -1883,6 +1965,21 @@ export default {
                     )[0].coach_name;
                 } else {
                   //  CT_2
+
+                  await this.GetCheckDate({
+                    courseId: this.course_data?.course_id,
+                    coursePackageOptionsId: "",
+                    dayOfWeekId:
+                      this.course_data?.days[0]?.times[0]?.timeData[0]
+                        ?.dayOfWeekId,
+                    timeId:
+                      this.course_data?.days[0]?.times[0]?.timeData[0]?.timeId,
+                    coachId:
+                      this.course_data?.days[0]?.times[0]?.timeData[0]
+                        ?.coach_id,
+                    courseTypeId: this.course_data?.course_type_id,
+                    studentId: "",
+                  });
                   if (
                     new Date(this.course_data.course_study_start_date) >
                     new Date()
@@ -1900,6 +1997,7 @@ export default {
                   this.course_order.coach_id =
                     this.course_data.coachs[0].coach_id;
                 }
+
                 if (this.order.courses.length === 0) {
                   if (
                     this.order.courses.filter(
@@ -1926,7 +2024,21 @@ export default {
                     });
                   }
                 } else {
-                  this.saveOrder({ regis_type: "" });
+                  if (this.check_date?.during == "1") {
+                    // สามารถซื้อได้
+                    await this.saveOrder({ regis_type: "" });
+                  } else {
+                    await Swal.fire({
+                      icon: "error",
+                      title: this.$t("unable to register"),
+                      text: this.$t("the application period has ended"),
+                      timer: 3000,
+                      timerProgressBar: true,
+                      showCancelButton: false,
+                      showConfirmButton: false,
+                    });
+                  }
+                  // this.saveOrder({ regis_type: "" });
                 }
               }
             });

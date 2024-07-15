@@ -47,19 +47,22 @@
             {{ $t("baht") }}/{{ $t("person") }}</v-col
           >
         </v-row>
+        <!-- <pre>{{ course_seat }}</pre> -->
         <rowData
           v-if="course_data.course_type_id === 'CT_2'"
           col_detail="5"
           mini
           icon="mdi-account-group-outline"
         >
-          {{
+          <!-- {{
             course_monitors?.length == 1
               ? course_monitors[0].m_current_student
               : 0
           }}
-          / {{ course_data.student_recived }} {{ $t("seat") }}</rowData
-        >
+          / {{ course_data.student_recived }} {{ $t("seat") }} -->
+          {{ course_seat.countSeatByCourse }}
+          / {{ course_seat.maxStudentByCourse }} {{ $t("seat") }}
+        </rowData>
         <rowData
           v-if="course_data.course_type_id === 'CT_1'"
           col_detail="5"
@@ -289,17 +292,29 @@ export default {
       locale: "th-TH",
     },
   }),
-  created() {
+  async created() {
     this.order_data = JSON.parse(localStorage.getItem("Order"));
     this.changeCourseOrderData(this.order_data);
     if (this.order_data.course_type_id === "CT_2") {
-      this.GetCourseStudent({
+      await this.GetCourseStudent({
         course_id: this.order_data.course_id,
         cpo_id: null,
       });
-      this.GetShortCourseMonitor({ course_id: this.order_data.course_id });
+      await this.GetCourse(this.$route.params.course_id);
+      await this.GetShortCourseMonitor({
+        course_id: this.order_data.course_id,
+      });
     }
-    this.GetCourse(this.$route.params.course_id);
+    await this.GetCourseSeats({
+      courseId: this.course_data?.course_id,
+      coursePackageOptionsId: "",
+      dayOfWeekId:
+        this.course_data?.days[0]?.times[0]?.timeData[0]?.dayOfWeekId,
+      timeId: this.course_data?.days[0]?.times[0]?.timeData[0]?.timeId,
+      coachId: this.course_data?.days[0]?.times[0]?.timeData[0]?.coach_id,
+      studentId: "",
+      courseTypeId: this.course_data?.course_type_id,
+    });
   },
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "course");
@@ -311,6 +326,7 @@ export default {
       order: "OrderModules/getOrder",
       course_is_loading: "CourseModules/getCourseIsLoading",
       course_monitors: "CourseMonitorModules/getCourseMonitor",
+      course_seat: "CourseModules/getCourseSeats",
     }),
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
@@ -326,6 +342,7 @@ export default {
       CreateReserveCourse: "OrderModules/CreateReserveCourse",
       GetGeneralCourseMonitor: "CourseMonitorModules/GetGeneralCourseMonitor",
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
+      GetCourseSeats: "CourseModules/GetCourseSeats",
     }),
     getTime(time) {
       return moment(time).format("HH:mm");
