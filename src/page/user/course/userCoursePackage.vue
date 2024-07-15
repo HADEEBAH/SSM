@@ -7,7 +7,9 @@
           <v-col cols="12" sm="3" class="d-flex align-center">
             <v-img
               class="rounded-lg my-3 mx-3"
-              :class="$vuetify.breakpoint.smAndUp ? 'width-img' : 'width-img-sm'"
+              :class="
+                $vuetify.breakpoint.smAndUp ? 'width-img' : 'width-img-sm'
+              "
               :src="
                 course_data.course_img || course_data.course_img !== ''
                   ? course_data.course_img

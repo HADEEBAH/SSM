@@ -190,7 +190,9 @@ const CourseModules = {
     filter_course_option: {
       limit: 6,
       page: 1
-    }
+    },
+    course_seat: [],
+    checkDay: []
 
   },
   mutations: {
@@ -368,8 +370,43 @@ const CourseModules = {
     SetFilterCourseOption(state, payload) {
       state.filter_course_option = payload
     },
+    SetCourseSeat(state, payload) {
+      state.course_seat = payload
+    },
+    SetCheckDay(state, payload) {
+      state.checkDay = payload
+    }
   },
   actions: {
+    // CHECK COURSE SEAT
+    async GetCourseSeats(context, { courseId, coachId, courseTypeId, dayOfWeekId, timeId, coursePackageOptionsId, studentId }) {
+      console.log('courseTypeId :>> ', courseTypeId);
+      try {
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/monitor/course/seats?courseId=${courseId}&courseTypeId=${courseTypeId}&coursePackageOptionsId=${coursePackageOptionsId}&dayOfWeekId=${dayOfWeekId}&timeId=${timeId}&coachId=${coachId}&studentId=${studentId}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/monitor/course/seats?courseId=${courseId}&courseTypeId=${courseTypeId}&coursePackageOptionsId=${coursePackageOptionsId}&dayOfWeekId=${dayOfWeekId}&timeId=${timeId}&coachId=${coachId}&studentId=${studentId}`)
+        if (data.statusCode === 200) {
+          context.commit("SetCourseSeat", data.data)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    async GetCheckDate(context, { courseId, coachId, courseTypeId, dayOfWeekId, timeId, coursePackageOptionsId, studentId }) {
+      try {
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/monitor/out/regiscoursedate?courseId=${courseId}&courseTypeId=${courseTypeId}&coursePackageOptionsId=${coursePackageOptionsId}&dayOfWeekId=${dayOfWeekId}&timeId=${timeId}&coachId=${coachId}&studentId=${studentId}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/monitor/out/regiscoursedate?courseId=${courseId}&courseTypeId=${courseTypeId}&coursePackageOptionsId=${coursePackageOptionsId}&dayOfWeekId=${dayOfWeekId}&timeId=${timeId}&coachId=${coachId}&studentId=${studentId}`)
+        if (data.statusCode === 200) {
+          context.commit("SetCheckDay", data.data)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+
     // DELETE : COURSE COACH
     async DeleteCourseCoach(context, { course_id, course_coach_id }) {
       try {
@@ -2093,6 +2130,12 @@ const CourseModules = {
     },
   },
   getters: {
+    getCourseSeats(state) {
+      return state.course_seat
+    },
+    getCheckDate(state) {
+      return state.checkDay
+    },
     export_is_loading(state) {
       return state.export_is_loading
     },
