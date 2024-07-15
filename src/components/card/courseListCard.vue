@@ -92,7 +92,7 @@ export default {
       this.course_order.detail = course.course_detail;
       this.course_order.period = course.period;
       this.changeCourseOrderData(this.course_order);
-      console.log("object :>> ", course);
+      // console.log("object :>> ", course);
       localStorage.setItem("Order", JSON.stringify(this.course_order));
       this.$router.push({
         name: "userCourseDetail_courseId",

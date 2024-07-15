@@ -382,9 +382,9 @@ const CourseModules = {
     async GetCourseSeats(context, { courseId, coachId, courseTypeId, dayOfWeekId, timeId, coursePackageOptionsId, studentId }) {
       console.log('courseTypeId :>> ', courseTypeId);
       try {
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/monitor/course/seats?courseId=${courseId}&courseTypeId=${courseTypeId}&coursePackageOptionsId=${coursePackageOptionsId}&dayOfWeekId=${dayOfWeekId}&timeId=${timeId}&coachId=${coachId}&studentId=${studentId}`)
+        // let localhost = "http://localhost:3000"
         // let { data } = await axios.get(`${localhost}/api/v1/monitor/course/seats?courseId=${courseId}&courseTypeId=${courseTypeId}&coursePackageOptionsId=${coursePackageOptionsId}&dayOfWeekId=${dayOfWeekId}&timeId=${timeId}&coachId=${coachId}&studentId=${studentId}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/monitor/course/seats?courseId=${courseId}&courseTypeId=${courseTypeId}&coursePackageOptionsId=${coursePackageOptionsId}&dayOfWeekId=${dayOfWeekId}&timeId=${timeId}&coachId=${coachId}&studentId=${studentId}`)
         if (data.statusCode === 200) {
           context.commit("SetCourseSeat", data.data)
         }
@@ -395,9 +395,9 @@ const CourseModules = {
 
     async GetCheckDate(context, { courseId, coachId, courseTypeId, dayOfWeekId, timeId, coursePackageOptionsId, studentId }) {
       try {
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/monitor/out/regiscoursedate?courseId=${courseId}&courseTypeId=${courseTypeId}&coursePackageOptionsId=${coursePackageOptionsId}&dayOfWeekId=${dayOfWeekId}&timeId=${timeId}&coachId=${coachId}&studentId=${studentId}`)
+        // let localhost = "http://localhost:3000"
         // let { data } = await axios.get(`${localhost}/api/v1/monitor/out/regiscoursedate?courseId=${courseId}&courseTypeId=${courseTypeId}&coursePackageOptionsId=${coursePackageOptionsId}&dayOfWeekId=${dayOfWeekId}&timeId=${timeId}&coachId=${coachId}&studentId=${studentId}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/monitor/out/regiscoursedate?courseId=${courseId}&courseTypeId=${courseTypeId}&coursePackageOptionsId=${coursePackageOptionsId}&dayOfWeekId=${dayOfWeekId}&timeId=${timeId}&coachId=${coachId}&studentId=${studentId}`)
         if (data.statusCode === 200) {
           context.commit("SetCheckDay", data.data)
         }

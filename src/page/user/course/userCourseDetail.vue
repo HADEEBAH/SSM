@@ -47,6 +47,7 @@
             {{ $t("baht") }}/{{ $t("person") }}</v-col
           >
         </v-row>
+        <!-- <pre>{{ course_seat }}</pre> -->
         <rowData
           v-if="course_data.course_type_id === 'CT_2'"
           col_detail="5"

@@ -1262,11 +1262,11 @@ const orderModules = {
           });
         }
         // console.log('payload :>> ', payload);
-        let localhost = "http://localhost:3002"
+        // let localhost = "http://localhost:3002"
 
         let { data } = await axios.post(
-          `${localhost}/api/v1/order/regis/course`,
-          // `${process.env.VUE_APP_URL}/api/v1/order/regis/course`,
+          // `${localhost}/api/v1/order/regis/course`,
+          `${process.env.VUE_APP_URL}/api/v1/order/regis/course`,
           payload,
           config
         );
@@ -1279,8 +1279,12 @@ const orderModules = {
             vatRate: 0,
             orderDesc: "",
           };
+          // const localhost = 'http://localhost:3000'
 
           let user_data = JSON.parse(localStorage.getItem("userDetail"));
+          // const userLogin = await axios.get(
+          //   `${localhost}/api/v1/account/${user_data.account_id}`
+          // );
           const userLogin = await axios.get(
             `${process.env.VUE_APP_URL}/api/v1/account/${user_data.account_id}`
           );
@@ -1307,6 +1311,12 @@ const orderModules = {
             localStorage.setItem("userDetail", JSON.stringify(payload));
           }
           if (order.type !== "addStudent") {
+            // const localhost = 'http://localhost:3003'
+            // let payment = await axios.post(
+            //   `${localhost}/api/v1/payment/code`,
+            //   payment_payload
+            // );
+
             let payment = await axios.post(
               `${process.env.VUE_APP_URL}/api/v1/payment/code`,
               payment_payload
@@ -1337,6 +1347,7 @@ const orderModules = {
                 total: data.data.totalPrice,
                 recipient: user_data.account_id,
               };
+              // let endpoint = 'http://localhost:3003'
               let endpoint = process.env.VUE_APP_URL;
               let payment = await axios.patch(
                 `${endpoint}/api/v1/payment/data/${data.data.orderNumber}`,
@@ -1594,6 +1605,8 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
+        // const localhost = 'http://localhost:3002'
+        // let updateStartDate = await axios.patch(`${localhost}/api/v1/order/update-orderid/${order_data.orderId}`, {}, config)
         let updateStartDate = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/update-orderid/${order_data.orderId}`, {}, config)
         if (updateStartDate.data.statusCode == 200) {
           let payment_payload = {
@@ -1701,6 +1714,8 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
+        // const localhost = 'http://localhost:3002'
+        // let updateStartDate = await axios.patch(`${localhost}/api/v1/order/update-orderid/${paymnet_data.orderId}`, {}, config)
         let updateStartDate = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/update-orderid/${paymnet_data.orderId}`, {}, config)
         if (updateStartDate.data.statusCode == 200) {
           let payment_payload = {
@@ -1711,6 +1726,11 @@ const orderModules = {
             vatRate: 0,
             orderDesc: "",
           };
+          // const localhost = 'http://localhost:3003'
+          // let { data } = await axios.post(
+          //   `${localhost}/api/v1/payment/code`,
+          //   payment_payload
+          // );
           let { data } = await axios.post(
             `${process.env.VUE_APP_URL}/api/v1/payment/code`,
             payment_payload
@@ -1941,7 +1961,6 @@ const orderModules = {
           },
         };
         // let localhost = "http://localhost:3002"
-
         // const { data } = await axios.delete(`${localhost}/api/v1/order/cancel-order/${order_number}`, config)
         const { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/order/cancel-order/${order_number}`, config)
         if (data.statusCode === 200) {
@@ -2305,6 +2324,11 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
+        // const localhost = 'http://localhost:3002'
+        // let { data } = await axios.get(
+        //   `${localhost}/api/v1/order/history/limit?limit=${limit}&page=${page}`,
+        //   config
+        // )
         let { data } = await axios.get(
           `${process.env.VUE_APP_URL}/api/v1/order/history/limit?limit=${limit}&page=${page}`,
           config
@@ -2354,8 +2378,8 @@ const orderModules = {
     },
     async GetOrderDetailByOrderNumber(context, { orderNumber }) {
       try {
-        // const { data } = await axios.get(`http://localhost:3000/api/v1/schedule/order?orderNumber=${orderNumber}`)
-        const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/order?orderNumber=${orderNumber}`)
+        const { data } = await axios.get(`http://localhost:3000/api/v1/schedule/order?orderNumber=${orderNumber}`)
+        // const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/order?orderNumber=${orderNumber}`)
         if (data.statusCode === 200) {
           context.commit("SetOrderNumberDetail", data.data)
         }

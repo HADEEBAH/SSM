@@ -1003,7 +1003,12 @@
                           <v-col cols="12" md="12" sm="12" class="text-lg">
                             <div v-html="course_data.detail"></div>
                           </v-col>
-                          <v-col cols="12" md="12" sm="12">
+                          <v-col
+                            cols="12"
+                            md="12"
+                            sm="12"
+                            v-if="course_data.course_type_id === 'CT_1'"
+                          >
                             <div class="mt-8">
                               <label-custom text="Performance"></label-custom>
                             </div>
