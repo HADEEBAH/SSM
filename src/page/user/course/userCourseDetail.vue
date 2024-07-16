@@ -189,12 +189,15 @@
             cols="12"
             class="flex justify-center"
           >
-            <v-btn
-              v-if="
+            <!-- v-if="
                 course_monitors?.length == 1
                   ? course_monitors[0].m_current_student <
                     course_data.student_recived
                   : 0 < course_data.student_recived
+              " -->
+            <v-btn
+              v-if="
+                course_seat?.countSeatByCourse < course_seat?.maxStudentByCourse
               "
               depressed
               :disabled="validateRegisterCourse() ? true : false"
