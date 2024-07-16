@@ -189,12 +189,15 @@
             cols="12"
             class="flex justify-center"
           >
-            <v-btn
-              v-if="
+            <!-- v-if="
                 course_monitors?.length == 1
                   ? course_monitors[0].m_current_student <
                     course_data.student_recived
                   : 0 < course_data.student_recived
+              " -->
+            <v-btn
+              v-if="
+                course_seat?.countSeatByCourse < course_seat?.maxStudentByCourse
               "
               depressed
               :disabled="validateRegisterCourse() ? true : false"
@@ -295,26 +298,28 @@ export default {
   async created() {
     this.order_data = JSON.parse(localStorage.getItem("Order"));
     this.changeCourseOrderData(this.order_data);
+    await this.GetCourse(this.$route.params.course_id);
+
     if (this.order_data.course_type_id === "CT_2") {
       await this.GetCourseStudent({
         course_id: this.order_data.course_id,
         cpo_id: null,
       });
-      await this.GetCourse(this.$route.params.course_id);
+      // await this.GetCourse(this.$route.params.course_id);
       await this.GetShortCourseMonitor({
         course_id: this.order_data.course_id,
       });
+      await this.GetCourseSeats({
+        courseId: this.course_data?.course_id,
+        coursePackageOptionsId: "",
+        dayOfWeekId:
+          this.course_data?.days[0]?.times[0]?.timeData[0]?.dayOfWeekId,
+        timeId: this.course_data?.days[0]?.times[0]?.timeData[0]?.timeId,
+        coachId: this.course_data?.days[0]?.times[0]?.timeData[0]?.coach_id,
+        studentId: "",
+        courseTypeId: this.course_data?.course_type_id,
+      });
     }
-    await this.GetCourseSeats({
-      courseId: this.course_data?.course_id,
-      coursePackageOptionsId: "",
-      dayOfWeekId:
-        this.course_data?.days[0]?.times[0]?.timeData[0]?.dayOfWeekId,
-      timeId: this.course_data?.days[0]?.times[0]?.timeData[0]?.timeId,
-      coachId: this.course_data?.days[0]?.times[0]?.timeData[0]?.coach_id,
-      studentId: "",
-      courseTypeId: this.course_data?.course_type_id,
-    });
   },
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "course");
