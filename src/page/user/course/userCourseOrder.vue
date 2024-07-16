@@ -1701,16 +1701,27 @@ export default {
     checkMaximumStudent() {
       let max = false;
       if (this.course_order.course_type_id === "CT_1") {
-        if (this.course_order.package_data.students) {
+        if (this.course_seat?.maxStudentByCourse) {
           max =
-            this.course_order.package_data.students <=
-            this.course_order.students.length;
+            this.course_seat?.maxStudentByCourse <=
+            this.course_order.students.length +
+              this.course_seat?.countSeatByCourse;
         }
+        // if (this.course_order.package_data.students) {
+        //   max =
+        //     this.course_order.package_data.students <=
+        //     this.course_order.students.length;
+        // }
       } else if (this.course_order.course_type_id === "CT_2") {
-        let check = this.course_monitors[0]?.m_current_student;
-        let count = (check += this.course_order.students.length);
-        max = this.course_data.student_recived <= count;
+        // let check = this.course_monitors[0]?.m_current_student;
+        // let count = (check += this.course_order.students.length);
+        // max = this.course_data.student_recived <= count;
         // this.course_data.student_recived <= this.course_order.students.length;
+
+        max =
+          this.course_seat?.maxStudentByCourse <=
+          this.course_order.students.length +
+            this.course_seat?.countSeatByCourse;
       }
       return max;
     },

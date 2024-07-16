@@ -983,7 +983,8 @@ const orderModules = {
               if (order.type !== "addStudent") {
                 if (!studentUpdate.some(v => v.studentId === student.account_id)) {
                   // console.log('itemRole :>> ', itemRole);
-                  if (!itemRole || itemRole === 'R_5') {
+                  // !itemRole ||
+                  if (itemRole === 'R_5') {
                     if (student.nicknameTh && student.class) {
                       studentUpdate.push({
                         "studentId": student.account_id,

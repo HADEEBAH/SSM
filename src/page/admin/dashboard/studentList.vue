@@ -486,11 +486,7 @@
               </v-text-field>
             </v-col>
             <!-- แพ็กเกจ -->
-            <v-col
-              cols="12"
-              sm="6"
-              v-if="item.courseTypeNameTh === 'คอร์สเรียนทั่วไป'"
-            >
+            <v-col cols="12" sm="6" v-if="item.optionName">
               <v-text-field
                 hide-details
                 outlined
