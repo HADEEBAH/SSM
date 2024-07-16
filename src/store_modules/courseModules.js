@@ -947,7 +947,7 @@ const CourseModules = {
       } catch (error) {
         Swal.fire({
           icon: "error",
-          title: VueI18n.t("something went wrong"),
+          title: VueI18n.t("failed to Delete, because data in monitor or order"),
           timer: 3000,
           showDenyButton: false,
           showCancelButton: false,
