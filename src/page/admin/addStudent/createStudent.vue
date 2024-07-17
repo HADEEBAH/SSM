@@ -683,7 +683,7 @@
                             :placeholder="$t(`choose a payment method`)"
                             outlined
                             color="pink"
-                            item-color="#ff6b81"
+                            item-color="pink"
                           >
                             <template v-slot:no-data>
                               <v-list-item>

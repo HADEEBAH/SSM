@@ -136,7 +136,7 @@
           <thead fixed-header>
             <tr class="text-center">
               <th class="text-center" colspan="8">
-                {{ $t("system satisfaction55") }}
+                {{ $t("system satisfaction") }}
               </th>
 
               <th colspan="4" class="text-center">
