@@ -197,9 +197,10 @@ const adminCheckInModules = {
                 // const { data } = await axios.get(`${localhost}/api/v1/adminfeature/schedule?courseId=${course}&coachId=${coach}&dowId=${dayOfWeek}&timeId=${time}&timeStart=${timeStart}&timeEnd=${timeEnd}`, config)
                 const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminfeature/schedule?courseId=${course}&coachId=${coach}&dowId=${dayOfWeek}&timeId=${time}&timeStart=${timeStart}&timeEnd=${timeEnd}`, config)
                 if (data.statusCode == 200) {
-                    context.commit("SetScheduleCheckinIsLoadIng", false)
-                    for await (let checkIn of data.data) {
+                    for await (let [index, checkIn] of data.data.entries()) {
+
                         if (checkIn.checkInStudent) {
+                            context.dispatch("CheckInCoach", { checkInData: checkIn, index: index })
                             checkIn.checkInStudent = checkIn.checkInStudent.map(s => {
                                 if (s?.compensationDate) {
                                     let compensationDate = moment(s.compensationDate).format("YYYY-MM-DD")
@@ -217,7 +218,8 @@ const adminCheckInModules = {
                             })
                         }
                     }
-                    context.commit("SetScheduleCheckin", data.data)
+                    await context.commit("SetScheduleCheckin", data.data)
+                    context.commit("SetScheduleCheckinIsLoadIng", false)
                 }
             } catch (error) {
                 context.commit("SetScheduleCheckinIsLoadIng", false)

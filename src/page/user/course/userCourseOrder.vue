@@ -122,13 +122,13 @@
             <v-autocomplete
               dense
               v-model="course_order.coach_id"
-              color="#FF6B81"
+              color="pink"
               @change="coachSelected($event)"
               :rules="coachRules"
               :items="course_order.time.timeData"
               :item-text="$i18n.locale == 'th' ? 'coach_name' : 'coach_name_en'"
               item-value="coach_id"
-              item-color="#ff6b81"
+              item-color="pink"
               outlined
               :placeholder="$t('choose a coach')"
             >
@@ -154,7 +154,15 @@
                           : item.coach_name_en
                       }}
                       {{
-                        `(${course_seat?.countSeatByCourse}/${course_seat?.maxStudentByCourse})`
+                        `(${
+                          course_seat?.countSeatByCourse
+                            ? course_seat?.countSeatByCourse
+                            : 0
+                        }/${
+                          course_seat?.maxStudentByCourse
+                            ? course_seat.maxStudentByCourse
+                            : 0
+                        })`
                       }}
                       <!-- {{
                         GenCoachNumberStudent(

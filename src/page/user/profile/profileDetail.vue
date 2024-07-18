@@ -42,7 +42,7 @@
         </v-col>
         <!--TH NAME -->
         <v-col cols="12" sm="6">
-          <label-custom :text="$t('first name(thai)2')"></label-custom>
+          <label-custom :text="$t('first name(thai)')"></label-custom>
           <v-text-field
             placeholder="-"
             v-model="profile_detail.firstNameTh"
@@ -81,6 +81,7 @@
             placeholder="-"
             v-model="profile_detail.nicknameTh"
             outlined
+            color="#ff6b81"
             dense
             :rules="rules.nickName"
             @keydown="validate($event, 'free-nonum')"
@@ -111,6 +112,7 @@
             required
             placeholder="-"
             v-model="profile_detail.mobileNo"
+            color="#ff6b81"
             outlined
             dense
             disabled
@@ -126,6 +128,7 @@
             outlined
             dense
             disabled
+            color="#ff6b81"
           >
           </v-text-field>
         </v-col>
@@ -137,6 +140,7 @@
             v-model="profile_detail.school.schoolNameTh"
             outlined
             dense
+            color="#ff6b81"
             :disabled="!isEnabled"
           >
           </v-text-field>
@@ -174,6 +178,7 @@
             v-model="profile_detail.congenitalDisease"
             outlined
             dense
+            color="#ff6b81"
             :disabled="!isEnabled"
           >
           </v-text-field>

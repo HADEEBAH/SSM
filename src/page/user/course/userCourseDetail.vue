@@ -60,8 +60,14 @@
               : 0
           }}
           / {{ course_data.student_recived }} {{ $t("seat") }} -->
-          {{ course_seat.countSeatByCourse }}
-          / {{ course_seat.maxStudentByCourse }} {{ $t("seat") }}
+          {{
+            course_seat.countSeatByCourse ? course_seat.countSeatByCourse : 0
+          }}
+          /
+          {{
+            course_seat.maxStudentByCourse ? course_seat.maxStudentByCourse : 0
+          }}
+          {{ $t("seat") }}
         </rowData>
         <rowData
           v-if="course_data.course_type_id === 'CT_1'"

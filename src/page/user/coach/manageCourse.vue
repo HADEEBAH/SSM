@@ -238,8 +238,8 @@
             :item-text="
               $i18n.locale == 'th' ? 'course_name_th' : 'course_name_en'
             "
-            color="#ff6b81"
-            item-color="#ff6b81"
+            color="pink"
+            item-color="pink"
             item-value="course_id"
             outlined
             dense
@@ -1130,8 +1130,8 @@
             :item-text="
               $i18n.locale == 'th' ? 'course_name_th' : 'course_name_en'
             "
-            color="#ff6b81"
-            item-color="#ff6b81"
+            color="pink"
+            item-color="pink"
             item-value="course_id"
             outlined
             dense
@@ -1189,7 +1189,13 @@
         }"
       >
         <template v-slot:[`item.nickname`]="{ item }">
-          {{ $i18n.locale == "th" ? item.nicknameTh : item.nicknameEn }}
+          {{
+            $i18n.locale == "th"
+              ? item.nicknameTh
+              : item.nicknameEn
+              ? item.nicknameEn
+              : item.nicknameTh
+          }}
         </template>
         <template v-slot:[`item.firstName`]="{ item }">
           {{ $i18n.locale == "th" ? item.firstNameTh : item.firstNameEn }}
@@ -1211,7 +1217,7 @@
       v-if="show_dialog_coach_leave_form"
     >
       <v-card class="pa-1">
-        <v-row dense>
+        <v-row dense class="sticky-header">
           <v-col class="pa-0" align="right">
             <v-btn @click="closeDialogLeaveForm" icon color="#ff6b81"
               ><v-icon>mdi-close</v-icon></v-btn
@@ -1229,16 +1235,29 @@
       v-if="show_leave_detail"
     >
       <v-card class="pa-1 mb-3">
-        <v-row dense>
+        <v-card-title class="sticky-header">
+          <v-row dense>
+            <v-col align="center">
+              {{ $t("leave request form") }}
+            </v-col>
+            <v-col cols="auto" align="end">
+              <v-btn icon color="#ff6b81" @click="closeDialogLeaveDetail()"
+                ><v-icon>mdi-close</v-icon></v-btn
+              >
+            </v-col>
+          </v-row>
+        </v-card-title>
+
+        <!-- <v-row dense>
           <v-col align="right">
             <v-btn icon color="#ff6b81" @click="closeDialogLeaveDetail()"
               ><v-icon>mdi-close</v-icon></v-btn
             >
           </v-col>
         </v-row>
-        <v-card-title class="d-flex justify-center">
+        <v-card-title class="d-flex justify-center sticky-header">
           {{ $t("leave request form") }}
-        </v-card-title>
+        </v-card-title> -->
         <v-card-text>
           <v-row dense class="mb-3">
             <v-col align="right"> {{ $t("status") }} : </v-col>
@@ -2359,3 +2378,14 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.sticky-header {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 1;
+  margin-bottom: 15px;
+  /* box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4); */
+}
+</style>
