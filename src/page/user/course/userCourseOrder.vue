@@ -154,7 +154,15 @@
                           : item.coach_name_en
                       }}
                       {{
-                        `(${course_seat?.countSeatByCourse}/${course_seat?.maxStudentByCourse})`
+                        `(${
+                          course_seat?.countSeatByCourse
+                            ? course_seat?.countSeatByCourse
+                            : 0
+                        }/${
+                          course_seat?.maxStudentByCourse
+                            ? course_seat.maxStudentByCourse
+                            : 0
+                        })`
                       }}
                       <!-- {{
                         GenCoachNumberStudent(
