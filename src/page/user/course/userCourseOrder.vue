@@ -122,13 +122,13 @@
             <v-autocomplete
               dense
               v-model="course_order.coach_id"
-              color="#FF6B81"
+              color="pink"
               @change="coachSelected($event)"
               :rules="coachRules"
               :items="course_order.time.timeData"
               :item-text="$i18n.locale == 'th' ? 'coach_name' : 'coach_name_en'"
               item-value="coach_id"
-              item-color="#ff6b81"
+              item-color="pink"
               outlined
               :placeholder="$t('choose a coach')"
             >
