@@ -700,6 +700,7 @@
     "sick" : "ป่วย",
     "sick leave" : "ลาป่วย",
     "something went wrong" : "เกิดข้อผิดพลาด",
+    "failed to Delete, because data in monitor or order":"ไม่สามารถลบคอร์สได้เนื่องจากมีนักเรียนในคอร์ส",
     "sorry, we couldn't find the page you were looking for" : "ขออภัยเราไม่พบหน้าเว็บที่คุณกำลังมองหา",
     "specify graduation date" : "ระบุวันที่เรียนจบ",
     "specify the remaining number of times" : "ระบุจำนวนครั้งคงเหลือ",
