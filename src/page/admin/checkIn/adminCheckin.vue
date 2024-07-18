@@ -135,6 +135,7 @@
           </v-row>
         </v-card-text>
       </v-card>
+      <!-- <pre>{{ scheduleCheckin }}</pre> -->
       <v-form v-model="validate" ref="validate_form">
         <div
           v-for="(schedule, IndexSchedule) in scheduleCheckin"
@@ -281,8 +282,8 @@
                           "
                           item-text="label"
                           item-value="value"
-                          :rules="status_text"
                         >
+                          <!-- :rules="status_text" -->
                           <template #item="{ item }">
                             <v-list-item-content>
                               <v-list-item-title
@@ -411,7 +412,7 @@
                       :disabled="!validate"
                       :dark="validate"
                       :color="!validate ? '' : '#ff6b81'"
-                      @click="saveStudentCheckIn(schedule)"
+                      @click="saveStudentCheckIn(schedule, IndexSchedule)"
                       >{{ $t("save") }}</v-btn
                     >
                   </v-col>
@@ -765,7 +766,7 @@ export default {
     // validate(e, type) {
     //   inputValidation(e, type);
     // },
-    saveStudentCheckIn(scheduleData) {
+    saveStudentCheckIn(scheduleData, index) {
       this.$refs.validate_form.validate();
       if (this.validate) {
         Swal.fire({
@@ -778,9 +779,27 @@ export default {
         }).then(async (result) => {
           if (result.isConfirmed) {
             this.openCard = false;
-            await this.UpdateCheckinStudents({
-              payload: scheduleData.checkInStudent,
-            });
+            if (
+              !scheduleData.checkInStudent.some((items) => {
+                return !items.status;
+              })
+            ) {
+              await this.UpdateCheckinStudents({
+                payload: scheduleData.checkInStudent,
+              });
+              await this.CheckedInCoach(scheduleData, index);
+            } else {
+              Swal.fire({
+                icon: "warning",
+                title: this.$t("warning"),
+                text: this.$t("please state your attendance status"),
+                showCancelButton: false,
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+              });
+            }
+
             this.openCard = true;
           }
         });
