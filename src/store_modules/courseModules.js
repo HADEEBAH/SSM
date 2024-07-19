@@ -380,7 +380,6 @@ const CourseModules = {
   actions: {
     // CHECK COURSE SEAT
     async GetCourseSeats(context, { courseId, coachId, courseTypeId, dayOfWeekId, timeId, coursePackageOptionsId, studentId }) {
-      console.log('courseTypeId :>> ', courseTypeId);
       try {
         // let localhost = "http://localhost:3000"
         // let { data } = await axios.get(`${localhost}/api/v1/monitor/course/seats?courseId=${courseId}&courseTypeId=${courseTypeId}&coursePackageOptionsId=${coursePackageOptionsId}&dayOfWeekId=${dayOfWeekId}&timeId=${timeId}&coachId=${coachId}&studentId=${studentId}`)
