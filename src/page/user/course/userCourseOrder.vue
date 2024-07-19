@@ -1311,7 +1311,6 @@ export default {
             course_id: this.course_order.course_id,
             cpo_id: this.course_order.option.course_package_option_id,
           });
-          // console.log("course_order :>> ", this.course_order);
 
           if (this.course_order.time) {
             let checkDayId = "";
@@ -1365,6 +1364,7 @@ export default {
         let coach =
           this.coachSelect || this.course_order.coach_id ? true : false;
         let student = false;
+
         if (this.course_order.students.length > 0) {
           if (
             this.course_order.students.filter((v) => !v.account_id).length > 0
@@ -1710,16 +1710,16 @@ export default {
       let max = false;
       if (this.course_order.course_type_id === "CT_1") {
         if (this.course_seat?.maxStudentByCourse) {
+          // max =
+          //   this.course_seat?.maxStudentByCourse <=
+          //   this.course_order.students.length +
+          //     this.course_seat?.countSeatByCourse;
+          // }
+          // if (this.course_order.package_data.students) {
           max =
-            this.course_seat?.maxStudentByCourse <=
-            this.course_order.students.length +
-              this.course_seat?.countSeatByCourse;
+            this.course_order.package_data.students <=
+            this.course_order.students.length;
         }
-        // if (this.course_order.package_data.students) {
-        //   max =
-        //     this.course_order.package_data.students <=
-        //     this.course_order.students.length;
-        // }
       } else if (this.course_order.course_type_id === "CT_2") {
         // let check = this.course_monitors[0]?.m_current_student;
         // let count = (check += this.course_order.students.length);
