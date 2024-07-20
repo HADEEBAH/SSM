@@ -51,13 +51,13 @@
               : `${event.name}`
           }}
         </template>
-        <template v-if="type === 'week'" v-slot:day-body="{ date, week }">
+        <!-- <template v-if="type === 'week'" v-slot:day-body="{ date, week }">
           <div
             class="v-current-time"
             :class="{ first: date === week[0].date }"
             :style="{ top: nowY }"
           ></div>
-        </template>
+        </template> -->
       </v-calendar>
     </v-card>
 
