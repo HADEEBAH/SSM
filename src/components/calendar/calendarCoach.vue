@@ -32,8 +32,8 @@
         :events="events"
         event-text-color="#000000"
         event-overlap-mode="column"
-        :first-interval="8"
-        :interval-count="12"
+        :first-interval="0"
+        :interval-count="24"
         :event-overlap-threshold="30"
         @click:event="selectedDate($event)"
         :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
@@ -60,6 +60,7 @@
         </template>
       </v-calendar>
     </v-card>
+
     <v-date-picker
       v-model="focus"
       v-else-if="type === 'month'"

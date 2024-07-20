@@ -24,7 +24,7 @@
         :events="events"
         event-text-color="#000000"
         event-overlap-mode="column"
-        :first-interval="1"
+        :first-interval="0"
         :interval-count="24"
         :event-overlap-threshold="30"
         @click:event="selectedDate($event)"
