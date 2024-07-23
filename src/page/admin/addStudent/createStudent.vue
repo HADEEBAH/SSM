@@ -197,7 +197,7 @@
                     $i18n.locale == 'th' ? 'course_name_th' : 'course_name_en'
                   "
                   v-model="course.course_id"
-                  :items="course.course_options"
+                  :items="openCourses(course.course_options)"
                   :rules="rules.course"
                   :placeholder="$t(`select course`)"
                   outlined
@@ -1051,6 +1051,10 @@ export default {
       searchNameUser: "loginModules/searchNameUser",
       GetAllCourseMonitor: "CourseMonitorModules/GetAllCourseMonitor",
     }),
+
+    openCourses(items) {
+      return items.filter((course) => course.status === "Open");
+    },
     minStartDate(startDate) {
       let date = new Date();
       if (moment(startDate).isSameOrAfter(date)) {
