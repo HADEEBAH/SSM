@@ -964,6 +964,7 @@ const orderModules = {
           paymentType: order.payment_type,
           totalPrice: 0,
           regisType: regis_type,
+          pay_date: order.pay_date
         };
         let total_price = 0;
         const studentUpdate = []
