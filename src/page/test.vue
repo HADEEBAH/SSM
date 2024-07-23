@@ -756,8 +756,8 @@
                           {{ $t("payee") }} :
                           <span class="text-pink-500 font-medium">
                             <!-- {{
-                            `${user_detail.first_name_th} ${user_detail.last_name_th}`
-                          }} -->
+                              `${user_detail.first_name_th} ${user_detail.last_name_th}`
+                            }} -->
                             {{
                               $i18n.locale === "th"
                                 ? user_detail.first_name_th +
@@ -875,8 +875,8 @@
     </v-dialog>
   </v-app>
 </template>
-
-<script>
+  
+  <script>
 import headerPage from "@/components/header/headerPage.vue";
 import LabelCustom from "@/components/label/labelCustom.vue";
 import dialogCard from "@/components/dialog/dialogCard.vue";
@@ -1351,7 +1351,6 @@ export default {
                   });
                   this.order.type = "addStudent";
                   this.changeOrderData(this.order);
-                  console.log("this.order :>> ", this.order);
                   await this.saveOrder({ regis_type: "addStudent" });
                   if (this.order_is_status) {
                     let payload = {
@@ -1475,7 +1474,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+  <style scoped>
 .sub-register-pc {
   position: absolute;
   left: 65%;
@@ -1495,4 +1494,4 @@ sub-register-sm {
   transform: translate(-50%, -50%);
 }
 </style>
-// creatStudent(featureSekectDate)
+  // creatStudent(featureSekectDate)
