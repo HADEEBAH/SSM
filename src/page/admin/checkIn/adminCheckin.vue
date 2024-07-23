@@ -277,10 +277,10 @@
                         "
                         >{{
                           $i18n.locale == "th"
-                            ? student.classNameth
+                            ? student.classNameTh
                             : student.classNameEn
                             ? student.classNameEn
-                            : student.classNameth
+                            : student.classNameTh
                         }}</v-col
                       >
 

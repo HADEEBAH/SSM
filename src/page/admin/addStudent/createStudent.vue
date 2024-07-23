@@ -729,18 +729,16 @@
                               <v-text-field
                                 dense
                                 outlined
-                                :rules="rules.pay_date"
-                                v-model="pay_date_str"
+                                :value="
+                                  pay_date_str ? pay_date_str : todayDate()
+                                "
                                 readonly
-                                :placeholder="$t('payment date')"
                                 v-bind="attrs"
                                 v-on="on"
                                 color="#FF6B81"
                               >
                                 <template v-slot:append>
-                                  <v-icon :color="pay_date ? '#FF6B81' : ''"
-                                    >mdi-calendar</v-icon
-                                  >
+                                  <v-icon color="#FF6B81">mdi-calendar</v-icon>
                                 </template>
                               </v-text-field>
                             </template>
@@ -1051,7 +1049,10 @@ export default {
       searchNameUser: "loginModules/searchNameUser",
       GetAllCourseMonitor: "CourseMonitorModules/GetAllCourseMonitor",
     }),
-
+    todayDate() {
+      let todayDate = new Date();
+      return dateFormatter(todayDate, "DD MMT YYYYT");
+    },
     openCourses(items) {
       return items.filter((course) => course.status === "Open");
     },

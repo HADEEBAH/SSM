@@ -135,7 +135,7 @@
         <!-- nickname -->
         <v-col cols="12" sm="6">
           <label-custom :text="$t('school')"></label-custom>
-          <v-text-field
+          <!-- <v-text-field
             placeholder="-"
             v-model="profile_detail.school.schoolNameTh"
             outlined
@@ -143,17 +143,53 @@
             color="#ff6b81"
             :disabled="!isEnabled"
           >
-          </v-text-field>
+          </v-text-field> -->
+          <!-- schoolList -->
+          <v-combobox
+            v-model="profile_detail.school.schoolNameTh"
+            :items="class_list"
+            item-text="classNameTh"
+            dense
+            outlined
+            color="#ff6B81"
+            item-color="#ff6b81"
+            :placeholder="$t('select school')"
+            :disabled="!isEnabled"
+          >
+            <template #no-data>
+              <v-list-item>
+                {{ $t("data not found") }}
+              </v-list-item>
+            </template>
+          </v-combobox>
         </v-col>
         <!-- {{ profile_detail.userRoles }} -->
-
         <v-col
           cols="12"
           sm="6"
           v-if="profile_detail?.userRoles?.roleId === 'R_5'"
         >
           <label-custom :text="$t('class')"></label-custom>
-          <v-autocomplete
+          <v-combobox
+            v-model="profile_detail.class.classNameTh"
+            :items="class_list"
+            item-text="classNameTh"
+            dense
+            outlined
+            color="#ff6B81"
+            item-color="#ff6b81"
+            :placeholder="$t('select class')"
+            :rules="rules.class"
+            :disabled="!isEnabled"
+          >
+            <template #no-data>
+              <v-list-item>
+                {{ $t("data not found") }}
+              </v-list-item>
+            </template>
+          </v-combobox>
+
+          <!-- <v-autocomplete
             v-model="profile_detail.class.classNameTh"
             :items="class_list"
             item-text="classNameTh"
@@ -169,11 +205,11 @@
                 {{ $t("data not found") }}
               </v-list-item>
             </template>
-          </v-autocomplete>
+          </v-autocomplete> -->
         </v-col>
         <v-col cols="12" sm="6">
           <label-custom :text="$t('congenital disease')"></label-custom>
-          <v-text-field
+          <!-- <v-text-field
             placeholder="-"
             v-model="profile_detail.congenitalDisease"
             outlined
@@ -181,7 +217,25 @@
             color="#ff6b81"
             :disabled="!isEnabled"
           >
-          </v-text-field>
+          </v-text-field> -->
+          <!-- AllergiesList -->
+          <v-combobox
+            v-model="profile_detail.congenitalDisease"
+            :items="class_list"
+            item-text="classNameTh"
+            dense
+            outlined
+            color="#ff6B81"
+            item-color="#ff6b81"
+            :placeholder="$t('select congenital disease')"
+            :disabled="!isEnabled"
+          >
+            <template #no-data>
+              <v-list-item>
+                {{ $t("data not found") }}
+              </v-list-item>
+            </template>
+          </v-combobox>
         </v-col>
         <!-- BTN -->
       </v-row>

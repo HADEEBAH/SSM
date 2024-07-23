@@ -296,7 +296,9 @@ const adminCheckInModules = {
                         Authorization: `Bearer ${VueCookie.get("token")}`,
                     },
                 };
-                const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/adminfeature/checkincoach`, {
+                let localhost = "http://localhost:3000"
+                const { data } = await axios.post(`${localhost}/api/v1/adminfeature/checkincoach`, {
+                    // const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/adminfeature/checkincoach`, {
                     ...checkInData
                 }, config)
                 if (data.statusCode == 201) {
