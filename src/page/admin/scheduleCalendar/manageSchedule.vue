@@ -909,7 +909,7 @@
                 <label class="font-weight-bold">{{ $t("coach") }}</label>
                 <v-autocomplete
                   outlined
-                  v-model="export_data.coach_name"
+                  v-model="export_data.coach_id"
                   :items="get_coachs"
                   :item-text="
                     $i18n.locale == 'th' ? 'fullNameTh' : 'fullNameEh'
@@ -939,7 +939,7 @@
                       class="grey--text text-caption"
                       color="#FF6B81"
                     >
-                      (+{{ export_data.coach_name.length - 1 }}
+                      (+{{ export_data.coach_id.length - 1 }}
                       {{ $t("others") }})
                     </span>
                   </template>
@@ -1428,7 +1428,7 @@ export default {
 
     export_data: {
       course_name: "",
-      coach_name: "",
+      coach_id: "",
       student_name: "",
       start_date: "",
       end_date: "",
@@ -1470,6 +1470,7 @@ export default {
       data_search_schedule: "ManageScheduleModules/getSearchFilterSchedule",
       packages: "CourseModules/getPackages",
       options_data: "CourseModules/getOptions",
+      getCheckinFilter: "adminCheckInModules/getCheckinFilter",
     }),
     dates() {
       return [
@@ -1525,12 +1526,16 @@ export default {
       ResetSearch: "ManageScheduleModules/ResetSearch",
       GetPackages: "CourseModules/GetPackages",
       GetOptions: "CourseModules/GetOptions",
+      CheckInFilter: "adminCheckInModules/CheckInFilter",
     }),
-    exportCheckin() {},
+    exportCheckin() {
+      console.log("this.export_data.coach_id :>> ", this.export_data.coach_id);
+      this.CheckInFilter({ account_id: this.export_data.coach_id });
+    },
     cleareData() {
       this.export_data = {
         course_name: "",
-        coach_name: "",
+        coach_id: "",
         student_name: "",
         start_date: "",
         end_date: "",
