@@ -667,7 +667,8 @@
 
 
 
-    
+    "study start" : "วันที่เริ่มเรียน",
+    "study end" : "วันที่เรียนจบ",
     "save" : "บันทึก",
     "save parent" : "บันทึกผู้ปกครอง",
     "save student" : "บันทึกนักเรียน",
@@ -774,6 +775,7 @@
     "school day":"วันเรียน",
     "system satisfaction":"ความพึงพอใจของระบบ",
     "some students or students have already purchased the course":"นักเรียนคนนี้หรือนักเรียนบางส่วนได้ซื้อหลักสูตรแล้ว",
+    "select congenital disease":"กรุณาเลือกโรคประจำตัว/อาการแพ้",
 
     
     "take annual leave" : "ลาพักร้อนประจำปี",

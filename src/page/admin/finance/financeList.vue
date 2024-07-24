@@ -242,14 +242,19 @@
             text
             class="underline"
             color="#FF6B81"
-            @click="
+            :to="{
+              name: 'Finance_orderID',
+              params: { order_id: item.order_number },
+            }"
+          >
+            {{ $t("see more") }}
+          </v-btn>
+          <!-- @click="
               $router.push({
                 name: 'Finance_orderID',
                 params: { order_id: item.order_number },
               })
-            "
-            >{{ $t("see more") }}</v-btn
-          >
+            " -->
         </template>
         <template v-slot:[`item.created_date`]="{ item }">
           <!-- {{ new Date(item.created_date).toLocaleDateString() }} -->
