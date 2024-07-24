@@ -1704,9 +1704,9 @@ const CourseModules = {
         if (search) {
           query = `&search=${search}`
         }
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/course/limit?category_id=${category_id}&status=${status}&course_type_id=${course_type_id}&limit=${limit}&page=${page}${query}`)
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/limit?category_id=${category_id}&status=${status}&course_type_id=${course_type_id}&limit=${limit}&page=${page}${query}`)
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/course/limit?category_id=${category_id}&status=${status}&course_type_id=${course_type_id}&limit=${limit}&page=${page}${query}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/limit?category_id=${category_id}&status=${status}&course_type_id=${course_type_id}&limit=${limit}&page=${page}${query}`)
         if (data.statusCode === 200) {
           for (const course of data.data) {
             // let course_studant_amount = 0

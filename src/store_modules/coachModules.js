@@ -500,9 +500,9 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/coachmanagement/coach/${course_id}/date/${date}`, config)
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${course_id}/date/${date}`, config)
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/coachmanagement/coach/${course_id}/date/${date}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${course_id}/date/${date}`, config)
         if (data.statusCode === 200) {
           // console.log(data.data)
           let i = 1
