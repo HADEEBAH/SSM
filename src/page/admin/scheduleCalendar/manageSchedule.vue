@@ -947,15 +947,21 @@
               </v-col>
             </v-row>
             <!-- TIME -->
+            <label class="font-weight-bold">{{ $t("study time") }}</label>
+
             <v-row dense>
-              <v-col cols="12" sm="6" class="px-0">
-                <label class="font-weight-bold">{{ $t("start time") }}</label>
+              <v-col cols="6" sm="6">
+                <!-- <label class="font-weight-bold">{{ $t("start time") }}</label> -->
 
                 <v-text-field
                   outlined
                   dense
-                  :style="`width:${width()}px;`"
-                  style="position: absolute; display: block; z-index: 4"
+                  style="
+                    position: absolute;
+                    display: block;
+                    z-index: 4;
+                    width: 142px;
+                  "
                   @focus="SelectedStartDate($event)"
                   v-model="export_data.start_time"
                   color="#FF6B81"
@@ -964,7 +970,6 @@
                   class="time-picker-hidden"
                   hide-clear-button
                   input-class="input-size-lg"
-                  :style="`width:${width()}px;`"
                   advanced-keyboard
                   @change="resetTimeEditExport()"
                   v-model="export_data.start_time"
@@ -975,14 +980,17 @@
               </v-col>
               <!-- เวลาสิ้นสุด -->
 
-              <v-col cols="12" sm="6" class="px-0">
-                <label class="font-weight-bold">{{ $t("end time") }}</label>
-
+              <v-col cols="6" sm="6">
+                <!-- <label class="font-weight-bold">{{ $t("end time") }}</label> -->
                 <v-text-field
                   outlined
                   dense
-                  :style="`width:${width()}px;`"
-                  style="position: absolute; display: block; z-index: 4"
+                  style="
+                    position: absolute;
+                    display: block;
+                    z-index: 4;
+                    width: 142px;
+                  "
                   @focus="SelectedStartDate($event)"
                   v-model="export_data.end_time"
                   color="#FF6B81"
@@ -993,7 +1001,6 @@
                   input-class="input-size-lg"
                   advanced-keyboard
                   v-model="export_data.end_time"
-                  :style="`width:${width()}px;`"
                   close-on-complete
                   :hour-range="checkHourExpord(export_data.start_time)"
                   color="#FF6B81"
