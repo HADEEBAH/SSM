@@ -24,7 +24,7 @@
         :events="events"
         event-text-color="#000000"
         event-overlap-mode="column"
-        :first-interval="1"
+        :first-interval="0"
         :interval-count="24"
         :event-overlap-threshold="30"
         @click:event="selectedDate($event)"
@@ -42,13 +42,13 @@
               : `${event.name}`
           }}
         </template>
-        <template v-if="type === 'week'" v-slot:day-body="{ week }">
+        <!-- <template v-if="type === 'week'" v-slot:day-body="{ week }">
           <div
             class="v-current-time"
             :class="{ first: week[0] }"
             :style="{ top: nowY }"
           ></div>
-        </template>
+        </template> -->
       </v-calendar>
     </v-card>
     <!-- MONTH -->

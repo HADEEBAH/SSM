@@ -197,7 +197,7 @@
                     $i18n.locale == 'th' ? 'course_name_th' : 'course_name_en'
                   "
                   v-model="course.course_id"
-                  :items="course.course_options"
+                  :items="openCourses(course.course_options)"
                   :rules="rules.course"
                   :placeholder="$t(`select course`)"
                   outlined
@@ -718,6 +718,39 @@
                           </v-autocomplete>
                         </v-col>
                         <v-col cols="auto">
+                          <v-menu
+                            v-model="menu_pay_date"
+                            :close-on-content-click="false"
+                            transition="scale-transition"
+                            offset-y
+                            min-width="auto"
+                          >
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-text-field
+                                dense
+                                outlined
+                                :value="
+                                  pay_date_str ? pay_date_str : todayDate()
+                                "
+                                readonly
+                                v-bind="attrs"
+                                v-on="on"
+                                color="#FF6B81"
+                              >
+                                <template v-slot:append>
+                                  <v-icon color="#FF6B81">mdi-calendar</v-icon>
+                                </template>
+                              </v-text-field>
+                            </template>
+                            <v-date-picker
+                              :max="today.toISOString()"
+                              v-model="pay_date"
+                              @input="inputPayDate($event)"
+                              :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
+                            ></v-date-picker>
+                          </v-menu>
+                        </v-col>
+                        <v-col cols="auto">
                           {{ $t("payee") }} :
                           <span class="text-pink-500 font-medium">
                             <!-- {{
@@ -884,6 +917,9 @@ export default {
     today: new Date(),
     selected: [""],
     pay: "",
+    menu_pay_date: "",
+    pay_date_str: "",
+    pay_date: "",
   }),
   created() {
     this.ClearData();
@@ -958,6 +994,10 @@ export default {
           (val) =>
             (val || "")?.length > 0 || this.$t("please select a start date"),
         ],
+        pay_date: [
+          (val) =>
+            (val || "")?.length > 0 || this.$t("please select a pay date"),
+        ],
         price: [(val) => (val || "") > 0 || this.$t("please select a price")],
         remark: [
           (val) =>
@@ -1009,6 +1049,13 @@ export default {
       searchNameUser: "loginModules/searchNameUser",
       GetAllCourseMonitor: "CourseMonitorModules/GetAllCourseMonitor",
     }),
+    todayDate() {
+      let todayDate = new Date();
+      return dateFormatter(todayDate, "DD MMT YYYYT");
+    },
+    openCourses(items) {
+      return items.filter((course) => course.status === "Open");
+    },
     minStartDate(startDate) {
       let date = new Date();
       if (moment(startDate).isSameOrAfter(date)) {
@@ -1099,6 +1146,10 @@ export default {
           data.start_date_str = dateFormatter(e, "DD MMT YYYYT");
           break;
       }
+    },
+    inputPayDate(e) {
+      this.pay_date_str = dateFormatter(e, "DD MMT YYYYT");
+      this.order.pay_date = this.pay_date;
     },
     openDialog() {
       this.dialog_show = true;
@@ -1305,6 +1356,7 @@ export default {
                   });
                   this.order.type = "addStudent";
                   this.changeOrderData(this.order);
+                  console.log("this.order :>> ", this.order);
                   await this.saveOrder({ regis_type: "addStudent" });
                   if (this.order_is_status) {
                     let payload = {
@@ -1448,3 +1500,4 @@ sub-register-sm {
   transform: translate(-50%, -50%);
 }
 </style>
+// creatStudent(featureSekectDate)

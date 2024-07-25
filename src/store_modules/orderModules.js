@@ -81,6 +81,7 @@ const orderModules = {
       payment_status: "",
       payment_type: "",
       total_price: 0,
+      pay_date: ""
     },
 
     orders: [],
@@ -483,7 +484,10 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
+        // let localhost = "http://localhost:3000"
+
         let { data } = await axios.get(
+          // `${localhost}/api/v1/adminpayment/${order_number}`,
           `${process.env.VUE_APP_URL}/api/v1/adminpayment/${order_number}`,
           config
         );
@@ -963,6 +967,7 @@ const orderModules = {
           paymentType: order.payment_type,
           totalPrice: 0,
           regisType: regis_type,
+          pay_date: order.pay_date
         };
         let total_price = 0;
         const studentUpdate = []
@@ -1347,6 +1352,7 @@ const orderModules = {
                 paymentType: order.payment_type,
                 total: data.data.totalPrice,
                 recipient: user_data.account_id,
+                payDate: order.pay_date
               };
               // let endpoint = 'http://localhost:3003'
               let endpoint = process.env.VUE_APP_URL;
@@ -1629,7 +1635,9 @@ const orderModules = {
             paymentType: order_data.paymentType,
             total: order_data.totalPrice,
           };
+          // const localhost = 'http://localhost:3003'
           let { data } = await axios.patch(
+            // `${localhost}/api/v1/payment/data/${order_data.orderNumber}`,
             `${process.env.VUE_APP_URL}/api/v1/payment/data/${order_data.orderNumber}`,
             payment_payload,
             config
@@ -2393,8 +2401,8 @@ const orderModules = {
     },
     async GetOrderDetailByOrderNumber(context, { orderNumber }) {
       try {
-        const { data } = await axios.get(`http://localhost:3000/api/v1/schedule/order?orderNumber=${orderNumber}`)
-        // const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/order?orderNumber=${orderNumber}`)
+        // const { data } = await axios.get(`http://localhost:3000/api/v1/schedule/order?orderNumber=${orderNumber}`)
+        const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/order?orderNumber=${orderNumber}`)
         if (data.statusCode === 200) {
           context.commit("SetOrderNumberDetail", data.data)
         }

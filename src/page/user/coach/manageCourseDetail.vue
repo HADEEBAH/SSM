@@ -161,6 +161,25 @@
                       : item.firstNameEn + " " + item.lastNameEn
                   }}
                 </template>
+                <template v-slot:[`item.nickname`]="{ item }">
+                  {{
+                    $i18n.locale == "th"
+                      ? item.nicknameTh
+                      : item.nicknameEn
+                      ? item.nicknameEn
+                      : item.nicknameTh
+                  }}
+                </template>
+                <template v-slot:[`item.class`]="{ item }">
+                  {{
+                    $i18n.locale == "th"
+                      ? item.classNameTh
+                      : item.classNameEn
+                      ? item.classNameEn
+                      : item.classNameTh
+                  }}
+                </template>
+
                 <template v-slot:[`item.actions`]="{ item }">
                   <div class="pt-5">
                     <v-select
@@ -1558,6 +1577,18 @@ export default {
           align: "center",
           sortable: false,
           value: "fullname",
+        },
+        {
+          text: `${this.$t("nickname")}`,
+          align: "center",
+          sortable: false,
+          value: "nickname",
+        },
+        {
+          text: `${this.$t("class")}`,
+          align: "center",
+          sortable: false,
+          value: "class",
         },
         {
           text: this.$t("package"),
