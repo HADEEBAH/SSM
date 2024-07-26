@@ -113,6 +113,7 @@
     "check-in reminder" : "แจ้งเตือนการเช็คอิน",
     "check in teach" : "ลงเวลาเข้าสอน",
     "check in student" : "เช็คอิน",
+    "check in status" : "สถานะเช็คอิน",
     "choose a date" : "เลือกวันที่",
     "choose a class time" : "เลือกช่วงเวลาเรียน",
     "choose a coach" : "เลือกโค้ช",
@@ -505,7 +506,7 @@
     "permission management": "การจัดการสิทธิ์",
     "phone number" : "เบอร์โทรศัพท์",
     "personal information" : "ข้อมูลส่วนตัว",
-    
+    "please select check in status":"กรุณาเลือกสถานะการเช็คอิน",
     "please select course":"กรุณาเลือก คอร์สเรียน",
     "please enter course name":"กรุณากรอกชื่อคอร์ส",
     "please select a reservation start date":"ระบุช่วงวันที่เริ่มจองคอร์ส",
