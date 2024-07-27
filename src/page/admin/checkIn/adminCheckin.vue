@@ -351,7 +351,7 @@
                           :rules="start_time"
                           :style="`width:${width()}px;`"
                           style="position: absolute; display: block; z-index: 4"
-                          :value="genTime(student.compensationStartTime)"
+                          :value="genTime(student?.compensationStartTime)"
                           @focus="
                             SelectedStartDate(
                               $event,
@@ -378,7 +378,7 @@
                           :rules="end_time"
                           :style="`width:${width()}px;`"
                           style="position: absolute; display: block; z-index: 4"
-                          :value="genTime(student.compensationEndTime)"
+                          :value="genTime(student?.compensationEndTime)"
                           @focus="
                             SelectedStartDate(
                               $event,
@@ -728,8 +728,8 @@ export default {
         .click();
     },
     genTime(time) {
-      if (time) {
-        return moment(time).format("HH:mm");
+      if (time && time !== "") {
+        return moment(time, "HH:mm").format("HH:mm");
       } else {
         return "";
       }

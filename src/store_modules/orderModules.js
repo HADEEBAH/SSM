@@ -963,6 +963,7 @@ const orderModules = {
           paymentType: order.payment_type,
           totalPrice: 0,
           regisType: regis_type,
+          pay_date: order.pay_date
         };
         let total_price = 0;
         const studentUpdate = []
@@ -1347,6 +1348,7 @@ const orderModules = {
                 paymentType: order.payment_type,
                 total: data.data.totalPrice,
                 recipient: user_data.account_id,
+                payDate: order.pay_date
               };
               // let endpoint = 'http://localhost:3003'
               let endpoint = process.env.VUE_APP_URL;
