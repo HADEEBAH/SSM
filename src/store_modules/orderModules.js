@@ -2395,8 +2395,8 @@ const orderModules = {
     },
     async GetOrderDetailByOrderNumber(context, { orderNumber }) {
       try {
-        const { data } = await axios.get(`http://localhost:3000/api/v1/schedule/order?orderNumber=${orderNumber}`)
-        // const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/order?orderNumber=${orderNumber}`)
+        // const { data } = await axios.get(`http://localhost:3000/api/v1/schedule/order?orderNumber=${orderNumber}`)
+        const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/order?orderNumber=${orderNumber}`)
         if (data.statusCode === 200) {
           context.commit("SetOrderNumberDetail", data.data)
         }
