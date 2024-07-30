@@ -199,8 +199,9 @@ const adminCheckInModules = {
                 if (data.statusCode == 200) {
                     for await (let [index, checkIn] of data.data.entries()) {
 
+                        console.log('index', index)
                         if (checkIn.checkInStudent) {
-                            context.dispatch("CheckInCoach", { checkInData: checkIn, index: index })
+                            // context.dispatch("CheckInCoach", { checkInData: checkIn, index: index })
                             checkIn.checkInStudent = checkIn.checkInStudent.map(s => {
                                 if (s?.compensationDate) {
                                     let compensationDate = moment(s.compensationDate).format("YYYY-MM-DD")

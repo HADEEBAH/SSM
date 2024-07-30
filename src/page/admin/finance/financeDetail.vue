@@ -754,7 +754,7 @@ export default {
             {
               table: {
                 headerRows: 1,
-                widths: ["auto", "*", "auto", "auto"],
+                widths: ["auto", "*", "auto", "auto"], 
                 body: this.GenCourseItem(),
               },
               margin: [0, 0, 0, 20],
@@ -963,12 +963,19 @@ export default {
                 {
                   stack: [
                     {
-                      text: `${moment(this.order_detail.createdDate).format(
-                        "DD/MM/YYYY HH:mm"
-                      )} ${this.pdf_lang == "th" ? "น." : ""}`,
+                      text: `${moment(
+                        this.order_detail.payment.paid_date
+                      ).format(
+                        "DD/MM/YYYY"
+                      )} ${this.order_detail.payment.paid_date.slice(11, 16)} ${
+                        this.pdf_lang == "th" ? "น." : ""
+                      }`,
+                      // text: `${moment(this.order_detail.createdDate).format(
+                      //   "DD/MM/YYYY HH:mm"
+                      // )} ${this.pdf_lang == "th" ? "น." : ""}`,
                       margin: [0, 5],
                       alignment: "center",
-                      fontSize: 11,
+                      fontSize: 11
                     },
                     {
                       text: this.pdf_lang == "th" ? "วันที่" : "Date",
@@ -1016,7 +1023,7 @@ export default {
                       }`,
                       margin: [0, 5],
                       alignment: "center",
-                      fontSize: 11,
+                      fontSize: 11
                     },
                     {
                       text: this.pdf_lang == "th" ? "วันที่" : "Date",
@@ -1110,11 +1117,8 @@ export default {
                 }`,
                 color: "#ff6b81",
               },
-              // remark
               {
-                text: course.remark
-                  ? `*หมายเหตุ: ${course.remark ? course.remark : ""}`
-                  : "",
+                text: course.remark ? `*หมายเหตุ: ${course.remark ? course.remark : ""}` : "",
                 color: "#ff6b81",
               },
             ],

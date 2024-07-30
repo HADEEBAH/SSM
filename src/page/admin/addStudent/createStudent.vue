@@ -994,10 +994,7 @@ export default {
           (val) =>
             (val || "")?.length > 0 || this.$t("please select a start date"),
         ],
-        pay_date: [
-          (val) =>
-            (val || "")?.length > 0 || this.$t("please select a pay date"),
-        ],
+        pay_date: [(val) => (val || "")?.length > 0 || this.$t("please select a pay date"),],
         price: [(val) => (val || "") > 0 || this.$t("please select a price")],
         remark: [
           (val) =>
@@ -1052,9 +1049,6 @@ export default {
     todayDate() {
       let todayDate = new Date();
       return dateFormatter(todayDate, "DD MMT YYYYT");
-    },
-    openCourses(items) {
-      return items.filter((course) => course.status === "Open");
     },
     minStartDate(startDate) {
       let date = new Date();
