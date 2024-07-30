@@ -585,7 +585,9 @@
                               $t('search for student name, coach name')
                             "
                             prepend-inner-icon="mdi-magnify"
-                            @input="searchStudentList(search_student_list)"
+                            @keyup.enter="
+                              searchStudentList(search_student_list)
+                            "
                           ></v-text-field>
                         </v-col>
                       </v-row>
@@ -599,14 +601,13 @@
                       ></v-progress-circular>
                     </v-col>
                   </v-row>
-
                   <template v-else>
                     <div
                       v-if="
-                        search_student_list
-                          ? search_student_datas?.length === 0
-                          : coach_list?.filter((v) => v?.datesList.length > 0)
-                              .length === 0
+                        (search_student_list &&
+                          coach_list?.filter((v) => v?.datesList.length > 0)
+                            .length === 0) ||
+                        error_data == true
                       "
                     >
                       <v-card dense outlined>
@@ -621,9 +622,9 @@
                     </div>
                     <template v-else>
                       <div
-                        v-for="(coach, coach_index) in search_student_list
-                          ? search_student_datas
-                          : coach_list?.filter((v) => v?.datesList?.length > 0)"
+                        v-for="(coach, coach_index) in coach_list?.filter(
+                          (v) => v?.datesList?.length > 0
+                        )"
                         :key="`${coach_index}-coach_index`"
                       >
                         <v-card
@@ -901,7 +902,9 @@
                                 </v-card>
                                 <v-expand-transition>
                                   <div
-                                    v-if="selected_schedule === index_date"
+                                    v-if="
+                                      selected_schedule.includes(index_date)
+                                    "
                                     class="px-3 mb-3"
                                   >
                                     <v-row dense v-if="student_list_is_loading">
@@ -2351,7 +2354,7 @@ export default {
       { label: "ปรับปรุง", value: "adjust", num_value: 3 },
     ],
     selected_coach: "",
-    selected_schedule: "",
+    selected_schedule: [],
 
     tab: "course",
     filter: {
@@ -2414,6 +2417,10 @@ export default {
     show_dialog_export_student: false,
     show_dialog_export_end_student: false,
     show_dialog_export_reserve_student: false,
+    studentIndex: null,
+    arrIndex: "",
+    searchBool: false,
+    error_data: false,
   }),
   mounted() {},
 
@@ -2441,7 +2448,10 @@ export default {
       );
       this.GetArtworkByCourse({ course_id: this.$route.params.course_id });
       this.preview_privilege_url = this.course_data.course_img_privilege;
-      this.GetCoachsByCourse({ course_id: this.$route.params.course_id });
+      this.GetCoachsByCourse({
+        course_id: this.$route.params.course_id,
+        search: this.search_student_list ? this.search_student_list : "",
+      });
     },
   },
   computed: {
@@ -2544,7 +2554,10 @@ export default {
       this.$store.dispatch("CategoryModules/GetCategorys");
       this.$store.dispatch("CourseModules/GetCoachs");
       this.GetArtworkByCourse({ course_id: this.$route.params.course_id });
-      this.GetCoachsByCourse({ course_id: this.$route.params.course_id });
+      // this.GetCoachsByCourse({
+      //   course_id: this.$route.params.course_id,
+      //   search: this.search_student_list ? this.search_student_list : "",
+      // });
       return "";
     },
   },
@@ -2672,36 +2685,117 @@ export default {
         }
       }
       (this.selected_coach = ""),
-        (this.selected_schedule = ""),
+        (this.selected_schedule = []),
         (this.selected_coach_potential = null);
       this.search_student_potential_datas = coach_list_search;
     },
+    // searchStudentList(search) {
+    //   let coach_list_search = [];
+    //   const regex = new RegExp(search.trim(), "i");
+    //   for (let coach of this.coach_list.filter(
+    //     (v) => v.studentArr.length > 0
+    //   )) {
+    //     const coach_full_name = `${coach.firstNameTh} ${coach.lastNameTh}`;
+    //     if (coach_full_name.search(regex) > -1) {
+    //       coach_list_search.push(coach);
+    //     }
+    //     for (let student of coach.studentArr) {
+    //       const student_full_name = `${student.firstNameTh} ${student.lastNameTh}`;
+    //       if (student_full_name.search(regex) > -1) {
+    //         if (
+    //           coach_list_search.filter((v) => v.coachId === coach.coachId)
+    //             .length === 0
+    //         ) {
+    //           coach_list_search.push(coach);
+    //         }
+    //       }
+    //     }
+    //   }
+    //   (this.selected_coach = ""),
+    //     (this.selected_schedule = ""),
+    //     (this.selected_coach_potential = null);
+    //   this.search_student_datas = coach_list_search;
+    // },
     searchStudentList(search) {
-      let coach_list_search = [];
-      const regex = new RegExp(search.trim(), "i");
-      for (let coach of this.coach_list.filter(
-        (v) => v.studentArr.length > 0
-      )) {
-        const coach_full_name = `${coach.firstNameTh} ${coach.lastNameTh}`;
-        if (coach_full_name.search(regex) > -1) {
-          coach_list_search.push(coach);
-        }
-        for (let student of coach.studentArr) {
-          const student_full_name = `${student.firstNameTh} ${student.lastNameTh}`;
-          if (student_full_name.search(regex) > -1) {
+      if (search !== "") {
+        const searchTerm = search.toLowerCase();
+        this.studentIndex = null; // Reset the index
+        this.arrIndex = "";
+        for (let i = 0; i < this.coach_list.length; i++) {
+          for (let j = 0; j < this.coach_list[i].studentArr.length; j++) {
+            const student = this.coach_list[i].studentArr[j];
+
+            const fullNameTh =
+              `${student.firstNameTh} ${student.lastNameTh}`.toLowerCase();
+            const fullNameEn =
+              `${student.firstNameEn} ${student.lastNameEn}`.toLowerCase();
+
             if (
-              coach_list_search.filter((v) => v.coachId === coach.coachId)
-                .length === 0
+              fullNameTh.includes(searchTerm) ||
+              fullNameEn.includes(searchTerm)
             ) {
-              coach_list_search.push(coach);
+              this.studentIndex = { dataIndex: i, studentIndex: j };
+
+              this.arrIndex = this.studentIndex.dataIndex;
+
+              this.GetCoachsByCourse({
+                course_id: this.$route.params.course_id,
+                search: search ? search : "",
+              });
+              for (const indexDate in this.coach_list[this.arrIndex]
+                .datesList) {
+                const date =
+                  this.coach_list[this.arrIndex].datesList[indexDate];
+                this.GetStudentByDate({
+                  course_id: this.$route.params.course_id,
+                  date: date.date,
+                  start_time: date.start,
+                  end_time: date.end,
+                  time_id: date.timeId,
+                  coach_id: date.coachId,
+                  // coach_data,
+                });
+
+                this.selected_schedule.push(Number(indexDate));
+              }
+              this.selected_coach = this.arrIndex;
+              this.error_data = false;
+
+              return; // Exit once a match is found
+            } else {
+              this.error_data = true;
             }
           }
         }
+      } else {
+        this.selected_coach = "";
+        this.error_data = false;
       }
-      (this.selected_coach = ""),
-        (this.selected_schedule = ""),
-        (this.selected_coach_potential = null);
-      this.search_student_datas = coach_list_search;
+
+      // this.selected_coach = 0;
+
+      // this.GetCoachsByCourse({
+      //   course_id: this.$route.params.course_id,
+      //   search: search ? search : "",
+      // });
+
+      // for (const indexDate in this.coach_list[0].datesList) {
+      //   const date = this.coach_list[0].datesList[indexDate];
+      //   this.GetStudentByDate({
+      //     course_id: this.$route.params.course_id,
+      //     date: date.date,
+      //     start_time: date.start,
+      //     end_time: date.end,
+      //     time_id: date.timeId,
+      //     coach_id: date.coachId,
+      //     // coach_data,
+      //   });
+
+      //   this.selected_schedule.push(Number(indexDate));
+      // }
+      // this.selected_coach = 0;
+      // console.log("this.selected_coach :>> ", this.selected_coach);
+      // console.log("this.selected_schedule :>> ", this.selected_schedule);
     },
     resetFilter() {
       this.filter = {
@@ -3248,6 +3342,7 @@ export default {
       } else {
         this.selected_coach = "";
       }
+      console.log("selected_coach :>> ", this.selected_coach);
     },
     selectSchedule(index, date, coach_data) {
       this.GetStudentByDate({
@@ -3259,11 +3354,14 @@ export default {
         coach_id: date.coachId,
         coach_data,
       });
-      if (this.selected_schedule !== index) {
-        this.selected_schedule = index;
+      if (this.selected_schedule.includes(index)) {
+        const indexSelected = this.selected_schedule.indexOf(index);
+        this.selected_schedule.splice(indexSelected, 1);
       } else {
-        this.selected_schedule = "";
+        this.selected_schedule.push(index);
       }
+      console.log("index :>> ", index);
+      console.log("this.selected_schedule :>> ", this.selected_schedule);
     },
     openFile(file) {
       let fileName = `${process.env.VUE_APP_URL}/api/v1/files/${file}`;
@@ -3273,3 +3371,4 @@ export default {
 };
 </script>
 <style></style>
+// course detail

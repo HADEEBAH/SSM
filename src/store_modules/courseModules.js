@@ -491,7 +491,7 @@ const CourseModules = {
       context.commit("SetCourseData", course_data)
     },
     // COACH :: LIST BY COURSE
-    async GetCoachsByCourse(context, { course_id }) {
+    async GetCoachsByCourse(context, { course_id, search }) {
       context.commit("SetCoachListIsLoading", true)
       try {
         let config = {
@@ -501,7 +501,8 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course/${course_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course/${course_id}?search=${search}`, config)
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course/${course_id}`, config)
         if (data.statusCode === 200) {
           let datesList = []
           for await (let coach of data.data) {
