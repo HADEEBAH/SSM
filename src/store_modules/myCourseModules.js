@@ -133,8 +133,9 @@ const myCourseModules = {
                 } else if (data_local.roles.includes('R_5')) {
                     type = "student"
                 }
-
-                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/student/${type}/${account_id}`, config);
+                let localhost = "http://localhost:3000"
+                let { data } = await axios.get(`${localhost}/api/v1/schedule/student/${type}/${account_id}`, config);
+                // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/student/${type}/${account_id}`, config);
                 if (data.statusCode === 200) {
                     for await (let course of data.data) {
                         for (const date of course.dates.date) {
@@ -174,7 +175,9 @@ const myCourseModules = {
 
                         }
                     }
-                    let mycourse = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
+                    let localhost = "http://localhost:3000"
+                    let mycourse = await axios.get(`${localhost}/api/v1/mycourse/student/${account_id}`, config);
+                    // let mycourse = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
                     if (mycourse.data.statusCode === 200) {
                         for (let course of mycourse.data.data) {
                             course.day_name = course.dates.day ? dayOfWeekArray(course.dates.day) : course.dates.day
@@ -342,7 +345,9 @@ const myCourseModules = {
                         'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
+                let localhost = "http://localhost:3000"
+                let { data } = await axios.get(`${localhost}/api/v1/mycourse/student/${account_id}`, config);
+                // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
                 if (data.statusCode === 200) {
                     context.commit("SetStudentCourse", data.data)
                 }

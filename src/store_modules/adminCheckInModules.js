@@ -105,9 +105,48 @@ const adminCheckInModules = {
         }
     },
     actions: {
-        async CheckInFilter(context, { account_id }) {
-            console.log('account_id :>> ', account_id);
+        async CheckInFilter(context, { export_data }) {
             context.commit("SetScheduleCheckinIsLoadIng", true)
+            let coachId = ''
+            let courseId = ''
+            let courseStatus = ''
+            let packageId = ''
+            let optionId = ''
+            let checkInStatus = ''
+            let startTime = ''
+            let endTime = ''
+            let startDate = ''
+            let endDate = ''
+            let courseType = ''
+            if (export_data) {
+                for (const idCoach of export_data.coach_id) {
+                    coachId += `&accountId=${idCoach}`
+                }
+                for (const idCourse of export_data.course_name) {
+                    courseId += `&courseId=${idCourse}`
+                }
+                for (const statusCourse of export_data.coure_status) {
+                    courseStatus += `&courseStatus=${statusCourse}`
+                }
+                for (const idPackage of export_data.package_id) {
+                    packageId += `&packageId=${idPackage}`
+                }
+                for (const idOptions of export_data.options_id) {
+                    optionId += `&optionId=${idOptions}`
+                }
+                for (const statusCheckIn of export_data.check_in_status_options) {
+                    checkInStatus += `&checkInStatus=${statusCheckIn}`
+                }
+                for (const typeCourse of export_data.course_type_id) {
+                    courseType += `&courseTypeId=${typeCourse}`
+                }
+
+                export_data.start_time ? startTime = `startTime=${export_data.start_time}` : ''
+                export_data.end_time ? endTime = `&endTime=${export_data.end_time}` : ''
+                export_data.start_date ? startDate = `&startDate=${export_data.start_date}` : ''
+                export_data.end_date ? endDate = `&endDate=${export_data.end_date}` : ''
+
+            }
             try {
                 let config = {
                     headers: {
@@ -116,37 +155,68 @@ const adminCheckInModules = {
                         'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                let endpoint = `${process.env.VUE_APP_URL}/api/v1/admincourse/export-coach-checkin?accountId=${account_id}`
+                let localhost = "http://localhost:3000"
+                let endpoint = `${localhost}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}${courseType}`
+                // let endpoint = `${process.env.VUE_APP_URL}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}`
                 let { data } = await axios.get(endpoint, config)
                 if (data.statusCode == 200) {
-                    // console.log('data.data :>> ', data.data);
                     let reports = []
-                    data.data.forEach(filterData => {
-                        // let getDate = ''
-                        reports.push({
-                            // "วันที่เรียน": filterData.schedule ? moment(filterData.schedule).format("DD/MM/YYYY HH:mm") : '-',
-                            // "วันที่เรียน": filterData.schedule ? filterData.schedule : '-',
-                            "เวลาเริ่มเรียน": filterData.timeStart ? filterData.timeStart : '-',
-                            "เวลาสิ้นสุดการเรียน": filterData.timeEnd ? filterData.timeEnd : '-',
-                            // "หมายเลขออเดอร์": order.order_number,
-                            // "สถานะ": order.payment_status,
-                            // "วันที่ชำระ": order.paid_date,
-                            // "ประเภทการชำระเงิน": order.payment_type ? order.payment_type == 'cash' ? 'เงินสด' :
-                            //   ['Credit Card', 'Credit Card Installment'].some(v => v == order.payment_type) ? 'บัตเครดิต/เดบิต' : 'โอนเงินเข้าบัญชี' : '',
-                            // "ราคา": parseFloat(order.price).toLocaleString(undefined, { minimumFractionDigits: 2 }),
-                            // "ผู้รับเงิน": order.payment?.recipient ? `${order.accountRecipientFirstNameTh} ${order.accountRecipientLastNameTh}` : '',
-                            // "คอร์ส": order.courseNameTh,
-                            // "ประเภทคอร์ส": order.courseTypeNameTh,
-                            // "แพคเก็จ": order.packageName,
-                            // "ระยะเวลา": order.optionName,
-                            // "โค้ช": order.coach_name,
-                            // "นักเรียน": order.student_name,
-                            // "ชื่อเล่นนักเรียน": order.nickname,
-                            // "ระดับชั้น": order.class_name,
-                            // "ผู้ซื้อ": order.created_by_name,
-                            // "วันที่ออกเอกสาร": moment().format("DD/MM/YYYY HH:mm"),
-                        })
-                        console.log('object :>> ', reports);
+                    await data.data.forEach(filterData => {
+                        if (filterData.checkinStudent) {
+                            let dateCheckIn = ''
+                            let satuscheckin = ''
+                            let studentName = ''
+                            const compareDates = (a, b) => {
+                                const dateA = new Date(a.date);
+                                const dateB = new Date(b.date);
+                                return dateA - dateB;
+                            };
+                            // Sort the array by date
+                            filterData.checkinStudent.sort(compareDates);
+
+                            // Display the status sorted by date
+                            filterData.checkinStudent.forEach(entry => {
+                                dateCheckIn = entry.date
+                                satuscheckin = entry.status
+                                studentName = `${entry.firstNameTh} ${entry.lastNameTh}`
+
+                                reports.push({
+                                    "วันที่เช็คอิน": filterData.checkinStudent ? moment(dateCheckIn).format("DD/MM/YYYY") : '-',
+                                    "เวลาเริ่มเรียน": filterData.timeStart ? filterData.timeStart : '-',
+                                    "เวลาสิ้นสุดการเรียน": filterData.timeEnd ? filterData.timeEnd : '-',
+                                    "วันที่เริ่มเรียน": filterData.dateStart ? moment(filterData.dateStart).format("DD/MM/YYYY") : '-',
+                                    "วันที่สิ้นสุดการเรียน": filterData.endDate ? moment(filterData.endDate).format("DD/MM/YYYY") : '-',
+                                    "ชื่อคอร์ส": filterData.courseNameTh ? filterData.courseNameTh : '-',
+                                    "ชื่อโค้ช": filterData.firstNameTh ? `${filterData.firstNameTh} ${filterData.lastNameTh}` : '-',
+                                    "ประเภทคอร์ส": filterData.courseTypeId ? filterData.courseTypeId : '-',
+                                    "สถานะคอร์สเรียน": filterData.courseStatus === 'Open' ? VueI18n.locale == 'th' ? 'คอร์สว่าง' : 'Course available' : VueI18n.locale == 'th' ? 'คอร์สเต็ม' : 'Full Course',
+                                    "แพ็คเกจ": filterData.packageName ? filterData.packageName : '-',
+                                    "ช่วงเวลา": filterData.optionName ? filterData.optionName : '-',
+                                    "ชื่อนักเรียน": filterData.checkinStudent ? studentName : '-',
+                                    "สถานะเช็คอิน": filterData.checkinStudent ? satuscheckin : '-',
+                                })
+
+                            });
+                        } else {
+                            reports.push({
+                                "วันที่เช็คอิน": '-',
+                                "เวลาเริ่มเรียน": filterData.timeStart ? filterData.timeStart : '-',
+                                "เวลาสิ้นสุดการเรียน": filterData.timeEnd ? filterData.timeEnd : '-',
+                                "วันที่เริ่มเรียน": filterData.dateStart ? moment(filterData.dateStart).format("DD/MM/YYYY") : '-',
+                                "วันที่สิ้นสุดการเรียน": filterData.endDate ? moment(filterData.endDate).format("DD/MM/YYYY") : '-',
+                                "ชื่อคอร์ส": filterData.courseNameTh ? filterData.courseNameTh : '-',
+                                "ชื่อโค้ช": filterData.firstNameTh ? `${filterData.firstNameTh} ${filterData.lastNameTh}` : '-',
+                                "ประเภทคอร์ส": filterData.courseTypeId ? filterData.courseTypeId : '-',
+                                "สถานะคอร์สเรียน": filterData.courseStatus === 'Open' ? VueI18n.locale == 'th' ? 'คอร์สว่าง' : 'Course available' : VueI18n.locale == 'th' ? 'คอร์สเต็ม' : 'Full Course',
+                                "แพ็คเกจ": filterData.packageName ? filterData.packageName : '-',
+                                "ช่วงเวลา": filterData.optionName ? filterData.optionName : '-',
+                                "ชื่อนักเรียน": '-',
+                                "สถานะเช็คอิน": '-',
+                            })
+                        }
+
+
+
                     })
 
                     if (reports.length > 0) {
@@ -175,7 +245,7 @@ const adminCheckInModules = {
                     } else {
                         context.commit("SetScheduleCheckinIsLoadIng", false)
                         Swal.fire({
-                            icon: "error",
+                            icon: "warning",
                             title: VueI18n.t("something went wrong"),
                             text: VueI18n.t("data not found"),
                             timer: 3000,
