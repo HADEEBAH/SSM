@@ -190,6 +190,8 @@
               </v-col>
               <v-col cols="12" sm="4">
                 <label-custom :text="$t(`course`)"></label-custom>
+                <!-- :items="openCourses(course.course_options)" -->
+
                 <v-autocomplete
                   dense
                   item-value="course_id"
@@ -197,7 +199,7 @@
                     $i18n.locale == 'th' ? 'course_name_th' : 'course_name_en'
                   "
                   v-model="course.course_id"
-                  :items="openCourses(course.course_options)"
+                  :items="course.course_options"
                   :rules="rules.course"
                   :placeholder="$t(`select course`)"
                   outlined
@@ -250,6 +252,7 @@
             >
               <v-col cols="12" sm="4">
                 <label-custom :text="$t('package')"></label-custom>
+                <pre>{{ course.course_data }}</pre>
                 <v-autocomplete
                   item-value="package_id"
                   item-text="package"

@@ -614,7 +614,7 @@
                         <v-card-text>
                           <v-row>
                             <v-col class="font-bold" align="center">
-                              {{ $t("no data found11") }}
+                              {{ $t("no data found") }}
                             </v-col>
                           </v-row>
                         </v-card-text>
@@ -923,7 +923,7 @@
                                     <template v-else>
                                       <div
                                         v-if="
-                                          students_data.filter(
+                                          student_list.filter(
                                             (v) =>
                                               v.cpo?.packageName ===
                                               date.cpo?.packageName
@@ -1016,12 +1016,15 @@
                                           </v-card-text>
                                         </v-card>
                                         <!-- {{
-                                          students_data.filter(
-                                            (v) =>
-                                              v.cpo?.packageName ===
-                                              date.cpo?.packageName
-                                          )
-                                        }} -->
+                                            students_data.filter(
+                                              (v) =>
+                                                v.cpo?.packageName ===
+                                                date.cpo?.packageName
+                                            )
+                                          }}
+                                          <pre>
+                                            {{ students_data }}
+                                          </pre> -->
                                         <div
                                           v-if="
                                             students_data.filter(
@@ -1175,288 +1178,121 @@
                                           </v-card>
                                         </div>
                                         <!-- NO student check in -->
-
                                         <div v-else>
-                                          <div v-if="select_open === false">
-                                            <div
-                                              v-for="(
-                                                students, date
-                                              ) in groupedStudentsByDate"
-                                              :key="date"
-                                            >
-                                              <div
-                                                v-for="(
-                                                  student, student_index
-                                                ) in students"
-                                                :key="`${student_index}-index`"
+                                          <pre>
+                                            {{ students_data_nocheck_in }}
+                                           </pre
+                                          >
+                                          <v-card
+                                            class="mb-2"
+                                            outlined
+                                            dense
+                                            v-for="(
+                                              student, student_index
+                                            ) in students_data_nocheck_in"
+                                            :key="`${student_index}-index`"
+                                          >
+                                            <v-card-text class="pa-2">
+                                              <v-row
+                                                dense
+                                                class="text-md font-bold flex align-center"
                                               >
-                                                <v-card
-                                                  class="mb-2"
-                                                  outlined
-                                                  dense
+                                                <v-col cols="1" align="center"
+                                                  >{{ student_index + 1 }}
+                                                </v-col>
+                                                <v-col cols align="center"
+                                                  >{{
+                                                    $i18n.locale == "th"
+                                                      ? `${student.studentName}`
+                                                      : `${student.studentNameEn}`
+                                                  }}
+                                                </v-col>
+
+                                                <v-col
+                                                  cols="2"
+                                                  align="center"
                                                   v-if="
-                                                    student.date ==
-                                                    dateList[index_date]
+                                                    course_data.course_type_id ===
+                                                    'CT_1'
                                                   "
                                                 >
-                                                  <v-card-text class="pa-2">
-                                                    <v-row
-                                                      dense
-                                                      class="text-md font-bold flex align-center"
-                                                    >
-                                                      <v-col
-                                                        cols="1"
-                                                        align="center"
-                                                        >{{
-                                                          student_index + 1
-                                                        }}</v-col
-                                                      >
-                                                      <v-col
-                                                        cols
-                                                        align="center"
-                                                      >
-                                                        {{
-                                                          $i18n.locale == "th"
-                                                            ? `${student.studentName}`
-                                                            : `${student.studentNameEn}`
-                                                        }}
-                                                      </v-col>
-                                                      <v-col
-                                                        cols="2"
-                                                        align="center"
-                                                        v-if="
-                                                          course_data.course_type_id ===
-                                                          'CT_1'
-                                                        "
-                                                      >
-                                                        {{
-                                                          $i18n.locale == "th"
-                                                            ? student.optionName
-                                                            : student.optionNameEn
-                                                        }}
-                                                      </v-col>
-                                                      <v-col
-                                                        v-if="
-                                                          course_data.course_type_id ===
-                                                          'CT_1'
-                                                        "
-                                                        cols="2"
-                                                        align="center"
-                                                      >
-                                                        {{
-                                                          `${student.countCheckIn}/${student.totalDay}`
-                                                        }}
-                                                      </v-col>
-                                                      <v-col
-                                                        v-else
-                                                        cols="4"
-                                                        align="center"
-                                                      >
-                                                        <span
-                                                          class="font-bold"
-                                                          >{{
-                                                            `${date.startDate} - ${date.endDate}`
-                                                          }}</span
-                                                        >
-                                                      </v-col>
-                                                      <v-col>
-                                                        <span class="text-sm">{{
-                                                          $t(
-                                                            "no check in admin"
-                                                          )
-                                                        }}</span>
-                                                      </v-col>
-                                                      <v-col cols="4">
-                                                        <v-row dense>
-                                                          <v-col class="pa-0">
-                                                            <v-btn
-                                                              text
-                                                              class="px-1"
-                                                              color="#ff6b81"
-                                                              disabled
-                                                            >
-                                                              <v-icon
-                                                                >mdi-check-decagram-outline</v-icon
-                                                              >
-                                                              {{
-                                                                $t(
-                                                                  "view evaluation"
-                                                                )
-                                                              }}
-                                                            </v-btn>
-                                                          </v-col>
-                                                          <v-col class="pa-0">
-                                                            <v-btn
-                                                              text
-                                                              @click="
-                                                                $router.push({
-                                                                  name: 'UserDetail',
-                                                                  params: {
-                                                                    account_id:
-                                                                      student.studentId,
-                                                                    action:
-                                                                      'view',
-                                                                    from: 'courseDetail',
-                                                                  },
-                                                                })
-                                                              "
-                                                              class="px-1"
-                                                              color="#ff6b81"
-                                                            >
-                                                              <v-icon
-                                                                >mdi-clipboard-text-search-outline</v-icon
-                                                              >
-                                                              {{
-                                                                $t(
-                                                                  "view profile"
-                                                                )
-                                                              }}
-                                                            </v-btn>
-                                                          </v-col>
-                                                        </v-row>
-                                                      </v-col>
-                                                    </v-row>
-                                                  </v-card-text>
-                                                </v-card>
-                                              </div>
-                                            </div>
-                                          </div>
-                                          <div v-else>
-                                            <div
-                                              v-if="
-                                                no_check_in_student_list?.length >
-                                                0
-                                              "
-                                            >
-                                              <div
-                                                v-for="(
-                                                  student, student_index
-                                                ) in no_check_in_student_list"
-                                                :key="`${student_index}-index`"
-                                              >
-                                                <v-card
-                                                  class="mb-2"
-                                                  outlined
-                                                  dense
+                                                  {{
+                                                    $i18n.locale == "th"
+                                                      ? student.optionName
+                                                      : student.optionNameEn
+                                                  }}
+                                                </v-col>
+                                                <v-col
+                                                  v-if="
+                                                    course_data.course_type_id ===
+                                                    'CT_1'
+                                                  "
+                                                  cols="2"
+                                                  align="center"
                                                 >
-                                                  <v-card-text class="pa-2">
-                                                    <v-row
-                                                      dense
-                                                      class="text-md font-bold flex align-center"
-                                                    >
-                                                      <v-col
-                                                        cols="1"
-                                                        align="center"
-                                                        >{{ student_index + 1 }}
-                                                      </v-col>
-                                                      <v-col cols align="center"
-                                                        >{{
-                                                          $i18n.locale == "th"
-                                                            ? `${student.studentName}`
-                                                            : `${student.studentNameEn}`
-                                                        }}
-                                                      </v-col>
-
-                                                      <v-col
-                                                        cols="2"
-                                                        align="center"
-                                                        v-if="
-                                                          course_data.course_type_id ===
-                                                          'CT_1'
-                                                        "
+                                                  {{
+                                                    `${student.countCheckIn}/${student.totalDay}`
+                                                  }}
+                                                </v-col>
+                                                <v-col
+                                                  v-else
+                                                  cols="4"
+                                                  align="center"
+                                                >
+                                                  <span class="font-bold">{{
+                                                    `${date.startDate} - ${date.endDate}`
+                                                  }}</span>
+                                                </v-col>
+                                                <v-col>
+                                                  <span class="text-sm">{{
+                                                    $t("no check in admin")
+                                                  }}</span>
+                                                </v-col>
+                                                <v-col cols="4">
+                                                  <v-row dense>
+                                                    <v-col class="pa-0">
+                                                      <v-btn
+                                                        text
+                                                        class="px-1"
+                                                        color="#ff6b81"
+                                                        disabled
                                                       >
+                                                        <v-icon
+                                                          >mdi-check-decagram-outline
+                                                        </v-icon>
                                                         {{
-                                                          $i18n.locale == "th"
-                                                            ? student.optionName
-                                                            : student.optionNameEn
+                                                          $t("view evaluation")
                                                         }}
-                                                      </v-col>
-                                                      <v-col
-                                                        v-if="
-                                                          course_data.course_type_id ===
-                                                          'CT_1'
+                                                      </v-btn>
+                                                    </v-col>
+                                                    <v-col class="pa-0">
+                                                      <v-btn
+                                                        text
+                                                        @click="
+                                                          $router.push({
+                                                            name: 'UserDetail',
+                                                            params: {
+                                                              account_id:
+                                                                student.studentId,
+                                                              action: 'view',
+                                                              from: 'courseDetail',
+                                                            },
+                                                          })
                                                         "
-                                                        cols="2"
-                                                        align="center"
+                                                        class="px-1"
+                                                        color="#ff6b81"
                                                       >
-                                                        {{
-                                                          `${student.countCheckIn}/${student.totalDay}`
-                                                        }}
-                                                      </v-col>
-                                                      <v-col
-                                                        v-else
-                                                        cols="4"
-                                                        align="center"
-                                                      >
-                                                        <span
-                                                          class="font-bold"
-                                                          >{{
-                                                            `${date.startDate} - ${date.endDate}`
-                                                          }}</span
-                                                        >
-                                                      </v-col>
-                                                      <v-col>
-                                                        <span class="text-sm">{{
-                                                          $t(
-                                                            "no check in admin"
-                                                          )
-                                                        }}</span>
-                                                      </v-col>
-                                                      <v-col cols="4">
-                                                        <v-row dense>
-                                                          <v-col class="pa-0">
-                                                            <v-btn
-                                                              text
-                                                              class="px-1"
-                                                              color="#ff6b81"
-                                                              disabled
-                                                            >
-                                                              <v-icon
-                                                                >mdi-check-decagram-outline
-                                                              </v-icon>
-                                                              {{
-                                                                $t(
-                                                                  "view evaluation"
-                                                                )
-                                                              }}
-                                                            </v-btn>
-                                                          </v-col>
-                                                          <v-col class="pa-0">
-                                                            <v-btn
-                                                              text
-                                                              @click="
-                                                                $router.push({
-                                                                  name: 'UserDetail',
-                                                                  params: {
-                                                                    account_id:
-                                                                      student.studentId,
-                                                                    action:
-                                                                      'view',
-                                                                    from: 'courseDetail',
-                                                                  },
-                                                                })
-                                                              "
-                                                              class="px-1"
-                                                              color="#ff6b81"
-                                                            >
-                                                              <v-icon>
-                                                                mdi-clipboard-text-search-outline
-                                                              </v-icon>
-                                                              {{
-                                                                $t(
-                                                                  "view profile"
-                                                                )
-                                                              }}
-                                                            </v-btn>
-                                                          </v-col>
-                                                        </v-row>
-                                                      </v-col>
-                                                    </v-row>
-                                                  </v-card-text>
-                                                </v-card>
-                                              </div>
-                                            </div>
-                                          </div>
+                                                        <v-icon>
+                                                          mdi-clipboard-text-search-outline
+                                                        </v-icon>
+                                                        {{ $t("view profile") }}
+                                                      </v-btn>
+                                                    </v-col>
+                                                  </v-row>
+                                                </v-col>
+                                              </v-row>
+                                            </v-card-text>
+                                          </v-card>
                                         </div>
                                       </div>
                                     </template>
@@ -1574,36 +1410,36 @@
                         }}
                       </v-chip>
                       <!-- <v-select
-                        v-model="item.status"
-                        dense
-                        outlined
-                        hide-details
-                        item-color="#ff6b81"
-                        :items="status"
-                        item-text="label"
-                        item-value="value"
-                        @change="updateReserve(item.reserveId, item)"
-                      >
-                        <template v-slot:selection="{ item }">
-                          <v-list-item-title>
-                            <v-icon :color="item.color">
-                              {{ item.icon }}
-                            </v-icon>
-                            {{ item.label }}
-                          </v-list-item-title>
-                        </template>
-
-                        <template v-slot:item="{ props, item }">
-                          <v-list-item-avatar v-bind="props">
-                            <v-icon :color="item.color">
-                              {{ item.icon }}
-                            </v-icon>
-                          </v-list-item-avatar>
-                          <v-list-item-title v-bind="props">
-                            {{ item.label }}
-                          </v-list-item-title>
-                        </template>
-                      </v-select> -->
+                          v-model="item.status"
+                          dense
+                          outlined
+                          hide-details
+                          item-color="#ff6b81"
+                          :items="status"
+                          item-text="label"
+                          item-value="value"
+                          @change="updateReserve(item.reserveId, item)"
+                        >
+                          <template v-slot:selection="{ item }">
+                            <v-list-item-title>
+                              <v-icon :color="item.color">
+                                {{ item.icon }}
+                              </v-icon>
+                              {{ item.label }}
+                            </v-list-item-title>
+                          </template>
+  
+                          <template v-slot:item="{ props, item }">
+                            <v-list-item-avatar v-bind="props">
+                              <v-icon :color="item.color">
+                                {{ item.icon }}
+                              </v-icon>
+                            </v-list-item-avatar>
+                            <v-list-item-title v-bind="props">
+                              {{ item.label }}
+                            </v-list-item-title>
+                          </template>
+                        </v-select> -->
                     </template>
                   </v-data-table>
                 </v-tab-item>
@@ -2491,8 +2327,8 @@
     </v-container>
   </v-app>
 </template>
-
-<script>
+  
+  <script>
 import courseCard from "@/components/course/courseCard.vue";
 import packageCard from "@/components/course/packageCard.vue";
 import coachsCard from "@/components/course/coachsCard.vue";
@@ -2609,7 +2445,6 @@ export default {
     students_data_nocheck_in: [],
     matchingIndices: [],
     dateList: [],
-    select_open: false,
   }),
   mounted() {},
 
@@ -2661,21 +2496,6 @@ export default {
       no_check_in_student_list: "CourseModules/getNoChackInStudentList",
       export_is_loading: "CourseModules/export_is_loading",
     }),
-
-    groupedStudentsByDate() {
-      console.log(
-        "this.students_data_nocheck_in :>> ",
-        this.students_data_nocheck_in
-      );
-      const grouped = {};
-      this.students_data_nocheck_in.forEach((student) => {
-        if (!grouped[student.date]) {
-          grouped[student.date] = [];
-        }
-        grouped[student.date].push(student);
-      });
-      return grouped;
-    },
     breadcrumbs() {
       return [
         { text: this.$t("manage all courses"), to: "CourseList" },
@@ -2758,7 +2578,6 @@ export default {
       this.$store.dispatch("CategoryModules/GetCategorys");
       this.$store.dispatch("CourseModules/GetCoachs");
       this.GetArtworkByCourse({ course_id: this.$route.params.course_id });
-
       // this.GetCoachsByCourse({
       //   course_id: this.$route.params.course_id,
       //   search: this.search_student_list ? this.search_student_list : "",
@@ -3109,10 +2928,9 @@ export default {
                   time_id: date.timeId,
                   coach_id: date.coachId,
                 });
-
-                this.students_data.push(await this.student_list);
+                this.students_data.push(this.student_list);
                 this.students_data_nocheck_in.push(
-                  await this.no_check_in_student_list
+                  this.no_check_in_student_list
                 );
 
                 // Check if the date matches
@@ -3161,8 +2979,6 @@ export default {
                     );
                   });
 
-                  // this.students_data = filteredData;
-                  // this.selected_schedule = indices;
                   this.students_data = filteredData;
                   this.selected_schedule = indices;
                 } else {
@@ -3184,6 +3000,11 @@ export default {
                   const flattenedDataNoCheckIn =
                     this.students_data_nocheck_in.flat();
 
+                  console.log(
+                    "flattenedDataNoCheckIn :>> ",
+                    flattenedDataNoCheckIn
+                  );
+
                   const filteredDataNoCheckIn = flattenedDataNoCheckIn.filter(
                     (record) => {
                       const recordDateTwo = new Date(record.date);
@@ -3194,13 +3015,23 @@ export default {
                       );
                     }
                   );
+                  // const groupedData = matchingDateNoCheckIn.map((date) => {
+                  //   return filteredDataNoCheckIn.filter(
+                  //     (record) => record.date === date
+                  //   );
+                  // });
+
+                  // console.log("groupedData :>> ", groupedData);
+
+                  // this.students_data_nocheck_in = groupedData;
+                  // this.selected_schedule = indicesNoCheckIn;
+
                   this.students_data_nocheck_in = filteredDataNoCheckIn;
                   this.selected_schedule = indicesNoCheckIn;
-                  // this.students_data_nocheck_in = filteredDataNoCheckIn;
-                  // this.selected_schedule = indicesNoCheckIn;
                 }
               }
 
+              // this.selected_coach = matchingIndices;
               this.selected_coach = this.arr_index;
               this.error_data = false;
 
@@ -3469,7 +3300,6 @@ export default {
       coach.checked = !coach.checked;
     },
     selectDateChecked(data) {
-      console.log("date :>> ", data);
       data.checked = !data.checked;
     },
     dayOfWeekArray(day) {
@@ -3864,122 +3694,21 @@ export default {
         this.selected_coach = "";
       }
     },
-    async selectSchedule(index, date, coach_data) {
-      this.select_open = true;
-      // this.GetStudentByDate({
-      //   course_id: this.$route.params.course_id,
-      //   date: date.date,
-      //   start_time: date.start,
-      //   end_time: date.end,
-      //   time_id: date.timeId,
-      //   coach_id: date.coachId,
-      //   coach_data,
-      // });
-      // if (this.selected_schedule.includes(index)) {
-      //   const indexSelected = this.selected_schedule.indexOf(index);
-      //   console.log("indexSelected :>> ", indexSelected);
-      //   this.selected_schedule.splice(indexSelected, 1);
-      // } else {
-      //   this.selected_schedule.push(index);
-
-      // }
-
-      // 1. เอาข้อมูลที่ตรงกับวันที่นั้นๆออกมา
-
-      // let coachDate = [];
-      // let dateChoose = [];
-      let dateChooses = "";
-      dateChooses = date.date;
-      // dateChoose.push(date.date);
-      // console.log("dateChoose :>> ", dateChoose);
-
-      // for (let index = 0; index < coach_data.length; index++) {
-      //   const studentDate = coach_data[index];
-      //   // coachDate = studentDate.date;
-      //   coachDate.push(studentDate.date);
-      // }
-
-      // console.log("coachDate :>> ", coachDate);
-      // // console.log("this.student_list :>> ", this.student_list);
-      // // const indices = coachDate.map((date) => dateChoose.indexOf(date));
-      // const indices = dateChoose.map((date) => coachDate.indexOf(date));
-      // console.log("indices :>> ", indices);
-      // console.log("coach_data :>> ", this.coach_list);
-      // // console.log(
-      // //   "this.student_list[indices] :>> ",
-      // //   this.student_list[indices]
-      // // );
-      this.students_data = [];
-      this.students_data_nocheck_in = [];
-      await this.GetStudentByDate({
+    selectSchedule(index, date, coach_data) {
+      this.GetStudentByDate({
         course_id: this.$route.params.course_id,
-        date: dateChooses,
+        date: date.date,
         start_time: date.start,
         end_time: date.end,
         time_id: date.timeId,
         coach_id: date.coachId,
         coach_data,
       });
-
-      if (this.student_list?.length > 0) {
-        // console.log("this.student_list :>> ", await this.student_list);
-        this.students_data = await this.student_list;
-        console.log("this.students_data :>> ", this.students_data);
-      } else {
-        this.students_data_nocheck_in = await this.no_check_in_student_list;
-        console.log(
-          "this.students_data_nocheck_in :>> ",
-          this.students_data_nocheck_in
-        );
-      }
-
-      // if (coach_data[indices].students?.length > 0) {
-      //   // get student_list
-      //   console.log("111 :>> ", 111);
-      //   await this.GetStudentByDate({
-      //     course_id: this.$route.params.course_id,
-      //     date: dateChooses,
-      //     start_time: date.start,
-      //     end_time: date.end,
-      //     time_id: date.timeId,
-      //     coach_id: date.coachId,
-      //     coach_data,
-      //   });
-      //   console.log("date.start :>> ", date.start);
-      //   console.log("dateChooses :>> ", dateChooses);
-      //   // เอา student_list ให้ตรงตาม dateChoose
-
-      //   console.log("this.student_list :>> ", await this.student_list);
-      // } else {
-      //   // get student_no_check_in
-      //   await this.GetStudentByDate({
-      //     course_id: this.$route.params.course_id,
-      //     date: dateChooses,
-      //     start_time: date.start,
-      //     end_time: date.end,
-      //     time_id: date.timeId,
-      //     coach_id: date.coachId,
-      //     coach_data,
-      //   });
-      //   console.log("this.student_list 22:>> ", await this.student_list);
-
-      //   console.log("222 :>> ", 222);
-      // }
-
-      // this.students_data = await this.student_list;
-      // this.students_data_nocheck_in = await this.no_check_in_student_list;
-
       if (this.selected_schedule.includes(index)) {
         const indexSelected = this.selected_schedule.indexOf(index);
         this.selected_schedule.splice(indexSelected, 1);
       } else {
-        if (this.selected_schedule == []) {
-          this.selected_schedule.push(index);
-        } else {
-          const indexSelected = this.selected_schedule.indexOf(index);
-          this.selected_schedule.splice(indexSelected, 1);
-          this.selected_schedule.push(index);
-        }
+        this.selected_schedule.push(index);
       }
     },
     openFile(file) {
@@ -3989,5 +3718,5 @@ export default {
   },
 };
 </script>
-<style></style>
-// course detail
+  <style></style>
+  // course detail 222
