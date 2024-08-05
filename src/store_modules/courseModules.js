@@ -501,9 +501,13 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
+        // let localhost = "http://localhost:3000"
+
+        // let { data } = await axios.get(`${localhost}/api/v1/schedule/manage-course/${course_id}?search=${search}`, config)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course/${course_id}?search=${search}`, config)
         // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course/${course_id}`, config)
         if (data.statusCode === 200) {
+          // console.log('data.data :>> ', data.data);
           let datesList = []
           for await (let coach of data.data) {
             coach.checked = false

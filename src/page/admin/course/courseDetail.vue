@@ -604,16 +604,17 @@
                   <template v-else>
                     <div
                       v-if="
-                        (search_student_list &&
-                          coach_list?.filter((v) => v?.datesList.length > 0)
-                            .length === 0) ||
-                        error_data == true
+                        search_student_list &&
+                        (coach_list?.filter((v) => v?.datesList.length > 0)
+                          .length === 0 ||
+                          error_data == true)
                       "
                     >
                       <v-card dense outlined>
                         <v-card-text>
                           <v-row>
                             <v-col class="font-bold" align="center">
+                              {{ coach_list_is_loading }}
                               {{ $t("no data found11") }}
                             </v-col>
                           </v-row>
@@ -2663,10 +2664,6 @@ export default {
     }),
 
     groupedStudentsByDate() {
-      console.log(
-        "this.students_data_nocheck_in :>> ",
-        this.students_data_nocheck_in
-      );
       const grouped = {};
       this.students_data_nocheck_in.forEach((student) => {
         if (!grouped[student.date]) {
@@ -3059,6 +3056,10 @@ export default {
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     async searchStudentList(search) {
+      let checkName = 0;
+      let checkLName = 0;
+      let checkFName = 0;
+      this.coach_list = [];
       if (search !== "") {
         const searchTerm = search.toLowerCase();
         this.student_index = null; // Reset the index
@@ -3068,25 +3069,43 @@ export default {
         let uniqueDates = [];
         let uniqueDatesTwo = [];
         let indicesNoCheckIn = [];
+        let names = [];
+        let lastName = [];
+        let fullNames = [];
+        let uniqueNames = [];
+        let uniqueLastNames = [];
+        let uniqueFullNames = [];
+        // let loopName = "";
+        // let test = false;
         // let matchingDatesTwo = [];
         this.dateList = [];
-        let checkName = "";
+        // let checkName = [];
         this.students_data = [];
         this.students_data_nocheck_in = [];
 
-        for (let i = 0; i < this.coach_list.length; i++) {
-          for (let j = 0; j < this.coach_list[i].studentArr.length; j++) {
-            const student = this.coach_list[i].studentArr[j];
+        for (let i = 0; i < this.coach_list?.length; i++) {
+          for (let j = 0; j < this.coach_list[i]?.studentArr.length; j++) {
+            const student = this.coach_list[i]?.studentArr[j];
 
             const fullNameTh =
+              // `${student.firstNameTh}`.toLowerCase();
               `${student.firstNameTh} ${student.lastNameTh}`.toLowerCase();
-            // `${student.firstNameTh} ${student.lastNameTh}`.toLowerCase();
             const fullNameEn =
               `${student.firstNameEn} ${student.lastNameEn}`.toLowerCase();
+            const nameTh = `${student.firstNameTh}`.toLowerCase();
+            // `${student.firstNameTh} ${student.lastNameTh}`.toLowerCase();
+            const nameEn = `${student.firstNameEn}`.toLowerCase();
+            const lastNameTh = `${student.lastNameTh}`.toLowerCase();
+            // `${student.firstNameTh} ${student.lastNameTh}`.toLowerCase();
+            const lastNameEn = `${student.lastNameTh}`.toLowerCase();
 
             if (
               fullNameTh.includes(searchTerm) ||
-              fullNameEn.includes(searchTerm)
+              fullNameEn.includes(searchTerm) ||
+              nameTh.includes(searchTerm) ||
+              nameEn.includes(searchTerm) ||
+              lastNameTh.includes(searchTerm) ||
+              lastNameEn.includes(searchTerm)
             ) {
               this.student_index = { dataIndex: i, student_index: j };
               this.arr_index = this.student_index.dataIndex;
@@ -3095,7 +3114,6 @@ export default {
                 course_id: this.$route.params.course_id,
                 search: search ? search : "",
               });
-
               //  matchingDates = [];
               for (const indexDate in this.coach_list[this.arr_index]
                 .datesList) {
@@ -3122,18 +3140,45 @@ export default {
                 // Check if the student exists in dataONE and match date
                 for (let k = 0; k < dataOneStudents.length; k++) {
                   const studentOne = dataOneStudents[k];
-                  checkName = studentOne.firstNameTh;
                   checkDateOne.push(studentOne.date?.split("T")[0]);
                 }
+
+                for (const items of this.student_list) {
+                  names.push(items.firstNameTh);
+                  lastName.push(items.lastNameTh);
+                  fullNames.push(`${items.firstNameTh} ${items.lastNameTh}`);
+                }
+                uniqueNames = [...new Set(names)];
+                uniqueLastNames = [...new Set(lastName)];
+                uniqueFullNames = [...new Set(fullNames)];
+
+                checkName = 0;
+                checkLName = 0;
+                checkFName = 0;
+
+                for (let name of uniqueNames) {
+                  if (name.includes(searchTerm)) {
+                    checkName++;
+                  }
+                }
+                for (let lastName of uniqueLastNames) {
+                  if (lastName.includes(searchTerm)) {
+                    checkLName++;
+                  }
+                }
+                for (let fullName of uniqueFullNames) {
+                  if (fullName.includes(searchTerm)) {
+                    checkFName++;
+                  }
+                }
+
                 for (let k = 0; k < dataTwoStudents.length; k++) {
                   const studentTwo = dataTwoStudents[k];
                   checkDateTwo.push(studentTwo.date);
                 }
 
-                // console.log("checkName :>> ", checkName.includes(searchTerm));
                 this.dateList = this.coach_list[this.arr_index].dateList;
-
-                if (checkName.includes(searchTerm)) {
+                if (checkName >= 1 || checkLName >= 1 || checkFName >= 1) {
                   // เช็คอินแล้ว
                   uniqueDates = [...new Set(checkDateOne)];
 
@@ -3469,7 +3514,6 @@ export default {
       coach.checked = !coach.checked;
     },
     selectDateChecked(data) {
-      console.log("date :>> ", data);
       data.checked = !data.checked;
     },
     dayOfWeekArray(day) {
@@ -3924,13 +3968,8 @@ export default {
       if (this.student_list?.length > 0) {
         // console.log("this.student_list :>> ", await this.student_list);
         this.students_data = await this.student_list;
-        console.log("this.students_data :>> ", this.students_data);
       } else {
         this.students_data_nocheck_in = await this.no_check_in_student_list;
-        console.log(
-          "this.students_data_nocheck_in :>> ",
-          this.students_data_nocheck_in
-        );
       }
 
       // if (coach_data[indices].students?.length > 0) {
