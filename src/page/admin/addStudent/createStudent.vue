@@ -191,6 +191,7 @@
               <v-col cols="12" sm="4">
                 <label-custom :text="$t(`course`)"></label-custom>
                 <!-- :items="openCourses(course.course_options)" -->
+                <!-- :items="course.course_options" -->
 
                 <v-autocomplete
                   dense
@@ -199,9 +200,10 @@
                     $i18n.locale == 'th' ? 'course_name_th' : 'course_name_en'
                   "
                   v-model="course.course_id"
-                  :items="course.course_options"
+                  :items="openCourses(course.course_options)"
                   :rules="rules.course"
                   :placeholder="$t(`select course`)"
+                  :loading="loading_course"
                   outlined
                   color="pink"
                   item-color="pink"
@@ -252,7 +254,7 @@
             >
               <v-col cols="12" sm="4">
                 <label-custom :text="$t('package')"></label-custom>
-                <pre>{{ course.course_data }}</pre>
+                <!-- <pre>{{ course.course_data }}</pre> -->
                 <v-autocomplete
                   item-value="package_id"
                   item-text="package"
@@ -923,6 +925,7 @@ export default {
     menu_pay_date: "",
     pay_date_str: "",
     pay_date: "",
+    loading_course: false,
   }),
   created() {
     this.ClearData();
@@ -1057,7 +1060,7 @@ export default {
       return dateFormatter(todayDate, "DD MMT YYYYT");
     },
     openCourses(items) {
-      return items.filter((course) => course.status === "Open");
+      return items.filter((course) => course.statusCourse === "Open");
     },
     minStartDate(startDate) {
       let date = new Date();
@@ -1179,11 +1182,13 @@ export default {
       course.price = 0;
       course.detail = "";
       course.remark = "";
+      this.loading_course = false;
       this.GetCoursesFilter({
         category_id: categoryId,
         status: "Active",
         course_type_id: course_type_id,
       }).then(() => {
+        this.loading_course = false;
         let course_ids = [];
         for (let order_course of this.order.courses) {
           course_ids.push(order_course.course_id);
@@ -1192,6 +1197,7 @@ export default {
           (v) => !course_ids.includes(v.course_id)
         );
       });
+      this.loading_course = true;
     },
     selectCourse(courseId, course) {
       course.package_data = {};
