@@ -437,11 +437,12 @@
 
               <v-col cols="12" sm="4" v-if="course.course_data && course.time">
                 <label-custom :text="$t('coach')"></label-custom>
+                <!-- <pre>{{ course.time }}</pre> -->
                 <v-autocomplete
                   dense
                   :rules="rules.coach"
                   v-model="course.coach"
-                  :items="course.time.timeData"
+                  :items="coachOptions(course.time.timeData)"
                   :placeholder="$t('choose a coach')"
                   item-color="pink"
                   outlined
@@ -540,6 +541,7 @@
             >
               <v-col cols="12" sm="4" v-if="course.course_type_id == 'CT_2'">
                 <label-custom :text="$t('date')"></label-custom>
+                <pre>{{ course }}</pre>
                 <v-text-field
                   v-if="course.course_id"
                   dense
@@ -1062,6 +1064,15 @@ export default {
     openCourses(items) {
       return items.filter((course) => course.statusCourse === "Open");
     },
+    // packageOptions(items) {
+    //   console.log("items :>> ", items);
+    //   return items.filter((packageStatus) => packageStatus.status === "Open");
+    // },
+    coachOptions(timeData) {
+      console.log("timeData :>> ", timeData);
+      return timeData.filter((coach) => coach.status_coach === "Open");
+      // return items.filter((coach) => coach.status_coach === "Open");
+    },
     minStartDate(startDate) {
       let date = new Date();
       if (moment(startDate).isSameOrAfter(date)) {
@@ -1200,6 +1211,7 @@ export default {
       this.loading_course = true;
     },
     selectCourse(courseId, course) {
+      console.log("111 :>> ", courseId);
       course.package_data = {};
       course.package = "";
       course.option = {};
@@ -1216,9 +1228,12 @@ export default {
       course.remark = "";
       if (courseId) {
         this.GetCourse(courseId).then(() => {
+          console.log("22 :>> ", 22);
           if (this.course_data) {
             course.course_data = this.course_data;
           }
+          console.log("this.course_data :>> ", this.course_data);
+
           if (this.course_data.course_type_id === "CT_2") {
             course.start_date = this.course_data.course_study_start_date;
             course.start_date_str = new Date(
