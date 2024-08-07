@@ -191,8 +191,8 @@
                       >
                         {{
                           item.course_type_id === "CT_1"
-                            ? item.option.net_price.toLocaleString()
-                            : item.net_price.toLocaleString()
+                          ? item.option.total_price.toLocaleString()
+                            : item.total_price.toLocaleString()
                         }}
                         {{ $t("baht") }}</v-col
                       >
@@ -461,9 +461,9 @@ export default {
       this.cart_list.forEach((course) => {
         if (course.checked) {
           if (course.course_type_id === "CT_1") {
-            this.total_price = this.total_price + course.option.net_price;
+            this.total_price = this.total_price + course.option.total_price;
           } else {
-            this.total_price = this.total_price + course.net_price;
+            this.total_price = this.total_price + course.total_price;
           }
         }
       });

@@ -1579,6 +1579,7 @@ const orderModules = {
           },
         };
         let { data } = await axios.patch(
+          // `http://localhost:3002/api/v1/order/update/${order_detail.orderNumber}`,
           `${process.env.VUE_APP_URL}/api/v1/order/update/${order_detail.orderNumber}`,
           payload,
           config
@@ -1632,6 +1633,7 @@ const orderModules = {
             total: order_data.totalPrice,
           };
           let { data } = await axios.patch(
+            // `http://localhost:3003/api/v1/payment/data/${order_data.orderNumber}`,
             `${process.env.VUE_APP_URL}/api/v1/payment/data/${order_data.orderNumber}`,
             payment_payload,
             config
@@ -1851,10 +1853,12 @@ const orderModules = {
               let discount = item.option.discount
                 ? item.option.discount_price
                 : 0;
-              item.option.net_price_unit = item.option.price_unit / item.option.amount;
-              item.option.net_price = (item.option.price_unit - discount) * item.students.length;
+                item.option.net_price_unit = item.option.price_unit - discount;
+                item.option.net_price = item.option.price_unit - discount;
+                item.option.total_price = item.option.net_price * item.students.length
             } else {
-              item.net_price = item.price * item.students.length;
+              item.net_price = item.price;
+              item.total_price = item.price * item.students.length
             }
 
           }
