@@ -614,8 +614,7 @@
                         <v-card-text>
                           <v-row>
                             <v-col class="font-bold" align="center">
-                              {{ coach_list_is_loading }}
-                              {{ $t("no data found11") }}
+                              {{ $t("no data found") }}
                             </v-col>
                           </v-row>
                         </v-card-text>
@@ -825,9 +824,6 @@
                                 )"
                                 :key="`${index_date}-date`"
                               >
-                                {{ selected_schedule.includes(index_date) }}
-                                {{ selected_schedule }}
-                                {{ index_date }}
                                 <v-card
                                   @click="
                                     selectSchedule(
@@ -1208,10 +1204,9 @@
                                                       <v-col
                                                         cols="1"
                                                         align="center"
-                                                        >{{
-                                                          student_index + 1
-                                                        }}</v-col
                                                       >
+                                                        {{ student_index + 1 }}
+                                                      </v-col>
                                                       <v-col
                                                         cols
                                                         align="center"
@@ -2995,66 +2990,7 @@ export default {
     //     (this.selected_coach_potential = null);
     //   this.search_student_datas = coach_list_search;
     // },
-    // /////////////////////////////////////////////////////////////////////////////////////////////
-    // searchStudentList(search) {
-    //   if (search !== "") {
-    //     const searchTerm = search.toLowerCase();
-    //     this.student_index = null; // Reset the index
-    //     this.arr_index = "";
-    //     for (let i = 0; i < this.coach_list.length; i++) {
-    //       for (let j = 0; j < this.coach_list[i].studentArr.length; j++) {
-    //         const student = this.coach_list[i].studentArr[j];
-
-    //         const fullNameTh =
-    //           `${student.firstNameTh} ${student.lastNameTh}`.toLowerCase();
-    //         const fullNameEn =
-    //           `${student.firstNameEn} ${student.lastNameEn}`.toLowerCase();
-
-    //         if (
-    //           fullNameTh.includes(searchTerm) ||
-    //           fullNameEn.includes(searchTerm)
-    //         ) {
-    //           this.student_index = { dataIndex: i, student_index: j };
-
-    //           this.arr_index = this.student_index.dataIndex;
-
-    //           this.GetCoachsByCourse({
-    //             course_id: this.$route.params.course_id,
-    //             search: search ? search : "",
-    //           });
-    //           for (const indexDate in this.coach_list[this.arr_index]
-    //             .datesList) {
-    //             const date =
-    //               this.coach_list[this.arr_index].datesList[indexDate];
-    //             this.GetStudentByDate({
-    //               course_id: this.$route.params.course_id,
-    //               date: date.date,
-    //               start_time: date.start,
-    //               end_time: date.end,
-    //               time_id: date.timeId,
-    //               coach_id: date.coachId,
-    //               // coach_data,
-    //             });
-    //             this.selected_schedule.push(Number(indexDate));
-
-    //           }
-    //           this.selected_coach = this.arr_index;
-    //           this.error_data = false;
-
-    //           return; // Exit once a match is found
-    //         } else {
-    //           this.error_data = true;
-    //         }
-    //       }
-    //     }
-    //   } else {
-    //     this.selected_coach = "";
-    //     this.error_data = false;
-    //   }
-    // },
-
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+    /////////////////////////////////////////////////////////////
     async searchStudentList(search) {
       let checkName = 0;
       let checkLName = 0;
@@ -3075,11 +3011,7 @@ export default {
         let uniqueNames = [];
         let uniqueLastNames = [];
         let uniqueFullNames = [];
-        // let loopName = "";
-        // let test = false;
-        // let matchingDatesTwo = [];
         this.dateList = [];
-        // let checkName = [];
         this.students_data = [];
         this.students_data_nocheck_in = [];
 
@@ -3088,15 +3020,12 @@ export default {
             const student = this.coach_list[i]?.studentArr[j];
 
             const fullNameTh =
-              // `${student.firstNameTh}`.toLowerCase();
               `${student.firstNameTh} ${student.lastNameTh}`.toLowerCase();
             const fullNameEn =
               `${student.firstNameEn} ${student.lastNameEn}`.toLowerCase();
             const nameTh = `${student.firstNameTh}`.toLowerCase();
-            // `${student.firstNameTh} ${student.lastNameTh}`.toLowerCase();
             const nameEn = `${student.firstNameEn}`.toLowerCase();
             const lastNameTh = `${student.lastNameTh}`.toLowerCase();
-            // `${student.firstNameTh} ${student.lastNameTh}`.toLowerCase();
             const lastNameEn = `${student.lastNameTh}`.toLowerCase();
 
             if (
@@ -3134,8 +3063,8 @@ export default {
                 );
 
                 // Check if the date matches
-                const dataOneStudents = this.student_list;
-                const dataTwoStudents = this.no_check_in_student_list;
+                const dataOneStudents = await this.student_list;
+                const dataTwoStudents = await this.no_check_in_student_list;
 
                 // Check if the student exists in dataONE and match date
                 for (let k = 0; k < dataOneStudents.length; k++) {
@@ -3174,7 +3103,7 @@ export default {
 
                 for (let k = 0; k < dataTwoStudents.length; k++) {
                   const studentTwo = dataTwoStudents[k];
-                  checkDateTwo.push(studentTwo.date);
+                  checkDateTwo.push(await studentTwo.date);
                 }
 
                 this.dateList = this.coach_list[this.arr_index].dateList;
@@ -3239,6 +3168,7 @@ export default {
                       );
                     }
                   );
+
                   this.students_data_nocheck_in = filteredDataNoCheckIn;
                   this.selected_schedule = indicesNoCheckIn;
                   // this.students_data_nocheck_in = filteredDataNoCheckIn;
@@ -3260,108 +3190,8 @@ export default {
         this.error_data = false;
       }
     },
-    // searchStudentList(search) {
-    //   if (search !== "") {
-    //     const searchTerm = search.toLowerCase();
-    //     this.student_index = null; // Reset the index
-    //     this.arr_index = "";
-    //     this.selected_schedule = []; // Reset the selected_schedule
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //     // Search in coach_list for matching students
-    //     for (let i = 0; i < this.coach_list.length; i++) {
-    //       for (let j = 0; j < this.coach_list[i].studentArr.length; j++) {
-    //         const student = this.coach_list[i].studentArr[j];
-
-    //         const fullNameTh =
-    //           `${student.firstNameTh} ${student.lastNameTh}`.toLowerCase();
-    //         const fullNameEn =
-    //           `${student.firstNameEn} ${student.lastNameEn}`.toLowerCase();
-
-    //         if (
-    //           fullNameTh.includes(searchTerm) ||
-    //           fullNameEn.includes(searchTerm)
-    //         ) {
-    //           this.student_index = { dataIndex: i, student_index: j };
-    //           this.arr_index = this.student_index.dataIndex;
-
-    //           this.GetCoachsByCourse({
-    //             course_id: this.$route.params.course_id,
-    //             search: search ? search : "",
-    //           });
-
-    //           // Add indices from dataONE to selected_schedule
-    //           const datesList = this.coach_list[this.arr_index].datesList;
-    //           for (const index in datesList) {
-    //             const date = datesList[index];
-
-    //             // Parse date to ensure comparison is valid
-    //             const dateToCompare = new Date(date.date)
-    //               .toISOString()
-    //               .split("T")[0]; // Convert to 'YYYY-MM-DD'
-
-    //             const dataOneStudents = this.student_list;
-    //             const dataTwoStudents = this.no_check_in_student_list;
-
-    //             // Check if the student exists in dataONE and match date
-    //             for (let k = 0; k < dataOneStudents.length; k++) {
-    //               const studentOne = dataOneStudents[k];
-    //               const fullNameOneTh =
-    //                 `${studentOne.firstNameTh} ${studentOne.lastNameTh}`.toLowerCase();
-    //               const fullNameOneEn =
-    //                 `${studentOne.firstNameEn} ${studentOne.lastNameEn}`.toLowerCase();
-
-    //               // const studentOneDate = new Date(studentOne.date)
-    //               //   .toISOString()
-    //               //   .split("T")[0];
-
-    //               if (
-    //                 (fullNameOneTh.includes(searchTerm) ||
-    //                   fullNameOneEn.includes(searchTerm)) &&
-    //                   studentOne.date.split("T")[0] === date.date
-    //               ) {
-    //                 this.selected_schedule.push(k);
-    //               }
-    //             }
-
-    //             // Check if the student exists in dataTWO and match date
-    //             for (let l = 0; l < dataTwoStudents.length; l++) {
-    //               const studentTwo = dataTwoStudents[l];
-    //               const fullNameTwoTh = studentTwo.studentName
-    //                 ? studentTwo.studentName.toLowerCase()
-    //                 : "";
-    //               const fullNameTwoEn = studentTwo.studentNameEn
-    //                 ? studentTwo.studentNameEn.toLowerCase()
-    //                 : "";
-
-    //               // Assuming date field in dataTWO exists as `date`
-    //               const studentTwoDate = new Date(studentTwo.date)
-    //                 .toISOString()
-    //                 .split("T")[0];
-
-    //               if (
-    //                 (fullNameTwoTh.includes(searchTerm) ||
-    //                   fullNameTwoEn.includes(searchTerm)) &&
-    //                 studentTwoDate === dateToCompare
-    //               ) {
-    //                 this.selected_schedule.push(l);
-    //               }
-    //             }
-    //           }
-
-    //           this.selected_coach = this.arr_index;
-    //           this.error_data = false;
-
-    //           return; // Exit once a match is found
-    //         } else {
-    //           this.error_data = true;
-    //         }
-    //       }
-    //     }
-    //   } else {
-    //     this.selected_coach = "";
-    //     this.error_data = false;
-    //   }
-    // },
     resetFilter() {
       this.filter = {
         dow: "",
@@ -3921,7 +3751,6 @@ export default {
       // });
       // if (this.selected_schedule.includes(index)) {
       //   const indexSelected = this.selected_schedule.indexOf(index);
-      //   console.log("indexSelected :>> ", indexSelected);
       //   this.selected_schedule.splice(indexSelected, 1);
       // } else {
       //   this.selected_schedule.push(index);
@@ -3930,29 +3759,8 @@ export default {
 
       // 1. เอาข้อมูลที่ตรงกับวันที่นั้นๆออกมา
 
-      // let coachDate = [];
-      // let dateChoose = [];
       let dateChooses = "";
       dateChooses = date.date;
-      // dateChoose.push(date.date);
-      // console.log("dateChoose :>> ", dateChoose);
-
-      // for (let index = 0; index < coach_data.length; index++) {
-      //   const studentDate = coach_data[index];
-      //   // coachDate = studentDate.date;
-      //   coachDate.push(studentDate.date);
-      // }
-
-      // console.log("coachDate :>> ", coachDate);
-      // // console.log("this.student_list :>> ", this.student_list);
-      // // const indices = coachDate.map((date) => dateChoose.indexOf(date));
-      // const indices = dateChoose.map((date) => coachDate.indexOf(date));
-      // console.log("indices :>> ", indices);
-      // console.log("coach_data :>> ", this.coach_list);
-      // // console.log(
-      // //   "this.student_list[indices] :>> ",
-      // //   this.student_list[indices]
-      // // );
       this.students_data = [];
       this.students_data_nocheck_in = [];
       await this.GetStudentByDate({
@@ -3965,52 +3773,26 @@ export default {
         coach_data,
       });
 
-      if (this.student_list?.length > 0) {
-        // console.log("this.student_list :>> ", await this.student_list);
-        this.students_data = await this.student_list;
-      } else {
-        this.students_data_nocheck_in = await this.no_check_in_student_list;
-      }
-
-      // if (coach_data[indices].students?.length > 0) {
-      //   // get student_list
-      //   console.log("111 :>> ", 111);
-      //   await this.GetStudentByDate({
-      //     course_id: this.$route.params.course_id,
-      //     date: dateChooses,
-      //     start_time: date.start,
-      //     end_time: date.end,
-      //     time_id: date.timeId,
-      //     coach_id: date.coachId,
-      //     coach_data,
-      //   });
-      //   console.log("date.start :>> ", date.start);
-      //   console.log("dateChooses :>> ", dateChooses);
-      //   // เอา student_list ให้ตรงตาม dateChoose
-
-      //   console.log("this.student_list :>> ", await this.student_list);
-      // } else {
-      //   // get student_no_check_in
-      //   await this.GetStudentByDate({
-      //     course_id: this.$route.params.course_id,
-      //     date: dateChooses,
-      //     start_time: date.start,
-      //     end_time: date.end,
-      //     time_id: date.timeId,
-      //     coach_id: date.coachId,
-      //     coach_data,
-      //   });
-      //   console.log("this.student_list 22:>> ", await this.student_list);
-
-      //   console.log("222 :>> ", 222);
-      // }
-
-      // this.students_data = await this.student_list;
-      // this.students_data_nocheck_in = await this.no_check_in_student_list;
-
+      // let indexClose = [];
       if (this.selected_schedule.includes(index)) {
-        const indexSelected = this.selected_schedule.indexOf(index);
-        this.selected_schedule.splice(indexSelected, 1);
+        if (this.selected_schedule?.length <= 1) {
+          const indexSelected = this.selected_schedule.indexOf(index);
+          this.selected_schedule.splice(indexSelected, 1);
+          this.select_open = false;
+        } else {
+          const indexSelected = this.selected_schedule.indexOf(index);
+          this.selected_schedule.splice(indexSelected, 1);
+          await this.GetStudentByDate({
+            course_id: this.$route.params.course_id,
+            date: coach_data[this.selected_schedule].date,
+            start_time: date.start,
+            end_time: date.end,
+            time_id: date.timeId,
+            coach_id: date.coachId,
+            coach_data,
+          });
+          this.select_open = false;
+        }
       } else {
         if (this.selected_schedule == []) {
           this.selected_schedule.push(index);
@@ -4019,6 +3801,14 @@ export default {
           this.selected_schedule.splice(indexSelected, 1);
           this.selected_schedule.push(index);
         }
+      }
+
+      if (this.student_list?.length > 0) {
+        // this.students_data.push(await this.student_list);
+        this.students_data = await this.student_list;
+      } else {
+        // this.students_data_nocheck_in.push(await this.no_check_in_student_list);
+        this.students_data_nocheck_in = await this.no_check_in_student_list;
       }
     },
     openFile(file) {
