@@ -120,6 +120,7 @@
     "cash out" : "Make Payment",
     "certification" : "Certification",
     "change photo":"Change photo",
+    "check in sattus" : "Check in sattus",
     "check in later" : "Check in later",
     "check in later by order number" : "Check in later by order number",
     "check-in notification":"Check-in notification",
@@ -210,6 +211,10 @@
     "credit card":"Credit card",
     "customization" : "Customization",
     "course has been created":"( Course has been created )",
+    "coach information not found": "Coach information not found",
+    "check in status" : "Check in status",
+
+
 
     "day" : "Day",
     "day and date" : "Day and date",
@@ -307,6 +312,7 @@
     "example of pictures":"Example of pictures",
     "excessive study hours" : "Excessive study hours",
     "export" : "Export",
+    "export course check in" : "Export course check in",
     "evaluate": "After participating in the Smart School Managemet system service, please evaluate your satisfaction. In order for the system that you use to use the service to use your comments to improve the service further",
     "evaluate satisfaction with using the system" : "Evaluate satisfaction with using the system",
     "ease of use":"Ease of use",
@@ -537,6 +543,7 @@
     "permission management": "Permission management",
     "personal" : "Personal",
     "phone number" : "Phone number",
+    "please select a course status":"Please select a course status",
     "please enter course name":"Please enter course name",
     "please select course":"Please select a course",
     "please select a reservation start date":"Please select a reservation start date",
@@ -585,6 +592,7 @@
     "please choose a payment method" : "Please choose a payment method",
     "please open a course" : "Please open a course",
     "press to enter the teaching time" : "Check in Teaching time",
+    "please select check in status":"Please select check in status",
     "please selete data" : "Please selete data",
     "please select developmental level" : "Please select developmental level",
     "please select a class date" : "Please select a class date",
@@ -808,7 +816,7 @@
 
 
 
-
+    "study time": "Study Time",
     "the system will not display information if the user does not enter student and parent information" :"The system will not display the information if the user does not fill in the student and parent information according to the template",
     "take annual leave" : "Take annual leave",
     "take leave form" : "Take leave form",

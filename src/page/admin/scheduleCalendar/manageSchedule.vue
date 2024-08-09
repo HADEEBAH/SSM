@@ -855,152 +855,15 @@
             <v-card-title>
               <v-row dense>
                 <v-col align="center">
-                  {{ $t("export") }}
+                  {{ $t("export course check in") }}
                 </v-col>
                 <v-col cols="auto" align="end">
-                  <v-btn icon @click="filter_coach = false">
+                  <v-btn icon @click="closeFilterCoach">
                     <v-icon color="#ff6b81">mdi-close</v-icon>
                   </v-btn>
                 </v-col>
               </v-row>
             </v-card-title>
-            <v-row dense>
-              <!-- ชื่อคอร์ส -->
-              <v-col cols="12" sm="6">
-                <label class="font-weight-bold">{{ $t("course name") }}</label>
-                <v-autocomplete
-                  outlined
-                  v-model="export_data.course_name"
-                  :items="get_filter_course"
-                  :item-text="
-                    $i18n.locale == 'th' ? 'courseNameTh' : 'courseNameEn'
-                  "
-                  item-value="courseId"
-                  multiple
-                  color="#FF6B81"
-                  item-color="#FF6B81"
-                  dense
-                  :placeholder="this.$t('courses')"
-                >
-                  <template v-slot:no-data>
-                    <v-list-item>
-                      <v-list-item-title>
-                        {{ $t("course information not found") }}
-                      </v-list-item-title>
-                    </v-list-item>
-                  </template>
-                  <template v-slot:selection="{ item, index }">
-                    <v-chip dark v-if="index === 0" color="#FF6B81">
-                      <span>{{
-                        $i18n.locale == "th"
-                          ? item.courseNameTh
-                          : item.courseNameEn
-                      }}</span>
-                    </v-chip>
-                    <span v-if="index === 1" class="grey--text text-caption">
-                      (+{{ export_data.course_name.length - 1 }}
-                      {{ $t("others") }})
-                    </span>
-                  </template>
-                </v-autocomplete>
-              </v-col>
-              <!-- โค้ช -->
-              <v-col cols="12" sm="6">
-                <label class="font-weight-bold">{{ $t("coach") }}</label>
-                <v-autocomplete
-                  outlined
-                  v-model="export_data.coach_name"
-                  :items="get_coachs"
-                  :item-text="
-                    $i18n.locale == 'th' ? 'fullNameTh' : 'fullNameEh'
-                  "
-                  item-value="accountId"
-                  multiple
-                  color="pink"
-                  item-color="pink"
-                  dense
-                  :placeholder="this.$t('coach')"
-                >
-                  <template v-slot:no-data>
-                    <v-list-item>
-                      <v-list-item-title>
-                        {{ $t("coach information not found") }}
-                      </v-list-item-title>
-                    </v-list-item>
-                  </template>
-                  <template v-slot:selection="{ item, index }">
-                    <v-chip dark v-if="index === 0" color="#FF6B81">
-                      <span>{{
-                        $i18n.locale == "th" ? item.fullNameTh : item.fullNameEh
-                      }}</span>
-                    </v-chip>
-                    <span
-                      v-if="index === 1"
-                      class="grey--text text-caption"
-                      color="#FF6B81"
-                    >
-                      (+{{ export_data.coach_name.length - 1 }}
-                      {{ $t("others") }})
-                    </span>
-                  </template>
-                </v-autocomplete>
-              </v-col>
-            </v-row>
-            <!-- TIME -->
-            <v-row dense>
-              <v-col cols="12" sm="6" class="px-0">
-                <label class="font-weight-bold">{{ $t("start time") }}</label>
-
-                <v-text-field
-                  outlined
-                  dense
-                  :style="`width:${width()}px;`"
-                  style="position: absolute; display: block; z-index: 4"
-                  @focus="SelectedStartDate($event)"
-                  v-model="export_data.start_time"
-                  color="#FF6B81"
-                ></v-text-field>
-                <VueTimepicker
-                  class="time-picker-hidden"
-                  hide-clear-button
-                  input-class="input-size-lg"
-                  :style="`width:${width()}px;`"
-                  advanced-keyboard
-                  @change="resetTimeEditExport()"
-                  v-model="export_data.start_time"
-                  close-on-complete
-                  color="#FF6B81"
-                >
-                </VueTimepicker>
-              </v-col>
-              <!-- เวลาสิ้นสุด -->
-
-              <v-col cols="12" sm="6" class="px-0">
-                <label class="font-weight-bold">{{ $t("end time") }}</label>
-
-                <v-text-field
-                  outlined
-                  dense
-                  :style="`width:${width()}px;`"
-                  style="position: absolute; display: block; z-index: 4"
-                  @focus="SelectedStartDate($event)"
-                  v-model="export_data.end_time"
-                  color="#FF6B81"
-                ></v-text-field>
-                <VueTimepicker
-                  class="time-picker-hidden"
-                  hide-clear-button
-                  input-class="input-size-lg"
-                  advanced-keyboard
-                  v-model="export_data.end_time"
-                  :style="`width:${width()}px;`"
-                  close-on-complete
-                  :hour-range="checkHourExpord(export_data.start_time)"
-                  color="#FF6B81"
-                >
-                </VueTimepicker>
-              </v-col>
-            </v-row>
             <!-- DATE -->
             <v-row dense>
               <!-- Start DATE -->
@@ -1089,15 +952,199 @@
                 </v-menu>
               </v-col>
             </v-row>
+            <!-- TIME -->
+
+            <v-row dense>
+              <!-- DATE -->
+              <v-col cols="12" sm="6">
+                <v-row dense>
+                  <v-col cols="6" sm="6">
+                    <label class="font-weight-bold">{{
+                      $t("start time")
+                    }}</label>
+                    <!-- <label class="font-weight-bold">{{
+                      $t("study time")
+                    }}</label> -->
+
+                    <v-text-field
+                      outlined
+                      dense
+                      style="
+                        position: absolute;
+                        display: block;
+                        z-index: 4;
+                        width: 142px;
+                      "
+                      @focus="SelectedStartDate($event)"
+                      v-model="export_data.start_time"
+                      color="#FF6B81"
+                    ></v-text-field>
+                    <VueTimepicker
+                      class="time-picker-hidden"
+                      hide-clear-button
+                      input-class="input-size-lg"
+                      advanced-keyboard
+                      @change="resetTimeEditExport()"
+                      v-model="export_data.start_time"
+                      close-on-complete
+                      color="#FF6B81"
+                    >
+                    </VueTimepicker>
+                  </v-col>
+                  <!-- เวลาสิ้นสุด -->
+
+                  <v-col cols="6" sm="6">
+                    <label class="font-weight-bold">{{ $t("end time") }}</label>
+                    <v-text-field
+                      outlined
+                      dense
+                      style="
+                        position: absolute;
+                        display: block;
+                        z-index: 4;
+                        width: 142px;
+                      "
+                      @focus="SelectedStartDate($event)"
+                      v-model="export_data.end_time"
+                      color="#FF6B81"
+                    ></v-text-field>
+                    <VueTimepicker
+                      class="time-picker-hidden"
+                      hide-clear-button
+                      input-class="input-size-lg"
+                      advanced-keyboard
+                      v-model="export_data.end_time"
+                      close-on-complete
+                      :hour-range="checkHourExpord(export_data.start_time)"
+                      color="#FF6B81"
+                    >
+                    </VueTimepicker>
+                  </v-col>
+                </v-row>
+              </v-col>
+              <!-- โค้ช -->
+              <v-col cols="12" sm="6">
+                <label class="font-weight-bold">{{ $t("coach") }}</label>
+                <v-autocomplete
+                  outlined
+                  v-model="export_data.coach_id"
+                  :items="get_coachs"
+                  :item-text="
+                    $i18n.locale == 'th' ? 'fullNameTh' : 'fullNameEh'
+                  "
+                  item-value="accountId"
+                  multiple
+                  color="pink"
+                  item-color="pink"
+                  dense
+                  :placeholder="this.$t('coach')"
+                >
+                  <template v-slot:no-data>
+                    <v-list-item>
+                      <v-list-item-title>
+                        {{ $t("coach information not found") }}
+                      </v-list-item-title>
+                    </v-list-item>
+                  </template>
+                  <template v-slot:selection="{ item, index }">
+                    <v-chip dark v-if="index === 0" color="#FF6B81">
+                      <span>{{
+                        $i18n.locale == "th" ? item.fullNameTh : item.fullNameEh
+                      }}</span>
+                    </v-chip>
+                    <span
+                      v-if="index === 1"
+                      class="grey--text text-caption"
+                      color="#FF6B81"
+                    >
+                      (+{{ export_data.coach_id.length - 1 }}
+                      {{ $t("others") }})
+                    </span>
+                  </template>
+                </v-autocomplete>
+              </v-col>
+            </v-row>
+
+            <!-- ชื่อคอร์ส -->
+            <v-row dense>
+              <!-- ชื่อคอร์ส -->
+              <v-col cols="12" sm="6">
+                <label class="font-weight-bold">{{ $t("course name") }}</label>
+                <v-autocomplete
+                  outlined
+                  v-model="export_data.course_name"
+                  :items="get_filter_course"
+                  :item-text="
+                    $i18n.locale == 'th' ? 'courseNameTh' : 'courseNameEn'
+                  "
+                  item-value="courseId"
+                  multiple
+                  color="#FF6B81"
+                  item-color="#FF6B81"
+                  dense
+                  :placeholder="this.$t('courses')"
+                >
+                  <template v-slot:no-data>
+                    <v-list-item>
+                      <v-list-item-title>
+                        {{ $t("course information not found") }}
+                      </v-list-item-title>
+                    </v-list-item>
+                  </template>
+                  <template v-slot:selection="{ item, index }">
+                    <v-chip dark v-if="index === 0" color="#FF6B81">
+                      <span>{{
+                        $i18n.locale == "th"
+                          ? item.courseNameTh
+                          : item.courseNameEn
+                      }}</span>
+                    </v-chip>
+                    <span v-if="index === 1" class="grey--text text-caption">
+                      (+{{ export_data.course_name.length - 1 }}
+                      {{ $t("others") }})
+                    </span>
+                  </template>
+                </v-autocomplete>
+              </v-col>
+              <!-- ประเภทคอร์ส -->
+              <v-col cols="12" sm="6">
+                <label class="font-weight-bold">{{ $t("course type") }}</label>
+                <v-autocomplete
+                  dense
+                  :items="courseType"
+                  :item-text="$i18n.locale == 'th' ? 'typeName' : 'typeNameEn'"
+                  item-value="typeOfValue"
+                  v-model="export_data.course_type_id"
+                  :placeholder="$t('please select a course type')"
+                  outlined
+                  multiple
+                  color="#FF6B81"
+                  item-color="#FF6B81"
+                  @input="setCourseType()"
+                >
+                  <template v-slot:selection="{ item, index }">
+                    <v-chip dark v-if="index === 0" color="#FF6B81">
+                      <span>{{ item.typeName }}</span>
+                    </v-chip>
+                    <span v-if="index === 1" class="grey--text text-caption">
+                      (+{{ export_data.course_type_id.length - 1 }}
+                      {{ $t("Others") }})
+                    </span>
+                  </template>
+                </v-autocomplete>
+              </v-col>
+            </v-row>
             <!-- PACKGE -->
             <v-row dense>
               <!-- course type -->
               <v-col cols="12" sm="6">
-                <label class="font-weight-bold">{{ $t("course type") }}</label>
+                <label class="font-weight-bold">{{
+                  $t("course status")
+                }}</label>
                 <v-autocomplete
                   outlined
-                  v-model="export_data.coure_type"
-                  :items="courseType"
+                  v-model="export_data.coure_status"
+                  :items="courseStatus"
                   :item-text="
                     $i18n.locale == 'th' ? 'coursTypeName' : 'coursTypeNameEn'
                   "
@@ -1106,7 +1153,7 @@
                   color="#FF6B81"
                   item-color="#FF6B81"
                   dense
-                  :placeholder="this.$t('courses status')"
+                  :placeholder="this.$t('please select a course status')"
                 >
                   <template v-slot:no-data>
                     <v-list-item>
@@ -1124,7 +1171,7 @@
                       }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
-                      (+{{ export_data.coure_type.length - 1 }}
+                      (+{{ export_data.coure_status.length - 1 }}
                       {{ $t("others") }})
                     </span>
                   </template>
@@ -1160,7 +1207,7 @@
             <!-- ระยะเวลาคอร์ส -->
             <v-row dense>
               <v-col cols="12" sm="6">
-                <label class="font-weight-bold">{{ $t("study start") }}</label>
+                <label class="font-weight-bold">{{ $t("period") }}</label>
                 <v-autocomplete
                   dense
                   :items="options_data"
@@ -1321,7 +1368,7 @@ export default {
       "พฤศจิกายน",
       "ธันวาคม",
     ],
-    courseType: [
+    courseStatus: [
       {
         coursTypeName: "คอร์สเต็ม",
         coursTypeNameEn: "Full course",
@@ -1331,6 +1378,18 @@ export default {
         coursTypeName: "คอร์สว่าง",
         coursTypeNameEn: "Course available",
         courseTypeValue: "Open",
+      },
+    ],
+    courseType: [
+      {
+        typeName: "คอร์สทั่วไป",
+        typeNameEn: "General course",
+        typeOfValue: "CT_1",
+      },
+      {
+        typeName: "คอร์สระยะสั้น",
+        typeNameEn: "Short course",
+        typeOfValue: "CT_2",
       },
     ],
 
@@ -1428,7 +1487,7 @@ export default {
 
     export_data: {
       course_name: "",
-      coach_name: "",
+      coach_id: "",
       student_name: "",
       start_date: "",
       end_date: "",
@@ -1439,10 +1498,11 @@ export default {
       select_start_time: "",
       select_end_time: "",
       check_in_status_options: [],
-      coure_type: [],
+      coure_status: [],
       packages: [],
       package_id: [],
       options_id: [],
+      course_type_id: [],
     },
   }),
 
@@ -1470,6 +1530,7 @@ export default {
       data_search_schedule: "ManageScheduleModules/getSearchFilterSchedule",
       packages: "CourseModules/getPackages",
       options_data: "CourseModules/getOptions",
+      getCheckinFilter: "adminCheckInModules/getCheckinFilter",
     }),
     dates() {
       return [
@@ -1525,12 +1586,15 @@ export default {
       ResetSearch: "ManageScheduleModules/ResetSearch",
       GetPackages: "CourseModules/GetPackages",
       GetOptions: "CourseModules/GetOptions",
+      CheckInFilter: "adminCheckInModules/CheckInFilter",
     }),
-    exportCheckin() {},
+    exportCheckin() {
+      this.CheckInFilter({ export_data: this.export_data });
+    },
     cleareData() {
       this.export_data = {
         course_name: "",
-        coach_name: "",
+        coach_id: "",
         student_name: "",
         start_date: "",
         end_date: "",
@@ -1539,12 +1603,13 @@ export default {
         start_time: "",
         end_time: "",
         select_start_time: "",
-        check_in_status_options: "",
         select_end_time: "",
-        coure_type: [],
+        check_in_status_options: [],
+        coure_status: [],
         packages: [],
         package_id: [],
         options_id: [],
+        course_type_id: [],
       };
     },
     width() {
@@ -2060,6 +2125,28 @@ export default {
         }
       }
       return allHolidaysData;
+    },
+    closeFilterCoach() {
+      this.filter_coach = false;
+      this.export_data = {
+        course_name: "",
+        coach_id: "",
+        student_name: "",
+        start_date: "",
+        end_date: "",
+        select_date_doc_start: false,
+        select_date_doc_end: false,
+        start_time: "",
+        end_time: "",
+        select_start_time: "",
+        select_end_time: "",
+        check_in_status_options: [],
+        coure_status: [],
+        packages: [],
+        package_id: [],
+        options_id: [],
+        course_type_id: [],
+      };
     },
   },
 };
