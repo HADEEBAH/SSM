@@ -325,6 +325,8 @@ const adminCheckInModules = {
                         Authorization: `Bearer ${VueCookie.get("token")}`,
                     },
                 };
+                // let localhost = "http://localhost:3000"
+                // const { data } = await axios.post(`${localhost}/api/v1/adminfeature/checkincoach`, {
                 const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/adminfeature/checkincoach`, {
                     ...checkInData
                 }, config)

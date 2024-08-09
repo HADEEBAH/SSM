@@ -197,7 +197,7 @@
                     $i18n.locale == 'th' ? 'course_name_th' : 'course_name_en'
                   "
                   v-model="course.course_id"
-                  :items="course.course_options"
+                  :items="openCourses(course.course_options)"
                   :rules="rules.course"
                   :placeholder="$t(`select course`)"
                   outlined
@@ -1350,6 +1350,7 @@ export default {
                   });
                   this.order.type = "addStudent";
                   this.changeOrderData(this.order);
+                  console.log("this.order :>> ", this.order);
                   await this.saveOrder({ regis_type: "addStudent" });
                   if (this.order_is_status) {
                     let payload = {
@@ -1493,3 +1494,4 @@ sub-register-sm {
   transform: translate(-50%, -50%);
 }
 </style>
+// creatStudent(featureSekectDate)
