@@ -541,7 +541,6 @@
             >
               <v-col cols="12" sm="4" v-if="course.course_type_id == 'CT_2'">
                 <label-custom :text="$t('date')"></label-custom>
-                <pre>{{ course }}</pre>
                 <v-text-field
                   v-if="course.course_id"
                   dense
