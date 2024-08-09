@@ -80,9 +80,19 @@ const adminCheckInModules = {
         },
         SetCheckInCoach(state, { index, students }) {
             state.scheduleCheckin[index].checkedIn = 1
-            state.scheduleCheckin[index].checkInStudent = students.map(v => {
-                // v.status = 'punctual' 
-                return v
+            state.scheduleCheckin[index].checkInStudent = students?.map(items => {
+                // items.status = items.status && items.status !== "" ? items.status : 'punctual'
+                if (items?.compensationDate) {
+                    items.compensationDate = items.compensationDate ? items.compensationDate !== "Invalid date" ? moment(new Date(items.compensationDate)).format("YYYY-MM-DD") : null : null
+                    items.compensationDateStr = items.compensationDate ? items.compensationDate !== "Invalid date" ? dateFormatter(new Date(items.compensationDate), "DD MMT YYYYT") : null : null
+
+                    items.compensationStartTime = items.compensationStartTime ? moment(items.compensationStartTime, "HH:mm") : ''
+                    items.compensationEndTime = items.compensationEndTime ? moment(items.compensationEndTime, "HH:mm") : ''
+                } else {
+                    items.compensationDateStr = ""
+                    items.compensationDate = ""
+                }
+                return items
             })
         },
         async SetCheckInStudent(state, { payload }) {
@@ -102,6 +112,10 @@ const adminCheckInModules = {
                 }
 
             });
+        },
+
+        SetUpdateCheckinStudentsIsLoading(state, payload) {
+            state.updateCheckinStudentsIsLoading = payload
         }
     },
     actions: {
@@ -155,8 +169,9 @@ const adminCheckInModules = {
                         'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                let localhost = "http://localhost:3000"
-                let endpoint = `${localhost}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}${courseType}`
+                // let localhost = "http://localhost:3000"
+                // let endpoint = `${localhost}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}${courseType}`
+                let endpoint = `${process.env.VUE_APP_URL}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}${courseType}`
                 // let endpoint = `${process.env.VUE_APP_URL}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}`
                 let { data } = await axios.get(endpoint, config)
                 if (data.statusCode == 200) {
@@ -348,6 +363,7 @@ const adminCheckInModules = {
             }
         },
         async GetScheduleCheckIn(context, { course, coach, dayOfWeek, time, timeStart, timeEnd }) {
+            let response = []
             try {
                 context.commit("SetScheduleCheckinIsLoadIng", true)
                 let config = {
@@ -361,28 +377,36 @@ const adminCheckInModules = {
                 // const { data } = await axios.get(`${localhost}/api/v1/adminfeature/schedule?courseId=${course}&coachId=${coach}&dowId=${dayOfWeek}&timeId=${time}&timeStart=${timeStart}&timeEnd=${timeEnd}`, config)
                 const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminfeature/schedule?courseId=${course}&coachId=${coach}&dowId=${dayOfWeek}&timeId=${time}&timeStart=${timeStart}&timeEnd=${timeEnd}`, config)
                 if (data.statusCode == 200) {
-                    for await (let [index, checkIn] of data.data.entries()) {
+                    for await (let items of data.data) {
+                        // data.data.map(items => {
+                        if (items?.checkInStudent) {
+                            // context.dispatch("CheckInCoach", { checkInData: checkIn, index: index })
+                            items?.checkInStudent.map(item => {
+                                if (item?.compensationDate) {
+                                    item.compensationDate = item.compensationDate ? item.compensationDate !== "Invalid date" ? moment(new Date(item.compensationDate)).format("YYYY-MM-DD") : null : null
+                                    item.compensationDateStr = item.compensationDate ? item.compensationDate !== "Invalid date" ? dateFormatter(new Date(item.compensationDate), "DD MMT YYYYT") : null : null
 
-                        if (checkIn.checkInStudent) {
-                            context.dispatch("CheckInCoach", { checkInData: checkIn, index: index })
-                            checkIn.checkInStudent = checkIn.checkInStudent.map(s => {
-                                if (s?.compensationDate) {
-                                    let compensationDate = moment(s.compensationDate).format("YYYY-MM-DD")
-                                    s.compensationDateStr = dateFormatter(compensationDate, "DD MMT YYYYT")
-                                    s.compensationStartTime = s.compensationStartTime ? moment(s.compensationStartTime, "HH:mm") : ''
-                                    s.compensationEndTime = s.compensationEndTime ? moment(s.compensationEndTime, "HH:mm") : ''
+                                    // let compensationDate = moment(item.compensationDate).format("YYYY-MM-DD")
+                                    // item.compensationDateStr = dateFormatter(compensationDate, "DD MMT YYYYT")
+                                    item.compensationStartTime = item.compensationStartTime ? moment(item.compensationStartTime, "HH:mm") : ''
+                                    item.compensationEndTime = item.compensationEndTime ? moment(item.compensationEndTime, "HH:mm") : ''
                                 } else {
-                                    s.compensationDateStr = ""
-                                    s.compensationDate = ""
+                                    item.compensationDateStr = ""
+                                    item.compensationDate = ""
                                 }
-                                s.menuCompensationDate = false
-                                s.startTime = ""
-                                s.endTime = ""
-                                return s
+                                item.menuCompensationDate = false
+                                item.startTime = ""
+                                item.endTime = ""
+
+                                return item
                             })
                         }
+
+                        response.push(items)
+                        // return items
+                        // })
                     }
-                    await context.commit("SetScheduleCheckin", data.data)
+                    await context.commit("SetScheduleCheckin", response)
                     context.commit("SetScheduleCheckinIsLoadIng", false)
                 }
             } catch (error) {
@@ -391,6 +415,7 @@ const adminCheckInModules = {
             }
         },
         async UpdateCheckinStudents(context, { payload }) {
+            context.commit("SetUpdateCheckinStudentsIsLoading", true)
             try {
                 let config = {
                     headers: {
@@ -401,18 +426,19 @@ const adminCheckInModules = {
                 };
                 let Isleave = []
                 let dataPayload = payload
-                dataPayload.map(v => {
-                    if (v.status !== "leave") {
-                        v.compensationDate = ""
-                        v.compensationStartTime = ""
-                        v.compensationEndTime = ""
+                dataPayload.map(items => {
+                    if (items.status !== "leave") {
+                        items.compensationDate = ""
+                        items.compensationStartTime = ""
+                        items.compensationEndTime = ""
                     } else {
-                        Isleave.push(v)
-                        v.compensationStartTime = moment(v.compensationStartTime).format("HH:mm")
-                        v.compensationEndTime = moment(v.compensationEndTime).format("HH:mm")
+                        Isleave.push(items)
+                        items.compensationStartTime = moment(items.compensationStartTime).format("HH:mm")
+                        items.compensationEndTime = moment(items.compensationEndTime).format("HH:mm")
                     }
-                    return v
+                    return items
                 })
+                // const { data } = await axios.patch(`http://localhost:3000/api/v1/adminfeature/checkinallstudent`, dataPayload, config)
                 const { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/adminfeature/checkinallstudent`, dataPayload, config)
                 if (data.statusCode == 200) {
                     Swal.fire({
@@ -426,17 +452,19 @@ const adminCheckInModules = {
                         timerProgressBar: true,
                     })
                     context.commit("SetCheckInStudent", { payload: payload })
-                    if (Isleave.length > 0) {
-                        const { timeEnd, timeStart, coachId, courseId, timeId, dayOfWeekId } = context.state.scheduleCheckin[0]
-                        await context.dispatch("GetScheduleCheckIn", {
-                            course: courseId,
-                            coach: coachId,
-                            dayOfWeek: dayOfWeekId,
-                            time: timeId,
-                            timeStart,
-                            timeEnd
-                        })
-                    }
+                    // if (Isleave.length > 0) {
+                    const { timeEnd, timeStart, coachId, courseId, timeId, dayOfWeekId } = context.state.scheduleCheckin[0]
+                    await context.dispatch("GetScheduleCheckIn", {
+                        course: courseId,
+                        coach: coachId,
+                        dayOfWeek: dayOfWeekId,
+                        time: timeId,
+                        timeStart,
+                        timeEnd
+                    })
+                    // }
+                    context.commit("SetUpdateCheckinStudentsIsLoading", false)
+
                 }
             } catch (error) {
                 Swal.fire({
@@ -449,6 +477,7 @@ const adminCheckInModules = {
                     showConfirmButton: false,
                     timerProgressBar: true,
                 })
+                context.commit("SetUpdateCheckinStudentsIsLoading", false)
             }
         },
         async CheckInCoach(context, { checkInData, index }) {
@@ -466,7 +495,8 @@ const adminCheckInModules = {
                     ...checkInData
                 }, config)
                 if (data.statusCode == 201) {
-                    context.commit("SetCheckInCoach", { index: index, students: data.data })
+                    console.log('SetCheckInCoach')
+                    await context.commit("SetCheckInCoach", { index: index, students: data.data })
                 }
             } catch (error) {
                 console.log(error)
@@ -494,7 +524,11 @@ const adminCheckInModules = {
         },
         scheduleCheckinIsLoadIng(state) {
             return state.scheduleCheckinIsLoadIng
+        },
+        getUpdateCheckinStudentsIsLoading(state) {
+            return state.updateCheckinStudentsIsLoading
         }
+
     },
 };
 
