@@ -268,8 +268,8 @@ export default {
       GetCalendarCoach: "CoachModules/GetCalendarCoach",
     }),
 
-    GetSchedule({ start, end }) {
-      this.GetCalendarCoach({
+    async GetSchedule({ start, end }) {
+      await this.GetCalendarCoach({
         start_date: start.date,
         end_date: end.date,
       });

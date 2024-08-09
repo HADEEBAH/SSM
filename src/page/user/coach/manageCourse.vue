@@ -1145,7 +1145,7 @@
           </v-autocomplete>
         </v-col>
       </v-row>
-
+      
       <!-- TAB -->
       <v-row class="mb-2">
         <v-col cols="12" align="center">
@@ -1791,8 +1791,8 @@ export default {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
   },
   async mounted() {
-    let startDate = new Date().toISOString().split("T")[0];
-    let endDate = new Date().toISOString().split("T")[0];
+    let startDate = moment(new Date()).format("YYYY-MM-DD");
+    let endDate = moment(new Date()).format("YYYY-MM-DD");
     await this.GetCalendarCoach({
       start_date: startDate,
       end_date: endDate,
