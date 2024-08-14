@@ -1566,6 +1566,18 @@ export default {
           value: "fullname",
         },
         {
+          text: `${this.$t("nickname")}`,
+          align: "center",
+          sortable: false,
+          value: "nickname",
+        },
+        {
+          text: `${this.$t("class")}`,
+          align: "center",
+          sortable: false,
+          value: "class",
+        },
+        {
           text: this.$t("package"),
           align: "center",
           sortable: false,
