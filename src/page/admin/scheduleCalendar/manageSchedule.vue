@@ -911,8 +911,6 @@
               <v-col cols="12" sm="6">
                 <!-- End Date -->
                 <label class="font-weight-bold">{{ $t("to date") }}</label>
-
-                <!-- <label :text="$t('to')"></label> -->
                 <v-menu
                   v-model="export_data.select_date_doc_end"
                   :close-on-content-click="false"
@@ -922,6 +920,13 @@
                   min-width="auto"
                 >
                   <template v-slot:activator="{ on, attrs }">
+                    <!-- :disabled="!export_data.start_date" -->
+                    <!-- :min="
+                      export_data.start_date
+                        ? export_data.start_date
+                        : today.toISOString()
+                    " -->
+
                     <v-text-field
                       dense
                       :value="
@@ -936,15 +941,10 @@
                       v-bind="attrs"
                       v-on="on"
                       color="#FF6B81"
-                      :disabled="!export_data.start_date"
                     ></v-text-field>
                   </template>
                   <v-date-picker
-                    :min="
-                      export_data.start_date
-                        ? export_data.start_date
-                        : today.toISOString()
-                    "
+                    :min="export_data.start_date ? export_data.start_date : ''"
                     v-model="export_data.end_date"
                     @input="inputDate($event, 'selected end date')"
                     locale="th-TH"
