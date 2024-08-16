@@ -207,7 +207,7 @@ const adminCheckInModules = {
                                     "แพ็คเกจ": filterData.packageName ? filterData.packageName : '-',
                                     "ช่วงเวลา": filterData.optionName ? filterData.optionName : '-',
                                     "ชื่อนักเรียน": filterData.checkinStudent ? studentName : '-',
-                                    "สถานะเช็คอิน": filterData.checkinStudent ? satuscheckin !== null ? satuscheckin : "ยังไม่มีการเช็คอิน" : '-',
+                                    "สถานะเช็คอิน": filterData.checkinStudent ? satuscheckin !== null ? satuscheckin : "ยังไม่มีการเลือกสถานะ" : '-',
                                     // "สถานะเช็คอิน": filterData.checkinStudent ? satuscheckin : '-',
                                 })
 
