@@ -1,7 +1,9 @@
 <template>
   <v-container>
     <headerPage :title="$t('admin check in later')" />
-    <loading-overlay :loading="getUpdateCheckinStudentsIsLoading"></loading-overlay>
+    <loading-overlay
+      :loading="getUpdateCheckinStudentsIsLoading"
+    ></loading-overlay>
     <v-card class="mb-3" outlined rounded="lg">
       <v-card-text>
         <v-row>
@@ -488,7 +490,8 @@ export default {
       time: "adminCheckInModules/time",
       scheduleCheckin: "adminCheckInModules/scheduleCheckin",
       scheduleCheckinIsLoadIng: "adminCheckInModules/scheduleCheckinIsLoadIng",
-      getUpdateCheckinStudentsIsLoading: "adminCheckInModules/getUpdateCheckinStudentsIsLoading",
+      getUpdateCheckinStudentsIsLoading:
+        "adminCheckInModules/getUpdateCheckinStudentsIsLoading",
     }),
     breadcrumbs() {
       return [
@@ -788,9 +791,9 @@ export default {
               })
             ) {
               await this.UpdateCheckinStudents({
-                payload: scheduleData.checkInStudent.map((items)=>{
-                  items.date = scheduleData.date.replaceAll('/', '-')
-                  return items
+                payload: scheduleData.checkInStudent.map((items) => {
+                  items.date = scheduleData.date.replaceAll("/", "-");
+                  return items;
                 }),
               });
               await this.CheckedInCoach(scheduleData, index);
