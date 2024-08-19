@@ -1986,9 +1986,9 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let localhost = "http://localhost:3002"
-        const { data } = await axios.delete(`${localhost}/api/v1/order/cancel-order/${order_number}`, config)
-        // const { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/order/cancel-order/${order_number}`, config)
+        // let localhost = "http://localhost:3002"
+        // const { data } = await axios.delete(`${localhost}/api/v1/order/cancel-order/${order_number}`, config)
+        const { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/order/cancel-order/${order_number}`, config)
         if (data.statusCode === 200) {
           await Swal.fire({
             icon: "success",
