@@ -73,7 +73,6 @@
           >
           </v-text-field>
         </v-col>
-        <pre></pre>
         <!-- nickname -->
         <v-col cols="12" sm="6">
           <label-custom :text="$t('nickname')"></label-custom>
@@ -153,7 +152,7 @@
           v-if="profile_detail?.userRoles?.roleId === 'R_5'"
         >
           <label-custom :text="$t('class')"></label-custom>
-          <v-autocomplete
+          <!-- <v-autocomplete
             v-model="profile_detail.class.classNameTh"
             :items="class_list"
             item-text="classNameTh"
@@ -169,7 +168,25 @@
                 {{ $t("data not found") }}
               </v-list-item>
             </template>
-          </v-autocomplete>
+          </v-autocomplete> -->
+          <v-combobox
+            v-model="profile_detail.class.classNameTh"
+            :items="class_list"
+            item-text="classNameTh"
+            dense
+            outlined
+            color="#ff6B81"
+            item-color="#ff6b81"
+            :placeholder="$t('select class')"
+            :rules="rules.class"
+            :disabled="!isEnabled"
+          >
+            <template #no-data>
+              <v-list-item>
+                {{ $t("data not found") }}
+              </v-list-item>
+            </template>
+          </v-combobox>
         </v-col>
         <v-col cols="12" sm="6">
           <label-custom :text="$t('congenital disease')"></label-custom>
@@ -358,7 +375,7 @@ export default {
     closeDialogPorfile(value) {
       this.changeProfileFail(value);
     },
-    submitEdit() {
+    async submitEdit() {
       if (this.$refs.form.validate()) {
         Swal.fire({
           icon: "question",
@@ -424,7 +441,7 @@ export default {
                   "userDetail",
                   JSON.stringify(data_storage)
                 );
-                this.GetProfileDetail(this.$route.params.profile_id);
+                await this.GetProfileDetail(this.$route.params.profile_id);
 
                 this.is_loading = false;
                 this.preview_file = "";
@@ -448,6 +465,7 @@ export default {
                   timerProgressBar: true,
                   timer: 3000,
                 });
+                await this.GetClassList();
               } else {
                 throw { message: data.message };
               }
