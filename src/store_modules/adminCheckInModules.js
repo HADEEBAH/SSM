@@ -169,9 +169,9 @@ const adminCheckInModules = {
                         'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                // let localhost = "http://localhost:3000"
-                // let endpoint = `${localhost}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}${courseType}`
-                let endpoint = `${process.env.VUE_APP_URL}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}${courseType}`
+                let localhost = "http://localhost:3000"
+                let endpoint = `${localhost}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}${courseType}`
+                // let endpoint = `${process.env.VUE_APP_URL}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}${courseType}`
                 let { data } = await axios.get(endpoint, config)
                 if (data.statusCode == 200) {
                     let reports = []
@@ -190,12 +190,13 @@ const adminCheckInModules = {
 
                             // Display the status sorted by date
                             filterData.checkinStudent.forEach(entry => {
-                                dateCheckIn = entry.date
+                                dateCheckIn = entry.checkInTimeStamp
+                                // dateCheckIn = entry.date
                                 satuscheckin = entry.status
                                 studentName = `${entry.firstNameTh} ${entry.lastNameTh}`
 
                                 reports.push({
-                                    "วันที่เช็คอิน": filterData.checkinStudent ? moment(dateCheckIn).format("DD/MM/YYYY") : '-',
+                                    "วันที่เช็คอิน": dateCheckIn ? filterData.checkinStudent ? moment(dateCheckIn).format("DD/MM/YYYY HH:mm:ss") : '-' : '',
                                     // "เวลาเริ่มเรียน": filterData.timeStart ? filterData.timeStart : '-',
                                     // "เวลาสิ้นสุดการเรียน": filterData.timeEnd ? filterData.timeEnd : '-',
                                     "วันที่เริ่มเรียน": filterData.dateStart ? moment(filterData.dateStart).format("DD/MM/YYYY") : '-',

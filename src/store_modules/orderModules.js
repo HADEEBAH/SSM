@@ -1853,9 +1853,9 @@ const orderModules = {
               let discount = item.option.discount
                 ? item.option.discount_price
                 : 0;
-                item.option.net_price_unit = item.option.price_unit - discount;
-                item.option.net_price = item.option.price_unit - discount;
-                item.option.total_price = item.option.net_price * item.students.length
+              item.option.net_price_unit = item.option.price_unit - discount;
+              item.option.net_price = item.option.price_unit - discount;
+              item.option.total_price = item.option.net_price * item.students.length
             } else {
               item.net_price = item.price;
               item.total_price = item.price * item.students.length
@@ -1981,9 +1981,9 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // let localhost = "http://localhost:3002"
-        // const { data } = await axios.delete(`${localhost}/api/v1/order/cancel-order/${order_number}`, config)
-        const { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/order/cancel-order/${order_number}`, config)
+        let localhost = "http://localhost:3002"
+        const { data } = await axios.delete(`${localhost}/api/v1/order/cancel-order/${order_number}`, config)
+        // const { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/order/cancel-order/${order_number}`, config)
         if (data.statusCode === 200) {
           await Swal.fire({
             icon: "success",

@@ -868,7 +868,6 @@
             <v-row dense>
               <!-- Start DATE -->
               <v-col cols="12" sm="6">
-                <!-- Start Date -->
                 <label class="font-weight-bold">{{ $t("since date") }}</label>
                 <label :text="$t('created date')"></label>
                 <v-menu
@@ -920,12 +919,9 @@
                   min-width="auto"
                 >
                   <template v-slot:activator="{ on, attrs }">
-                    <!-- :disabled="!export_data.start_date" -->
-                    <!-- :min="
-                      export_data.start_date
-                        ? export_data.start_date
-                        : today.toISOString()
-                    " -->
+                    <!-- :disabled="!export_data.start_date" :min="
+                    export_data.start_date ? export_data.start_date :
+                    today.toISOString() " -->
 
                     <v-text-field
                       dense
