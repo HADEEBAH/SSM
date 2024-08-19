@@ -200,7 +200,7 @@
                     $i18n.locale == 'th' ? 'course_name_th' : 'course_name_en'
                   "
                   v-model="course.course_id"
-                  :items="openCourses(course.course_options)"
+                  :items="course.course_options"
                   :rules="rules.course"
                   :placeholder="$t(`select course`)"
                   :loading="loading_course"
@@ -437,12 +437,14 @@
 
               <v-col cols="12" sm="4" v-if="course.course_data && course.time">
                 <label-custom :text="$t('coach')"></label-custom>
+                <!-- :items="coachOptions(course.time.timeData)" -->
+
                 <!-- <pre>{{ course.time }}</pre> -->
                 <v-autocomplete
                   dense
                   :rules="rules.coach"
                   v-model="course.coach"
-                  :items="coachOptions(course.time.timeData)"
+                  :items="course.time.timeData"
                   :placeholder="$t('choose a coach')"
                   item-color="pink"
                   outlined

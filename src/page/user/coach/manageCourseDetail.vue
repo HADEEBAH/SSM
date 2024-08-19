@@ -168,12 +168,20 @@
                 </template>
                 <template v-slot:[`item.nickname`]="{ item }">
                   {{
-                    $i18n.locale == "th" ? item.nicknameTh : (item.nicknameEn ? item.nicknameEn : "-")
+                    $i18n.locale == "th"
+                      ? item.nicknameTh
+                      : item.nicknameEn
+                      ? item.nicknameEn
+                      : "-"
                   }}
                 </template>
                 <template v-slot:[`item.class`]="{ item }">
                   {{
-                    $i18n.locale == "th" ? item.classNameTh : (item.classNameEn ? item.classNameEn : "-")
+                    $i18n.locale == "th"
+                      ? item.classNameTh
+                      : item.classNameEn
+                      ? item.classNameEn
+                      : "-"
                   }}
                 </template>
 

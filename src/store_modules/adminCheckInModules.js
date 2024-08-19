@@ -179,8 +179,11 @@ const adminCheckInModules = {
                     await data.data.forEach(filterData => {
                         if (filterData.checkinStudent) {
                             let dateCheckIn = ''
+                            let studyDate = ''
                             let satuscheckin = ''
                             let studentName = ''
+                            // let packages = ''
+                            let options = ''
                             const compareDates = (a, b) => {
                                 const dateA = new Date(a.date);
                                 const dateB = new Date(b.date);
@@ -191,40 +194,52 @@ const adminCheckInModules = {
 
                             // Display the status sorted by date
                             filterData.checkinStudent.forEach(entry => {
-                                dateCheckIn = entry.date
+                                dateCheckIn = entry.checkInTimeStamp
+                                studyDate = entry.date
                                 satuscheckin = entry.status
                                 studentName = `${entry.firstNameTh} ${entry.lastNameTh}`
+                                // packages = entry.package
+                                options = entry.option_name
+
 
                                 reports.push({
-                                    "วันที่เช็คอิน": filterData.checkinStudent ? moment(dateCheckIn).format("DD/MM/YYYY") : '-',
-                                    "เวลาเริ่มเรียน": filterData.timeStart ? filterData.timeStart : '-',
-                                    "เวลาสิ้นสุดการเรียน": filterData.timeEnd ? filterData.timeEnd : '-',
-                                    "วันที่เริ่มเรียน": filterData.dateStart ? moment(filterData.dateStart).format("DD/MM/YYYY") : '-',
-                                    "วันที่สิ้นสุดการเรียน": filterData.endDate ? moment(filterData.endDate).format("DD/MM/YYYY") : '-',
+                                    "วันเวลาเช็คอิน": dateCheckIn ? filterData.checkinStudent ? moment(dateCheckIn).format("DD/MM/YYYY HH:mm:ss") : '-' : '',
+                                    "วันที่เรียน": studyDate ? filterData.checkinStudent ? moment(studyDate).format("DD/MM/YYYY") : '-' : '',
+                                    // "เวลาเริ่มเรียน": filterData.timeStart ? filterData.timeStart : '-',
+                                    // "เวลาสิ้นสุดการเรียน": filterData.timeEnd ? filterData.timeEnd : '-',
+                                    // "วันที่เริ่มเรียน": filterData.dateStart ? moment(filterData.dateStart).format("DD/MM/YYYY") : '-',
+                                    // "วันที่สิ้นสุดการเรียน": filterData.endDate ? moment(filterData.endDate).format("DD/MM/YYYY") : '-',
                                     "ชื่อคอร์ส": filterData.courseNameTh ? filterData.courseNameTh : '-',
                                     "ชื่อโค้ช": filterData.firstNameTh ? `${filterData.firstNameTh} ${filterData.lastNameTh}` : '-',
                                     "ประเภทคอร์ส": filterData.courseTypeId ? filterData.courseTypeId === 'CT_1' ? VueI18n.locale == 'th' ? 'คอร์สทั่วไป' : 'General course' : VueI18n.locale == 'th' ? 'คอร์สระยะสั้น' : 'Short course' : '-',
-                                    "สถานะคอร์สเรียน": filterData.courseStatus ? filterData.courseStatus === 'Open' ? VueI18n.locale == 'th' ? 'คอร์สว่าง' : 'Course available' : VueI18n.locale == 'th' ? 'คอร์สเต็ม' : 'Full Course' : '-',
+                                    // "สถานะคอร์สเรียน": filterData.courseStatus ? filterData.courseStatus === 'Open' ? VueI18n.locale == 'th' ? 'คอร์สว่าง' : 'Course available' : VueI18n.locale == 'th' ? 'คอร์สเต็ม' : 'Full Course' : '-',
                                     "แพ็คเกจ": filterData.packageName ? filterData.packageName : '-',
-                                    "ช่วงเวลา": filterData.optionName ? filterData.optionName : '-',
+                                    // "ช่วงเวลา": filterData.optionName ? filterData.optionName : '-',
+                                    // "แพ็คเกจ": packages ? packages : '-',
+                                    "ช่วงเวลา": options ? options : '-',
                                     "ชื่อนักเรียน": filterData.checkinStudent ? studentName : '-',
-                                    "สถานะเช็คอิน": filterData.checkinStudent ? satuscheckin : '-',
+                                    "สถานะเช็คอิน": filterData.checkinStudent ? satuscheckin !== null ? satuscheckin : "ยังไม่มีการเลือกสถานะ" : '-',
+                                    // "สถานะเช็คอิน": filterData.checkinStudent ? satuscheckin : '-',
                                 })
 
                             });
                         } else {
                             reports.push({
-                                "วันที่เช็คอิน": '-',
-                                "เวลาเริ่มเรียน": filterData.timeStart ? filterData.timeStart : '-',
-                                "เวลาสิ้นสุดการเรียน": filterData.timeEnd ? filterData.timeEnd : '-',
-                                "วันที่เริ่มเรียน": filterData.dateStart ? moment(filterData.dateStart).format("DD/MM/YYYY") : '-',
-                                "วันที่สิ้นสุดการเรียน": filterData.endDate ? moment(filterData.endDate).format("DD/MM/YYYY") : '-',
+                                "วันเวลาเช็คอิน": '-',
+                                "วันที่เรียน": '-',
+
+                                // "เวลาเริ่มเรียน": filterData.timeStart ? filterData.timeStart : '-',
+                                // "เวลาสิ้นสุดการเรียน": filterData.timeEnd ? filterData.timeEnd : '-',
+                                // "วันที่เริ่มเรียน": filterData.dateStart ? moment(filterData.dateStart).format("DD/MM/YYYY") : '-',
+                                // "วันที่สิ้นสุดการเรียน": filterData.endDate ? moment(filterData.endDate).format("DD/MM/YYYY") : '-',
                                 "ชื่อคอร์ส": filterData.courseNameTh ? filterData.courseNameTh : '-',
                                 "ชื่อโค้ช": filterData.firstNameTh ? `${filterData.firstNameTh} ${filterData.lastNameTh}` : '-',
                                 "ประเภทคอร์ส": filterData.courseTypeId ? filterData.courseTypeId === 'CT_1' ? VueI18n.locale == 'th' ? 'คอร์สทั่วไป' : 'General course' : VueI18n.locale == 'th' ? 'คอร์สระยะสั้น' : 'Short course' : '-',
-                                "สถานะคอร์สเรียน": filterData.courseStatus ? filterData.courseStatus === 'Open' ? VueI18n.locale == 'th' ? 'คอร์สว่าง' : 'Course available' : VueI18n.locale == 'th' ? 'คอร์สเต็ม' : 'Full Course' : '-',
-                                "แพ็คเกจ": filterData.packageName ? filterData.packageName : '-',
-                                "ช่วงเวลา": filterData.optionName ? filterData.optionName : '-',
+                                // "สถานะคอร์สเรียน": filterData.courseStatus ? filterData.courseStatus === 'Open' ? VueI18n.locale == 'th' ? 'คอร์สว่าง' : 'Course available' : VueI18n.locale == 'th' ? 'คอร์สเต็ม' : 'Full Course' : '-',
+                                // "แพ็คเกจ": filterData.packageName ? filterData.packageName : '-',
+                                // "ช่วงเวลา": filterData.optionName ? filterData.optionName : '-',
+                                "แพ็คเกจ": '-',
+                                "ช่วงเวลา": '-',
                                 "ชื่อนักเรียน": '-',
                                 "สถานะเช็คอิน": '-',
                             })

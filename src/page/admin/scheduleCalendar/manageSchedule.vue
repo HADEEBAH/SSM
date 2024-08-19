@@ -868,8 +868,7 @@
             <v-row dense>
               <!-- Start DATE -->
               <v-col cols="12" sm="6">
-                <!-- Start Date -->
-                <label class="font-weight-bold">{{ $t("study start") }}</label>
+                <label class="font-weight-bold">{{ $t("since date") }}</label>
                 <label :text="$t('created date')"></label>
                 <v-menu
                   v-model="export_data.select_date_doc_start"
@@ -910,9 +909,7 @@
               </v-col>
               <v-col cols="12" sm="6">
                 <!-- End Date -->
-                <label class="font-weight-bold">{{ $t("study end") }}</label>
-
-                <!-- <label :text="$t('to')"></label> -->
+                <label class="font-weight-bold">{{ $t("to date") }}</label>
                 <v-menu
                   v-model="export_data.select_date_doc_end"
                   :close-on-content-click="false"
@@ -922,6 +919,10 @@
                   min-width="auto"
                 >
                   <template v-slot:activator="{ on, attrs }">
+                    <!-- :disabled="!export_data.start_date" :min="
+                    export_data.start_date ? export_data.start_date :
+                    today.toISOString() " -->
+
                     <v-text-field
                       dense
                       :value="
@@ -936,15 +937,10 @@
                       v-bind="attrs"
                       v-on="on"
                       color="#FF6B81"
-                      :disabled="!export_data.start_date"
                     ></v-text-field>
                   </template>
                   <v-date-picker
-                    :min="
-                      export_data.start_date
-                        ? export_data.start_date
-                        : today.toISOString()
-                    "
+                    :min="export_data.start_date ? export_data.start_date : ''"
                     v-model="export_data.end_date"
                     @input="inputDate($event, 'selected end date')"
                     locale="th-TH"
@@ -955,26 +951,16 @@
             <!-- TIME -->
 
             <v-row dense>
-              <!-- DATE -->
-              <v-col cols="12" sm="6">
+              <!-- TIME -->
+              <!-- <v-col cols="12" sm="6">
+                <label class="font-weight-bold">{{ $t("period") }}</label>
                 <v-row dense>
-                  <v-col cols="6" sm="6">
-                    <label class="font-weight-bold">{{
-                      $t("start time")
-                    }}</label>
-                    <!-- <label class="font-weight-bold">{{
-                      $t("study time")
-                    }}</label> -->
-
+                  <v-col cols="12" sm="6">
                     <v-text-field
                       outlined
                       dense
-                      style="
-                        position: absolute;
-                        display: block;
-                        z-index: 4;
-                        width: 142px;
-                      "
+                      :style="`width:${widthPeriod()}px;`"
+                      style="position: absolute; display: block; z-index: 4"
                       @focus="SelectedStartDate($event)"
                       v-model="export_data.start_time"
                       color="#FF6B81"
@@ -985,25 +971,20 @@
                       input-class="input-size-lg"
                       advanced-keyboard
                       @change="resetTimeEditExport()"
-                      v-model="export_data.start_time"
+                      v-model="formattedStartTime"
                       close-on-complete
                       color="#FF6B81"
                     >
                     </VueTimepicker>
                   </v-col>
-                  <!-- เวลาสิ้นสุด -->
+                  เวลาสิ้นสุด
 
-                  <v-col cols="6" sm="6">
-                    <label class="font-weight-bold">{{ $t("end time") }}</label>
+                  <v-col cols="12" sm="6">
                     <v-text-field
                       outlined
                       dense
-                      style="
-                        position: absolute;
-                        display: block;
-                        z-index: 4;
-                        width: 142px;
-                      "
+                      :style="`width:${widthPeriod()}px;`"
+                      style="position: absolute; display: block; z-index: 4"
                       @focus="SelectedStartDate($event)"
                       v-model="export_data.end_time"
                       color="#FF6B81"
@@ -1013,7 +994,7 @@
                       hide-clear-button
                       input-class="input-size-lg"
                       advanced-keyboard
-                      v-model="export_data.end_time"
+                      v-model="formattedEndTime"
                       close-on-complete
                       :hour-range="checkHourExpord(export_data.start_time)"
                       color="#FF6B81"
@@ -1021,7 +1002,7 @@
                     </VueTimepicker>
                   </v-col>
                 </v-row>
-              </v-col>
+              </v-col> -->
               <!-- โค้ช -->
               <v-col cols="12" sm="6">
                 <label class="font-weight-bold">{{ $t("coach") }}</label>
@@ -1063,10 +1044,9 @@
                   </template>
                 </v-autocomplete>
               </v-col>
-            </v-row>
 
-            <!-- ชื่อคอร์ส -->
-            <v-row dense>
+              <!-- ชื่อคอร์ส -->
+
               <!-- ชื่อคอร์ส -->
               <v-col cols="12" sm="6">
                 <label class="font-weight-bold">{{ $t("course name") }}</label>
@@ -1133,11 +1113,11 @@
                   </template>
                 </v-autocomplete>
               </v-col>
-            </v-row>
-            <!-- PACKGE -->
-            <v-row dense>
+
+              <!-- PACKGE -->
+
               <!-- course type -->
-              <v-col cols="12" sm="6">
+              <!-- <v-col cols="12" sm="6">
                 <label class="font-weight-bold">{{
                   $t("course status")
                 }}</label>
@@ -1176,7 +1156,7 @@
                     </span>
                   </template>
                 </v-autocomplete>
-              </v-col>
+              </v-col> -->
               <!-- แพ็กเกจ -->
               <v-col cols="12" sm="6">
                 <label class="font-weight-bold">{{ $t("package") }}</label>
@@ -1203,9 +1183,7 @@
                   </template>
                 </v-autocomplete>
               </v-col>
-            </v-row>
-            <!-- ระยะเวลาคอร์ส -->
-            <v-row dense>
+              <!-- ระยะเวลาคอร์ส -->
               <v-col cols="12" sm="6">
                 <label class="font-weight-bold">{{ $t("period") }}</label>
                 <v-autocomplete
@@ -1278,7 +1256,13 @@
                 }}</v-btn></v-col
               >
               <v-col cols="12" sm="4" align="end">
-                <v-btn depressed dark color="#ff6b81" @click="exportCheckin()">
+                <v-btn
+                  depressed
+                  dark
+                  color="#ff6b81"
+                  :loading="loading_export"
+                  @click="exportCheckin()"
+                >
                   {{ $t("view all") }}
                 </v-btn>
               </v-col>
@@ -1345,6 +1329,7 @@ export default {
     filter_search: "",
     dialog: true,
     search: "",
+    loading_export: false,
     thaiDaysOfWeek: [
       "วันอาทิตย์",
       "วันจันทร์",
@@ -1532,6 +1517,26 @@ export default {
       options_data: "CourseModules/getOptions",
       getCheckinFilter: "adminCheckInModules/getCheckinFilter",
     }),
+    formattedStartTime: {
+      get() {
+        // Return time with minutes set to 00
+        return this.export_data.start_time.split(":")[0] + ":00";
+      },
+      set(value) {
+        // Update the time, ensuring minutes are always 00
+        this.export_data.start_time = value;
+      },
+    },
+    formattedEndTime: {
+      get() {
+        // Return time with minutes set to 00
+        return this.export_data.end_time.split(":")[0] + ":00";
+      },
+      set(value) {
+        // Update the time, ensuring minutes are always 00
+        this.export_data.end_time = value;
+      },
+    },
     dates() {
       return [
         (val) =>
@@ -1588,8 +1593,24 @@ export default {
       GetOptions: "CourseModules/GetOptions",
       CheckInFilter: "adminCheckInModules/CheckInFilter",
     }),
-    exportCheckin() {
-      this.CheckInFilter({ export_data: this.export_data });
+    async exportCheckin() {
+      this.loading_export = true;
+      await this.CheckInFilter({ export_data: this.export_data });
+      this.loading_export = false;
+    },
+    widthPeriod() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return 300;
+        case "sm":
+          return 140;
+        case "md":
+          return 140;
+        case "lg":
+          return 140;
+        case "xl":
+          return 140;
+      }
     },
     cleareData() {
       this.export_data = {
@@ -1724,6 +1745,8 @@ export default {
     },
     resetTimeEditExport() {
       this.export_data.select_start_time = `${this.export_data.start_time.HH} : ${this.export_data.start_time.mm}`;
+      // this.export_data.start_time =
+      //   this.export_data.start_time.split(":")[0] + ":00";
       this.export_data.end_time = "";
     },
 
