@@ -1117,7 +1117,7 @@
               <!-- PACKGE -->
 
               <!-- course type -->
-              <v-col cols="12" sm="6">
+              <!-- <v-col cols="12" sm="6">
                 <label class="font-weight-bold">{{
                   $t("course status")
                 }}</label>
@@ -1156,7 +1156,7 @@
                     </span>
                   </template>
                 </v-autocomplete>
-              </v-col>
+              </v-col> -->
               <!-- แพ็กเกจ -->
               <v-col cols="12" sm="6">
                 <label class="font-weight-bold">{{ $t("package") }}</label>

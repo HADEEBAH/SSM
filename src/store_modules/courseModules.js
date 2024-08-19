@@ -492,6 +492,7 @@ const CourseModules = {
     },
     // COACH :: LIST BY COURSE
     async GetCoachsByCourse(context, { course_id }) {
+      // async GetCoachsByCourse(context, { course_id, search }) {
       context.commit("SetCoachListIsLoading", true)
       try {
         let config = {
@@ -501,8 +502,13 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
+        // let localhost = "http://localhost:3000"
+
+        // let { data } = await axios.get(`${localhost}/api/v1/schedule/manage-course/${course_id}?search=${search}`, config)
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course/${course_id}?search=${search}`, config)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course/${course_id}`, config)
         if (data.statusCode === 200) {
+          // console.log('data.data :>> ', data.data);
           let datesList = []
           for await (let coach of data.data) {
             coach.checked = false
@@ -618,11 +624,10 @@ const CourseModules = {
             let scheduleStudent = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course-student/${course_id}/${date}?starTime=${start_time}&endTime=${end_time}&coachId=${coach_id}`, config)
             if (scheduleStudent.data.statusCode == 200) {
               let scheduleStudentData = scheduleStudent.data.data.filter(v => v.endTime == end_time && v.startTime == start_time && v.coachId == coach_id)
-              // scheduleStudentData.map(v=>{
-              //   v.countCheckIn = current_check_in
-              //   v.totalDay = count_check_In_date.length
-              //   return v
-              // })
+              scheduleStudentData.map(item => {
+                item.date = date
+                return item
+              })
               context.commit("SetNoChackInStudentList", scheduleStudentData)
             }
           }
@@ -1705,6 +1710,8 @@ const CourseModules = {
         if (search) {
           query = `&search=${search}`
         }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/course/limit?category_id=${category_id}&status=${status}&course_type_id=${course_type_id}&limit=${limit}&page=${page}${query}`)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/limit?category_id=${category_id}&status=${status}&course_type_id=${course_type_id}&limit=${limit}&page=${page}${query}`)
         if (data.statusCode === 200) {
           for (const course of data.data) {
