@@ -178,7 +178,7 @@
             color="#ff6B81"
             item-color="#ff6b81"
             :placeholder="$t('select class')"
-            :rules="rules.class"
+            :rules="!profile_detail.class.classNameTh ? rules.class : ''"
             :disabled="!isEnabled"
           >
             <template #no-data>
