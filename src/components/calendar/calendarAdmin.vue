@@ -290,7 +290,7 @@ export default {
       required: false,
     },
     searchCourseType: {
-      type: String,
+      type: Array,
       required: false,
     },
     searchChose: {

@@ -201,6 +201,19 @@
                         >{{ $t("first name - last name") }}</v-col
                       >
                       <v-col
+                        cols=""
+                        class="font-bold text-[#ff6b81]"
+                        align="center"
+                        >{{ $t("nickname") }}</v-col
+                      >
+                      <v-col
+                        cols=""
+                        class="font-bold text-[#ff6b81]"
+                        align="center"
+                        >{{ $t("class") }}</v-col
+                      >
+
+                      <v-col
                         cols="3"
                         class="font-bold text-[#ff6b81]"
                         align="center"
@@ -230,6 +243,7 @@
                   outlined
                   rounded="lg"
                 >
+                  <!-- <pre>{{ student }}</pre> -->
                   <v-card-text>
                     <v-row>
                       <v-col
@@ -241,6 +255,38 @@
                         "
                         >{{ student.studentName }}</v-col
                       >
+                      <v-col
+                        cols="12"
+                        sm=""
+                        class="d-flex align-center"
+                        :class="
+                          $vuetify.breakpoint.smAndUp ? 'justify-center' : ''
+                        "
+                      >
+                        {{
+                          $i18n.locale == "th"
+                            ? student.nicknameTh
+                            : student.nicknameEn
+                            ? student.nicknameEn
+                            : student.nicknameTh
+                        }}</v-col
+                      >
+                      <v-col
+                        cols="12"
+                        sm=""
+                        class="d-flex align-center"
+                        :class="
+                          $vuetify.breakpoint.smAndUp ? 'justify-center' : ''
+                        "
+                        >{{
+                          $i18n.locale == "th"
+                            ? student.classNameTh
+                            : student.classNameEn
+                            ? student.classNameEn
+                            : student.classNameTh
+                        }}</v-col
+                      >
+
                       <v-col
                         cols="12"
                         sm="3"

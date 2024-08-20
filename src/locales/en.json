@@ -120,6 +120,7 @@
     "cash out" : "Make Payment",
     "certification" : "Certification",
     "change photo":"Change photo",
+    "check in sattus" : "Check in sattus",
     "check in later" : "Check in later",
     "check in later by order number" : "Check in later by order number",
     "check-in notification":"Check-in notification",
@@ -210,6 +211,10 @@
     "credit card":"Credit card",
     "customization" : "Customization",
     "course has been created":"( Course has been created )",
+    "coach information not found": "Coach information not found",
+    "check in status" : "Check in status",
+
+
 
     "day" : "Day",
     "day and date" : "Day and date",
@@ -307,6 +312,7 @@
     "example of pictures":"Example of pictures",
     "excessive study hours" : "Excessive study hours",
     "export" : "Export",
+    "export course check in" : "Export course check in",
     "evaluate": "After participating in the Smart School Managemet system service, please evaluate your satisfaction. In order for the system that you use to use the service to use your comments to improve the service further",
     "evaluate satisfaction with using the system" : "Evaluate satisfaction with using the system",
     "ease of use":"Ease of use",
@@ -537,6 +543,7 @@
     "permission management": "Permission management",
     "personal" : "Personal",
     "phone number" : "Phone number",
+    "please select a course status":"Please select a course status",
     "please enter course name":"Please enter course name",
     "please select course":"Please select a course",
     "please select a reservation start date":"Please select a reservation start date",
@@ -585,6 +592,7 @@
     "please choose a payment method" : "Please choose a payment method",
     "please open a course" : "Please open a course",
     "press to enter the teaching time" : "Check in Teaching time",
+    "please select check in status":"Please select check in status",
     "please selete data" : "Please selete data",
     "please select developmental level" : "Please select developmental level",
     "please select a class date" : "Please select a class date",
@@ -696,7 +704,8 @@
     "role": "Role",
     "recommendations System satisfaction":"Recommendations System satisfaction",
 
-
+    "study start" : "Study start date",
+    "study end" : "Study end date",
     "save" : "Save",
     "save parent" : "Save parent",
     "save student" : "Save student",
@@ -709,6 +718,7 @@
     "satisfaction score" : "Satisfaction score",
     "suggestions" : "Suggestions",
     "seat" : "Seat",
+    "select class": "Select class",
     "see more" : "See more",
     "set the size not to exceed 5MB": "( Set the size not to exceed 5MB )",
     "school" : "School",
@@ -727,6 +737,8 @@
     "service value" : "Service value",
     "show student list" : "Show student list",
     "sign in" : "Login",
+    "since date":"Since date",
+    "since time":"Since time",
     "sick" : "Sick",
     "sick leave" : "Sick leave",
     "something went wrong" : "Something went wrong",
@@ -803,9 +815,11 @@
     "school day":"School Day",
     "system satisfaction":"System satisfaction",
     "some students or students have already purchased the course":"Some students or students have already purchased the course",
+    "select congenital disease":"Select Congenital disease / Allergies",
 
 
 
+    "study time": "Study Time",
     "the system will not display information if the user does not enter student and parent information" :"The system will not display the information if the user does not fill in the student and parent information according to the template",
     "take annual leave" : "Take annual leave",
     "take leave form" : "Take leave form",
@@ -867,6 +881,7 @@
     "thank you for participating in the satisfaction evaluation" : "Thank you for participating in the satisfaction evaluation",
     "this course is not in pending status":"( This course is not in pending status )",
     "to" : "To",
+    "to date" : "To date",
     "to day" : "to",
     "to you" : "to you",
     "to request leave" : "To request leave",

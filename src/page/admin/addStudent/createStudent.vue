@@ -190,6 +190,9 @@
               </v-col>
               <v-col cols="12" sm="4">
                 <label-custom :text="$t(`course`)"></label-custom>
+                <!-- :items="openCourses(course.course_options)" -->
+                <!-- :items="course.course_options" -->
+
                 <v-autocomplete
                   dense
                   item-value="course_id"
@@ -200,6 +203,7 @@
                   :items="course.course_options"
                   :rules="rules.course"
                   :placeholder="$t(`select course`)"
+                  :loading="loading_course"
                   outlined
                   color="pink"
                   item-color="pink"
@@ -250,6 +254,7 @@
             >
               <v-col cols="12" sm="4">
                 <label-custom :text="$t('package')"></label-custom>
+                <!-- <pre>{{ course.course_data }}</pre> -->
                 <v-autocomplete
                   item-value="package_id"
                   item-text="package"
@@ -432,6 +437,9 @@
 
               <v-col cols="12" sm="4" v-if="course.course_data && course.time">
                 <label-custom :text="$t('coach')"></label-custom>
+                <!-- :items="coachOptions(course.time.timeData)" -->
+
+                <!-- <pre>{{ course.time }}</pre> -->
                 <v-autocomplete
                   dense
                   :rules="rules.coach"
@@ -920,6 +928,7 @@ export default {
     menu_pay_date: "",
     pay_date_str: "",
     pay_date: "",
+    loading_course: false,
   }),
   created() {
     this.ClearData();
@@ -994,7 +1003,10 @@ export default {
           (val) =>
             (val || "")?.length > 0 || this.$t("please select a start date"),
         ],
-        pay_date: [(val) => (val || "")?.length > 0 || this.$t("please select a pay date"),],
+        pay_date: [
+          (val) =>
+            (val || "")?.length > 0 || this.$t("please select a pay date"),
+        ],
         price: [(val) => (val || "") > 0 || this.$t("please select a price")],
         remark: [
           (val) =>
@@ -1049,6 +1061,18 @@ export default {
     todayDate() {
       let todayDate = new Date();
       return dateFormatter(todayDate, "DD MMT YYYYT");
+    },
+    openCourses(items) {
+      return items.filter((course) => course.statusCourse === "Open");
+    },
+    // packageOptions(items) {
+    //   console.log("items :>> ", items);
+    //   return items.filter((packageStatus) => packageStatus.status === "Open");
+    // },
+    coachOptions(timeData) {
+      console.log("timeData :>> ", timeData);
+      return timeData.filter((coach) => coach.status_coach === "Open");
+      // return items.filter((coach) => coach.status_coach === "Open");
     },
     minStartDate(startDate) {
       let date = new Date();
@@ -1170,11 +1194,13 @@ export default {
       course.price = 0;
       course.detail = "";
       course.remark = "";
+      this.loading_course = false;
       this.GetCoursesFilter({
         category_id: categoryId,
         status: "Active",
         course_type_id: course_type_id,
       }).then(() => {
+        this.loading_course = false;
         let course_ids = [];
         for (let order_course of this.order.courses) {
           course_ids.push(order_course.course_id);
@@ -1183,8 +1209,10 @@ export default {
           (v) => !course_ids.includes(v.course_id)
         );
       });
+      this.loading_course = true;
     },
     selectCourse(courseId, course) {
+      console.log("111 :>> ", courseId);
       course.package_data = {};
       course.package = "";
       course.option = {};
@@ -1201,9 +1229,12 @@ export default {
       course.remark = "";
       if (courseId) {
         this.GetCourse(courseId).then(() => {
+          console.log("22 :>> ", 22);
           if (this.course_data) {
             course.course_data = this.course_data;
           }
+          console.log("this.course_data :>> ", this.course_data);
+
           if (this.course_data.course_type_id === "CT_2") {
             course.start_date = this.course_data.course_study_start_date;
             course.start_date_str = new Date(
@@ -1350,6 +1381,7 @@ export default {
                   });
                   this.order.type = "addStudent";
                   this.changeOrderData(this.order);
+                  console.log("this.order :>> ", this.order);
                   await this.saveOrder({ regis_type: "addStudent" });
                   if (this.order_is_status) {
                     let payload = {
@@ -1493,3 +1525,4 @@ sub-register-sm {
   transform: translate(-50%, -50%);
 }
 </style>
+// creatStudent(featureSekectDate)

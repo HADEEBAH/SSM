@@ -4,6 +4,8 @@ import VueI18n from "../i18n";
 import { dateFormatter } from '@/functions/functions';
 import moment from "moment";
 import Swal from "sweetalert2";
+var XLSX = require("xlsx");
+
 
 function dayOfWeekArray(day) {
     let days = day;
@@ -51,9 +53,13 @@ const adminCheckInModules = {
         time: [],
         scheduleCheckin: [],
         scheduleCheckinIsLoadIng: false,
-        updateCheckinStudentsIsLoading: false
+        checkin_filter: [],
+
     },
     mutations: {
+        SetCheckInFilter(state, payload) {
+            state.checkin_filter = payload
+        },
         SetCourses(state, payload) {
             state.courses = payload
         },
@@ -113,6 +119,179 @@ const adminCheckInModules = {
         }
     },
     actions: {
+        async CheckInFilter(context, { export_data }) {
+            context.commit("SetScheduleCheckinIsLoadIng", true)
+            let coachId = ''
+            let courseId = ''
+            let courseStatus = ''
+            let packageId = ''
+            let optionId = ''
+            let checkInStatus = ''
+            let startTime = ''
+            let endTime = ''
+            let startDate = ''
+            let endDate = ''
+            let courseType = ''
+            if (export_data) {
+                for (const idCoach of export_data.coach_id) {
+                    coachId += `&accountId=${idCoach}`
+                }
+                for (const idCourse of export_data.course_name) {
+                    courseId += `&courseId=${idCourse}`
+                }
+                for (const statusCourse of export_data.coure_status) {
+                    courseStatus += `&courseStatus=${statusCourse}`
+                }
+                for (const idPackage of export_data.package_id) {
+                    packageId += `&packageId=${idPackage}`
+                }
+                for (const idOptions of export_data.options_id) {
+                    optionId += `&optionId=${idOptions}`
+                }
+                for (const statusCheckIn of export_data.check_in_status_options) {
+                    checkInStatus += `&checkInStatus=${statusCheckIn}`
+                }
+                for (const typeCourse of export_data.course_type_id) {
+                    courseType += `&courseTypeId=${typeCourse}`
+                }
+
+                export_data.start_time ? startTime = `startTime=${export_data.start_time}` : ''
+                export_data.end_time ? endTime = `&endTime=${export_data.end_time}` : ''
+                export_data.start_date ? startDate = `&startDate=${export_data.start_date}` : ''
+                export_data.end_date ? endDate = `&endDate=${export_data.end_date}` : ''
+
+            }
+            try {
+                let config = {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Content-type": "Application/json",
+                        'Authorization': `Bearer ${VueCookie.get("token")}`
+                    }
+                }
+                // let localhost = "http://localhost:3000"
+                // let endpoint = `${localhost}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}${courseType}`
+                let endpoint = `${process.env.VUE_APP_URL}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}${courseType}`
+                // let endpoint = `${process.env.VUE_APP_URL}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}`
+                let { data } = await axios.get(endpoint, config)
+                if (data.statusCode == 200) {
+                    let reports = []
+                    await data.data.forEach(filterData => {
+                        if (filterData.checkinStudent) {
+                            let dateCheckIn = ''
+                            let studyDate = ''
+                            let satuscheckin = ''
+                            let studentName = ''
+                            // let packages = ''
+                            let options = ''
+                            const compareDates = (a, b) => {
+                                const dateA = new Date(a.date);
+                                const dateB = new Date(b.date);
+                                return dateA - dateB;
+                            };
+                            // Sort the array by date
+                            filterData.checkinStudent.sort(compareDates);
+
+                            // Display the status sorted by date
+                            filterData.checkinStudent.forEach(entry => {
+                                dateCheckIn = entry.checkInTimeStamp
+                                studyDate = entry.date
+                                satuscheckin = entry.status
+                                studentName = `${entry.firstNameTh} ${entry.lastNameTh}`
+                                // packages = entry.package
+                                options = entry.option_name
+
+
+                                reports.push({
+                                    "วันเวลาเช็คอิน": dateCheckIn ? filterData.checkinStudent ? moment(dateCheckIn).format("DD/MM/YYYY HH:mm:ss") : '-' : '',
+                                    "วันที่เรียน": studyDate ? filterData.checkinStudent ? moment(studyDate).format("DD/MM/YYYY") : '-' : '',
+                                    // "เวลาเริ่มเรียน": filterData.timeStart ? filterData.timeStart : '-',
+                                    // "เวลาสิ้นสุดการเรียน": filterData.timeEnd ? filterData.timeEnd : '-',
+                                    // "วันที่เริ่มเรียน": filterData.dateStart ? moment(filterData.dateStart).format("DD/MM/YYYY") : '-',
+                                    // "วันที่สิ้นสุดการเรียน": filterData.endDate ? moment(filterData.endDate).format("DD/MM/YYYY") : '-',
+                                    "ชื่อคอร์ส": filterData.courseNameTh ? filterData.courseNameTh : '-',
+                                    "ชื่อโค้ช": filterData.firstNameTh ? `${filterData.firstNameTh} ${filterData.lastNameTh}` : '-',
+                                    "ประเภทคอร์ส": filterData.courseTypeId ? filterData.courseTypeId === 'CT_1' ? VueI18n.locale == 'th' ? 'คอร์สทั่วไป' : 'General course' : VueI18n.locale == 'th' ? 'คอร์สระยะสั้น' : 'Short course' : '-',
+                                    // "สถานะคอร์สเรียน": filterData.courseStatus ? filterData.courseStatus === 'Open' ? VueI18n.locale == 'th' ? 'คอร์สว่าง' : 'Course available' : VueI18n.locale == 'th' ? 'คอร์สเต็ม' : 'Full Course' : '-',
+                                    "แพ็คเกจ": filterData.packageName ? filterData.packageName : '-',
+                                    // "ช่วงเวลา": filterData.optionName ? filterData.optionName : '-',
+                                    // "แพ็คเกจ": packages ? packages : '-',
+                                    "ช่วงเวลา": options ? options : '-',
+                                    "ชื่อนักเรียน": filterData.checkinStudent ? studentName : '-',
+                                    "สถานะเช็คอิน": filterData.checkinStudent ? satuscheckin !== null ? satuscheckin : "ยังไม่มีการเลือกสถานะ" : '-',
+                                    // "สถานะเช็คอิน": filterData.checkinStudent ? satuscheckin : '-',
+                                })
+
+                            });
+                        } else {
+                            reports.push({
+                                "วันเวลาเช็คอิน": '-',
+                                "วันที่เรียน": '-',
+
+                                // "เวลาเริ่มเรียน": filterData.timeStart ? filterData.timeStart : '-',
+                                // "เวลาสิ้นสุดการเรียน": filterData.timeEnd ? filterData.timeEnd : '-',
+                                // "วันที่เริ่มเรียน": filterData.dateStart ? moment(filterData.dateStart).format("DD/MM/YYYY") : '-',
+                                // "วันที่สิ้นสุดการเรียน": filterData.endDate ? moment(filterData.endDate).format("DD/MM/YYYY") : '-',
+                                "ชื่อคอร์ส": filterData.courseNameTh ? filterData.courseNameTh : '-',
+                                "ชื่อโค้ช": filterData.firstNameTh ? `${filterData.firstNameTh} ${filterData.lastNameTh}` : '-',
+                                "ประเภทคอร์ส": filterData.courseTypeId ? filterData.courseTypeId === 'CT_1' ? VueI18n.locale == 'th' ? 'คอร์สทั่วไป' : 'General course' : VueI18n.locale == 'th' ? 'คอร์สระยะสั้น' : 'Short course' : '-',
+                                // "สถานะคอร์สเรียน": filterData.courseStatus ? filterData.courseStatus === 'Open' ? VueI18n.locale == 'th' ? 'คอร์สว่าง' : 'Course available' : VueI18n.locale == 'th' ? 'คอร์สเต็ม' : 'Full Course' : '-',
+                                // "แพ็คเกจ": filterData.packageName ? filterData.packageName : '-',
+                                // "ช่วงเวลา": filterData.optionName ? filterData.optionName : '-',
+                                "แพ็คเกจ": '-',
+                                "ช่วงเวลา": '-',
+                                "ชื่อนักเรียน": '-',
+                                "สถานะเช็คอิน": '-',
+                            })
+                        }
+
+
+
+                    })
+
+                    if (reports.length > 0) {
+                        let config = {
+                            headers: {
+                                "Access-Control-Allow-Origin": "*",
+                                "Content-type": "Application/json",
+                                'Authorization': `Bearer ${VueCookie.get("token")}`
+                            }
+                        }
+                        let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/admincourse/export-log`, {}, config)
+
+                        var workbook = XLSX.utils.book_new();
+                        var worksheet = XLSX.utils.json_to_sheet(reports);
+                        XLSX.utils.book_append_sheet(workbook, worksheet, 'sheet1');
+                        var excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+                        var blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+                        var url = URL.createObjectURL(blob);
+                        var link = document.createElement("a");
+                        link.href = url;
+                        link.download = `coachCheckIn.xlsx`;
+                        link.click();
+                        URL.revokeObjectURL(url);
+                        context.commit("SetCheckInFilter", data.data)
+                        context.commit("SetScheduleCheckinIsLoadIng", false)
+                    } else {
+                        context.commit("SetScheduleCheckinIsLoadIng", false)
+                        Swal.fire({
+                            icon: "warning",
+                            title: VueI18n.t("something went wrong"),
+                            text: VueI18n.t("data not found"),
+                            timer: 3000,
+                            timerProgressBar: true,
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                        })
+                    }
+
+
+                }
+
+            } catch (error) {
+                context.commit("SetScheduleCheckinIsLoadIng", false)
+            }
+        },
         async SearchCourses(context, { search }) {
             context.commit("SetScheduleCheckin", [])
             try {
@@ -329,6 +508,8 @@ const adminCheckInModules = {
                         Authorization: `Bearer ${VueCookie.get("token")}`,
                     },
                 };
+                // let localhost = "http://localhost:3000"
+                // const { data } = await axios.post(`${localhost}/api/v1/adminfeature/checkincoach`, {
                 const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/adminfeature/checkincoach`, {
                     ...checkInData
                 }, config)
@@ -342,6 +523,9 @@ const adminCheckInModules = {
         }
     },
     getters: {
+        getCheckinFilter(state) {
+            return state.checkin_filter
+        },
         courses(state) {
             return state.courses
         },
