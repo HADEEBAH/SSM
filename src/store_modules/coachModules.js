@@ -524,30 +524,32 @@ const coachModules = {
         if (data.statusCode === 200) {
           let i = 1
 
-          data.data.map((student)=>{
+          data.data.map((student) => {
             student.no = i
             student.fullname = `${student.firstNameTh} ${student.lastNameTh}`
             student.fullname_en = `${student.firstNameEn} ${student.lastNameEn}`
             student.check_in_student_id = student.checkInStudentId,
-            student.menu_compensation_date = false,
-            student.compensationDate = student.compensationDate ? student.compensationDate !== "Invalid date" ? moment(new Date(student.compensationDate)).format("YYYY-MM-DD") : null : null
+              student.menu_compensation_date = false,
+              student.compensationDate = student.compensationDate ? student.compensationDate !== "Invalid date" ? moment(new Date(student.compensationDate)).format("YYYY-MM-DD") : null : null
             student.compensation_date_str = student.compensationDate ? student.compensationDate !== "Invalid date" ? dateFormatter(new Date(student.compensationDate), "DD MT YYYYT") : null : null
             student.compensationStartTime = student.compensationStartTime ? moment(student.compensationStartTime, "HH:mm") : null
             student.compensationEndTime = student.compensationEndTime ? moment(student.compensationEndTime, "HH:mm") : null
             student.files = []
             student.potentialfiles = []
+            student.status ? student.status : student.status = 'punctual'
             // student.status = student.status && student.status !== "" ? student.status : 'punctual'
             i = i + 1
           })
           console.log('data.data', data.data)
           await context.commit("SetStudentCheckIn", data.data.filter(items => items.timeId === time_id))
           context.commit("SetStudentCheckInLoading", false)
-      }
+        }
       } catch (error) {
         console.log(error)
         context.commit("SetStudentCheckInLoading", false)
       }
     },
+
     async CheckInCoach(context, { course_id, time_id, date, type, time_start, time_end }) {
       context.commit("SetCoachCheckInIsLoading", true)
       try {
