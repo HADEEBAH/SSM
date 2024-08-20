@@ -687,6 +687,7 @@
     "school(thai)" : "โรงเรียน(ภาษาไทย)",
     "school(en)" : "โรงเรียน(ภาษาอังกฤษ)",
     "seat" : "ที่นั่ง",
+    "select class": "กรุณาเลือกชั้นเรียน",
     "see more" : "ดูเพิ่มเติม",
     "set the size not to exceed 5MB": "( กำหนดขนาดไม่เกิน 5MB )",
     "select all": "เลือกทั้งหมด",
