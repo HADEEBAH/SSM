@@ -536,7 +536,7 @@ const coachModules = {
             student.compensationEndTime = student.compensationEndTime ? moment(student.compensationEndTime, "HH:mm") : null
             student.files = []
             student.potentialfiles = []
-            student.status !== null ? student.status : student.status = 'punctual'
+            student.status ? student.status : student.status = 'punctual'
             // student.status = student.status && student.status !== "" ? student.status : 'punctual'
             i = i + 1
           })

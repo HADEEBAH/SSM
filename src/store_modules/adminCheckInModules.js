@@ -397,7 +397,7 @@ const adminCheckInModules = {
                         if (items?.checkInStudent) {
                             // context.dispatch("CheckInCoach", { checkInData: checkIn, index: index })
                             items?.checkInStudent.map(item => {
-                                item.status !== null ? item.status : item.status = 'punctual'
+                                item.status ? item.status : item.status = 'punctual'
 
                                 if (item?.compensationDate) {
                                     item.compensationDate = item.compensationDate ? item.compensationDate !== "Invalid date" ? moment(new Date(item.compensationDate)).format("YYYY-MM-DD") : null : null
@@ -514,7 +514,7 @@ const adminCheckInModules = {
                     ...checkInData
                 }, config)
                 if (data.statusCode == 201) {
-                    data.data.map(item => { item.status !== null ? item.status : item.status = 'punctual' })
+                    data.data.map(item => { item.status ? item.status : item.status = 'punctual' })
                     await context.commit("SetCheckInCoach", { index: index, students: data.data })
                 }
             } catch (error) {
