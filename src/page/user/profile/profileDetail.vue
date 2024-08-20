@@ -169,16 +169,18 @@
               </v-list-item>
             </template>
           </v-autocomplete> -->
+          <!-- {{ profile_detail.class.classNameTh }} -->
           <v-combobox
-            v-model="profile_detail.class.classNameTh"
+            v-model="selectedClass"
             :items="class_list"
             item-text="classNameTh"
+            item-value="classNameTh"
             dense
             outlined
             color="#ff6B81"
             item-color="#ff6b81"
             :placeholder="$t('select class')"
-            :rules="!profile_detail.class.classNameTh ? rules.class : ''"
+            :rules="rules.class"
             :disabled="!isEnabled"
           >
             <template #no-data>
@@ -304,6 +306,7 @@ export default {
     nation: "",
     mobileNo: "",
     email: "",
+    selectedClass: null,
   }),
   beforeRouteLeave(to, from, next) {
     if (
@@ -319,12 +322,14 @@ export default {
   async created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     await this.GetClassList();
+    this.selectedClass = this.profile_detail.class;
   },
   mounted() {
     this.$store.dispatch(
       "NavberUserModules/changeTitleNavber",
       "personal information"
     );
+    this.selectedClass = this.profile_detail.class;
   },
 
   methods: {
@@ -375,6 +380,109 @@ export default {
     closeDialogPorfile(value) {
       this.changeProfileFail(value);
     },
+    // async submitEdit() {
+    //   if (this.$refs.form.validate()) {
+    //     Swal.fire({
+    //       icon: "question",
+    //       title: this.$t("do you want to edit your profile information?"),
+    //       showDenyButton: false,
+    //       showCancelButton: true,
+    //       confirmButtonText: this.$t("agree"),
+    //       cancelButtonText: this.$t("cancel"),
+    //     }).then(async (result) => {
+    //       if (result.isConfirmed) {
+    //         try {
+    //           this.is_loading = true;
+    //           let config = {
+    //             headers: {
+    //               "Access-Control-Allow-Origin": "*",
+    //               "Content-type": "Application/json",
+    //               Authorization: `Bearer ${VueCookie.get("token")}`,
+    //             },
+    //           };
+
+    //           // Extract the classNameTh from selectedClass
+    //           let payload = {
+    //             firstNameTh: this.profile_detail.firstNameTh,
+    //             lastNameTh: this.profile_detail.lastNameTh,
+    //             nation: this.profile_detail.nation,
+    //             mobileNo: this.profile_detail.mobileNo,
+    //             email: this.profile_detail.email,
+    //             schoolTh: this.profile_detail.school.schoolNameTh,
+    //             nicknameTh: this.profile_detail?.nicknameTh
+    //               ? this.profile_detail.nicknameTh
+    //               : "",
+    //             congenitalDiseaseTh: this.profile_detail?.congenitalDisease
+    //               ? this.profile_detail.congenitalDisease
+    //               : "",
+    //             className:
+    //               this.selectedClass?.classNameTh || this.selectedClass,
+    //           };
+
+    //           this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+    //           let user_account_id = this.user_detail.account_id;
+
+    //           let payloadData = new FormData();
+    //           payloadData.append("payload", JSON.stringify(payload));
+    //           if (this.image_profile.name) {
+    //             payloadData.append("imageProfile", this.image_profile);
+    //           }
+
+    //           let { data } = await axios.patch(
+    //             `${process.env.VUE_APP_URL}/api/v1/profile/${user_account_id}`,
+    //             payloadData,
+    //             config
+    //           );
+
+    //           if (data.statusCode === 200) {
+    //             let data_storage = JSON.parse(
+    //               localStorage.getItem("userDetail")
+    //             );
+    //             data_storage.first_name_th = data.data.firstNameTh;
+    //             data_storage.last_name_th = data.data.lastNameTh;
+    //             data_storage.image = `${data.data.image}`;
+    //             localStorage.setItem(
+    //               "userDetail",
+    //               JSON.stringify(data_storage)
+    //             );
+    //             await this.GetProfileDetail(this.$route.params.profile_id);
+
+    //             this.is_loading = false;
+    //             this.preview_file = "";
+    //             this.dialog_show = true;
+    //             this.isDisabled = true;
+    //             this.isEnabled = false;
+    //             this.buttonName = this.$t("edit");
+    //             document.getElementById("fileInput").value = "";
+    //             Swal.fire({
+    //               icon: "success",
+    //               title: this.$t("succeed"),
+    //               text: this.$t("profile has been edited"),
+    //               showDenyButton: false,
+    //               showCancelButton: false,
+    //               showConfirmButton: false,
+    //               timerProgressBar: true,
+    //               timer: 3000,
+    //             });
+    //             await this.GetClassList();
+    //           } else {
+    //             throw { message: data.message };
+    //           }
+    //         } catch (error) {
+    //           Swal.fire({
+    //             icon: "error",
+    //             title: this.$t("something went wrong"),
+    //             text: error.message,
+    //             timer: 3000,
+    //             timerProgressBar: true,
+    //             showCancelButton: false,
+    //             showConfirmButton: false,
+    //           });
+    //         }
+    //       }
+    //     });
+    //   }
+    // },
     async submitEdit() {
       if (this.$refs.form.validate()) {
         Swal.fire({
@@ -409,9 +517,11 @@ export default {
                 congenitalDiseaseTh: this.profile_detail?.congenitalDisease
                   ? this.profile_detail.congenitalDisease
                   : "",
-                className: this.profile_detail?.class?.classNameTh
-                  ? this.profile_detail.class.classNameTh
-                  : "",
+                // className: this.profile_detail?.class?.classNameTh
+                //   ? this.profile_detail.class.classNameTh
+                //   : "",
+                className:
+                  this.selectedClass?.classNameTh || this.selectedClass,
               };
 
               this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
