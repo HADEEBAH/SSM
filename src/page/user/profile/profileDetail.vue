@@ -143,9 +143,25 @@
             :disabled="!isEnabled"
           >
           </v-text-field>
+          <!-- schoolList -->
+          <!-- <v-combobox
+            v-model="profile_detail.school.schoolNameTh"
+            :items="class_list"
+            item-text="classNameTh"
+            dense
+            outlined
+            color="#ff6B81"
+            item-color="#ff6b81"
+            :placeholder="$t('select school')"
+            :disabled="!isEnabled"
+          >
+            <template #no-data>
+              <v-list-item>
+                {{ $t("data not found") }}
+              </v-list-item>
+            </template>
+          </v-combobox> -->
         </v-col>
-        <!-- {{ profile_detail.userRoles }} -->
-
         <v-col
           cols="12"
           sm="6"
@@ -192,7 +208,7 @@
         </v-col>
         <v-col cols="12" sm="6">
           <label-custom :text="$t('congenital disease')"></label-custom>
-          <v-text-field
+          <!-- <v-text-field
             placeholder="-"
             v-model="profile_detail.congenitalDisease"
             outlined
@@ -200,7 +216,25 @@
             color="#ff6b81"
             :disabled="!isEnabled"
           >
-          </v-text-field>
+          </v-text-field> -->
+          <!-- AllergiesList -->
+          <v-combobox
+            v-model="profile_detail.congenitalDisease"
+            :items="congenital_list"
+            item-text="diseaseNameTh"
+            dense
+            outlined
+            color="#ff6B81"
+            item-color="#ff6b81"
+            :placeholder="$t('select congenital disease')"
+            :disabled="!isEnabled"
+          >
+            <template #no-data>
+              <v-list-item>
+                {{ $t("data not found") }}
+              </v-list-item>
+            </template>
+          </v-combobox>
         </v-col>
         <!-- BTN -->
       </v-row>
@@ -340,6 +374,7 @@ export default {
       GetAll: "ProfileModules/GetAll",
       GetProfileDetail: "ProfileModules/GetProfileDetail",
       changeProfileFail: "loginModules/changeProfileFail",
+      GetCongenital: "ProfileModules/GetCongenital",
     }),
     // getErrorMessage(text, language) {
     //   const thaiPattern =
@@ -533,7 +568,6 @@ export default {
                 payloadData.append("imageProfile", this.image_profile);
               }
               // let localhost = "http://localhost:3000";
-
               let { data } = await axios.patch(
                 // `${localhost}/api/v1/profile/${user_account_id}`,
                 `${process.env.VUE_APP_URL}/api/v1/profile/${user_account_id}`,
@@ -552,7 +586,6 @@ export default {
                   JSON.stringify(data_storage)
                 );
                 await this.GetProfileDetail(this.$route.params.profile_id);
-
                 this.is_loading = false;
                 this.preview_file = "";
                 this.dialog_show = true;
@@ -663,6 +696,7 @@ export default {
       profile_user: "ProfileModules/getProfileUser",
       profile_detail: "ProfileModules/getProfileDetail",
       profile_fail: "loginModules/getProfileFail",
+      congenital_list: "ProfileModules/getCongenital",
     }),
     // isButtonDisabled() {
     //   // Disable the button if either input has an error

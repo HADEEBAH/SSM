@@ -113,6 +113,7 @@
     "check-in reminder" : "แจ้งเตือนการเช็คอิน",
     "check in teach" : "ลงเวลาเข้าสอน",
     "check in student" : "เช็คอิน",
+    "check in status" : "สถานะเช็คอิน",
     "choose a date" : "เลือกวันที่",
     "choose a class time" : "เลือกช่วงเวลาเรียน",
     "choose a coach" : "เลือกโค้ช",
@@ -286,6 +287,7 @@
     "end time" : "เวลาสิ้นสุด",
     "excessive study hours" : "ชั่วโมงการเรียนเกินกว่าที่กำหนด",
     "export" : "นำออก",
+    "export course check in" : "นำออกคอร์สเช็คอิน",
     "evaluate": "จากที่ได้เข้าร่วมบริการระบบ Smart School Managemet กรุณาประเมินความพึงพอใจ เพื่อให้ทางระบบที่ท่านเข้าใช้บริการนำความคิดเห็นของท่านไปปรับปรุงการให้บริการต่อไป",
     "evaluate satisfaction with using the system" : "ประเมินความพึงพอใจการใช้งานระบบ",
     "ease of use":"ความง่ายและดวกในการใช้งาน",
@@ -505,7 +507,8 @@
     "permission management": "การจัดการสิทธิ์",
     "phone number" : "เบอร์โทรศัพท์",
     "personal information" : "ข้อมูลส่วนตัว",
-    
+    "please select a course status":"กรุณาเลือกสถานะคอร์สเรียน",
+    "please select check in status":"กรุณาเลือกสถานะการเช็คอิน",
     "please select course":"กรุณาเลือก คอร์สเรียน",
     "please enter course name":"กรุณากรอกชื่อคอร์ส",
     "please select a reservation start date":"ระบุช่วงวันที่เริ่มจองคอร์ส",
@@ -667,7 +670,8 @@
 
 
 
-    
+    "study start" : "วันที่เริ่มเรียน",
+    "study end" : "วันที่เรียนจบ",
     "save" : "บันทึก",
     "save parent" : "บันทึกผู้ปกครอง",
     "save student" : "บันทึกนักเรียน",
@@ -775,8 +779,9 @@
     "school day":"วันเรียน",
     "system satisfaction":"ความพึงพอใจของระบบ",
     "some students or students have already purchased the course":"นักเรียนคนนี้หรือนักเรียนบางส่วนได้ซื้อหลักสูตรแล้ว",
+    "select congenital disease":"กรุณาเลือกโรคประจำตัว/อาการแพ้",
 
-    
+    "study time": "เวลาเรียน",
     "take annual leave" : "ลาพักร้อนประจำปี",
     "take leave form" : "แบบฟอร์มการลา",
     "take leave date": "วันที่ลา",

@@ -81,6 +81,7 @@ const orderModules = {
       payment_status: "",
       payment_type: "",
       total_price: 0,
+      pay_date: ""
     },
 
     orders: [],
@@ -483,7 +484,10 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
+        // let localhost = "http://localhost:3000"
+
         let { data } = await axios.get(
+          // `${localhost}/api/v1/adminpayment/${order_number}`,
           `${process.env.VUE_APP_URL}/api/v1/adminpayment/${order_number}`,
           config
         );
@@ -1632,6 +1636,7 @@ const orderModules = {
             paymentType: order_data.paymentType,
             total: order_data.totalPrice,
           };
+          // const localhost = 'http://localhost:3003'
           let { data } = await axios.patch(
             // `http://localhost:3003/api/v1/payment/data/${order_data.orderNumber}`,
             `${process.env.VUE_APP_URL}/api/v1/payment/data/${order_data.orderNumber}`,
@@ -1853,9 +1858,9 @@ const orderModules = {
               let discount = item.option.discount
                 ? item.option.discount_price
                 : 0;
-                item.option.net_price_unit = item.option.price_unit - discount;
-                item.option.net_price = item.option.price_unit - discount;
-                item.option.total_price = item.option.net_price * item.students.length
+              item.option.net_price_unit = item.option.price_unit - discount;
+              item.option.net_price = item.option.price_unit - discount;
+              item.option.total_price = item.option.net_price * item.students.length
             } else {
               item.net_price = item.price;
               item.total_price = item.price * item.students.length

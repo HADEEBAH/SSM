@@ -18,6 +18,8 @@ const portfolioModules = {
     async GetPortfolioData(context, { account_id }) {
       context.commit("SetPortfolioIsLoading", true)
       try {
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/profile/portfolio/${account_id}`)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/profile/portfolio/${account_id}`)
         if (data.statusCode === 200) {
           context.commit("SetPortfolioData", data.data)

@@ -121,7 +121,7 @@ const myCourseModules = {
                         "Content-type": "Application/json",
                         'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
-                  }
+                }
                 const dataCourseSchedule = { dates: [] };
                 let type = "student"
                 if (data_local.roles.includes('R_4')) {
@@ -345,6 +345,8 @@ const myCourseModules = {
                         'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
+                // let localhost = "http://localhost:3000"
+                // let { data } = await axios.get(`${localhost}/api/v1/mycourse/student/${account_id}`, config);
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
                 if (data.statusCode === 200) {
                     context.commit("SetStudentCourse", data.data)
