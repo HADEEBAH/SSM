@@ -176,7 +176,7 @@
             color="#ff6B81"
             item-color="#ff6b81"
             outlined
-            :rules="!selectedClass ? rules.class : ''"
+            :rules="!selectedClass.classNameTh ? rules.class : ''"
             :disabled="!isEnabled"
             dense
           >
@@ -664,6 +664,11 @@ export default {
                   Authorization: `Bearer ${VueCookie.get("token")}`,
                 },
               };
+              console.log("this.otherClass :>> ", this.otherClass);
+              console.log(
+                "this.selectedClass?.classNameTh :>> ",
+                this.selectedClass
+              );
 
               let payload = {
                 firstNameTh: this.profile_detail.firstNameTh,
@@ -680,7 +685,7 @@ export default {
                   : "",
                 className: this.otherClass
                   ? this.otherClass
-                  : this.selectedClass?.classNameTh,
+                  : this.selectedClass?.classNameTh || this.selectedClass,
               };
 
               this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
