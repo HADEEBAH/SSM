@@ -138,7 +138,12 @@ const profileModules = {
         }
         const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/class`, config)
         if (data.statusCode === 200) {
-          // console.log(data.data)
+          console.log(data.data)
+          data.data.push({
+            classId: null,
+            classNameTh: "อื่นๆ",
+            classNameEn: "Other"
+          })
           context.commit("SetClass", data.data)
         }
       } catch (error) {
