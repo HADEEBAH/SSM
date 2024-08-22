@@ -669,6 +669,7 @@ export default {
                 "this.selectedClass?.classNameTh :>> ",
                 this.selectedClass
               );
+              console.log("this.profile_detail :>> ", this.profile_detail);
 
               let payload = {
                 firstNameTh: this.profile_detail.firstNameTh,
@@ -683,9 +684,12 @@ export default {
                 congenitalDiseaseTh: this.profile_detail?.congenitalDisease
                   ? this.profile_detail.congenitalDisease
                   : "",
-                className: this.otherClass
-                  ? this.otherClass
-                  : this.selectedClass?.classNameTh || this.selectedClass,
+                className:
+                  this.profile_detail?.userRoles?.roleId == "R_5"
+                    ? this.otherClass
+                      ? this.otherClass
+                      : this.selectedClass?.classNameTh || this.selectedClass
+                    : "",
               };
 
               this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
