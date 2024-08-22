@@ -209,7 +209,7 @@
         </v-col>
         <v-col cols="12" sm="6">
           <label-custom :text="$t('congenital disease')"></label-custom>
-          <!-- <v-text-field
+          <v-text-field
             placeholder="-"
             v-model="profile_detail.congenitalDisease"
             outlined
@@ -217,9 +217,9 @@
             color="#ff6b81"
             :disabled="!isEnabled"
           >
-          </v-text-field> -->
+          </v-text-field>
           <!-- AllergiesList -->
-          <v-combobox
+          <!-- <v-combobox
             v-model="profile_detail.congenitalDisease"
             :items="congenital_list"
             item-text="diseaseNameTh"
@@ -235,7 +235,7 @@
                 {{ $t("data not found") }}
               </v-list-item>
             </template>
-          </v-combobox>
+          </v-combobox> -->
         </v-col>
         <!-- BTN -->
       </v-row>

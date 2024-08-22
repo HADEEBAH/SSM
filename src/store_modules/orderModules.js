@@ -931,10 +931,8 @@ const orderModules = {
     // },
 
 
-    async saveOrder(context, { regis_type, data_class, type_checked }) {
+    async saveOrder(context, { regis_type, my_data_class, othert_data_class, type_checked }) {
       context.commit("SetOrderIsLoading", true);
-      console.log('data_class :>> ', data_class);
-      console.log('type_checked :>> ', type_checked);
 
       try {
         let order = context.state.order;
@@ -997,7 +995,7 @@ const orderModules = {
                       studentUpdate.push({
                         "studentId": student.account_id,
                         "nicknameTh": student.nicknameTh,
-                        "class": student.class === 'อื่นๆ' && data_class !== '' ? data_class : student.class
+                        "class": student.class === 'อื่นๆ' && my_data_class !== '' || othert_data_class !== '' ? othert_data_class || my_data_class : student.class
                       });
                     } else {
                       allStudentsValid = false;

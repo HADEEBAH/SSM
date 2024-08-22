@@ -275,7 +275,7 @@
             :text="$t('please enter your class')"
           ></labelCustom>
           <v-text-field
-            v-model="checkClassData"
+            v-model="myCheckClassData"
             placeholder="-"
             outlined
             color="#ff6b81"
@@ -667,7 +667,7 @@
                     :text="$t('please enter your class')"
                   ></labelCustom>
                   <v-text-field
-                    v-model="checkClassData"
+                    v-model="otherCheckClassData"
                     placeholder="-"
                     outlined
                     color="#ff6b81"
@@ -1140,7 +1140,8 @@ export default {
     chaeckConditions: false,
     inputClass: "",
     inputNickName: "",
-    checkClassData: "",
+    myCheckClassData: "",
+    otherCheckClassData: "",
   }),
   async created() {
     this.order_data = JSON.parse(localStorage.getItem("Order"));
@@ -1165,7 +1166,7 @@ export default {
       newClass
     ) {
       if (newClass !== "อื่นๆ") {
-        this.checkClassData = ""; // Reset checkClassData if class is not 'อื่นๆ'
+        (this.myCheckClassData = ""), (this.otherCheckClassData = ""); // Reset checkClassData if class is not 'อื่นๆ'
       }
     },
 
@@ -1467,8 +1468,7 @@ export default {
     realtimeCheckClass(items) {
       this.inputClass = items;
       if (items !== "อื่นๆ") {
-        this.checkClassData = "";
-        console.log(" this.checkClassData :>> ", this.checkClassData);
+        (this.myCheckClassData = ""), (this.otherCheckClassData = "");
       }
     },
     checkRoleParent() {
@@ -1675,10 +1675,8 @@ export default {
       if (
         (roles !== "R_5" && yourself === false && checkNickname) ||
         (roles === "R_5" && checkNickname && checkClass) ||
-        this.checkClassData ||
         (roles === undefined && checkNickname) ||
-        (yourself === true && checkNickname && checkClass) ||
-        this.checkClassData
+        (yourself === true && checkNickname && checkClass)
       ) {
         if (this.course_order.course_type_id == "CT_1") {
           this.$refs.form_coach.validate();
@@ -1998,11 +1996,35 @@ export default {
         roles = items?.roles?.roleId;
       }
 
+      // if (
+      //   (roles !== "R_5" && yourself === false && checkNickname) ||
+      //   (roles === "R_5" && checkNickname && checkClass) ||
+      //   (roles === undefined && checkNickname) ||
+      //   (yourself === true && checkNickname && checkClass)
+      // )
       if (
         (roles !== "R_5" && yourself === false && checkNickname) ||
-        (roles === "R_5" && checkNickname && checkClass) ||
+        (roles === "R_5" &&
+          checkNickname &&
+          checkClass &&
+          checkClass !== "อื่นๆ") ||
+        (roles === "R_5" &&
+          checkNickname &&
+          checkClass &&
+          checkClass === "อื่นๆ" &&
+          this.myCheckClassData !== "") ||
+        this.otherCheckClassData !== "" ||
         (roles === undefined && checkNickname) ||
-        (yourself === true && checkNickname && checkClass)
+        (yourself === true &&
+          checkNickname &&
+          checkClass &&
+          checkClass !== "อื่นๆ") ||
+        (yourself === true &&
+          checkNickname &&
+          checkClass &&
+          checkClass === "อื่นๆ" &&
+          this.myCheckClassData !== "") ||
+        this.otherCheckClassData !== ""
       ) {
         if (this.course_order.course_type_id == "CT_1") {
           this.$refs.form_coach.validate();
@@ -2089,7 +2111,8 @@ export default {
                   if (this.course_order.day && this.course_order.time) {
                     this.saveOrder({
                       regis_type: "",
-                      data_class: this.checkClassData,
+                      my_data_class: this.myCheckClassData,
+                      othert_data_class: this.otherCheckClassData,
                       type_checked: yourself,
                     });
                   } else {
@@ -2105,7 +2128,9 @@ export default {
                     // สามารถซื้อได้
                     await this.saveOrder({
                       regis_type: "",
-                      data_class: this.checkClassData,
+                      my_data_class: this.myCheckClassData,
+                      othert_data_class: this.otherCheckClassData,
+                      type_checked: yourself,
                     });
                   } else {
                     await Swal.fire({

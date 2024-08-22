@@ -288,6 +288,21 @@
                                 </template>
                               </v-autocomplete>
                             </v-col>
+                            <v-col cols="12" sm="6" v-if="openTypeClass">
+                              <label-custom
+                                :text="$t('please enter your class')"
+                              ></label-custom>
+                              <v-text-field
+                                v-model="otherClass"
+                                placeholder="-"
+                                outlined
+                                color="#ff6b81"
+                                dense
+                                :rules="rules.class"
+                                :disabled="!isEnabled"
+                              >
+                              </v-text-field>
+                            </v-col>
 
                             <v-col cols="12" sm="6">
                               <label-custom
@@ -365,6 +380,21 @@
                                   {{ $t("data not found") }}
                                 </template>
                               </v-autocomplete>
+                            </v-col>
+                            <v-col cols="12" sm="6" v-if="openTypeClass">
+                              <label-custom
+                                :text="$t('please enter your class')"
+                              ></label-custom>
+                              <v-text-field
+                                v-model="otherClass"
+                                placeholder="-"
+                                outlined
+                                color="#ff6b81"
+                                dense
+                                :rules="rules.class"
+                                :disabled="!isEnabled"
+                              >
+                              </v-text-field>
                             </v-col>
 
                             <v-col cols="12" sm="6">
@@ -1062,6 +1092,8 @@ export default {
     user_form: false,
     className: "",
     activeClass: false,
+    otherClass: "",
+    openTypeClass: false,
   }),
 
   beforeMount() {
@@ -1108,6 +1140,12 @@ export default {
     handleChange(item) {
       this.activeClass = true;
       this.className = item;
+      if (item == "อื่นๆ") {
+        this.openTypeClass = true;
+      } else if (item !== "อื่นๆ") {
+        this.openTypeClass = false;
+        this.otherClass = "";
+      }
     },
     selectRole() {
       this.selectRoles;
@@ -1480,16 +1518,20 @@ export default {
                 schoolEn: this.show_by_id.school.schoolNameEn,
                 nicknameTh: this.show_by_id.nicknameTh,
                 nicknameEn: this.show_by_id.nicknameEn,
-                className:
-                  this.activeClass === true
-                    ? this.className
-                    : this.show_by_id.class.classNameTh,
+                className: this.otherClass
+                  ? this.otherClass
+                  : this.activeClass === true
+                  ? this.className
+                  : this.show_by_id.class.classNameTh,
                 congenitalDiseaseTh: this.show_by_id.congenitalDisease,
               };
               let bodyFormData = new FormData();
               bodyFormData.append("image", this.send_image_profile);
               bodyFormData.append("payload", JSON.stringify(payload));
+              // let localhost = "http://localhost:3000";
+
               let { data } = await axios.patch(
+                // `${localhost}/api/v1/usermanagement/update/${account_id}`,
                 `${process.env.VUE_APP_URL}/api/v1/usermanagement/update/${account_id}`,
                 bodyFormData,
                 config

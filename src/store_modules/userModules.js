@@ -169,18 +169,21 @@ const userModules = {
                         'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
+                // let localhost = "http://localhost:3000";
+
+                // let { data } = await axios.get(`${localhost}/api/v1/usermanagement/${account_id}`, config)
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/usermanagement/${account_id}`, config)
                 if (data.statusCode === 200) {
                     data.data.image = data.data.image && data.data.image != "" ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}` : ""
                     context.commit("SetShowById", [])
                     data.data.class = data.data.class ? data.data.class : {
-                        classNameTh : "",
-                        classNameEn : ""
-                    } 
+                        classNameTh: "",
+                        classNameEn: ""
+                    }
                     data.data.school = data.data.school ? data.data.school : {
-                        schoolNameTh : "",
-                        schoolNameEn : ""
-                    } 
+                        schoolNameTh: "",
+                        schoolNameEn: ""
+                    }
                     context.commit("SetShowById", data.data)
                 }
             } catch (error) {
