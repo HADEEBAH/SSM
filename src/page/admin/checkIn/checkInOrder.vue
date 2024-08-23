@@ -202,7 +202,7 @@
       </v-row>
     </v-form>
     <div v-if="checkCourseType == 'CT_2'">
-      <div>{{ testfunction() }}</div>
+      <div>{{ verifyGeneralCourse() }}</div>
     </div>
   </v-container>
 </template>
@@ -321,10 +321,10 @@ export default {
       this.getCpo = orders?.cpo;
       if (orders.courseTypeId == "CT_2") {
         // this.clickActive = true;
-        this.testfunction();
+        this.verifyGeneralCourse();
       }
     },
-    testfunction() {
+    verifyGeneralCourse() {
       Swal.fire({
         icon: "warning",
         title: this.$t("warning"),
