@@ -1079,7 +1079,26 @@
                                                     student.totalDay
                                                   }}
                                                 </v-col>
-                                                <v-col cols>
+                                                <v-col
+                                                  cols
+                                                  v-if="!student.status"
+                                                >
+                                                  <pre>{{
+                                                    student.status
+                                                  }}</pre>
+                                                  <v-chip
+                                                    color="orange"
+                                                    outlined
+                                                  >
+                                                    {{
+                                                      $t(
+                                                        "no status has been selected yet"
+                                                      )
+                                                    }}
+                                                  </v-chip>
+                                                </v-col>
+                                                <v-col cols v-else>
+                                                  <!-- {{ pre$t(student.status) }} -->
                                                   <v-chip
                                                     align="center"
                                                     class="font-bold"
