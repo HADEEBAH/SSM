@@ -148,11 +148,7 @@
                 class="header-table border"
                 :items="
                   coach_check_in.checkInCoachId
-                    ? student_check_in.filter((v) =>
-                        v.cpo?.packageName
-                          ? v.cpo.packageName === package_name_filter
-                          : true
-                      )
+                    ? student_check_in
                     : []
                 "
                 item-key="no"
