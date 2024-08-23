@@ -541,7 +541,7 @@ const coachModules = {
             i = i + 1
           })
           console.log('data.data', data.data)
-          await context.commit("SetStudentCheckIn", data.data.filter(items => items.timeId === time_id))
+          await context.commit("SetStudentCheckIn", data.data)
           context.commit("SetStudentCheckInLoading", false)
         }
       } catch (error) {
