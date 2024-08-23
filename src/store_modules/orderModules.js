@@ -931,8 +931,9 @@ const orderModules = {
     // },
 
 
-    async saveOrder(context, { regis_type }) {
+    async saveOrder(context, { regis_type, my_data_class, othert_data_class, type_checked }) {
       context.commit("SetOrderIsLoading", true);
+
       try {
         let order = context.state.order;
         let configs = {
@@ -989,12 +990,12 @@ const orderModules = {
                 if (!studentUpdate.some(v => v.studentId === student.account_id)) {
                   // console.log('itemRole :>> ', itemRole);
                   // !itemRole ||
-                  if (itemRole === 'R_5') {
+                  if (itemRole === 'R_5' || type_checked === true) {
                     if (student.nicknameTh && student.class) {
                       studentUpdate.push({
                         "studentId": student.account_id,
                         "nicknameTh": student.nicknameTh,
-                        "class": student.class
+                        "class": student.class === 'อื่นๆ' && my_data_class !== '' || othert_data_class !== '' ? othert_data_class || my_data_class : student.class
                       });
                     } else {
                       allStudentsValid = false;
@@ -1253,6 +1254,8 @@ const orderModules = {
           },
         };
         try {
+          // const localhost = 'http://localhost:3000'
+          // await axios.post(`${localhost}/api/v1/account/student/list`, studentUpdate, config)
           await axios.post(`${process.env.VUE_APP_URL}/api/v1/account/student/list`, studentUpdate, config)
         } catch (error) {
           Swal.fire({
