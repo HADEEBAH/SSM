@@ -507,8 +507,8 @@ const coachModules = {
           },
         };
         // let localhost = "http://localhost:3000"
-        // let { data } = await axios.get(`${localhost}/api/v1/coachmanagement/coach/${course_id}/date/${date}`, config)
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${course_id}/date/${date}`, config)
+        // let { data } = await axios.get(`${localhost}/api/v1/coachmanagement/coach/${course_id}/date/${date}/time/${time_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${course_id}/date/${date}/time/${time_id}`, config)
         // .then(async(result)=>{
         //   if (result.data.data.length !== 0 && context.state.coach_check_in?.checkInCoachId) {
         //     await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/more/student/list?courseId=${course_id}&date=${date}&timeId=${time_id}`,null, config)
