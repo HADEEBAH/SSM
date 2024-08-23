@@ -1083,9 +1083,6 @@
                                                   cols
                                                   v-if="!student.status"
                                                 >
-                                                  <pre>{{
-                                                    student.status
-                                                  }}</pre>
                                                   <v-chip
                                                     color="orange"
                                                     outlined
