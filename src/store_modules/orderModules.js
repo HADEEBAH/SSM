@@ -2435,6 +2435,7 @@ const orderModules = {
           },
         };
         // let localhost = "http://localhost:3000"
+        // const { data } = await axios.post(`${localhost}/api/v1/schedule/AutoResetScheldule`, {
         const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/schedule/AutoResetScheldule`, {
           orderNumber,
           orderItemId,

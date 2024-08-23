@@ -30,13 +30,19 @@
     </v-row>
     <v-row dense>
       <v-col>
+        <v-card v-if="order_number_detail.length === 0" outlined>
+          <v-card-text class="text-center font-bold">
+            {{ $t("enter order number") }}
+          </v-card-text>
+        </v-card>
         <v-card
           v-for="(order, index) in order_number_detail"
           :key="`${index}-order`"
-          :class="seletedCourse ? 'card-selected list-hover' : 'list-hover'"
+          :class="getCardClass(order.orderItemId)"
           outlined
-          @click="SelectCourse(order.orderItemId)"
+          @click="SelectCourse(order)"
         >
+          <!-- courseTypeId -->
           <v-card-text>
             <v-row dense>
               <v-col class="font-bold text-lg">
@@ -92,15 +98,10 @@
             </v-row>
           </v-card-text>
         </v-card>
-        <v-card v-if="order_number_detail.length === 0" outlined>
-          <v-card-text class="text-center font-bold">
-            {{ $t("enter order number") }}
-          </v-card-text>
-        </v-card>
       </v-col>
     </v-row>
     <v-form ref="form" v-model="valid">
-      <v-row v-if="seletedCourse">
+      <v-row v-if="seletedCourse && checkCourseType == 'CT_1'">
         <v-col>
           <v-radio-group v-model="type">
             <v-row>
@@ -200,12 +201,16 @@
         </v-col>
       </v-row>
     </v-form>
+    <div v-if="checkCourseType == 'CT_2'">
+      <div>{{ verifyGeneralCourse() }}</div>
+    </div>
   </v-container>
 </template>
 
 <script>
 import { inputValidation } from "@/functions/functions";
 import headerPage from "@/components/header/headerPage.vue";
+import Swal from "sweetalert2";
 import { mapActions, mapGetters } from "vuex";
 export default {
   name: "ManageCheckInLater",
@@ -223,6 +228,10 @@ export default {
       seletedCourse: "",
       countNumber: "",
       valid: false,
+      checkCourseType: "",
+      // clickActive: false,
+      getMax: "",
+      getCpo: "",
     };
   },
   mounted() {
@@ -245,15 +254,13 @@ export default {
       return [(val) => (val || "").length > 0 || this.$t("enter last date")];
     },
     RulesLastTime() {
-      const maxRemain = this.getMaxRemain();
-      const checkCpo = this.getCpo();
       return [
         (val) => (val || "").length > 0 || this.$t("enter last time"),
         (val) =>
-          checkCpo === null
+          this.getCpo === null
             ? parseInt(val) <= 100 || `${this.$t("number must be")} ${100}`
-            : parseInt(val) <= maxRemain ||
-              `${this.$t("number must be")} ${maxRemain}`,
+            : parseInt(val) <= this.getMax ||
+              `${this.$t("number must be")} ${this.getMax}`,
         (val) => parseInt(val) >= 0 || this.$t("number must be 1"),
         (val) => !this.containsDecimal(val) || this.$t("can not use"),
       ];
@@ -294,39 +301,9 @@ export default {
         }
       );
     },
-    // checkInput(value) {
-    //   const maxRemain = this.getMaxRemain();
-    //   if (parseInt(value) > maxRemain) {
-    //     this.lastTime = ""; // Clear the input if it exceeds the maxRemain
-    //   } else {
-    //     this.lastTime = value; // Set the input if it's valid
-    //   }
-    // },
+
     containsDecimal(value) {
       return value.includes(".");
-    },
-    getMaxRemain() {
-      let maxRemain = 0;
-      for (const itemData of this.order_number_detail) {
-        for (const itemStudent of itemData?.students) {
-          if (itemStudent.remain > maxRemain) {
-            maxRemain = itemStudent.remain;
-          }
-        }
-      }
-      return maxRemain;
-    },
-    getCpo() {
-      let dataCpo = {};
-      for (const itemData of this.order_number_detail) {
-        dataCpo = itemData.cpo;
-        // for (const itemStudent of itemData?.students) {
-        //   if (itemStudent.remain > maxRemain) {
-        //     maxRemain = itemStudent.remain;
-        //   }
-        // }
-      }
-      return dataCpo;
     },
 
     maximumCountCourse() {
@@ -337,8 +314,33 @@ export default {
       }
       return this.countNumber;
     },
-    SelectCourse(orderItemId) {
-      this.seletedCourse = orderItemId;
+    SelectCourse(orders) {
+      this.seletedCourse = orders.orderItemId;
+      this.checkCourseType = orders.courseTypeId;
+      this.getMax = orders?.cpo?.HPT;
+      this.getCpo = orders?.cpo;
+      if (orders.courseTypeId == "CT_2") {
+        // this.clickActive = true;
+        this.verifyGeneralCourse();
+      }
+    },
+    verifyGeneralCourse() {
+      Swal.fire({
+        icon: "warning",
+        title: this.$t("warning"),
+        text: this.$t("this item cannot be made. Because it is a short course"),
+        timer: 3000,
+        timerProgressBar: true,
+        showCancelButton: false,
+        showConfirmButton: false,
+      });
+    },
+    getCardClass(orderItemId) {
+      return {
+        "card-selected": this.seletedCourse === orderItemId,
+        "list-hover": true,
+        "mb-3": true,
+      };
     },
     HandleInputOrderNumber(orderNumber) {
       this.GetOrderDetailByOrderNumber({
@@ -386,6 +388,7 @@ export default {
     },
     async save() {
       if (this.$refs.form.validate()) {
+        console.log("this.endClassDate :>> ", this.endClassDate);
         await this.UpdateScheduleAndCheckIn({
           orderNumber: this.orderNumder,
           orderItemId: this.seletedCourse,
