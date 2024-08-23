@@ -388,15 +388,25 @@ export default {
     },
     async save() {
       if (this.$refs.form.validate()) {
-        console.log("this.endClassDate :>> ", this.endClassDate);
-        await this.UpdateScheduleAndCheckIn({
-          orderNumber: this.orderNumder,
-          orderItemId: this.seletedCourse,
-          lastTime: this.lastTime,
-          type: this.type,
-          endDate: this.endClassDate,
+        Swal.fire({
+          icon: "question",
+          title: this.$t("do you want to save it?"),
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("cancel"),
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            await this.UpdateScheduleAndCheckIn({
+              orderNumber: this.orderNumder,
+              orderItemId: this.seletedCourse,
+              lastTime: this.lastTime,
+              type: this.type,
+              endDate: this.endClassDate,
+            });
+          }
+          this.type = "";
         });
-        this.type = "";
       }
     },
   },
