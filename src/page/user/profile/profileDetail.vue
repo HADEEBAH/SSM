@@ -64,9 +64,9 @@
           <v-text-field
             placeholder="-"
             v-model="profile_detail.lastNameTh"
-            :rules="rules.lastNameThRules"
             outlined
             dense
+            :rules="rules.lastNameThRules"
             :disabled="!isEnabled"
             color="#ff6b81"
             @keydown="validate($event, 'th-special')"
@@ -996,24 +996,6 @@ export default {
             !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
             this.$t("please enter your thai name"),
         ],
-        // firstNameEnRules: [
-        //   (val) =>
-        //     (val || "").length > 1 ||
-        //     this.$t(
-        //       "please enter your name (english), at least 2 characters long"
-        //     ),
-        //   (val) =>
-        //     (val || "").length < 20 ||
-        //     this.$t(
-        //       "please enter your name (english) length not exceeding 20 characters"
-        //     ),
-        //   (val) =>
-        //     /[A-Za-z]/g.test(val) ||
-        //     this.$t("please enter your name in english"),
-        //   (val) =>
-        //     !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-        //     this.$t("please enter your name in english"),
-        // ],
         lastNameThRules: [
           (val) =>
             (val || "").length > 1 ||
@@ -1025,9 +1007,6 @@ export default {
             this.$t(
               "please enter your last name (Thai) not more than 20 characters"
             ),
-          (val) =>
-            val.split(" ").length <= 1 ||
-            this.$t("please enter your last name in thai"),
           (val) =>
             /[ก-๏\s]/g.test(val) ||
             this.$t("please enter your last name in thai"),
@@ -1076,16 +1055,6 @@ export default {
         class: [
           (val) =>
             (val || "").length > 1 || this.$t("please select your class"),
-          // (val) =>
-          //   (val || "").length < 20 ||
-          //   this.$t(
-          //     "please enter your nickName length not exceeding 20 characters"
-          //   ),
-          // (val) =>
-          //   /[ก-๏\s]/g.test(val) || this.$t("please enter your thai name"),
-          // (val) =>
-          //   !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-          //   this.$t("please enter your thai name"),
         ],
         confirm_password: (val) =>
           (val && val.length > 7) ||
