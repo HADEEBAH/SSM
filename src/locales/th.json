@@ -551,6 +551,7 @@
     "please enter your name (thai) with a length of at least 2 characters" : "กรุณาระบุชื่อ (ภาษาไทย) ความยาวอย่างน้อย 2 ตัวอักษร", 
     "please enter your name (thai) length not exceeding 20 characters" : "กรุณาระบุชื่อ (ภาษาไทย) ความยาวไม่เกิน 100 ตัวอักษร",
     "please enter your thai name" : "กรุณากรอกชื่อภาษาไทย",
+    "please enter your nickname" : "กรุณากรอกชื่อเล่น",
     "please enter your name in english" : "กรุณากรอกชื่อภาษาอังกฤษ",
     "please enter your username" : "กรุณาระบุ ชื่อผู้ใช้ (username)",
     "please enter your password again" : "กรุณาระบุรหัสผ่านใหม่อีกครั้ง",
