@@ -175,7 +175,7 @@
                       dense
                       outlined
                       type="number"
-                      :max="maximumCountCourse(order_number_detail)"
+                      :max="maxNumber"
                       :min="0"
                       :placeholder="$t('specify the remaining number of times')"
                     ></v-text-field>
@@ -230,8 +230,8 @@ export default {
       valid: false,
       checkCourseType: "",
       // clickActive: false,
-      getMax: "",
       getCpo: "",
+      maxNumber: 0,
     };
   },
   mounted() {
@@ -259,8 +259,8 @@ export default {
         (val) =>
           this.getCpo === null
             ? parseInt(val) <= 100 || `${this.$t("number must be")} ${100}`
-            : parseInt(val) <= this.getMax ||
-              `${this.$t("number must be")} ${this.getMax}`,
+            : parseInt(val) <= this.maxNumber ||
+              `${this.$t("number must be")} ${this.maxNumber}`,
         (val) => parseInt(val) >= 0 || this.$t("number must be 1"),
         (val) => !this.containsDecimal(val) || this.$t("can not use"),
       ];
@@ -306,18 +306,10 @@ export default {
       return value.includes(".");
     },
 
-    maximumCountCourse() {
-      for (const itemData of this.order_number_detail) {
-        for (const itemStudent of itemData?.students) {
-          this.countNumber = itemData.cpo ? itemStudent.remain : 100;
-        }
-      }
-      return this.countNumber;
-    },
     SelectCourse(orders) {
       this.seletedCourse = orders.orderItemId;
       this.checkCourseType = orders.courseTypeId;
-      this.getMax = orders?.cpo?.HPT;
+      this.maxNumber = orders?.cpo?.HPT;
       this.getCpo = orders?.cpo;
       if (orders.courseTypeId == "CT_2") {
         // this.clickActive = true;
