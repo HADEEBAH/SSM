@@ -136,7 +136,7 @@
                           <v-row>
                             <v-col cols="12" sm="6">
                               <label-custom
-                                :text="$t('first name(thai)2')"
+                                :text="$t('first name(thai)')"
                               ></label-custom>
 
                               <v-text-field
@@ -167,7 +167,7 @@
                             </v-col>
                           </v-row>
 
-                          <v-row>
+                          <v-row dense>
                             <v-col cols="12" sm="6">
                               <label-custom
                                 :text="$t('first name(english)')"
@@ -201,7 +201,8 @@
                               </v-text-field>
                             </v-col>
                           </v-row>
-                          <v-row>
+                          <!-- Nickname NoRole -->
+                          <v-row v-if="show_by_id.userRoles?.length <= 0" dense>
                             <v-col cols="12" sm="6">
                               <label-custom
                                 :text="$t('nickname(thai)')"
@@ -233,7 +234,51 @@
                               </v-text-field>
                             </v-col>
                           </v-row>
-                          <v-row>
+                          <!-- Nickname have Role -->
+                          <v-row
+                            v-for="itemsRoles of show_by_id.userRoles"
+                            :key="itemsRoles"
+                            dense
+                          >
+                            <v-col cols="12" sm="6">
+                              <label-custom
+                                :text="$t('nickname(thai)')"
+                              ></label-custom>
+                              <v-text-field
+                                v-model="show_by_id.nicknameTh"
+                                v-bind:disabled="isDisabled"
+                                @keydown="validate($event, 'th')"
+                                :rules="
+                                  itemsRoles.roleId == 'R_4' ||
+                                  itemsRoles.roleId == 'R_5'
+                                    ? rules.nicknName
+                                    : ''
+                                "
+                                placeholder="-"
+                                outlined
+                                dense
+                                color="#ff6b81"
+                              >
+                              </v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                              <label-custom
+                                :text="$t('nickname(en)')"
+                              ></label-custom>
+                              <v-text-field
+                                v-model="show_by_id.nicknameEn"
+                                v-bind:disabled="isDisabled"
+                                @keydown="validate($event, 'en-special')"
+                                placeholder="-"
+                                outlined
+                                dense
+                                color="#ff6b81"
+                              >
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+
+                          <v-row dense>
                             <v-col cols="12" sm="6">
                               <label-custom :text="$t('email')"></label-custom>
                               <v-text-field
@@ -1901,6 +1946,18 @@ export default {
           (val) =>
             !/[\uD800-\uDBFF][\uDC00-\uDFFF ]/g.test(val) ||
             this.$t("please enter your last name in English"),
+        ],
+        nicknName: [
+          (val) =>
+            (val || "").length < 20 ||
+            this.$t(
+              "please enter your nickName length not exceeding 20 characters"
+            ),
+          (val) =>
+            /[ก-๏\s]/g.test(val) || this.$t("please enter your nickname"),
+          (val) =>
+            !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+            this.$t("please enter your nickname"),
         ],
         name: [
           (val) =>
