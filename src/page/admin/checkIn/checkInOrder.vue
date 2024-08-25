@@ -176,7 +176,7 @@
                       outlined
                       type="number"
                       :max="maxNumber"
-                      :min="0"
+                      :min="1"
                       :placeholder="$t('specify the remaining number of times')"
                     ></v-text-field>
                     <!-- @input="checkInput" -->
@@ -261,7 +261,7 @@ export default {
             ? parseInt(val) <= 100 || `${this.$t("number must be")} ${100}`
             : parseInt(val) <= this.maxNumber ||
               `${this.$t("number must be")} ${this.maxNumber}`,
-        (val) => parseInt(val) >= 0 || this.$t("number must be 1"),
+        (val) => parseInt(val) >= 1 || this.$t("number must be 1"),
         (val) => !this.containsDecimal(val) || this.$t("can not use"),
       ];
     },
