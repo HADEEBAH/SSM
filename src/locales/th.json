@@ -458,7 +458,7 @@
     "nationality must not have emojis": "สันชาติต้องไม่มีอิโมจิ",
     "november": "พฤศจิกายน",
     "number must be": "ตัวเลขควรที่จะเท่ากันหรือน้อยกว่า",
-    "number must be 1": "ตัวเลขควรที่จะเท่ากับ 0 หรือมากกว่า",
+    "number must be 1": "ตัวเลขควรที่จะเท่ากับ 1 หรือมากกว่า",
     
     "o'clock" : "น.",
     "outside the register date" : "อยู่นอกระยะเวลารับสมัคร",
