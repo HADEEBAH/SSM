@@ -192,7 +192,8 @@ const CourseModules = {
       page: 1
     },
     course_seat: [],
-    checkDay: []
+    checkDay: [],
+    filter_student_data: []
 
   },
   mutations: {
@@ -375,7 +376,10 @@ const CourseModules = {
     },
     SetCheckDay(state, payload) {
       state.checkDay = payload
-    }
+    },
+    SetFilterStudentData(state, payload) {
+      state.filter_student_data = payload
+    },
   },
   actions: {
     // CHECK COURSE SEAT
@@ -2135,6 +2139,40 @@ const CourseModules = {
         console.log(error)
       }
     },
+    async GetFilterStudentData(context, { student_id, course_id }) {
+
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${localhost}/api/v1/studentlist/search?courseId=${course_id}&studentId=${student_id} `, config)
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}studentlist/search?courseId=${course_id}&studentId=${student_id} `, config)
+        if (data.statusCode == 200) {
+          context.commit("SetFilterStudentData", data.data)
+          console.log('data.data :>> ', data.data);
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+        // if (error.response.data.message == "This coach cannot be deleted. Because the middle of teaching") {
+        //   Swal.fire({
+        //     icon: "error",
+        //     title: VueI18n.t("can not delete coach"),
+        //     text: VueI18n.t(error.response.data.message),
+        //     timer: 3000,
+        //     showDenyButton: false,
+        //     showCancelButton: false,
+        //     showConfirmButton: false,
+        //     timerProgressBar: true,
+        //   })
+        //   context.dispatch("GetCourse", course_id)
+        // }
+      }
+    },
   },
   getters: {
     getCourseSeats(state) {
@@ -2214,6 +2252,9 @@ const CourseModules = {
     },
     getFilterCourseOption(state) {
       return state.filter_course_option
+    },
+    getFilterStudentData(state) {
+      return state.filter_student_data
     },
   },
 };
