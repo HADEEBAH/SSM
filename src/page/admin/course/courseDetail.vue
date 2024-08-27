@@ -575,7 +575,14 @@
                           $t("coach list")
                         }}</v-col>
                         <v-col cols="auto">
-                          <v-btn color="#ff6b81" @click="searchStudentList">
+                          <v-btn
+                            color="#ff6b81"
+                            @click="searchStudentList"
+                            prepend-inner-icon="mdi-magnify"
+                            dark
+                          >
+                            <v-icon dark> mdi-magnify </v-icon>
+
                             {{ $t("search for student name, coach name") }}
                           </v-btn>
                           <!-- <v-text-field

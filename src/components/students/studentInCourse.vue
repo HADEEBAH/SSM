@@ -17,7 +17,7 @@
       </v-toolbar>
 
       <!-- <v-card> -->
-      <v-row dense class="mx-5 my-10">
+      <v-row dense class="mx-5 my-5">
         <v-col cols="12">
           <v-autocomplete
             dense
@@ -53,7 +53,9 @@
             </template>
           </v-autocomplete>
         </v-col>
-        <v-col cols="10" class="my-5" align-self="center">
+      </v-row>
+      <v-row dense v-if="studentId !== ''" class="mx-5 my-5">
+        <v-col cols="10" align-self="center">
           <span class="font-bold">
             {{ $t("first name") + " - " + $t("last name") }}
           </span>
@@ -79,7 +81,6 @@
             {{ $t("view profile") }}
           </v-btn>
         </v-col>
-        <pre>{{ getCheckInId }}</pre>
         <!-- TABLE -->
         <v-col cols="12">
           <v-data-table
@@ -94,6 +95,7 @@
                 </v-col>
               </v-row>
             </template>
+
             <template v-slot:[`item.classDate`]="{ item }">
               <!-- <pre>{{ item }}</pre> -->
               {{ GenDate(item.scheduleDate) }}
@@ -226,6 +228,13 @@ export default {
 
     columnStudents() {
       return [
+        {
+          text: this.$t("no."),
+          align: "center",
+          sortable: false,
+          value: "index",
+        },
+
         {
           text: this.$t("class date"),
           align: "center",
