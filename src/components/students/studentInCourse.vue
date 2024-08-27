@@ -79,7 +79,7 @@
             {{ $t("view profile") }}
           </v-btn>
         </v-col>
-        <pre>{{ filter_student_data }}</pre>
+        <pre>{{ checkInId }}</pre>
         <!-- TABLE -->
         <v-col cols="12">
           <v-data-table
@@ -137,34 +137,38 @@
                 </v-chip>
               </v-col>
             </template>
-            <!-- <template v-slot:[`item.evaluation`]="{ item }">
+            <template v-slot:[`item.evaluation`]="{ item }">
               <v-btn
                 text
                 class="px-1"
                 color="#ff6b81"
-                @click="showDialogAssessment(student, item.date)"
+                :disabled="!item.checkInStudentId"
+                @click="showDialogAssessment(item)"
               >
                 <v-icon>mdi-check-decagram-outline </v-icon>
                 {{ $t("view evaluation") }}
               </v-btn>
-            </template> -->
+            </template>
           </v-data-table>
         </v-col>
       </v-row>
     </v-card>
+    <student-evaluation
+      v-if="evaluationBool"
+      :checkInStudentId="checkInId"
+      :statusBool="evaluationBool"
+      @input="evaluationBool = $event"
+    >
+    </student-evaluation>
   </v-dialog>
-
-  <!-- <student-evaluation :checkInStudentId="122121">
-
-  </student-evaluation> -->
 </template>
   
   <script>
 import { mapGetters, mapActions } from "vuex";
-// import studentEvaluation from "@/components/students/studentEvaluation.vue";
+import studentEvaluation from "@/components/students/studentEvaluation.vue";
 
 export default {
-  // components: {studentEvaluation},
+  components: { studentEvaluation },
   props: {
     statusBool: {
       type: Boolean,
@@ -201,6 +205,10 @@ export default {
         bg_color: "#F4CCCC",
       },
     ],
+    evaluationBool: false,
+    checkInId: "",
+    checkedId: [],
+    dataFilter: {},
   }),
   computed: {
     ...mapGetters({
@@ -271,6 +279,7 @@ export default {
           : `${items?.firstNameEng} ${items?.lastNameEng}`;
 
       this.studentId = items.userOneId;
+
       await this.GetFilterStudentData({
         student_id: items.userOneId,
         course_id: this.courseId,
@@ -278,6 +287,8 @@ export default {
     },
     closeDialog() {
       this.dialogStatus = false; // Close the dialog
+      this.filter_student_data = [];
+      this.students_data = [];
     },
     GenDate(date) {
       return new Date(date).toLocaleDateString(
@@ -288,6 +299,10 @@ export default {
           day: "numeric",
         }
       );
+    },
+    async showDialogAssessment(item) {
+      this.checkInId = await item.checkInStudentId;
+      this.evaluationBool = true;
     },
   },
 };

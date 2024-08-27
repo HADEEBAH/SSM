@@ -193,7 +193,8 @@ const CourseModules = {
     },
     course_seat: [],
     checkDay: [],
-    filter_student_data: []
+    filter_student_data: [],
+    assessment: []
 
   },
   mutations: {
@@ -380,6 +381,9 @@ const CourseModules = {
     SetFilterStudentData(state, payload) {
       state.filter_student_data = payload
     },
+    SetAssessment(state, payload) {
+      state.assessment = payload
+    },
   },
   actions: {
     // CHECK COURSE SEAT
@@ -408,8 +412,6 @@ const CourseModules = {
         console.log(error)
       }
     },
-
-
     // DELETE : COURSE COACH
     async DeleteCourseCoach(context, { course_id, course_coach_id }) {
       try {
@@ -2154,7 +2156,39 @@ const CourseModules = {
         // let { data } = await axios.get(`${process.env.VUE_APP_URL}studentlist/search?courseId=${course_id}&studentId=${student_id} `, config)
         if (data.statusCode == 200) {
           context.commit("SetFilterStudentData", data.data)
-          console.log('data.data :>> ', data.data);
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+        // if (error.response.data.message == "This coach cannot be deleted. Because the middle of teaching") {
+        //   Swal.fire({
+        //     icon: "error",
+        //     title: VueI18n.t("can not delete coach"),
+        //     text: VueI18n.t(error.response.data.message),
+        //     timer: 3000,
+        //     showDenyButton: false,
+        //     showCancelButton: false,
+        //     showConfirmButton: false,
+        //     timerProgressBar: true,
+        //   })
+        //   context.dispatch("GetCourse", course_id)
+        // }
+      }
+    },
+    async GetAssessmentStudent(context, { checkIn_student_id }) {
+
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/studentlist/assessment/student/${checkIn_student_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/assessment/student/${checkIn_student_id}`, config)
+        if (data.statusCode == 200) {
+          context.commit("SetAssessment", data.data)
         }
       } catch (error) {
         console.log('error :>> ', error);
@@ -2255,6 +2289,9 @@ const CourseModules = {
     },
     getFilterStudentData(state) {
       return state.filter_student_data
+    },
+    getAssessmentStudent(state) {
+      return state.assessment
     },
   },
 };

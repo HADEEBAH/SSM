@@ -1,5 +1,21 @@
 <template>
-  <v-dialog v-model="dialog_detail" persistent max-width="600px">\ </v-dialog>
+  <v-dialog v-model="dialog_detail" persistent max-width="600px">
+    <v-card>
+      <v-card-text class="pa-2">
+        <v-row dense>
+          <v-col></v-col>
+          <v-col class="pa-0" cols="auto">
+            <v-btn icon color="red" @click="closeDialogAssessment()"
+              ><v-icon>mdi-close</v-icon></v-btn
+            >
+          </v-col>
+        </v-row>
+        <v-row>
+          <pre>{{ assessment_data }}</pre>
+        </v-row>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
@@ -18,8 +34,10 @@ export default {
   },
   data: () => ({}),
   computed: {
-    ...mapGetters({}),
-    dialogStatus: {
+    ...mapGetters({
+      assessment_data: "CourseModules/getAssessmentStudent",
+    }),
+    dialog_detail: {
       get() {
         return this.statusBool;
       },
@@ -29,10 +47,15 @@ export default {
     },
   },
   mounted() {
-    this.GetStudentData();
+    this.GetAssessmentStudent({ checkIn_student_id: this.checkInStudentId });
   },
   methods: {
-    ...mapActions({}),
+    ...mapActions({
+      GetAssessmentStudent: "CourseModules/GetAssessmentStudent",
+    }),
+    closeDialogAssessment() {
+      this.dialog_detail = false;
+    },
   },
 };
 </script>
