@@ -184,7 +184,7 @@ const adminCheckInModules = {
                             let studentName = ''
                             let checkInCountPerDay = ''
                             let totalCheckInCount = ''
-                            // let packages = ''
+                            let packages = ''
                             let options = ''
                             const compareDates = (a, b) => {
                                 const dateA = new Date(a.date);
@@ -202,7 +202,7 @@ const adminCheckInModules = {
                                 checkInCountPerDay = entry.countCheckIn
                                 totalCheckInCount = entry.totalDay
                                 studentName = `${entry.firstNameTh} ${entry.lastNameTh}`
-                                // packages = entry.package
+                                packages = entry.packageName
                                 options = entry.option_name
 
 
@@ -217,7 +217,7 @@ const adminCheckInModules = {
                                     "ชื่อโค้ช": filterData.firstNameTh ? `${filterData.firstNameTh} ${filterData.lastNameTh}` : '-',
                                     "ประเภทคอร์ส": filterData.courseTypeId ? filterData.courseTypeId === 'CT_1' ? VueI18n.locale == 'th' ? 'คอร์สทั่วไป' : 'General course' : VueI18n.locale == 'th' ? 'คอร์สระยะสั้น' : 'Short course' : '-',
                                     // "สถานะคอร์สเรียน": filterData.courseStatus ? filterData.courseStatus === 'Open' ? VueI18n.locale == 'th' ? 'คอร์สว่าง' : 'Course available' : VueI18n.locale == 'th' ? 'คอร์สเต็ม' : 'Full Course' : '-',
-                                    "แพ็คเกจ": filterData.packageName ? filterData.packageName : '-',
+                                    "แพ็คเกจ": filterData.checkinStudent ? packages : '-',
                                     // "ช่วงเวลา": filterData.optionName ? filterData.optionName : '-',
                                     // "แพ็คเกจ": packages ? packages : '-',
                                     "ช่วงเวลา": options ? options : '-',
