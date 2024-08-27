@@ -79,7 +79,7 @@
             {{ $t("view profile") }}
           </v-btn>
         </v-col>
-        <pre>{{ checkInId }}</pre>
+        <pre>{{ getCheckInId }}</pre>
         <!-- TABLE -->
         <v-col cols="12">
           <v-data-table
@@ -155,8 +155,9 @@
     </v-card>
     <student-evaluation
       v-if="evaluationBool"
-      :checkInStudentId="checkInId"
       :statusBool="evaluationBool"
+      :checkInId="this.getCheckInId"
+      :date="this.getDate"
       @input="evaluationBool = $event"
     >
     </student-evaluation>
@@ -206,9 +207,8 @@ export default {
       },
     ],
     evaluationBool: false,
-    checkInId: "",
-    checkedId: [],
-    dataFilter: {},
+    getCheckInId: "",
+    getDate: "",
   }),
   computed: {
     ...mapGetters({
@@ -301,7 +301,8 @@ export default {
       );
     },
     async showDialogAssessment(item) {
-      this.checkInId = await item.checkInStudentId;
+      this.getCheckInId = await item.checkInStudentId;
+      this.getDate = await item.scheduleDate;
       this.evaluationBool = true;
     },
   },

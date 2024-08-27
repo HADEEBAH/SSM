@@ -2174,7 +2174,7 @@ const CourseModules = {
         // }
       }
     },
-    async GetAssessmentStudent(context, { checkIn_student_id }) {
+    async GetAssessmentStudent(context, { checkin_id, date }) {
 
       try {
         let config = {
@@ -2184,9 +2184,9 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        // let localhost = "http://localhost:3000"
-        // let { data } = await axios.get(`${localhost}/api/v1/studentlist/assessment/student/${checkIn_student_id}`, config)
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/assessment/student/${checkIn_student_id}`, config)
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${localhost}/api/v1/studentlist/assessment/?checkInStudentId=${checkin_id}&date=${date}`, config)
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/assessment/?checkInStudentId=${checkin_id}&date=${date}`, config)
         if (data.statusCode == 200) {
           context.commit("SetAssessment", data.data)
         }
