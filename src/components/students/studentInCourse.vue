@@ -74,7 +74,7 @@
                 $router.push({
                   name: 'UserDetail',
                   params: {
-                    account_id: studentId,
+                    account_id: getStudentId,
                     action: 'view',
                     from: 'courseDetail',
                   },
