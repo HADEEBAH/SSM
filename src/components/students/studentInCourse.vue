@@ -269,7 +269,7 @@ export default {
     },
   },
   mounted() {
-    this.GetStudentData();
+    this.GetStudentData({ course_id: this.courseId });
   },
   methods: {
     ...mapActions({
@@ -287,10 +287,10 @@ export default {
           ? `${items?.firstNameTh} ${items?.lastNameTh}`
           : `${items?.firstNameEng} ${items?.lastNameEng}`;
 
-      this.studentId = items.userOneId;
+      this.studentId = items.studentId;
 
       await this.GetFilterStudentData({
-        student_id: items.userOneId,
+        student_id: items.studentId,
         course_id: this.courseId,
       });
     },
