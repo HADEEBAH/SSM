@@ -167,7 +167,7 @@
                     {{ $t("check in teach") }}
                   </v-btn>
                 </v-col>
-                <v-col cols="auto">
+                <!-- <v-col cols="auto">
                   <v-btn
                     icon
                     v-if="schedule.checkedIn == 1"
@@ -177,7 +177,7 @@
                   >
                     <v-icon>mdi-refresh</v-icon>
                   </v-btn>
-                </v-col>
+                </v-col> -->
               </v-row>
             </v-card-text>
           </v-card>
@@ -794,9 +794,9 @@ export default {
       this.scheduleCheckin[index].openStudents =
         !this.scheduleCheckin[index].openStudents;
     },
-    async CheckedInCoach(checkInData, index) {
-      await this.CheckInCoach({ checkInData, index });
-    },
+    // async CheckedInCoach(checkInData, index) {
+    //   await this.CheckInCoach({ checkInData, index });
+    // },
     // CheckInStudent(checkInStudentId, studentData){
     //     let payload = {
     //         compensationDate: "",
@@ -818,7 +818,7 @@ export default {
     // validate(e, type) {
     //   inputValidation(e, type);
     // },
-    saveStudentCheckIn(scheduleData, index) {
+    saveStudentCheckIn(scheduleData) {
       this.$refs.validate_form.validate();
       if (this.validate) {
         Swal.fire({
@@ -842,7 +842,7 @@ export default {
                   return items;
                 }),
               });
-              await this.CheckedInCoach(scheduleData, index);
+              // await this.CheckedInCoach(scheduleData, index);
             } else {
               Swal.fire({
                 icon: "warning",

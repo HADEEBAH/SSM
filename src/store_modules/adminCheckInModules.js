@@ -182,7 +182,9 @@ const adminCheckInModules = {
                             let studyDate = ''
                             let satuscheckin = ''
                             let studentName = ''
-                            // let packages = ''
+                            // let checkInCountPerDay = ''
+                            // let totalCheckInCount = ''
+                            let packages = ''
                             let options = ''
                             const compareDates = (a, b) => {
                                 const dateA = new Date(a.date);
@@ -196,9 +198,21 @@ const adminCheckInModules = {
                             filterData.checkinStudent.forEach(entry => {
                                 dateCheckIn = entry.checkInTimeStamp
                                 studyDate = entry.date
-                                satuscheckin = entry.status
+                                satuscheckin = entry.status ? (
+                                  entry.status === "emergency leave" ? "ลาฉุกเฉิน" : (
+                                    entry.status === "punctual" ? "ตรงเวลา" : (
+                                      entry.status === "absent" ? "ขาด" : (
+                                        entry.status === "leave" ? "ลา" : (
+                                          entry.status === "late " ? "สาย" : null
+                                        )
+                                      )
+                                    )
+                                  )
+                                ) : null
+                                // checkInCountPerDay = entry.countCheckIn
+                                // totalCheckInCount = entry.totalDay
                                 studentName = `${entry.firstNameTh} ${entry.lastNameTh}`
-                                // packages = entry.package
+                                packages = entry.packageName
                                 options = entry.option_name
 
 
@@ -213,12 +227,14 @@ const adminCheckInModules = {
                                     "ชื่อโค้ช": filterData.firstNameTh ? `${filterData.firstNameTh} ${filterData.lastNameTh}` : '-',
                                     "ประเภทคอร์ส": filterData.courseTypeId ? filterData.courseTypeId === 'CT_1' ? VueI18n.locale == 'th' ? 'คอร์สทั่วไป' : 'General course' : VueI18n.locale == 'th' ? 'คอร์สระยะสั้น' : 'Short course' : '-',
                                     // "สถานะคอร์สเรียน": filterData.courseStatus ? filterData.courseStatus === 'Open' ? VueI18n.locale == 'th' ? 'คอร์สว่าง' : 'Course available' : VueI18n.locale == 'th' ? 'คอร์สเต็ม' : 'Full Course' : '-',
-                                    "แพ็คเกจ": filterData.packageName ? filterData.packageName : '-',
+                                    "แพ็คเกจ": filterData.checkinStudent ? packages : '-',
                                     // "ช่วงเวลา": filterData.optionName ? filterData.optionName : '-',
                                     // "แพ็คเกจ": packages ? packages : '-',
                                     "ช่วงเวลา": options ? options : '-',
                                     "ชื่อนักเรียน": filterData.checkinStudent ? studentName : '-',
                                     "สถานะเช็คอิน": filterData.checkinStudent ? satuscheckin !== null ? satuscheckin : "ยังไม่มีการเลือกสถานะ" : '-',
+                                    // "จำนวนที่เช็คอิน": filterData.checkinStudent ? checkInCountPerDay : '0',
+                                    // "วันเรียนทั้งหมด": filterData.checkinStudent ? totalCheckInCount : '0',
                                     // "สถานะเช็คอิน": filterData.checkinStudent ? satuscheckin : '-',
                                 })
 
@@ -242,6 +258,8 @@ const adminCheckInModules = {
                                 "ช่วงเวลา": '-',
                                 "ชื่อนักเรียน": '-',
                                 "สถานะเช็คอิน": '-',
+                                // "จำนวนที่เช็คอิน": '0',
+                                // "วันเรียนทั้งหมด": '0',
                             })
                         }
 
