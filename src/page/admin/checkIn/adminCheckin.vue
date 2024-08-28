@@ -794,27 +794,39 @@ export default {
       this.scheduleCheckin[index].openStudents =
         !this.scheduleCheckin[index].openStudents;
     },
-    // async CheckedInCoach(checkInData, index) {
-    //   await this.CheckInCoach({ checkInData, index });
-    // },
-    // CheckInStudent(checkInStudentId, studentData){
-    //     let payload = {
-    //         compensationDate: "",
-    //         compensationStartTime: "",
-    //         compensationEndTime: "",
-    //     }
-    //     if(studentData.status === "leave" && studentData.compensationDate && studentData.compensationStartTime && studentData.compensationEndTime){
-    //         payload = {
-    //             compensationDate: studentData.compensationDate,
-    //             compensationStartTime: studentData.compensationStartTime,
-    //             compensationEndTime: studentData.compensationEndTime,
-    //         }
-    //         this.UpdateCheckinStudent({checkInStudentId, status : studentData.status , payload})
-    //     }else{
-    //         this.UpdateCheckinStudent({checkInStudentId, status : studentData.status , payload})
-    //     }
-
-    // },
+    async CheckedInCoach(checkInData, index) {
+      await this.CheckInCoach({ checkInData, index });
+    },
+    CheckInStudent(checkInStudentId, studentData) {
+      let payload = {
+        compensationDate: "",
+        compensationStartTime: "",
+        compensationEndTime: "",
+      };
+      if (
+        studentData.status === "leave" &&
+        studentData.compensationDate &&
+        studentData.compensationStartTime &&
+        studentData.compensationEndTime
+      ) {
+        payload = {
+          compensationDate: studentData.compensationDate,
+          compensationStartTime: studentData.compensationStartTime,
+          compensationEndTime: studentData.compensationEndTime,
+        };
+        this.UpdateCheckinStudent({
+          checkInStudentId,
+          status: studentData.status,
+          payload,
+        });
+      } else {
+        this.UpdateCheckinStudent({
+          checkInStudentId,
+          status: studentData.status,
+          payload,
+        });
+      }
+    },
     // validate(e, type) {
     //   inputValidation(e, type);
     // },
