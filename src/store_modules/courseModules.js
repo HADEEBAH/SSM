@@ -2151,9 +2151,9 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/studentlist/search?courseId=${course_id}&studentId=${student_id} `, config)
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}studentlist/search?courseId=${course_id}&studentId=${student_id} `, config)
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/studentlist/search?courseId=${course_id}&studentId=${student_id} `, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/search?courseId=${course_id}&studentId=${student_id} `, config)
         if (data.statusCode == 200) {
           context.commit("SetFilterStudentData", data.data)
         }
@@ -2184,9 +2184,9 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/studentlist/assessment/?checkInStudentId=${checkin_id}&date=${date}`, config)
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/assessment/?checkInStudentId=${checkin_id}&date=${date}`, config)
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/studentlist/assessment/?checkInStudentId=${checkin_id}&date=${date}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/assessment/?checkInStudentId=${checkin_id}&date=${date}`, config)
         if (data.statusCode == 200) {
           context.commit("SetAssessment", data.data)
         }
