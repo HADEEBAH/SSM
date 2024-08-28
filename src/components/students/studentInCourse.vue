@@ -11,7 +11,7 @@
           <v-icon>mdi-close</v-icon>
         </v-btn>
         <v-toolbar-title>
-          {{ $t("search for student name, coach name") }}
+          {{ $t("search for student name, coach name in course") }}{{ $i18n.locale === "th" ? course_data?.course_name_th : ` ${course_data?.course_name_en}` }}
         </v-toolbar-title>
         <v-spacer></v-spacer>
       </v-toolbar>
@@ -249,6 +249,7 @@ export default {
     ...mapGetters({
       students_data: "UserModules/getStudentsData",
       filter_student_data: "CourseModules/getFilterStudentData",
+      course_data: "CourseModules/getCourseData"
     }),
     dialogStatus: {
       get() {
