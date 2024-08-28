@@ -9,14 +9,12 @@ const userModules = {
         query_roles: "",
         filter_role_is_loading: false,
         user_filter: [],
-
-
-
         show_by_id: [],
         data_user_by_id: [],
         student_schedule: [],
         user_one_temp: {},
         filtered_data: [],
+        students_data: []
     },
     mutations: {
         SetUserList(state, payload) {
@@ -43,7 +41,9 @@ const userModules = {
         SetFilteredData(state, payload) {
             // state.filtered_data = payload
             state.user_list = payload
-
+        },
+        SetStudentData(state, payload) {
+            state.students_data = payload
         },
 
 
@@ -240,6 +240,28 @@ const userModules = {
             }
         },
 
+        async GetStudentData(context, { course_id }) {
+            try {
+                let config = {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Content-type": "Application/json",
+                        'Authorization': `Bearer ${VueCookie.get("token")}`
+                    }
+                }
+                // let localhost = "http://localhost:3000"
+                // let { data } = await axios.get(`${localhost}/api/v1/studentlist/by/course?courseId=${course_id}`, config)
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/by/course?courseId=${course_id}`, config)
+                if (data.statusCode === 200) {
+                    context.commit("SetStudentData", data.data)
+                } else {
+                    throw { error: data }
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
     },
     getters: {
         getUserList(state) {
@@ -262,6 +284,9 @@ const userModules = {
         },
         getFilteredData(state) {
             return state.filtered_data
+        },
+        getStudentsData(state) {
+            return state.students_data
         },
     },
 };
