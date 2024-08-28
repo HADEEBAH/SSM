@@ -231,7 +231,13 @@ const coachModules = {
           },
         };
         let count = 0
-        for await (const student of students) {
+        let checkinStudent = []
+        for (const item of students) {
+          if (item.check_in_student_id) {
+            checkinStudent.push(item)
+          }
+        }
+        for await (const student of checkinStudent) {
           if (student.assessment.rating_evolution === 3) {
             student.assessment.evolution = "adjust"
           } else if (student.assessment.rating_evolution === 4) {
@@ -281,7 +287,7 @@ const coachModules = {
             }
           }
         }
-        if (count === students.length) {
+        if (count === checkinStudent.length) {
           context.commit("SetStudentCheckInIsLoading", false)
           Swal.fire({
             icon: "success",
