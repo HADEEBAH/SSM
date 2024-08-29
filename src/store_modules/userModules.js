@@ -240,7 +240,7 @@ const userModules = {
             }
         },
 
-        async GetStudentData(context, { course_id }) {
+        async GetStudentData(context, { course_id, type }) {
             try {
                 let config = {
                     headers: {
@@ -249,9 +249,9 @@ const userModules = {
                         'Authorization': `Bearer ${VueCookie.get("token")}`
                     }
                 }
-                // let localhost = "http://localhost:3000"
-                // let { data } = await axios.get(`${localhost}/api/v1/studentlist/by/course?courseId=${course_id}`, config)
-                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/by/course?courseId=${course_id}`, config)
+                let localhost = "http://localhost:3000"
+                let { data } = await axios.get(`${localhost}/api/v1/studentlist/by/course?courseId=${course_id}&type=${type}`, config)
+                // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/by/course?courseId=${course_id}&type=${type}`, config)
                 if (data.statusCode === 200) {
                     context.commit("SetStudentData", data.data)
                 } else {

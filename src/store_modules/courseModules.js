@@ -194,7 +194,9 @@ const CourseModules = {
     course_seat: [],
     checkDay: [],
     filter_student_data: [],
-    assessment: []
+    assessment: [],
+    filter_potential_student: [],
+    potential_assessment: []
 
   },
   mutations: {
@@ -383,6 +385,12 @@ const CourseModules = {
     },
     SetAssessment(state, payload) {
       state.assessment = payload
+    },
+    SetFilterPotentialStudent(state, payload) {
+      state.filter_potential_student = payload
+    },
+    SetPotentialAssessment(state, payload) {
+      state.potential_assessment = payload
     },
   },
   actions: {
@@ -2142,7 +2150,6 @@ const CourseModules = {
       }
     },
     async GetFilterStudentData(context, { student_id, course_id }) {
-
       try {
         let config = {
           headers: {
@@ -2175,7 +2182,6 @@ const CourseModules = {
       }
     },
     async GetAssessmentStudent(context, { checkin_id, date }) {
-
       try {
         let config = {
           headers: {
@@ -2205,6 +2211,25 @@ const CourseModules = {
         //   })
         //   context.dispatch("GetCourse", course_id)
         // }
+      }
+    },
+    async GetFilterPotentialStudent(context, { course_id, student_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${localhost}/api/v1/studentlist/search-potential?courseId=${course_id}&studentId=${student_id}`, config)
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/search-potential?courseId=${course_id}`, config)
+        if (data.statusCode == 200) {
+          context.commit("SetFilterPotentialStudent", data.data)
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
       }
     },
   },
@@ -2292,6 +2317,9 @@ const CourseModules = {
     },
     getAssessmentStudent(state) {
       return state.assessment
+    },
+    getFilterPotentialStudent(state) {
+      return state.filter_potential_student
     },
   },
 };
