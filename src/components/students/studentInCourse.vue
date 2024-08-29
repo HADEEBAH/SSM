@@ -168,7 +168,8 @@
                     !item.checkInStudentId ||
                     item.status == 'absent' ||
                     item.status == 'emergency leave' ||
-                    item.status == 'leave'
+                    item.status == 'leave' ||
+                    !item.status
                   "
                   @click="showDialogAssessment(item)"
                 >
