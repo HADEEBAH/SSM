@@ -576,15 +576,15 @@
                 </v-text-field>
               </v-col>
             </v-row>
-            <!-- PRICE -->
             <v-row dense>
+              <!-- PRICE -->
               <v-col cols="12" sm="4">
                 <label-custom :text="$t(`price`)"></label-custom>
+                <!-- :rules="rules.price" -->
+                <!-- @change="CalTotalPrice()" -->
                 <v-text-field
                   dense
-                  :rules="rules.price"
                   v-model="course.price"
-                  @change="CalTotalPrice()"
                   outlined
                   @keydown="Validation($event, 'number')"
                   type="number"
@@ -593,6 +593,28 @@
                 >
                 </v-text-field>
               </v-col>
+              <!-- discount -->
+              <v-col cols="12" sm="4">
+                <label-custom :text="$t(`discount`)"></label-custom>
+                <!-- :rules="rules.price" -->
+
+                <v-text-field
+                  dense
+                  :value="
+                    course?.option?.discount_price
+                      ? course?.option?.discount_price
+                      : '0'
+                  "
+                  outlined
+                  @keydown="Validation($event, 'number')"
+                  type="number"
+                  color="pink"
+                  :suffix="$t(`baht`)"
+                  disabled
+                >
+                </v-text-field>
+              </v-col>
+              <!-- หมายเหตุราคา -->
               <v-col cols="12">
                 <label-custom :text="$t(`price note`)"></label-custom>
                 <v-textarea
@@ -602,6 +624,37 @@
                   outlined
                   color="#ff6b81"
                 ></v-textarea>
+              </v-col>
+            </v-row>
+            <!-- Discount Checkbox-->
+            <v-row dense class="mt-[-8]">
+              <v-col cols="12" sm="6">
+                <v-checkbox
+                  v-model="course.checkedDis"
+                  :label="`${$t('there is a new discount')} (${$t('baht')})`"
+                  color="#FF6B81"
+                  @click="
+                    checkBoxFunc(course_index, order.courses, course.checkedDis)
+                  "
+                  :disabled="course.checkedPercent"
+                ></v-checkbox>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-checkbox
+                  v-model="course.checkedPercent"
+                  :label="`${$t('there is a new discount')} (${$t(
+                    'percentage'
+                  )})`"
+                  color="#FF6B81"
+                  @click="
+                    checkBoxFunc(
+                      course_index,
+                      order.courses,
+                      course.checkedPercent
+                    )
+                  "
+                  :disabled="course.checkedDis"
+                ></v-checkbox>
               </v-col>
             </v-row>
           </v-card-text>
