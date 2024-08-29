@@ -11,7 +11,12 @@
           <v-icon>mdi-close</v-icon>
         </v-btn>
         <v-toolbar-title>
-          {{ $t("search for student name, coach name in course") }}{{ $i18n.locale === "th" ? course_data?.course_name_th : ` ${course_data?.course_name_en}` }}
+          {{ $t("search for student name, coach name in course")
+          }}{{
+            $i18n.locale === "th"
+              ? course_data?.course_name_th
+              : ` ${course_data?.course_name_en}`
+          }}
         </v-toolbar-title>
         <v-spacer></v-spacer>
       </v-toolbar>
@@ -159,7 +164,12 @@
                   text
                   class="px-1"
                   color="#ff6b81"
-                  :disabled="!item.checkInStudentId"
+                  :disabled="
+                    !item.checkInStudentId ||
+                    item.status == 'absent' ||
+                    item.status == 'emergency leave' ||
+                    item.status == 'leave'
+                  "
                   @click="showDialogAssessment(item)"
                 >
                   <v-icon>mdi-check-decagram-outline </v-icon>
@@ -249,7 +259,7 @@ export default {
     ...mapGetters({
       students_data: "UserModules/getStudentsData",
       filter_student_data: "CourseModules/getFilterStudentData",
-      course_data: "CourseModules/getCourseData"
+      course_data: "CourseModules/getCourseData",
     }),
     dialogStatus: {
       get() {
