@@ -420,8 +420,7 @@
                     (v) =>
                       v.type === 'general' &&
                       (v.status == 'punctual' ||
-                        v.status == 'late' ||
-                        v.status == 'emergency leave')
+                        v.status == 'late')
                   ).length > 0
                 "
               >
