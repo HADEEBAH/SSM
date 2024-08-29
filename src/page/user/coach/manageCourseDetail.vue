@@ -438,8 +438,8 @@
                   style="border: 1px solid #999"
                   v-for="(student, index_student) in student_check_in.filter(
                     (v) =>
-                      (v.type === 'general' && v.status == 'punctual') ||
-                      v.status == 'late'
+                      v.type === 'general' &&
+                      (v.status === 'punctual' || v.status === 'late')
                   )"
                   :key="`${index_student}-student`"
                 >
