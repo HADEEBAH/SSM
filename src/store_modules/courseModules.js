@@ -2166,19 +2166,6 @@ const CourseModules = {
         }
       } catch (error) {
         console.log('error :>> ', error);
-        // if (error.response.data.message == "This coach cannot be deleted. Because the middle of teaching") {
-        //   Swal.fire({
-        //     icon: "error",
-        //     title: VueI18n.t("can not delete coach"),
-        //     text: VueI18n.t(error.response.data.message),
-        //     timer: 3000,
-        //     showDenyButton: false,
-        //     showCancelButton: false,
-        //     showConfirmButton: false,
-        //     timerProgressBar: true,
-        //   })
-        //   context.dispatch("GetCourse", course_id)
-        // }
       }
     },
     async GetAssessmentStudent(context, { checkin_id, date }) {
@@ -2198,19 +2185,6 @@ const CourseModules = {
         }
       } catch (error) {
         console.log('error :>> ', error);
-        // if (error.response.data.message == "This coach cannot be deleted. Because the middle of teaching") {
-        //   Swal.fire({
-        //     icon: "error",
-        //     title: VueI18n.t("can not delete coach"),
-        //     text: VueI18n.t(error.response.data.message),
-        //     timer: 3000,
-        //     showDenyButton: false,
-        //     showCancelButton: false,
-        //     showConfirmButton: false,
-        //     timerProgressBar: true,
-        //   })
-        //   context.dispatch("GetCourse", course_id)
-        // }
       }
     },
     async GetFilterPotentialStudent(context, { course_id, student_id }) {
@@ -2227,6 +2201,25 @@ const CourseModules = {
         // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/search-potential?courseId=${course_id}`, config)
         if (data.statusCode == 200) {
           context.commit("SetFilterPotentialStudent", data.data)
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
+    async GetPotentialAssessment(context, { checkin_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${localhost}/api/v1/studentlist/assessment-potential/?checkInPotentialId=${checkin_id}`, config)
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/assessment/?checkInStudentId=${checkin_id}&date=${date}`, config)
+        if (data.statusCode == 200) {
+          context.commit("SetPotentialAssessment", data.data)
         }
       } catch (error) {
         console.log('error :>> ', error);
@@ -2320,6 +2313,9 @@ const CourseModules = {
     },
     getFilterPotentialStudent(state) {
       return state.filter_potential_student
+    },
+    getPotentialAssessment(state) {
+      return state.potential_assessment
     },
   },
 };

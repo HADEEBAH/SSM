@@ -44,6 +44,7 @@
                     <v-row dense>
                       <v-col>{{ $t("developmental level") }} </v-col>
                     </v-row>
+                    <pre>{{ potential_assessment }}</pre>
                     <!-- ระดับพัฒนาการ -->
                     <!-- <v-row dense>
                       <v-col>
@@ -171,7 +172,7 @@ export default {
   }),
   computed: {
     ...mapGetters({
-      assessment_data: "CourseModules/getAssessmentStudent",
+      potential_assessment: "CourseModules/getPotentialAssessment",
     }),
     dialog_detail: {
       get() {
@@ -182,10 +183,12 @@ export default {
       },
     },
   },
-  mounted() {},
+  mounted() {
+    this.GetPotentialAssessment({ checkin_id: this.checkInId });
+  },
   methods: {
     ...mapActions({
-      GetAssessmentStudent: "CourseModules/GetAssessmentStudent",
+      GetPotentialAssessment: "CourseModules/GetPotentialAssessment",
     }),
     closePotentialDialog() {
       this.dialog_detail = false;

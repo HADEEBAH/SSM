@@ -107,6 +107,7 @@
               ></v-progress-circular>
             </v-row>
           </v-col>
+
           <v-col cols="12" v-else>
             <v-data-table
               class="header-table rounded-lg"
@@ -214,6 +215,20 @@
               >
                 {{ `${item.countCheckIn} / ${item.totalPotential}` }}
               </template>
+              <template
+                v-if="studentType === 'potential'"
+                v-slot:[`item.potentEvaluation`]="{ item }"
+              >
+                <v-btn
+                  text
+                  class="px-1"
+                  color="#ff6b81"
+                  @click="showPotentialDialog(item)"
+                >
+                  <v-icon>mdi-check-decagram-outline </v-icon>
+                  {{ $t("view evaluation") }}
+                </v-btn>
+              </template>
             </v-data-table>
             <!-- NO DATA -->
             <v-data-table
@@ -249,7 +264,7 @@
     <potential-evaluation
       v-if="potentEvaluationBool && studentType == 'potential'"
       :statusBool="potentEvaluationBool"
-      :checkInId="getPotential"
+      :checkInId="this.getPotentialId"
       @input="potentEvaluationBool = $event"
     >
     </potential-evaluation>
@@ -308,7 +323,7 @@ export default {
     getCheckInId: "",
     potentGetCheckInId: "",
     getDate: "",
-    getPotential: "",
+    getPotentialId: "",
     loadingTable: false,
     noDataPotential: [],
     noDataInPotential: [],
@@ -397,6 +412,12 @@ export default {
           sortable: false,
           value: "number",
         },
+        {
+          text: this.$t("view evaluation"),
+          align: "center",
+          sortable: false,
+          value: "potentEvaluation",
+        },
       ];
     },
   },
@@ -415,6 +436,7 @@ export default {
         : `${item.firstNameEng} ${item.lastNameEng}`;
     },
     async filterStudents(items) {
+      console.log("items :>> ", this.filter_potential_student);
       this.studentName =
         this.$i18n.locale === "th"
           ? `${items?.firstNameTh} ${items?.lastNameTh}`
@@ -461,9 +483,9 @@ export default {
       this.getDate = await item.scheduleDate;
       this.evaluationBool = true;
     },
-    showPotentialDialog() {
+    async showPotentialDialog(items) {
+      this.getPotentialId = await items.checkInPotentialId;
       this.potentEvaluationBool = true;
-      this.getPotential = "3b6bca5e-8309-46ce-96bf-0ed3a8143902";
 
       // console.log("filter_student_data :>> ", this.filter_student_data);
     },
