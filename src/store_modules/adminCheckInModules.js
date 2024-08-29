@@ -182,8 +182,8 @@ const adminCheckInModules = {
                             let studyDate = ''
                             let satuscheckin = ''
                             let studentName = ''
-                            // let checkInCountPerDay = ''
-                            // let totalCheckInCount = ''
+                            let checkInCountPerDay = ''
+                            let totalCheckInCount = ''
                             let packages = ''
                             let options = ''
                             const compareDates = (a, b) => {
@@ -203,14 +203,14 @@ const adminCheckInModules = {
                                     entry.status === "punctual" ? "ตรงเวลา" : (
                                       entry.status === "absent" ? "ขาด" : (
                                         entry.status === "leave" ? "ลา" : (
-                                          entry.status === "late " ? "สาย" : null
+                                          entry.status === "late" ? "สาย" : null
                                         )
                                       )
                                     )
                                   )
                                 ) : null
-                                // checkInCountPerDay = entry.countCheckIn
-                                // totalCheckInCount = entry.totalDay
+                                checkInCountPerDay = entry.countCheckIn
+                                totalCheckInCount = entry.totalDay
                                 studentName = `${entry.firstNameTh} ${entry.lastNameTh}`
                                 packages = entry.packageName
                                 options = entry.option_name
@@ -233,8 +233,8 @@ const adminCheckInModules = {
                                     "ช่วงเวลา": options ? options : '-',
                                     "ชื่อนักเรียน": filterData.checkinStudent ? studentName : '-',
                                     "สถานะเช็คอิน": filterData.checkinStudent ? satuscheckin !== null ? satuscheckin : "ยังไม่มีการเลือกสถานะ" : '-',
-                                    // "จำนวนที่เช็คอิน": filterData.checkinStudent ? checkInCountPerDay : '0',
-                                    // "วันเรียนทั้งหมด": filterData.checkinStudent ? totalCheckInCount : '0',
+                                    "จำนวนที่เช็คอิน": filterData.checkinStudent ? checkInCountPerDay : '0',
+                                    "วันเรียนทั้งหมด": filterData.checkinStudent ? totalCheckInCount : '0',
                                     // "สถานะเช็คอิน": filterData.checkinStudent ? satuscheckin : '-',
                                 })
 
@@ -258,8 +258,8 @@ const adminCheckInModules = {
                                 "ช่วงเวลา": '-',
                                 "ชื่อนักเรียน": '-',
                                 "สถานะเช็คอิน": '-',
-                                // "จำนวนที่เช็คอิน": '0',
-                                // "วันเรียนทั้งหมด": '0',
+                                "จำนวนที่เช็คอิน": '0',
+                                "วันเรียนทั้งหมด": '0',
                             })
                         }
 

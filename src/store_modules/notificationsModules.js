@@ -21,9 +21,9 @@ const notificatiosModules = {
     actions: {
 
         async GetNotifications(context, data) {
-            const user_detail = JSON.parse(localStorage.getItem("userDetail"));
-            context.commit("SetGetNotify", data)
-            context.dispatch("GetNotificationsAll", user_detail.account_id)
+          const user_detail = JSON.parse(localStorage.getItem("userDetail"));
+          context.commit("SetGetNotify", data)
+          await context.dispatch("GetNotificationsAll", { account_id :user_detail.account_id, limit: 10 })
         },
 
         async GetNotificationsAll(context, { account_id, limit }) {
@@ -31,7 +31,7 @@ const notificatiosModules = {
                 // let { data } = await axios.get(`http://localhost:3004/api/v1/notification/byId/${account_id}?limit=${limit}`)
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/notification/byId/${account_id}?limit=${limit}`)
                 if (data.statusCode === 200) {
-                    context.commit("setgetNotificationsAll", data.data)
+                    await context.commit("setgetNotificationsAll", data.data)
                 }
             } catch (error) {
                 console.log(error);

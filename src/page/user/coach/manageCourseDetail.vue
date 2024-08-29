@@ -146,11 +146,7 @@
             <v-form v-model="validate_form" ref="validate_form">
               <v-data-table
                 class="header-table border"
-                :items="
-                  coach_check_in.checkInCoachId
-                    ? student_check_in
-                    : []
-                "
+                :items="coach_check_in.checkInCoachId ? student_check_in : []"
                 item-key="no"
                 :expanded.sync="expanded_index"
                 :headers="headers"
@@ -429,6 +425,13 @@
                   ).length > 0
                 "
               >
+                <!-- v-for="(student, index_student) in student_check_in.filter(
+                    (v) =>
+                      v.type === 'general' &&
+                      (v.status == 'punctual' ||
+                        v.status == 'late' ||
+                        v.status == 'emergency leave')
+                  )" -->
                 <v-card
                   class="mb-2"
                   flat
@@ -436,9 +439,7 @@
                   v-for="(student, index_student) in student_check_in.filter(
                     (v) =>
                       v.type === 'general' &&
-                      (v.status == 'punctual' ||
-                        v.status == 'late' ||
-                        v.status == 'emergency leave')
+                      (v.status === 'punctual' || v.status === 'late')
                   )"
                   :key="`${index_student}-student`"
                 >
