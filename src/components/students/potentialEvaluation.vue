@@ -374,7 +374,6 @@ export default {
     // },
   },
   data: () => ({
-    dataLoading: false,
     check_in_status_options: [
       {
         label: "punctual",
@@ -407,7 +406,7 @@ export default {
       { label: "ดี", value: "good", num_value: 4 },
       { label: "ปรับปรุง", value: "adjust", num_value: 3 },
     ],
-    checkedShow: false,
+    dataLoading: false,
   }),
   computed: {
     ...mapGetters({
@@ -422,27 +421,21 @@ export default {
       },
     },
   },
-  mounted() {
-    this.GetPotentialAssessment({ checkin_id: this.checkInId });
+  async mounted() {
+    this.dataLoading = true;
+    await this.GetPotentialAssessment({ checkin_id: this.checkInId });
+    this.dataLoading = false;
   },
   methods: {
     ...mapActions({
       GetPotentialAssessment: "CourseModules/GetPotentialAssessment",
     }),
     closePotentialDialog() {
-      this.dataLoading = true;
       this.dialog_detail = false;
-      this.dataLoading = false;
     },
     openFile(file) {
       let fileName = `${process.env.VUE_APP_URL}/api/v1/files/${file}`;
       window.open(fileName, "_blank");
-    },
-    checkStatus(items) {
-      this.checkedShow = true;
-      if (this.checkedShow == true) {
-        items == "punctual" || items == "late";
-      }
     },
   },
 };
