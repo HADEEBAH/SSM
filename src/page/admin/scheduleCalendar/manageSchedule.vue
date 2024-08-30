@@ -1536,7 +1536,7 @@ export default {
         options.push({
           nameEn: "no check in",
           nameTh: "ยังไม่มีการเช็คอิน",
-          value: "noCheckeIn",
+          value: "noCheckIn",
         });
       }
       return options;
