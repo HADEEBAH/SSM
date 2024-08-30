@@ -231,7 +231,7 @@
                   class="border-2 border-[#ff6b81] rounded-lg"
                 >
                   <v-row>
-                    <v-col align="center">
+                    <v-col align="center" align-self="center">
                       <imgFileType :mime_type="file.filesType"></imgFileType>
                     </v-col>
                     <v-col cols="12" sm="10" align="start">

@@ -89,7 +89,7 @@
                   {{ $t("view profile") }}
                 </v-btn>
                 <!-- View Potential Evaluation -->
-                <v-btn
+                <!-- <v-btn
                   v-if="students.studentId && studentType == 'potential'"
                   text
                   class="px-1"
@@ -98,7 +98,7 @@
                 >
                   <v-icon>mdi-check-decagram-outline </v-icon>
                   {{ $t("view evaluation") }}
-                </v-btn>
+                </v-btn> -->
               </v-col>
             </v-row>
           </v-col>
@@ -338,6 +338,7 @@ export default {
     ...mapGetters({
       students_data: "UserModules/getStudentsData",
       filter_student_data: "CourseModules/getFilterStudentData",
+      filter_potential_student: "CourseModules/getFilterPotentialStudent",
       course_data: "CourseModules/getCourseData",
     }),
     dialogStatus: {
@@ -489,6 +490,7 @@ export default {
       this.evaluationBool = true;
     },
     async showPotentialDialog(items) {
+      // this.getPotentialId = "e5e61153-bcdb-4234-b759-528df58b40ae";
       this.getPotentialId = await items.checkInPotentialId;
       this.potentEvaluationBool = true;
 
