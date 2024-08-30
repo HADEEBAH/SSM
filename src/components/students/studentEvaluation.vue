@@ -235,7 +235,7 @@
                       <imgFileType :mime_type="file.filesType"></imgFileType>
                     </v-col>
                     <v-col cols="12" sm="10" align="start">
-                      <span class="font-bold">{{ file.attachmentFiles }}</span
+                      <span class="font-bold">{{ file.originalFilesName }}</span
                       ><br />
                       <span class="text-caption"
                         >{{ $t("file size") }} :

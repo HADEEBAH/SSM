@@ -129,7 +129,7 @@
                                 </v-col>
                                 <v-col cols="12" sm="10" align="start">
                                   <span class="font-bold">{{
-                                    potential_data.attachmentPotential
+                                    potential_data.originalFilesName
                                   }}</span
                                   ><br />
                                   <span class="text-caption"
@@ -316,7 +316,7 @@
                         </v-col>
                         <v-col cols="12" sm="10" align="start">
                           <span class="font-bold">{{
-                            file.attachmentFiles
+                            file.originalFilesName
                           }}</span
                           ><br />
                           <span class="text-caption"
