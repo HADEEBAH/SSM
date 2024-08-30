@@ -187,7 +187,13 @@
                   text
                   class="px-1"
                   color="#ff6b81"
-                  :disabled="!item.checkInStudentId"
+                  :disabled="
+                    !item.checkInStudentId ||
+                    item.status == 'absent' ||
+                    item.status == 'emergency leave' ||
+                    item.status == 'leave' ||
+                    !item.status
+                  "
                   @click="showDialogAssessment(item)"
                 >
                   <v-icon>mdi-check-decagram-outline </v-icon>

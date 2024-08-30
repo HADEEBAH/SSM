@@ -430,7 +430,9 @@ export default {
       GetPotentialAssessment: "CourseModules/GetPotentialAssessment",
     }),
     closePotentialDialog() {
+      this.dataLoading = true;
       this.dialog_detail = false;
+      this.dataLoading = false;
     },
     openFile(file) {
       let fileName = `${process.env.VUE_APP_URL}/api/v1/files/${file}`;
