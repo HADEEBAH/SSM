@@ -855,7 +855,7 @@
             <v-card-title>
               <v-row dense>
                 <v-col align="center">
-                  {{ $t("export course check in") }}
+                  <!-- {{ $t("export course check in") }} -->
                 </v-col>
                 <v-col cols="auto" align="end">
                   <v-btn icon @click="closeFilterCoach">
@@ -1220,10 +1220,11 @@
                 <label class="font-weight-bold">{{
                   $t("check in status")
                 }}</label>
+                <!-- :items="checkInStatusOptions" -->
 
                 <v-autocomplete
                   v-model="export_data.check_in_status_options"
-                  :items="checkInStatusOptions"
+                  :items="filteredCheckInStatusOptions"
                   :item-text="$i18n.locale == 'th' ? 'nameTh' : 'nameEn'"
                   item-value="value"
                   outlined
@@ -1468,7 +1469,17 @@ export default {
         nameTh: "ขาด",
         value: "absent",
       },
+      // {
+      //   nameEn: "no check in",
+      //   nameTh: "ยังไม่มีการเช็คอิน",
+      //   value: "noCheckeIn",
+      // },
     ],
+    // {
+    //     // nameEn: "no check in",
+    //     // nameTh: "ยังไม่มีการเช็คอิน",
+    //     value: "noCheckeIn",
+    //   },
 
     export_data: {
       course_name: "",
@@ -1488,10 +1499,12 @@ export default {
       package_id: [],
       options_id: [],
       course_type_id: [],
+      storedData: "",
     },
   }),
 
   created() {
+    this.storedData = JSON.parse(localStorage.getItem("userDetail"));
     this.GetAllHolidays();
     this.GetAllCourse();
     this.GetOptions();
@@ -1517,6 +1530,17 @@ export default {
       options_data: "CourseModules/getOptions",
       getCheckinFilter: "adminCheckInModules/getCheckinFilter",
     }),
+    filteredCheckInStatusOptions() {
+      let options = this.checkInStatusOptions;
+      if (this.storedData.account_id == "200438430336") {
+        options.push({
+          nameEn: "no check in",
+          nameTh: "ยังไม่มีการเช็คอิน",
+          value: "noCheckeIn",
+        });
+      }
+      return options;
+    },
     formattedStartTime: {
       get() {
         // Return time with minutes set to 00
@@ -1573,6 +1597,7 @@ export default {
     },
   },
   mounted() {
+    this.storedData = JSON.parse(localStorage.getItem("userDetail"));
     this.GetCoachs();
     this.GetFilterCourse();
   },
@@ -1593,6 +1618,7 @@ export default {
       GetOptions: "CourseModules/GetOptions",
       CheckInFilter: "adminCheckInModules/CheckInFilter",
     }),
+
     async exportCheckin() {
       this.loading_export = true;
       await this.CheckInFilter({ export_data: this.export_data });
