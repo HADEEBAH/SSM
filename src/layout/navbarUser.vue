@@ -181,17 +181,26 @@
             color="red"
             :content="amount_cart_list"
           >
-            <v-icon dark @click="$router.push({ name: 'CartList' })"
-              >mdi-cart</v-icon
+            <router-link
+              dark
+              :to="{
+                name: 'CartList',
+              }"
             >
+              <v-icon dark> mdi-cart </v-icon>
+            </router-link>
           </v-badge>
-          <v-icon
+          <router-link
             v-else
-            class="mr-5"
             dark
-            @click="$router.push({ name: 'CartList' })"
-            >mdi-cart</v-icon
+            :to="{
+              name: 'CartList',
+            }"
+            class="router-link-icon mr-5"
           >
+            <v-icon dark> mdi-cart </v-icon>
+          </router-link>
+
           <div>
             <div v-if="!$vuetify.breakpoint.smAndDown">
               <v-avatar
