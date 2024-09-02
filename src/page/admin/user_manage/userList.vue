@@ -101,12 +101,7 @@
 
             <!-- เพิ่มผู้ใช้ -->
             <v-col cols="12" sm="2">
-              <v-btn
-                block
-                color="#FF6B81"
-                dark
-                @click="$router.push({ name: 'UserCreate' })"
-              >
+              <v-btn block color="#FF6B81" dark :to="{ name: 'UserCreate' }">
                 <v-icon left> mdi-plus </v-icon>
                 {{ $t("add user") }}
               </v-btn>
@@ -147,43 +142,35 @@
             </template>
 
             <template v-slot:[`item.actions`]="{ item }">
-              <v-icon
-                small
-                color="#FF6B81"
-                @click="
-                  $router.push({
-                    name: 'UserDetail',
-                    params: {
-                      action: 'view',
-                      account_id: item.accountId
-                        ? item.accountId
-                        : item.userOneId,
-                      from: 'userList',
-                    },
-                  })
-                "
+              <router-link
+                :to="{
+                  name: 'UserDetail',
+                  params: {
+                    action: 'view',
+                    account_id: item.accountId
+                      ? item.accountId
+                      : item.userOneId,
+                    from: 'userList',
+                  },
+                }"
               >
-                mdi-eye-outline
-              </v-icon>
-              <v-icon
-                small
-                class="ml-5"
-                color="#FF6B81"
-                @click="
-                  $router.push({
-                    name: 'UserDetail',
-                    params: {
-                      action: 'edit',
-                      account_id: item.accountId
-                        ? item.accountId
-                        : item.userOneId,
-                      from: 'userList',
-                    },
-                  })
-                "
+                <v-icon small color="#FF6B81"> mdi-eye-outline </v-icon>
+              </router-link>
+              <router-link
+                :to="{
+                  name: 'UserDetail',
+                  params: {
+                    action: 'edit',
+                    account_id: item.accountId
+                      ? item.accountId
+                      : item.userOneId,
+                    from: 'userList',
+                  },
+                }"
               >
-                mdi-pencil
-              </v-icon>
+                <v-icon small class="ml-5" color="#FF6B81"> mdi-pencil </v-icon>
+              </router-link>
+
               <v-icon
                 class="ml-5"
                 small

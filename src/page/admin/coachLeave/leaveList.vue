@@ -273,7 +273,10 @@
           </template>
           <template v-slot:[`item.show`]="{ item }">
             <v-btn
-              @click="showDetail(item.coachLeaveId)"
+              :to="{
+                name: 'LeaveDetail_coachleaveId',
+                params: { coachleave_id: item.coachLeaveId },
+              }"
               class="mr-3"
               icon
               color="#ff6b81"
