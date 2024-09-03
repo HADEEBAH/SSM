@@ -190,9 +190,6 @@
               </v-col>
               <v-col cols="12" sm="4">
                 <label-custom :text="$t(`course`)"></label-custom>
-                <!-- :items="openCourses(course.course_options)" -->
-                <!-- :items="course.course_options" -->
-
                 <v-autocomplete
                   dense
                   item-value="course_id"
@@ -203,7 +200,6 @@
                   :items="course.course_options"
                   :rules="rules.course"
                   :placeholder="$t(`select course`)"
-                  :loading="loading_course"
                   outlined
                   color="pink"
                   item-color="pink"
@@ -254,7 +250,6 @@
             >
               <v-col cols="12" sm="4">
                 <label-custom :text="$t('package')"></label-custom>
-                <!-- <pre>{{ course.course_data }}</pre> -->
                 <v-autocomplete
                   item-value="package_id"
                   item-text="package"
@@ -288,7 +283,7 @@
                     )[0].options
                   "
                   :placeholder="$t('choose duration')"
-                  @change="Calprice(course)"
+                  @change="Calprice(course, order.courses)"
                   item-color="white"
                   color="pink"
                 >
@@ -437,9 +432,6 @@
 
               <v-col cols="12" sm="4" v-if="course.course_data && course.time">
                 <label-custom :text="$t('coach')"></label-custom>
-                <!-- :items="coachOptions(course.time.timeData)" -->
-
-                <!-- <pre>{{ course.time }}</pre> -->
                 <v-autocomplete
                   dense
                   :rules="rules.coach"
@@ -576,12 +568,12 @@
                 </v-text-field>
               </v-col>
             </v-row>
+            <!-- PRICE -->
+            <!-- <pre>{{ course.option.discount_price }}</pre> -->
             <v-row dense>
-              <!-- PRICE -->
               <v-col cols="12" sm="4">
-                <label-custom :text="$t(`price`)"></label-custom>
+                <label-custom :text="$t('price')"></label-custom>
                 <!-- :rules="rules.price" -->
-                <!-- @change="CalTotalPrice()" -->
                 <v-text-field
                   dense
                   v-model="course.price"
@@ -594,7 +586,6 @@
                 >
                 </v-text-field>
               </v-col>
-              <!-- discount -->
               <v-col cols="12" sm="4">
                 <label-custom :text="$t(`discount`)"></label-custom>
                 <!-- :rules="rules.price" -->
@@ -647,6 +638,7 @@
                 ></v-checkbox>
               </v-col>
             </v-row>
+            <!-- Discount-->
             <v-row dense>
               <!-- Discount BATH -->
               <v-col
@@ -672,7 +664,37 @@
                   :min="0"
                 ></v-text-field>
               </v-col>
-              <!-- หมายเหตุราคา -->
+              <!-- Discount Percent -->
+              <!-- <v-col cols="12" sm="6" v-if="course.checkedPercent">
+                  <v-text-field
+                    dense
+                    type="number"
+                    class="input-text-right"
+                    :placeholder="$t('specify discount/percent')"
+                    v-model="discout_percent_admin[course_index]"
+                    @keypress.enter="
+                      calPercent(
+                        discout_percent_admin,
+                        order.courses,
+                        course_index,
+                        course.checkedDis,
+                        course.checkedPercent
+                      )
+                    "
+                    @blur="
+                      calPercent(
+                        discout_percent_admin,
+                        order.courses,
+                        course_index
+                      )
+                    "
+                    outlined
+                    color="#FF6B81"
+                    :rules="[moreDiscount(course.price)]"
+                    :max="course.price"
+                    :min="0"
+                  ></v-text-field>
+                </v-col> -->
               <v-col cols="12">
                 <label-custom :text="$t(`price note`)"></label-custom>
                 <v-textarea
@@ -706,17 +728,15 @@
                     <v-col class="text-lg font-bold"
                       >{{ $t("total price") }} :</v-col
                     >
-                    <!-- <v-col
-                      cols="auto"
-                      class="text-lg font-bold text-pink-500"
-                      >{{
-                        (order.total_price * students?.length).toLocaleString(
-                          undefined,
-                          { minimumFractionDigits: 2 }
-                        )
-                      }}
-                    </v-col> -->
                     <v-col cols="auto" class="text-lg font-bold text-pink-500">
+                      <!-- {{
+                          (
+                            order.total_price * students?.length -
+                              totalDiscount || 0
+                          ).toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                          })
+                        }} -->
                       {{
                         (totalPricees * students?.length).toLocaleString(
                           undefined,
@@ -816,44 +836,11 @@
                           </v-autocomplete>
                         </v-col>
                         <v-col cols="auto">
-                          <v-menu
-                            v-model="menu_pay_date"
-                            :close-on-content-click="false"
-                            transition="scale-transition"
-                            offset-y
-                            min-width="auto"
-                          >
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-text-field
-                                dense
-                                outlined
-                                :value="
-                                  pay_date_str ? pay_date_str : todayDate()
-                                "
-                                readonly
-                                v-bind="attrs"
-                                v-on="on"
-                                color="#FF6B81"
-                              >
-                                <template v-slot:append>
-                                  <v-icon color="#FF6B81">mdi-calendar</v-icon>
-                                </template>
-                              </v-text-field>
-                            </template>
-                            <v-date-picker
-                              :max="today.toISOString()"
-                              v-model="pay_date"
-                              @input="inputPayDate($event)"
-                              :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
-                            ></v-date-picker>
-                          </v-menu>
-                        </v-col>
-                        <v-col cols="auto">
                           {{ $t("payee") }} :
                           <span class="text-pink-500 font-medium">
                             <!-- {{
-                            `${user_detail.first_name_th} ${user_detail.last_name_th}`
-                          }} -->
+                              `${user_detail.first_name_th} ${user_detail.last_name_th}`
+                            }} -->
                             {{
                               $i18n.locale === "th"
                                 ? user_detail.first_name_th +
@@ -971,8 +958,8 @@
     </v-dialog>
   </v-app>
 </template>
-
-<script>
+  
+  <script>
 import headerPage from "@/components/header/headerPage.vue";
 import LabelCustom from "@/components/label/labelCustom.vue";
 import dialogCard from "@/components/dialog/dialogCard.vue";
@@ -1015,10 +1002,7 @@ export default {
     today: new Date(),
     selected: [""],
     pay: "",
-    menu_pay_date: "",
-    pay_date_str: "",
-    pay_date: "",
-    loading_course: false,
+    check_discount_admin: false,
     discout_from_admin: [],
     discout_percent_admin: [],
     newPrice: "",
@@ -1102,10 +1086,6 @@ export default {
           (val) =>
             (val || "")?.length > 0 || this.$t("please select a start date"),
         ],
-        pay_date: [
-          (val) =>
-            (val || "")?.length > 0 || this.$t("please select a pay date"),
-        ],
         price: [(val) => (val || "") > 0 || this.$t("please select a price")],
         remark: [
           (val) =>
@@ -1116,8 +1096,13 @@ export default {
           (val) =>
             val ? true : false || this.$t("please choose a payment method"),
         ],
+
+        // more_discount: [(val) => val?.length > 0 || val],
       };
     },
+    // moreDiscount() {
+    //   return [(val) => parseInt(val) >= 0 || this.$t("number must be 1")];
+    // },
   },
 
   watch: {
@@ -1136,6 +1121,7 @@ export default {
         });
       }
     },
+
     search(val) {
       if (val?.length > 3) {
         this.loading = true;
@@ -1157,6 +1143,17 @@ export default {
       searchNameUser: "loginModules/searchNameUser",
       GetAllCourseMonitor: "CourseMonitorModules/GetAllCourseMonitor",
     }),
+    moreDiscount(maxPrice) {
+      return (value) => {
+        if (value > maxPrice) {
+          return `${this.$t("number must be")} ${maxPrice}`;
+        }
+        if (value < 0) {
+          return this.$t("number must be 1");
+        }
+        return true;
+      };
+    },
     checkBoxFunc(index, items, bool) {
       this.checkedBox = bool;
       this.dataIndex = index;
@@ -1169,16 +1166,58 @@ export default {
         this.CalTotalPrice(this.discout_from_admin);
       }
     },
-    moreDiscount(maxPrice) {
-      return (value) => {
-        if (value > maxPrice) {
-          return `${this.$t("number must be")} ${maxPrice}`;
-        }
-        if (value < 0) {
-          return this.$t("number must be 1");
-        }
-        return true;
-      };
+
+    // discountFunction(defaultPrice, discount) {
+    //   console.log("discount[index] :>> ", discount);
+    //   console.log("defaultPrice :>> ", defaultPrice);
+    //   let pushPrice = [];
+    //   for (const items of defaultPrice) {
+    //     pushPrice.push(items.price);
+    //   }
+    //   console.log("pushPrice :>> ", pushPrice);
+    //   let totalPrice = 0;
+
+    //   // Iterate through the arrays
+    //   for (let i = 0; i < pushPrice.length; i++) {
+    //     // Calculate the price after discount for each item
+    //     let priceAfterDiscount = pushPrice[i] - discount[i];
+
+    //     // Add the price after discount to the total price
+    //     totalPrice += priceAfterDiscount;
+    //   }
+    //   console.log("totalPrice :>> ", totalPrice);
+    //   this.totalPricees = totalPrice;
+    //   return totalPrice;
+    //   // let testDis = "";
+    //   // testDis = discount[index] - defaultPrice[index];
+    //   // console.log("object :>> ", testDis);
+    //   // let newDiscount = "";
+    //   // for (const item of discount) {
+    //   //   newDiscount += item;
+    //   //   // console.log('newDiscount :>> ', newDiscount);
+    //   // }
+    //   // console.log("defaultPrice :>> ", defaultPrice);
+    //   // console.log("newDiscount :>> ", newDiscount);
+    //   // // this.newPrice = defaultPrice - newDiscount;
+    //   // // console.log("this.newPrice :>> ", this.newPrice);
+    //   // if (index === 0 && defaultPrice[0] !== 0) {
+    //   //   defaultPrice[1] = 0; // Default value for index 1 when index 0 has a number
+    //   //   console.log("index :>> ", index);
+    //   // }
+    // },
+    minStartDate(startDate) {
+      let date = new Date();
+      if (moment(startDate).isSameOrAfter(date)) {
+        date = new Date(startDate);
+      }
+      return date.toISOString();
+    },
+    Validation(e, lang) {
+      inputValidation(e, lang);
+    },
+    remove(item) {
+      const index = this.students.indexOf(item);
+      if (index >= 0) this.students.splice(index, 1);
     },
     CalTotalPrice(newDiscount) {
       let netPrice = 0; // newDiscount, defaultPrice
@@ -1204,47 +1243,72 @@ export default {
         }
       }
       this.totalPricees = netPrice;
+      // for (let course of this.order.courses) {
+      //   if (course.price) {
+      //     this.order.total_price = this.order.total_price += parseInt(
+      //       course.price
+      //     );
+      //     if (newDiscount[i]?.length >= 1 && course.checkedDis) {
+      //       console.log("course :>> ", checkType.checkedDis);
+      //       newDiscount = newDiscount.map((item) => {
+      //         if (item === undefined || item === null || item === "") {
+      //           return "0";
+      //         }
+      //         return item;
+      //       });
+
+      //       // Sum all elements in the newDiscount
+      //       let sum = newDiscount.reduce(
+      //         (accumulator, currentValue) =>
+      //           accumulator + parseFloat(currentValue),
+      //         0
+      //       );
+      //       this.totalDiscount = 0;
+
+      //       this.totalDiscount = sum;
+      //     } else if (checkType.checkedPercent) {
+      //       console.log("percent :>> ", 11);
+      //     }
+      //   }
+      // }
     },
-    todayDate() {
-      let todayDate = new Date();
-      return dateFormatter(todayDate, "DD MMT YYYYT");
-    },
-    openCourses(items) {
-      return items.filter((course) => course.statusCourse === "Open");
-    },
-    // packageOptions(items) {
-    //   console.log("items :>> ", items);
-    //   return items.filter((packageStatus) => packageStatus.status === "Open");
-    // },
-    coachOptions(timeData) {
-      console.log("timeData :>> ", timeData);
-      return timeData.filter((coach) => coach.status_coach === "Open");
-      // return items.filter((coach) => coach.status_coach === "Open");
-    },
-    minStartDate(startDate) {
-      let date = new Date();
-      if (moment(startDate).isSameOrAfter(date)) {
-        date = new Date(startDate);
+    calPercent(percentageNumber) {
+      let coursePrice = [];
+      // let total = 0;
+      for (const item of this.order.courses) {
+        coursePrice.push(item?.price);
       }
-      return date.toISOString();
+      let finalPrices = [];
+      let total = 0;
+
+      for (let i = 0; i < coursePrice.length; i++) {
+        const discount = (percentageNumber[i] / 100) * coursePrice[i];
+        const finalPrice = coursePrice[i] - discount;
+        finalPrices.push(finalPrice);
+        total += finalPrice;
+      }
+
+      this.totalDiscountPercent = total;
+      // let percentageValues = [];
+      // for (let i = 0; i < coursePrice.length; i++) {
+      //   percentageValues.push((percentageNumber[i] / 100) * coursePrice[i]);
+      // }
+
+      // let total = percentageValues.reduce(
+      //   (accumulator, currentValue) => accumulator + currentValue,
+      //   0
+      // );
+
+      // let totalString = total.toString();
+
+      // console.log(totalString);
     },
-    Validation(e, lang) {
-      inputValidation(e, lang);
-    },
-    remove(item) {
-      const index = this.students.indexOf(item);
-      if (index >= 0) this.students.splice(index, 1);
-    },
-    // CalTotalPrice() {
-    //   this.order.total_price = 0;
-    //   for (let course of this.order.courses) {
-    //     if (course.price) {
-    //       this.order.total_price =
-    //         this.order.total_price + parseInt(course.price);
-    //     }
-    //   }
-    // },
+
     selectCourseType(type, course) {
+      // console.log("this.checkedBox :>> ", this.checkedBox);
+      // let testDis = (this.totalDiscount = [this.dataIndex] = "0");
+      // let testDis = this.discout_from_admin[this.dataIndex] =
+      //   "0"
       course.category_id = "";
       course.course_id = "";
       course.course_type_id = type;
@@ -1263,6 +1327,9 @@ export default {
       course.price = 0;
       course.detail = "";
       course.remark = "";
+      course.checkedDis = false;
+      course.checkedPercent = false;
+      // this.totalPricees = testDis;
     },
     selectPackage(course) {
       course.option = {};
@@ -1302,11 +1369,11 @@ export default {
         checkedDis: false,
         checkedPercent: false,
       });
+      // this.discout_from_admin = [0, 0];
     },
     Calprice(course) {
       course.price = course.option.net_price;
       this.CalTotalPrice(this.discout_from_admin);
-      // this.CalTotalPrice();
     },
     inputDate(e, type, data) {
       switch (type) {
@@ -1314,10 +1381,6 @@ export default {
           data.start_date_str = dateFormatter(e, "DD MMT YYYYT");
           break;
       }
-    },
-    inputPayDate(e) {
-      this.pay_date_str = dateFormatter(e, "DD MMT YYYYT");
-      this.order.pay_date = this.pay_date;
     },
     openDialog() {
       this.dialog_show = true;
@@ -1344,13 +1407,11 @@ export default {
       course.price = 0;
       course.detail = "";
       course.remark = "";
-      this.loading_course = false;
       this.GetCoursesFilter({
         category_id: categoryId,
         status: "Active",
         course_type_id: course_type_id,
       }).then(() => {
-        this.loading_course = false;
         let course_ids = [];
         for (let order_course of this.order.courses) {
           course_ids.push(order_course.course_id);
@@ -1359,7 +1420,6 @@ export default {
           (v) => !course_ids.includes(v.course_id)
         );
       });
-      this.loading_course = true;
     },
     selectCourse(courseId, course) {
       course.package_data = {};
@@ -1419,65 +1479,6 @@ export default {
         });
       }
     },
-    // selectCourse(courseId, course) {
-    //   console.log("111 :>> ", courseId);
-    //   course.package_data = {};
-    //   course.package = "";
-    //   course.option = {};
-    //   course.option_data = {};
-    //   course.day = "";
-    //   course.time = "";
-    //   course.time_str = "";
-    //   course.coach = "";
-    //   course.manu_start_date = false;
-    //   course.start_date_str = "";
-    //   course.start_date = "";
-    //   course.price = 0;
-    //   course.detail = "";
-    //   course.remark = "";
-    //   if (courseId) {
-    //     this.GetCourse(courseId).then(() => {
-    //       console.log("22 :>> ", 22);
-    //       if (this.course_data) {
-    //         course.course_data = this.course_data;
-    //       }
-    //       console.log("this.course_data :>> ", this.course_data);
-
-    //       if (this.course_data.course_type_id === "CT_2") {
-    //         course.start_date = this.course_data.course_study_start_date;
-    //         course.start_date_str = new Date(
-    //           course.start_date
-    //         ).toLocaleDateString(
-    //           this.$i18n.locale == "th" ? "th-TH" : "en-US",
-    //           {
-    //             year: "numeric",
-    //             month: "long",
-    //             day: "numeric",
-    //           }
-    //         );
-    //         course.coach = this.course_data.coachs[0];
-    //         let startTimePart =
-    //           this.course_data.course_period_start_date.split(":");
-    //         let endTimePart =
-    //           this.course_data.course_period_end_date.split(":");
-    //         let period_start = `${startTimePart[0].padStart(
-    //           2,
-    //           "0"
-    //         )}:${startTimePart[1].padStart(2, "0")}`;
-    //         let period_end = `${endTimePart[0].padStart(
-    //           2,
-    //           "0"
-    //         )}:${endTimePart[1].padStart(2, "0")}`;
-    //         course.time_str = `${period_start}-${period_end} ${this.$t(
-    //           "o'clock"
-    //         )}`;
-    //         course.price = parseInt(this.course_data.price_course);
-    //         course.time = this.course_data.days_of_class[0].times[0];
-    //         this.CalTotalPrice();
-    //       }
-    //     });
-    //   }
-    // },
     save() {
       this.GetAllCourseMonitor().then(() => {
         this.$refs.course_form.validate();
@@ -1589,8 +1590,14 @@ export default {
                   });
                   this.order.type = "addStudent";
                   this.changeOrderData(this.order);
-                  console.log("this.order :>> ", this.order);
-                  await this.saveOrder({ regis_type: "addStudent" });
+                  await this.saveOrder({
+                    regis_type: "addStudent",
+                    newdiscount: this.discout_from_admin,
+                    newTotalPrice:
+                      this.order.total_price * this.students?.length -
+                        this.totalDiscount || 0,
+                    totalNewDisCount: this.totalDiscount,
+                  });
                   if (this.order_is_status) {
                     let payload = {
                       notificationName: this.notification_name,
@@ -1642,7 +1649,14 @@ export default {
                   });
                   this.order.type = "addStudent";
                   this.changeOrderData(this.order);
-                  await this.saveOrder({ regis_type: "addStudent" });
+                  await this.saveOrder({
+                    regis_type: "addStudent",
+                    newdiscount: this.discout_from_admin,
+                    newTotalPrice:
+                      this.order.total_price * this.students?.length -
+                        this.totalDiscount || 0,
+                    totalNewDisCount: this.totalDiscount,
+                  });
                   if (this.order_is_status) {
                     let payload = {
                       notificationName: this.notification_name,
@@ -1669,6 +1683,7 @@ export default {
     },
     ClearData() {
       this.students = [];
+      this.discout_from_admin = [];
       this.changeOrderData({
         type: "",
         order_step: 0,
@@ -1715,7 +1730,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+  <style scoped>
 .sub-register-pc {
   position: absolute;
   left: 65%;
@@ -1735,4 +1750,4 @@ sub-register-sm {
   transform: translate(-50%, -50%);
 }
 </style>
-// creatStudent(featureSekectDate)
+  // createStudnt
