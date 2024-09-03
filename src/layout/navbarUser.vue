@@ -31,6 +31,8 @@
           depressed
           text
           color="#ffffff"
+          :href="'https://docs.google.com/forms/d/e/1FAIpQLSdayLva9MELypybakCFtdVfMbjVESI9dGN6y_yYDETkQWV33w/viewform?usp=sharing'"
+          target="_blank"
           @click="ReportProblem"
           >{{ $t("ReportProblem") }}</v-btn
         >
