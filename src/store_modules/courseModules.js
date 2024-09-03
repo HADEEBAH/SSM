@@ -194,7 +194,9 @@ const CourseModules = {
     course_seat: [],
     checkDay: [],
     filter_student_data: [],
-    assessment: []
+    assessment: [],
+    filter_potential_student: [],
+    potential_assessment: []
 
   },
   mutations: {
@@ -383,6 +385,12 @@ const CourseModules = {
     },
     SetAssessment(state, payload) {
       state.assessment = payload
+    },
+    SetFilterPotentialStudent(state, payload) {
+      state.filter_potential_student = payload
+    },
+    SetPotentialAssessment(state, payload) {
+      state.potential_assessment = payload
     },
   },
   actions: {
@@ -2142,7 +2150,6 @@ const CourseModules = {
       }
     },
     async GetFilterStudentData(context, { student_id, course_id }) {
-
       try {
         let config = {
           headers: {
@@ -2159,23 +2166,9 @@ const CourseModules = {
         }
       } catch (error) {
         console.log('error :>> ', error);
-        // if (error.response.data.message == "This coach cannot be deleted. Because the middle of teaching") {
-        //   Swal.fire({
-        //     icon: "error",
-        //     title: VueI18n.t("can not delete coach"),
-        //     text: VueI18n.t(error.response.data.message),
-        //     timer: 3000,
-        //     showDenyButton: false,
-        //     showCancelButton: false,
-        //     showConfirmButton: false,
-        //     timerProgressBar: true,
-        //   })
-        //   context.dispatch("GetCourse", course_id)
-        // }
       }
     },
     async GetAssessmentStudent(context, { checkin_id, date }) {
-
       try {
         let config = {
           headers: {
@@ -2192,19 +2185,44 @@ const CourseModules = {
         }
       } catch (error) {
         console.log('error :>> ', error);
-        // if (error.response.data.message == "This coach cannot be deleted. Because the middle of teaching") {
-        //   Swal.fire({
-        //     icon: "error",
-        //     title: VueI18n.t("can not delete coach"),
-        //     text: VueI18n.t(error.response.data.message),
-        //     timer: 3000,
-        //     showDenyButton: false,
-        //     showCancelButton: false,
-        //     showConfirmButton: false,
-        //     timerProgressBar: true,
-        //   })
-        //   context.dispatch("GetCourse", course_id)
-        // }
+      }
+    },
+    async GetFilterPotentialStudent(context, { course_id, student_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/studentlist/search-potential?courseId=${course_id}&studentId=${student_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/search-potential?courseId=${course_id}&studentId=${student_id}`, config)
+        if (data.statusCode == 200) {
+          context.commit("SetFilterPotentialStudent", data.data)
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
+    async GetPotentialAssessment(context, { checkin_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/studentlist/assessment-potential/?checkInPotentialId=${checkin_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/assessment-potential/?checkInPotentialId=${checkin_id}`, config)
+        if (data.statusCode == 200) {
+          context.commit("SetPotentialAssessment", data.data)
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
       }
     },
   },
@@ -2292,6 +2310,12 @@ const CourseModules = {
     },
     getAssessmentStudent(state) {
       return state.assessment
+    },
+    getFilterPotentialStudent(state) {
+      return state.filter_potential_student
+    },
+    getPotentialAssessment(state) {
+      return state.potential_assessment
     },
   },
 };
