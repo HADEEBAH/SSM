@@ -60,38 +60,49 @@
           </v-col>
         </v-row>
         <v-row dense class="mx-5 my-5">
-          <v-col cols="10" align-self="center">
+          <v-col cols="12" md="6" align-self="center">
             <span class="font-bold">
               {{ $t("first name") + " - " + $t("last name") }}
             </span>
             : {{ students.studentId ? studentName : "-" }}
           </v-col>
-          <v-col
-            cols="2"
-            align="start"
-            class="my-5"
-            align-self="center"
-            v-if="students.studentId"
-          >
-            <v-btn
-              text
-              @click="
-                $router.push({
-                  name: 'UserDetail',
-                  params: {
-                    account_id: getStudentId,
-                    action: 'view',
-                    from: 'courseDetail',
-                  },
-                })
-              "
-              class="px-1"
-              color="#ff6b81"
-            >
-              <v-icon> mdi-clipboard-text-search-outline </v-icon>
-              {{ $t("view profile") }}
-            </v-btn>
+          <v-col cols="12" md="6" align="end">
+            <v-row dense justify="end">
+              <v-col cols="6" v-if="students.studentId">
+                <!-- View profile -->
+                <v-btn
+                  text
+                  @click="
+                    $router.push({
+                      name: 'UserDetail',
+                      params: {
+                        account_id: getStudentId,
+                        action: 'view',
+                        from: 'courseDetail',
+                      },
+                    })
+                  "
+                  class="px-1"
+                  color="#ff6b81"
+                >
+                  <v-icon> mdi-clipboard-text-search-outline </v-icon>
+                  {{ $t("view profile") }}
+                </v-btn>
+                <!-- View Potential Evaluation -->
+                <!-- <v-btn
+                  v-if="students.studentId && studentType == 'potential'"
+                  text
+                  class="px-1"
+                  color="#ff6b81"
+                  @click="showPotentialDialog"
+                >
+                  <v-icon>mdi-check-decagram-outline </v-icon>
+                  {{ $t("view evaluation") }}
+                </v-btn> -->
+              </v-col>
+            </v-row>
           </v-col>
+
           <!-- TABLE -->
           <v-col cols="12" v-if="loadingTable" class="pa-2">
             <v-row class="fill-height ma-0" align="center" justify="center">
@@ -101,17 +112,26 @@
               ></v-progress-circular>
             </v-row>
           </v-col>
+
           <v-col cols="12" v-else>
             <v-data-table
               class="header-table rounded-lg"
-              :headers="columnStudents"
-              :items="filter_student_data"
+              :headers="
+                studentType === 'inpotential'
+                  ? columnStudents
+                  : columnStudentsPotential
+              "
+              :items="
+                studentType === 'inpotential'
+                  ? filter_student_data
+                  : filter_potential_student
+              "
               v-if="students.studentId"
             >
               <template v-slot:no-data>
                 <v-row dense>
                   <v-col align="center">
-                    {{ $t("no data found22") }}
+                    {{ $t("no data found") }}
                   </v-col>
                 </v-row>
               </template>
@@ -159,7 +179,10 @@
                   </v-chip>
                 </v-col>
               </template>
-              <template v-slot:[`item.evaluation`]="{ item }">
+              <template
+                v-if="studentType === 'inpotential'"
+                v-slot:[`item.evaluation`]="{ item }"
+              >
                 <v-btn
                   text
                   class="px-1"
@@ -177,11 +200,55 @@
                   {{ $t("view evaluation") }}
                 </v-btn>
               </template>
+              <template
+                v-slot:[`item.name`]="{ item }"
+                v-if="studentType === 'potential'"
+              >
+                {{
+                  $i18n.locale == "th"
+                    ? `${item.firstNameTh} ${item.lastNameTh}`
+                    : `${item.firstNameEng} ${item.lastNameEng}`
+                }}
+              </template>
+              <template
+                v-slot:[`item.period`]="{ item }"
+                v-if="studentType === 'potential'"
+              >
+                {{
+                  $i18n.locale == "th"
+                    ? `${item.optionName}`
+                    : `${item.optionNameEn}`
+                }}
+              </template>
+              <template
+                v-slot:[`item.number`]="{ item }"
+                v-if="studentType === 'potential'"
+              >
+                {{ `${item.countCheckIn} / ${item.totalPotential}` }}
+              </template>
+              <template
+                v-if="studentType === 'potential'"
+                v-slot:[`item.potentEvaluation`]="{ item }"
+              >
+                <v-btn
+                  text
+                  class="px-1"
+                  color="#ff6b81"
+                  @click="showPotentialDialog(item)"
+                >
+                  <v-icon>mdi-check-decagram-outline </v-icon>
+                  {{ $t("view evaluation") }}
+                </v-btn>
+              </template>
             </v-data-table>
             <!-- NO DATA -->
             <v-data-table
               class="header-table rounded-lg"
-              :headers="columnStudents"
+              :headers="
+                studentType === 'inpotential'
+                  ? columnStudents
+                  : columnStudentsPotential
+              "
               :items="no_data"
               v-else
             >
@@ -198,28 +265,40 @@
       </v-card-text>
     </v-card>
     <student-evaluation
-      v-if="evaluationBool"
+      v-if="evaluationBool && studentType == 'inpotential'"
       :statusBool="evaluationBool"
       :checkInId="this.getCheckInId"
       :date="this.getDate"
       @input="evaluationBool = $event"
     >
     </student-evaluation>
+    <potential-evaluation
+      v-if="potentEvaluationBool && studentType == 'potential'"
+      :statusBool="potentEvaluationBool"
+      :checkInId="this.getPotentialId"
+      @input="potentEvaluationBool = $event"
+    >
+    </potential-evaluation>
   </v-dialog>
 </template>
   
   <script>
 import { mapGetters, mapActions } from "vuex";
 import studentEvaluation from "@/components/students/studentEvaluation.vue";
+import PotentialEvaluation from "./potentialEvaluation.vue";
 
 export default {
-  components: { studentEvaluation },
+  components: { studentEvaluation, PotentialEvaluation },
   props: {
     statusBool: {
       type: Boolean,
       required: true,
     },
     courseId: {
+      type: String,
+      required: true,
+    },
+    studentType: {
       type: String,
       required: true,
     },
@@ -251,15 +330,21 @@ export default {
       },
     ],
     evaluationBool: false,
+    potentEvaluationBool: false,
     getCheckInId: "",
+    potentGetCheckInId: "",
     getDate: "",
+    getPotentialId: "",
     loadingTable: false,
+    noDataPotential: [],
+    noDataInPotential: [],
     no_data: [],
   }),
   computed: {
     ...mapGetters({
       students_data: "UserModules/getStudentsData",
       filter_student_data: "CourseModules/getFilterStudentData",
+      filter_potential_student: "CourseModules/getFilterPotentialStudent",
       course_data: "CourseModules/getCourseData",
     }),
     dialogStatus: {
@@ -312,14 +397,50 @@ export default {
         },
       ];
     },
+    columnStudentsPotential() {
+      return [
+        {
+          text: this.$t("no."),
+          align: "center",
+          sortable: false,
+          value: "index",
+        },
+
+        {
+          text: this.$t("first name - last name"),
+          align: "center",
+          sortable: false,
+          value: "name",
+        },
+        {
+          text: this.$t("period"),
+          align: "center",
+          sortable: false,
+          value: "period",
+        },
+        {
+          text: this.$t("number of times"),
+          align: "center",
+          sortable: false,
+          value: "number",
+        },
+        {
+          text: this.$t("view evaluation"),
+          align: "center",
+          sortable: false,
+          value: "potentEvaluation",
+        },
+      ];
+    },
   },
   mounted() {
-    this.GetStudentData({ course_id: this.courseId });
+    this.GetStudentData({ course_id: this.courseId, type: this.studentType });
   },
   methods: {
     ...mapActions({
       GetStudentData: "UserModules/GetStudentData",
       GetFilterStudentData: "CourseModules/GetFilterStudentData",
+      GetFilterPotentialStudent: "CourseModules/GetFilterPotentialStudent",
     }),
     getStudentName(item) {
       return this.$i18n.locale === "th"
@@ -327,13 +448,18 @@ export default {
         : `${item.firstNameEng} ${item.lastNameEng}`;
     },
     async filterStudents(items) {
+      console.log("items :>> ", this.filter_potential_student);
       this.studentName =
         this.$i18n.locale === "th"
           ? `${items?.firstNameTh} ${items?.lastNameTh}`
           : `${items?.firstNameEng} ${items?.lastNameEng}`;
 
       this.getStudentId = await items.studentId;
-      await this.getAPIFilterStudent();
+      if (this.studentType == "inpotential") {
+        await this.getAPIFilterStudent();
+      } else if (this.studentType == "potential") {
+        await this.getAPIFilterPotentialStudent();
+      }
     },
     async getAPIFilterStudent() {
       this.loadingTable = true;
@@ -343,10 +469,16 @@ export default {
       });
       this.loadingTable = false;
     },
+    async getAPIFilterPotentialStudent() {
+      this.loadingTable = true;
+      await this.GetFilterPotentialStudent({
+        course_id: this.courseId,
+        student_id: this.getStudentId,
+      });
+      this.loadingTable = false;
+    },
     closeDialog() {
       this.dialogStatus = false; // Close the dialog
-      this.filter_student_data = [];
-      this.students_data = [];
     },
     GenDate(date) {
       return new Date(date).toLocaleDateString(
@@ -362,6 +494,13 @@ export default {
       this.getCheckInId = await item.checkInStudentId;
       this.getDate = await item.scheduleDate;
       this.evaluationBool = true;
+    },
+    async showPotentialDialog(items) {
+      // this.getPotentialId = "e5e61153-bcdb-4234-b759-528df58b40ae";
+      this.getPotentialId = await items.checkInPotentialId;
+      this.potentEvaluationBool = true;
+
+      // console.log("filter_student_data :>> ", this.filter_student_data);
     },
   },
 };
