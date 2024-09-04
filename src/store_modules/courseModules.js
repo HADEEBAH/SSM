@@ -192,7 +192,11 @@ const CourseModules = {
       page: 1
     },
     course_seat: [],
-    checkDay: []
+    checkDay: [],
+    filter_student_data: [],
+    assessment: [],
+    filter_potential_student: [],
+    potential_assessment: []
 
   },
   mutations: {
@@ -375,7 +379,19 @@ const CourseModules = {
     },
     SetCheckDay(state, payload) {
       state.checkDay = payload
-    }
+    },
+    SetFilterStudentData(state, payload) {
+      state.filter_student_data = payload
+    },
+    SetAssessment(state, payload) {
+      state.assessment = payload
+    },
+    SetFilterPotentialStudent(state, payload) {
+      state.filter_potential_student = payload
+    },
+    SetPotentialAssessment(state, payload) {
+      state.potential_assessment = payload
+    },
   },
   actions: {
     // CHECK COURSE SEAT
@@ -404,8 +420,6 @@ const CourseModules = {
         console.log(error)
       }
     },
-
-
     // DELETE : COURSE COACH
     async DeleteCourseCoach(context, { course_id, course_coach_id }) {
       try {
@@ -491,7 +505,7 @@ const CourseModules = {
       context.commit("SetCourseData", course_data)
     },
     // COACH :: LIST BY COURSE
-    async GetCoachsByCourse(context, { course_id }) {
+    async GetCoachsByCourse(context, { course_id, search }) {
       context.commit("SetCoachListIsLoading", true)
       try {
         let config = {
@@ -501,8 +515,14 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
+        console.log('search', search)
+        // let localhost = "http://localhost:3000"
+
+        // let { data } = await axios.get(`${localhost}/api/v1/schedule/manage-course/${course_id}?search=${search}`, config)
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course/${course_id}?search=${search}`, config)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course/${course_id}`, config)
         if (data.statusCode === 200) {
+          // console.log('data.data :>> ', data.data);
           let datesList = []
           for await (let coach of data.data) {
             coach.checked = false
@@ -614,14 +634,14 @@ const CourseModules = {
             context.commit("SetNoChackInStudentList", [])
           } else {
             context.commit("SetStudentList", [])
+            // let scheduleStudent = await axios.get(`http://localhost:3000/api/v1/schedule/manage-course-student/${course_id}/${date}?starTime=${start_time}&endTime=${end_time}&coachId=${coach_id}`, config)
             let scheduleStudent = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/manage-course-student/${course_id}/${date}?starTime=${start_time}&endTime=${end_time}&coachId=${coach_id}`, config)
             if (scheduleStudent.data.statusCode == 200) {
               let scheduleStudentData = scheduleStudent.data.data.filter(v => v.endTime == end_time && v.startTime == start_time && v.coachId == coach_id)
-              // scheduleStudentData.map(v=>{
-              //   v.countCheckIn = current_check_in
-              //   v.totalDay = count_check_In_date.length
-              //   return v
-              // })
+              scheduleStudentData.map(item => {
+                item.date = date
+                return item
+              })
               context.commit("SetNoChackInStudentList", scheduleStudentData)
             }
           }
@@ -2129,6 +2149,82 @@ const CourseModules = {
         console.log(error)
       }
     },
+    async GetFilterStudentData(context, { student_id, course_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/studentlist/search?courseId=${course_id}&studentId=${student_id} `, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/search?courseId=${course_id}&studentId=${student_id} `, config)
+        if (data.statusCode == 200) {
+          context.commit("SetFilterStudentData", data.data)
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
+    async GetAssessmentStudent(context, { checkin_id, date }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/studentlist/assessment/?checkInStudentId=${checkin_id}&date=${date}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/assessment/?checkInStudentId=${checkin_id}&date=${date}`, config)
+        if (data.statusCode == 200) {
+          context.commit("SetAssessment", data.data)
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
+    async GetFilterPotentialStudent(context, { course_id, student_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/studentlist/search-potential?courseId=${course_id}&studentId=${student_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/search-potential?courseId=${course_id}&studentId=${student_id}`, config)
+        if (data.statusCode == 200) {
+          context.commit("SetFilterPotentialStudent", data.data)
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
+    async GetPotentialAssessment(context, { checkin_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/studentlist/assessment-potential/?checkInPotentialId=${checkin_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/assessment-potential/?checkInPotentialId=${checkin_id}`, config)
+        if (data.statusCode == 200) {
+          context.commit("SetPotentialAssessment", data.data)
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
   },
   getters: {
     getCourseSeats(state) {
@@ -2208,6 +2304,18 @@ const CourseModules = {
     },
     getFilterCourseOption(state) {
       return state.filter_course_option
+    },
+    getFilterStudentData(state) {
+      return state.filter_student_data
+    },
+    getAssessmentStudent(state) {
+      return state.assessment
+    },
+    getFilterPotentialStudent(state) {
+      return state.filter_potential_student
+    },
+    getPotentialAssessment(state) {
+      return state.potential_assessment
     },
   },
 };

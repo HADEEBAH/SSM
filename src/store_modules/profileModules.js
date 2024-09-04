@@ -87,7 +87,8 @@ const profileModules = {
       policy: ' บริษัท อินเทอร์เน็ตประเทศไทย จำกัด (มหาชน) มีความมุ่งมั่นที่จะดำเนินการตามพระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 ให้สอดคล้องกับหลักเกณฑ์ของคณะกรรมการคุ้มครองข้อมูลส่วนบุคคลเพื่อให้มีหลักเกณฑ์การคุ้มครองสิทธิของเจ้าของข้อมูลเกี่ยวกับข้อมูลส่วนบุคคลสิทธิในความเป็นส่วนตัวและเสรีภาพในข้อมูลส่วนบุคคลของผู้เจ้าของข้อมูลและพัฒนาปรับปรุงนโยบายระเบียบปฏิบัติของ บริษัทให้ต่อเนื่องสืบไปเพื่อให้เป็นไปตามนโยบายการคุ้มครองข้อมูลส่วนบุคคลบริษัทจึงขอประกาศนโยบาย ดังนี้'
     },
 
-    relation_detail: []
+    relation_detail: [],
+    congenital_disease_list: ''
 
   },
   mutations: {
@@ -120,8 +121,9 @@ const profileModules = {
     SetRelationDetail(state, payload) {
       state.relation_detail = payload
     },
-
-
+    SetCongenital(state, payload) {
+      state.congenital_disease_list = payload
+    },
 
   },
   actions: {
@@ -136,7 +138,12 @@ const profileModules = {
         }
         const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/class`, config)
         if (data.statusCode === 200) {
-          // console.log(data.data)
+          console.log(data.data)
+          data.data.push({
+            classId: null,
+            classNameTh: "อื่นๆ",
+            classNameEn: "Other"
+          })
           context.commit("SetClass", data.data)
         }
       } catch (error) {
@@ -212,7 +219,6 @@ const profileModules = {
           }
         }
         // let localhost = "http://localhost:3000"
-
         // let { data } = await axios.get(`${localhost}/api/v1/profile/${account_id}`, config)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/profile/${account_id}`, config)
         let roles = {
@@ -278,6 +284,26 @@ const profileModules = {
         console.log(error);
       }
     },
+    async GetCongenital(context) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000";
+        // let { data } = await axios.get(`${localhost}/api/v1/congenitalDisease `, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/congenitalDisease `, config)
+
+        if (data.statusCode === 200) {
+          context.commit("SetCongenital", data.data)
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
 
   },
   getters: {
@@ -304,6 +330,9 @@ const profileModules = {
     },
     classList(state) {
       return state.class_list
+    },
+    getCongenital(state) {
+      return state.congenital_disease_list
     }
 
   },

@@ -33,6 +33,7 @@ const coachModules = {
     courses_option: {},
     course_coach_list: [],
     calendar_coach: [],
+    studentCheckInLoading: false,
     // filter_leave_data: []
 
   },
@@ -111,6 +112,9 @@ const coachModules = {
     },
     SetCalendarCoach(state, payload) {
       state.calendar_coach = payload
+    },
+    SetStudentCheckInLoading(state, payload) {
+      state.studentCheckInLoading = payload
     },
   },
   actions: {
@@ -227,7 +231,13 @@ const coachModules = {
           },
         };
         let count = 0
-        for await (const student of students) {
+        let checkinStudent = []
+        for (const item of students) {
+          if (item.check_in_student_id) {
+            checkinStudent.push(item)
+          }
+        }
+        for await (const student of checkinStudent) {
           if (student.assessment.rating_evolution === 3) {
             student.assessment.evolution = "adjust"
           } else if (student.assessment.rating_evolution === 4) {
@@ -277,7 +287,7 @@ const coachModules = {
             }
           }
         }
-        if (count === students.length) {
+        if (count === checkinStudent.length) {
           context.commit("SetStudentCheckInIsLoading", false)
           Swal.fire({
             icon: "success",
@@ -429,12 +439,13 @@ const coachModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        students = students.map(v => {
-          v.compensationDate = v.compensationDate ? moment(new Date(v.compensationDate)).format("YYYY-MM-DD") : ''
-          v.compensationStartTime = v.compensationStartTime ? moment(v.compensationStartTime).format("HH:mm") : ''
-          v.compensationEndTime = v.compensationEndTime ? moment(v.compensationEndTime).format("HH:mm") : ''
-          return v
+        students = students.map((items) => {
+          items.compensationDate = items.compensationDate ? moment(new Date(items.compensationDate)).format("YYYY-MM-DD") : ''
+          items.compensationStartTime = items.compensationStartTime ? moment(items.compensationStartTime).format("HH:mm") : ''
+          items.compensationEndTime = items.compensationEndTime ? moment(items.compensationEndTime).format("HH:mm") : ''
+          return items
         })
+        // const { data } = await axios.patch(`http://localhost:3000/api/v1/checkin/studentall`, students, config)
         const { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/checkin/studentall`, students, config)
         if (data.statusCode == 200) {
           context.commit("SetStudentCheckInIsLoading", false)
@@ -491,6 +502,7 @@ const coachModules = {
       }
     },
     async GetStudentByTimeId(context, { course_id, date, time_id }) {
+      context.commit("SetStudentCheckInLoading", true)
       context.commit("SetStudentCheckIn", [])
       try {
         let config = {
@@ -501,12 +513,24 @@ const coachModules = {
           },
         };
         // let localhost = "http://localhost:3000"
-        // let { data } = await axios.get(`${localhost}/api/v1/coachmanagement/coach/${course_id}/date/${date}`, config)
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${course_id}/date/${date}`, config)
+        // let { data } = await axios.get(`${localhost}/api/v1/coachmanagement/coach/${course_id}/date/${date}/time/${time_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${course_id}/date/${date}/time/${time_id}`, config)
+        // .then(async(result)=>{
+        //   if (result.data.data.length !== 0 && context.state.coach_check_in?.checkInCoachId) {
+        //     await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/more/student/list?courseId=${course_id}&date=${date}&timeId=${time_id}`,null, config)
+        //     // await axios.patch(`${localhost}/api/v1/coachmanagement/more/student/list?courseId=${course_id}&date=${date}&timeId=${time_id}`,null, config)
+        //     return await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${course_id}/date/${date}`, config)
+        //     // return await axios.get(`${localhost}/api/v1/coachmanagement/coach/${course_id}/date/${date}`, config)
+        //   } else {
+        //     return result
+        //   }
+        // })
+        console.log('coach_check_in', context.state.coach_check_in)
+        console.log('data : =>', data)
         if (data.statusCode === 200) {
-          // console.log(data.data)
           let i = 1
-          for await (let student of data.data) {
+
+          data.data.map((student) => {
             student.no = i
             student.fullname = `${student.firstNameTh} ${student.lastNameTh}`
             student.fullname_en = `${student.firstNameEn} ${student.lastNameEn}`
@@ -518,15 +542,20 @@ const coachModules = {
             student.compensationEndTime = student.compensationEndTime ? moment(student.compensationEndTime, "HH:mm") : null
             student.files = []
             student.potentialfiles = []
-            // student.status = 'punctual'
+            student.status ? student.status : student.status = 'punctual'
+            // student.status = student.status && student.status !== "" ? student.status : 'punctual'
             i = i + 1
-          }
-          await context.commit("SetStudentCheckIn", data.data.filter(v => v.timeId === time_id))
+          })
+          console.log('data.data', data.data)
+          await context.commit("SetStudentCheckIn", data.data)
+          context.commit("SetStudentCheckInLoading", false)
         }
       } catch (error) {
         console.log(error)
+        context.commit("SetStudentCheckInLoading", false)
       }
     },
+
     async CheckInCoach(context, { course_id, time_id, date, type, time_start, time_end }) {
       context.commit("SetCoachCheckInIsLoading", true)
       try {
@@ -539,6 +568,7 @@ const coachModules = {
         };
         let user_detail = JSON.parse(localStorage.getItem("userDetail"));
         // let loaclhost = "http://localhost:3000"
+        // const { data } = await axios.post(`http://localhost:3000/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}`, {
         const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}`, {
           "date": date,
           "timeId": time_id,
@@ -984,7 +1014,10 @@ const coachModules = {
         };
         let courses_task = []
         // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`http://localhost:3000/api/v1/schedule/coach-calendar?startDate=${start_date}&endDate=${end_date}`, config)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/coach-calendar?startDate=${start_date}&endDate=${end_date}`, config)
+
+        console.log('data =>', data)
         if (data.statusCode == 200) {
           let holidays = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
           if (holidays.data.statusCode === 200) {
@@ -1068,6 +1101,9 @@ const coachModules = {
     },
     getCalendarCoach(state) {
       return state.calendar_coach
+    },
+    getStudentCheckInLoading(state) {
+      return state.studentCheckInLoading
     },
 
   },

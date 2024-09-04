@@ -1,6 +1,7 @@
 <template>
   <v-app>
     {{ setFunctios }}
+    <loading-overlay :loading="studentCheckInLoading"></loading-overlay>
     <v-container>
       <v-card flat>
         <v-card-text class="bg-[#FBF3F5] border">
@@ -137,19 +138,15 @@
               >
             </v-col>
           </v-row>
+          <!-- <pre>
+            student_check_in : {{ student_check_in }}
+            coach_check_in :{{ coach_check_in }}
+          </pre> -->
           <v-card elevation="1" class="mb-2">
             <v-form v-model="validate_form" ref="validate_form">
               <v-data-table
                 class="header-table border"
-                :items="
-                  coach_check_in.checkInCoachId
-                    ? student_check_in.filter((v) =>
-                        v.cpo?.packageName
-                          ? v.cpo.packageName === package_name_filter
-                          : true
-                      )
-                    : []
-                "
+                :items="coach_check_in.checkInCoachId ? student_check_in : []"
                 item-key="no"
                 :expanded.sync="expanded_index"
                 :headers="headers"
@@ -167,7 +164,7 @@
                       ? item.nicknameTh
                       : item.nicknameEn
                       ? item.nicknameEn
-                      : item.nicknameTh
+                      : "-"
                   }}
                 </template>
                 <template v-slot:[`item.class`]="{ item }">
@@ -176,7 +173,7 @@
                       ? item.classNameTh
                       : item.classNameEn
                       ? item.classNameEn
-                      : item.classNameTh
+                      : "-"
                   }}
                 </template>
 
@@ -423,11 +420,17 @@
                     (v) =>
                       v.type === 'general' &&
                       (v.status == 'punctual' ||
-                        v.status == 'late' ||
-                        v.status == 'emergency leave')
+                        v.status == 'late')
                   ).length > 0
                 "
               >
+                <!-- v-for="(student, index_student) in student_check_in.filter(
+                    (v) =>
+                      v.type === 'general' &&
+                      (v.status == 'punctual' ||
+                        v.status == 'late' ||
+                        v.status == 'emergency leave')
+                  )" -->
                 <v-card
                   class="mb-2"
                   flat
@@ -435,9 +438,7 @@
                   v-for="(student, index_student) in student_check_in.filter(
                     (v) =>
                       v.type === 'general' &&
-                      (v.status == 'punctual' ||
-                        v.status == 'late' ||
-                        v.status == 'emergency leave')
+                      (v.status === 'punctual' || v.status === 'late')
                   )"
                   :key="`${index_student}-student`"
                 >
@@ -1537,6 +1538,7 @@ export default {
       student_check_in: "CoachModules/getStudentCheckIn",
       coach_check_in_is_loading: "CoachModules/getCoachCheckInIsLoading",
       student_check_in_is_loading: "CoachModules/getStudentCheckInIsLoading",
+      studentCheckInLoading: "CoachModules/getStudentCheckInLoading",
     }),
     start_time() {
       return [(val) => !!val || this.$t("please specify start time")];
@@ -1829,6 +1831,7 @@ export default {
       );
     },
     async saveSummary(items) {
+      console.log("saveSummary อันนี้แหละ");
       let student_id = [];
       await items.map((val) => {
         student_id.push({ studentId: val.studentId });
@@ -2059,6 +2062,7 @@ export default {
     },
     checkIn() {
       if (!this.coach_check_in.checkInCoachId) {
+        console.log("checkIn อันนี้", this.course_data);
         Swal.fire({
           icon: "question",
           title: this.$t("want to invest time in teaching?"),
@@ -2075,7 +2079,8 @@ export default {
               time_id: this.$route.params.timeId,
               time_start: this.$route.params.timeStart,
               time_end: this.$route.params.timeEnd,
-              type: this.$route.params.typeEvent,
+              type: this.course_data.course_type_id,
+              // type: this.$route.params.typeEvent,
             }).then(async () => {
               await this.GetCoachCheckIn({
                 course_id: this.$route.params.courseId,

@@ -575,7 +575,17 @@
                           $t("coach list")
                         }}</v-col>
                         <v-col cols="auto">
-                          <v-text-field
+                          <v-btn
+                            color="#ff6b81"
+                            @click="searchStudentList"
+                            prepend-inner-icon="mdi-magnify"
+                            dark
+                          >
+                            <v-icon dark> mdi-magnify </v-icon>
+
+                            {{ $t("search for student name, coach name") }}
+                          </v-btn>
+                          <!-- <v-text-field
                             class="bg-white rounded-lg"
                             v-model="search_student_list"
                             dense
@@ -586,7 +596,7 @@
                             "
                             prepend-inner-icon="mdi-magnify"
                             @input="searchStudentList(search_student_list)"
-                          ></v-text-field>
+                          ></v-text-field> -->
                         </v-col>
                       </v-row>
                     </v-card-text>
@@ -1079,7 +1089,23 @@
                                                     student.totalDay
                                                   }}
                                                 </v-col>
-                                                <v-col cols>
+                                                <v-col
+                                                  cols
+                                                  v-if="!student.status"
+                                                >
+                                                  <v-chip
+                                                    color="orange"
+                                                    outlined
+                                                  >
+                                                    {{
+                                                      $t(
+                                                        "no status has been selected yet"
+                                                      )
+                                                    }}
+                                                  </v-chip>
+                                                </v-col>
+                                                <v-col cols v-else>
+                                                  <!-- {{ pre$t(student.status) }} -->
                                                   <v-chip
                                                     align="center"
                                                     class="font-bold"
@@ -1431,7 +1457,17 @@
                           $t("coach list")
                         }}</v-col>
                         <v-col cols="auto">
-                          <v-text-field
+                          <v-btn
+                            color="#ff6b81"
+                            @click="searchStudentPotential"
+                            prepend-inner-icon="mdi-magnify"
+                            dark
+                          >
+                            <v-icon dark> mdi-magnify </v-icon>
+
+                            {{ $t("search for student name, coach name") }}
+                          </v-btn>
+                          <!-- <v-text-field
                             v-model="search_student_potential"
                             class="bg-white rounded-lg"
                             dense
@@ -1444,7 +1480,7 @@
                             @input="
                               searchStudentPotential(search_student_potential)
                             "
-                          ></v-text-field>
+                          ></v-text-field> -->
                         </v-col>
                       </v-row>
                     </v-card-text>
@@ -2303,6 +2339,18 @@
           </v-card-text>
         </v-card>
       </v-dialog>
+      <!-- dialog search student_list -->
+      <student-in-course
+        v-if="studentListDialog"
+        :statusBool="studentListDialog"
+        :courseId="course_data.course_id"
+        :studentType="
+          inpotentialBool
+            ? (studentType = 'inpotential')
+            : (studentType = 'potential')
+        "
+        @input="studentListDialog = $event"
+      ></student-in-course>
     </v-container>
   </v-app>
 </template>
@@ -2315,6 +2363,7 @@ import HeaderPage from "@/components/header/headerPage.vue";
 import headerCard from "@/components/header/headerCard.vue";
 import ImgCard from "@/components/course/imgCard.vue";
 import loadingOverlay from "@/components/loading/loadingOverlay.vue";
+import studentInCourse from "@/components/students/studentInCourse.vue";
 import Swal from "sweetalert2";
 import { CheckFileSize, dateDMY, dateFormatter } from "@/functions/functions";
 import imgFileType from "@/components/file_type/imgFileType.vue";
@@ -2331,6 +2380,7 @@ export default {
     headerCard,
     loadingOverlay,
     imgFileType,
+    studentInCourse,
   },
   mixins: [mixin],
   data: () => ({
@@ -2414,6 +2464,9 @@ export default {
     show_dialog_export_student: false,
     show_dialog_export_end_student: false,
     show_dialog_export_reserve_student: false,
+    studentListDialog: false,
+    inpotentialBool: false,
+    studentType: "",
   }),
   mounted() {},
 
@@ -2649,59 +2702,67 @@ export default {
         : !this.coach_list.filter((v) => v.studentPotentialArr?.length > 0)
             .length > 0;
     },
-    searchStudentPotential(search) {
-      let coach_list_search = [];
-      const regex = new RegExp(search.trim(), "i");
-      for (let coach of this.coach_list.filter(
-        (v) => v.studentPotentialArr.length > 0
-      )) {
-        const coach_full_name = `${coach.coachNmae}`;
-        if (coach_full_name.search(regex) > -1) {
-          coach_list_search.push(coach);
-        }
-        for (let student of coach.studentPotentialArr) {
-          const student_full_name = `${student.firstNameTh} ${student.lastNameTh}`;
-          if (student_full_name.search(regex) > -1) {
-            if (
-              coach_list_search.filter((v) => v.coachId === coach.coachId)
-                .length === 0
-            ) {
-              coach_list_search.push(coach);
-            }
-          }
-        }
-      }
-      (this.selected_coach = ""),
-        (this.selected_schedule = ""),
-        (this.selected_coach_potential = null);
-      this.search_student_potential_datas = coach_list_search;
+    // searchStudentPotential(search) {
+    //   let coach_list_search = [];
+    //   const regex = new RegExp(search.trim(), "i");
+    //   for (let coach of this.coach_list.filter(
+    //     (v) => v.studentPotentialArr.length > 0
+    //   )) {
+    //     const coach_full_name = `${coach.coachNmae}`;
+    //     if (coach_full_name.search(regex) > -1) {
+    //       coach_list_search.push(coach);
+    //     }
+    //     for (let student of coach.studentPotentialArr) {
+    //       const student_full_name = `${student.firstNameTh} ${student.lastNameTh}`;
+    //       if (student_full_name.search(regex) > -1) {
+    //         if (
+    //           coach_list_search.filter((v) => v.coachId === coach.coachId)
+    //             .length === 0
+    //         ) {
+    //           coach_list_search.push(coach);
+    //         }
+    //       }
+    //     }
+    //   }
+    //   (this.selected_coach = ""),
+    //     (this.selected_schedule = ""),
+    //     (this.selected_coach_potential = null);
+    //   this.search_student_potential_datas = coach_list_search;
+    // },
+    // searchStudentList(search) {
+    //   let coach_list_search = [];
+    //   const regex = new RegExp(search.trim(), "i");
+    //   for (let coach of this.coach_list.filter(
+    //     (v) => v.studentArr.length > 0
+    //   )) {
+    //     const coach_full_name = `${coach.firstNameTh} ${coach.lastNameTh}`;
+    //     if (coach_full_name.search(regex) > -1) {
+    //       coach_list_search.push(coach);
+    //     }
+    //     for (let student of coach.studentArr) {
+    //       const student_full_name = `${student.firstNameTh} ${student.lastNameTh}`;
+    //       if (student_full_name.search(regex) > -1) {
+    //         if (
+    //           coach_list_search.filter((v) => v.coachId === coach.coachId)
+    //             .length === 0
+    //         ) {
+    //           coach_list_search.push(coach);
+    //         }
+    //       }
+    //     }
+    //   }
+    //   (this.selected_coach = ""),
+    //     (this.selected_schedule = ""),
+    //     (this.selected_coach_potential = null);
+    //   this.search_student_datas = coach_list_search;
+    // },
+    searchStudentPotential() {
+      this.studentListDialog = true; // Set to true only once
+      this.inpotentialBool = false;
     },
-    searchStudentList(search) {
-      let coach_list_search = [];
-      const regex = new RegExp(search.trim(), "i");
-      for (let coach of this.coach_list.filter(
-        (v) => v.studentArr.length > 0
-      )) {
-        const coach_full_name = `${coach.firstNameTh} ${coach.lastNameTh}`;
-        if (coach_full_name.search(regex) > -1) {
-          coach_list_search.push(coach);
-        }
-        for (let student of coach.studentArr) {
-          const student_full_name = `${student.firstNameTh} ${student.lastNameTh}`;
-          if (student_full_name.search(regex) > -1) {
-            if (
-              coach_list_search.filter((v) => v.coachId === coach.coachId)
-                .length === 0
-            ) {
-              coach_list_search.push(coach);
-            }
-          }
-        }
-      }
-      (this.selected_coach = ""),
-        (this.selected_schedule = ""),
-        (this.selected_coach_potential = null);
-      this.search_student_datas = coach_list_search;
+    searchStudentList() {
+      this.studentListDialog = true; // Set to true only once
+      this.inpotentialBool = true;
     },
     resetFilter() {
       this.filter = {
@@ -3273,3 +3334,4 @@ export default {
 };
 </script>
 <style></style>
+// course Detail

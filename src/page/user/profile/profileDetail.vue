@@ -64,16 +64,15 @@
           <v-text-field
             placeholder="-"
             v-model="profile_detail.lastNameTh"
-            :rules="rules.lastNameThRules"
             outlined
             dense
+            :rules="rules.lastNameThRules"
             :disabled="!isEnabled"
             color="#ff6b81"
             @keydown="validate($event, 'th-special')"
           >
           </v-text-field>
         </v-col>
-        <pre></pre>
         <!-- nickname -->
         <v-col cols="12" sm="6">
           <label-custom :text="$t('nickname')"></label-custom>
@@ -135,7 +134,7 @@
         <!-- nickname -->
         <v-col cols="12" sm="6">
           <label-custom :text="$t('school')"></label-custom>
-          <!-- <v-text-field
+          <v-text-field
             placeholder="-"
             v-model="profile_detail.school.schoolNameTh"
             outlined
@@ -143,9 +142,9 @@
             color="#ff6b81"
             :disabled="!isEnabled"
           >
-          </v-text-field> -->
+          </v-text-field>
           <!-- schoolList -->
-          <v-combobox
+          <!-- <v-combobox
             v-model="profile_detail.school.schoolNameTh"
             :items="class_list"
             item-text="classNameTh"
@@ -161,42 +160,23 @@
                 {{ $t("data not found") }}
               </v-list-item>
             </template>
-          </v-combobox>
+          </v-combobox> -->
         </v-col>
-        <!-- {{ profile_detail.userRoles }} -->
         <v-col
           cols="12"
           sm="6"
           v-if="profile_detail?.userRoles?.roleId === 'R_5'"
         >
           <label-custom :text="$t('class')"></label-custom>
-          <v-combobox
-            v-model="profile_detail.class.classNameTh"
+          <v-autocomplete
+            v-model="selectedClass"
             :items="class_list"
-            item-text="classNameTh"
-            dense
-            outlined
-            color="#ff6B81"
-            item-color="#ff6b81"
-            :placeholder="$t('select class')"
-            :rules="rules.class"
-            :disabled="!isEnabled"
-          >
-            <template #no-data>
-              <v-list-item>
-                {{ $t("data not found") }}
-              </v-list-item>
-            </template>
-          </v-combobox>
-
-          <!-- <v-autocomplete
-            v-model="profile_detail.class.classNameTh"
-            :items="class_list"
+            item-value="classNameTh"
             item-text="classNameTh"
             color="#ff6B81"
             item-color="#ff6b81"
             outlined
-            :rules="rules.class"
+            :rules="!selectedClass.classNameTh ? rules.class : ''"
             :disabled="!isEnabled"
             dense
           >
@@ -205,11 +185,31 @@
                 {{ $t("data not found") }}
               </v-list-item>
             </template>
-          </v-autocomplete> -->
+          </v-autocomplete>
+        </v-col>
+        <v-col
+          cols="12"
+          sm="6"
+          v-if="
+            profile_detail?.userRoles?.roleId === 'R_5' &&
+            selectedClass === 'อื่นๆ'
+          "
+        >
+          <label-custom :text="$t('please enter your class')"></label-custom>
+          <v-text-field
+            v-model="otherClass"
+            placeholder="-"
+            outlined
+            color="#ff6b81"
+            dense
+            :rules="rules.class"
+            :disabled="!isEnabled"
+          >
+          </v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
           <label-custom :text="$t('congenital disease')"></label-custom>
-          <!-- <v-text-field
+          <v-text-field
             placeholder="-"
             v-model="profile_detail.congenitalDisease"
             outlined
@@ -217,12 +217,12 @@
             color="#ff6b81"
             :disabled="!isEnabled"
           >
-          </v-text-field> -->
+          </v-text-field>
           <!-- AllergiesList -->
-          <v-combobox
+          <!-- <v-combobox
             v-model="profile_detail.congenitalDisease"
-            :items="class_list"
-            item-text="classNameTh"
+            :items="congenital_list"
+            item-text="diseaseNameTh"
             dense
             outlined
             color="#ff6B81"
@@ -235,7 +235,7 @@
                 {{ $t("data not found") }}
               </v-list-item>
             </template>
-          </v-combobox>
+          </v-combobox> -->
         </v-col>
         <!-- BTN -->
       </v-row>
@@ -341,6 +341,9 @@ export default {
     nation: "",
     mobileNo: "",
     email: "",
+    selectedClass: null,
+    otherClass: "",
+    checkTrue: true,
   }),
   beforeRouteLeave(to, from, next) {
     if (
@@ -356,12 +359,22 @@ export default {
   async created() {
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     await this.GetClassList();
+    this.selectedClass = await this.profile_detail.class;
   },
-  mounted() {
-    this.$store.dispatch(
+  async mounted() {
+    await this.$store.dispatch(
       "NavberUserModules/changeTitleNavber",
       "personal information"
     );
+    this.selectedClass = await this.profile_detail.class;
+  },
+  watch: {
+    async selectedClass(newValue) {
+      // this.selectedClass = await this.profile_detail.class;
+      if (newValue !== "อื่นๆ") {
+        this.otherClass = "";
+      }
+    },
   },
 
   methods: {
@@ -372,6 +385,7 @@ export default {
       GetAll: "ProfileModules/GetAll",
       GetProfileDetail: "ProfileModules/GetProfileDetail",
       changeProfileFail: "loginModules/changeProfileFail",
+      GetCongenital: "ProfileModules/GetCongenital",
     }),
     // getErrorMessage(text, language) {
     //   const thaiPattern =
@@ -412,7 +426,225 @@ export default {
     closeDialogPorfile(value) {
       this.changeProfileFail(value);
     },
-    submitEdit() {
+    // async submitEdit() {
+    //   if (this.$refs.form.validate()) {
+    //     Swal.fire({
+    //       icon: "question",
+    //       title: this.$t("do you want to edit your profile information?"),
+    //       showDenyButton: false,
+    //       showCancelButton: true,
+    //       confirmButtonText: this.$t("agree"),
+    //       cancelButtonText: this.$t("cancel"),
+    //     }).then(async (result) => {
+    //       if (result.isConfirmed) {
+    //         try {
+    //           this.is_loading = true;
+    //           let config = {
+    //             headers: {
+    //               "Access-Control-Allow-Origin": "*",
+    //               "Content-type": "Application/json",
+    //               Authorization: `Bearer ${VueCookie.get("token")}`,
+    //             },
+    //           };
+
+    //           // Extract the classNameTh from selectedClass
+    //           let payload = {
+    //             firstNameTh: this.profile_detail.firstNameTh,
+    //             lastNameTh: this.profile_detail.lastNameTh,
+    //             nation: this.profile_detail.nation,
+    //             mobileNo: this.profile_detail.mobileNo,
+    //             email: this.profile_detail.email,
+    //             schoolTh: this.profile_detail.school.schoolNameTh,
+    //             nicknameTh: this.profile_detail?.nicknameTh
+    //               ? this.profile_detail.nicknameTh
+    //               : "",
+    //             congenitalDiseaseTh: this.profile_detail?.congenitalDisease
+    //               ? this.profile_detail.congenitalDisease
+    //               : "",
+    //             className:
+    //               this.selectedClass?.classNameTh || this.selectedClass,
+    //           };
+
+    //           this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+    //           let user_account_id = this.user_detail.account_id;
+
+    //           let payloadData = new FormData();
+    //           payloadData.append("payload", JSON.stringify(payload));
+    //           if (this.image_profile.name) {
+    //             payloadData.append("imageProfile", this.image_profile);
+    //           }
+
+    //           let { data } = await axios.patch(
+    //             `${process.env.VUE_APP_URL}/api/v1/profile/${user_account_id}`,
+    //             payloadData,
+    //             config
+    //           );
+
+    //           if (data.statusCode === 200) {
+    //             let data_storage = JSON.parse(
+    //               localStorage.getItem("userDetail")
+    //             );
+    //             data_storage.first_name_th = data.data.firstNameTh;
+    //             data_storage.last_name_th = data.data.lastNameTh;
+    //             data_storage.image = `${data.data.image}`;
+    //             localStorage.setItem(
+    //               "userDetail",
+    //               JSON.stringify(data_storage)
+    //             );
+    //             await this.GetProfileDetail(this.$route.params.profile_id);
+
+    //             this.is_loading = false;
+    //             this.preview_file = "";
+    //             this.dialog_show = true;
+    //             this.isDisabled = true;
+    //             this.isEnabled = false;
+    //             this.buttonName = this.$t("edit");
+    //             document.getElementById("fileInput").value = "";
+    //             Swal.fire({
+    //               icon: "success",
+    //               title: this.$t("succeed"),
+    //               text: this.$t("profile has been edited"),
+    //               showDenyButton: false,
+    //               showCancelButton: false,
+    //               showConfirmButton: false,
+    //               timerProgressBar: true,
+    //               timer: 3000,
+    //             });
+    //             await this.GetClassList();
+    //           } else {
+    //             throw { message: data.message };
+    //           }
+    //         } catch (error) {
+    //           Swal.fire({
+    //             icon: "error",
+    //             title: this.$t("something went wrong"),
+    //             text: error.message,
+    //             timer: 3000,
+    //             timerProgressBar: true,
+    //             showCancelButton: false,
+    //             showConfirmButton: false,
+    //           });
+    //         }
+    //       }
+    //     });
+    //   }
+    // },
+    // async submitEdit() {
+    //   if (this.$refs.form.validate()) {
+    //     Swal.fire({
+    //       icon: "question",
+    //       title: this.$t("do you want to edit your profile information?"),
+    //       showDenyButton: false,
+    //       showCancelButton: true,
+    //       confirmButtonText: this.$t("agree"),
+    //       cancelButtonText: this.$t("cancel"),
+    //     }).then(async (result) => {
+    //       if (result.isConfirmed) {
+    //         try {
+    //           this.is_loading = true;
+    //           let config = {
+    //             headers: {
+    //               "Access-Control-Allow-Origin": "*",
+    //               "Content-type": "Application/json",
+    //               Authorization: `Bearer ${VueCookie.get("token")}`,
+    //             },
+    //           };
+
+    //           let payload = {
+    //             firstNameTh: this.profile_detail.firstNameTh,
+    //             lastNameTh: this.profile_detail.lastNameTh,
+    //             nation: this.profile_detail.nation,
+    //             mobileNo: this.profile_detail.mobileNo,
+    //             email: this.profile_detail.email,
+    //             schoolTh: this.profile_detail.school.schoolNameTh,
+    //             nicknameTh: this.profile_detail?.nicknameTh
+    //               ? this.profile_detail.nicknameTh
+    //               : "",
+    //             congenitalDiseaseTh: this.profile_detail?.congenitalDisease
+    //               ? this.profile_detail.congenitalDisease
+    //               : "",
+    //             // className: this.profile_detail?.class?.classNameTh
+    //             //   ? this.profile_detail.class.classNameTh
+    //             //   : "",
+    //             className: this.otherClass
+    //               ? this.otherClass
+    //               : this.selectedClass?.classNameTh,
+    //             // className:
+    //             //   this.selectedClass?.classNameTh || this.selectedClass,
+    //           };
+
+    //           this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+    //           let user_account_id = this.user_detail.account_id;
+
+    //           let payloadData = new FormData();
+    //           payloadData.append("payload", JSON.stringify(payload));
+    //           if (this.image_profile.name) {
+    //             payloadData.append("imageProfile", this.image_profile);
+    //           }
+    //           // let localhost = "http://localhost:3000";
+    //           let { data } = await axios.patch(
+    //             // `${localhost}/api/v1/profile/${user_account_id}`,
+    //             `${process.env.VUE_APP_URL}/api/v1/profile/${user_account_id}`,
+    //             payloadData,
+    //             config
+    //           );
+    //           if (data.statusCode === 200) {
+    //             let data_storage = JSON.parse(
+    //               localStorage.getItem("userDetail")
+    //             );
+    //             data_storage.first_name_th = data.data.firstNameTh;
+    //             data_storage.last_name_th = data.data.lastNameTh;
+    //             data_storage.image = `${data.data.image}`;
+    //             localStorage.setItem(
+    //               "userDetail",
+    //               JSON.stringify(data_storage)
+    //             );
+    //             this.is_loading = false;
+    //             this.preview_file = "";
+    //             this.dialog_show = true;
+    //             this.isDisabled = true;
+    //             this.isEnabled = false;
+    //             this.buttonName = this.$t("edit");
+    //             document.getElementById("fileInput").value = "";
+    //             // Swal.fire({
+    //             //   icon: "success",
+    //             //   title: "แก้ไขโปรไฟล์สำเร็จ 55",
+    //             //   timer: 3000,
+    //             // });
+    //             Swal.fire({
+    //               icon: "success",
+    //               title: this.$t("succeed"),
+    //               text: this.$t("profile has been edited"),
+    //               showDenyButton: false,
+    //               showCancelButton: false,
+    //               showConfirmButton: false,
+    //               timerProgressBar: true,
+    //               timer: 3000,
+    //             });
+    //             await this.GetProfileDetail(this.$route.params.profile_id);
+
+    //             await this.GetClassList();
+    //             // this.checkTrue
+    //           } else {
+    //             throw { message: data.message };
+    //           }
+    //         } catch (error) {
+    //           Swal.fire({
+    //             icon: "error",
+    //             title: this.$t("something went wrong"),
+    //             text: error.message,
+    //             timer: 3000,
+    //             timerProgressBar: true,
+    //             showCancelButton: false,
+    //             showConfirmButton: false,
+    //           });
+    //         }
+    //       }
+    //     });
+    //   }
+    // },
+
+    async submitEdit() {
       if (this.$refs.form.validate()) {
         Swal.fire({
           icon: "question",
@@ -432,6 +664,12 @@ export default {
                   Authorization: `Bearer ${VueCookie.get("token")}`,
                 },
               };
+              console.log("this.otherClass :>> ", this.otherClass);
+              console.log(
+                "this.selectedClass?.classNameTh :>> ",
+                this.selectedClass
+              );
+              console.log("this.profile_detail :>> ", this.profile_detail);
 
               let payload = {
                 firstNameTh: this.profile_detail.firstNameTh,
@@ -446,9 +684,12 @@ export default {
                 congenitalDiseaseTh: this.profile_detail?.congenitalDisease
                   ? this.profile_detail.congenitalDisease
                   : "",
-                className: this.profile_detail?.class?.classNameTh
-                  ? this.profile_detail.class.classNameTh
-                  : "",
+                className:
+                  this.profile_detail?.userRoles?.roleId == "R_5"
+                    ? this.otherClass
+                      ? this.otherClass
+                      : this.selectedClass?.classNameTh || this.selectedClass
+                    : "",
               };
 
               this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
@@ -459,10 +700,8 @@ export default {
               if (this.image_profile.name) {
                 payloadData.append("imageProfile", this.image_profile);
               }
-              // let localhost = "http://localhost:3000";
 
               let { data } = await axios.patch(
-                // `${localhost}/api/v1/profile/${user_account_id}`,
                 `${process.env.VUE_APP_URL}/api/v1/profile/${user_account_id}`,
                 payloadData,
                 config
@@ -478,8 +717,6 @@ export default {
                   "userDetail",
                   JSON.stringify(data_storage)
                 );
-                this.GetProfileDetail(this.$route.params.profile_id);
-
                 this.is_loading = false;
                 this.preview_file = "";
                 this.dialog_show = true;
@@ -487,11 +724,7 @@ export default {
                 this.isEnabled = false;
                 this.buttonName = this.$t("edit");
                 document.getElementById("fileInput").value = "";
-                // Swal.fire({
-                //   icon: "success",
-                //   title: "แก้ไขโปรไฟล์สำเร็จ 55",
-                //   timer: 3000,
-                // });
+
                 Swal.fire({
                   icon: "success",
                   title: this.$t("succeed"),
@@ -502,6 +735,22 @@ export default {
                   timerProgressBar: true,
                   timer: 3000,
                 });
+
+                await this.GetProfileDetail(this.$route.params.profile_id);
+                await this.GetClassList();
+
+                // If `otherClass` is not empty, add it to `class_list` if it's not already there
+                if (
+                  this.otherClass &&
+                  !this.class_list.includes(this.otherClass)
+                ) {
+                  this.class_list.push(this.otherClass);
+                }
+
+                // Set `selectedClass` to `otherClass` if `otherClass` is filled
+                if (this.otherClass) {
+                  this.selectedClass = this.otherClass;
+                }
               } else {
                 throw { message: data.message };
               }
@@ -589,6 +838,7 @@ export default {
       profile_user: "ProfileModules/getProfileUser",
       profile_detail: "ProfileModules/getProfileDetail",
       profile_fail: "loginModules/getProfileFail",
+      congenital_list: "ProfileModules/getCongenital",
     }),
     // isButtonDisabled() {
     //   // Disable the button if either input has an error
@@ -746,24 +996,6 @@ export default {
             !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
             this.$t("please enter your thai name"),
         ],
-        // firstNameEnRules: [
-        //   (val) =>
-        //     (val || "").length > 1 ||
-        //     this.$t(
-        //       "please enter your name (english), at least 2 characters long"
-        //     ),
-        //   (val) =>
-        //     (val || "").length < 20 ||
-        //     this.$t(
-        //       "please enter your name (english) length not exceeding 20 characters"
-        //     ),
-        //   (val) =>
-        //     /[A-Za-z]/g.test(val) ||
-        //     this.$t("please enter your name in english"),
-        //   (val) =>
-        //     !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-        //     this.$t("please enter your name in english"),
-        // ],
         lastNameThRules: [
           (val) =>
             (val || "").length > 1 ||
@@ -775,9 +1007,6 @@ export default {
             this.$t(
               "please enter your last name (Thai) not more than 20 characters"
             ),
-          (val) =>
-            val.split(" ").length <= 1 ||
-            this.$t("please enter your last name in thai"),
           (val) =>
             /[ก-๏\s]/g.test(val) ||
             this.$t("please enter your last name in thai"),
@@ -826,16 +1055,6 @@ export default {
         class: [
           (val) =>
             (val || "").length > 1 || this.$t("please select your class"),
-          // (val) =>
-          //   (val || "").length < 20 ||
-          //   this.$t(
-          //     "please enter your nickName length not exceeding 20 characters"
-          //   ),
-          // (val) =>
-          //   /[ก-๏\s]/g.test(val) || this.$t("please enter your thai name"),
-          // (val) =>
-          //   !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
-          //   this.$t("please enter your thai name"),
         ],
         confirm_password: (val) =>
           (val && val.length > 7) ||

@@ -420,7 +420,7 @@
           </div>
         </div>
       </v-expand-x-transition>
-
+      
       <!-- PAGE 2 -->
       <v-expand-x-transition transition="scale-transition">
         <div v-if="$route.params.action == 'MySchedule'">

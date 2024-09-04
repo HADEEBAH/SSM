@@ -239,6 +239,8 @@
         </v-col>
         <v-col cols="12" sm="6">
           <labelCustom required :text="$t('class')"></labelCustom>
+          <!-- :disabled="profile_detail.class.classNameTh !== ''" -->
+
           <v-autocomplete
             v-model="course_order.students.find((v) => !v.is_other).class"
             :items="class_list"
@@ -247,12 +249,12 @@
             color="#ff6B81"
             item-color="#ff6b81"
             dense
-            :disabled="profile_detail.class.classNameTh !== ''"
             @input="
               realtimeCheckClass(
                 course_order.students.find((v) => !v.is_other).class
               )
             "
+            :disabled="profile_detail.class.classNameTh !== ''"
           >
             <template #no-data>
               <v-list-item>
@@ -260,6 +262,26 @@
               </v-list-item>
             </template>
           </v-autocomplete>
+        </v-col>
+        <v-col
+          cols="12"
+          sm="6"
+          v-if="
+            course_order.students.find((v) => !v.is_other).class === 'อื่นๆ'
+          "
+        >
+          <labelCustom
+            required
+            :text="$t('please enter your class')"
+          ></labelCustom>
+          <v-text-field
+            v-model="myCheckClassData"
+            placeholder="-"
+            outlined
+            color="#ff6b81"
+            dense
+          >
+          </v-text-field>
         </v-col>
       </v-row>
       <!-- Apply For Others -->
@@ -619,6 +641,8 @@
                 </v-col>
                 <v-col cols="12" sm="6" v-if="student.role === 'R_5'">
                   <labelCustom required :text="$t('class')"></labelCustom>
+                  <!-- :disabled="student?.classData" -->
+
                   <v-autocomplete
                     v-model="student.class"
                     :items="class_list"
@@ -627,8 +651,8 @@
                     item-color="#ff6b81"
                     outlined
                     dense
-                    :disabled="student?.classData"
                     @input="realtimeCheckClass(student.class)"
+                    :disabled="student?.classData"
                   >
                     <template #no-data>
                       <v-list-item>
@@ -636,6 +660,20 @@
                       </v-list-item>
                     </template>
                   </v-autocomplete>
+                </v-col>
+                <v-col cols="12" sm="6" v-if="student.class === 'อื่นๆ'">
+                  <labelCustom
+                    required
+                    :text="$t('please enter your class')"
+                  ></labelCustom>
+                  <v-text-field
+                    v-model="otherCheckClassData"
+                    placeholder="-"
+                    outlined
+                    color="#ff6b81"
+                    dense
+                  >
+                  </v-text-field>
                 </v-col>
               </v-row>
             </template>
@@ -1102,6 +1140,8 @@ export default {
     chaeckConditions: false,
     inputClass: "",
     inputNickName: "",
+    myCheckClassData: "",
+    otherCheckClassData: "",
   }),
   async created() {
     this.order_data = JSON.parse(localStorage.getItem("Order"));
@@ -1121,6 +1161,15 @@ export default {
       this.course_order.coach_id = null;
       this.coachSelect = false;
     },
+
+    "course_order.students.find((v) => !v.is_other).class": function (
+      newClass
+    ) {
+      if (newClass !== "อื่นๆ") {
+        (this.myCheckClassData = ""), (this.otherCheckClassData = ""); // Reset checkClassData if class is not 'อื่นๆ'
+      }
+    },
+
     "course_order.apply_for_parent": function () {
       if (this.course_order.apply_for_parent) {
         this.course_order.students.push({
@@ -1418,6 +1467,9 @@ export default {
     },
     realtimeCheckClass(items) {
       this.inputClass = items;
+      if (items !== "อื่นๆ") {
+        (this.myCheckClassData = ""), (this.otherCheckClassData = "");
+      }
     },
     checkRoleParent() {
       return ["R_4", ""].includes(this.profile_detail.userRoles.roleId);
@@ -1944,11 +1996,35 @@ export default {
         roles = items?.roles?.roleId;
       }
 
+      // if (
+      //   (roles !== "R_5" && yourself === false && checkNickname) ||
+      //   (roles === "R_5" && checkNickname && checkClass) ||
+      //   (roles === undefined && checkNickname) ||
+      //   (yourself === true && checkNickname && checkClass)
+      // )
       if (
         (roles !== "R_5" && yourself === false && checkNickname) ||
-        (roles === "R_5" && checkNickname && checkClass) ||
+        (roles === "R_5" &&
+          checkNickname &&
+          checkClass &&
+          checkClass !== "อื่นๆ") ||
+        (roles === "R_5" &&
+          checkNickname &&
+          checkClass &&
+          checkClass === "อื่นๆ" &&
+          this.myCheckClassData !== "") ||
+        this.otherCheckClassData !== "" ||
         (roles === undefined && checkNickname) ||
-        (yourself === true && checkNickname && checkClass)
+        (yourself === true &&
+          checkNickname &&
+          checkClass &&
+          checkClass !== "อื่นๆ") ||
+        (yourself === true &&
+          checkNickname &&
+          checkClass &&
+          checkClass === "อื่นๆ" &&
+          this.myCheckClassData !== "") ||
+        this.otherCheckClassData !== ""
       ) {
         if (this.course_order.course_type_id == "CT_1") {
           this.$refs.form_coach.validate();
@@ -2033,7 +2109,12 @@ export default {
                 this.changeOrderData(this.order);
                 if (this.course_order.course_type_id == "CT_1") {
                   if (this.course_order.day && this.course_order.time) {
-                    this.saveOrder({ regis_type: "" });
+                    this.saveOrder({
+                      regis_type: "",
+                      my_data_class: this.myCheckClassData,
+                      othert_data_class: this.otherCheckClassData,
+                      type_checked: yourself,
+                    });
                   } else {
                     Swal.fire({
                       icon: "error",
@@ -2045,7 +2126,12 @@ export default {
                 } else {
                   if (this.check_date?.during == "1") {
                     // สามารถซื้อได้
-                    await this.saveOrder({ regis_type: "" });
+                    await this.saveOrder({
+                      regis_type: "",
+                      my_data_class: this.myCheckClassData,
+                      othert_data_class: this.otherCheckClassData,
+                      type_checked: yourself,
+                    });
                   } else {
                     await Swal.fire({
                       icon: "error",

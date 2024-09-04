@@ -1,6 +1,9 @@
 <template>
   <v-container>
     <headerPage :title="$t('admin check in later')" />
+    <loading-overlay
+      :loading="getUpdateCheckinStudentsIsLoading"
+    ></loading-overlay>
     <v-card class="mb-3" outlined rounded="lg">
       <v-card-text>
         <v-row>
@@ -164,7 +167,7 @@
                     {{ $t("check in teach") }}
                   </v-btn>
                 </v-col>
-                <v-col cols="auto">
+                <!-- <v-col cols="auto">
                   <v-btn
                     icon
                     v-if="schedule.checkedIn == 1"
@@ -174,7 +177,7 @@
                   >
                     <v-icon>mdi-refresh</v-icon>
                   </v-btn>
-                </v-col>
+                </v-col> -->
               </v-row>
             </v-card-text>
           </v-card>
@@ -397,7 +400,7 @@
                           :rules="start_time"
                           :style="`width:${width()}px;`"
                           style="position: absolute; display: block; z-index: 4"
-                          :value="genTime(student.compensationStartTime)"
+                          :value="genTime(student?.compensationStartTime)"
                           @focus="
                             SelectedStartDate(
                               $event,
@@ -424,7 +427,7 @@
                           :rules="end_time"
                           :style="`width:${width()}px;`"
                           style="position: absolute; display: block; z-index: 4"
-                          :value="genTime(student.compensationEndTime)"
+                          :value="genTime(student?.compensationEndTime)"
                           @focus="
                             SelectedStartDate(
                               $event,
@@ -487,10 +490,11 @@ import { Input, TimePicker } from "ant-design-vue";
 import { dateFormatter } from "@/functions/functions";
 import Swal from "sweetalert2";
 // import { inputValidation } from "@/functions/functions";
+import loadingOverlay from "@/components/loading/loadingOverlay.vue";
 
 export default {
   name: "AdminCheckin",
-  components: { headerPage, TimePicker },
+  components: { headerPage, TimePicker, loadingOverlay },
   directives: {
     "ant-input": Input,
   },
@@ -532,6 +536,8 @@ export default {
       time: "adminCheckInModules/time",
       scheduleCheckin: "adminCheckInModules/scheduleCheckin",
       scheduleCheckinIsLoadIng: "adminCheckInModules/scheduleCheckinIsLoadIng",
+      getUpdateCheckinStudentsIsLoading:
+        "adminCheckInModules/getUpdateCheckinStudentsIsLoading",
     }),
     breadcrumbs() {
       return [
@@ -655,9 +661,9 @@ export default {
       }
     },
     filter: {
-      handler(val) {
+      async handler(val) {
         if (val.course && val.coach && val.dayOfWeek && val.time) {
-          this.GetScheduleCheckIn({
+          await this.GetScheduleCheckIn({
             ...val,
             timeStart: this.time.filter((v) => v.timeId === val.time)[0]
               .timeStart,
@@ -774,8 +780,8 @@ export default {
         .click();
     },
     genTime(time) {
-      if (time) {
-        return moment(time).format("HH:mm");
+      if (time && time !== "") {
+        return moment(time, "HH:mm").format("HH:mm");
       } else {
         return "";
       }
@@ -788,31 +794,43 @@ export default {
       this.scheduleCheckin[index].openStudents =
         !this.scheduleCheckin[index].openStudents;
     },
-    CheckedInCoach(checkInData, index) {
-      this.CheckInCoach({ checkInData, index });
+    async CheckedInCoach(checkInData, index) {
+      await this.CheckInCoach({ checkInData, index });
     },
-    // CheckInStudent(checkInStudentId, studentData){
-    //     let payload = {
-    //         compensationDate: "",
-    //         compensationStartTime: "",
-    //         compensationEndTime: "",
-    //     }
-    //     if(studentData.status === "leave" && studentData.compensationDate && studentData.compensationStartTime && studentData.compensationEndTime){
-    //         payload = {
-    //             compensationDate: studentData.compensationDate,
-    //             compensationStartTime: studentData.compensationStartTime,
-    //             compensationEndTime: studentData.compensationEndTime,
-    //         }
-    //         this.UpdateCheckinStudent({checkInStudentId, status : studentData.status , payload})
-    //     }else{
-    //         this.UpdateCheckinStudent({checkInStudentId, status : studentData.status , payload})
-    //     }
-
-    // },
+    CheckInStudent(checkInStudentId, studentData) {
+      let payload = {
+        compensationDate: "",
+        compensationStartTime: "",
+        compensationEndTime: "",
+      };
+      if (
+        studentData.status === "leave" &&
+        studentData.compensationDate &&
+        studentData.compensationStartTime &&
+        studentData.compensationEndTime
+      ) {
+        payload = {
+          compensationDate: studentData.compensationDate,
+          compensationStartTime: studentData.compensationStartTime,
+          compensationEndTime: studentData.compensationEndTime,
+        };
+        this.UpdateCheckinStudent({
+          checkInStudentId,
+          status: studentData.status,
+          payload,
+        });
+      } else {
+        this.UpdateCheckinStudent({
+          checkInStudentId,
+          status: studentData.status,
+          payload,
+        });
+      }
+    },
     // validate(e, type) {
     //   inputValidation(e, type);
     // },
-    saveStudentCheckIn(scheduleData, index) {
+    saveStudentCheckIn(scheduleData) {
       this.$refs.validate_form.validate();
       if (this.validate) {
         Swal.fire({
@@ -831,9 +849,13 @@ export default {
               })
             ) {
               await this.UpdateCheckinStudents({
-                payload: scheduleData.checkInStudent,
+                payload: scheduleData.checkInStudent.map((items) => {
+                  items.date = scheduleData.date.replaceAll("/", "-");
+                  items.courseId = scheduleData.courseId
+                  return items;
+                }),
               });
-              await this.CheckedInCoach(scheduleData, index);
+              // await this.CheckedInCoach(scheduleData, index);
             } else {
               Swal.fire({
                 icon: "warning",

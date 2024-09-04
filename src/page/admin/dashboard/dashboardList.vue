@@ -467,7 +467,7 @@
             </v-card>
           </v-col>
         </v-row>
-
+        
         <v-row dense>
           <v-card-title>
             <v-img

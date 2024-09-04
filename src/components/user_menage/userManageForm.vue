@@ -136,7 +136,7 @@
                           <v-row>
                             <v-col cols="12" sm="6">
                               <label-custom
-                                :text="$t('first name(thai)2')"
+                                :text="$t('first name(thai)')"
                               ></label-custom>
 
                               <v-text-field
@@ -167,7 +167,7 @@
                             </v-col>
                           </v-row>
 
-                          <v-row>
+                          <v-row dense>
                             <v-col cols="12" sm="6">
                               <label-custom
                                 :text="$t('first name(english)')"
@@ -201,7 +201,8 @@
                               </v-text-field>
                             </v-col>
                           </v-row>
-                          <v-row>
+                          <!-- Nickname NoRole -->
+                          <v-row v-if="show_by_id.userRoles?.length <= 0" dense>
                             <v-col cols="12" sm="6">
                               <label-custom
                                 :text="$t('nickname(thai)')"
@@ -233,7 +234,51 @@
                               </v-text-field>
                             </v-col>
                           </v-row>
-                          <v-row>
+                          <!-- Nickname have Role -->
+                          <v-row
+                            v-for="itemsRoles of show_by_id.userRoles"
+                            :key="itemsRoles"
+                            dense
+                          >
+                            <v-col cols="12" sm="6">
+                              <label-custom
+                                :text="$t('nickname(thai)')"
+                              ></label-custom>
+                              <v-text-field
+                                v-model="show_by_id.nicknameTh"
+                                v-bind:disabled="isDisabled"
+                                @keydown="validate($event, 'th')"
+                                :rules="
+                                  itemsRoles.roleId == 'R_4' ||
+                                  itemsRoles.roleId == 'R_5'
+                                    ? rules.nicknName
+                                    : ''
+                                "
+                                placeholder="-"
+                                outlined
+                                dense
+                                color="#ff6b81"
+                              >
+                              </v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                              <label-custom
+                                :text="$t('nickname(en)')"
+                              ></label-custom>
+                              <v-text-field
+                                v-model="show_by_id.nicknameEn"
+                                v-bind:disabled="isDisabled"
+                                @keydown="validate($event, 'en-special')"
+                                placeholder="-"
+                                outlined
+                                dense
+                                color="#ff6b81"
+                              >
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+
+                          <v-row dense>
                             <v-col cols="12" sm="6">
                               <label-custom :text="$t('email')"></label-custom>
                               <v-text-field
@@ -287,6 +332,21 @@
                                   {{ $t("data not found") }}
                                 </template>
                               </v-autocomplete>
+                            </v-col>
+                            <v-col cols="12" sm="6" v-if="openTypeClass">
+                              <label-custom
+                                :text="$t('please enter your class')"
+                              ></label-custom>
+                              <v-text-field
+                                v-model="otherClass"
+                                placeholder="-"
+                                outlined
+                                color="#ff6b81"
+                                dense
+                                :rules="rules.class"
+                                :disabled="!isEnabled"
+                              >
+                              </v-text-field>
                             </v-col>
 
                             <v-col cols="12" sm="6">
@@ -365,6 +425,21 @@
                                   {{ $t("data not found") }}
                                 </template>
                               </v-autocomplete>
+                            </v-col>
+                            <v-col cols="12" sm="6" v-if="openTypeClass">
+                              <label-custom
+                                :text="$t('please enter your class')"
+                              ></label-custom>
+                              <v-text-field
+                                v-model="otherClass"
+                                placeholder="-"
+                                outlined
+                                color="#ff6b81"
+                                dense
+                                :rules="rules.class"
+                                :disabled="!isEnabled"
+                              >
+                              </v-text-field>
                             </v-col>
 
                             <v-col cols="12" sm="6">
@@ -1062,6 +1137,8 @@ export default {
     user_form: false,
     className: "",
     activeClass: false,
+    otherClass: "",
+    openTypeClass: false,
   }),
 
   beforeMount() {
@@ -1108,6 +1185,12 @@ export default {
     handleChange(item) {
       this.activeClass = true;
       this.className = item;
+      if (item == "อื่นๆ") {
+        this.openTypeClass = true;
+      } else if (item !== "อื่นๆ") {
+        this.openTypeClass = false;
+        this.otherClass = "";
+      }
     },
     selectRole() {
       this.selectRoles;
@@ -1480,16 +1563,20 @@ export default {
                 schoolEn: this.show_by_id.school.schoolNameEn,
                 nicknameTh: this.show_by_id.nicknameTh,
                 nicknameEn: this.show_by_id.nicknameEn,
-                className:
-                  this.activeClass === true
-                    ? this.className
-                    : this.show_by_id.class.classNameTh,
+                className: this.otherClass
+                  ? this.otherClass
+                  : this.activeClass === true
+                  ? this.className
+                  : this.show_by_id.class.classNameTh,
                 congenitalDiseaseTh: this.show_by_id.congenitalDisease,
               };
               let bodyFormData = new FormData();
               bodyFormData.append("image", this.send_image_profile);
               bodyFormData.append("payload", JSON.stringify(payload));
+              // let localhost = "http://localhost:3000";
+
               let { data } = await axios.patch(
+                // `${localhost}/api/v1/usermanagement/update/${account_id}`,
                 `${process.env.VUE_APP_URL}/api/v1/usermanagement/update/${account_id}`,
                 bodyFormData,
                 config
@@ -1859,6 +1946,18 @@ export default {
           (val) =>
             !/[\uD800-\uDBFF][\uDC00-\uDFFF ]/g.test(val) ||
             this.$t("please enter your last name in English"),
+        ],
+        nicknName: [
+          (val) =>
+            (val || "").length < 20 ||
+            this.$t(
+              "please enter your nickName length not exceeding 20 characters"
+            ),
+          (val) =>
+            /[ก-๏\s]/g.test(val) || this.$t("please enter your nickname"),
+          (val) =>
+            !/[\uD800-\uDBFF][\uDC00-\uDFFF]/g.test(val) ||
+            this.$t("please enter your nickname"),
         ],
         name: [
           (val) =>

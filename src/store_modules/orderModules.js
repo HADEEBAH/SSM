@@ -931,8 +931,9 @@ const orderModules = {
     // },
 
 
-    async saveOrder(context, { regis_type }) {
+    async saveOrder(context, { regis_type, my_data_class, othert_data_class, type_checked }) {
       context.commit("SetOrderIsLoading", true);
+
       try {
         let order = context.state.order;
         let configs = {
@@ -989,12 +990,12 @@ const orderModules = {
                 if (!studentUpdate.some(v => v.studentId === student.account_id)) {
                   // console.log('itemRole :>> ', itemRole);
                   // !itemRole ||
-                  if (itemRole === 'R_5') {
+                  if (itemRole === 'R_5' || type_checked === true) {
                     if (student.nicknameTh && student.class) {
                       studentUpdate.push({
                         "studentId": student.account_id,
                         "nicknameTh": student.nicknameTh,
-                        "class": student.class
+                        "class": student.class === 'อื่นๆ' && my_data_class !== '' || othert_data_class !== '' ? othert_data_class || my_data_class : student.class
                       });
                     } else {
                       allStudentsValid = false;
@@ -1253,6 +1254,8 @@ const orderModules = {
           },
         };
         try {
+          // const localhost = 'http://localhost:3000'
+          // await axios.post(`${localhost}/api/v1/account/student/list`, studentUpdate, config)
           await axios.post(`${process.env.VUE_APP_URL}/api/v1/account/student/list`, studentUpdate, config)
         } catch (error) {
           Swal.fire({
@@ -1583,6 +1586,7 @@ const orderModules = {
           },
         };
         let { data } = await axios.patch(
+          // `http://localhost:3002/api/v1/order/update/${order_detail.orderNumber}`,
           `${process.env.VUE_APP_URL}/api/v1/order/update/${order_detail.orderNumber}`,
           payload,
           config
@@ -1637,7 +1641,7 @@ const orderModules = {
           };
           // const localhost = 'http://localhost:3003'
           let { data } = await axios.patch(
-            // `${localhost}/api/v1/payment/data/${order_data.orderNumber}`,
+            // `http://localhost:3003/api/v1/payment/data/${order_data.orderNumber}`,
             `${process.env.VUE_APP_URL}/api/v1/payment/data/${order_data.orderNumber}`,
             payment_payload,
             config
@@ -1857,10 +1861,12 @@ const orderModules = {
               let discount = item.option.discount
                 ? item.option.discount_price
                 : 0;
-              item.option.net_price_unit = item.option.price_unit / item.option.amount;
-              item.option.net_price = (item.option.price_unit - discount) * item.students.length;
+              item.option.net_price_unit = item.option.price_unit - discount;
+              item.option.net_price = item.option.price_unit - discount;
+              item.option.total_price = item.option.net_price * item.students.length
             } else {
-              item.net_price = item.price * item.students.length;
+              item.net_price = item.price;
+              item.total_price = item.price * item.students.length
             }
 
           }
@@ -2429,6 +2435,7 @@ const orderModules = {
           },
         };
         // let localhost = "http://localhost:3000"
+        // const { data } = await axios.post(`${localhost}/api/v1/schedule/AutoResetScheldule`, {
         const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/schedule/AutoResetScheldule`, {
           orderNumber,
           orderItemId,
