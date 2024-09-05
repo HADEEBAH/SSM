@@ -78,6 +78,7 @@
             </v-row>
           </v-col>
         </v-row>
+
         <v-card
           outlined
           v-for="(course, course_index) in order.courses"
@@ -577,6 +578,7 @@
               </v-col>
             </v-row>
             <!-- PRICE -->
+            <!-- <pre>{{ course }}</pre>s -->
             <v-row dense>
               <v-col cols="12" sm="4">
                 <label-custom :text="$t(`price`)"></label-custom>
@@ -1058,6 +1060,10 @@ export default {
       searchNameUser: "loginModules/searchNameUser",
       GetAllCourseMonitor: "CourseMonitorModules/GetAllCourseMonitor",
     }),
+    checkData(allData, price) {
+      console.log("allData :>> ", allData);
+      console.log("price :>> ", price);
+    },
     todayDate() {
       let todayDate = new Date();
       return dateFormatter(todayDate, "DD MMT YYYYT");
@@ -1212,7 +1218,7 @@ export default {
       this.loading_course = true;
     },
     selectCourse(courseId, course) {
-      console.log("111 :>> ", courseId);
+      console.log("111 :>> ", course);
       course.package_data = {};
       course.package = "";
       course.option = {};
@@ -1236,6 +1242,7 @@ export default {
           console.log("this.course_data :>> ", this.course_data);
 
           if (this.course_data.course_type_id === "CT_2") {
+            console.log("this.course_data 2222:>> ", this.course_data);
             course.start_date = this.course_data.course_study_start_date;
             course.start_date_str = new Date(
               course.start_date
@@ -1264,6 +1271,7 @@ export default {
               "o'clock"
             )}`;
             course.price = parseInt(this.course_data.price_course);
+            course.newPrice = parseInt(course.course_data.newPrice);
             course.time = this.course_data.days_of_class[0].times[0];
             this.CalTotalPrice();
           }
@@ -1503,6 +1511,7 @@ export default {
         payment_status: "",
         payment_type: "",
         total_price: 0,
+        newPrice: 0,
       });
     },
   },

@@ -1305,6 +1305,7 @@ const CourseModules = {
             location: data.data.courseLocation,
             detail: data.data.courseDescription,
             discountCT2: data.data.discountPriceCT2,
+            newPrice: data.data.calculateCoursePrice,
             music_performance: data.data.courseMusicPerformance,
             catification: data.data.courseCertification,
             price_course: data.data.coursePrice,

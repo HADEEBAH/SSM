@@ -81,7 +81,8 @@ const orderModules = {
       payment_status: "",
       payment_type: "",
       total_price: 0,
-      pay_date: ""
+      pay_date: "",
+      newPrice: 0
     },
 
     orders: [],
