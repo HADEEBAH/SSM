@@ -995,6 +995,8 @@ const orderModules = {
                       studentUpdate.push({
                         "studentId": student.account_id,
                         "nicknameTh": student.nicknameTh,
+                        "congenitalDiseaseTh": student.congenital,
+                        "schoolTh": student.school,
                         "class": student.class === 'อื่นๆ' && my_data_class !== '' || othert_data_class !== '' ? othert_data_class || my_data_class : student.class
                       });
                     } else {

@@ -263,6 +263,33 @@
             </template>
           </v-autocomplete>
         </v-col>
+        <!-- <pre>{{ profile_detail }}</pre> -->
+        <!-- SCHOOL -->
+        <v-col cols="12" sm="6">
+          <label-custom :text="$t('school')"></label-custom>
+          <v-text-field
+            placeholder="-"
+            v-model="course_order.students.find((v) => !v.is_other).school"
+            outlined
+            dense
+            color="#ff6b81"
+            :disabled="profile_detail.school.schoolNameTh !== null"
+          >
+          </v-text-field>
+        </v-col>
+        <!-- AllergiesList -->
+        <v-col cols="12" sm="6">
+          <label-custom :text="$t('congenital disease')"></label-custom>
+          <v-text-field
+            placeholder="-"
+            v-model="course_order.students.find((v) => !v.is_other).congenital"
+            outlined
+            dense
+            color="#ff6b81"
+            :disabled="profile_detail.congenitalDisease !== null"
+          >
+          </v-text-field>
+        </v-col>
         <v-col
           cols="12"
           sm="6"
@@ -639,6 +666,7 @@
                     @input="realtimeCheckNickname(student.nicknameTh)"
                   ></v-text-field>
                 </v-col>
+                <!-- CLASS -->
                 <v-col cols="12" sm="6" v-if="student.role === 'R_5'">
                   <labelCustom required :text="$t('class')"></labelCustom>
                   <!-- :disabled="student?.classData" -->
@@ -661,7 +689,35 @@
                     </template>
                   </v-autocomplete>
                 </v-col>
-                <v-col cols="12" sm="6" v-if="student.class === 'อื่นๆ'">
+                <!-- <pre>{{ student }}</pre> -->
+                <!-- SCHOOL -->
+                <v-col cols="12" sm="6" v-if="student.role === 'R_5'">
+                  <labelCustom required :text="$t('school')"></labelCustom>
+                  <!-- :disabled="student?.classData" -->
+                  <v-text-field
+                    placeholder="-"
+                    v-model="student.school"
+                    outlined
+                    dense
+                    color="#ff6b81"
+                    :disabled="student.school"
+                  >
+                  </v-text-field>
+                </v-col>
+                <!-- ALERGICT -->
+                <v-col cols="12" sm="6" v-if="student.role === 'R_5'">
+                  <label-custom :text="$t('congenital disease')"></label-custom>
+                  <v-text-field
+                    placeholder="-"
+                    v-model="student.congenital"
+                    outlined
+                    dense
+                    color="#ff6b81"
+                    :disabled="student.congenital"
+                  >
+                  </v-text-field>
+                </v-col>
+                <v-col cols="12" sm="6" v-if="inputClass === 'อื่นๆ'">
                   <labelCustom
                     required
                     :text="$t('please enter your class')"
@@ -1215,6 +1271,8 @@ export default {
           parents: [],
           is_account: false,
           is_other: false,
+          school: this.profile_detail.school.schoolNameTh,
+          congenital: this.profile_detail.congenitalDisease,
           nicknameTh: this.profile_detail.nicknameTh,
           class: this.profile_detail?.class?.classNameTh,
         });
@@ -1227,6 +1285,11 @@ export default {
       }
     },
     "course_order.apply_for_others": function () {
+      console.log(
+        "this.course_order.apply_for_others :>> ",
+        this.course_order.apply_for_others
+      );
+
       if (this.course_order.apply_for_others) {
         this.course_order.students.push({
           student_name: "",
@@ -1240,6 +1303,8 @@ export default {
           is_other: true,
           class: "",
           nickName: "",
+          school: "",
+          congenital: "",
         });
       } else {
         this.course_order.students.forEach((student, index) => {
@@ -1251,6 +1316,8 @@ export default {
     },
     last_user_registered: function () {
       if (this.last_user_registered.type === "parent") {
+        console.log("last_user_registered 11 :>> ", this.last_user_registered);
+
         if (
           this.course_order.students.filter((v) => v.is_other === false)[0]
             .parents.length === 0
@@ -1280,6 +1347,7 @@ export default {
             });
         }
       } else if (this.last_user_registered.type === "student") {
+        console.log("last_user_registered 22 :>> ", this.last_user_registered);
         let student =
           this.course_order.students[this.course_order.students.length - 1];
         student.account_id = this.last_user_registered.account_id;
@@ -1297,6 +1365,8 @@ export default {
         student.nicknameData = this.last_user_registered.nickNameTh;
         student.class = this.last_user_registered?.class?.classNameTh;
         student.nicknameTh = this.last_user_registered.nickNameTh;
+        student.school = this.last_user_registered.nickNameTh;
+        student.congenital = this.last_user_registered.nickNameTh;
       }
       this.dialog_parent = false;
     },
@@ -1658,15 +1728,20 @@ export default {
     CreateReserve() {
       let checkNickname = "";
       let checkClass = "";
+      let checkSchool = "";
+      let checkcongenital = "";
       let roles = "";
       let yourself = this.course_order.apply_for_yourself;
-
       for (const items of this.course_order?.students) {
+        console.log("items :>> ", items);
+
         checkNickname = items.nicknameTh ? items.nicknameTh : null;
         checkClass =
           items.class || items.class?.classNameTh
             ? items.class || items.class?.classNameTh
             : null;
+        checkSchool = items.school ? items.school : null;
+        checkcongenital = items.congenital ? items.congenital : null;
       }
       for (const items of this.user_student_data) {
         roles = items?.roles?.roleId;
@@ -1674,9 +1749,17 @@ export default {
 
       if (
         (roles !== "R_5" && yourself === false && checkNickname) ||
-        (roles === "R_5" && checkNickname && checkClass) ||
+        (roles === "R_5" &&
+          checkNickname &&
+          checkClass &&
+          checkSchool &&
+          checkcongenital) ||
         (roles === undefined && checkNickname) ||
-        (yourself === true && checkNickname && checkClass)
+        (yourself === true &&
+          checkNickname &&
+          checkClass &&
+          checkSchool &&
+          checkcongenital)
       ) {
         if (this.course_order.course_type_id == "CT_1") {
           this.$refs.form_coach.validate();
@@ -1856,6 +1939,8 @@ export default {
           is_other: true,
           is_account: false,
           parents: [],
+          school: "",
+          congenital: "",
         });
       }
     },
@@ -1982,15 +2067,21 @@ export default {
     async checkOut() {
       let checkNickname = "";
       let checkClass = "";
+      let checkSchool = "";
+      let checkcongenital = "";
       let roles = "";
       let yourself = this.course_order.apply_for_yourself;
 
       for (const items of this.course_order?.students) {
+        console.log("items :>> ", items);
+
         checkNickname = items.nicknameTh ? items.nicknameTh : null;
         checkClass =
           items.class || items.class?.classNameTh
             ? items.class || items.class?.classNameTh
             : null;
+        checkSchool = items.school ? items.school : null;
+        checkcongenital = items.congenital ? items.congenital : null;
       }
       for (const items of this.user_student_data) {
         roles = items?.roles?.roleId;
@@ -2007,22 +2098,30 @@ export default {
         (roles === "R_5" &&
           checkNickname &&
           checkClass &&
-          checkClass !== "อื่นๆ") ||
+          checkClass !== "อื่นๆ" &&
+          checkSchool &&
+          checkcongenital) ||
         (roles === "R_5" &&
           checkNickname &&
           checkClass &&
           checkClass === "อื่นๆ" &&
+          checkSchool &&
+          checkcongenital &&
           this.myCheckClassData !== "") ||
         this.otherCheckClassData !== "" ||
         (roles === undefined && checkNickname) ||
         (yourself === true &&
           checkNickname &&
           checkClass &&
-          checkClass !== "อื่นๆ") ||
+          checkClass !== "อื่นๆ" &&
+          checkSchool &&
+          checkcongenital) ||
         (yourself === true &&
           checkNickname &&
           checkClass &&
           checkClass === "อื่นๆ" &&
+          checkSchool &&
+          checkcongenital &&
           this.myCheckClassData !== "") ||
         this.otherCheckClassData !== ""
       ) {
@@ -2100,12 +2199,26 @@ export default {
                     ).length === 0
                   ) {
                     this.order.courses.push({ ...this.course_order });
+                    this.order.course_type = this.course_data.course_type_id;
+                    if (this.course_data.course_type_id == "CT_2") {
+                      this.order.discount = 20;
+                      // this.order.discount = this.course_data.discount
+                    }
                   }
                 } else {
                   this.order.courses = [];
                   this.order.courses.push({ ...this.course_order });
+                  this.order.course_type = this.course_data.course_type_id;
+                  if (this.course_data.course_type_id == "CT_2") {
+                    this.order.discount = 20;
+                    // this.order.discount = this.course_data.discount
+                  }
                 }
                 this.order.created_by = this.user_login.account_id;
+                console.log("this.order :>> ", this.order);
+                console.log("this.course_order :>> ", this.course_order);
+                console.log("course_data :>> ", this.course_data);
+
                 this.changeOrderData(this.order);
                 if (this.course_order.course_type_id == "CT_1") {
                   if (this.course_order.day && this.course_order.time) {
@@ -2181,6 +2294,10 @@ export default {
                 let student = this.course_order.students.filter(
                   (v) => v.username === username
                 )[0];
+                console.log(
+                  "this.user_student_data :>> ",
+                  this.user_student_data
+                );
                 if (this.user_student_data.length > 0) {
                   student.firstname_en = this.user_student_data[0].firstNameEng;
                   student.lastname_en = this.user_student_data[0].lastNameEng;
@@ -2196,6 +2313,10 @@ export default {
                   student.nicknameData = this.user_student_data[0].nicknameTh;
                   student.classData =
                     this.user_student_data[0]?.class?.classNameTh;
+                  student.school =
+                    this.user_student_data[0]?.school?.schoolNameTh;
+                  student.congenital =
+                    this.user_student_data[0]?.congenitalDisease;
                   student.role = this.user_student_data[0]?.roles?.roleId;
                 } else {
                   if (student) {
