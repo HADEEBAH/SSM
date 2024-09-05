@@ -1610,6 +1610,8 @@ const CourseModules = {
           "courseMusicPerformance": course.music_performance,
           "courseCertification": course.catification,
           "coursePrice": course.price_course,
+          "discountPrice": course.discountCT2 ? course.discountCT2 : 0,
+          "checkDiscountBool": course.checkedDiscount,
           "coachs": [],
           "dayOfweek": [],
           "coursePackages": []
