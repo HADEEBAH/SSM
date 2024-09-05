@@ -91,6 +91,8 @@
     "booking information not found": "Booking information not found",
     "booking time": "Booking time",
     "booking status": "Booking status",
+    "because your orders are duplicated": "Because your orders are duplicated",
+
 
     "cash":"Cash",
     "can't apply": "Can't apply",
@@ -105,6 +107,7 @@
     "can not update course" : "Can not update course",
     "can not delete coach" : "Can not delete coach",
     "can not use" : "Can not use . in this case",
+    "cannot register": "Cannot register",
     "cannot register , The seats are full": "Cannot register , The seats are full.",
     "cannot use file extensions other than XLSX": "Cannot use other type of files xlsx wher downloaded from template",
     "cancel" : "Cancel",

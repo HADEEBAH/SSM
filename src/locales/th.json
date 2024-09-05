@@ -81,6 +81,8 @@
     "booking information not found": "ไม่พบข้อมูลการจอง",
     "booking time": "เวลาที่จอง",
     "booking status": "สถานะการจอง",
+    "because your orders are duplicated": "เนื่องจากคำสั่งซื้อของคุณซ้ำกัน",
+
 
     "can't apply": "ไม่สามารถสมัครได้",
     "Can not use the same accountID to create Relations." : "ไม่สามารถใช้ผู้ใช้เดียวกันเพื่อสร้างความสัมพันธ์ได้",
@@ -93,6 +95,7 @@
     "can not update course" : "ไม่สามารถแก้ไขคอร์ได้",
     "can not delete coach" : "ไม่สามารถลบโค้ชได้",
     "can not use" : "ไม่สามารถใช้ . ได้",
+    "cannot register": "ไม่สามารถลงทะเบียนได้",
     "cannot register , The seats are full": "ไม่สามารถลงทะเบียนได้ ที่นั่งเต็มแล้ว",
     "cannot use file extensions other than XLSX": "ไม่สามารถใช้นามสกุลอื่นได้นอกจาก xlsx ที่ดาวน์โหลดจากปุ่มเทมเพลต",
     "cancel" : "ยกเลิก",

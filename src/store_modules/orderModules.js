@@ -1451,6 +1451,18 @@ const orderModules = {
             showCancelButton: false,
             showConfirmButton: false,
           });
+        } else if (error?.response?.data?.message == "Cannot register , Because your orders are duplicated.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("cannot register"),
+            text: VueI18n.t(
+              "because your orders are duplicated"
+            ),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
         } else if (error?.response?.data?.message == "over register date") {
           Swal.fire({
             icon: "error",
@@ -1535,6 +1547,20 @@ const orderModules = {
             showConfirmButton: false,
           });
         } else if (error?.response?.data?.message === "register duplicate") {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t(
+              "something went wrong"
+            ),
+            text: VueI18n.t(
+              "some students or students have already purchased the course"
+            ),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message === "register Duplicate") {
           Swal.fire({
             icon: "error",
             title: VueI18n.t(
