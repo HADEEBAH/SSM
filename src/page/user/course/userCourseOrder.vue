@@ -2138,7 +2138,7 @@ export default {
                       discount:
                         this?.course_data?.course_type_id == "CT_2"
                           ? this?.course_data?.discountCT2
-                          : "0",
+                          : 0,
                     });
                   } else {
                     await Swal.fire({

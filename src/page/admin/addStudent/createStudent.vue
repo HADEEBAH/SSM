@@ -1434,7 +1434,10 @@ export default {
                   });
                   this.order.type = "addStudent";
                   this.changeOrderData(this.order);
-                  await this.saveOrder({ regis_type: "addStudent" });
+                  await this.saveOrder({
+                    regis_type: "addStudent",
+                    discount: this.course_data?.discountCT2,
+                  });
                   if (this.order_is_status) {
                     let payload = {
                       notificationName: this.notification_name,
