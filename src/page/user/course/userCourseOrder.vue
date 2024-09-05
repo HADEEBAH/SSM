@@ -60,7 +60,6 @@
           </v-col>
         </v-row>
       </v-card>
-      <!-- <pre>{{ course_order }}</pre> -->
 
       <!-- SELECT CLASS DATE -->
       <template v-if="course_order.course_type_id == 'CT_1'">
@@ -689,7 +688,6 @@
                     </template>
                   </v-autocomplete>
                 </v-col>
-                <!-- <pre>{{ student }}</pre> -->
                 <!-- SCHOOL -->
                 <v-col cols="12" sm="6" v-if="student.role === 'R_5'">
                   <labelCustom required :text="$t('school')"></labelCustom>
@@ -700,7 +698,7 @@
                     outlined
                     dense
                     color="#ff6b81"
-                    :disabled="student.school"
+                    :disabled="student.schoolData"
                   >
                   </v-text-field>
                 </v-col>
@@ -713,7 +711,7 @@
                     outlined
                     dense
                     color="#ff6b81"
-                    :disabled="student.congenital"
+                    :disabled="student.congenitalData"
                   >
                   </v-text-field>
                 </v-col>
@@ -808,7 +806,6 @@
             >
           </template>
         </v-col>
-        <!-- <pre>{{ course_order }}</pre> -->
 
         <v-col cols="12" sm="6">
           <v-btn
@@ -1340,6 +1337,7 @@ export default {
             });
         }
       } else if (this.last_user_registered.type === "student") {
+        console.log("last_user_registered :>> ", this.last_user_registered);
         let student =
           this.course_order.students[this.course_order.students.length - 1];
         student.account_id = this.last_user_registered.account_id;
@@ -1357,8 +1355,10 @@ export default {
         student.nicknameData = this.last_user_registered.nickNameTh;
         student.class = this.last_user_registered?.class?.classNameTh;
         student.nicknameTh = this.last_user_registered.nickNameTh;
-        student.school = this.last_user_registered.nickNameTh;
-        student.congenital = this.last_user_registered.nickNameTh;
+        student.school = this.last_user_registered.school;
+        student.congenital = this.last_user_registered.congenitalDisease;
+        student.schoolData = this.last_user_registered.school;
+        student.congenitalData = this.last_user_registered.congenitalDisease;
       }
       this.dialog_parent = false;
     },
@@ -2281,12 +2281,16 @@ export default {
                   student.IsWaraphat = this.user_student_data[0].IsWaraphat;
                   student.nicknameTh = this.user_student_data[0].nicknameTh;
                   student.class = this.user_student_data[0]?.class?.classNameTh;
-                  student.nicknameData = this.user_student_data[0].nicknameTh;
-                  student.classData =
-                    this.user_student_data[0]?.class?.classNameTh;
                   student.school =
                     this.user_student_data[0]?.school?.schoolNameTh;
                   student.congenital =
+                    this.user_student_data[0]?.congenitalDisease;
+                  student.nicknameData = this.user_student_data[0].nicknameTh;
+                  student.classData =
+                    this.user_student_data[0]?.class?.classNameTh;
+                  student.schoolData =
+                    this.user_student_data[0]?.school?.schoolNameTh;
+                  student.congenitalData =
                     this.user_student_data[0]?.congenitalDisease;
                   student.role = this.user_student_data[0]?.roles?.roleId;
                 } else {
