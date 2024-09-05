@@ -1285,11 +1285,6 @@ export default {
       }
     },
     "course_order.apply_for_others": function () {
-      console.log(
-        "this.course_order.apply_for_others :>> ",
-        this.course_order.apply_for_others
-      );
-
       if (this.course_order.apply_for_others) {
         this.course_order.students.push({
           student_name: "",
@@ -1316,8 +1311,6 @@ export default {
     },
     last_user_registered: function () {
       if (this.last_user_registered.type === "parent") {
-        console.log("last_user_registered 11 :>> ", this.last_user_registered);
-
         if (
           this.course_order.students.filter((v) => v.is_other === false)[0]
             .parents.length === 0
@@ -1347,7 +1340,6 @@ export default {
             });
         }
       } else if (this.last_user_registered.type === "student") {
-        console.log("last_user_registered 22 :>> ", this.last_user_registered);
         let student =
           this.course_order.students[this.course_order.students.length - 1];
         student.account_id = this.last_user_registered.account_id;
@@ -1732,9 +1724,8 @@ export default {
       let checkcongenital = "";
       let roles = "";
       let yourself = this.course_order.apply_for_yourself;
-      for (const items of this.course_order?.students) {
-        console.log("items :>> ", items);
 
+      for (const items of this.course_order?.students) {
         checkNickname = items.nicknameTh ? items.nicknameTh : null;
         checkClass =
           items.class || items.class?.classNameTh
@@ -2073,8 +2064,6 @@ export default {
       let yourself = this.course_order.apply_for_yourself;
 
       for (const items of this.course_order?.students) {
-        console.log("items :>> ", items);
-
         checkNickname = items.nicknameTh ? items.nicknameTh : null;
         checkClass =
           items.class || items.class?.classNameTh
@@ -2199,26 +2188,12 @@ export default {
                     ).length === 0
                   ) {
                     this.order.courses.push({ ...this.course_order });
-                    this.order.course_type = this.course_data.course_type_id;
-                    if (this.course_data.course_type_id == "CT_2") {
-                      this.order.discount = 20;
-                      // this.order.discount = this.course_data.discount
-                    }
                   }
                 } else {
                   this.order.courses = [];
                   this.order.courses.push({ ...this.course_order });
-                  this.order.course_type = this.course_data.course_type_id;
-                  if (this.course_data.course_type_id == "CT_2") {
-                    this.order.discount = 20;
-                    // this.order.discount = this.course_data.discount
-                  }
                 }
                 this.order.created_by = this.user_login.account_id;
-                console.log("this.order :>> ", this.order);
-                console.log("this.course_order :>> ", this.course_order);
-                console.log("course_data :>> ", this.course_data);
-
                 this.changeOrderData(this.order);
                 if (this.course_order.course_type_id == "CT_1") {
                   if (this.course_order.day && this.course_order.time) {
@@ -2294,10 +2269,6 @@ export default {
                 let student = this.course_order.students.filter(
                   (v) => v.username === username
                 )[0];
-                console.log(
-                  "this.user_student_data :>> ",
-                  this.user_student_data
-                );
                 if (this.user_student_data.length > 0) {
                   student.firstname_en = this.user_student_data[0].firstNameEng;
                   student.lastname_en = this.user_student_data[0].lastNameEng;
