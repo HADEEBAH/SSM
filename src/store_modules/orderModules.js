@@ -931,9 +931,9 @@ const orderModules = {
     // },
 
 
-    async saveOrder(context, { regis_type, my_data_class, othert_data_class, type_checked }) {
+    async saveOrder(context, { regis_type, my_data_class, othert_data_class, type_checked, discount }) {
       context.commit("SetOrderIsLoading", true);
-
+      console.log('discount :>> ', discount);
       try {
         let order = context.state.order;
         let configs = {
@@ -968,7 +968,8 @@ const orderModules = {
           paymentType: order.payment_type,
           totalPrice: 0,
           regisType: regis_type,
-          pay_date: order.pay_date
+          pay_date: order.pay_date,
+          discountPriceCT2: discount ? discount : 0
         };
         let total_price = 0;
         const studentUpdate = []
@@ -1011,32 +1012,7 @@ const orderModules = {
                     }
                   }
                 }
-                // if (!studentUpdate.some(v => v.studentId === student.account_id)) {
 
-                //   if (itemRole === 'R_5') {
-                //     if (student.nicknameTh && student.class) {
-                //       studentUpdate.push(
-                //         {
-                //           "studentId": student.account_id,
-                //           "nicknameTh": student.nicknameTh,
-                //           "class": student.class
-                //         },
-                //       )
-                //     } else {
-                //       throw "please enter your name and class"
-                //     }
-                //   } else {
-                //     if (student.nicknameTh) {
-                //       studentUpdate.push(
-                //         {
-                //           "studentId": student.account_id,
-                //           "nicknameTh": student.nicknameTh,
-                //           "class": ''
-                //         },
-                //       )
-                //     }
-                //   }
-                // }
               }
             }
             if (student.parents[0]) {
@@ -1111,6 +1087,7 @@ const orderModules = {
             price = course.price;
             total_price = order.total_price * course.students.length;
           } else {
+            console.log('course :>> ', course);
             price = course.option?.net_price
               ? course.option.net_price
               : course.price;
@@ -1124,127 +1101,7 @@ const orderModules = {
         if (!allStudentsValid) {
           throw "please enter your name and class";
         }
-        // await order.courses.forEach((course) => {
-        //   let students = [];
-        //   course.students.forEach(async (student) => {
-        //     let { data } = await axios.get(
-        //       `http://localhost:3000/api/v1/account/auth/${student.account_id}`
-        //     );
-        //     console.log('data :>> ', data.data.roles);
 
-        //     let itemRole = ''
-        //     for (const items of data.data.roles) {
-        //       itemRole = items.roleId
-        //     }
-        //     if (regis_type !== "cart") {
-        //       if (order.type !== "addStudent") {
-        //         if (!studentUpdate.some(v => v.studentId === student.account_id)) {
-
-        //           if (itemRole === 'R_5') {
-        //             if (student.nicknameTh && student.class) {
-        //               studentUpdate.push(
-        //                 {
-        //                   "studentId": student.account_id,
-        //                   "nicknameTh": student.nicknameTh,
-        //                   "class": student.class
-        //                 },
-        //               )
-        //             } else {
-        //               throw "please enter your name and class"
-        //             }
-        //           } else {
-        //             if (student.nicknameTh) {
-        //               studentUpdate.push(
-        //                 {
-        //                   "studentId": student.account_id,
-        //                   "nicknameTh": student.nicknameTh,
-        //                   "class": ''
-        //                 },
-        //               )
-        //             }
-        //           }
-        //         }
-        //       }
-        //     }
-        //     if (student.parents[0]) {
-        //       students.push({
-        //         accountId: student.account_id ? student.account_id : "",
-        //         userName: student.username,
-        //         firstNameTh: student.firstname,
-        //         lastNameTh: student.lastname,
-        //         tel: student.tel,
-        //         isOther: student.is_other,
-        //         parent: {
-        //           accountId: student.parents[0].account_id,
-        //           parentFirstnameTh: student.parents[0].firstname_th
-        //             ? student.parents[0].firstname_th
-        //             : "",
-        //           parentLastnameTh: student.parents[0].lastname_en
-        //             ? student.parents[0].lastname_en
-        //             : "",
-        //           parentFirstnameEn: student.parents[0].firstname_en,
-        //           parentLastnameEn: student.parents[0].lastname_en,
-        //           parentTel: student.parents[0].tel,
-        //         },
-        //       });
-        //     } else {
-        //       students.push({
-        //         accountId: student.account_id ? student.account_id : "",
-        //         userName: student.username,
-        //         firstNameTh: student.firstname,
-        //         lastNameTh: student.lastname,
-        //         tel: student.tel,
-        //         isOther: student.is_other,
-        //         parent: {},
-        //       });
-        //     }
-        //   });
-        //   payload.courses.push({
-        //     courseId: course.course_id,
-        //     coursePackageOptionId: course.option.course_package_option_id ? course.option.course_package_option_id : null,
-        //     dayName: course.day?.dayName
-        //       ? course.day.dayName
-        //       : course.day.day
-        //         ? dayOfWeekArray(course.day.day)
-        //         : "",
-        //     dayOfWeekId: course?.time?.timeData
-        //       ? course.time.timeData.filter(
-        //         (v) => v.coach_id === course.coach_id
-        //       )[0].dayOfWeekId
-        //       : course.time.dayOfWeekId,
-        //     timeId: course?.time?.timeData
-        //       ? course.time.timeData.filter(
-        //         (v) => v.coach_id === course.coach_id
-        //       )[0].timeId
-        //       : course.time.timeId,
-        //     time: course.time,
-        //     startDate: course.start_date ? course.start_date : moment(new Date()).format("YYYY-MM-DD"),
-        //     remark: course.remark ? course.remark : "",
-        //     price: course.option?.net_price
-        //       ? course.option.net_price
-        //       : course.price,
-        //     coach: {
-        //       accountId: course.coach_id ? course.coach_id : course.coach,
-        //       fullName: course.coach_name,
-        //     },
-        //     student: students,
-        //   });
-        //   let price = 0
-        //   if (order.type == "addStudent") {
-        //     price = course.price;
-        //     total_price = order.total_price * course.students.length;
-        //   } else {
-        //     price = course.option?.net_price
-        //       ? course.option.net_price
-        //       : course.price;
-        //     if (course.price * course.students.length !== price) {
-        //       total_price = total_price + price * course.students.length;
-        //     } else {
-        //       total_price = total_price + price;
-        //     }
-        //   }
-
-        // });
         payload.totalPrice = total_price;
         let config = {
           headers: {
@@ -1280,14 +1137,14 @@ const orderModules = {
           config
         );
         if (data.statusCode === 201) {
-          let payment_payload = {
-            orderId: data.data.orderNumber,
-            total: data.data.totalPrice,
-            subtotal: 0.0,
-            vat: 0,
-            vatRate: 0,
-            orderDesc: "",
-          };
+          // let payment_payload = {
+          //   orderId: data.data.orderNumber,
+          //   total: data.data.totalPrice,
+          //   subtotal: 0.0,
+          //   vat: 0,
+          //   vatRate: 0,
+          //   orderDesc: "",
+          // };
           // const localhost = 'http://localhost:3000'
 
           let user_data = JSON.parse(localStorage.getItem("userDetail"));
@@ -1319,110 +1176,110 @@ const orderModules = {
             };
             localStorage.setItem("userDetail", JSON.stringify(payload));
           }
-          if (order.type !== "addStudent") {
-            // const localhost = 'http://localhost:3003'
-            // let payment = await axios.post(
-            //   `${localhost}/api/v1/payment/code`,
-            //   payment_payload
-            // );
+          // if (order.type !== "addStudent") {
+          //   // const localhost = 'http://localhost:3003'
+          //   // let payment = await axios.post(
+          //   //   `${localhost}/api/v1/payment/code`,
+          //   //   payment_payload
+          //   // );
 
-            let payment = await axios.post(
-              `${process.env.VUE_APP_URL}/api/v1/payment/code`,
-              payment_payload
-            );
-            if (payment.data.statusCode === 201) {
-              window.location.href = payment.data.data;
-              setTimeout(() => {
-                localStorage.removeItem("Order");
-                context.commit("SetResetCourseData");
-                context.commit("SetOrder", {
-                  type: "",
-                  order_step: 0,
-                  order_number: "",
-                  courses: [],
-                  created_by: "",
-                  payment_status: "",
-                  payment_type: "",
-                  total_price: 0,
-                });
-                context.commit("SetOrderIsLoading", false);
-              }, 500);
-            }
-          } else {
-            if (order.payment_status === "paid") {
-              let payment_payload = {
-                orderId: data.data.orderNumber,
-                paymentType: order.payment_type,
-                total: data.data.totalPrice,
-                recipient: user_data.account_id,
-                payDate: order.pay_date
-              };
-              // let endpoint = 'http://localhost:3003'
-              let endpoint = process.env.VUE_APP_URL;
-              let payment = await axios.patch(
-                `${endpoint}/api/v1/payment/data/${data.data.orderNumber}`,
-                payment_payload
-              );
-              if (payment.data.statusCode === 200) {
-                Swal.fire({
-                  icon: "success",
-                  title: VueI18n.t("succeed"),
-                  text: VueI18n.t("the transaction has been completed"),
-                  showDenyButton: false,
-                  showCancelButton: false,
-                  showConfirmButton: false,
-                  timer: 3000,
-                  timerProgressBar: true,
-                });
-                // router.replace({ name: "Finance" });
-                localStorage.removeItem("Order");
-                context.commit("SetResetCourseData");
-                context.commit("SetOrder", {
-                  type: "",
-                  order_step: 0,
-                  order_number: "",
-                  courses: [],
-                  created_by: "",
-                  payment_status: "",
-                  payment_type: "",
-                  total_price: 0,
-                });
-                context.commit("SetOrderIsLoading", false);
-              }
-            } else {
-              // const order_enpoint = `${process.env.VUE_APP_URL}/api/v1/order/update/${data.data.orderNumber}`
-              // const payment_payload = {
-              //   paymentType: "",
-              //   paymentStatus: "pending",
-              // };
-              // await axios.patch(order_enpoint, payment_payload)
-              Swal.fire({
-                icon: "success",
-                title: VueI18n.t("succeed"),
-                text: VueI18n.t("the transaction has been completed"),
-                showDenyButton: false,
-                showCancelButton: false,
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-              });
-              // router.replace({ name: "Finance" });
-              localStorage.removeItem("Order");
-              context.commit("SetResetCourseData");
-              context.commit("SetOrder", {
-                type: "",
-                order_step: 0,
-                order_number: "",
-                courses: [],
-                created_by: "",
-                payment_status: "",
-                payment_type: "",
-                total_price: 0,
-              });
-              context.commit("SetOrderIsLoading", false);
-              context.commit("SetOrderIsStatus", true);
-            }
-          }
+          //   let payment = await axios.post(
+          //     `${process.env.VUE_APP_URL}/api/v1/payment/code`,
+          //     payment_payload
+          //   );
+          //   if (payment.data.statusCode === 201) {
+          //     window.location.href = payment.data.data;
+          //     setTimeout(() => {
+          //       localStorage.removeItem("Order");
+          //       context.commit("SetResetCourseData");
+          //       context.commit("SetOrder", {
+          //         type: "",
+          //         order_step: 0,
+          //         order_number: "",
+          //         courses: [],
+          //         created_by: "",
+          //         payment_status: "",
+          //         payment_type: "",
+          //         total_price: 0,
+          //       });
+          //       context.commit("SetOrderIsLoading", false);
+          //     }, 500);
+          //   }
+          // } else {
+          //   if (order.payment_status === "paid") {
+          //     let payment_payload = {
+          //       orderId: data.data.orderNumber,
+          //       paymentType: order.payment_type,
+          //       total: data.data.totalPrice,
+          //       recipient: user_data.account_id,
+          //       payDate: order.pay_date
+          //     };
+          //     // let endpoint = 'http://localhost:3003'
+          //     let endpoint = process.env.VUE_APP_URL;
+          //     let payment = await axios.patch(
+          //       `${endpoint}/api/v1/payment/data/${data.data.orderNumber}`,
+          //       payment_payload
+          //     );
+          //     if (payment.data.statusCode === 200) {
+          //       Swal.fire({
+          //         icon: "success",
+          //         title: VueI18n.t("succeed"),
+          //         text: VueI18n.t("the transaction has been completed"),
+          //         showDenyButton: false,
+          //         showCancelButton: false,
+          //         showConfirmButton: false,
+          //         timer: 3000,
+          //         timerProgressBar: true,
+          //       });
+          //       // router.replace({ name: "Finance" });
+          //       localStorage.removeItem("Order");
+          //       context.commit("SetResetCourseData");
+          //       context.commit("SetOrder", {
+          //         type: "",
+          //         order_step: 0,
+          //         order_number: "",
+          //         courses: [],
+          //         created_by: "",
+          //         payment_status: "",
+          //         payment_type: "",
+          //         total_price: 0,
+          //       });
+          //       context.commit("SetOrderIsLoading", false);
+          //     }
+          //   } else {
+          //     // const order_enpoint = `${process.env.VUE_APP_URL}/api/v1/order/update/${data.data.orderNumber}`
+          //     // const payment_payload = {
+          //     //   paymentType: "",
+          //     //   paymentStatus: "pending",
+          //     // };
+          //     // await axios.patch(order_enpoint, payment_payload)
+          //     Swal.fire({
+          //       icon: "success",
+          //       title: VueI18n.t("succeed"),
+          //       text: VueI18n.t("the transaction has been completed"),
+          //       showDenyButton: false,
+          //       showCancelButton: false,
+          //       showConfirmButton: false,
+          //       timer: 3000,
+          //       timerProgressBar: true,
+          //     });
+          //     // router.replace({ name: "Finance" });
+          //     localStorage.removeItem("Order");
+          //     context.commit("SetResetCourseData");
+          //     context.commit("SetOrder", {
+          //       type: "",
+          //       order_step: 0,
+          //       order_number: "",
+          //       courses: [],
+          //       created_by: "",
+          //       payment_status: "",
+          //       payment_type: "",
+          //       total_price: 0,
+          //     });
+          //     context.commit("SetOrderIsLoading", false);
+          //     context.commit("SetOrderIsStatus", true);
+          //   }
+          // }
         }
       } catch (error) {
         context.commit("SetOrderIsLoading", false);

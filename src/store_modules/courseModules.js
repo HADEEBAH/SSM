@@ -100,6 +100,7 @@ const CourseModules = {
       },
       location: "",
       detail: "",
+      discountCT2: '',
       music_performance: "",
       catification: "",
       price_course: 0,
@@ -1260,7 +1261,9 @@ const CourseModules = {
     async GetCourse(context, course_id) {
       context.commit("SetCourseIsLoading", true)
       try {
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
+        const localhost = 'http://localhost:3000'
+        let { data } = await axios.get(`${localhost}/api/v1/course/detail/${course_id}`)
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
         if (data.statusCode === 200) {
           let course_hours_part = data?.data?.coursePerTime?.toFixed(2)?.split(".")
           let course_hours_object = {}
@@ -1301,6 +1304,7 @@ const CourseModules = {
             course_hours_obj: course_hours_object,
             location: data.data.courseLocation,
             detail: data.data.courseDescription,
+            discountCT2: data.data.discountPriceCT2,
             music_performance: data.data.courseMusicPerformance,
             catification: data.data.courseCertification,
             price_course: data.data.coursePrice,
