@@ -82,7 +82,6 @@ const orderModules = {
       payment_type: "",
       total_price: 0,
       pay_date: "",
-      newPrice: 0
     },
 
     orders: [],
@@ -970,7 +969,7 @@ const orderModules = {
           totalPrice: 0,
           regisType: regis_type,
           pay_date: order.pay_date,
-          discountPriceCT2: discount ? discount : 0
+          discountPrice: discount ? discount : 0
         };
         let total_price = 0;
         const studentUpdate = []
@@ -1138,14 +1137,14 @@ const orderModules = {
           config
         );
         if (data.statusCode === 201) {
-          // let payment_payload = {
-          //   orderId: data.data.orderNumber,
-          //   total: data.data.totalPrice,
-          //   subtotal: 0.0,
-          //   vat: 0,
-          //   vatRate: 0,
-          //   orderDesc: "",
-          // };
+          let payment_payload = {
+            orderId: data.data.orderNumber,
+            total: data.data.totalPrice,
+            subtotal: 0.0,
+            vat: 0,
+            vatRate: 0,
+            orderDesc: "",
+          };
           // const localhost = 'http://localhost:3000'
 
           let user_data = JSON.parse(localStorage.getItem("userDetail"));
@@ -1177,110 +1176,110 @@ const orderModules = {
             };
             localStorage.setItem("userDetail", JSON.stringify(payload));
           }
-          // if (order.type !== "addStudent") {
-          //   // const localhost = 'http://localhost:3003'
-          //   // let payment = await axios.post(
-          //   //   `${localhost}/api/v1/payment/code`,
-          //   //   payment_payload
-          //   // );
+          if (order.type !== "addStudent") {
+            // const localhost = 'http://localhost:3003'
+            // let payment = await axios.post(
+            //   `${localhost}/api/v1/payment/code`,
+            //   payment_payload
+            // );
 
-          //   let payment = await axios.post(
-          //     `${process.env.VUE_APP_URL}/api/v1/payment/code`,
-          //     payment_payload
-          //   );
-          //   if (payment.data.statusCode === 201) {
-          //     window.location.href = payment.data.data;
-          //     setTimeout(() => {
-          //       localStorage.removeItem("Order");
-          //       context.commit("SetResetCourseData");
-          //       context.commit("SetOrder", {
-          //         type: "",
-          //         order_step: 0,
-          //         order_number: "",
-          //         courses: [],
-          //         created_by: "",
-          //         payment_status: "",
-          //         payment_type: "",
-          //         total_price: 0,
-          //       });
-          //       context.commit("SetOrderIsLoading", false);
-          //     }, 500);
-          //   }
-          // } else {
-          //   if (order.payment_status === "paid") {
-          //     let payment_payload = {
-          //       orderId: data.data.orderNumber,
-          //       paymentType: order.payment_type,
-          //       total: data.data.totalPrice,
-          //       recipient: user_data.account_id,
-          //       payDate: order.pay_date
-          //     };
-          //     // let endpoint = 'http://localhost:3003'
-          //     let endpoint = process.env.VUE_APP_URL;
-          //     let payment = await axios.patch(
-          //       `${endpoint}/api/v1/payment/data/${data.data.orderNumber}`,
-          //       payment_payload
-          //     );
-          //     if (payment.data.statusCode === 200) {
-          //       Swal.fire({
-          //         icon: "success",
-          //         title: VueI18n.t("succeed"),
-          //         text: VueI18n.t("the transaction has been completed"),
-          //         showDenyButton: false,
-          //         showCancelButton: false,
-          //         showConfirmButton: false,
-          //         timer: 3000,
-          //         timerProgressBar: true,
-          //       });
-          //       // router.replace({ name: "Finance" });
-          //       localStorage.removeItem("Order");
-          //       context.commit("SetResetCourseData");
-          //       context.commit("SetOrder", {
-          //         type: "",
-          //         order_step: 0,
-          //         order_number: "",
-          //         courses: [],
-          //         created_by: "",
-          //         payment_status: "",
-          //         payment_type: "",
-          //         total_price: 0,
-          //       });
-          //       context.commit("SetOrderIsLoading", false);
-          //     }
-          //   } else {
-          //     // const order_enpoint = `${process.env.VUE_APP_URL}/api/v1/order/update/${data.data.orderNumber}`
-          //     // const payment_payload = {
-          //     //   paymentType: "",
-          //     //   paymentStatus: "pending",
-          //     // };
-          //     // await axios.patch(order_enpoint, payment_payload)
-          //     Swal.fire({
-          //       icon: "success",
-          //       title: VueI18n.t("succeed"),
-          //       text: VueI18n.t("the transaction has been completed"),
-          //       showDenyButton: false,
-          //       showCancelButton: false,
-          //       showConfirmButton: false,
-          //       timer: 3000,
-          //       timerProgressBar: true,
-          //     });
-          //     // router.replace({ name: "Finance" });
-          //     localStorage.removeItem("Order");
-          //     context.commit("SetResetCourseData");
-          //     context.commit("SetOrder", {
-          //       type: "",
-          //       order_step: 0,
-          //       order_number: "",
-          //       courses: [],
-          //       created_by: "",
-          //       payment_status: "",
-          //       payment_type: "",
-          //       total_price: 0,
-          //     });
-          //     context.commit("SetOrderIsLoading", false);
-          //     context.commit("SetOrderIsStatus", true);
-          //   }
-          // }
+            let payment = await axios.post(
+              `${process.env.VUE_APP_URL}/api/v1/payment/code`,
+              payment_payload
+            );
+            if (payment.data.statusCode === 201) {
+              window.location.href = payment.data.data;
+              setTimeout(() => {
+                localStorage.removeItem("Order");
+                context.commit("SetResetCourseData");
+                context.commit("SetOrder", {
+                  type: "",
+                  order_step: 0,
+                  order_number: "",
+                  courses: [],
+                  created_by: "",
+                  payment_status: "",
+                  payment_type: "",
+                  total_price: 0,
+                });
+                context.commit("SetOrderIsLoading", false);
+              }, 500);
+            }
+          } else {
+            if (order.payment_status === "paid") {
+              let payment_payload = {
+                orderId: data.data.orderNumber,
+                paymentType: order.payment_type,
+                total: data.data.totalPrice,
+                recipient: user_data.account_id,
+                payDate: order.pay_date
+              };
+              // let endpoint = 'http://localhost:3003'
+              let endpoint = process.env.VUE_APP_URL;
+              let payment = await axios.patch(
+                `${endpoint}/api/v1/payment/data/${data.data.orderNumber}`,
+                payment_payload
+              );
+              if (payment.data.statusCode === 200) {
+                Swal.fire({
+                  icon: "success",
+                  title: VueI18n.t("succeed"),
+                  text: VueI18n.t("the transaction has been completed"),
+                  showDenyButton: false,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                  timer: 3000,
+                  timerProgressBar: true,
+                });
+                // router.replace({ name: "Finance" });
+                localStorage.removeItem("Order");
+                context.commit("SetResetCourseData");
+                context.commit("SetOrder", {
+                  type: "",
+                  order_step: 0,
+                  order_number: "",
+                  courses: [],
+                  created_by: "",
+                  payment_status: "",
+                  payment_type: "",
+                  total_price: 0,
+                });
+                context.commit("SetOrderIsLoading", false);
+              }
+            } else {
+              // const order_enpoint = `${process.env.VUE_APP_URL}/api/v1/order/update/${data.data.orderNumber}`
+              // const payment_payload = {
+              //   paymentType: "",
+              //   paymentStatus: "pending",
+              // };
+              // await axios.patch(order_enpoint, payment_payload)
+              Swal.fire({
+                icon: "success",
+                title: VueI18n.t("succeed"),
+                text: VueI18n.t("the transaction has been completed"),
+                showDenyButton: false,
+                showCancelButton: false,
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+              });
+              // router.replace({ name: "Finance" });
+              localStorage.removeItem("Order");
+              context.commit("SetResetCourseData");
+              context.commit("SetOrder", {
+                type: "",
+                order_step: 0,
+                order_number: "",
+                courses: [],
+                created_by: "",
+                payment_status: "",
+                payment_type: "",
+                total_price: 0,
+              });
+              context.commit("SetOrderIsLoading", false);
+              context.commit("SetOrderIsStatus", true);
+            }
+          }
         }
       } catch (error) {
         context.commit("SetOrderIsLoading", false);
@@ -2220,6 +2219,10 @@ const orderModules = {
           `${process.env.VUE_APP_URL}/api/v1/order/history/limit?limit=${limit}&page=${page}`,
           config
         )
+        // let { data } = await axios.get(
+        //   `${process.env.VUE_APP_URL}/api/v1/order/history/limit?limit=${limit}&page=${page}`,
+        //   config
+        // )
         // let mapHistory = [];
         if (data.statusCode === 200) {
           data.data.map((items) => {

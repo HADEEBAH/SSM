@@ -578,7 +578,7 @@
               </v-col>
             </v-row>
             <!-- PRICE -->
-            <!-- <pre>{{ course }}</pre>s -->
+            <!-- <pre>{{ course }}</pre> -->
             <v-row dense>
               <v-col cols="12" sm="4">
                 <label-custom :text="$t(`price`)"></label-custom>
@@ -1235,14 +1235,11 @@ export default {
       course.remark = "";
       if (courseId) {
         this.GetCourse(courseId).then(() => {
-          console.log("22 :>> ", 22);
           if (this.course_data) {
             course.course_data = this.course_data;
           }
-          console.log("this.course_data :>> ", this.course_data);
 
           if (this.course_data.course_type_id === "CT_2") {
-            console.log("this.course_data 2222:>> ", this.course_data);
             course.start_date = this.course_data.course_study_start_date;
             course.start_date_str = new Date(
               course.start_date
@@ -1270,8 +1267,13 @@ export default {
             course.time_str = `${period_start}-${period_end} ${this.$t(
               "o'clock"
             )}`;
-            course.price = parseInt(this.course_data.price_course);
-            course.newPrice = parseInt(course.course_data.newPrice);
+            let calcutaleDiscount = 0;
+            calcutaleDiscount =
+              this.course_data?.price_course - this.course_data?.discountPrice;
+            course.price =
+              this.course_data?.course_type_id == "CT_2"
+                ? parseInt(calcutaleDiscount)
+                : parseInt(this.course_data.price_course);
             course.time = this.course_data.days_of_class[0].times[0];
             this.CalTotalPrice();
           }
@@ -1444,7 +1446,7 @@ export default {
                   this.changeOrderData(this.order);
                   await this.saveOrder({
                     regis_type: "addStudent",
-                    discount: this.course_data?.discountCT2,
+                    discount: this.course_data?.discountPrice,
                   });
                   if (this.order_is_status) {
                     let payload = {
@@ -1511,7 +1513,6 @@ export default {
         payment_status: "",
         payment_type: "",
         total_price: 0,
-        newPrice: 0,
       });
     },
   },

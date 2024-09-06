@@ -47,12 +47,15 @@
             {{ $t("baht") }}/{{ $t("course") }}</v-col
           >
         </v-row>
-        <v-row v-if="course_data.course_type_id === 'CT_2'" dense>
+        <v-row
+          v-if="course_data.course_type_id === 'CT_2' && course_data.discount"
+          dense
+        >
           <v-col cols="auto">
             <v-icon class="mr-2" color="#ff6b81">mdi-sale</v-icon>
           </v-col>
           <v-col class="font-bold"
-            >{{ parseFloat(course_data.discountCT2).toLocaleString() }}
+            >{{ parseFloat(course_data.discount).toLocaleString() }}
             {{ $t("baht") }}/{{ $t("course") }}</v-col
           >
         </v-row>

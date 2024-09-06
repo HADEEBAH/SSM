@@ -2137,7 +2137,7 @@ export default {
                       // course_type_id: this?.course_data?.course_type_id,
                       discount:
                         this?.course_data?.course_type_id == "CT_2"
-                          ? this?.course_data?.discountCT2
+                          ? this?.course_data?.discount
                           : 0,
                     });
                   } else {

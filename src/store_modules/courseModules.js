@@ -100,7 +100,8 @@ const CourseModules = {
       },
       location: "",
       detail: "",
-      discountCT2: '',
+      discount: '',
+      checked_discount_bool: '',
       music_performance: "",
       catification: "",
       price_course: 0,
@@ -731,10 +732,14 @@ const CourseModules = {
           "courseStudentRecived": course_data.student_recived,
           "courseStudyEndDate": course_data?.coachs[0]?.class_date_range?.end_date,
           "courseStudyStartDate": course_data?.coachs[0]?.class_date_range?.start_date,
+          "checkedDiscount": course_data?.checked_discount_bool,
+          "discountPrice": course_data?.discount ? course_data?.discount : 0,
           "coachs": [],
           "dayOfweek": [],
         }
         if (course_data.course_type_id === "CT_2") {
+          console.log('course_data :>> ', course_data);
+
           for await (const coach of course_data.coachs.filter(v => v.teach_day_data.length > 0)) {
             let teach_day_data = []
             for await (const date of coach.teach_day_data) {
@@ -1304,8 +1309,9 @@ const CourseModules = {
             course_hours_obj: course_hours_object,
             location: data.data.courseLocation,
             detail: data.data.courseDescription,
-            discountCT2: data.data.discountPriceCT2,
-            newPrice: data.data.calculateCoursePrice,
+            discount: data.data.discountPrice,
+            checked_discount_bool: data.data.checkedDiscount,
+            calculate_price: data.data.calculateCoursePrice,
             music_performance: data.data.courseMusicPerformance,
             catification: data.data.courseCertification,
             price_course: data.data.coursePrice,
@@ -1611,8 +1617,8 @@ const CourseModules = {
           "courseMusicPerformance": course.music_performance,
           "courseCertification": course.catification,
           "coursePrice": course.price_course,
-          "discountPrice": course.discountCT2 ? course.discountCT2 : 0,
-          "checkDiscountBool": course.checkedDiscount,
+          "checkedDiscount": course.checked_discount_bool,
+          "discountPrice": course.discount ? course.discount : 0,
           "coachs": [],
           "dayOfweek": [],
           "coursePackages": []

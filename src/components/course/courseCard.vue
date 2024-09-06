@@ -421,12 +421,13 @@
               </v-text-field>
             </v-col>
           </v-row>
+          <!-- <pre>{{ course_data }}</pre> -->
           <v-row dense>
             <v-col cols="12" sm="2" align-self="start">
               <v-checkbox
-                v-model="course_data.checkedDiscount"
+                v-model="course_data.checked_discount_bool"
                 :label="$t('there is a discount')"
-                @click="ckeckClick(course_data)"
+                @click="ckeckClick(course_data.checked_discount_bool)"
                 :disabled="disable"
                 color="#FF6B81"
               ></v-checkbox>
@@ -435,7 +436,7 @@
               cols="12"
               sm="10"
               class="mt-4"
-              v-if="course_data.checkedDiscount"
+              v-if="course_data.checked_discount_bool"
             >
               <v-text-field
                 :placeholder="$t('specify discount/baht')"
@@ -448,7 +449,7 @@
                 outlined
                 @focus="$event.target.select()"
                 type="number"
-                v-model="course_data.discountCT2"
+                v-model="course_data.discount"
                 color="#FF6B81"
               >
               </v-text-field
@@ -1186,9 +1187,9 @@ export default {
     //   };
     // },
 
-    ckeckClick(items) {
-      if (items.checkedDiscount == false) {
-        items.discountPriceCT2 = "";
+    ckeckClick(item) {
+      if (item == false) {
+        this.course_data.discount = 0;
       }
     },
 
