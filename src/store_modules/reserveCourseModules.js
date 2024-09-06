@@ -255,7 +255,7 @@ const reserveCourseModules = {
           endIndex = page * limit;
           data.data.result = data.data?.result.slice(startIndex, endIndex)
           data.data.count = status === 'waiting' ? data.data?.amountPending : (status === 'cancel' ? data.data?.amountCancel : (status === 'contacted' ? data.data?.amountApproved : data.data?.amount))
-
+          data.data.totalRows = data?.data?.searchAmount
           data.data?.result.map((item) => {
             const options = { year: "numeric", month: "long", day: "numeric" };
             const thaiLocale = "th-TH";
@@ -514,7 +514,6 @@ const reserveCourseModules = {
           },
         };
         // let localhost = "http://localhost:3002"
-
         // const { data } = await axios.patch(`${localhost}/api/v1/order/reserve/update/all/${courseId}`, {}, config)
         const { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/reserve/update/all/${courseId}`, {}, config)
         if (data.statusCode === 200) {

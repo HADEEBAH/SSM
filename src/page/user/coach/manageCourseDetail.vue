@@ -419,8 +419,7 @@
                   student_check_in.filter(
                     (v) =>
                       v.type === 'general' &&
-                      (v.status == 'punctual' ||
-                        v.status == 'late')
+                      (v.status == 'punctual' || v.status == 'late')
                   ).length > 0
                 "
               >
@@ -1831,7 +1830,6 @@ export default {
       );
     },
     async saveSummary(items) {
-      console.log("saveSummary อันนี้แหละ");
       let student_id = [];
       await items.map((val) => {
         student_id.push({ studentId: val.studentId });
@@ -2062,7 +2060,6 @@ export default {
     },
     checkIn() {
       if (!this.coach_check_in.checkInCoachId) {
-        console.log("checkIn อันนี้", this.course_data);
         Swal.fire({
           icon: "question",
           title: this.$t("want to invest time in teaching?"),

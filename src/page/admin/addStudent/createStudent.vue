@@ -78,6 +78,7 @@
             </v-row>
           </v-col>
         </v-row>
+
         <v-card
           outlined
           v-for="(course, course_index) in order.courses"
@@ -577,6 +578,7 @@
               </v-col>
             </v-row>
             <!-- PRICE -->
+            <!-- <pre>{{ course }}</pre> -->
             <v-row dense>
               <v-col cols="12" sm="4">
                 <label-custom :text="$t(`price`)"></label-custom>
@@ -1058,6 +1060,7 @@ export default {
       searchNameUser: "loginModules/searchNameUser",
       GetAllCourseMonitor: "CourseMonitorModules/GetAllCourseMonitor",
     }),
+
     todayDate() {
       let todayDate = new Date();
       return dateFormatter(todayDate, "DD MMT YYYYT");
@@ -1070,7 +1073,6 @@ export default {
     //   return items.filter((packageStatus) => packageStatus.status === "Open");
     // },
     coachOptions(timeData) {
-      console.log("timeData :>> ", timeData);
       return timeData.filter((coach) => coach.status_coach === "Open");
       // return items.filter((coach) => coach.status_coach === "Open");
     },
@@ -1212,7 +1214,6 @@ export default {
       this.loading_course = true;
     },
     selectCourse(courseId, course) {
-      console.log("111 :>> ", courseId);
       course.package_data = {};
       course.package = "";
       course.option = {};
@@ -1229,11 +1230,9 @@ export default {
       course.remark = "";
       if (courseId) {
         this.GetCourse(courseId).then(() => {
-          console.log("22 :>> ", 22);
           if (this.course_data) {
             course.course_data = this.course_data;
           }
-          console.log("this.course_data :>> ", this.course_data);
 
           if (this.course_data.course_type_id === "CT_2") {
             course.start_date = this.course_data.course_study_start_date;
@@ -1263,7 +1262,14 @@ export default {
             course.time_str = `${period_start}-${period_end} ${this.$t(
               "o'clock"
             )}`;
-            course.price = parseInt(this.course_data.price_course);
+            // let calcutaleDiscount = 0;
+            // calcutaleDiscount =
+            //   this.course_data?.price_course - this.course_data?.discountPrice;
+
+            course.price =
+              this.course_data?.course_type_id == "CT_2"
+                ? parseInt(this.course_data?.calculate_price)
+                : parseInt(this.course_data.price_course);
             course.time = this.course_data.days_of_class[0].times[0];
             this.CalTotalPrice();
           }
@@ -1381,7 +1387,6 @@ export default {
                   });
                   this.order.type = "addStudent";
                   this.changeOrderData(this.order);
-                  console.log("this.order :>> ", this.order);
                   await this.saveOrder({ regis_type: "addStudent" });
                   if (this.order_is_status) {
                     let payload = {
@@ -1434,7 +1439,10 @@ export default {
                   });
                   this.order.type = "addStudent";
                   this.changeOrderData(this.order);
-                  await this.saveOrder({ regis_type: "addStudent" });
+                  await this.saveOrder({
+                    regis_type: "addStudent",
+                    discount: this.course_data?.discountPrice,
+                  });
                   if (this.order_is_status) {
                     let payload = {
                       notificationName: this.notification_name,

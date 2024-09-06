@@ -100,6 +100,8 @@ const CourseModules = {
       },
       location: "",
       detail: "",
+      discount: '',
+      checked_discount_bool: '',
       music_performance: "",
       catification: "",
       price_course: 0,
@@ -730,10 +732,13 @@ const CourseModules = {
           "courseStudentRecived": course_data.student_recived,
           "courseStudyEndDate": course_data?.coachs[0]?.class_date_range?.end_date,
           "courseStudyStartDate": course_data?.coachs[0]?.class_date_range?.start_date,
+          "checkedDiscount": course_data?.checked_discount_bool,
+          "discountPrice": course_data?.discount ? course_data?.discount : 0,
           "coachs": [],
           "dayOfweek": [],
         }
         if (course_data.course_type_id === "CT_2") {
+
           for await (const coach of course_data.coachs.filter(v => v.teach_day_data.length > 0)) {
             let teach_day_data = []
             for await (const date of coach.teach_day_data) {
@@ -1260,6 +1265,8 @@ const CourseModules = {
     async GetCourse(context, course_id) {
       context.commit("SetCourseIsLoading", true)
       try {
+        // const localhost = 'http://localhost:3000'
+        // let { data } = await axios.get(`${localhost}/api/v1/course/detail/${course_id}`)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
         if (data.statusCode === 200) {
           let course_hours_part = data?.data?.coursePerTime?.toFixed(2)?.split(".")
@@ -1301,6 +1308,9 @@ const CourseModules = {
             course_hours_obj: course_hours_object,
             location: data.data.courseLocation,
             detail: data.data.courseDescription,
+            discount: data.data.discountPrice,
+            checked_discount_bool: data.data.checkedDiscount,
+            calculate_price: data.data.calculateCoursePrice,
             music_performance: data.data.courseMusicPerformance,
             catification: data.data.courseCertification,
             price_course: data.data.coursePrice,
@@ -1606,6 +1616,8 @@ const CourseModules = {
           "courseMusicPerformance": course.music_performance,
           "courseCertification": course.catification,
           "coursePrice": course.price_course,
+          "checkedDiscount": course.checked_discount_bool,
+          "discountPrice": course.discount ? course.discount : 0,
           "coachs": [],
           "dayOfweek": [],
           "coursePackages": []
@@ -1686,6 +1698,8 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.post(`${localhost}/api/v1/course/create`, data_payload, config)
         let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/course/create`, data_payload, config)
         if (data.statusCode === 201) {
           context.commit("SetCourseIsLoading", false)

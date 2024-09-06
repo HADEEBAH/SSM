@@ -60,7 +60,6 @@
           </v-col>
         </v-row>
       </v-card>
-      <!-- <pre>{{ course_order }}</pre> -->
 
       <!-- SELECT CLASS DATE -->
       <template v-if="course_order.course_type_id == 'CT_1'">
@@ -262,6 +261,33 @@
               </v-list-item>
             </template>
           </v-autocomplete>
+        </v-col>
+        <!-- <pre>{{ profile_detail }}</pre> -->
+        <!-- SCHOOL -->
+        <v-col cols="12" sm="6">
+          <label-custom :text="$t('school')"></label-custom>
+          <v-text-field
+            placeholder="-"
+            v-model="course_order.students.find((v) => !v.is_other).school"
+            outlined
+            dense
+            color="#ff6b81"
+            :disabled="profile_detail.school.schoolNameTh !== null"
+          >
+          </v-text-field>
+        </v-col>
+        <!-- AllergiesList -->
+        <v-col cols="12" sm="6">
+          <label-custom :text="$t('congenital disease')"></label-custom>
+          <v-text-field
+            placeholder="-"
+            v-model="course_order.students.find((v) => !v.is_other).congenital"
+            outlined
+            dense
+            color="#ff6b81"
+            :disabled="profile_detail.congenitalDisease !== null"
+          >
+          </v-text-field>
         </v-col>
         <v-col
           cols="12"
@@ -639,6 +665,7 @@
                     @input="realtimeCheckNickname(student.nicknameTh)"
                   ></v-text-field>
                 </v-col>
+                <!-- CLASS -->
                 <v-col cols="12" sm="6" v-if="student.role === 'R_5'">
                   <labelCustom required :text="$t('class')"></labelCustom>
                   <!-- :disabled="student?.classData" -->
@@ -661,13 +688,44 @@
                     </template>
                   </v-autocomplete>
                 </v-col>
-                <v-col cols="12" sm="6" v-if="student.class === 'อื่นๆ'">
+                <!-- SCHOOL -->
+                <v-col cols="12" sm="6" v-if="student.role === 'R_5'">
+                  <labelCustom required :text="$t('school')"></labelCustom>
+                  <!-- :disabled="student?.classData" -->
+                  <v-text-field
+                    placeholder="-"
+                    v-model="student.school"
+                    outlined
+                    dense
+                    color="#ff6b81"
+                    :disabled="student.schoolData"
+                  >
+                  </v-text-field>
+                </v-col>
+                <!-- ALERGICT -->
+                <v-col cols="12" sm="6" v-if="student.role === 'R_5'">
+                  <label-custom :text="$t('congenital disease')"></label-custom>
+                  <v-text-field
+                    placeholder="-"
+                    v-model="student.congenital"
+                    outlined
+                    dense
+                    color="#ff6b81"
+                    :disabled="student.congenitalData"
+                  >
+                  </v-text-field>
+                </v-col>
+                <v-col
+                  cols="12"
+                  sm="6"
+                  v-if="student.class === 'อื่นๆ' && student.role === 'R_5'"
+                >
                   <labelCustom
                     required
                     :text="$t('please enter your class')"
                   ></labelCustom>
                   <v-text-field
-                    v-model="otherCheckClassData"
+                    v-model="student.otherClass"
                     placeholder="-"
                     outlined
                     color="#ff6b81"
@@ -752,7 +810,6 @@
             >
           </template>
         </v-col>
-        <!-- <pre>{{ course_order }}</pre> -->
 
         <v-col cols="12" sm="6">
           <v-btn
@@ -1194,6 +1251,7 @@ export default {
           is_other: true,
           class: "",
           nickName: "",
+          otherClass: "",
         });
       } else {
         this.course_order.students.forEach((student, index) => {
@@ -1215,8 +1273,11 @@ export default {
           parents: [],
           is_account: false,
           is_other: false,
+          school: this.profile_detail.school.schoolNameTh,
+          congenital: this.profile_detail.congenitalDisease,
           nicknameTh: this.profile_detail.nicknameTh,
           class: this.profile_detail?.class?.classNameTh,
+          otherClass: this.otherCheckClassData,
         });
       } else {
         this.course_order.students.forEach((student, index) => {
@@ -1240,6 +1301,9 @@ export default {
           is_other: true,
           class: "",
           nickName: "",
+          school: "",
+          congenital: "",
+          otherClass: "",
         });
       } else {
         this.course_order.students.forEach((student, index) => {
@@ -1297,6 +1361,11 @@ export default {
         student.nicknameData = this.last_user_registered.nickNameTh;
         student.class = this.last_user_registered?.class?.classNameTh;
         student.nicknameTh = this.last_user_registered.nickNameTh;
+        student.school = this.last_user_registered.school;
+        student.congenital = this.last_user_registered.congenitalDisease;
+        student.schoolData = this.last_user_registered.school;
+        student.congenitalData = this.last_user_registered.congenitalDisease;
+        student.otherClass = this.otherCheckClassData;
       }
       this.dialog_parent = false;
     },
@@ -1462,6 +1531,7 @@ export default {
       GetCourseSeats: "CourseModules/GetCourseSeats",
       GetCheckDate: "CourseModules/GetCheckDate",
     }),
+
     realtimeCheckNickname(items) {
       this.inputNickName = items;
     },
@@ -1658,6 +1728,8 @@ export default {
     CreateReserve() {
       let checkNickname = "";
       let checkClass = "";
+      let checkSchool = "";
+      let checkcongenital = "";
       let roles = "";
       let yourself = this.course_order.apply_for_yourself;
 
@@ -1667,6 +1739,8 @@ export default {
           items.class || items.class?.classNameTh
             ? items.class || items.class?.classNameTh
             : null;
+        checkSchool = items.school ? items.school : null;
+        checkcongenital = items.congenital ? items.congenital : null;
       }
       for (const items of this.user_student_data) {
         roles = items?.roles?.roleId;
@@ -1674,9 +1748,17 @@ export default {
 
       if (
         (roles !== "R_5" && yourself === false && checkNickname) ||
-        (roles === "R_5" && checkNickname && checkClass) ||
+        (roles === "R_5" &&
+          checkNickname &&
+          checkClass &&
+          checkSchool &&
+          checkcongenital) ||
         (roles === undefined && checkNickname) ||
-        (yourself === true && checkNickname && checkClass)
+        (yourself === true &&
+          checkNickname &&
+          checkClass &&
+          checkSchool &&
+          checkcongenital)
       ) {
         if (this.course_order.course_type_id == "CT_1") {
           this.$refs.form_coach.validate();
@@ -1844,7 +1926,9 @@ export default {
               username: this.profile_detail.userName,
             },
           ],
+          class: "",
         });
+        this.inputClass = "";
       } else {
         this.course_order.students.push({
           account_id: "",
@@ -1856,7 +1940,11 @@ export default {
           is_other: true,
           is_account: false,
           parents: [],
+          school: "",
+          congenital: "",
+          class: "",
         });
+        this.inputClass = "";
       }
     },
     closeDialogCart() {
@@ -1923,7 +2011,10 @@ export default {
                 this.user_login.account_id,
                 JSON.stringify(this.order)
               );
-              this.saveCart({ cart_data: this.order });
+              this.saveCart({
+                cart_data: this.order,
+                discount: this.course_data?.discount,
+              });
               // this.resetCourseData();
               // this.show_dialog_cart = true;
               // Swal.fire({
@@ -1982,6 +2073,8 @@ export default {
     async checkOut() {
       let checkNickname = "";
       let checkClass = "";
+      let checkSchool = "";
+      let checkcongenital = "";
       let roles = "";
       let yourself = this.course_order.apply_for_yourself;
 
@@ -1991,6 +2084,8 @@ export default {
           items.class || items.class?.classNameTh
             ? items.class || items.class?.classNameTh
             : null;
+        checkSchool = items.school ? items.school : null;
+        checkcongenital = items.congenital ? items.congenital : null;
       }
       for (const items of this.user_student_data) {
         roles = items?.roles?.roleId;
@@ -2007,22 +2102,30 @@ export default {
         (roles === "R_5" &&
           checkNickname &&
           checkClass &&
-          checkClass !== "อื่นๆ") ||
+          checkClass !== "อื่นๆ" &&
+          checkSchool &&
+          checkcongenital) ||
         (roles === "R_5" &&
           checkNickname &&
           checkClass &&
           checkClass === "อื่นๆ" &&
+          checkSchool &&
+          checkcongenital &&
           this.myCheckClassData !== "") ||
         this.otherCheckClassData !== "" ||
         (roles === undefined && checkNickname) ||
         (yourself === true &&
           checkNickname &&
           checkClass &&
-          checkClass !== "อื่นๆ") ||
+          checkClass !== "อื่นๆ" &&
+          checkSchool &&
+          checkcongenital) ||
         (yourself === true &&
           checkNickname &&
           checkClass &&
           checkClass === "อื่นๆ" &&
+          checkSchool &&
+          checkcongenital &&
           this.myCheckClassData !== "") ||
         this.otherCheckClassData !== ""
       ) {
@@ -2126,11 +2229,17 @@ export default {
                 } else {
                   if (this.check_date?.during == "1") {
                     // สามารถซื้อได้
+
                     await this.saveOrder({
                       regis_type: "",
                       my_data_class: this.myCheckClassData,
                       othert_data_class: this.otherCheckClassData,
                       type_checked: yourself,
+                      // course_type_id: this?.course_data?.course_type_id,
+                      discount:
+                        this?.course_data?.course_type_id == "CT_2"
+                          ? this?.course_data?.discount
+                          : 0,
                     });
                   } else {
                     await Swal.fire({
@@ -2193,9 +2302,17 @@ export default {
                   student.IsWaraphat = this.user_student_data[0].IsWaraphat;
                   student.nicknameTh = this.user_student_data[0].nicknameTh;
                   student.class = this.user_student_data[0]?.class?.classNameTh;
+                  student.school =
+                    this.user_student_data[0]?.school?.schoolNameTh;
+                  student.congenital =
+                    this.user_student_data[0]?.congenitalDisease;
                   student.nicknameData = this.user_student_data[0].nicknameTh;
                   student.classData =
                     this.user_student_data[0]?.class?.classNameTh;
+                  student.schoolData =
+                    this.user_student_data[0]?.school?.schoolNameTh;
+                  student.congenitalData =
+                    this.user_student_data[0]?.congenitalDisease;
                   student.role = this.user_student_data[0]?.roles?.roleId;
                 } else {
                   if (student) {
