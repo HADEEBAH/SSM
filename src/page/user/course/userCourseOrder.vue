@@ -265,7 +265,7 @@
         <!-- <pre>{{ profile_detail }}</pre> -->
         <!-- SCHOOL -->
         <v-col cols="12" sm="6">
-          <label-custom :text="$t('school')"></label-custom>
+          <label-custom required :text="$t('school')"></label-custom>
           <v-text-field
             placeholder="-"
             v-model="course_order.students.find((v) => !v.is_other).school"
@@ -278,7 +278,10 @@
         </v-col>
         <!-- AllergiesList -->
         <v-col cols="12" sm="6">
-          <label-custom :text="$t('congenital disease')"></label-custom>
+          <label-custom
+            required
+            :text="$t('congenital disease')"
+          ></label-custom>
           <v-text-field
             placeholder="-"
             v-model="course_order.students.find((v) => !v.is_other).congenital"
@@ -704,7 +707,10 @@
                 </v-col>
                 <!-- ALERGICT -->
                 <v-col cols="12" sm="6" v-if="student.role === 'R_5'">
-                  <label-custom :text="$t('congenital disease')"></label-custom>
+                  <label-custom
+                    required
+                    :text="$t('congenital disease')"
+                  ></label-custom>
                   <v-text-field
                     placeholder="-"
                     v-model="student.congenital"
