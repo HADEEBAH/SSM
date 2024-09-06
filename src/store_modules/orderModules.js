@@ -1256,9 +1256,9 @@ const orderModules = {
           },
         };
         try {
-          const localhost = 'http://localhost:3000'
-          await axios.post(`${localhost}/api/v1/account/student/list`, studentUpdate, config)
-          // await axios.post(`${process.env.VUE_APP_URL}/api/v1/account/student/list`, studentUpdate, config)
+          // const localhost = 'http://localhost:3000'
+          // await axios.post(`${localhost}/api/v1/account/student/list`, studentUpdate, config)
+          await axios.post(`${process.env.VUE_APP_URL}/api/v1/account/student/list`, studentUpdate, config)
         } catch (error) {
           Swal.fire({
             icon: "error",

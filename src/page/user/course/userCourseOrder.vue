@@ -715,13 +715,17 @@
                   >
                   </v-text-field>
                 </v-col>
-                <v-col cols="12" sm="6" v-if="inputClass === 'อื่นๆ'">
+                <v-col
+                  cols="12"
+                  sm="6"
+                  v-if="student.class === 'อื่นๆ' && student.role === 'R_5'"
+                >
                   <labelCustom
                     required
                     :text="$t('please enter your class')"
                   ></labelCustom>
                   <v-text-field
-                    v-model="otherCheckClassData"
+                    v-model="student.otherClass"
                     placeholder="-"
                     outlined
                     color="#ff6b81"
@@ -1247,6 +1251,7 @@ export default {
           is_other: true,
           class: "",
           nickName: "",
+          otherClass: "",
         });
       } else {
         this.course_order.students.forEach((student, index) => {
@@ -1272,6 +1277,7 @@ export default {
           congenital: this.profile_detail.congenitalDisease,
           nicknameTh: this.profile_detail.nicknameTh,
           class: this.profile_detail?.class?.classNameTh,
+          otherClass: this.otherCheckClassData,
         });
       } else {
         this.course_order.students.forEach((student, index) => {
@@ -1297,6 +1303,7 @@ export default {
           nickName: "",
           school: "",
           congenital: "",
+          otherClass: "",
         });
       } else {
         this.course_order.students.forEach((student, index) => {
@@ -1359,6 +1366,7 @@ export default {
         student.congenital = this.last_user_registered.congenitalDisease;
         student.schoolData = this.last_user_registered.school;
         student.congenitalData = this.last_user_registered.congenitalDisease;
+        student.otherClass = this.otherCheckClassData;
       }
       this.dialog_parent = false;
     },
@@ -1524,6 +1532,7 @@ export default {
       GetCourseSeats: "CourseModules/GetCourseSeats",
       GetCheckDate: "CourseModules/GetCheckDate",
     }),
+
     realtimeCheckNickname(items) {
       this.inputNickName = items;
     },
@@ -1918,7 +1927,9 @@ export default {
               username: this.profile_detail.userName,
             },
           ],
+          class: "",
         });
+        this.inputClass = "";
       } else {
         this.course_order.students.push({
           account_id: "",
@@ -1932,7 +1943,9 @@ export default {
           parents: [],
           school: "",
           congenital: "",
+          class: "",
         });
+        this.inputClass = "";
       }
     },
     closeDialogCart() {
