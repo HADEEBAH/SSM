@@ -1267,12 +1267,21 @@ export default {
             course.time_str = `${period_start}-${period_end} ${this.$t(
               "o'clock"
             )}`;
-            let calcutaleDiscount = 0;
-            calcutaleDiscount =
-              this.course_data?.price_course - this.course_data?.discountPrice;
+            // let calcutaleDiscount = 0;
+            // calcutaleDiscount =
+            //   this.course_data?.price_course - this.course_data?.discountPrice;
+            console.log("this.course_data :>> ", this.course_data);
+            console.log(
+              "this.course_data.calculate_price :>> ",
+              this.course_data.calculate_price
+            );
+            console.log(
+              "this.course_data.course_type_id :>> ",
+              this.course_data.course_type_id
+            );
             course.price =
               this.course_data?.course_type_id == "CT_2"
-                ? parseInt(calcutaleDiscount)
+                ? parseInt(this.course_data?.calculate_price)
                 : parseInt(this.course_data.price_course);
             course.time = this.course_data.days_of_class[0].times[0];
             this.CalTotalPrice();

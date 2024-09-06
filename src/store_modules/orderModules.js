@@ -539,7 +539,7 @@ const orderModules = {
         console.log(error);
       }
     },
-    async saveCart(context, { cart_data }) {
+    async saveCart(context, { cart_data, discount }) {
       try {
         let order = cart_data;
         let payload = {
@@ -548,7 +548,7 @@ const orderModules = {
           created_by: "",
           paymentStatus: "pending",
           paymentType: "",
-          totalPrice: 0,
+          totalPrice: 0
         };
         let total_price = 0;
         let studentUpdate = [];
@@ -655,6 +655,8 @@ const orderModules = {
               fullName: course.coach_name,
             },
             student: students,
+            discountPrice: discount
+
           };
           let price = course.option?.net_price
             ? course.option.net_price
@@ -674,9 +676,10 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-
+        const localhost = 'http://localhost:3002'
         let { data } = await axios.post(
-          `${process.env.VUE_APP_URL}/api/v1/order/cart`,
+          `${localhost}/api/v1/order/cart`,
+          // `${process.env.VUE_APP_URL}/api/v1/order/cart`,
           payload,
           config
         );
@@ -1128,11 +1131,11 @@ const orderModules = {
           });
         }
         // console.log('payload :>> ', payload);
-        // let localhost = "http://localhost:3002"
+        let localhost = "http://localhost:3002"
 
         let { data } = await axios.post(
-          // `${localhost}/api/v1/order/regis/course`,
-          `${process.env.VUE_APP_URL}/api/v1/order/regis/course`,
+          `${localhost}/api/v1/order/regis/course`,
+          // `${process.env.VUE_APP_URL}/api/v1/order/regis/course`,
           payload,
           config
         );
@@ -1705,9 +1708,10 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
+        const localhost = 'http://localhost:3002'
         let { data } = await axios.get(
-          `${process.env.VUE_APP_URL}/api/v1/order/cart/limit?limit=${limit}&page=${page}`,
-
+          `${localhost}/api/v1/order/cart/limit?limit=${limit}&page=${page}`,
+          // `${process.env.VUE_APP_URL}/api/v1/order/cart/limit?limit=${limit}&page=${page}`,
           config
         );
         if (data.statusCode === 200) {

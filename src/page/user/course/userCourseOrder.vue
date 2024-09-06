@@ -748,7 +748,7 @@
               dense
               color="#ff6b81"
               @click="addToCart"
-              >{{ $t("add to cart") }}</v-btn
+              >{{ $t("add to cart22") }}</v-btn
             >
           </template>
         </v-col>
@@ -1923,7 +1923,10 @@ export default {
                 this.user_login.account_id,
                 JSON.stringify(this.order)
               );
-              this.saveCart({ cart_data: this.order });
+              this.saveCart({
+                cart_data: this.order,
+                discount: this.course_data?.discount,
+              });
               // this.resetCourseData();
               // this.show_dialog_cart = true;
               // Swal.fire({

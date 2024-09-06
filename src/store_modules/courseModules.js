@@ -1699,7 +1699,9 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/course/create`, data_payload, config)
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.post(`${localhost}/api/v1/course/create`, data_payload, config)
+        // let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/course/create`, data_payload, config)
         if (data.statusCode === 201) {
           context.commit("SetCourseIsLoading", false)
           router.replace({ name: "CourseList" })
