@@ -738,7 +738,6 @@ const CourseModules = {
           "dayOfweek": [],
         }
         if (course_data.course_type_id === "CT_2") {
-          console.log('course_data :>> ', course_data);
 
           for await (const coach of course_data.coachs.filter(v => v.teach_day_data.length > 0)) {
             let teach_day_data = []

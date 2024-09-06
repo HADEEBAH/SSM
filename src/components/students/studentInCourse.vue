@@ -448,7 +448,6 @@ export default {
         : `${item.firstNameEng} ${item.lastNameEng}`;
     },
     async filterStudents(items) {
-      console.log("items :>> ", this.filter_potential_student);
       this.studentName =
         this.$i18n.locale === "th"
           ? `${items?.firstNameTh} ${items?.lastNameTh}`

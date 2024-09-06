@@ -1344,7 +1344,6 @@ export default {
             });
         }
       } else if (this.last_user_registered.type === "student") {
-        console.log("last_user_registered :>> ", this.last_user_registered);
         let student =
           this.course_order.students[this.course_order.students.length - 1];
         student.account_id = this.last_user_registered.account_id;
@@ -2213,7 +2212,6 @@ export default {
                 this.changeOrderData(this.order);
                 if (this.course_order.course_type_id == "CT_1") {
                   if (this.course_order.day && this.course_order.time) {
-                    console.log("this.course_data :>> ", this.course_data);
                     this.saveOrder({
                       regis_type: "",
                       my_data_class: this.myCheckClassData,
@@ -2231,7 +2229,6 @@ export default {
                 } else {
                   if (this.check_date?.during == "1") {
                     // สามารถซื้อได้
-                    console.log("this.course_data 22:>> ", this.course_data);
 
                     await this.saveOrder({
                       regis_type: "",

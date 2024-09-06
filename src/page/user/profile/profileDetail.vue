@@ -664,12 +664,6 @@ export default {
                   Authorization: `Bearer ${VueCookie.get("token")}`,
                 },
               };
-              console.log("this.otherClass :>> ", this.otherClass);
-              console.log(
-                "this.selectedClass?.classNameTh :>> ",
-                this.selectedClass
-              );
-              console.log("this.profile_detail :>> ", this.profile_detail);
 
               let payload = {
                 firstNameTh: this.profile_detail.firstNameTh,

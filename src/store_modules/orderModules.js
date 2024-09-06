@@ -936,7 +936,6 @@ const orderModules = {
 
     async saveOrder(context, { regis_type, my_data_class, othert_data_class, type_checked, discount }) {
       context.commit("SetOrderIsLoading", true);
-      console.log('discount :>> ', discount);
       try {
         let order = context.state.order;
         let configs = {
@@ -1092,7 +1091,6 @@ const orderModules = {
             price = course.price;
             total_price = order.total_price * course.students.length;
           } else {
-            console.log('course :>> ', course);
             price = course.option?.net_price
               ? course.option.net_price
               : course.price;

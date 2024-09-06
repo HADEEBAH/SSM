@@ -1060,10 +1060,7 @@ export default {
       searchNameUser: "loginModules/searchNameUser",
       GetAllCourseMonitor: "CourseMonitorModules/GetAllCourseMonitor",
     }),
-    checkData(allData, price) {
-      console.log("allData :>> ", allData);
-      console.log("price :>> ", price);
-    },
+
     todayDate() {
       let todayDate = new Date();
       return dateFormatter(todayDate, "DD MMT YYYYT");
@@ -1076,7 +1073,6 @@ export default {
     //   return items.filter((packageStatus) => packageStatus.status === "Open");
     // },
     coachOptions(timeData) {
-      console.log("timeData :>> ", timeData);
       return timeData.filter((coach) => coach.status_coach === "Open");
       // return items.filter((coach) => coach.status_coach === "Open");
     },
@@ -1218,7 +1214,6 @@ export default {
       this.loading_course = true;
     },
     selectCourse(courseId, course) {
-      console.log("111 :>> ", course);
       course.package_data = {};
       course.package = "";
       course.option = {};
@@ -1270,15 +1265,7 @@ export default {
             // let calcutaleDiscount = 0;
             // calcutaleDiscount =
             //   this.course_data?.price_course - this.course_data?.discountPrice;
-            console.log("this.course_data :>> ", this.course_data);
-            console.log(
-              "this.course_data.calculate_price :>> ",
-              this.course_data.calculate_price
-            );
-            console.log(
-              "this.course_data.course_type_id :>> ",
-              this.course_data.course_type_id
-            );
+
             course.price =
               this.course_data?.course_type_id == "CT_2"
                 ? parseInt(this.course_data?.calculate_price)
@@ -1400,7 +1387,6 @@ export default {
                   });
                   this.order.type = "addStudent";
                   this.changeOrderData(this.order);
-                  console.log("this.order :>> ", this.order);
                   await this.saveOrder({ regis_type: "addStudent" });
                   if (this.order_is_status) {
                     let payload = {
