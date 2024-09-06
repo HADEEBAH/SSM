@@ -514,7 +514,6 @@ const reserveCourseModules = {
           },
         };
         // let localhost = "http://localhost:3002"
-
         // const { data } = await axios.patch(`${localhost}/api/v1/order/reserve/update/all/${courseId}`, {}, config)
         const { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/reserve/update/all/${courseId}`, {}, config)
         if (data.statusCode === 200) {

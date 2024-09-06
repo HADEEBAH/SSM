@@ -2012,7 +2012,10 @@ export default {
                 this.user_login.account_id,
                 JSON.stringify(this.order)
               );
-              this.saveCart({ cart_data: this.order });
+              this.saveCart({
+                cart_data: this.order,
+                discount: this.course_data?.discount,
+              });
               // this.resetCourseData();
               // this.show_dialog_cart = true;
               // Swal.fire({
@@ -2210,6 +2213,7 @@ export default {
                 this.changeOrderData(this.order);
                 if (this.course_order.course_type_id == "CT_1") {
                   if (this.course_order.day && this.course_order.time) {
+                    console.log("this.course_data :>> ", this.course_data);
                     this.saveOrder({
                       regis_type: "",
                       my_data_class: this.myCheckClassData,
@@ -2227,11 +2231,18 @@ export default {
                 } else {
                   if (this.check_date?.during == "1") {
                     // สามารถซื้อได้
+                    console.log("this.course_data 22:>> ", this.course_data);
+
                     await this.saveOrder({
                       regis_type: "",
                       my_data_class: this.myCheckClassData,
                       othert_data_class: this.otherCheckClassData,
                       type_checked: yourself,
+                      // course_type_id: this?.course_data?.course_type_id,
+                      discount:
+                        this?.course_data?.course_type_id == "CT_2"
+                          ? this?.course_data?.discount
+                          : 0,
                     });
                   } else {
                     await Swal.fire({

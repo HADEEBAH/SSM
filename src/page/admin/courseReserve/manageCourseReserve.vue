@@ -145,6 +145,7 @@
       v-if="reserve_list_is_loading"
       :loading="reserve_list_is_loading"
     ></loading-overlay>
+    <pre>{{ reserve_list }}</pre>
     <v-card>
       <v-data-table
         class="header-table"
@@ -793,11 +794,19 @@ export default {
       };
     },
     async clickTab() {
+      console.log("this.tabs_temp :>> ", this.tabs_temp);
+      console.log("this.tab_selected :>> ", this.tab_selected);
+      console.log("this.tabs_change :>> ", this.tabs_change);
+      console.log("this.text_temp :>> ", this.text_temp);
+      console.log("this.search_filter :>> ", this.search_filter);
+      console.log("this.text_change :>> ", this.text_change);
       this.search_bool = true;
       if (this.tabs_temp !== this.tab_selected) {
+        console.log("11 :>> ", 11);
         this.tabs_change = true;
       }
       if (this.text_temp !== this.search_filter) {
+        console.log("22 :>> ", 22);
         this.text_change = true;
       }
       await this.loadItems(this.tab_selected);
