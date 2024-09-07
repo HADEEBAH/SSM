@@ -267,7 +267,7 @@
         <v-col cols="12" sm="6">
           <label-custom required :text="$t('school')"></label-custom>
           <v-text-field
-            placeholder="-"
+            :placeholder="$t('please specify the name of the school')"
             v-model="course_order.students.find((v) => !v.is_other).school"
             outlined
             dense
@@ -283,7 +283,7 @@
             :text="$t('congenital disease')"
           ></label-custom>
           <v-text-field
-            placeholder="-"
+            :placeholder="$t('please specify congenital disease')"
             v-model="course_order.students.find((v) => !v.is_other).congenital"
             outlined
             dense
@@ -696,7 +696,7 @@
                   <labelCustom required :text="$t('school')"></labelCustom>
                   <!-- :disabled="student?.classData" -->
                   <v-text-field
-                    placeholder="-"
+                    :placeholder="$t('please specify the name of the school')"
                     v-model="student.school"
                     outlined
                     dense
@@ -712,7 +712,7 @@
                     :text="$t('congenital disease')"
                   ></label-custom>
                   <v-text-field
-                    placeholder="-"
+                    :placeholder="$t('please specify congenital disease')"
                     v-model="student.congenital"
                     outlined
                     dense

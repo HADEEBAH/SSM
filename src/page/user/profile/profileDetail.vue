@@ -135,7 +135,7 @@
         <v-col cols="12" sm="6">
           <label-custom :text="$t('school')"></label-custom>
           <v-text-field
-            placeholder="-"
+            :placeholder="$t('please specify the name of the school')"
             v-model="profile_detail.school.schoolNameTh"
             outlined
             dense
@@ -210,7 +210,7 @@
         <v-col cols="12" sm="6">
           <label-custom :text="$t('congenital disease')"></label-custom>
           <v-text-field
-            placeholder="-"
+            :placeholder="$t('please specify congenital disease')"
             v-model="profile_detail.congenitalDisease"
             outlined
             dense
