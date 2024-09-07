@@ -459,6 +459,7 @@
     "nationality must not have emojis": "สันชาติต้องไม่มีอิโมจิ",
     "november": "พฤศจิกายน",
     "number must be": "ตัวเลขควรที่จะเท่ากันหรือน้อยกว่า",
+    "number must be lest than": "ตัวเลขควรที่จะน้อยกว่า",
     "number must be 1": "ตัวเลขควรที่จะเท่ากับ 1 หรือมากกว่า",
     
     "o'clock" : "น.",

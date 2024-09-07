@@ -671,7 +671,9 @@ export default {
                 nation: this.profile_detail.nation,
                 mobileNo: this.profile_detail.mobileNo,
                 email: this.profile_detail.email,
-                schoolTh: this.profile_detail.school.schoolNameTh,
+                schoolTh: this.profile_detail.school.schoolNameTh
+                  ? this.profile_detail.school.schoolNameTh
+                  : "",
                 nicknameTh: this.profile_detail?.nicknameTh
                   ? this.profile_detail.nicknameTh
                   : "",
