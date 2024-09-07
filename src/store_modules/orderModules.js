@@ -934,7 +934,7 @@ const orderModules = {
     // },
 
 
-    async saveOrder(context, { regis_type, my_data_class, othert_data_class, type_checked, discount }) {
+    async saveOrder(context, { regis_type, my_data_class, othert_data_class, type_checked, discount, courseData }) {
       context.commit("SetOrderIsLoading", true);
       try {
         let order = context.state.order;
@@ -1080,6 +1080,7 @@ const orderModules = {
             price: course.option?.net_price
               ? course.option.net_price
               : course.price,
+            originalPrice: courseData.price_course,
             coach: {
               accountId: course.coach_id ? course.coach_id : course.coach,
               fullName: course.coach_name,

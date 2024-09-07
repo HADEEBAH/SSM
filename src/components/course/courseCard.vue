@@ -443,7 +443,7 @@
                 dense
                 class="input-text-right"
                 :disabled="disable"
-                :rules="price"
+                :rules="rulesDiscount"
                 :min="0"
                 :max="course_data.price_course"
                 outlined
@@ -1168,25 +1168,25 @@ export default {
     price() {
       return [(val) => val > 0 || this.$t("please specify price")];
     },
+    rulesDiscount() {
+      return [
+        () =>
+          this.course_data.discount !== "" ||
+          this.$t("please fill out the information correctly"),
+        () =>
+          parseInt(this.course_data.discount) <=
+            this.course_data.price_course ||
+          `${this.$t("number must be")} ${this.course_data.price_course}`,
+        () =>
+          parseInt(this.course_data.discount) >= 1 ||
+          this.$t("number must be 1"),
+      ];
+    },
   },
   methods: {
     ...mapActions({
       ChangeCourseData: "CourseModules/ChangeCourseData",
     }),
-    // rulesDiscount(maxPrice) {
-    //   console.log("maxPrice :>> ", maxPrice);
-    //   return (value) => {
-    //     console.log("value :>> ", value);
-    //     if (value > maxPrice) {
-    //       return `${this.$t("number must be")} ${maxPrice}`;
-    //     }
-    //     if (value < 0) {
-    //       return this.$t("number must be 1");
-    //     }
-    //     return true;
-    //   };
-    // },
-
     ckeckClick(item) {
       if (item == false) {
         this.course_data.discount = 0;
