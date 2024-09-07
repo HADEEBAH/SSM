@@ -292,7 +292,6 @@
           >
           </v-text-field>
         </v-col>
-        {{ myCheckClassData }}
         <v-col
           cols="12"
           sm="6"
@@ -2120,8 +2119,7 @@ export default {
           checkClass === "อื่นๆ" &&
           checkSchool &&
           checkcongenital &&
-          this.myCheckClassData) ||
-        checkOtherClass ||
+          (this.myCheckClassData || checkOtherClass)) ||
         this.otherCheckClassData !== "" ||
         (roles === undefined && checkNickname) ||
         (yourself === true &&
