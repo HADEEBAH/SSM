@@ -54,8 +54,9 @@
           <v-col cols="auto">
             <v-icon class="mr-2" color="#ff6b81">mdi-sale</v-icon>
           </v-col>
-          <v-col class="font-bold"
-            >{{ parseFloat(course_data.discount).toLocaleString() }}
+          <v-col class="font-bold">
+            {{ `${$t("discount")}` }}
+            {{ parseFloat(course_data.discount).toLocaleString() }}
             {{ $t("baht") }}/{{ $t("course") }}</v-col
           >
         </v-row>
