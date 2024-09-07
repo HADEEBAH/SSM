@@ -292,7 +292,6 @@
           >
           </v-text-field>
         </v-col>
-        {{ myCheckClassData }}
         <v-col
           cols="12"
           sm="6"
