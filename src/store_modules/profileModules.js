@@ -217,9 +217,9 @@ const profileModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        // let localhost = "http://localhost:3000"
-        // let { data } = await axios.get(`${localhost}/api/v1/profile/${account_id}`, config)
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/profile/${account_id}`, config)
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${localhost}/api/v1/profile/${account_id}`, config)
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/profile/${account_id}`, config)
         let roles = {
           roleId: "",
           roleNameEng: "",
