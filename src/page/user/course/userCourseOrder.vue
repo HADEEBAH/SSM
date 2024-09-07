@@ -253,7 +253,7 @@
                 course_order.students.find((v) => !v.is_other).class
               )
             "
-            :disabled="profile_detail.class.classNameTh !== ''"
+            :disabled="profile_detail.class.classNameTh"
           >
             <template #no-data>
               <v-list-item>
@@ -262,17 +262,17 @@
             </template>
           </v-autocomplete>
         </v-col>
-        <!-- <pre>{{ profile_detail }}</pre> -->
+
         <!-- SCHOOL -->
         <v-col cols="12" sm="6">
           <label-custom required :text="$t('school')"></label-custom>
           <v-text-field
-            placeholder="-"
+            :placeholder="$t('please specify the name of the school')"
             v-model="course_order.students.find((v) => !v.is_other).school"
             outlined
             dense
             color="#ff6b81"
-            :disabled="profile_detail.school.schoolNameTh !== null"
+            :disabled="profile_detail.school.schoolNameTh"
           >
           </v-text-field>
         </v-col>
@@ -283,7 +283,7 @@
             :text="$t('congenital disease')"
           ></label-custom>
           <v-text-field
-            placeholder="-"
+            :placeholder="$t('please specify congenital disease')"
             v-model="course_order.students.find((v) => !v.is_other).congenital"
             outlined
             dense
@@ -292,6 +292,7 @@
           >
           </v-text-field>
         </v-col>
+        {{ myCheckClassData }}
         <v-col
           cols="12"
           sm="6"
@@ -696,7 +697,7 @@
                   <labelCustom required :text="$t('school')"></labelCustom>
                   <!-- :disabled="student?.classData" -->
                   <v-text-field
-                    placeholder="-"
+                    :placeholder="$t('please specify the name of the school')"
                     v-model="student.school"
                     outlined
                     dense
@@ -712,7 +713,7 @@
                     :text="$t('congenital disease')"
                   ></label-custom>
                   <v-text-field
-                    placeholder="-"
+                    :placeholder="$t('please specify congenital disease')"
                     v-model="student.congenital"
                     outlined
                     dense
@@ -2081,6 +2082,7 @@ export default {
       let checkClass = "";
       let checkSchool = "";
       let checkcongenital = "";
+      let checkOtherClass = "";
       let roles = "";
       let yourself = this.course_order.apply_for_yourself;
 
@@ -2092,6 +2094,7 @@ export default {
             : null;
         checkSchool = items.school ? items.school : null;
         checkcongenital = items.congenital ? items.congenital : null;
+        checkOtherClass = items.otherClass;
       }
       for (const items of this.user_student_data) {
         roles = items?.roles?.roleId;
@@ -2117,7 +2120,8 @@ export default {
           checkClass === "อื่นๆ" &&
           checkSchool &&
           checkcongenital &&
-          this.myCheckClassData !== "") ||
+          this.myCheckClassData) ||
+        checkOtherClass ||
         this.otherCheckClassData !== "" ||
         (roles === undefined && checkNickname) ||
         (yourself === true &&
@@ -2132,7 +2136,7 @@ export default {
           checkClass === "อื่นๆ" &&
           checkSchool &&
           checkcongenital &&
-          this.myCheckClassData !== "") ||
+          (this.myCheckClassData || checkOtherClass)) ||
         this.otherCheckClassData !== ""
       ) {
         if (this.course_order.course_type_id == "CT_1") {
@@ -2223,6 +2227,7 @@ export default {
                       my_data_class: this.myCheckClassData,
                       othert_data_class: this.otherCheckClassData,
                       type_checked: yourself,
+                      courseData: this.course_data,
                     });
                   } else {
                     Swal.fire({
@@ -2246,6 +2251,7 @@ export default {
                         this?.course_data?.course_type_id == "CT_2"
                           ? this?.course_data?.discount
                           : 0,
+                      courseData: this.course_data,
                     });
                   } else {
                     await Swal.fire({
@@ -2319,6 +2325,9 @@ export default {
                     this.user_student_data[0]?.school?.schoolNameTh;
                   student.congenitalData =
                     this.user_student_data[0]?.congenitalDisease;
+                  student.otherClass =
+                    this.user_student_data[0]?.class?.classNameTh;
+
                   student.role = this.user_student_data[0]?.roles?.roleId;
                 } else {
                   if (student) {

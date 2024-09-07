@@ -423,7 +423,7 @@
           </v-row>
           <!-- <pre>{{ course_data }}</pre> -->
           <v-row dense>
-            <v-col cols="12" sm="2" align-self="start">
+            <v-col cols="6" align-self="start">
               <v-checkbox
                 v-model="course_data.checked_discount_bool"
                 :label="$t('there is a discount')"
@@ -432,20 +432,19 @@
                 color="#FF6B81"
               ></v-checkbox>
             </v-col>
-            <v-col
-              cols="12"
-              sm="10"
-              class="mt-4"
-              v-if="course_data.checked_discount_bool"
-            >
+          </v-row>
+          <v-row dense>
+            <v-col cols="6" v-if="course_data.checked_discount_bool">
               <v-text-field
                 :placeholder="$t('specify discount/baht')"
                 dense
                 class="input-text-right"
                 :disabled="disable"
-                :rules="price"
-                :min="0"
-                :max="course_data.price_course"
+                :rules="rulesDiscount"
+                :min="1"
+                :max="
+                  checkMaxPrice(course_data.discount, course_data.price_course)
+                "
                 outlined
                 @focus="$event.target.select()"
                 type="number"
@@ -1168,31 +1167,32 @@ export default {
     price() {
       return [(val) => val > 0 || this.$t("please specify price")];
     },
+    rulesDiscount() {
+      return [
+        () =>
+          this.course_data.discount !== "" ||
+          this.$t("please fill out the information correctly"),
+        () =>
+          parseInt(this.course_data.discount) < this.course_data.price_course ||
+          `${this.$t("number must be")} ${this.course_data.price_course}`,
+        () =>
+          parseInt(this.course_data.discount) >= 1 ||
+          this.$t("number must be 1"),
+      ];
+    },
   },
   methods: {
     ...mapActions({
       ChangeCourseData: "CourseModules/ChangeCourseData",
     }),
-    // rulesDiscount(maxPrice) {
-    //   console.log("maxPrice :>> ", maxPrice);
-    //   return (value) => {
-    //     console.log("value :>> ", value);
-    //     if (value > maxPrice) {
-    //       return `${this.$t("number must be")} ${maxPrice}`;
-    //     }
-    //     if (value < 0) {
-    //       return this.$t("number must be 1");
-    //     }
-    //     return true;
-    //   };
-    // },
-
     ckeckClick(item) {
       if (item == false) {
         this.course_data.discount = 0;
       }
     },
-
+    checkMaxPrice(discount, price_course) {
+      return discount < price_course;
+    },
     ChengeReservation(e) {
       if (!e) {
         this.course_data.menu_reservation_start_date = false;
