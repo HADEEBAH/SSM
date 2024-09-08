@@ -934,7 +934,9 @@ const orderModules = {
     // },
 
 
-    async saveOrder(context, { regis_type, my_data_class, othert_data_class, type_checked, discount, courseData }) {
+    async saveOrder(context, { regis_type, my_data_class, type_checked, discount, courseData }) {
+      // othert_data_class
+
       context.commit("SetOrderIsLoading", true);
       try {
         let order = context.state.order;
@@ -995,12 +997,14 @@ const orderModules = {
                   // !itemRole ||
                   if (itemRole === 'R_5' || type_checked === true) {
                     if (student.nicknameTh && student.class) {
+                      let checkClass = student.class === 'อื่นๆ' ? student.class = 'Other' : student.class
                       studentUpdate.push({
                         "studentId": student.account_id,
                         "nicknameTh": student.nicknameTh,
                         "congenitalDiseaseTh": student.congenital,
                         "schoolTh": student.school,
-                        "class": student.class === 'อื่นๆ' && my_data_class !== '' || othert_data_class !== '' ? othert_data_class || my_data_class : student.class
+                        "class": student.otherClass ? student.otherClass : my_data_class ? student.otherClass ? student.otherClass : my_data_class : checkClass
+
                       });
                     } else {
                       allStudentsValid = false;
@@ -1011,7 +1015,7 @@ const orderModules = {
                       studentUpdate.push({
                         "studentId": student.account_id,
                         "nicknameTh": student.nicknameTh,
-                        "class": ''
+                        "class": student.class
                       });
                     }
                   }
@@ -1116,305 +1120,373 @@ const orderModules = {
         };
         try {
           // const localhost = 'http://localhost:3000'
-          // await axios.post(`${localhost}/api/v1/account/student/list`, studentUpdate, config)
-          await axios.post(`${process.env.VUE_APP_URL}/api/v1/account/student/list`, studentUpdate, config)
-        } catch (error) {
-          Swal.fire({
-            icon: "error",
-            title: VueI18n.t("update user"),
-            text: VueI18n.t(
-              "flid update nickname and class"
-            ),
-            timer: 3000,
-            timerProgressBar: true,
-            showCancelButton: false,
-            showConfirmButton: false,
-          });
-        }
-        // console.log('payload :>> ', payload);
-        // let localhost = "http://localhost:3002"
-
-        let { data } = await axios.post(
-          // `${localhost}/api/v1/order/regis/course`,
-          `${process.env.VUE_APP_URL}/api/v1/order/regis/course`,
-          payload,
-          config
-        );
-        if (data.statusCode === 201) {
-          let payment_payload = {
-            orderId: data.data.orderNumber,
-            total: data.data.totalPrice,
-            subtotal: 0.0,
-            vat: 0,
-            vatRate: 0,
-            orderDesc: "",
-          };
-          // const localhost = 'http://localhost:3000'
-
-          let user_data = JSON.parse(localStorage.getItem("userDetail"));
-          // const userLogin = await axios.get(
-          //   `${localhost}/api/v1/account/${user_data.account_id}`
-          // );
-          const userLogin = await axios.get(
-            `${process.env.VUE_APP_URL}/api/v1/account/${user_data.account_id}`
-          );
-          if (userLogin.data.statusCode === 200) {
-            let roles = [];
-            if (userLogin.data.data.userRoles.length > 0) {
-              userLogin.data.data.userRoles.forEach((role) => {
-                roles.push(role.roleId);
-              });
-            }
-            let payload = {
-              account_id: userLogin.data.data.userOneId,
-              email: userLogin.data.data.email,
-              username: user_data.username,
-              password: user_data.password,
-              first_name_en: userLogin.data.data.firstNameEng,
-              first_name_th: userLogin.data.data.firstNameTh,
-              last_name_en: userLogin.data.data.lastNameEng,
-              last_name_th: userLogin.data.data.lastNameTh,
-              role: userLogin.data.data.userRoles,
-              roles: roles,
-              tel: userLogin.data.data.mobileNo,
-            };
-            localStorage.setItem("userDetail", JSON.stringify(payload));
-          }
-          if (order.type !== "addStudent") {
-            // const localhost = 'http://localhost:3003'
-            // let payment = await axios.post(
-            //   `${localhost}/api/v1/payment/code`,
-            //   payment_payload
-            // );
-
-            let payment = await axios.post(
-              `${process.env.VUE_APP_URL}/api/v1/payment/code`,
-              payment_payload
-            );
-            if (payment.data.statusCode === 201) {
-              window.location.href = payment.data.data;
-              setTimeout(() => {
-                localStorage.removeItem("Order");
-                context.commit("SetResetCourseData");
-                context.commit("SetOrder", {
-                  type: "",
-                  order_step: 0,
-                  order_number: "",
-                  courses: [],
-                  created_by: "",
-                  payment_status: "",
-                  payment_type: "",
-                  total_price: 0,
-                });
-                context.commit("SetOrderIsLoading", false);
-              }, 500);
-            }
-          } else {
-            if (order.payment_status === "paid") {
-              let payment_payload = {
-                orderId: data.data.orderNumber,
-                paymentType: order.payment_type,
-                total: data.data.totalPrice,
-                recipient: user_data.account_id,
-                payDate: order.pay_date
-              };
-              // let endpoint = 'http://localhost:3003'
-              let endpoint = process.env.VUE_APP_URL;
-              let payment = await axios.patch(
-                `${endpoint}/api/v1/payment/data/${data.data.orderNumber}`,
-                payment_payload
+          // let { data } = await axios.post(`${localhost}/api/v1/account/student/list`, studentUpdate, config)
+          let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/account/student/list`, studentUpdate, config)
+          if (data.statusCode === 201) {
+            try {
+              let { data } = await axios.post(
+                // `${localhost}/api/v1/order/regis/course`,
+                `${process.env.VUE_APP_URL}/api/v1/order/regis/course`,
+                payload,
+                config
               );
-              if (payment.data.statusCode === 200) {
+              if (data.statusCode === 201) {
+                let payment_payload = {
+                  orderId: data.data.orderNumber,
+                  total: data.data.totalPrice,
+                  subtotal: 0.0,
+                  vat: 0,
+                  vatRate: 0,
+                  orderDesc: "",
+                };
+                // const localhost = 'http://localhost:3000'
+
+                let user_data = JSON.parse(localStorage.getItem("userDetail"));
+                // const userLogin = await axios.get(
+                //   `${localhost}/api/v1/account/${user_data.account_id}`
+                // );
+                const userLogin = await axios.get(
+                  `${process.env.VUE_APP_URL}/api/v1/account/${user_data.account_id}`
+                );
+                if (userLogin.data.statusCode === 200) {
+                  let roles = [];
+                  if (userLogin.data.data.userRoles.length > 0) {
+                    userLogin.data.data.userRoles.forEach((role) => {
+                      roles.push(role.roleId);
+                    });
+                  }
+                  let payload = {
+                    account_id: userLogin.data.data.userOneId,
+                    email: userLogin.data.data.email,
+                    username: user_data.username,
+                    password: user_data.password,
+                    first_name_en: userLogin.data.data.firstNameEng,
+                    first_name_th: userLogin.data.data.firstNameTh,
+                    last_name_en: userLogin.data.data.lastNameEng,
+                    last_name_th: userLogin.data.data.lastNameTh,
+                    role: userLogin.data.data.userRoles,
+                    roles: roles,
+                    tel: userLogin.data.data.mobileNo,
+                  };
+                  localStorage.setItem("userDetail", JSON.stringify(payload));
+                }
+                if (order.type !== "addStudent") {
+                  // const localhost = 'http://localhost:3003'
+                  // let payment = await axios.post(
+                  //   `${localhost}/api/v1/payment/code`,
+                  //   payment_payload
+                  // );
+
+                  let payment = await axios.post(
+                    `${process.env.VUE_APP_URL}/api/v1/payment/code`,
+                    payment_payload
+                  );
+                  if (payment.data.statusCode === 201) {
+                    window.location.href = payment.data.data;
+                    setTimeout(() => {
+                      localStorage.removeItem("Order");
+                      context.commit("SetResetCourseData");
+                      context.commit("SetOrder", {
+                        type: "",
+                        order_step: 0,
+                        order_number: "",
+                        courses: [],
+                        created_by: "",
+                        payment_status: "",
+                        payment_type: "",
+                        total_price: 0,
+                      });
+                      context.commit("SetOrderIsLoading", false);
+                    }, 500);
+                  }
+                } else {
+                  if (order.payment_status === "paid") {
+                    let payment_payload = {
+                      orderId: data.data.orderNumber,
+                      paymentType: order.payment_type,
+                      total: data.data.totalPrice,
+                      recipient: user_data.account_id,
+                      payDate: order.pay_date
+                    };
+                    // let endpoint = 'http://localhost:3003'
+                    let endpoint = process.env.VUE_APP_URL;
+                    let payment = await axios.patch(
+                      `${endpoint}/api/v1/payment/data/${data.data.orderNumber}`,
+                      payment_payload
+                    );
+                    if (payment.data.statusCode === 200) {
+                      Swal.fire({
+                        icon: "success",
+                        title: VueI18n.t("succeed"),
+                        text: VueI18n.t("the transaction has been completed"),
+                        showDenyButton: false,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                      });
+                      // router.replace({ name: "Finance" });
+                      localStorage.removeItem("Order");
+                      context.commit("SetResetCourseData");
+                      context.commit("SetOrder", {
+                        type: "",
+                        order_step: 0,
+                        order_number: "",
+                        courses: [],
+                        created_by: "",
+                        payment_status: "",
+                        payment_type: "",
+                        total_price: 0,
+                      });
+                      context.commit("SetOrderIsLoading", false);
+                    }
+                  } else {
+                    // const order_enpoint = `${process.env.VUE_APP_URL}/api/v1/order/update/${data.data.orderNumber}`
+                    // const payment_payload = {
+                    //   paymentType: "",
+                    //   paymentStatus: "pending",
+                    // };
+                    // await axios.patch(order_enpoint, payment_payload)
+                    Swal.fire({
+                      icon: "success",
+                      title: VueI18n.t("succeed"),
+                      text: VueI18n.t("the transaction has been completed"),
+                      showDenyButton: false,
+                      showCancelButton: false,
+                      showConfirmButton: false,
+                      timer: 3000,
+                      timerProgressBar: true,
+                    });
+                    // router.replace({ name: "Finance" });
+                    localStorage.removeItem("Order");
+                    context.commit("SetResetCourseData");
+                    context.commit("SetOrder", {
+                      type: "",
+                      order_step: 0,
+                      order_number: "",
+                      courses: [],
+                      created_by: "",
+                      payment_status: "",
+                      payment_type: "",
+                      total_price: 0,
+                    });
+                    context.commit("SetOrderIsLoading", false);
+                    context.commit("SetOrderIsStatus", true);
+                  }
+                }
+              }
+            } catch (error) {
+              context.commit("SetOrderIsLoading", false);
+              context.commit("SetOrderIsStatus", false);
+              if (error?.response?.data?.message == "Parents cannot purchase courses for them") {
                 Swal.fire({
-                  icon: "success",
-                  title: VueI18n.t("succeed"),
-                  text: VueI18n.t("the transaction has been completed"),
-                  showDenyButton: false,
-                  showCancelButton: false,
-                  showConfirmButton: false,
+                  icon: "error",
+                  title: VueI18n.t("unable to register"),
+                  text: VueI18n.t(
+                    "parents cannot resave the course to their parents"
+                  ),
                   timer: 3000,
                   timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
                 });
-                // router.replace({ name: "Finance" });
-                localStorage.removeItem("Order");
-                context.commit("SetResetCourseData");
-                context.commit("SetOrder", {
-                  type: "",
-                  order_step: 0,
-                  order_number: "",
-                  courses: [],
-                  created_by: "",
-                  payment_status: "",
-                  payment_type: "",
-                  total_price: 0,
+              } else if (error?.response?.data?.message == "over study end date") {
+                Swal.fire({
+                  icon: "error",
+                  title: VueI18n.t("unable to register"),
+                  text: VueI18n.t(
+                    "the class period has ended"
+                  ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
                 });
-                context.commit("SetOrderIsLoading", false);
+              } else if (error?.response?.data?.message == "over register date") {
+                Swal.fire({
+                  icon: "error",
+                  title: VueI18n.t("unable to register"),
+                  text: VueI18n.t(
+                    "outside the register date"
+                  ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message == "Cannot register , fail at course monitor , course-coach or seats are full") {
+                Swal.fire({
+                  icon: "error",
+                  title: VueI18n.t("unable to register"),
+                  text: VueI18n.t(
+                    "unable to register Due to insufficient seats or the coach teaching in another package"
+                  ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message === "duplicate pending order") {
+                Swal.fire({
+                  // icon: "error",
+                  // title: VueI18n.t("unable to register"),
+                  icon: "warning",
+                  title: VueI18n.t("warning"),
+                  text: VueI18n.t(
+                    "duplicate user in this course Unable to register"
+                  ),
+                  // text: VueI18n.t(
+                  //   "unable to register Because the course is already in your registration history"
+                  // ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message === "User is duplicate in this course. Cannot enroll again") {
+                Swal.fire({
+                  icon: "error",
+                  title: VueI18n.t(
+                    "something went wrong"
+                  ),
+                  text: VueI18n.t(
+                    "duplicate user in this course Unable to register"
+                  ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message === "The price is not correct!!") {
+                Swal.fire({
+                  icon: "error",
+                  title: VueI18n.t(
+                    "something went wrong"
+                  ),
+                  text: VueI18n.t(
+                    "the price is not correct payment cannot be processed"
+                  ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message === "Cannot register , The seats are full.") {
+                Swal.fire({
+                  icon: "error",
+                  title: VueI18n.t(
+                    "something went wrong"
+                  ),
+                  text: VueI18n.t(
+                    "cannot register , The seats are full"
+                  ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message === "register duplicate") {
+                Swal.fire({
+                  icon: "error",
+                  title: VueI18n.t(
+                    "something went wrong"
+                  ),
+                  text: VueI18n.t(
+                    "some students or students have already purchased the course"
+                  ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error === "please enter your name and class") {
+                Swal.fire({
+                  icon: "error",
+                  title: VueI18n.t("unable to register"),
+                  text: VueI18n.t(
+                    "please enter your name and class"
+                  ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: VueI18n.t("something went wrong"),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
               }
-            } else {
-              // const order_enpoint = `${process.env.VUE_APP_URL}/api/v1/order/update/${data.data.orderNumber}`
-              // const payment_payload = {
-              //   paymentType: "",
-              //   paymentStatus: "pending",
-              // };
-              // await axios.patch(order_enpoint, payment_payload)
-              Swal.fire({
-                icon: "success",
-                title: VueI18n.t("succeed"),
-                text: VueI18n.t("the transaction has been completed"),
-                showDenyButton: false,
-                showCancelButton: false,
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-              });
-              // router.replace({ name: "Finance" });
-              localStorage.removeItem("Order");
-              context.commit("SetResetCourseData");
-              context.commit("SetOrder", {
-                type: "",
-                order_step: 0,
-                order_number: "",
-                courses: [],
-                created_by: "",
-                payment_status: "",
-                payment_type: "",
-                total_price: 0,
-              });
-              context.commit("SetOrderIsLoading", false);
-              context.commit("SetOrderIsStatus", true);
             }
+
           }
+        } catch (error) {
+          if (error?.response?.data?.message == "schoolTh not found.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t("something went wrong"),
+              text: VueI18n.t(
+                "please filter yourse school"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message == "congenitalDiseaseTh not found.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t("something went wrong"),
+              text: VueI18n.t(
+                "please filter yourse congenitalDisease"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message == "class not found.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t("something went wrong"),
+              text: VueI18n.t(
+                "please filter yourse more class"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message == " not found nickname.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t("something went wrong"),
+              text: VueI18n.t(
+                "please filter yourse nickname"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          }
+          console.log('error :>> ', error);
+
+          context.commit("SetOrderIsLoading", false);
+
         }
-      } catch (error) {
-        context.commit("SetOrderIsLoading", false);
-        context.commit("SetOrderIsStatus", false);
-        if (error?.response?.data?.message == "Parents cannot purchase courses for them") {
+        // console.log('payload :>> ', payload);
+      } catch (err) {
+        if (err == "please enter your name and class") {
           Swal.fire({
-            icon: "error",
-            title: VueI18n.t("unable to register"),
-            text: VueI18n.t(
-              "parents cannot resave the course to their parents"
-            ),
-            timer: 3000,
-            timerProgressBar: true,
-            showCancelButton: false,
-            showConfirmButton: false,
-          });
-        } else if (error?.response?.data?.message == "over study end date") {
-          Swal.fire({
-            icon: "error",
-            title: VueI18n.t("unable to register"),
-            text: VueI18n.t(
-              "the class period has ended"
-            ),
-            timer: 3000,
-            timerProgressBar: true,
-            showCancelButton: false,
-            showConfirmButton: false,
-          });
-        } else if (error?.response?.data?.message == "over register date") {
-          Swal.fire({
-            icon: "error",
-            title: VueI18n.t("unable to register"),
-            text: VueI18n.t(
-              "outside the register date"
-            ),
-            timer: 3000,
-            timerProgressBar: true,
-            showCancelButton: false,
-            showConfirmButton: false,
-          });
-        } else if (error?.response?.data?.message == "Cannot register , fail at course monitor , course-coach or seats are full") {
-          Swal.fire({
-            icon: "error",
-            title: VueI18n.t("unable to register"),
-            text: VueI18n.t(
-              "unable to register Due to insufficient seats or the coach teaching in another package"
-            ),
-            timer: 3000,
-            timerProgressBar: true,
-            showCancelButton: false,
-            showConfirmButton: false,
-          });
-        } else if (error?.response?.data?.message === "duplicate pending order") {
-          Swal.fire({
-            // icon: "error",
-            // title: VueI18n.t("unable to register"),
             icon: "warning",
-            title: VueI18n.t("warning"),
+            title: VueI18n.t("something went wrong"),
             text: VueI18n.t(
-              "duplicate user in this course Unable to register"
-            ),
-            // text: VueI18n.t(
-            //   "unable to register Because the course is already in your registration history"
-            // ),
-            timer: 3000,
-            timerProgressBar: true,
-            showCancelButton: false,
-            showConfirmButton: false,
-          });
-        } else if (error?.response?.data?.message === "User is duplicate in this course. Cannot enroll again") {
-          Swal.fire({
-            icon: "error",
-            title: VueI18n.t(
-              "something went wrong"
-            ),
-            text: VueI18n.t(
-              "duplicate user in this course Unable to register"
-            ),
-            timer: 3000,
-            timerProgressBar: true,
-            showCancelButton: false,
-            showConfirmButton: false,
-          });
-        } else if (error?.response?.data?.message === "The price is not correct!!") {
-          Swal.fire({
-            icon: "error",
-            title: VueI18n.t(
-              "something went wrong"
-            ),
-            text: VueI18n.t(
-              "the price is not correct payment cannot be processed"
-            ),
-            timer: 3000,
-            timerProgressBar: true,
-            showCancelButton: false,
-            showConfirmButton: false,
-          });
-        } else if (error?.response?.data?.message === "Cannot register , The seats are full.") {
-          Swal.fire({
-            icon: "error",
-            title: VueI18n.t(
-              "something went wrong"
-            ),
-            text: VueI18n.t(
-              "cannot register , The seats are full"
-            ),
-            timer: 3000,
-            timerProgressBar: true,
-            showCancelButton: false,
-            showConfirmButton: false,
-          });
-        } else if (error?.response?.data?.message === "register duplicate") {
-          Swal.fire({
-            icon: "error",
-            title: VueI18n.t(
-              "something went wrong"
-            ),
-            text: VueI18n.t(
-              "some students or students have already purchased the course"
-            ),
-            timer: 3000,
-            timerProgressBar: true,
-            showCancelButton: false,
-            showConfirmButton: false,
-          });
-        } else if (error === "please enter your name and class") {
-          Swal.fire({
-            icon: "error",
-            title: VueI18n.t("unable to register"),
-            text: VueI18n.t(
-              "please enter your name and class"
+              "please filter yourse class or nickname"
             ),
             timer: 3000,
             timerProgressBar: true,
@@ -1425,13 +1497,19 @@ const orderModules = {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("something went wrong"),
+            text: err,
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
             showConfirmButton: false,
           });
         }
-      }
+        context.commit("SetOrderIsLoading", false);
+
+      } // let localhost = "http://localhost:3002"
+
+
+
     },
     async updateOrderStatus(context, { order_detail }) {
       try {
