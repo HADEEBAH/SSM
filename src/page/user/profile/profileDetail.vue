@@ -218,7 +218,7 @@
             :disabled="!isEnabled"
           >
           </v-text-field>
-          <!-- AllergiesList -->
+          <!-- Food allergicList -->
           <!-- <v-combobox
             v-model="profile_detail.congenitalDisease"
             :items="congenital_list"

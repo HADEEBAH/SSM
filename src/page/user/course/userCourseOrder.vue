@@ -278,7 +278,7 @@
           >
           </v-text-field>
         </v-col>
-        <!-- AllergiesList -->
+        <!-- Food allergicList -->
         <v-col cols="12" sm="6">
           <label-custom
             required

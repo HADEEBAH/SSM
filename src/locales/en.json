@@ -144,7 +144,7 @@
     "choose start date" : "Choose start date",
     "choice": "Choice",
     "class": "class",
-    "congenital disease" : "Congenital disease / Allergies",
+    "congenital disease" : "Congenital disease / Food allergic",
     "coach code" : "Coach code",
     "coach deleted" : "Coach deleted",
     "coach has not yet completed the student evaluation form" : "Coach has not yet completed the student evaluation form",
@@ -831,7 +831,7 @@
     "school day":"School Day",
     "system satisfaction":"System satisfaction",
     "some students or students have already purchased the course":"Some students or students have already purchased the course",
-    "select congenital disease":"Select Congenital disease / Allergies",
+    "select congenital disease":"Select Congenital disease / Food allergic",
 
 
 
