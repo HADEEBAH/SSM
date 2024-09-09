@@ -78,6 +78,7 @@
             </v-row>
           </v-col>
         </v-row>
+
         <v-card
           outlined
           v-for="(course, course_index) in order.courses"
@@ -576,15 +577,70 @@
                 </v-text-field>
               </v-col>
             </v-row>
+            <!-- PRICE -->
+            <!-- <pre>{{ course_data }}</pre> -->
             <v-row dense>
               <!-- PRICE -->
-              <v-col cols="12" sm="4">
+              <!-- <v-col cols="12" sm="4">
                 <label-custom :text="$t(`price`)"></label-custom>
-                <!-- :rules="rules.price" -->
-                <!-- @change="CalTotalPrice()" -->
                 <v-text-field
                   dense
-                  v-model="course.price"
+                  outlined
+                  :value="
+                    course?.course_type_id == 'CT_1'
+                      ? course?.option?.price_unit
+                      : course?.course_data?.price_course
+                  "
+                  v-model="course.option.price_unit"
+                  @keydown="Validation($event, 'number')"
+                  type="number"
+                  color="pink"
+                  :suffix="$t(`baht`)"
+                  disabled
+                >
+                </v-text-field>
+              </v-col> -->
+              <v-col cols="12" sm="4" v-if="course?.course_type_id == 'CT_1'">
+                <label-custom :text="$t(`price`)"></label-custom>
+                <v-text-field
+                  dense
+                  outlined
+                  v-model="course.option.price_unit"
+                  @keydown="Validation($event, 'number')"
+                  type="number"
+                  color="pink"
+                  :suffix="$t(`baht`)"
+                  disabled
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="12" sm="4" v-if="course?.course_type_id == 'CT_2'">
+                <label-custom :text="$t(`price`)"></label-custom>
+                <v-text-field
+                  dense
+                  outlined
+                  :value="course?.course_data?.price_course"
+                  @keydown="Validation($event, 'number')"
+                  type="number"
+                  color="pink"
+                  :suffix="$t(`baht`)"
+                  disabled
+                >
+                </v-text-field>
+              </v-col>
+              <!-- <pre>{{ course }}</pre> -->
+              <!-- discount -->
+              <v-col cols="12" sm="4" v-if="course?.course_type_id == 'CT_1'">
+                <label-custom :text="$t(`discount`)"></label-custom>
+                <!-- :rules="rules.price" -->
+
+                <v-text-field
+                  dense
+                  :value="
+                    course?.option?.discount_price
+                      ? course?.option?.discount_price
+                      : '0'
+                  "
                   outlined
                   @keydown="Validation($event, 'number')"
                   type="number"
@@ -594,16 +650,15 @@
                 >
                 </v-text-field>
               </v-col>
-              <!-- discount -->
-              <v-col cols="12" sm="4">
+              <v-col cols="12" sm="4" v-if="course?.course_type_id == 'CT_2'">
                 <label-custom :text="$t(`discount`)"></label-custom>
                 <!-- :rules="rules.price" -->
 
                 <v-text-field
                   dense
                   :value="
-                    course?.option?.discount_price
-                      ? course?.option?.discount_price
+                    course?.course_data?.discount
+                      ? course?.course_data?.discount
                       : '0'
                   "
                   outlined
@@ -1217,7 +1272,6 @@ export default {
     //   return items.filter((packageStatus) => packageStatus.status === "Open");
     // },
     coachOptions(timeData) {
-      console.log("timeData :>> ", timeData);
       return timeData.filter((coach) => coach.status_coach === "Open");
       // return items.filter((coach) => coach.status_coach === "Open");
     },
@@ -1411,7 +1465,14 @@ export default {
             course.time_str = `${period_start}-${period_end} ${this.$t(
               "o'clock"
             )}`;
-            course.price = Number(this.course_data.price_course);
+            // let calcutaleDiscount = 0;
+            // calcutaleDiscount =
+            //   this.course_data?.price_course - this.course_data?.discountPrice;
+
+            course.price =
+              this.course_data?.course_type_id == "CT_2"
+                ? parseInt(this.course_data?.calculate_price)
+                : parseInt(this.course_data.price_course);
             course.time = this.course_data.days_of_class[0].times[0];
 
             this?.CalTotalPrice(this.discout_from_admin);
@@ -1589,8 +1650,10 @@ export default {
                   });
                   this.order.type = "addStudent";
                   this.changeOrderData(this.order);
-                  console.log("this.order :>> ", this.order);
-                  await this.saveOrder({ regis_type: "addStudent" });
+                  await this.saveOrder({
+                    regis_type: "addStudent",
+                    courseData: this.course_data,
+                  });
                   if (this.order_is_status) {
                     let payload = {
                       notificationName: this.notification_name,
@@ -1642,7 +1705,11 @@ export default {
                   });
                   this.order.type = "addStudent";
                   this.changeOrderData(this.order);
-                  await this.saveOrder({ regis_type: "addStudent" });
+                  await this.saveOrder({
+                    regis_type: "addStudent",
+                    discount: this.course_data?.discountPrice,
+                    courseData: this.course_data,
+                  });
                   if (this.order_is_status) {
                     let payload = {
                       notificationName: this.notification_name,

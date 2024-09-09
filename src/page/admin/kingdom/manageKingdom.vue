@@ -28,12 +28,10 @@
           <v-btn
             text
             color="#FF6B81"
-            @click="
-              $router.push({
-                name: 'EditKingdom',
-                params: { category_id: item.categoryId },
-              })
-            "
+            :to="{
+              name: 'EditKingdom',
+              params: { category_id: item.categoryId },
+            }"
           >
             <v-icon>mdi-text-box-search-outline</v-icon>
             {{ $t("view details") }}

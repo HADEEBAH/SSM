@@ -851,6 +851,7 @@ export default {
               await this.UpdateCheckinStudents({
                 payload: scheduleData.checkInStudent.map((items) => {
                   items.date = scheduleData.date.replaceAll("/", "-");
+                  items.courseId = scheduleData.courseId
                   return items;
                 }),
               });

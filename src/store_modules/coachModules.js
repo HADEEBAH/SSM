@@ -525,8 +525,7 @@ const coachModules = {
         //     return result
         //   }
         // })
-        console.log('coach_check_in', context.state.coach_check_in)
-        console.log('data : =>', data)
+
         if (data.statusCode === 200) {
           let i = 1
 
@@ -546,7 +545,6 @@ const coachModules = {
             // student.status = student.status && student.status !== "" ? student.status : 'punctual'
             i = i + 1
           })
-          console.log('data.data', data.data)
           await context.commit("SetStudentCheckIn", data.data)
           context.commit("SetStudentCheckInLoading", false)
         }
@@ -1017,7 +1015,6 @@ const coachModules = {
         // let { data } = await axios.get(`http://localhost:3000/api/v1/schedule/coach-calendar?startDate=${start_date}&endDate=${end_date}`, config)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/coach-calendar?startDate=${start_date}&endDate=${end_date}`, config)
 
-        console.log('data =>', data)
         if (data.statusCode == 200) {
           let holidays = await axios.get(`${process.env.VUE_APP_URL}/api/v1/holiday/all`, config);
           if (holidays.data.statusCode === 200) {

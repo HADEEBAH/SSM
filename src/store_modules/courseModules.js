@@ -100,6 +100,8 @@ const CourseModules = {
       },
       location: "",
       detail: "",
+      discount: '',
+      checked_discount_bool: '',
       music_performance: "",
       catification: "",
       price_course: 0,
@@ -194,7 +196,9 @@ const CourseModules = {
     course_seat: [],
     checkDay: [],
     filter_student_data: [],
-    assessment: []
+    assessment: [],
+    filter_potential_student: [],
+    potential_assessment: []
 
   },
   mutations: {
@@ -383,6 +387,12 @@ const CourseModules = {
     },
     SetAssessment(state, payload) {
       state.assessment = payload
+    },
+    SetFilterPotentialStudent(state, payload) {
+      state.filter_potential_student = payload
+    },
+    SetPotentialAssessment(state, payload) {
+      state.potential_assessment = payload
     },
   },
   actions: {
@@ -722,10 +732,13 @@ const CourseModules = {
           "courseStudentRecived": course_data.student_recived,
           "courseStudyEndDate": course_data?.coachs[0]?.class_date_range?.end_date,
           "courseStudyStartDate": course_data?.coachs[0]?.class_date_range?.start_date,
+          "checkedDiscount": course_data?.checked_discount_bool,
+          "discountPrice": course_data?.discount ? course_data?.discount : 0,
           "coachs": [],
           "dayOfweek": [],
         }
         if (course_data.course_type_id === "CT_2") {
+
           for await (const coach of course_data.coachs.filter(v => v.teach_day_data.length > 0)) {
             let teach_day_data = []
             for await (const date of coach.teach_day_data) {
@@ -1252,6 +1265,8 @@ const CourseModules = {
     async GetCourse(context, course_id) {
       context.commit("SetCourseIsLoading", true)
       try {
+        // const localhost = 'http://localhost:3000'
+        // let { data } = await axios.get(`${localhost}/api/v1/course/detail/${course_id}`)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
         if (data.statusCode === 200) {
           let course_hours_part = data?.data?.coursePerTime?.toFixed(2)?.split(".")
@@ -1293,6 +1308,9 @@ const CourseModules = {
             course_hours_obj: course_hours_object,
             location: data.data.courseLocation,
             detail: data.data.courseDescription,
+            discount: data.data.discountPrice,
+            checked_discount_bool: data.data.checkedDiscount,
+            calculate_price: data.data.calculateCoursePrice,
             music_performance: data.data.courseMusicPerformance,
             catification: data.data.courseCertification,
             price_course: data.data.coursePrice,
@@ -1598,6 +1616,8 @@ const CourseModules = {
           "courseMusicPerformance": course.music_performance,
           "courseCertification": course.catification,
           "coursePrice": course.price_course,
+          "checkedDiscount": course.checked_discount_bool,
+          "discountPrice": course.discount ? course.discount : 0,
           "coachs": [],
           "dayOfweek": [],
           "coursePackages": []
@@ -1678,6 +1698,8 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.post(`${localhost}/api/v1/course/create`, data_payload, config)
         let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/course/create`, data_payload, config)
         if (data.statusCode === 201) {
           context.commit("SetCourseIsLoading", false)
@@ -2142,7 +2164,6 @@ const CourseModules = {
       }
     },
     async GetFilterStudentData(context, { student_id, course_id }) {
-
       try {
         let config = {
           headers: {
@@ -2159,23 +2180,9 @@ const CourseModules = {
         }
       } catch (error) {
         console.log('error :>> ', error);
-        // if (error.response.data.message == "This coach cannot be deleted. Because the middle of teaching") {
-        //   Swal.fire({
-        //     icon: "error",
-        //     title: VueI18n.t("can not delete coach"),
-        //     text: VueI18n.t(error.response.data.message),
-        //     timer: 3000,
-        //     showDenyButton: false,
-        //     showCancelButton: false,
-        //     showConfirmButton: false,
-        //     timerProgressBar: true,
-        //   })
-        //   context.dispatch("GetCourse", course_id)
-        // }
       }
     },
     async GetAssessmentStudent(context, { checkin_id, date }) {
-
       try {
         let config = {
           headers: {
@@ -2192,19 +2199,44 @@ const CourseModules = {
         }
       } catch (error) {
         console.log('error :>> ', error);
-        // if (error.response.data.message == "This coach cannot be deleted. Because the middle of teaching") {
-        //   Swal.fire({
-        //     icon: "error",
-        //     title: VueI18n.t("can not delete coach"),
-        //     text: VueI18n.t(error.response.data.message),
-        //     timer: 3000,
-        //     showDenyButton: false,
-        //     showCancelButton: false,
-        //     showConfirmButton: false,
-        //     timerProgressBar: true,
-        //   })
-        //   context.dispatch("GetCourse", course_id)
-        // }
+      }
+    },
+    async GetFilterPotentialStudent(context, { course_id, student_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/studentlist/search-potential?courseId=${course_id}&studentId=${student_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/search-potential?courseId=${course_id}&studentId=${student_id}`, config)
+        if (data.statusCode == 200) {
+          context.commit("SetFilterPotentialStudent", data.data)
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
+    async GetPotentialAssessment(context, { checkin_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/studentlist/assessment-potential/?checkInPotentialId=${checkin_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/assessment-potential/?checkInPotentialId=${checkin_id}`, config)
+        if (data.statusCode == 200) {
+          context.commit("SetPotentialAssessment", data.data)
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
       }
     },
   },
@@ -2292,6 +2324,12 @@ const CourseModules = {
     },
     getAssessmentStudent(state) {
       return state.assessment
+    },
+    getFilterPotentialStudent(state) {
+      return state.filter_potential_student
+    },
+    getPotentialAssessment(state) {
+      return state.potential_assessment
     },
   },
 };

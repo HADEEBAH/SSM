@@ -16,6 +16,7 @@
           </v-col>
         </v-row>
       </v-card-title>
+
       <v-calendar
         ref="calendar"
         color="#ff6b81"
@@ -31,16 +32,20 @@
         :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
       >
         <template v-slot:event="{ event }">
-          {{
-            event.start_time && event.end_time
-              ? `${event.start_time} - ${event.end_time}`
-              : ""
-          }}
-          {{
-            event.start_time && event.end_time
-              ? `\n${event.name}`
-              : `${event.name}`
-          }}
+          <a :href="getEventUrl(event)">
+            <div class="h-full text-black">
+              {{
+                event.start_time && event.end_time
+                  ? `${event.start_time} - ${event.end_time}`
+                  : ""
+              }}
+              {{
+                event.start_time && event.end_time
+                  ? `\n${event.name}`
+                  : `${event.name}`
+              }}
+            </div>
+          </a>
         </template>
         <!-- <template v-if="type === 'week'" v-slot:day-body="{ week }">
           <div
@@ -282,6 +287,16 @@ export default {
         ${parseFloat(title_part[1]) + 543} -
         ${shortMonthToLongMonth(title_part[3])} 
         ${parseFloat(title_part[4]) + 543}`;
+      }
+    },
+
+    getEventUrl(items) {
+      if (items.type !== "holiday") {
+        const resolved = this.$router.resolve({
+          name: "StudentCourse",
+          params: { course_id: items.courseId },
+        });
+        return resolved.href;
       }
     },
     selectedDate(data) {

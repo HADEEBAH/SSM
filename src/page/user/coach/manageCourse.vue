@@ -67,23 +67,19 @@
                 (v) => v.type !== 'holiday'
               )"
               :key="course_index"
+              :to="{
+                name: 'menageCourseDetail',
+                params: {
+                  courseId: course.course_id,
+                  timeId: course.time_id,
+                  timeStart: course.start_time,
+                  timeEnd: course.end_time,
+                  date: course.start_date,
+                  typeEvent: 'null',
+                },
+              }"
             >
-              <v-card-text
-                class="cursor-pointer"
-                @click="
-                  $router.push({
-                    name: 'menageCourseDetail',
-                    params: {
-                      courseId: course.course_id,
-                      timeId: course.time_id,
-                      timeStart: course.start_time,
-                      timeEnd: course.end_time,
-                      date: course.start_date,
-                      typeEvent: 'null',
-                    },
-                  })
-                "
-              >
+              <v-card-text class="cursor-pointer">
                 <v-row dense>
                   <v-col cols="12" sm="4">
                     <v-img
@@ -1145,7 +1141,7 @@
           </v-autocomplete>
         </v-col>
       </v-row>
-      
+
       <!-- TAB -->
       <v-row class="mb-2">
         <v-col cols="12" align="center">
