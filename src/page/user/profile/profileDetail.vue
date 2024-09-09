@@ -135,7 +135,7 @@
         <v-col cols="12" sm="6">
           <label-custom :text="$t('school')"></label-custom>
           <v-text-field
-            placeholder="-"
+            :placeholder="$t('please specify the name of the school')"
             v-model="profile_detail.school.schoolNameTh"
             outlined
             dense
@@ -210,7 +210,7 @@
         <v-col cols="12" sm="6">
           <label-custom :text="$t('congenital disease')"></label-custom>
           <v-text-field
-            placeholder="-"
+            :placeholder="$t('please specify congenital disease')"
             v-model="profile_detail.congenitalDisease"
             outlined
             dense
@@ -218,7 +218,7 @@
             :disabled="!isEnabled"
           >
           </v-text-field>
-          <!-- AllergiesList -->
+          <!-- Food allergicList -->
           <!-- <v-combobox
             v-model="profile_detail.congenitalDisease"
             :items="congenital_list"
@@ -664,12 +664,6 @@ export default {
                   Authorization: `Bearer ${VueCookie.get("token")}`,
                 },
               };
-              console.log("this.otherClass :>> ", this.otherClass);
-              console.log(
-                "this.selectedClass?.classNameTh :>> ",
-                this.selectedClass
-              );
-              console.log("this.profile_detail :>> ", this.profile_detail);
 
               let payload = {
                 firstNameTh: this.profile_detail.firstNameTh,
@@ -677,7 +671,9 @@ export default {
                 nation: this.profile_detail.nation,
                 mobileNo: this.profile_detail.mobileNo,
                 email: this.profile_detail.email,
-                schoolTh: this.profile_detail.school.schoolNameTh,
+                schoolTh: this.profile_detail.school.schoolNameTh
+                  ? this.profile_detail.school.schoolNameTh
+                  : "",
                 nicknameTh: this.profile_detail?.nicknameTh
                   ? this.profile_detail.nicknameTh
                   : "",
