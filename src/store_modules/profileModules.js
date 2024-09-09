@@ -138,7 +138,6 @@ const profileModules = {
         }
         const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/class`, config)
         if (data.statusCode === 200) {
-          console.log(data.data)
           data.data.push({
             classId: null,
             classNameTh: "อื่นๆ",
@@ -231,12 +230,12 @@ const profileModules = {
 
           response.image = await response.image && response.image != "" ? `${process.env.VUE_APP_URL}/api/v1/files/${response.image}` : ""
           response.class = await response.class ? response.class : {
-            classNameTh: "",
-            classNameEn: "",
+            classNameTh: null,
+            classNameEn: null,
           }
-          response.school = await response.school ? response.school : {
-            schoolNameTh: "",
-            schoolNameEn: "",
+          response.school = response.school ? response.school : {
+            schoolNameTh: null,
+            schoolNameEn: null,
           }
           for await (const role of await response.userRoles) {
             roles.roleId = role.roleId
