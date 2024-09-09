@@ -10,6 +10,7 @@
         </v-col>
       </v-row>
     </template>
+
     <v-card v-if="type === 'week' || $vuetify.breakpoint.smAndUp">
       <v-card-title>
         <v-row>
@@ -24,6 +25,7 @@
           </v-col>
         </v-row>
       </v-card-title>
+
       <v-calendar
         ref="calendar"
         color="#ff6b81"
@@ -40,16 +42,20 @@
         @change="GetSchedule"
       >
         <template v-slot:event="{ event }">
-          {{
-            event.start_time && event.end_time
-              ? `${event.start_time} - ${event.end_time}`
-              : ""
-          }}
-          {{
-            event.start_time && event.end_time
-              ? `\n${event.name} (${event.subtitle})`
-              : `${event.name}`
-          }}
+          <a :href="getEventUrl(event)">
+            <div class="h-full text-black">
+              {{
+                event.start_time && event.end_time
+                  ? `${event.start_time} - ${event.end_time}`
+                  : ""
+              }}
+              {{
+                event.start_time && event.end_time
+                  ? `\n${event.name} (${event.subtitle})`
+                  : `${event.name}`
+              }}
+            </div>
+          </a>
         </template>
         <!-- <template v-if="type === 'week'" v-slot:day-body="{ date, week }">
           <div
@@ -294,6 +300,22 @@ export default {
         ${parseFloat(title_part[1]) + 543} -
         ${shortMonthToLongMonth(title_part[3])} 
         ${parseFloat(title_part[4]) + 543}`;
+      }
+    },
+    getEventUrl(items) {
+      if (items.type !== "holiday") {
+        const resolved = this.$router.resolve({
+          name: "menageCourseDetail",
+          params: {
+            courseId: items.course_id,
+            timeId: items.time_id,
+            timeStart: items.start_time,
+            timeEnd: items.end_time,
+            date: items.start_date,
+            typeEvent: items.type ? items.type : "null",
+          },
+        });
+        return resolved.href;
       }
     },
     selectedDate(data) {

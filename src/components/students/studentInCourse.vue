@@ -72,16 +72,14 @@
                 <!-- View profile -->
                 <v-btn
                   text
-                  @click="
-                    $router.push({
-                      name: 'UserDetail',
-                      params: {
-                        account_id: getStudentId,
-                        action: 'view',
-                        from: 'courseDetail',
-                      },
-                    })
-                  "
+                  :to="{
+                    name: 'UserDetail',
+                    params: {
+                      account_id: getStudentId,
+                      action: 'view',
+                      from: 'courseDetail',
+                    },
+                  }"
                   class="px-1"
                   color="#ff6b81"
                 >

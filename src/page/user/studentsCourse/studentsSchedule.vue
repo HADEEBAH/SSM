@@ -145,12 +145,10 @@
               <v-card
                 outlined
                 class="mb-3 pa-2"
-                @click="
-                  $router.push({
-                    name: 'StudentCourse',
-                    params: { course_id: item.courseId },
-                  })
-                "
+                :to="{
+                  name: 'StudentCourse',
+                  params: { course_id: item.courseId },
+                }"
               >
                 <v-card-text>
                   <v-row dense>
@@ -291,12 +289,10 @@
             >
               <v-card
                 outlined
-                @click="
-                  $router.push({
-                    name: 'StudentCourse',
-                    params: { course_id: item.courseId },
-                  })
-                "
+                :to="{
+                  name: 'StudentCourse',
+                  params: { course_id: item.courseId },
+                }"
                 class="mb-3 pa-2"
               >
                 <v-row dense>
@@ -420,7 +416,7 @@
           </div>
         </div>
       </v-expand-x-transition>
-      
+
       <!-- PAGE 2 -->
       <v-expand-x-transition transition="scale-transition">
         <div v-if="$route.params.action == 'MySchedule'">

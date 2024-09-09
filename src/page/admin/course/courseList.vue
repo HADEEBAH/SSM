@@ -157,12 +157,10 @@
           <v-btn
             text
             color="#FF6B81"
-            @click="
-              $router.push({
-                name: 'Course_courseID',
-                params: { course_id: item.course_id },
-              })
-            "
+            :to="{
+              name: 'Course_courseID',
+              params: { course_id: item.course_id },
+            }"
           >
             <v-icon>mdi-text-box-search-outline</v-icon>
             {{ $t("view details") }}

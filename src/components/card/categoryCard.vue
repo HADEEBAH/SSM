@@ -23,7 +23,11 @@
       class="font-bold cursor-pointer"
       @click="selectedCategory(category)"
     >
-      {{ $i18n.locale == "th" ? category.categoryNameTh : category.categoryNameEng }}
+      {{
+        $i18n.locale == "th"
+          ? category.categoryNameTh
+          : category.categoryNameEng
+      }}
     </v-card-title>
 
     <v-card-subtitle>
@@ -46,37 +50,37 @@
 </template>
 
 <script>
-import { mapActions, mapMutations,mapGetters } from "vuex";
+import { mapActions, mapMutations, mapGetters } from "vuex";
 export default {
-    props: {
-        category: {
-            type: Object
-        }
+  props: {
+    category: {
+      type: Object,
     },
-    data: ()=>({}),
-    computed: {
-        ...mapGetters({
-            course_order: "OrderModules/getCourseOrder" 
-        })
+  },
+  data: () => ({}),
+  computed: {
+    ...mapGetters({
+      course_order: "OrderModules/getCourseOrder",
+    }),
+  },
+  methods: {
+    ...mapMutations({
+      SetShowMore: "CategoryModules/SetShowMore",
+    }),
+    ...mapActions({
+      changeCourseOrderData: "OrderModules/changeCourseOrderData",
+    }),
+    selectedCategory(category) {
+      this.course_order.kingdom = category.categoryNameTh;
+      this.course_order.category_id = category.categoryId;
+      this.changeCourseOrderData(this.course_order);
+      localStorage.setItem("Order", JSON.stringify(this.course_order));
+      this.$router.push({
+        name: "userCourseList_categoryId",
+        params: { category_id: category.categoryId },
+      });
     },
-    methods:{
-        ...mapMutations({
-            SetShowMore : "CategoryModules/SetShowMore"
-        }),
-        ...mapActions({
-            changeCourseOrderData: "OrderModules/changeCourseOrderData",
-        }),
-        selectedCategory(category) {
-            this.course_order.kingdom = category.categoryNameTh;
-            this.course_order.category_id = category.categoryId;
-            this.changeCourseOrderData(this.course_order);
-            localStorage.setItem("Order", JSON.stringify(this.course_order));
-            this.$router.push({
-                name: "userCourseList_categoryId",
-                params: { category_id: category.categoryId },
-            });
-        },
-    }
+  },
 };
 </script>
 

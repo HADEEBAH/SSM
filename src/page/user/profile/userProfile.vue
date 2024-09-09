@@ -32,6 +32,10 @@
         depressed
         color="#FF6B81"
         class="white--text rounded-xl"
+        :to="{
+          name: 'ProfileDetail',
+          params: { profile_id: this.data_local.account_id },
+        }"
         @click="show_detail()"
       >
         {{ $t("view personal information") }}

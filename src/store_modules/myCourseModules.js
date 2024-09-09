@@ -179,7 +179,7 @@ const myCourseModules = {
                     let mycourse = await axios.get(`${process.env.VUE_APP_URL}/api/v1/mycourse/student/${account_id}`, config);
                     if (mycourse.data.statusCode === 200) {
                         for (let course of mycourse.data.data) {
-                            console.log('mycourse.data.data', mycourse.data.data)
+                            // console.log('mycourse.data.data', mycourse.data.data)
                             course.day_name = course.dates.day ? dayOfWeekArray(course.dates.day) : course.dates.day
                         }
                         if (data_local.roles.includes('R_4')) {

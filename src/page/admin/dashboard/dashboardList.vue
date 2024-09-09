@@ -16,7 +16,9 @@
               <!-- ผู้เรียนทั้งหมด -->
               <v-col cols="6" sm="3">
                 <v-card
-                  @click="$router.push({ name: 'StudentList' })"
+                  :to="{
+                    name: 'StudentList',
+                  }"
                   class="cursor-pointer rounded-lg"
                 >
                   <v-row dense>
@@ -467,7 +469,7 @@
             </v-card>
           </v-col>
         </v-row>
-        
+
         <v-row dense>
           <v-card-title>
             <v-img
