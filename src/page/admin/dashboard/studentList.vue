@@ -157,16 +157,14 @@
           <v-btn
             text
             color="#FF6B81"
-            @click="
-              $router.push({
-                name: 'UserDetail',
-                params: {
-                  action: 'view',
-                  account_id: item.studentId,
-                  from: 'Dashboard',
-                },
-              })
-            "
+            :to="{
+              name: 'UserDetail',
+              params: {
+                action: 'view',
+                account_id: item.studentId,
+                from: 'Dashboard',
+              },
+            }"
           >
             <v-icon>mdi-text-box-search-outline</v-icon>
             {{ $t("view student details") }}
@@ -195,16 +193,14 @@
           <v-btn
             text
             color="#FF6B81"
-            @click="
-              $router.push({
-                name: 'UserDetail',
-                params: {
-                  action: 'view',
-                  account_id: item.studentId,
-                  from: 'Dashboard',
-                },
-              })
-            "
+            :to="{
+              name: 'UserDetail',
+              params: {
+                action: 'view',
+                account_id: item.studentId,
+                from: 'Dashboard',
+              },
+            }"
           >
             <v-icon>mdi-text-box-search-outline</v-icon>
             {{ $t("view student details") }}
@@ -236,16 +232,14 @@
           <v-btn
             text
             color="#FF6B81"
-            @click="
-              $router.push({
-                name: 'UserDetail',
-                params: {
-                  action: 'view',
-                  account_id: item.studentId,
-                  from: 'Dashboard',
-                },
-              })
-            "
+            :to="{
+              name: 'UserDetail',
+              params: {
+                action: 'view',
+                account_id: item.studentId,
+                from: 'Dashboard',
+              },
+            }"
           >
             <v-icon>mdi-text-box-search-outline</v-icon>
             {{ $t("view student details") }}
@@ -277,16 +271,14 @@
           <v-btn
             text
             color="#FF6B81"
-            @click="
-              $router.push({
-                name: 'UserDetail',
-                params: {
-                  action: 'view',
-                  account_id: item.studentId,
-                  from: 'Dashboard',
-                },
-              })
-            "
+            :to="{
+              name: 'UserDetail',
+              params: {
+                action: 'view',
+                account_id: item.studentId,
+                from: 'Dashboard',
+              },
+            }"
           >
             <v-icon>mdi-text-box-search-outline</v-icon>
             {{ $t("view student details") }}

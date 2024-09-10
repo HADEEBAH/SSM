@@ -184,6 +184,7 @@
                       <v-col align="right" cols="8">
                         {{ $t("paid price") }}</v-col
                       >
+                      <!-- <pre>{{ item }}</pre> -->
                       <v-col
                         align="right"
                         cols="4"
@@ -191,7 +192,7 @@
                       >
                         {{
                           item.course_type_id === "CT_1"
-                          ? item.option.total_price.toLocaleString()
+                            ? item.option.total_price.toLocaleString()
                             : item.total_price.toLocaleString()
                         }}
                         {{ $t("baht") }}</v-col
