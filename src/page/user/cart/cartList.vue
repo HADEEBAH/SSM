@@ -562,16 +562,20 @@ export default {
               });
             } else {
               this.order_is_loading = true;
-              await this.saveOrder({ regis_type: "cart" }).finally(() => {
-                for (const cart of this.order.courses) {
-                  for (const id of cart.order_tmp_id) {
-                    this.DeleteCart({
-                      cart_id: id,
-                      account_id: this.user_login.account_id,
-                    });
+              await this.saveOrder({ regis_type: "cart" })
+                .then(() => {
+                  for (const cart of this.order.courses) {
+                    for (const id of cart.order_tmp_id) {
+                      this.DeleteCart({
+                        cart_id: id,
+                        account_id: this.user_login.account_id,
+                      });
+                    }
                   }
-                }
-              });
+                })
+                .catch((err) => {
+                  console.log("err :>> ", err);
+                });
               this.order_is_loading = false;
 
               this.total_price = 0;

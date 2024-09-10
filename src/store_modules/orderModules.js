@@ -1084,7 +1084,8 @@ const orderModules = {
             price: course.option?.net_price
               ? course.option.net_price
               : course.price,
-            originalPrice: courseData.price_course,
+
+            originalPrice: courseData ? courseData.price_course : 0,
             coach: {
               accountId: course.coach_id ? course.coach_id : course.coach,
               fullName: course.coach_name,
