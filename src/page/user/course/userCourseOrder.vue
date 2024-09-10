@@ -124,7 +124,7 @@
               color="pink"
               @change="coachSelected($event)"
               :rules="coachRules"
-              :items="course_order.time.timeData"
+              :items="course_seat"
               :item-text="$i18n.locale == 'th' ? 'coach_name' : 'coach_name_en'"
               item-value="coach_id"
               item-color="pink"
@@ -149,18 +149,14 @@
                       "
                       >{{
                         $i18n.locale == "th"
-                          ? item.coach_name
-                          : item.coach_name_en
+                          ? item?.coach_name
+                          : item?.coach_name_en
                       }}
                       {{
                         `(${
-                          course_seat?.countSeatByCourse
-                            ? course_seat?.countSeatByCourse
-                            : 0
+                          item?.countSeatByCourse ? item?.countSeatByCourse : 0
                         }/${
-                          course_seat?.maxStudentByCourse
-                            ? course_seat.maxStudentByCourse
-                            : 0
+                          item?.maxStudentByCourse ? item.maxStudentByCourse : 0
                         })`
                       }}
                       <!-- {{
@@ -1440,13 +1436,13 @@ export default {
           });
 
           if (this.course_order.time) {
-            let checkDayId = "";
-            let checkTimeId = "";
-            let checkCoachId = "";
+            let checkDayId = [];
+            let checkTimeId = [];
+            let checkCoachId = [];
             for (const items of this.course_order.time.timeData) {
-              checkDayId = items.dayOfWeekId;
-              checkTimeId = items.timeId;
-              checkCoachId = items.coach_id;
+              checkDayId.push(items.dayOfWeekId);
+              checkTimeId.push(items.timeId);
+              checkCoachId.push(items.coach_id);
             }
             this.GetCourseSeats({
               courseId: this.course_order?.course_id,
@@ -1710,13 +1706,13 @@ export default {
       this.coachSelect = false;
       this.course_order.coach_id = coach_id;
 
-      let checkDayId = "";
-      let checkTimeId = "";
-      let checkCoachId = "";
-      for (const items of this.course_order?.time?.timeData) {
-        checkDayId = items.dayOfWeekId;
-        checkTimeId = items.timeId;
-        checkCoachId = items.coach_id;
+      let checkDayId = [];
+      let checkTimeId = [];
+      let checkCoachId = [];
+      for (const items of this.course_order.time.timeData) {
+        checkDayId.push(items.dayOfWeekId);
+        checkTimeId.push(items.timeId);
+        checkCoachId.push(items.coach_id);
       }
       this.GetCourseSeats({
         courseId: this.course_order?.course_id,
