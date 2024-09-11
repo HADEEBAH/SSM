@@ -675,18 +675,22 @@
             <v-row dense class="mt-[-8]">
               <v-col cols="12" sm="6">
                 <v-checkbox
-                  v-model="course.checkedDis"
+                  v-model="course.checkedDiscountPrice"
                   :label="`${$t('there is a new discount')} (${$t('baht')})`"
                   color="#FF6B81"
                   @click="
-                    checkBoxFunc(course_index, order.courses, course.checkedDis)
+                    checkBoxFunc(
+                      course_index,
+                      order.courses,
+                      course.checkedDiscountPrice
+                    )
                   "
-                  :disabled="course.checkedPercent"
+                  :disabled="course.checkedDiscountPercent"
                 ></v-checkbox>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-checkbox
-                  v-model="course.checkedPercent"
+                  v-model="course.checkedDiscountPercent"
                   :label="`${$t('there is a new discount')} (${$t(
                     'percentage'
                   )})`"
@@ -695,25 +699,29 @@
                     checkBoxFunc(
                       course_index,
                       order.courses,
-                      course.checkedPercent
+                      course.checkedDiscountPercent
                     )
                   "
-                  :disabled="course.checkedDis"
+                  :disabled="course.checkedDiscountPrice"
                 ></v-checkbox>
               </v-col>
             </v-row>
             <v-row dense>
               <!-- Discount BATH -->
+              {{ discout_from_admin }}
+              {{ course.checkedDiscountPercent }}
               <v-col
                 cols="12"
-                v-if="course.checkedDis || course.checkedPercent"
+                v-if="
+                  course.checkedDiscountPrice || course.checkedDiscountPercent
+                "
               >
                 <v-text-field
                   dense
                   type="number"
                   class="input-text-right"
                   :placeholder="
-                    course.checkedDis
+                    course.checkedDiscountPrice
                       ? $t('specify discount/baht')
                       : $t('specify discount/percent')
                   "
@@ -1241,12 +1249,12 @@ export default {
       for (let i = 0; i <= this.order?.courses.length; i++) {
         let courseData = this.order?.courses[i];
         if (courseData?.price) {
-          if (courseData.checkedDis) {
+          if (courseData.checkedDiscountPrice) {
             if (newDiscount) {
               let priceDiscount = courseData.price - Number(newDiscount[i]);
               netPrice += priceDiscount;
             }
-          } else if (courseData.checkedPercent) {
+          } else if (courseData.checkedDiscountPercent) {
             if (newDiscount) {
               let discountAmount =
                 (Number(newDiscount[i]) / 100) * courseData.price;
@@ -1353,8 +1361,8 @@ export default {
         selected: true,
         parents: [],
         students: [],
-        checkedDis: false,
-        checkedPercent: false,
+        checkedDiscountPrice: false,
+        checkedDiscountPercent: false,
       });
     },
     Calprice(course) {
@@ -1430,8 +1438,8 @@ export default {
       course.price = 0;
       course.detail = "";
       course.remark = "";
-      course.checkedDis = false;
-      course.checkedPercent = false;
+      course.checkedDiscountPrice = false;
+      course.checkedDiscountPercent = false;
       if (courseId) {
         this.GetCourse(courseId).then(() => {
           if (this.course_data) {
@@ -1653,6 +1661,7 @@ export default {
                   await this.saveOrder({
                     regis_type: "addStudent",
                     courseData: this.course_data,
+                    moreDiscount: this.discout_from_admin,
                   });
                   if (this.order_is_status) {
                     let payload = {
@@ -1709,6 +1718,7 @@ export default {
                     regis_type: "addStudent",
                     discount: this.course_data?.discountPrice,
                     courseData: this.course_data,
+                    moreDiscount: this.discout_from_admin,
                   });
                   if (this.order_is_status) {
                     let payload = {
@@ -1769,8 +1779,8 @@ export default {
             selected: true,
             parents: [],
             students: [],
-            checkedDis: false,
-            checkedPercent: false,
+            checkedDiscountPrice: false,
+            checkedDiscountPercent: false,
           },
         ],
         created_by: "",

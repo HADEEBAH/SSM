@@ -934,7 +934,8 @@ const orderModules = {
     // },
 
 
-    async saveOrder(context, { regis_type, my_data_class, type_checked, discount, courseData }) {
+    async saveOrder(context, { regis_type, my_data_class, type_checked, discount, courseData, moreDiscount }) {
+      console.log('moreDiscount :>> ', moreDiscount);
       // othert_data_class
 
       context.commit("SetOrderIsLoading", true);
@@ -1084,7 +1085,8 @@ const orderModules = {
             price: course.option?.net_price
               ? course.option.net_price
               : course.price,
-            originalPrice: courseData.price_course,
+
+            originalPrice: courseData ? courseData.price_course : 0,
             coach: {
               accountId: course.coach_id ? course.coach_id : course.coach,
               fullName: course.coach_name,
@@ -1284,32 +1286,6 @@ const orderModules = {
                   title: VueI18n.t("unable to register"),
                   text: VueI18n.t(
                     "parents cannot resave the course to their parents"
-                  ),
-                  timer: 3000,
-                  timerProgressBar: true,
-                  showCancelButton: false,
-                  showConfirmButton: false,
-                });
-              } else if (error?.response?.data?.message == "Cannot register , Because your orders are duplicated.") {
-                Swal.fire({
-                  icon: "warning",
-                  title: VueI18n.t("cannot register"),
-                  text: VueI18n.t(
-                    "because your orders are duplicated"
-                  ),
-                  timer: 3000,
-                  timerProgressBar: true,
-                  showCancelButton: false,
-                  showConfirmButton: false,
-                });
-              } else if (error?.response?.data?.message === "register Duplicate") {
-                Swal.fire({
-                  icon: "error",
-                  title: VueI18n.t(
-                    "something went wrong"
-                  ),
-                  text: VueI18n.t(
-                    "some students or students have already purchased the course"
                   ),
                   timer: 3000,
                   timerProgressBar: true,
@@ -1532,7 +1508,7 @@ const orderModules = {
         }
         context.commit("SetOrderIsLoading", false);
 
-      } // let localhost = "http://localhost:3002"
+      }
 
 
 
