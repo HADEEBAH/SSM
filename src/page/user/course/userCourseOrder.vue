@@ -1629,15 +1629,15 @@ export default {
           if (this.course_order.time && this.course_order.coach_id) {
             let time_data = this.course_order.time;
             let dayOfWeekId = time_data?.timeData
-              ? time_data.timeData.filter(
-                  (v) => v.coach_id === this.course_order.coach_id
+              ? time_data?.timeData?.filter(
+                  (v) => v.coach_id === this?.course_order?.coach_id
                 )[0].dayOfWeekId
-              : time_data.dayOfWeekId;
+              : time_data?.dayOfWeekId;
             let timeId = time_data?.timeData
-              ? time_data.timeData.filter(
-                  (v) => v.coach_id === this.course_order.coach_id
+              ? time_data?.timeData?.filter(
+                  (v) => v.coach_id === this?.course_order?.coach_id
                 )[0].timeId
-              : time_data.timeId;
+              : time_data?.timeId;
             if (this.course_order.course_type_id === "CT_1") {
               let course_monitors_filter = this.course_monitors.filter(
                 (v) =>
