@@ -788,7 +788,7 @@
             <v-btn
               v-else
               class="w-full"
-              disabled
+              :disabled="validateButton"
               outlined
               dense
               color="#ff6b81"
@@ -1954,101 +1954,100 @@ export default {
       this.$router.push({ name: "UserKingdom" });
     },
     addToCart() {
-      let checkNickname = "";
-      let checkClass = "";
-      let roles = "";
-      let yourself = this.course_order.apply_for_yourself;
+      // let checkNickname = "";
+      // let checkClass = "";
+      // let roles = "";
+      // let yourself = this.course_order.apply_for_yourself;
 
-      for (const items of this.course_order?.students) {
-        checkNickname = items.nicknameTh ? items.nicknameTh : null;
-        checkClass =
-          items.class || items.class?.classNameTh
-            ? items.class || items.class?.classNameTh
-            : null;
-      }
-      for (const items of this.user_student_data) {
-        roles = items?.roles?.roleId;
-      }
+      // for (const items of this.course_order?.students) {
+      //   checkNickname = items.nicknameTh ? items.nicknameTh : null;
+      //   checkClass =
+      //     items.class || items.class?.classNameTh
+      //       ? items.class || items.class?.classNameTh
+      //       : null;
+      // }
+      // for (const items of this.user_student_data) {
+      //   roles = items?.roles?.roleId;
+      // }
 
-      if (
-        (roles !== "R_5" && yourself === false && checkNickname) ||
-        (roles === "R_5" && checkNickname && checkClass) ||
-        (roles === undefined && checkNickname) ||
-        (yourself === true && checkNickname && checkClass)
-      ) {
-        if (this.course_order.course_type_id == "CT_1") {
-          this.$refs.form_coach.validate();
-        } else {
-          this.validate_coach = true;
-        }
-        if (this.validate_coach) {
-          Swal.fire({
-            icon: "question",
-            title: this.$t("want to add to cart?"),
-            showDenyButton: false,
-            showCancelButton: true,
-            confirmButtonText: this.$t("agree"),
-            cancelButtonText: this.$t("no"),
-          }).then(async (result) => {
-            if (result.isConfirmed) {
-              if (this.course_order.course_type_id == "CT_2") {
-                let days_of_class = this.course_data.days_of_class[0];
-                this.course_order.time = days_of_class.times[0];
-                this.course_order.coach_name =
-                  this.course_data.coachs[0].coach_name;
-                this.course_order.coach_id =
-                  this.course_data.coachs[0].coach_id;
-                this.course_order.coach = this.course_data.coachs[0].coach_id;
-              } else {
-                this.course_order.coach = this.course_order.coach_id;
-                this.course_order.coach_name =
-                  this.course_order.time.timeData.filter(
-                    (v) => v.coach_id === this.course_order.coach_id
-                  )[0].coach_name;
-              }
-              this.order.courses.push({ ...this.course_order });
-              this.order.created_by = this.user_login.account_id;
-              this.changeOrderData(this.order);
-              localStorage.setItem(
-                this.user_login.account_id,
-                JSON.stringify(this.order)
-              );
-              this.saveCart({
-                cart_data: this.order,
-                discount: this.course_data?.discount,
-              });
-              // this.resetCourseData();
-              // this.show_dialog_cart = true;
-              // Swal.fire({
-              //   icon: "success",
-              //   title: this.$t("succeed"),
-              //   text: this.$t(
-              //     "the course has been successfully added to the cart"
-              //   ),
-              //   showCancelButton: false,
-              //   showConfirmButton: false,
-              //   showDenyButton: false,
-              //   timer: 3000,
-              //   timerProgressBar: true,
-              // }).finally(() => {
-              //   this.$router.push({ name: "CartList" });
-              // });
-            }
-          });
-        }
+      // if (
+      //   (roles !== "R_5" && yourself === false && checkNickname) ||
+      //   (roles === "R_5" && checkNickname && checkClass) ||
+      //   (roles === undefined && checkNickname) ||
+      //   (yourself === true && checkNickname && checkClass)
+      // ) {
+      if (this.course_order.course_type_id == "CT_1") {
+        this.$refs.form_coach.validate();
       } else {
-        // this.chaeckConditions = true;
+        this.validate_coach = true;
+      }
+      if (this.validate_coach) {
         Swal.fire({
-          icon: "warning",
-          title: this.$t("something went wrong"),
-          text: this.$t("please filter yourse nickname and class"),
-          timer: 3000,
+          icon: "question",
+          title: this.$t("want to add to cart?"),
           showDenyButton: false,
-          showCancelButton: false,
-          showConfirmButton: false,
-          timerProgressBar: true,
+          showCancelButton: true,
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("no"),
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            if (this.course_order.course_type_id == "CT_2") {
+              let days_of_class = this.course_data.days_of_class[0];
+              this.course_order.time = days_of_class.times[0];
+              this.course_order.coach_name =
+                this.course_data.coachs[0].coach_name;
+              this.course_order.coach_id = this.course_data.coachs[0].coach_id;
+              this.course_order.coach = this.course_data.coachs[0].coach_id;
+            } else {
+              this.course_order.coach = this.course_order.coach_id;
+              this.course_order.coach_name =
+                this.course_order.time.timeData.filter(
+                  (v) => v.coach_id === this.course_order.coach_id
+                )[0].coach_name;
+            }
+            this.order.courses.push({ ...this.course_order });
+            this.order.created_by = this.user_login.account_id;
+            this.changeOrderData(this.order);
+            localStorage.setItem(
+              this.user_login.account_id,
+              JSON.stringify(this.order)
+            );
+            this.saveCart({
+              cart_data: this.order,
+              discount: this.course_data?.discount,
+            });
+            // this.resetCourseData();
+            // this.show_dialog_cart = true;
+            // Swal.fire({
+            //   icon: "success",
+            //   title: this.$t("succeed"),
+            //   text: this.$t(
+            //     "the course has been successfully added to the cart"
+            //   ),
+            //   showCancelButton: false,
+            //   showConfirmButton: false,
+            //   showDenyButton: false,
+            //   timer: 3000,
+            //   timerProgressBar: true,
+            // }).finally(() => {
+            //   this.$router.push({ name: "CartList" });
+            // });
+          }
         });
       }
+      // } else {
+      //   // this.chaeckConditions = true;
+      //   Swal.fire({
+      //     icon: "warning",
+      //     title: this.$t("something went wrong"),
+      //     text: this.$t("please filter yourse nickname and class"),
+      //     timer: 3000,
+      //     showDenyButton: false,
+      //     showCancelButton: false,
+      //     showConfirmButton: false,
+      //     timerProgressBar: true,
+      //   });
+      // }
     },
     removeParent(student) {
       this.course_order.students
