@@ -124,8 +124,8 @@
               color="pink"
               @change="coachSelected($event)"
               :rules="coachRules"
-              :items="course_seat"
-              :item-text="$i18n.locale == 'th' ? 'coach_name' : 'coach_name_en'"
+              :items="all_course_seat"
+              :item-text="$i18n.locale == 'th' ? 'fullnameTh' : 'fullnameEn'"
               item-value="coach_id"
               item-color="pink"
               outlined
@@ -147,10 +147,11 @@
                           ? 'font-bold'
                           : ''
                       "
-                      >{{
+                    >
+                      {{
                         $i18n.locale == "th"
-                          ? item?.coach_name
-                          : item?.coach_name_en
+                          ? `${item?.firstNameTh} ${item?.lastNameTh}`
+                          : `${item?.firstNameEn} ${item?.lastNameEn}`
                       }}
                       {{
                         `(${
@@ -159,14 +160,6 @@
                           item?.maxStudentByCourse ? item.maxStudentByCourse : 0
                         })`
                       }}
-                      <!-- {{
-                        GenCoachNumberStudent(
-                          item.coach_id,
-                          item.dayOfWeekId,
-                          item.timeId,
-                          course_order
-                        )
-                      }} -->
                     </span></v-list-item-title
                   >
                 </v-list-item-content>
@@ -1398,6 +1391,7 @@ export default {
       reserve_list: "OrderModules/getReserveList",
       get_user_oneId: "loginModules/getUserOneId",
       course_seat: "CourseModules/getCourseSeats",
+      all_course_seat: "CourseModules/getAllSeats",
       check_date: "CourseModules/getCheckDate",
 
       // getUserOneId
@@ -1444,7 +1438,7 @@ export default {
               checkTimeId.push(items.timeId);
               checkCoachId.push(items.coach_id);
             }
-            this.GetCourseSeats({
+            this.GetAllSeats({
               courseId: this.course_order?.course_id,
               coursePackageOptionsId:
                 this.course_order?.option?.course_package_option_id,
@@ -1534,6 +1528,7 @@ export default {
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
       GetReserceCourse: "OrderModules/GetReserceCourse",
       GetCourseSeats: "CourseModules/GetCourseSeats",
+      GetAllSeats: "CourseModules/GetAllSeats",
       GetCheckDate: "CourseModules/GetCheckDate",
     }),
 
@@ -1714,7 +1709,7 @@ export default {
         checkTimeId.push(items.timeId);
         checkCoachId.push(items.coach_id);
       }
-      this.GetCourseSeats({
+      this.GetAllSeats({
         courseId: this.course_order?.course_id,
         coursePackageOptionsId:
           this.course_order?.option?.course_package_option_id,
