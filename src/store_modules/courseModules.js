@@ -415,14 +415,14 @@ const CourseModules = {
         dataPayload.courseId = courseId,
           dataPayload.courseTypeId = courseTypeId,
           dataPayload.coursePackageOptionsId = coursePackageOptionsId,
-          dataPayload.dayOfWeekId = [dayOfWeekId],
-          dataPayload.timeId = [timeId],
-          dataPayload.coachId = [coachId]
+          dataPayload.dayOfWeekId = dayOfWeekId,
+          dataPayload.timeId = timeId,
+          dataPayload.coachId = coachId
 
 
-        // let localhost = "http://localhost:3000"
-        // let { data } = await axios.post(`${localhost}/api/v1/monitor/get/course/seats`, dataPayload, config)
-        let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/monitor/get/course/seats`, dataPayload, config)
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.post(`${localhost}/api/v1/monitor/get/course/seats`, dataPayload, config)
+        // let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/monitor/get/course/seats`, dataPayload, config)
         if (data.statusCode == 201) {
           for (const items of data.data) {
             items.fullnameTh = `${items.firstNameTh} ${items.lastNameTh}`

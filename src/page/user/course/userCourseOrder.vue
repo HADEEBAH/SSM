@@ -90,7 +90,7 @@
               $t("choose a class time")
             }}</v-col>
           </v-row>
-          <v-radio-group v-model="course_order.time">
+          <v-radio-group v-model="course_order.time" @change="getCoach">
             <v-row>
               <v-col
                 cols="12"
@@ -126,7 +126,7 @@
               :rules="coachRules"
               :items="all_course_seat"
               :item-text="$i18n.locale == 'th' ? 'fullnameTh' : 'fullnameEn'"
-              item-value="coach_id"
+              item-value="coachId"
               item-color="pink"
               outlined
               :placeholder="$t('choose a coach')"
@@ -770,101 +770,84 @@
       </v-row>
       <v-row dense>
         <v-col cols="12" sm="6">
-          <template v-if="course_order.course_type_id === 'CT_1'">
-            <v-btn
-              v-if="
-                course_order.time && course_order.coach_id
-                  ? GenMonitors() === 'Open'
-                  : false
-              "
-              class="w-full"
-              :disabled="validateButton"
-              outlined
-              dense
-              color="#ff6b81"
-              @click="addToCart"
-              >{{ $t("add to cart") }}</v-btn
-            >
-            <v-btn
-              v-else
-              class="w-full"
-              :disabled="validateButton"
-              outlined
-              dense
-              color="#ff6b81"
-              @click="addToCart"
-              >{{ $t("add to cart") }}</v-btn
-            >
-          </template>
-          <template v-else>
-            <v-btn
-              class="w-full"
-              :disabled="validateButton"
-              outlined
-              dense
-              color="#ff6b81"
-              @click="addToCart"
-              >{{ $t("add to cart") }}</v-btn
-            >
-          </template>
+          <v-btn
+            class="w-full"
+            :disabled="validateButton"
+            outlined
+            dense
+            color="#ff6b81"
+            @click="addToCart"
+            >{{ $t("add to cart") }}</v-btn
+          >
         </v-col>
-
         <v-col cols="12" sm="6">
           <v-btn
             v-if="
-              course_order?.time && course_order?.coach_id
-                ? GenMonitors() === 'Close'
-                : false
+              course_seat?.status === 'Close' ||
+              course_order.students.length + course_seat?.countSeatByCourse >
+                maxStudentByCourse ||
+              course_data.course_status === 'Reserve'
             "
-            class="w-full white--text"
+            class="w-full"
             :disabled="validateButton || ValidateReserve()"
-            elevation="0"
+            :class="
+              validateButton || ValidateReserve()
+                ? 'bg-[#C4C4C4] font-black'
+                : 'bg-[#ff6b81] white--text'
+            "
+            outlined
             dense
             @click="CreateReserve"
-            :color="disable_checkout ? '#C4C4C4' : '#ff6b81'"
-            >{{ $t("reserve") }}</v-btn
-          >
-          <v-btn
-            v-else-if="
-              course_data?.course_status === 'Reserve'
-                ? GenMonitors() === 'Close'
-                : false
-            "
-            class="w-full white--text"
-            :disabled="validateButton || ValidateReserve()"
-            elevation="0"
-            dense
-            @click="CreateReserve"
-            :color="disable_checkout ? '#C4C4C4' : '#ff6b81'"
-            >{{ $t("reserve") }}</v-btn
-          >
-          <v-btn
-            v-else-if="
-              course_order?.time && course_order.coach_id
-                ? GenMonitors() === 'Open'
-                : false
-            "
-            class="w-full white--text"
-            :disabled="validateButton"
-            elevation="0"
-            dense
-            @click="checkOut"
-            :color="disable_checkout ? '#C4C4C4' : '#ff6b81'"
-          >
-            {{ $t("cash out") }}
+            :color="validateButton || ValidateReserve() ? '#C4C4C4' : '#ff6b81'"
+            >{{ $t("reserve") }}
           </v-btn>
+
           <v-btn
             v-else
-            class="w-full white--text"
+            class="w-full"
             :disabled="validateButton"
-            elevation="0"
+            :class="
+              validateButton
+                ? 'bg-[#C4C4C4] font-black'
+                : 'bg-[#ff6b81] white--text'
+            "
+            outlined
             dense
             @click="checkOut"
-            :color="disable_checkout ? '#C4C4C4' : '#ff6b81'"
+            :color="validateButton ? '#C4C4C4' : '#ff6b81'"
+            >{{ $t("cash out") }}
+          </v-btn>
+        </v-col>
+      </v-row>
+      <!-- <v-row v-else>
+        <v-col cols="12" sm="6">
+          <v-btn
+            class="w-full"
+            :disabled="validateButton"
+            outlined
+            dense
+            color="#ff6b81"
+            @click="addToCart"
+            >{{ $t("add to cart") }}</v-btn
+          >
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-btn
+            class="w-full"
+            :disabled="validateButton"
+            :class="
+              validateButton
+                ? 'bg-[#C4C4C4] font-black'
+                : 'bg-[#ff6b81] white--text'
+            "
+            outlined
+            dense
+            color="#ff6b81"
+            @click="checkOut"
             >{{ $t("cash out") }}</v-btn
           >
         </v-col>
-      </v-row>
+      </v-row> -->
     </v-container>
     <!-- LOADING -->
     <loading-overlay :loading="order_is_loading"></loading-overlay>
@@ -1429,26 +1412,26 @@ export default {
             cpo_id: this.course_order.option.course_package_option_id,
           });
 
-          if (this.course_order.time) {
-            let checkDayId = [];
-            let checkTimeId = [];
-            let checkCoachId = [];
-            for (const items of this.course_order.time.timeData) {
-              checkDayId.push(items.dayOfWeekId);
-              checkTimeId.push(items.timeId);
-              checkCoachId.push(items.coach_id);
-            }
-            this.GetAllSeats({
-              courseId: this.course_order?.course_id,
-              coursePackageOptionsId:
-                this.course_order?.option?.course_package_option_id,
-              dayOfWeekId: checkDayId,
-              timeId: checkTimeId,
-              coachId: checkCoachId,
-              studentId: "",
-              courseTypeId: this.course_order?.course_type_id,
-            });
-          }
+          // if (this.course_order.time) {
+          //   let checkDayId = [];
+          //   let checkTimeId = [];
+          //   let checkCoachId = [];
+          //   for (const items of this.course_order.time.timeData) {
+          //     checkDayId.push(items.dayOfWeekId);
+          //     checkTimeId.push(items.timeId);
+          //     checkCoachId.push(items.coach_id);
+          //   }
+          //   this.GetAllSeats({
+          //     courseId: this.course_order?.course_id,
+          //     coursePackageOptionsId:
+          //       this.course_order?.option?.course_package_option_id,
+          //     dayOfWeekId: checkDayId,
+          //     timeId: checkTimeId,
+          //     coachId: checkCoachId,
+          //     studentId: "",
+          //     courseTypeId: this.course_order?.course_type_id,
+          //   });
+          // }
 
           if (this.course_order.course_id) {
             this.GetShortCourseMonitor({
@@ -1471,39 +1454,38 @@ export default {
       return "";
     },
     validateButton() {
-      if (this.course_order.coach_id) {
-        this.GenMonitors();
-        this.ValidateReserve();
-      }
       if (this.course_order.course_type_id === "CT_1") {
         let time = this.course_order.time ? true : false;
         let day = this.course_order.day ? true : false;
         let coach =
           this.coachSelect || this.course_order.coach_id ? true : false;
-        let student = false;
+        let student = this.course_order.students.length > 0 ? true : false;
+        // if (this.course_order.students.length > 0) {
+        //   if (
+        //     this.course_order.students.filter((v) => !v.account_id).length > 0
+        //   ) {
+        //     student = false;
+        //   } else {
+        //     student = true;
+        //   }
+        // }
+        // return !(time && day && coach && student);
 
-        if (this.course_order.students.length > 0) {
-          if (
-            this.course_order.students.filter((v) => !v.account_id).length > 0
-          ) {
-            student = false;
-          } else {
-            student = true;
-          }
-        }
-        return !(time && day && coach && student);
+        return time && day && coach && student ? false : true;
       } else {
-        let student = true;
-        if (this.course_order.students.length > 0) {
-          if (
-            this.course_order.students.filter((v) => !v.account_id).length > 0
-          ) {
-            student = false;
-          }
-        } else {
-          student = false;
-        }
+        let student = this.course_order.students.length > 0 ? true : false;
         return !student;
+        // let student = true;
+        // if (this.course_order.students.length > 0) {
+        //   if (
+        //     this.course_order.students.filter((v) => !v.account_id).length > 0
+        //   ) {
+        //     student = false;
+        //   }
+        // } else {
+        //   student = false;
+        // }
+        // return !student;
       }
     },
   },
@@ -1517,7 +1499,8 @@ export default {
       changeCourseOrderData: "OrderModules/changeCourseOrderData",
       resetCourseData: "OrderModules/resetCourseData",
       changeOrderData: "OrderModules/changeOrderData",
-      changeDialogRegisterOneId: "RegisterModules/changeDialogRegisterOneId",
+      changeDialogRegisterOneId:
+        "RegisterModules/changenmogeDialogRegisterOneId",
       saveOrder: "OrderModules/saveOrder",
       saveCart: "OrderModules/saveCart",
       checkUsernameOneid: "loginModules/checkUsernameOneid",
@@ -1531,6 +1514,28 @@ export default {
       GetAllSeats: "CourseModules/GetAllSeats",
       GetCheckDate: "CourseModules/GetCheckDate",
     }),
+    getCoach() {
+      if (this.course_order.time) {
+        let checkDayId = [];
+        let checkTimeId = [];
+        let checkCoachId = [];
+        for (const items of this.course_order.time.timeData) {
+          checkDayId.push(items.dayOfWeekId);
+          checkTimeId.push(items.timeId);
+          checkCoachId.push(items.coach_id);
+        }
+        this.GetAllSeats({
+          courseId: this.course_order?.course_id,
+          coursePackageOptionsId:
+            this.course_order?.option?.course_package_option_id,
+          dayOfWeekId: checkDayId,
+          timeId: checkTimeId,
+          coachId: checkCoachId,
+          studentId: "",
+          courseTypeId: this.course_order?.course_type_id,
+        });
+      }
+    },
 
     realtimeCheckNickname(items) {
       this.inputNickName = items;
@@ -1554,16 +1559,32 @@ export default {
       inputValidation(e, lang);
     },
     ValidateReserve() {
-      if (this.course_data.course_status == "Reserve") {
-        const today = moment(new Date()).format("YYYY-MM-DD");
-        if (
-          !moment(today).isBetween(
-            this.course_data.reservation_start_date,
-            this.course_data.reservation_end_date,
-            null,
-            "[]"
-          )
-        ) {
+      if (this.course_data.course_status === "Reserve") {
+        // console.log('this.course_data.reservation_start_date :>> ', this.course_data.reservation_start_date);
+        // console.log('this.course_data.reservation_start_date :>> ', this.course_data.reservation_start_date);
+        const today = moment().format("YYYY-MM-DD");
+        const start = moment(this.course_data.reservation_start_date).format(
+          "YYYY-MM-DD"
+        );
+        const end = moment(this.course_data.reservation_end_date).format(
+          "YYYY-MM-DD"
+        );
+        if (!(moment(today) >= moment(start) && moment(today) <= moment(end))) {
+          return true;
+          // let validate_reserve = [];
+          // if (this.course_order.students.length > 0) {
+          //   for (let student of this.course_order.students) {
+          //     validate_reserve.push(
+          //       this.reserve_list.some((v) => v.studentId == student.account_id)
+          //     );
+          //   }
+          // }
+          // if (validate_reserve.includes(true)) {
+          //   return true;
+          // } else {
+          //   return false;
+          // }
+        } else {
           let validate_reserve = [];
           if (this.course_order.students.length > 0) {
             for (let student of this.course_order.students) {
@@ -1571,23 +1592,25 @@ export default {
                 this.reserve_list.some((v) => v.studentId == student.account_id)
               );
             }
+          } else {
+            return true;
           }
           if (validate_reserve.includes(true)) {
             return true;
           } else {
             return false;
           }
-        } else {
-          return false;
         }
       } else {
         let validate_reserve = [];
         if (this.course_order.students.length > 0) {
           for (let student of this.course_order.students) {
             validate_reserve.push(
-              this.reserve_list.some((v) => v.studentId == student.account_id)
+              this.reserve_list.some((v) => v.studentId === student.account_id)
             );
           }
+        } else {
+          return true;
         }
         if (validate_reserve.includes(true)) {
           return true;
@@ -1701,24 +1724,21 @@ export default {
       this.coachSelect = false;
       this.course_order.coach_id = coach_id;
 
-      let checkDayId = [];
-      let checkTimeId = [];
-      let checkCoachId = [];
-      for (const items of this.course_order.time.timeData) {
-        checkDayId.push(items.dayOfWeekId);
-        checkTimeId.push(items.timeId);
-        checkCoachId.push(items.coach_id);
-      }
-      this.GetAllSeats({
+      const matchedData = this?.course_order?.time?.timeData?.find(
+        (item) => item.coach_id === coach_id
+      );
+
+      this.GetCourseSeats({
         courseId: this.course_order?.course_id,
         coursePackageOptionsId:
           this.course_order?.option?.course_package_option_id,
-        dayOfWeekId: checkDayId,
-        timeId: checkTimeId,
-        coachId: checkCoachId,
+        dayOfWeekId: matchedData.dayOfWeekId,
+        timeId: matchedData.timeId,
+        coachId: matchedData.coach_id,
         studentId: "",
         courseTypeId: this.course_order?.course_type_id,
       });
+      this.coachSelect = true;
     },
     resetTime() {
       this.course_order.time = null;
