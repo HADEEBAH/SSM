@@ -199,10 +199,31 @@ const CourseModules = {
     assessment: [],
     filter_potential_student: [],
     potential_assessment: [],
-    seats: []
+    seats: [],
+    package_add_student: [],
+    option_add_student: [],
+    day_add_student: [],
+    time_add_student: [],
+    coach_add_student: [],
+
 
   },
   mutations: {
+    SetPackageAddStudent(state, payload) {
+      state.package_add_student = payload
+    },
+    SetOptionAddStudent(state, payload) {
+      state.option_add_student = payload
+    },
+    SetDayAddStudent(state, payload) {
+      state.day_add_student = payload
+    },
+    SetTimeAddStudent(state, payload) {
+      state.time_add_student = payload
+    },
+    SetCoachAddStudent(state, payload) {
+      state.coach_add_student = payload
+    },
     SetSeat(state, payload) {
       state.seats = payload
     },
@@ -1632,6 +1653,86 @@ const CourseModules = {
         console.log(error)
       }
     },
+    async GetPackagesAddStudent(context, { course_id }) {
+      try {
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/course/detail/addstudent/status-course/${course_id}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/addstudent/status-course/${course_id}`)
+        if (data.statusCode === 200) {
+          context.commit("SetPackageAddStudent", data.data)
+        } else {
+          throw { error: data }
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async GetOptionAddStudent(context, { course_id, package_id }) {
+      try {
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/course/detail/addstudent/status-package/${course_id}/${package_id}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/addstudent/status-package/${course_id}/${package_id}`)
+        if (data.statusCode === 200) {
+          context.commit("SetOptionAddStudent", data.data)
+        } else {
+          throw { error: data }
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async GetDayAddStudent(context, { course_id, package_id, option_id }) {
+      try {
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/course/detail/addstudent/status-day/${course_id}/${package_id}/${option_id}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/addstudent/status-day/${course_id}/${package_id}/${option_id}`)
+        if (data.statusCode === 200) {
+          for (const items of data.data) {
+            let dayArray = items.dayOfWeekName.split(',')
+            let dayString = dayOfWeekArray(dayArray)
+            items.dayName = dayString
+          }
+          context.commit("SetDayAddStudent", data.data)
+        } else {
+          throw { error: data }
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    async GetTimeAddStudent(context, { course_id, package_id, option_id, day_ofweek_id }) {
+      try {
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/course/detail/addstudent/status-time/${course_id}/${package_id}/${option_id}/${day_ofweek_id}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/addstudent/status-time/${course_id}/${package_id}/${option_id}/${day_ofweek_id}`)
+        if (data.statusCode === 200) {
+          context.commit("SetTimeAddStudent", data.data)
+        } else {
+          throw { error: data }
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async GetCoachAddStudent(context, { course_id, package_id, option_id, day_ofweek_id, time_id }) {
+      try {
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/course/detail/addstudent/status-coach/${course_id}/${package_id}/${option_id}/${day_ofweek_id}/${time_id}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/addstudent/status-coach/${course_id}/${package_id}/${option_id}/${day_ofweek_id}/${time_id}`)
+        if (data.statusCode === 200) {
+          for (const items of data.data) {
+            items.fullNameTh = `${items.firstNameTh} ${items.lastNameTh}`
+            items.fullNameEn = `${items.firstNameEn} ${items.lastNameEn}`
+          }
+          context.commit("SetCoachAddStudent", data.data)
+        } else {
+          throw { error: data }
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
     // COURSE :: CREATE
     async CreateCourse(context) {
       context.commit("SetCourseIsLoading", true)
@@ -2280,6 +2381,21 @@ const CourseModules = {
     },
   },
   getters: {
+    getPackagesAddStudent(state) {
+      return state.package_add_student
+    },
+    getOptionAddStudent(state) {
+      return state.option_add_student
+    },
+    getDayAddStudent(state) {
+      return state.day_add_student
+    },
+    getTimeAddStudent(state) {
+      return state.time_add_student
+    },
+    getCoachAddStudent(state) {
+      return state.coach_add_student
+    },
     getAllSeats(state) {
       return state.seats
     },

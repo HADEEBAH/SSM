@@ -219,10 +219,10 @@
                   </template>
                   <template v-slot:item="{ item }">
                     <v-list-item-content>
-                      <v-list-item-title
-                        ><span
+                      <v-list-item-title>
+                        <span
                           :class="
-                            course.course_id === item.course_id
+                            course.course_id === item.courseId
                               ? 'font-bold'
                               : ''
                           "
@@ -231,8 +231,8 @@
                               ? item.course_name_th
                               : item.course_name_en
                           }}</span
-                        ></v-list-item-title
-                      >
+                        >
+                      </v-list-item-title>
                     </v-list-item-content>
                     <v-list-item-action>
                       <v-icon>
@@ -255,16 +255,15 @@
             >
               <v-col cols="12" sm="4">
                 <label-custom :text="$t('package')"></label-custom>
-                <!-- <pre>{{ course.course_data }}</pre> -->
                 <v-autocomplete
-                  item-value="package_id"
-                  item-text="package"
+                  item-value="packageId"
+                  item-text="packageName"
                   item-color="pink"
                   color="pink"
                   dense
                   :rules="rules.package"
                   v-model="course.package"
-                  :items="course.course_data.packages"
+                  :items="packageOptions(package_add_student)"
                   :placeholder="$t('choose a package')"
                   outlined
                   @change="selectPackage(course)"
@@ -278,27 +277,28 @@
               </v-col>
               <v-col cols="12" sm="4" v-if="course.package">
                 <label-custom :text="$t('periods')"></label-custom>
+                <!-- :items="
+                    course.course_data.packages.filter(
+                      (v) => v.package_id == course.package
+                    )[0].options
+                  " -->
                 <v-autocomplete
                   dense
                   outlined
                   :rules="rules.option"
                   v-model="course.option"
-                  :items="
-                    course.course_data.packages.filter(
-                      (v) => v.package_id == course.package
-                    )[0].options
-                  "
+                  :items="periodOptions(option_add_student)"
                   :placeholder="$t('choose duration')"
                   @change="Calprice(course)"
                   item-color="white"
                   color="pink"
                 >
-                  <template v-slot:selection="data">
+                  <template v-slot:selection="{ item }">
                     {{
                       `${
                         $i18n.locale == "th"
-                          ? data.item.option_name
-                          : data.item.option_name_en
+                          ? item.optionName
+                          : item.optionNameEn
                       }`
                     }}
                   </template>
@@ -307,14 +307,14 @@
                       <v-list-item-title class=""
                         ><span
                           :class="
-                            course.option.option_id === item.option_id
+                            course.option.optionId === item.optionId
                               ? 'font-bold text-[#ff6b81]'
                               : 'text-[#000]'
                           "
                           >{{
                             $i18n.locale == "th"
-                              ? item.option_name
-                              : item.option_name_en
+                              ? item.optionName
+                              : item.optionNameEn
                           }}</span
                         ></v-list-item-title
                       >
@@ -322,13 +322,13 @@
                     <v-list-item-action>
                       <v-icon
                         :color="
-                          course.option.option_id === item.option_id
+                          course.option.optionId === item.optionId
                             ? '#ff6b81'
                             : '#9999'
                         "
                       >
                         {{
-                          course.option.option_id === item.option_id
+                          course.option.optionId === item.optionId
                             ? "mdi-check-circle"
                             : "mdi-radiobox-blank"
                         }}</v-icon
@@ -347,7 +347,7 @@
                 <v-text-field
                   dense
                   disabled
-                  :value="course.option.amount"
+                  :value="course.option.hourPerTime"
                   outlined
                 ></v-text-field>
               </v-col>
@@ -360,19 +360,22 @@
                 course.course_id
               "
             >
-              <v-col cols="12" sm="2" v-if="course.option.amount">
+              <v-col cols="12" sm="2" v-if="course.option.optionId">
                 <label-custom :text="$t('day')"></label-custom>
+                <!-- :items="course.course_data.days" -->
+
                 <v-autocomplete
                   dense
                   :rules="rules.day"
                   v-model="course.day"
                   item-text="dayName"
                   item-value="dayName"
-                  :items="course.course_data.days"
+                  :items="dayOptions(day_add_student)"
                   :placeholder="$t('pick a day')"
                   outlined
                   item-color="pink"
                   color="pink"
+                  @change="calTime(course)"
                 >
                   <template v-slot:no-data>
                     <div class="mx-3 font-bold">
@@ -381,17 +384,22 @@
                   </template>
                 </v-autocomplete>
               </v-col>
-              <v-col cols="12" sm="3" v-if="course.day">
+              <v-col
+                cols="12"
+                sm="3"
+                v-if="course.option.optionId && course.day"
+              >
                 <label-custom :text="$t('times')"></label-custom>
+                <!-- :items="
+                    course.course_data.days.filter(
+                      (v) => v.dayName === course.day
+                    )[0].times
+                  " -->
                 <v-select
                   dense
                   :rules="rules.time"
                   v-model="course.time"
-                  :items="
-                    course.course_data.days.filter(
-                      (v) => v.dayName === course.day
-                    )[0].times
-                  "
+                  :items="timeOption(time_add_student)"
                   :placeholder="$t('choose a time')"
                   outlined
                   item-color="white"
@@ -435,17 +443,20 @@
                   </template>
                 </v-select>
               </v-col>
-
-              <v-col cols="12" sm="4" v-if="course.course_data && course.time">
+              <v-col
+                cols="12"
+                sm="4"
+                v-if="course.option.optionId && course.time"
+              >
                 <label-custom :text="$t('coach')"></label-custom>
                 <!-- :items="coachOptions(course.time.timeData)" -->
+                <!-- :items="course.time.timeData" -->
 
-                <!-- <pre>{{ course.time }}</pre> -->
                 <v-autocomplete
                   dense
                   :rules="rules.coach"
                   v-model="course.coach"
-                  :items="course.time.timeData"
+                  :items="coachOption(coach_add_student)"
                   :placeholder="$t('choose a coach')"
                   item-color="pink"
                   outlined
@@ -458,12 +469,10 @@
                       </v-list-item-title>
                     </v-list-item>
                   </template>
-                  <template v-slot:selection="data">
+                  <template v-slot:selection="{ item }">
                     {{
                       `${
-                        $i18n.locale == "th"
-                          ? data.item.coach_name
-                          : data.item.coach_name_en
+                        $i18n.locale == "th" ? item.fullNameTh : item.fullNameEn
                       }`
                     }}
                   </template>
@@ -478,8 +487,8 @@
                           "
                           >{{
                             $i18n.locale == "th"
-                              ? item.coach_name
-                              : item.coach_name_en
+                              ? item.fullNameTh
+                              : item.fullNameEn
                           }}</span
                         ></v-list-item-title
                       >
@@ -952,6 +961,11 @@ export default {
       order_is_loading: "OrderModules/getOrderIsLoading",
       course_monitors: "CourseMonitorModules/getCourseMonitor",
       order_is_status: "OrderModules/getOrderIsStatus",
+      package_add_student: "CourseModules/getPackagesAddStudent",
+      option_add_student: "CourseModules/getOptionAddStudent",
+      day_add_student: "CourseModules/getDayAddStudent",
+      time_add_student: "CourseModules/getTimeAddStudent",
+      coach_add_student: "CourseModules/getCoachAddStudent",
     }),
     transfer() {
       return [
@@ -986,7 +1000,7 @@ export default {
         ],
         option: [
           (val) =>
-            (val.option_id ? true : false) || this.$t("please select a period"),
+            (val.optionId ? true : false) || this.$t("please select a period"),
         ],
         day: [
           (val) =>
@@ -1059,7 +1073,24 @@ export default {
       GetCourse: "CourseModules/GetCourse",
       searchNameUser: "loginModules/searchNameUser",
       GetAllCourseMonitor: "CourseMonitorModules/GetAllCourseMonitor",
+      GetPackagesAddStudent: "CourseModules/GetPackagesAddStudent",
+      GetOptionAddStudent: "CourseModules/GetOptionAddStudent",
+      GetDayAddStudent: "CourseModules/GetDayAddStudent",
+      GetTimeAddStudent: "CourseModules/GetTimeAddStudent",
+      GetCoachAddStudent: "CourseModules/GetCoachAddStudent",
     }),
+
+    calTime(course) {
+      course.coach = {};
+      course.time = {};
+
+      this.GetTimeAddStudent({
+        course_id: course.course_id,
+        package_id: course?.option?.packageId,
+        option_id: course?.option?.optionId,
+        day_ofweek_id: course?.option?.dayOfWeekId,
+      });
+    },
 
     todayDate() {
       let todayDate = new Date();
@@ -1068,10 +1099,23 @@ export default {
     openCourses(items) {
       return items.filter((course) => course.statusCourse === "Open");
     },
-    // packageOptions(items) {
-    //   console.log("items :>> ", items);
-    //   return items.filter((packageStatus) => packageStatus.status === "Open");
-    // },
+    packageOptions(items) {
+      return items?.courseDetail?.filter(
+        (packages) => packages.status === "Open"
+      );
+    },
+    dayOptions(items) {
+      return items.filter((item) => item.status === "Open");
+    },
+    timeOption(items) {
+      return items.filter((item) => item.status === "Open");
+    },
+    coachOption(items) {
+      return items.filter((item) => item.status === "Open");
+    },
+    periodOptions(items) {
+      return items.filter((item) => item.status === "Open");
+    },
     coachOptions(timeData) {
       return timeData.filter((coach) => coach.status_coach === "Open");
       // return items.filter((coach) => coach.status_coach === "Open");
@@ -1119,11 +1163,19 @@ export default {
       course.detail = "";
       course.remark = "";
     },
-    selectPackage(course) {
+    async selectPackage(course) {
       course.option = {};
-      course.package_data = course.course_data.packages.filter(
-        (v) => v.package_id === course.package
-      )[0];
+      course.time = {};
+      course.day = {};
+      course.coach = {};
+      // course.package_data = course.course_data.packages.filter(
+      //   (v) => v.package_id === course.package
+      // )[0];
+
+      await this.GetOptionAddStudent({
+        course_id: course.course_id,
+        package_id: course.package,
+      });
     },
     addCourse() {
       this.order.courses.push({
@@ -1156,9 +1208,18 @@ export default {
         students: [],
       });
     },
-    Calprice(course) {
-      course.price = course.option.net_price;
+    async Calprice(course) {
+      course.price = course.option.pricePerPerson;
+      course.time = {};
+      course.day = {};
+      course.coach = {};
+      // course.price = course.option.net_price;
       this.CalTotalPrice();
+      await this.GetDayAddStudent({
+        course_id: course.course_id,
+        package_id: course?.option?.packageId,
+        option_id: course?.option?.optionId,
+      });
     },
     inputDate(e, type, data) {
       switch (type) {
@@ -1177,8 +1238,15 @@ export default {
     removeCourse(index) {
       this.order.courses.splice(index, 1);
     },
-    selectTime(time, course) {
+    async selectTime(time, course) {
       course.coach = {};
+      await this.GetCoachAddStudent({
+        course_id: course.course_id,
+        package_id: course?.option?.packageId,
+        option_id: course?.option?.optionId,
+        day_ofweek_id: course?.option?.dayOfWeekId,
+        time_id: course?.option?.timeId,
+      });
     },
     selectCategory(categoryId, course_type_id, course) {
       course.course_id = "";
@@ -1213,7 +1281,7 @@ export default {
       });
       this.loading_course = true;
     },
-    selectCourse(courseId, course) {
+    async selectCourse(courseId, course) {
       course.package_data = {};
       course.package = "";
       course.option = {};
@@ -1229,7 +1297,7 @@ export default {
       course.detail = "";
       course.remark = "";
       if (courseId) {
-        this.GetCourse(courseId).then(() => {
+        await this.GetCourse(courseId).then(() => {
           if (this.course_data) {
             course.course_data = this.course_data;
           }
@@ -1275,6 +1343,7 @@ export default {
           }
         });
       }
+      await this.GetPackagesAddStudent({ course_id: courseId });
     },
     save() {
       this.GetAllCourseMonitor().then(() => {

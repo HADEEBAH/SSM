@@ -1062,7 +1062,7 @@ const orderModules = {
           payload.courses.push({
             courseId: course.course_id,
             courseTypeId: course.course_type_id,
-            coursePackageOptionId: course.option.course_package_option_id ? course.option.course_package_option_id : null,
+            coursePackageOptionId: course.option.course_package_option_id || course.option.coursePackageOptionsId ? course.option.course_package_option_id || course.option.coursePackageOptionsId : null,
             dayName: course.day?.dayName
               ? course.day.dayName
               : course.day.day
@@ -1078,7 +1078,22 @@ const orderModules = {
                 (v) => v.coach_id === course.coach_id
               )[0].timeId
               : course.time.timeId,
-            time: course.time,
+            // time: course.time,
+            time: !course.apply_for_others && !course.apply_for_yourself ? {
+              start: course.coach.start, // Default to 19:00 if not available
+              end: course.coach.end,     // Default to 20:00 if not available
+              timeData: [
+                {
+                  maximumStudent: course.coach.maximumStudent,
+                  dayOfWeekId: course.coach.dayOfWeekId,
+                  timeId: course.coach.timeId,
+                  courseCoachId: course.coach.courseCoachId,
+                  coach_name: course.coach.fullNameTh,
+                  coach_name_en: course.coach.fullNameEn,
+                  coach_id: course.coach.coachId
+                }
+              ]
+            } : course.time,
             startDate: course.start_date ? course.start_date : moment(new Date()).format("YYYY-MM-DD"),
             remark: course.remark ? course.remark : "",
             price: course.option?.net_price
@@ -1087,8 +1102,8 @@ const orderModules = {
 
             originalPrice: courseData ? courseData.price_course : 0,
             coach: {
-              accountId: course.coach_id ? course.coach_id : course.coach,
-              fullName: course.coach_name,
+              accountId: course.coach_id || course.coach.coachId ? course.coach_id || course.coach.coachId : course.coach,
+              fullName: course.coach_name || course.coach.fullNameTh,
             },
             student: students,
           });
