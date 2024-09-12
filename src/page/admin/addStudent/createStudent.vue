@@ -1246,6 +1246,7 @@ export default {
     CalTotalPrice(newDiscount) {
       let netPrice = 0; // newDiscount, defaultPrice
       this.order.total_price = 0;
+
       for (let i = 0; i <= this.order?.courses.length; i++) {
         let courseData = this.order?.courses[i];
         if (courseData?.price) {
@@ -1265,8 +1266,10 @@ export default {
             netPrice += Number(courseData?.price);
           }
         }
+        console.log("this.order?.courses[i] :>> ", this.order?.courses[i]);
       }
       this.totalPricees = netPrice;
+      this.order.total_price = netPrice;
     },
     todayDate() {
       let todayDate = new Date();
@@ -1662,6 +1665,7 @@ export default {
                     regis_type: "addStudent",
                     courseData: this.course_data,
                     moreDiscount: this.discout_from_admin,
+                    totalDiscount: this.totalPricees,
                   });
                   if (this.order_is_status) {
                     let payload = {
@@ -1719,6 +1723,7 @@ export default {
                     discount: this.course_data?.discountPrice,
                     courseData: this.course_data,
                     moreDiscount: this.discout_from_admin,
+                    totalDiscount: this.totalPricees,
                   });
                   if (this.order_is_status) {
                     let payload = {
