@@ -754,7 +754,7 @@ export default {
             {
               table: {
                 headerRows: 1,
-                widths: ["auto", "*", "auto", "auto"], 
+                widths: ["auto", "*", "auto", "auto", "auto"],
                 body: this.GenCourseItem(),
               },
               margin: [0, 0, 0, 20],
@@ -800,6 +800,21 @@ export default {
                           alignment: "right",
                         },
                         {
+                          text: this.pdf_lang == "th" ? "ส่วนลด" : "discount",
+                          margin: [0, 5],
+                          color: "#ff6b81",
+                          alignment: "right",
+                        },
+                        {
+                          text:
+                            this.pdf_lang == "th"
+                              ? "จำนวนเงินหลังหักส่วนลด"
+                              : "Amount after discount",
+                          margin: [0, 5],
+                          color: "#ff6b81",
+                          alignment: "right",
+                        },
+                        {
                           text:
                             this.pdf_lang == "th"
                               ? "จำนวนเงินรวมทั้งสิ้น"
@@ -817,6 +832,31 @@ export default {
                             "en-US",
                             { minimumFractionDigits: 2 }
                           )} ${this.pdf_lang == "th" ? "บาท" : "Baht"}`,
+                          margin: [0, 5],
+                          color: "#ff6b81",
+                          alignment: "right",
+                        },
+                        {
+                          text: `${parseFloat(
+                            this.count_old_discount
+                          )?.toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}${this.pdf_lang == "th" ? "บาท" : "Baht"}`,
+
+                          margin: [0, 5],
+                          color: "#ff6b81",
+                          alignment: "right",
+                        },
+                        {
+                          text: `${parseFloat(
+                            this.order_detail.totalPrice
+                              ? this.order_detail.totalPrice
+                              : 0
+                          )?.toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}${this.pdf_lang == "th" ? "บาท" : "Baht"}`,
                           margin: [0, 5],
                           color: "#ff6b81",
                           alignment: "right",
@@ -975,7 +1015,7 @@ export default {
                       // )} ${this.pdf_lang == "th" ? "น." : ""}`,
                       margin: [0, 5],
                       alignment: "center",
-                      fontSize: 11
+                      fontSize: 11,
                     },
                     {
                       text: this.pdf_lang == "th" ? "วันที่" : "Date",
@@ -1023,7 +1063,7 @@ export default {
                       }`,
                       margin: [0, 5],
                       alignment: "center",
-                      fontSize: 11
+                      fontSize: 11,
                     },
                     {
                       text: this.pdf_lang == "th" ? "วันที่" : "Date",
@@ -1067,6 +1107,12 @@ export default {
           },
           {
             text: this.pdf_lang == "th" ? "จำนวน" : "Amount",
+            fillColor: "#dedede",
+            alignment: "center",
+          },
+          {
+            text:
+              this.pdf_lang == "th" ? "ราคาต่อหน่วย(บาท)" : "Unit/price(Baht)",
             fillColor: "#dedede",
             alignment: "center",
           },
@@ -1118,7 +1164,9 @@ export default {
                 color: "#ff6b81",
               },
               {
-                text: course.remark ? `*หมายเหตุ: ${course.remark ? course.remark : ""}` : "",
+                text: course.remark
+                  ? `*หมายเหตุ: ${course.remark ? course.remark : ""}`
+                  : "",
                 color: "#ff6b81",
               },
             ],
@@ -1132,6 +1180,16 @@ export default {
           {
             text: `${(
               parseFloat(course.price) * course.students.length
+            )?.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}`,
+            color: "#ff6b81",
+            alignment: "right",
+          },
+          {
+            text: `${parseFloat(
+              this.lang_net_price ? this.lang_net_price : 0
             )?.toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,

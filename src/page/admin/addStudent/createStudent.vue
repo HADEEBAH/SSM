@@ -1665,7 +1665,6 @@ export default {
                     regis_type: "addStudent",
                     courseData: this.course_data,
                     moreDiscount: this.discout_from_admin,
-                    totalDiscount: this.totalPricees,
                   });
                   if (this.order_is_status) {
                     let payload = {
@@ -1723,7 +1722,6 @@ export default {
                     discount: this.course_data?.discountPrice,
                     courseData: this.course_data,
                     moreDiscount: this.discout_from_admin,
-                    totalDiscount: this.totalPricees,
                   });
                   if (this.order_is_status) {
                     let payload = {

@@ -935,9 +935,8 @@ const orderModules = {
 
 
     // async saveOrder(context, { moreDiscount }) {
-    async saveOrder(context, { regis_type, my_data_class, type_checked, discount, courseData, moreDiscount, totalPrice }) {
-      console.log('moreDiscount :>> ', moreDiscount);
-      console.log('totalPrice :>> ', totalPrice);
+    async saveOrder(context, { regis_type, my_data_class, type_checked, discount, courseData, moreDiscount }) {
+
       // othert_data_class
       context.commit("SetOrderIsLoading", true);
       try {
@@ -1298,6 +1297,18 @@ const orderModules = {
                   title: VueI18n.t("unable to register"),
                   text: VueI18n.t(
                     "parents cannot resave the course to their parents"
+                  ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message == "Unable to register due to course and package status being closed.") {
+                Swal.fire({
+                  icon: "error",
+                  title: VueI18n.t("unable to register"),
+                  text: VueI18n.t(
+                    "unable to register due to course and package status being closed"
                   ),
                   timer: 3000,
                   timerProgressBar: true,
