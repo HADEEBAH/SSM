@@ -82,6 +82,7 @@
     "booking time": "เวลาที่จอง",
     "booking status": "สถานะการจอง",
     "because your orders are duplicated": "เนื่องจากคำสั่งซื้อของคุณซ้ำกัน",
+    "because this course is full":"เนื่องจากคอร์สนี้เต็ม",
 
 
     "can't apply": "ไม่สามารถสมัครได้",
@@ -900,6 +901,8 @@
     "user": "ผู้ใช้",
     "user role": "บทบาทผู้ใช้งาน",
     "unsuccessful":"ไม่สำเร็จ",
+    "unable to register due to course and package status being closed":"ไม่สามารถลงทะเบียนได้เนื่องจากสถานะหลักสูตรและแพ็คเกจถูกปิด",
+    "Unable to register due to course and package status being closed":"ไม่สามารถลงทะเบียนได้เนื่องจากสถานะหลักสูตรและแพ็คเกจถูกปิด",
     "unable to delete course" : "ไม่สามารถลบคอร์สได้",
     "unable to close course" : "ไม่สามารถปิดคอร์สได้",
     "unable to change roles": "ไม่สามารถเปลี่ยนบทบาทได้",

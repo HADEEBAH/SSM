@@ -1306,6 +1306,18 @@ const orderModules = {
                   showCancelButton: false,
                   showConfirmButton: false,
                 });
+              } else if (error?.response?.data?.message == "Unable to register due to course and package status being closed.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t("cannot register"),
+                  text: VueI18n.t(
+                    "unable to register due to course and package status being closed"
+                  ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
               } else if (error?.response?.data?.message == "Cannot register , Because your orders are duplicated.") {
                 Swal.fire({
                   icon: "warning",

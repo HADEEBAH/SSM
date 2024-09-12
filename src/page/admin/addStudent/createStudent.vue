@@ -250,7 +250,10 @@
             <v-row
               dense
               v-if="
-                course.course_type_id == 'CT_1' && course.course_data && course
+                package_add_student.courseStatus === 'Open' &&
+                course.course_type_id == 'CT_1' &&
+                course.course_data &&
+                course
               "
             >
               <v-col cols="12" sm="4">
@@ -269,9 +272,11 @@
                   @change="selectPackage(course)"
                 >
                   <template v-slot:no-data>
-                    <div class="mx-3 font-bold">
-                      {{ $t("no data available") }}
-                    </div>
+                    <v-list-item>
+                      <v-list-item-title>
+                        {{ $t("no data found") }}
+                      </v-list-item-title>
+                    </v-list-item>
                   </template>
                 </v-autocomplete>
               </v-col>
@@ -336,9 +341,11 @@
                     </v-list-item-action>
                   </template>
                   <template v-slot:no-data>
-                    <div class="mx-3 font-bold">
-                      {{ $t("no data available") }}
-                    </div>
+                    <v-list-item>
+                      <v-list-item-title>
+                        {{ $t("no data found") }}
+                      </v-list-item-title>
+                    </v-list-item>
                   </template>
                 </v-autocomplete>
               </v-col>
@@ -352,6 +359,7 @@
                 ></v-text-field>
               </v-col>
             </v-row>
+            <!-- <pre>{{ day_add_student }}</pre> -->
             <v-row
               dense
               v-if="
@@ -375,12 +383,14 @@
                   outlined
                   item-color="pink"
                   color="pink"
-                  @change="calTime(course)"
+                  @change="calTime(course, $event)"
                 >
                   <template v-slot:no-data>
-                    <div class="mx-3 font-bold">
-                      {{ $t("no data available") }}
-                    </div>
+                    <v-list-item>
+                      <v-list-item-title>
+                        {{ $t("no data found") }}
+                      </v-list-item-title>
+                    </v-list-item>
                   </template>
                 </v-autocomplete>
               </v-col>
@@ -403,7 +413,7 @@
                   :placeholder="$t('choose a time')"
                   outlined
                   item-color="white"
-                  @change="selectTime(course.time, course)"
+                  @change="selectCoach(course.time, course)"
                   color="#FF6B81"
                 >
                   <template v-slot:selection="data">
@@ -412,11 +422,12 @@
                   <template v-slot:no-data>
                     <v-list-item>
                       <v-list-item-title>
-                        {{ $t("data not found") }}
+                        {{ $t("no data found") }}
                       </v-list-item-title>
                     </v-list-item>
                   </template>
                   <template v-slot:item="{ item }">
+                    <!-- {{ item }} -->
                     <v-list-item-content>
                       <v-list-item-title
                         ><span
@@ -940,6 +951,7 @@ export default {
     pay_date_str: "",
     pay_date: "",
     loading_course: false,
+    getDayOfWeek: "",
   }),
   created() {
     this.ClearData();
@@ -1080,7 +1092,13 @@ export default {
       GetCoachAddStudent: "CourseModules/GetCoachAddStudent",
     }),
 
-    calTime(course) {
+    calTime(course, dayOfWeekId) {
+      const filteredData = this.day_add_student?.filter(
+        (item) => item.dayName === dayOfWeekId
+      );
+      for (const items of filteredData) {
+        this.getDayOfWeek = items?.dayOfWeekId;
+      }
       course.coach = {};
       course.time = {};
 
@@ -1088,7 +1106,7 @@ export default {
         course_id: course.course_id,
         package_id: course?.option?.packageId,
         option_id: course?.option?.optionId,
-        day_ofweek_id: course?.option?.dayOfWeekId,
+        day_ofweek_id: this.getDayOfWeek,
       });
     },
 
@@ -1238,14 +1256,14 @@ export default {
     removeCourse(index) {
       this.order.courses.splice(index, 1);
     },
-    async selectTime(time, course) {
+    async selectCoach(time, course) {
       course.coach = {};
       await this.GetCoachAddStudent({
         course_id: course.course_id,
         package_id: course?.option?.packageId,
         option_id: course?.option?.optionId,
-        day_ofweek_id: course?.option?.dayOfWeekId,
-        time_id: course?.option?.timeId,
+        day_ofweek_id: this.getDayOfWeek,
+        time_id: course?.time?.timeId,
       });
     },
     selectCategory(categoryId, course_type_id, course) {
@@ -1344,6 +1362,17 @@ export default {
         });
       }
       await this.GetPackagesAddStudent({ course_id: courseId });
+      if (this.package_add_student.courseStatus === "Close") {
+        Swal.fire({
+          icon: "warning",
+          title: this.$t("warning"),
+          text: this.$t("because this course is full"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
+        });
+      }
     },
     save() {
       this.GetAllCourseMonitor().then(() => {
