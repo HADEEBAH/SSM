@@ -1060,10 +1060,11 @@ const orderModules = {
               break; // Exit the loop if the criteria are not met
             }
           }
+
           payload.courses.push({
             courseId: course.course_id,
             courseTypeId: course.course_type_id,
-            coursePackageOptionId: course.option.course_package_option_id ? course.option.course_package_option_id : null,
+            coursePackageOptionId: course.option.course_package_option_id || course.option.coursePackageOptionsId ? course.option.course_package_option_id || course.option.coursePackageOptionsId : null,
             dayName: course.day?.dayName
               ? course.day.dayName
               : course.day.day
@@ -1079,7 +1080,22 @@ const orderModules = {
                 (v) => v.coach_id === course.coach_id
               )[0].timeId
               : course.time.timeId,
-            time: course.time,
+            // time: course.time,
+            time: !course.apply_for_others && !course.apply_for_yourself ? {
+              start: course.coach.start, // Default to 19:00 if not available
+              end: course.coach.end,     // Default to 20:00 if not available
+              timeData: [
+                {
+                  maximumStudent: course.coach.maximumStudent,
+                  dayOfWeekId: course.coach.dayOfWeekId,
+                  timeId: course.coach.timeId,
+                  courseCoachId: course.coach.courseCoachId,
+                  coach_name: course.coach.fullNameTh,
+                  coach_name_en: course.coach.fullNameEn,
+                  coach_id: course.coach.coachId
+                }
+              ]
+            } : course.time,
             startDate: course.start_date ? course.start_date : moment(new Date()).format("YYYY-MM-DD"),
             remark: course.remark ? course.remark : "",
             price: course.option?.net_price
@@ -1088,14 +1104,14 @@ const orderModules = {
 
             originalPrice: courseData ? courseData.price_course : 0,
             coach: {
-              accountId: course.coach_id ? course.coach_id : course.coach,
-              fullName: course.coach_name,
+              accountId: course.coach_id || course.coach.coachId ? course.coach_id || course.coach.coachId : course.coach,
+              fullName: course.coach_name || course.coach.fullNameTh,
             },
             student: students,
             statusDiscountPrice: course.checkedDiscountPrice,
             statusDiscountPercent: course.checkedDiscountPercent,
-            discount: course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice
-              ? course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice
+            discount: course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice
+              ? course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice
               : '0'
           })
           if (moreDiscount) {
@@ -1309,6 +1325,18 @@ const orderModules = {
                 });
               } else if (error?.response?.data?.message == "Unable to register due to course and package status being closed.") {
                 Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t("cannot register"),
+                  text: VueI18n.t(
+                    "unable to register due to course and package status being closed"
+                  ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message == "Cannot register , Because your orders are duplicated.") {
+                Swal.fire({
                   icon: "error",
                   title: VueI18n.t("unable to register"),
                   text: VueI18n.t(
@@ -1460,6 +1488,18 @@ const orderModules = {
                   title: VueI18n.t("unable to register"),
                   text: VueI18n.t(
                     "please enter your name and class"
+                  ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error === "Over Registration") {
+                Swal.fire({
+                  icon: "error",
+                  title: VueI18n.t("something went wrong"),
+                  text: VueI18n.t(
+                    "cannot register , The seats are full"
                   ),
                   timer: 3000,
                   timerProgressBar: true,

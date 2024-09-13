@@ -92,7 +92,8 @@
     "booking time": "Booking time",
     "booking status": "Booking status",
     "because your orders are duplicated": "Because your orders are duplicated",
-
+    "because this course is full":"เนื่องจากคอร์สนี้เต็ม",
+    
 
     "cash":"Cash",
     "can't apply": "Can't apply",
