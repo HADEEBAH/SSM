@@ -92,7 +92,8 @@
     "booking time": "Booking time",
     "booking status": "Booking status",
     "because your orders are duplicated": "Because your orders are duplicated",
-
+    "because this course is full":"เนื่องจากคอร์สนี้เต็ม",
+    
 
     "cash":"Cash",
     "can't apply": "Can't apply",
@@ -935,6 +936,7 @@
     "user information": "User information",
     "user role": "User role",
     "unsuccessful":"Unsuccessful",
+    "unable to register due to course and package status being closed":"Unable to register due to course and package status being closed",
     "unable to register": "Unable to register",
     "unable to delete course" : "Unable to delete course",
     "unable to change roles": "Unable to change roles",
