@@ -1655,9 +1655,9 @@ const CourseModules = {
     },
     async GetPackagesAddStudent(context, { course_id }) {
       try {
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/course/detail/addstudent/status-course/${course_id}`)
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/addstudent/status-course/${course_id}`)
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/course/detail/addstudent/status-course/${course_id}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/addstudent/status-course/${course_id}`)
         if (data.statusCode === 200) {
           context.commit("SetPackageAddStudent", data.data)
         } else {
@@ -1669,9 +1669,9 @@ const CourseModules = {
     },
     async GetOptionAddStudent(context, { course_id, package_id }) {
       try {
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/course/detail/addstudent/status-package/${course_id}/${package_id}`)
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/addstudent/status-package/${course_id}/${package_id}`)
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/course/detail/addstudent/status-package/${course_id}/${package_id}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/addstudent/status-package/${course_id}/${package_id}`)
         if (data.statusCode === 200) {
           context.commit("SetOptionAddStudent", data.data)
         } else {
@@ -1683,9 +1683,9 @@ const CourseModules = {
     },
     async GetDayAddStudent(context, { course_id, package_id, option_id }) {
       try {
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/course/detail/addstudent/status-day/${course_id}/${package_id}/${option_id}`)
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/addstudent/status-day/${course_id}/${package_id}/${option_id}`)
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/course/detail/addstudent/status-day/${course_id}/${package_id}/${option_id}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/addstudent/status-day/${course_id}/${package_id}/${option_id}`)
         if (data.statusCode === 200) {
           for (const items of data.data) {
             let dayArray = items.dayOfWeekName.split(',')
@@ -1703,9 +1703,9 @@ const CourseModules = {
 
     async GetTimeAddStudent(context, { course_id, package_id, option_id, day_ofweek_id }) {
       try {
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/course/detail/addstudent/status-time/${course_id}/${package_id}/${option_id}/${day_ofweek_id}`)
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/addstudent/status-time/${course_id}/${package_id}/${option_id}/${day_ofweek_id}`)
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/course/detail/addstudent/status-time/${course_id}/${package_id}/${option_id}/${day_ofweek_id}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/addstudent/status-time/${course_id}/${package_id}/${option_id}/${day_ofweek_id}`)
         if (data.statusCode === 200) {
           context.commit("SetTimeAddStudent", data.data)
         } else {
@@ -1717,9 +1717,9 @@ const CourseModules = {
     },
     async GetCoachAddStudent(context, { course_id, package_id, option_id, day_ofweek_id, time_id }) {
       try {
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/course/detail/addstudent/status-coach/${course_id}/${package_id}/${option_id}/${day_ofweek_id}/${time_id}`)
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/addstudent/status-coach/${course_id}/${package_id}/${option_id}/${day_ofweek_id}/${time_id}`)
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/course/detail/addstudent/status-coach/${course_id}/${package_id}/${option_id}/${day_ofweek_id}/${time_id}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/addstudent/status-coach/${course_id}/${package_id}/${option_id}/${day_ofweek_id}/${time_id}`)
         if (data.statusCode === 200) {
           for (const items of data.data) {
             items.fullNameTh = `${items.firstNameTh} ${items.lastNameTh}`
