@@ -198,10 +198,14 @@ const CourseModules = {
     filter_student_data: [],
     assessment: [],
     filter_potential_student: [],
-    potential_assessment: []
+    potential_assessment: [],
+    seats: []
 
   },
   mutations: {
+    SetSeat(state, payload) {
+      state.seats = payload
+    },
     SetExportIsLoading(state, payload) {
       state.export_is_loading = payload
     },
@@ -396,6 +400,41 @@ const CourseModules = {
     },
   },
   actions: {
+    async GetAllSeats(context, { courseId, coachId, courseTypeId, dayOfWeekId, timeId, coursePackageOptionsId }) {
+
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        let dataPayload = {}
+
+        dataPayload.courseId = courseId,
+          dataPayload.courseTypeId = courseTypeId,
+          dataPayload.coursePackageOptionsId = coursePackageOptionsId,
+          dataPayload.dayOfWeekId = dayOfWeekId,
+          dataPayload.timeId = timeId,
+          dataPayload.coachId = coachId
+
+
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.post(`${localhost}/api/v1/monitor/get/course/seats`, dataPayload, config)
+        let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/monitor/get/course/seats`, dataPayload, config)
+        if (data.statusCode == 201) {
+          for (const items of data.data) {
+            items.fullnameTh = `${items.firstNameTh} ${items.lastNameTh}`
+            items.fullnameEn = `${items.firstNameEn} ${items.lastNameEn}`
+          }
+          context.commit("SetSeat", data.data)
+
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
     // CHECK COURSE SEAT
     async GetCourseSeats(context, { courseId, coachId, courseTypeId, dayOfWeekId, timeId, coursePackageOptionsId, studentId }) {
       try {
@@ -2241,6 +2280,9 @@ const CourseModules = {
     },
   },
   getters: {
+    getAllSeats(state) {
+      return state.seats
+    },
     getCourseSeats(state) {
       return state.course_seat
     },
