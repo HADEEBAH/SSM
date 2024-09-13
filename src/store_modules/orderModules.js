@@ -1306,6 +1306,18 @@ const orderModules = {
                   showCancelButton: false,
                   showConfirmButton: false,
                 });
+              } else if (error?.response?.data?.message === "Over Registration") {
+                Swal.fire({
+                  icon: "error",
+                  title: VueI18n.t("something went wrong"),
+                  text: VueI18n.t(
+                    "cannot register , The seats are full"
+                  ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
               } else if (error?.response?.data?.message == "Unable to register due to course and package status being closed.") {
                 Swal.fire({
                   icon: "warning",
@@ -1459,18 +1471,6 @@ const orderModules = {
                   title: VueI18n.t("unable to register"),
                   text: VueI18n.t(
                     "please enter your name and class"
-                  ),
-                  timer: 3000,
-                  timerProgressBar: true,
-                  showCancelButton: false,
-                  showConfirmButton: false,
-                });
-              } else if (error === "Over Registration") {
-                Swal.fire({
-                  icon: "error",
-                  title: VueI18n.t("something went wrong"),
-                  text: VueI18n.t(
-                    "cannot register , The seats are full"
                   ),
                   timer: 3000,
                   timerProgressBar: true,
