@@ -1424,6 +1424,20 @@ const orderModules = {
                   showCancelButton: false,
                   showConfirmButton: false,
                 });
+              } else if (error?.response?.data?.message === "register Duplicate") {
+                Swal.fire({
+                  icon: "error",
+                  title: VueI18n.t(
+                    "something went wrong"
+                  ),
+                  text: VueI18n.t(
+                    "some students or students have already purchased the course"
+                  ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
               } else if (error === "please enter your name and class") {
                 Swal.fire({
                   icon: "error",

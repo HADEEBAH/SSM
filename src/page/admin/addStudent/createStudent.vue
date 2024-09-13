@@ -1389,6 +1389,7 @@ export default {
     },
     removeCourse(index) {
       this.order.courses.splice(index, 1);
+      this.discout_from_admin.splice(index, 1);
     },
     selectTime(time, course) {
       course.coach = {};
