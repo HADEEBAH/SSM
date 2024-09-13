@@ -205,10 +205,16 @@
             <v-card-text>
               <v-card class="mb-3">
                 <v-card-text class="bg-[#FFF5F6]">
-                  <rowData
-                    col_header="4"
-                    col_detail="8"
-                    :title="$t('total price')"
+                  <rowData col_header="4" col_detail="8" :title="$t('price')"
+                    >:
+                    <span class="w-full font-bold">{{
+                      order_detail.totalPrice?.toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                      })
+                    }}</span>
+                    {{ $t("baht") }}
+                  </rowData>
+                  <rowData col_header="4" col_detail="8" :title="$t('discount')"
                     >:
                     <span class="w-full font-bold">{{
                       order_detail.totalPrice?.toLocaleString(undefined, {
@@ -777,18 +783,19 @@ export default {
             {
               columns: [
                 {
-                  width: "55%",
+                  width: "60%",
                   text: `(${
                     this.pdf_lang == "th"
                       ? convertToThaiBaht(this.order_detail.totalPrice)
                       : convertToEnglishCurrency(this.order_detail.totalPrice)
                   })`,
                   color: "#ff6b81",
+                  margin: [0, 88.5, 0, 0],
                 },
                 {
                   columns: [
                     {
-                      width: "45%",
+                      width: "55%",
                       stack: [
                         {
                           text:
@@ -837,26 +844,19 @@ export default {
                           alignment: "right",
                         },
                         {
-                          text: `${parseFloat(
-                            this.count_old_discount
-                          )?.toLocaleString(undefined, {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })}${this.pdf_lang == "th" ? "บาท" : "Baht"}`,
-
+                          text: `${this.order_detail.totalPrice?.toLocaleString(
+                            "en-US",
+                            { minimumFractionDigits: 2 }
+                          )} ${this.pdf_lang == "th" ? "บาท" : "Baht"}`,
                           margin: [0, 5],
                           color: "#ff6b81",
                           alignment: "right",
                         },
                         {
-                          text: `${parseFloat(
-                            this.order_detail.totalPrice
-                              ? this.order_detail.totalPrice
-                              : 0
-                          )?.toLocaleString(undefined, {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })}${this.pdf_lang == "th" ? "บาท" : "Baht"}`,
+                          text: `${this.order_detail.totalPrice?.toLocaleString(
+                            "en-US",
+                            { minimumFractionDigits: 2 }
+                          )} ${this.pdf_lang == "th" ? "บาท" : "Baht"}`,
                           margin: [0, 5],
                           color: "#ff6b81",
                           alignment: "right",

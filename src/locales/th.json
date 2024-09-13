@@ -904,7 +904,7 @@
     "user": "ผู้ใช้",
     "user role": "บทบาทผู้ใช้งาน",
     "unsuccessful":"ไม่สำเร็จ",
-    "unable to register due to course and package status being closed": "ไม่สามารถลงทะเบียนได้เนื่องจากสถานะหลักสูตรและแพ็คเกจถูกปิด",
+    "unable to register due to course and package status being closed": "ไม่สามารถลงทะเบียนได้เนื่องจากที่นั่งเต็ม หรือ หลักสูตรและแพ็คเกจถูกปิด",
     "unable to delete course" : "ไม่สามารถลบคอร์สได้",
     "unable to close course" : "ไม่สามารถปิดคอร์สได้",
     "unable to change roles": "ไม่สามารถเปลี่ยนบทบาทได้",

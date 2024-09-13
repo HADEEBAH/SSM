@@ -324,9 +324,9 @@ const orderModules = {
           },
         };
         let students = [];
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/adminpayment/limit?limit=${limit}&page=${page}&status=${status}`, config);
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/limit?limit=${limit}&page=${page}&status=${status}`, config);
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/adminpayment/limit?limit=${limit}&page=${page}&status=${status}`, config);
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/limit?limit=${limit}&page=${page}&status=${status}`, config);
         if (data.statusCode === 200) {
 
           startIndex = (page - 1) * limit;
@@ -393,9 +393,9 @@ const orderModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/adminpayment/finance?search=${name}&limit=${limit}&page=${page}&status=${status}`, config)
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/finance?search=${name}&limit=${limit}&page=${page}&status=${status}`, config)
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/adminpayment/finance?search=${name}&limit=${limit}&page=${page}&status=${status}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminpayment/finance?search=${name}&limit=${limit}&page=${page}&status=${status}`, config)
 
         if (data.statusCode === 200) {
 
@@ -484,11 +484,11 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let localhost = "http://localhost:3000"
+        // let localhost = "http://localhost:3000"
 
         let { data } = await axios.get(
-          `${localhost}/api/v1/adminpayment/${order_number}`,
-          // `${process.env.VUE_APP_URL}/api/v1/adminpayment/${order_number}`,
+          // `${localhost}/api/v1/adminpayment/${order_number}`,
+          `${process.env.VUE_APP_URL}/api/v1/adminpayment/${order_number}`,
           config
         );
         if (data.statusCode == 200) {
@@ -1060,8 +1060,6 @@ const orderModules = {
               break; // Exit the loop if the criteria are not met
             }
           }
-          console.log('order :>> ', order);
-          console.log('order.total_price :>> ', order.total_price);
           payload.courses.push({
             courseId: course.course_id,
             courseTypeId: course.course_type_id,
@@ -1095,15 +1093,21 @@ const orderModules = {
             },
             student: students,
             statusDiscountPrice: course.checkedDiscountPrice,
-            statusDiscountPercent: course.checkedDiscountPercent
-
+            statusDiscountPercent: course.checkedDiscountPercent,
+            discount: course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice
+              ? course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice
+              : '0'
           })
-          payload.courses.forEach((course, index) => {
-            if (moreDiscount[index]) {
-              course.adminDiscount = moreDiscount[index]; // Add the "adminDiscount" key with the value from the `data` array
-            }
-          });
-          console.log('payload.courses :>> ', payload.courses);
+          if (moreDiscount) {
+            payload.courses.forEach((course, index) => {
+              if (moreDiscount[index]) {
+                course.adminDiscount = moreDiscount[index] // Add the "adminDiscount" key with the value from the `data` array
+              } else {
+                course.adminDiscount = 0
+              }
+            });
+          }
+
           let price = 0
           if (order.type == "addStudent") {
             price = course.price;
@@ -1132,14 +1136,14 @@ const orderModules = {
           },
         };
         try {
-          const localhost = 'http://localhost:3002'
+          // const localhost = 'http://localhost:3002'
           // let { data } = await axios.post(`${localhost}/api/v1/account/student/list`, studentUpdate, config)
           let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/account/student/list`, studentUpdate, config)
           if (data.statusCode === 201) {
             try {
               let { data } = await axios.post(
-                `${localhost}/api/v1/order/regis/course`,
-                // `${process.env.VUE_APP_URL}/api/v1/order/regis/course`,
+                // `${localhost}/api/v1/order/regis/course`,
+                `${process.env.VUE_APP_URL}/api/v1/order/regis/course`,
                 payload,
                 config
               );
@@ -1309,6 +1313,18 @@ const orderModules = {
                   title: VueI18n.t("unable to register"),
                   text: VueI18n.t(
                     "unable to register due to course and package status being closed"
+                  ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message == "Over Registration") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t("something went wrong"),
+                  text: VueI18n.t(
+                    "cannot register , The seats are full"
                   ),
                   timer: 3000,
                   timerProgressBar: true,
@@ -1518,7 +1534,6 @@ const orderModules = {
           context.commit("SetOrderIsLoading", false);
 
         }
-        // console.log('payload :>> ', payload);
       } catch (err) {
         if (err == "please enter your name and class") {
           Swal.fire({
