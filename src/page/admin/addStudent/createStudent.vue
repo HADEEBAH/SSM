@@ -378,12 +378,12 @@
                   v-model="course.day"
                   item-text="dayName"
                   item-value="dayName"
-                  :items="dayOptions(day_add_student)"
+                  :items="open_day_add_student"
                   :placeholder="$t('pick a day')"
                   outlined
                   item-color="pink"
                   color="pink"
-                  @change="calTime(course, $event)"
+                  @change="selectDay(course, $event)"
                 >
                   <template v-slot:no-data>
                     <v-list-item>
@@ -945,7 +945,7 @@ export default {
     pay_date_str: "",
     pay_date: "",
     loading_course: false,
-    getDayOfWeek: [],
+    getDayOfWeek: "",
     getTimedatas: [],
   }),
   created() {
@@ -974,6 +974,7 @@ export default {
       time_add_student: "CourseModules/getTimeAddStudent",
       coach_add_student: "CourseModules/getCoachAddStudent",
       open_time_add_student: "CourseModules/getOpenTimeAddStudent",
+      open_day_add_student: "CourseModules/getOpenDayAddStudent",
     }),
     transfer() {
       return [
@@ -1088,16 +1089,16 @@ export default {
       GetCoachAddStudent: "CourseModules/GetCoachAddStudent",
     }),
 
-    calTime(course, dayOfWeekId) {
-      const filteredData = this.day_add_student?.filter(
-        (item) => item.dayName === dayOfWeekId
-      );
-      for (const items of filteredData) {
-        this.getDayOfWeek.push(items?.dayOfWeekId);
-      }
+    selectDay(course, items) {
       course.coach = {};
       course.time = {};
-
+      let filterDayAddStudent = this.day_add_student
+        .filter((item) => item.dayName === items)
+        ?.map((items) => {
+          return items?.dayOfWeekId;
+        });
+      this.getDayOfWeek = "";
+      this.getDayOfWeek = filterDayAddStudent;
       this.GetTimeAddStudent({
         course_id: course.course_id,
         package_id: course?.option?.packageId,
@@ -1117,9 +1118,6 @@ export default {
       return items?.courseDetail?.filter(
         (packages) => packages.status === "Open"
       );
-    },
-    dayOptions(items) {
-      return items.filter((item) => item.status === "Open");
     },
 
     coachOption(items) {

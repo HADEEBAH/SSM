@@ -205,7 +205,8 @@ const CourseModules = {
     day_add_student: [],
     time_add_student: [],
     coach_add_student: [],
-    open_time_add_student: []
+    open_time_add_student: [],
+    open_day_add_student: []
 
 
   },
@@ -422,6 +423,9 @@ const CourseModules = {
     },
     SetOpenTimeAddStudent(state, payload) {
       state.open_time_add_student = payload
+    },
+    SetOpenDayAddStudent(state, payload) {
+      state.open_day_add_student = payload
     },
 
   },
@@ -1687,18 +1691,28 @@ const CourseModules = {
       }
     },
     async GetDayAddStudent(context, { course_id, package_id, option_id }) {
+      let getDayDuplicate = []
       try {
         // let localhost = "http://localhost:3000"
         // let { data } = await axios.get(`${localhost}/api/v1/course/detail/addstudent/status-day/${course_id}/${package_id}/${option_id}`)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/addstudent/status-day/${course_id}/${package_id}/${option_id}`)
         if (data.statusCode === 200) {
+          let dayOpen = data?.data?.filter((item) => item?.status === "Open");
+          for (const itemsDays of dayOpen) {
+            if (getDayDuplicate?.length === 0) {
+              getDayDuplicate.push(itemsDays)
+            } else if (!getDayDuplicate.some((items) => itemsDays.dayOfWeekName === items.dayOfWeekName)) {
+              getDayDuplicate.push(itemsDays)
+            }
+          }
           for (const items of data.data) {
             let dayArray = items.dayOfWeekName.split(',')
             let dayString = dayOfWeekArray(dayArray)
             items.dayName = dayString
 
           }
-          context.commit("SetDayAddStudent", data.data)
+          context.commit("SetOpenDayAddStudent", getDayDuplicate)
+          context.commit("SetDayAddStudent", dayOpen)
 
         } else {
           throw { error: data }
@@ -1758,6 +1772,7 @@ const CourseModules = {
         // let { data } = await axios.post(`${localhost}/api/v1/course/detail/addstudent/status-coach`, payloads)
         let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/course/detail/addstudent/status-coach`, payloads)
         if (data.statusCode === 201) {
+
           for (const items of data.data) {
             items.fullNameTh = `${items.firstNameTh} ${items.lastNameTh}`
             items.fullNameEn = `${items.firstNameEn} ${items.lastNameEn}`
@@ -2528,6 +2543,9 @@ const CourseModules = {
     },
     getOpenTimeAddStudent(state) {
       return state.open_time_add_student
+    },
+    getOpenDayAddStudent(state) {
+      return state.open_day_add_student
     },
 
   },
