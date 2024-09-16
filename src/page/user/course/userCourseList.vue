@@ -242,7 +242,6 @@ export default {
 
         if (!this.waitingProcess) {
           this.waitingProcess = true;
-          console.log("search_course :>> ", this.search_course);
           if (!this.search_course) {
             await this.GetCoursesFilter({
               category_id: this.$route.params.category_id,
