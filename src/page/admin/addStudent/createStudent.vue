@@ -378,12 +378,12 @@
                   v-model="course.day"
                   item-text="dayName"
                   item-value="dayName"
-                  :items="dayOptions(day_add_student)"
+                  :items="open_day_add_student"
                   :placeholder="$t('pick a day')"
                   outlined
                   item-color="pink"
                   color="pink"
-                  @change="calTime(course, $event)"
+                  @change="selectDay(course, $event)"
                 >
                   <template v-slot:no-data>
                     <v-list-item>
@@ -409,11 +409,12 @@
                   dense
                   :rules="rules.time"
                   v-model="course.time"
-                  :items="timeOption(time_add_student)"
+                  :items="open_time_add_student"
                   :placeholder="$t('choose a time')"
                   outlined
+                  return-object
                   item-color="white"
-                  @change="selectCoach(course.time, course)"
+                  @change="selectTime($event)"
                   color="#FF6B81"
                 >
                   <template v-slot:selection="data">
@@ -469,9 +470,9 @@
                   v-model="course.coach"
                   :items="coachOption(coach_add_student)"
                   :placeholder="$t('choose a coach')"
-                  item-color="pink"
                   outlined
                   color="pink"
+                  item-color="pink"
                 >
                   <template v-slot:no-data>
                     <v-list-item>
@@ -493,7 +494,7 @@
                         ><span
                           :class="
                             course.coach.courseCoachId === item.courseCoachId
-                              ? 'font-bold  text-[#ff6b81]'
+                              ? 'font-bold'
                               : ''
                           "
                           >{{
@@ -505,18 +506,11 @@
                       >
                     </v-list-item-content>
                     <v-list-item-action>
-                      <v-icon
-                        :color="
-                          course.coach.courseCoachId === item.courseCoachId
-                            ? '#ff6b81'
-                            : ''
-                        "
-                        >{{
-                          course.coach.courseCoachId === item.courseCoachId
-                            ? "mdi-check-circle"
-                            : "mdi-radiobox-blank"
-                        }}</v-icon
-                      >
+                      <v-icon>{{
+                        course.coach.courseCoachId === item.courseCoachId
+                          ? "mdi-check-circle"
+                          : "mdi-radiobox-blank"
+                      }}</v-icon>
                     </v-list-item-action>
                   </template>
                 </v-autocomplete>
@@ -1114,6 +1108,7 @@ export default {
     dataIndex: 0,
     totalDiscountPercent: 0,
     getDayOfWeek: "",
+    getTimedatas: [],
   }),
   created() {
     this.ClearData();
@@ -1140,6 +1135,8 @@ export default {
       day_add_student: "CourseModules/getDayAddStudent",
       time_add_student: "CourseModules/getTimeAddStudent",
       coach_add_student: "CourseModules/getCoachAddStudent",
+      open_time_add_student: "CourseModules/getOpenTimeAddStudent",
+      open_day_add_student: "CourseModules/getOpenDayAddStudent",
     }),
     transfer() {
       return [
@@ -1322,9 +1319,17 @@ export default {
       for (const items of filteredData) {
         this.getDayOfWeek = items?.dayOfWeekId;
       }
+    },
+    selectDay(course, items) {
       course.coach = {};
       course.time = {};
-
+      let filterDayAddStudent = this.day_add_student
+        .filter((item) => item.dayName === items)
+        ?.map((items) => {
+          return items?.dayOfWeekId;
+        });
+      this.getDayOfWeek = "";
+      this.getDayOfWeek = filterDayAddStudent;
       this.GetTimeAddStudent({
         course_id: course.course_id,
         package_id: course?.option?.packageId,
@@ -1345,12 +1350,7 @@ export default {
         (packages) => packages.status === "Open"
       );
     },
-    dayOptions(items) {
-      return items.filter((item) => item.status === "Open");
-    },
-    timeOption(items) {
-      return items.filter((item) => item.status === "Open");
-    },
+
     coachOption(items) {
       return items.filter((item) => item.status === "Open");
     },
@@ -1483,14 +1483,18 @@ export default {
       this.order.courses.splice(index, 1);
       this.discout_from_admin.splice(index, 1);
     },
-    async selectCoach(time, course) {
-      course.coach = {};
+    async selectTime(items) {
+      let filterTimeAddStudent = this.time_add_student
+        .filter((item) => item.start === items.start && item.end === items.end)
+        ?.map((items) => {
+          return items?.timeId;
+        });
       await this.GetCoachAddStudent({
-        course_id: course.course_id,
-        package_id: course?.option?.packageId,
-        option_id: course?.option?.optionId,
+        course_id: items?.courseId,
+        package_id: items?.packageId,
+        option_id: items?.optionId,
         day_ofweek_id: this.getDayOfWeek,
-        time_id: course?.time?.timeId,
+        time_id: filterTimeAddStudent,
       });
     },
     selectCategory(categoryId, course_type_id, course) {
