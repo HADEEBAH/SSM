@@ -1264,11 +1264,14 @@ export default {
     },
     moreDiscount(maxPrice) {
       return (value) => {
-        if (value > maxPrice) {
+        if (value >= maxPrice) {
           return `${this.$t("number must be")} ${maxPrice}`;
         }
-        if (value < 0) {
+        if (value < 1) {
           return this.$t("number must be 1");
+        }
+        if (!value) {
+          return this.$t("please enter discount");
         }
         return true;
       };
@@ -1276,35 +1279,45 @@ export default {
     CalTotalPrice(newDiscount) {
       let netPrice = 0; // newDiscount, defaultPrice
       this.order.total_price = 0;
+      // ทำให้ newDiscount อยู่ในรูปแบบ 0 ตลอดถ้าไม่มีค่า
+      if (
+        !newDiscount ||
+        !Array.isArray(newDiscount) ||
+        newDiscount.length === 0
+      ) {
+        newDiscount = this.order.courses.map(() => 0);
+      }
       for (let i = 0; i <= this.order?.courses.length; i++) {
-        let courseData = this.order?.courses[i];
+        let itemsData = this.order?.courses[i];
         let priceCourse =
-          courseData?.option?.pricePerPerson -
-          courseData?.option?.discountPrice;
+          itemsData?.option?.pricePerPerson - itemsData?.option?.discountPrice;
 
-        if (courseData?.option?.pricePerPerson || courseData?.price) {
-          if (courseData.checkedDiscountPrice) {
+        if (itemsData?.option?.pricePerPerson || itemsData?.price) {
+          if (itemsData.checkedDiscountPrice) {
             if (newDiscount) {
-              if (courseData?.course_type_id === "CT_1") {
+              if (itemsData?.course_type_id === "CT_1") {
                 let priceDiscount = priceCourse - Number(newDiscount[i]);
                 netPrice += priceDiscount;
-              } else if (courseData?.course_type_id === "CT_2") {
-                let priceDiscount = courseData.price - Number(newDiscount[i]);
+              } else if (itemsData?.course_type_id === "CT_2") {
+                let priceDiscount =
+                  itemsData?.course_data?.calculate_price -
+                  Number(newDiscount[i]);
+                // let priceDiscount = itemsData.price - Number(newDiscount[i]);
                 netPrice += priceDiscount;
               }
             }
-          } else if (courseData.checkedDiscountPercent) {
+          } else if (itemsData.checkedDiscountPercent) {
             if (newDiscount) {
               let discountAmount =
-                (Number(newDiscount[i]) / 100) * courseData.price;
-              let pricePercen = courseData.price - discountAmount;
+                (Number(newDiscount[i]) / 100) * itemsData.price;
+              let pricePercen = itemsData.price - discountAmount;
               netPrice += pricePercen;
             }
           } else {
-            if (courseData?.course_type_id === "CT_1") {
+            if (itemsData?.course_type_id === "CT_1") {
               netPrice += Number(priceCourse);
             } else {
-              netPrice += Number(courseData?.price);
+              netPrice += Number(itemsData?.price);
             }
           }
         }
@@ -1584,10 +1597,11 @@ export default {
             // calcutaleDiscount =
             //   this.course_data?.price_course - this.course_data?.discountPrice;
 
-            course.price =
-              this.course_data?.course_type_id == "CT_2"
-                ? parseInt(this.course_data?.calculate_price)
-                : parseInt(this.course_data.price_course);
+            // course.price =
+            //   this.course_data?.course_type_id == "CT_2"
+            //     ? parseInt(this.course_data?.calculate_price)
+            //     : parseInt(this.course_data.price_course);
+            course.price = parseInt(this.course_data.price_course);
             course.time = this.course_data.days_of_class[0].times[0];
 
             this?.CalTotalPrice(this.discout_from_admin);

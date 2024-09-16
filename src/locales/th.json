@@ -875,6 +875,7 @@
     "today's teaching program"  : "รายการสอนวันนี้",
     "total" : "รวมทั้งหมด",
     "total price":"ราคารวม",
+    "total amount":"จำนวนเงินรวมทั้งสิ้น",
     "time" : "ครั้ง",
     "times" : "เวลา",
     "transaction time" : "เวลาทำรายการ",
@@ -1048,6 +1049,7 @@
 
     "next":"ถัดไป",
     "please enter the student's name":"กรุณากรอกชื่อผู้เรียน",
+    "please enter discount":"กรุณากรอกส่วนลด",
     
     "price" : "ราคา",
     "price note":"หมายเหตุราคา",

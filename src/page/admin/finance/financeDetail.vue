@@ -201,7 +201,6 @@
           </v-card>
         </v-col>
         <v-col cols="12" sm="5">
-          <!-- <pre>{{ order_detail?.orderItem }}</pre> -->
           <v-card>
             <v-card-text>
               <v-card class="mb-3">
@@ -209,7 +208,7 @@
                   <rowData col_header="4" col_detail="8" :title="$t('price')"
                     >:
                     <span class="w-full font-bold">{{
-                      order_detail.totalPrice?.toLocaleString(undefined, {
+                      order_detail.sumPrice?.toLocaleString(undefined, {
                         minimumFractionDigits: 2,
                       })
                     }}</span>
@@ -218,9 +217,12 @@
                   <rowData col_header="4" col_detail="8" :title="$t('discount')"
                     >:
                     <span class="w-full font-bold">{{
-                      order_detail.totalPrice?.toLocaleString(undefined, {
-                        minimumFractionDigits: 2,
-                      })
+                      order_detail.sumDiscountCourse?.toLocaleString(
+                        undefined,
+                        {
+                          minimumFractionDigits: 2,
+                        }
+                      )
                     }}</span>
                     {{ $t("baht") }}
                   </rowData>
@@ -230,9 +232,24 @@
                     :title="$t('more discount')"
                     >:
                     <span class="w-full font-bold">{{
-                      order_detail.totalPrice?.toLocaleString(undefined, {
+                      order_detail.sumAdminDiscount?.toLocaleString(undefined, {
                         minimumFractionDigits: 2,
                       })
+                    }}</span>
+                    {{ $t("baht") }}
+                  </rowData>
+                  <rowData
+                    col_header="4"
+                    col_detail="8"
+                    :title="$t('total amount')"
+                    >:
+                    <span class="w-full font-bold">{{
+                      order_detail.diffAdminDiscountTotal?.toLocaleString(
+                        undefined,
+                        {
+                          minimumFractionDigits: 2,
+                        }
+                      )
                     }}</span>
                     {{ $t("baht") }}
                   </rowData>
@@ -799,8 +816,12 @@ export default {
                   width: "60%",
                   text: `(${
                     this.pdf_lang == "th"
-                      ? convertToThaiBaht(this.order_detail.totalPrice)
-                      : convertToEnglishCurrency(this.order_detail.totalPrice)
+                      ? convertToThaiBaht(
+                          this.order_detail.diffAdminDiscountTotal
+                        )
+                      : convertToEnglishCurrency(
+                          this.order_detail.diffAdminDiscountTotal
+                        )
                   })`,
                   color: "#ff6b81",
                   margin: [0, 88.5, 0, 0],
@@ -848,7 +869,7 @@ export default {
                     {
                       stack: [
                         {
-                          text: `${this.order_detail.totalPrice?.toLocaleString(
+                          text: `${this.order_detail.grandTotal?.toLocaleString(
                             "en-US",
                             { minimumFractionDigits: 2 }
                           )} ${this.pdf_lang == "th" ? "บาท" : "Baht"}`,
@@ -857,7 +878,7 @@ export default {
                           alignment: "right",
                         },
                         {
-                          text: `${this.order_detail.totalPrice?.toLocaleString(
+                          text: `${this.order_detail.sumAdminDiscount?.toLocaleString(
                             "en-US",
                             { minimumFractionDigits: 2 }
                           )} ${this.pdf_lang == "th" ? "บาท" : "Baht"}`,
@@ -866,7 +887,7 @@ export default {
                           alignment: "right",
                         },
                         {
-                          text: `${this.order_detail.totalPrice?.toLocaleString(
+                          text: `${this.order_detail.diffAdminDiscountTotal?.toLocaleString(
                             "en-US",
                             { minimumFractionDigits: 2 }
                           )} ${this.pdf_lang == "th" ? "บาท" : "Baht"}`,
@@ -875,7 +896,7 @@ export default {
                           alignment: "right",
                         },
                         {
-                          text: `${this.order_detail.totalPrice?.toLocaleString(
+                          text: `${this.order_detail.diffAdminDiscountTotal?.toLocaleString(
                             "en-US",
                             { minimumFractionDigits: 2 }
                           )} ${this.pdf_lang == "th" ? "บาท" : "Baht"}`,
@@ -980,7 +1001,7 @@ export default {
                   margin: [0, 5],
                 },
                 {
-                  text: `${this.order_detail.totalPrice?.toLocaleString(
+                  text: `${this.order_detail.diffAdminDiscountTotal?.toLocaleString(
                     "en-US",
                     { minimumFractionDigits: 2 }
                   )} ${this.pdf_lang == "th" ? "บาท" : "Baht"}`,
@@ -1191,9 +1212,7 @@ export default {
             alignment: "center",
           },
           {
-            text: `${(
-              parseFloat(course.price) * course.students.length
-            )?.toLocaleString(undefined, {
+            text: `${parseFloat(course.unitPrice)?.toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}`,
@@ -1201,9 +1220,7 @@ export default {
             alignment: "right",
           },
           {
-            text: `${parseFloat(
-              this.lang_net_price ? this.lang_net_price : 0
-            )?.toLocaleString(undefined, {
+            text: `${parseFloat(course.totalPrice)?.toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}`,
