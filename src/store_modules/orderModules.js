@@ -484,11 +484,10 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // let localhost = "http://localhost:3000"
-
+        let localhost = "http://localhost:3000"
         let { data } = await axios.get(
-          // `${localhost}/api/v1/adminpayment/${order_number}`,
-          `${process.env.VUE_APP_URL}/api/v1/adminpayment/${order_number}`,
+          `${localhost}/api/v1/adminpayment/${order_number}`,
+          // `${process.env.VUE_APP_URL}/api/v1/adminpayment/${order_number}`,
           config
         );
         if (data.statusCode == 200) {

@@ -201,6 +201,7 @@
           </v-card>
         </v-col>
         <v-col cols="12" sm="5">
+          <!-- <pre>{{ order_detail?.orderItem }}</pre> -->
           <v-card>
             <v-card-text>
               <v-card class="mb-3">
@@ -215,6 +216,18 @@
                     {{ $t("baht") }}
                   </rowData>
                   <rowData col_header="4" col_detail="8" :title="$t('discount')"
+                    >:
+                    <span class="w-full font-bold">{{
+                      order_detail.totalPrice?.toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                      })
+                    }}</span>
+                    {{ $t("baht") }}
+                  </rowData>
+                  <rowData
+                    col_header="4"
+                    col_detail="8"
+                    :title="$t('more discount')"
                     >:
                     <span class="w-full font-bold">{{
                       order_detail.totalPrice?.toLocaleString(undefined, {
