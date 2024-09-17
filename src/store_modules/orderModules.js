@@ -934,7 +934,7 @@ const orderModules = {
 
 
     // async saveOrder(context, { moreDiscount }) {
-    async saveOrder(context, { regis_type, my_data_class, type_checked, discount, courseData, moreDiscount }) {
+    async saveOrder(context, { regis_type, my_data_class, type_checked, discount, courseData }) {
 
       // othert_data_class
       context.commit("SetOrderIsLoading", true);
@@ -1114,22 +1114,24 @@ const orderModules = {
             statusDiscountPercent: course.checkedDiscountPercent,
             discount: course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice
               ? course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice
-              : '0'
+              : '0',
+            adminDiscount: course.discountOther ? course.discountOther : 0
           })
-          if (moreDiscount) {
-            payload.courses.forEach((course, index) => {
-              if (moreDiscount[index]) {
-                course.adminDiscount = moreDiscount[index] // Add the "adminDiscount" key with the value from the `data` array
-              } else {
-                course.adminDiscount = 0
-              }
-            });
-          }
+          // if (moreDiscount) {
+          //   payload.courses.forEach((course, index) => {
+          //     if (moreDiscount[index]) {
+          //       course.adminDiscount = moreDiscount[index] // Add the "adminDiscount" key with the value from the `data` array
+          //     } else {
+          //       course.adminDiscount = 0
+          //     }
+          //   });
+          // }
 
           let price = 0
           if (order.type == "addStudent") {
-            price = course.price;
-            total_price = order.total_price * course.students.length;
+            // price = course.price;
+            // total_price = order.total_price * course.students.length;
+            total_price = order.total_price
           } else {
             price = course.option?.net_price
               ? course.option.net_price
@@ -1154,14 +1156,14 @@ const orderModules = {
           },
         };
         try {
-          // const localhost = 'http://localhost:3002'
+          const localhost = 'http://localhost:3002'
           // let { data } = await axios.post(`${localhost}/api/v1/account/student/list`, studentUpdate, config)
           let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/account/student/list`, studentUpdate, config)
           if (data.statusCode === 201) {
             try {
               let { data } = await axios.post(
-                // `${localhost}/api/v1/order/regis/course`,
-                `${process.env.VUE_APP_URL}/api/v1/order/regis/course`,
+                `${localhost}/api/v1/order/regis/course`,
+                // `${process.env.VUE_APP_URL}/api/v1/order/regis/course`,
                 payload,
                 config
               );
@@ -1884,10 +1886,10 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        // const localhost = 'http://localhost:3002'
+        const localhost = 'http://localhost:3002'
         let { data } = await axios.get(
-          // `${localhost}/api/v1/order/cart/limit?limit=${limit}&page=${page}`,
-          `${process.env.VUE_APP_URL}/api/v1/order/cart/limit?limit=${limit}&page=${page}`,
+          `${localhost}/api/v1/order/cart/limit?limit=${limit}&page=${page}`,
+          // `${process.env.VUE_APP_URL}/api/v1/order/cart/limit?limit=${limit}&page=${page}`,
           config
         );
         if (data.statusCode === 200) {

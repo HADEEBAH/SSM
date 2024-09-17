@@ -621,7 +621,11 @@
                 <v-text-field
                   dense
                   outlined
-                  v-model="course.option.pricePerPerson"
+                  :value="
+                    course?.option?.pricePerPerson
+                      ? course?.option?.pricePerPerson
+                      : 0
+                  "
                   @keydown="Validation($event, 'number')"
                   type="number"
                   color="pink"
@@ -635,7 +639,11 @@
                 <v-text-field
                   dense
                   outlined
-                  :value="course?.course_data?.price_course"
+                  :value="
+                    course?.course_data?.price_course
+                      ? course?.course_data?.price_course
+                      : 0
+                  "
                   @keydown="Validation($event, 'number')"
                   type="number"
                   color="pink"
@@ -723,15 +731,15 @@
               </v-col> -->
             </v-row>
             <v-row dense>
-              <!-- Discount BATH -->
-              {{ discout_from_admin }}
-              {{ course.checkedDiscountPercent }}
               <v-col
                 cols="12"
                 v-if="
                   course.checkedDiscountPrice || course.checkedDiscountPercent
                 "
               >
+                <!-- v-model="discout_from_admin[course_index]"
+                  @keypress.enter="CalTotalPrice(discout_from_admin)"
+                  @blur="CalTotalPrice(discout_from_admin)" -->
                 <v-text-field
                   dense
                   type="number"
@@ -741,9 +749,9 @@
                       ? $t('specify discount/baht')
                       : $t('specify discount/percent')
                   "
-                  v-model="discout_from_admin[course_index]"
-                  @keypress.enter="CalTotalPrice(discout_from_admin)"
-                  @blur="CalTotalPrice(discout_from_admin)"
+                  v-model="course.ortherDiscountPrice"
+                  @keypress.enter="CalTotalPrice()"
+                  @blur="CalTotalPrice()"
                   outlined
                   color="#FF6B81"
                   :rules="[moreDiscount(course.price)]"
@@ -1098,7 +1106,6 @@ export default {
     pay_date_str: "",
     pay_date: "",
     loading_course: false,
-    discout_from_admin: [],
     discout_percent_admin: [],
     newPrice: "",
     totalPricees: 0,
@@ -1255,12 +1262,13 @@ export default {
       this.dataIndex = index;
       items.forEach((checkbox, index) => {
         checkbox.checked = index === index;
+        // checkbox.ortherDiscountPrice = 0;
       });
       if (this.checkedBox === false) {
-        this.discout_from_admin[index] = "0";
-        this.discout_percent_admin[index] = "0";
-        this.CalTotalPrice(this.discout_from_admin);
+        items[index].ortherDiscountPrice = 0;
+        // }
       }
+      this.CalTotalPrice();
     },
     moreDiscount(maxPrice) {
       return (value) => {
@@ -1276,54 +1284,29 @@ export default {
         return true;
       };
     },
-    CalTotalPrice(newDiscount) {
-      let netPrice = 0; // newDiscount, defaultPrice
-      this.order.total_price = 0;
-      // ทำให้ newDiscount อยู่ในรูปแบบ 0 ตลอดถ้าไม่มีค่า
-      if (
-        !newDiscount ||
-        !Array.isArray(newDiscount) ||
-        newDiscount.length === 0
-      ) {
-        newDiscount = this.order.courses.map(() => 0);
-      }
-      for (let i = 0; i <= this.order?.courses.length; i++) {
+    CalTotalPrice() {
+      let countAllPrice = 0;
+      for (let i = 0; i < this.order?.courses.length; i++) {
         let itemsData = this.order?.courses[i];
-        let priceCourse =
-          itemsData?.option?.pricePerPerson - itemsData?.option?.discountPrice;
-
-        if (itemsData?.option?.pricePerPerson || itemsData?.price) {
-          if (itemsData.checkedDiscountPrice) {
-            if (newDiscount) {
-              if (itemsData?.course_type_id === "CT_1") {
-                let priceDiscount = priceCourse - Number(newDiscount[i]);
-                netPrice += priceDiscount;
-              } else if (itemsData?.course_type_id === "CT_2") {
-                let priceDiscount =
-                  itemsData?.course_data?.calculate_price -
-                  Number(newDiscount[i]);
-                // let priceDiscount = itemsData.price - Number(newDiscount[i]);
-                netPrice += priceDiscount;
-              }
-            }
-          } else if (itemsData.checkedDiscountPercent) {
-            if (newDiscount) {
-              let discountAmount =
-                (Number(newDiscount[i]) / 100) * itemsData.price;
-              let pricePercen = itemsData.price - discountAmount;
-              netPrice += pricePercen;
-            }
-          } else {
-            if (itemsData?.course_type_id === "CT_1") {
-              netPrice += Number(priceCourse);
-            } else {
-              netPrice += Number(itemsData?.price);
-            }
-          }
+        itemsData.discountOther = itemsData.ortherDiscountPrice;
+        itemsData.netPrice =
+          Number(itemsData.priceDiscount) - Number(itemsData.discountOther);
+        if (itemsData?.checkedDiscountPrice) {
+          countAllPrice += itemsData.netPrice;
+        } else if (itemsData.checkedDiscountPercent) {
+          // if (itemsData.discountOther) {
+          //   let discountAmount =
+          //     (Number(itemsData.discountOther) / 100) * itemsData.price;
+          //   let pricePercen = itemsData.price - discountAmount;
+          //   netPrice += pricePercen;
+          // }
+        } else {
+          countAllPrice += Number(itemsData.priceDiscount);
         }
       }
-      this.totalPricees = netPrice;
-      this.order.total_price = netPrice;
+
+      this.totalPricees = countAllPrice;
+      this.order.total_price = Number(countAllPrice) * this.students.length;
     },
     calTime(course, dayOfWeekId) {
       const filteredData = this.day_add_student?.filter(
@@ -1416,6 +1399,12 @@ export default {
       course.price = 0;
       course.detail = "";
       course.remark = "";
+      course.ortherDiscountPrice = 0;
+      (course.price = 0),
+        (course.discount = 0),
+        (course.priceDiscount = 0),
+        (course.discountOther = 0),
+        (course.netPrice = 0);
     },
     async selectPackage(course) {
       course.option = {};
@@ -1462,14 +1451,22 @@ export default {
         students: [],
         checkedDiscountPrice: false,
         checkedDiscountPercent: false,
+        ortherDiscountPrice: 0,
+        discount: 0,
+        priceDiscount: 0,
+        discountOther: 0,
+        netPrice: 0,
       });
     },
     async Calprice(course) {
       course.price = course.option.pricePerPerson;
+      course.discount = course.option.discountPrice;
+      course.priceDiscount =
+        course.option.pricePerPerson - course.option.discountPrice;
       course.time = {};
       course.day = {};
       course.coach = {};
-      this.CalTotalPrice(this.discout_from_admin);
+      this.CalTotalPrice();
       // course.price = course.option.net_price;
       // this.CalTotalPrice();
       await this.GetDayAddStudent({
@@ -1494,7 +1491,6 @@ export default {
     },
     removeCourse(index) {
       this.order.courses.splice(index, 1);
-      this.discout_from_admin.splice(index, 1);
     },
     async selectTime(items) {
       let filterTimeAddStudent = this.time_add_student
@@ -1560,12 +1556,22 @@ export default {
       course.remark = "";
       course.checkedDiscountPrice = false;
       course.checkedDiscountPercent = false;
+      course.ortherDiscountPrice = 0;
+      (course.price = 0),
+        (course.discount = 0),
+        (course.priceDiscount = 0),
+        (course.discountOther = 0),
+        (course.netPrice = 0);
+
       if (courseId) {
         await this.GetCourse(courseId).then(() => {
           if (this.course_data) {
             course.course_data = this.course_data;
           }
           if (this.course_data.course_type_id === "CT_2") {
+            course.price = this.course_data.price_course;
+            course.discount = this.course_data.discount;
+            course.priceDiscount = this.course_data.calculate_price;
             course.start_date = this.course_data.course_study_start_date;
             course.start_date_str = new Date(
               course.start_date
@@ -1604,7 +1610,7 @@ export default {
             course.price = parseInt(this.course_data.price_course);
             course.time = this.course_data.days_of_class[0].times[0];
 
-            this?.CalTotalPrice(this.discout_from_admin);
+            this?.CalTotalPrice();
           }
         });
       }
@@ -1796,7 +1802,6 @@ export default {
               await this.saveOrder({
                 regis_type: "addStudent",
                 courseData: this.course_data,
-                moreDiscount: this.discout_from_admin,
               });
               if (this.order_is_status) {
                 let payload = {
@@ -1851,7 +1856,6 @@ export default {
                 regis_type: "addStudent",
                 discount: this.course_data?.discountPrice,
                 courseData: this.course_data,
-                moreDiscount: this.discout_from_admin,
               });
               if (this.order_is_status) {
                 let payload = {
@@ -1914,6 +1918,11 @@ export default {
             students: [],
             checkedDiscountPrice: false,
             checkedDiscountPercent: false,
+            ortherDiscountPrice: 0,
+            discount: 0,
+            priceDiscount: 0,
+            discountOther: 0,
+            netPrice: 0,
           },
         ],
         created_by: "",
