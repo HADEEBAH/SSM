@@ -359,7 +359,6 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-            <!-- <pre>{{ day_add_student }}</pre> -->
             <v-row
               dense
               v-if="
@@ -592,7 +591,6 @@
               </v-col>
             </v-row>
             <!-- PRICE -->
-            <!-- <pre>{{ course_data }}</pre> -->
             <v-row dense>
               <!-- PRICE -->
               <!-- <v-col cols="12" sm="4">
@@ -652,7 +650,6 @@
                 >
                 </v-text-field>
               </v-col>
-              <!-- <pre>{{ course }}</pre> -->
               <!-- discount -->
               <v-col cols="12" sm="4" v-if="course?.course_type_id == 'CT_1'">
                 <label-custom :text="$t(`discount`)"></label-custom>
@@ -1306,7 +1303,7 @@ export default {
       }
 
       this.totalPricees = countAllPrice;
-      this.order.total_price = Number(countAllPrice) * this.students.length;
+      this.order.total_price = Number(countAllPrice);
     },
     calTime(course, dayOfWeekId) {
       const filteredData = this.day_add_student?.filter(
@@ -1628,7 +1625,6 @@ export default {
       }
     },
     // selectCourse(courseId, course) {
-    //   console.log("111 :>> ", courseId);
     //   course.package_data = {};
     //   course.package = "";
     //   course.option = {};
@@ -1645,11 +1641,9 @@ export default {
     //   course.remark = "";
     //   if (courseId) {
     //     this.GetCourse(courseId).then(() => {
-    //       console.log("22 :>> ", 22);
     //       if (this.course_data) {
     //         course.course_data = this.course_data;
     //       }
-    //       console.log("this.course_data :>> ", this.course_data);
 
     //       if (this.course_data.course_type_id === "CT_2") {
     //         course.start_date = this.course_data.course_study_start_date;
@@ -1694,8 +1688,6 @@ export default {
       if (this.validate_form) {
         // if (this.validate_form && this.course_monitors?.length > 0) {
         // for (let course of this.order.courses) {
-        //   console.log("course :>> ", course);
-        //   console.log("ourse.package_data :>> ", course.package_data);
         //   if (course.package_data.students < this.students?.length) {
         //     studentFail = true;
         //   }

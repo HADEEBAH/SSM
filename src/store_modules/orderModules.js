@@ -484,10 +484,10 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        let localhost = "http://localhost:3000"
+        // let localhost = "http://localhost:3000"
         let { data } = await axios.get(
-          `${localhost}/api/v1/adminpayment/${order_number}`,
-          // `${process.env.VUE_APP_URL}/api/v1/adminpayment/${order_number}`,
+          // `${localhost}/api/v1/adminpayment/${order_number}`,
+          `${process.env.VUE_APP_URL}/api/v1/adminpayment/${order_number}`,
           config
         );
         if (data.statusCode == 200) {
@@ -1131,7 +1131,7 @@ const orderModules = {
           if (order.type == "addStudent") {
             // price = course.price;
             // total_price = order.total_price * course.students.length;
-            total_price = order.total_price
+            total_price = order.total_price * course.students.length;
           } else {
             price = course.option?.net_price
               ? course.option.net_price
@@ -1156,14 +1156,14 @@ const orderModules = {
           },
         };
         try {
-          const localhost = 'http://localhost:3002'
+          // const localhost = 'http://localhost:3002'
           // let { data } = await axios.post(`${localhost}/api/v1/account/student/list`, studentUpdate, config)
           let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/account/student/list`, studentUpdate, config)
           if (data.statusCode === 201) {
             try {
               let { data } = await axios.post(
-                `${localhost}/api/v1/order/regis/course`,
-                // `${process.env.VUE_APP_URL}/api/v1/order/regis/course`,
+                // `${localhost}/api/v1/order/regis/course`,
+                `${process.env.VUE_APP_URL}/api/v1/order/regis/course`,
                 payload,
                 config
               );
@@ -1675,7 +1675,7 @@ const orderModules = {
           let payment_payload = {
             orderId: order_data.orderNumber,
             paymentType: order_data.paymentType,
-            total: order_data.totalPrice,
+            total: order_data.diffAdminDiscountTotal,
           };
           // const localhost = 'http://localhost:3003'
           let { data } = await axios.patch(
@@ -1886,10 +1886,10 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        const localhost = 'http://localhost:3002'
+        // const localhost = 'http://localhost:3002'
         let { data } = await axios.get(
-          `${localhost}/api/v1/order/cart/limit?limit=${limit}&page=${page}`,
-          // `${process.env.VUE_APP_URL}/api/v1/order/cart/limit?limit=${limit}&page=${page}`,
+          // `${localhost}/api/v1/order/cart/limit?limit=${limit}&page=${page}`,
+          `${process.env.VUE_APP_URL}/api/v1/order/cart/limit?limit=${limit}&page=${page}`,
           config
         );
         if (data.statusCode === 200) {
