@@ -6,7 +6,7 @@
     "
   >
     {{ setFunctions }}
-    <v-card ref="banner_bar" class="mb-3" flat tile>
+    <v-card ref="banner_bar" flat tile>
       <v-window show-arrows>
         <template #next="{ on, attrs }">
           <v-btn
@@ -55,22 +55,24 @@
           </div>
         </v-col>
       </v-row>
-      <v-card class="rounded-xl pa-2">
+      <v-card class="rounded-xl">
         <v-card-text>
           <v-row ref="filter_bar">
             <v-col
               cols="12"
               sm="4"
+              lg="6"
               class="text-2xl align-self-center font-weight-bold"
             >
               {{ $t("warraphat learning sphere") }}
             </v-col>
-            <v-col cols="12" sm="8" style="text-align: -webkit-right">
+            <v-col cols="12" sm="8" lg="6" style="text-align: -webkit-right">
+              <!-- :class="`bg-white rounded-full ${
+                  !MobileSize ? 'w-full' : 'w-full'
+                } `" -->
               <v-text-field
                 v-model="search_kingdom"
-                :class="`bg-white rounded-full ${
-                  !MobileSize ? 'w-2/5' : 'w-full'
-                } `"
+                class="bg-white rounded-full w-full"
                 hide-details
                 dense
                 outlined
@@ -85,7 +87,7 @@
               cols="6"
               md="3"
               sm="6"
-              class="pa-1 mb-3 d-flex justify-center"
+              class="d-flex justify-center"
               v-for="(item, index_item) in searchKingdom(search_kingdom)"
               :key="index_item"
             >

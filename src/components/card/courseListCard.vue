@@ -12,7 +12,7 @@
     >
       <v-row>
         <v-col class="pa-4" align="right">
-          <v-chip color="#F9B320" text-color="white">{{
+          <v-chip small color="#F9B320" text-color="white">{{
             `${GenPeriod(course.period)} ${$t("hour")} `
           }}</v-chip></v-col
         >
