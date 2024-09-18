@@ -1,5 +1,5 @@
 <template>
-  <v-card hover class="w-[270px] h-full">
+  <v-card hover class="w-full h-full">
     <v-img
       @click="selectedCategory(category)"
       :aspect-ratio="16 / 9"
