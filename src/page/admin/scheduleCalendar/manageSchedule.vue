@@ -1469,11 +1469,16 @@ export default {
         nameTh: "ขาด",
         value: "absent",
       },
-      // {
-      //   nameEn: "no check in",
-      //   nameTh: "ยังไม่มีการเช็คอิน",
-      //   value: "noCheckeIn",
-      // },
+      {
+        nameEn: "no check in",
+        nameTh: "ยังไม่มีการเช็คอิน",
+        value: "noCheckeIn",
+      },
+      {
+        nameEn: "no status has been selected yet",
+        nameTh: "ยังไม่มีการเลือกสถานะ",
+        value: "noStatus",
+      },
     ],
     // {
     //     // nameEn: "no check in",

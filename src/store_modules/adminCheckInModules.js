@@ -172,7 +172,6 @@ const adminCheckInModules = {
                 // let localhost = "http://localhost:3000"
                 // let endpoint = `${localhost}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}${courseType}`
                 let endpoint = `${process.env.VUE_APP_URL}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}${courseType}`
-                // let endpoint = `${process.env.VUE_APP_URL}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}`
                 let { data } = await axios.get(endpoint, config)
                 if (data.statusCode == 200) {
                     let reports = []
@@ -199,15 +198,19 @@ const adminCheckInModules = {
                                 dateCheckIn = entry.checkInTimeStamp
                                 studyDate = entry.date
                                 satuscheckin = entry.status ? (
-                                  entry.status === "emergency leave" ? "ลาฉุกเฉิน" : (
-                                    entry.status === "punctual" ? "ตรงเวลา" : (
-                                      entry.status === "absent" ? "ขาด" : (
-                                        entry.status === "leave" ? "ลา" : (
-                                          entry.status === "late" ? "สาย" : null
+                                    entry.status === "emergency leave" ? "ลาฉุกเฉิน" : (
+                                        entry.status === "punctual" ? "ตรงเวลา" : (
+                                            entry.status === "absent" ? "ขาด" : (
+                                                entry.status === "leave" ? "ลา" : (
+                                                    entry.status === "late" ? "สาย" : (
+                                                        entry.status === "noCheckin" ? "ยังไม่เช็คอิน" : (
+                                                            entry.status === "nostatusCheckin" ? "ยังไม่สถานะเช็คอิน" : null
+                                                        )
+                                                    )
+                                                )
+                                            )
                                         )
-                                      )
                                     )
-                                  )
                                 ) : null
                                 checkInCountPerDay = entry.countCheckIn
                                 totalCheckInCount = entry.totalDay
