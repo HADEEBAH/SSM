@@ -1257,11 +1257,11 @@ export default {
     checkBoxFunc(index, items, bool) {
       this.checkedBox = bool;
       this.dataIndex = index;
-      items.forEach((checkbox, index) => {
-        checkbox.checked = index === index;
+      items.map((checkbox, indexs) => {
+        checkbox.checked = indexs === index;
         // checkbox.ortherDiscountPrice = 0;
       });
-      if (this.checkedBox === false) {
+      if (!this.checkedBox) {
         items[index].ortherDiscountPrice = 0;
         // }
       }
