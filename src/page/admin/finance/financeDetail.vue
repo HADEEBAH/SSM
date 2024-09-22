@@ -205,15 +205,51 @@
             <v-card-text>
               <v-card class="mb-3">
                 <v-card-text class="bg-[#FFF5F6]">
+                  <rowData col_header="4" col_detail="8" :title="$t('price')"
+                    >:
+                    <span class="w-full font-bold">{{
+                      order_detail.sumPrice?.toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                      })
+                    }}</span>
+                    {{ $t("baht") }}
+                  </rowData>
+                  <rowData col_header="4" col_detail="8" :title="$t('discount')"
+                    >:
+                    <span class="w-full font-bold">{{
+                      order_detail.sumDiscountCourse?.toLocaleString(
+                        undefined,
+                        {
+                          minimumFractionDigits: 2,
+                        }
+                      )
+                    }}</span>
+                    {{ $t("baht") }}
+                  </rowData>
                   <rowData
                     col_header="4"
                     col_detail="8"
-                    :title="$t('total price')"
+                    :title="$t('more discount')"
                     >:
                     <span class="w-full font-bold">{{
-                      order_detail.totalPrice?.toLocaleString(undefined, {
+                      order_detail.sumAdminDiscount?.toLocaleString(undefined, {
                         minimumFractionDigits: 2,
                       })
+                    }}</span>
+                    {{ $t("baht") }}
+                  </rowData>
+                  <rowData
+                    col_header="4"
+                    col_detail="8"
+                    :title="$t('total amount')"
+                    >:
+                    <span class="w-full font-bold">{{
+                      order_detail.diffAdminDiscountTotal?.toLocaleString(
+                        undefined,
+                        {
+                          minimumFractionDigits: 2,
+                        }
+                      )
                     }}</span>
                     {{ $t("baht") }}
                   </rowData>
@@ -754,7 +790,7 @@ export default {
             {
               table: {
                 headerRows: 1,
-                widths: ["auto", "*", "auto", "auto"], 
+                widths: ["auto", "*", "auto", "auto", "auto"],
                 body: this.GenCourseItem(),
               },
               margin: [0, 0, 0, 20],
@@ -777,24 +813,44 @@ export default {
             {
               columns: [
                 {
-                  width: "55%",
+                  width: "60%",
                   text: `(${
                     this.pdf_lang == "th"
-                      ? convertToThaiBaht(this.order_detail.totalPrice)
-                      : convertToEnglishCurrency(this.order_detail.totalPrice)
+                      ? convertToThaiBaht(
+                          this.order_detail.diffAdminDiscountTotal
+                        )
+                      : convertToEnglishCurrency(
+                          this.order_detail.diffAdminDiscountTotal
+                        )
                   })`,
                   color: "#ff6b81",
+                  margin: [0, 88.5, 0, 0],
                 },
                 {
                   columns: [
                     {
-                      width: "45%",
+                      width: "55%",
                       stack: [
                         {
                           text:
                             this.pdf_lang == "th"
                               ? "รวมเป็นเงิน"
                               : "total price",
+                          margin: [0, 5],
+                          color: "#ff6b81",
+                          alignment: "right",
+                        },
+                        {
+                          text: this.pdf_lang == "th" ? "ส่วนลด" : "discount",
+                          margin: [0, 5],
+                          color: "#ff6b81",
+                          alignment: "right",
+                        },
+                        {
+                          text:
+                            this.pdf_lang == "th"
+                              ? "จำนวนเงินหลังหักส่วนลด"
+                              : "Amount after discount",
                           margin: [0, 5],
                           color: "#ff6b81",
                           alignment: "right",
@@ -813,7 +869,7 @@ export default {
                     {
                       stack: [
                         {
-                          text: `${this.order_detail.totalPrice?.toLocaleString(
+                          text: `${this.order_detail.grandTotal?.toLocaleString(
                             "en-US",
                             { minimumFractionDigits: 2 }
                           )} ${this.pdf_lang == "th" ? "บาท" : "Baht"}`,
@@ -822,7 +878,25 @@ export default {
                           alignment: "right",
                         },
                         {
-                          text: `${this.order_detail.totalPrice?.toLocaleString(
+                          text: `${this.order_detail.sumAdminDiscount?.toLocaleString(
+                            "en-US",
+                            { minimumFractionDigits: 2 }
+                          )} ${this.pdf_lang == "th" ? "บาท" : "Baht"}`,
+                          margin: [0, 5],
+                          color: "#ff6b81",
+                          alignment: "right",
+                        },
+                        {
+                          text: `${this.order_detail.diffAdminDiscountTotal?.toLocaleString(
+                            "en-US",
+                            { minimumFractionDigits: 2 }
+                          )} ${this.pdf_lang == "th" ? "บาท" : "Baht"}`,
+                          margin: [0, 5],
+                          color: "#ff6b81",
+                          alignment: "right",
+                        },
+                        {
+                          text: `${this.order_detail.diffAdminDiscountTotal?.toLocaleString(
                             "en-US",
                             { minimumFractionDigits: 2 }
                           )} ${this.pdf_lang == "th" ? "บาท" : "Baht"}`,
@@ -927,7 +1001,7 @@ export default {
                   margin: [0, 5],
                 },
                 {
-                  text: `${this.order_detail.totalPrice?.toLocaleString(
+                  text: `${this.order_detail.diffAdminDiscountTotal?.toLocaleString(
                     "en-US",
                     { minimumFractionDigits: 2 }
                   )} ${this.pdf_lang == "th" ? "บาท" : "Baht"}`,
@@ -975,7 +1049,7 @@ export default {
                       // )} ${this.pdf_lang == "th" ? "น." : ""}`,
                       margin: [0, 5],
                       alignment: "center",
-                      fontSize: 11
+                      fontSize: 11,
                     },
                     {
                       text: this.pdf_lang == "th" ? "วันที่" : "Date",
@@ -1023,7 +1097,7 @@ export default {
                       }`,
                       margin: [0, 5],
                       alignment: "center",
-                      fontSize: 11
+                      fontSize: 11,
                     },
                     {
                       text: this.pdf_lang == "th" ? "วันที่" : "Date",
@@ -1067,6 +1141,12 @@ export default {
           },
           {
             text: this.pdf_lang == "th" ? "จำนวน" : "Amount",
+            fillColor: "#dedede",
+            alignment: "center",
+          },
+          {
+            text:
+              this.pdf_lang == "th" ? "ราคาต่อหน่วย(บาท)" : "Unit/price(Baht)",
             fillColor: "#dedede",
             alignment: "center",
           },
@@ -1118,7 +1198,9 @@ export default {
                 color: "#ff6b81",
               },
               {
-                text: course.remark ? `*หมายเหตุ: ${course.remark ? course.remark : ""}` : "",
+                text: course.remark
+                  ? `*หมายเหตุ: ${course.remark ? course.remark : ""}`
+                  : "",
                 color: "#ff6b81",
               },
             ],
@@ -1130,9 +1212,15 @@ export default {
             alignment: "center",
           },
           {
-            text: `${(
-              parseFloat(course.price) * course.students.length
-            )?.toLocaleString(undefined, {
+            text: `${parseFloat(course.unitPrice)?.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}`,
+            color: "#ff6b81",
+            alignment: "right",
+          },
+          {
+            text: `${parseFloat(course.totalPrice)?.toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}`,
