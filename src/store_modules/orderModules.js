@@ -485,7 +485,6 @@ const orderModules = {
           },
         };
         // let localhost = "http://localhost:3000"
-
         let { data } = await axios.get(
           // `${localhost}/api/v1/adminpayment/${order_number}`,
           `${process.env.VUE_APP_URL}/api/v1/adminpayment/${order_number}`,
@@ -934,9 +933,10 @@ const orderModules = {
     // },
 
 
+    // async saveOrder(context, { moreDiscount }) {
     async saveOrder(context, { regis_type, my_data_class, type_checked, discount, courseData }) {
-      // othert_data_class
 
+      // othert_data_class
       context.commit("SetOrderIsLoading", true);
       try {
         let order = context.state.order;
@@ -1059,6 +1059,7 @@ const orderModules = {
               break; // Exit the loop if the criteria are not met
             }
           }
+
           payload.courses.push({
             courseId: course.course_id,
             courseTypeId: course.course_type_id,
@@ -1080,25 +1081,28 @@ const orderModules = {
               : course.time.timeId,
             // time: course.time,
             time: !course.apply_for_others && !course.apply_for_yourself ? {
-              start: course.coach.start, // Default to 19:00 if not available
-              end: course.coach.end,     // Default to 20:00 if not available
+              start: course.coach.start || course.time.start,
+              end: course.coach.end || course.time.start,
               timeData: [
                 {
-                  maximumStudent: course.coach.maximumStudent,
-                  dayOfWeekId: course.coach.dayOfWeekId,
-                  timeId: course.coach.timeId,
-                  courseCoachId: course.coach.courseCoachId,
-                  coach_name: course.coach.fullNameTh,
-                  coach_name_en: course.coach.fullNameEn,
-                  coach_id: course.coach.coachId
+                  maximumStudent: course.coach.maximumStudent || course.time.maximumStudent,
+                  dayOfWeekId: course.coach.dayOfWeekId || course.time.dayOfWeekId,
+                  timeId: course.coach.timeId || course.time.timeId,
+                  courseCoachId: course.coach.courseCoachId || course.coach.course_coach_id,
+                  coach_name: course.coach.fullNameTh || course.coach.coach_name,
+                  coach_name_en: course.coach.fullNameEn || course.coach.coach_name_en,
+                  coach_id: course.coach.coachId || course.coach.coach_id
                 }
               ]
             } : course.time,
             startDate: course.start_date ? course.start_date : moment(new Date()).format("YYYY-MM-DD"),
             remark: course.remark ? course.remark : "",
-            price: course.option?.net_price
-              ? course.option.net_price
-              : course.price,
+            // price: course.option?.net_price
+            //   ? course.option.net_price
+            //   : course.price,
+            price: course.option?.price_unit
+              ? course.option.price_unit
+              : order.type !== "cart" ? course.price : course.coursePrice,
 
             originalPrice: courseData ? courseData.price_course : 0,
             coach: {
@@ -1106,10 +1110,27 @@ const orderModules = {
               fullName: course.coach_name || course.coach.fullNameTh,
             },
             student: students,
-          });
+            statusDiscountPrice: course.checkedDiscountPrice,
+            statusDiscountPercent: course.checkedDiscountPercent,
+            discount: course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice
+              ? course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice
+              : '0',
+            adminDiscount: course.discountOther ? course.discountOther : 0
+          })
+          // if (moreDiscount) {
+          //   payload.courses.forEach((course, index) => {
+          //     if (moreDiscount[index]) {
+          //       course.adminDiscount = moreDiscount[index] // Add the "adminDiscount" key with the value from the `data` array
+          //     } else {
+          //       course.adminDiscount = 0
+          //     }
+          //   });
+          // }
+
           let price = 0
           if (order.type == "addStudent") {
-            price = course.price;
+            // price = course.price;
+            // total_price = order.total_price * course.students.length;
             total_price = order.total_price * course.students.length;
           } else {
             price = course.option?.net_price
@@ -1135,7 +1156,7 @@ const orderModules = {
           },
         };
         try {
-          // const localhost = 'http://localhost:3000'
+          // const localhost = 'http://localhost:3002'
           // let { data } = await axios.post(`${localhost}/api/v1/account/student/list`, studentUpdate, config)
           let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/account/student/list`, studentUpdate, config)
           if (data.statusCode === 201) {
@@ -1332,24 +1353,22 @@ const orderModules = {
                 });
               } else if (error?.response?.data?.message == "Cannot register , Because your orders are duplicated.") {
                 Swal.fire({
-                  icon: "warning",
-                  title: VueI18n.t("cannot register"),
+                  icon: "error",
+                  title: VueI18n.t("unable to register"),
                   text: VueI18n.t(
-                    "because your orders are duplicated"
+                    "unable to register due to course and package status being closed"
                   ),
                   timer: 3000,
                   timerProgressBar: true,
                   showCancelButton: false,
                   showConfirmButton: false,
                 });
-              } else if (error?.response?.data?.message === "register Duplicate") {
+              } else if (error?.response?.data?.message == "Over Registration") {
                 Swal.fire({
-                  icon: "error",
-                  title: VueI18n.t(
-                    "something went wrong"
-                  ),
+                  icon: "warning",
+                  title: VueI18n.t("something went wrong"),
                   text: VueI18n.t(
-                    "some students or students have already purchased the course"
+                    "cannot register , The seats are full"
                   ),
                   timer: 3000,
                   timerProgressBar: true,
@@ -1465,6 +1484,20 @@ const orderModules = {
                   showCancelButton: false,
                   showConfirmButton: false,
                 });
+              } else if (error?.response?.data?.message === "register Duplicate") {
+                Swal.fire({
+                  icon: "error",
+                  title: VueI18n.t(
+                    "something went wrong"
+                  ),
+                  text: VueI18n.t(
+                    "some students or students have already purchased the course"
+                  ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
               } else if (error === "please enter your name and class") {
                 Swal.fire({
                   icon: "error",
@@ -1545,7 +1578,6 @@ const orderModules = {
           context.commit("SetOrderIsLoading", false);
 
         }
-        // console.log('payload :>> ', payload);
       } catch (err) {
         if (err == "please enter your name and class") {
           Swal.fire({
@@ -1572,7 +1604,7 @@ const orderModules = {
         }
         context.commit("SetOrderIsLoading", false);
 
-      } // let localhost = "http://localhost:3002"
+      }
 
 
 
@@ -1590,6 +1622,7 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
+
         let { data } = await axios.patch(
           // `http://localhost:3002/api/v1/order/update/${order_detail.orderNumber}`,
           `${process.env.VUE_APP_URL}/api/v1/order/update/${order_detail.orderNumber}`,
@@ -1642,7 +1675,7 @@ const orderModules = {
           let payment_payload = {
             orderId: order_data.orderNumber,
             paymentType: order_data.paymentType,
-            total: order_data.totalPrice,
+            total: order_data.diffAdminDiscountTotal,
           };
           // const localhost = 'http://localhost:3003'
           let { data } = await axios.patch(

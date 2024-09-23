@@ -359,7 +359,6 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-            <!-- <pre>{{ day_add_student }}</pre> -->
             <v-row
               dense
               v-if="
@@ -592,23 +591,172 @@
               </v-col>
             </v-row>
             <!-- PRICE -->
-            <!-- <pre>{{ course }}</pre> -->
             <v-row dense>
-              <v-col cols="12" sm="4">
+              <!-- PRICE -->
+              <!-- <v-col cols="12" sm="4">
                 <label-custom :text="$t(`price`)"></label-custom>
                 <v-text-field
                   dense
-                  :rules="rules.price"
-                  v-model="course.price"
-                  @change="CalTotalPrice()"
+                  outlined
+                  :value="
+                    course?.course_type_id == 'CT_1'
+                      ? course?.option?.price_unit
+                      : course?.course_data?.price_course
+                  "
+                  v-model="course.option.price_unit"
+                  @keydown="Validation($event, 'number')"
+                  type="number"
+                  color="pink"
+                  :suffix="$t(`baht`)"
+                  disabled
+                >
+                </v-text-field>
+              </v-col> -->
+              <v-col cols="12" sm="4" v-if="course?.course_type_id == 'CT_1'">
+                <label-custom :text="$t(`price`)"></label-custom>
+                <!-- v-model="course.option.price_unit" -->
+
+                <v-text-field
+                  dense
+                  outlined
+                  :value="
+                    course?.option?.pricePerPerson
+                      ? course?.option?.pricePerPerson
+                      : 0
+                  "
+                  @keydown="Validation($event, 'number')"
+                  type="number"
+                  color="pink"
+                  :suffix="$t(`baht`)"
+                  disabled
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="12" sm="4" v-if="course?.course_type_id == 'CT_2'">
+                <label-custom :text="$t(`price`)"></label-custom>
+                <v-text-field
+                  dense
+                  outlined
+                  :value="
+                    course?.course_data?.price_course
+                      ? course?.course_data?.price_course
+                      : 0
+                  "
+                  @keydown="Validation($event, 'number')"
+                  type="number"
+                  color="pink"
+                  :suffix="$t(`baht`)"
+                  disabled
+                >
+                </v-text-field>
+              </v-col>
+              <!-- discount -->
+              <v-col cols="12" sm="4" v-if="course?.course_type_id == 'CT_1'">
+                <label-custom :text="$t(`discount`)"></label-custom>
+                <!-- :rules="rules.price" -->
+
+                <v-text-field
+                  dense
+                  :value="
+                    course?.option?.discountPrice
+                      ? course?.option?.discountPrice
+                      : '0'
+                  "
                   outlined
                   @keydown="Validation($event, 'number')"
                   type="number"
                   color="pink"
                   :suffix="$t(`baht`)"
+                  disabled
                 >
                 </v-text-field>
               </v-col>
+              <v-col cols="12" sm="4" v-if="course?.course_type_id == 'CT_2'">
+                <label-custom :text="$t(`discount`)"></label-custom>
+                <!-- :rules="rules.price" -->
+
+                <v-text-field
+                  dense
+                  :value="
+                    course?.course_data?.discount
+                      ? course?.course_data?.discount
+                      : '0'
+                  "
+                  outlined
+                  @keydown="Validation($event, 'number')"
+                  type="number"
+                  color="pink"
+                  :suffix="$t(`baht`)"
+                  disabled
+                >
+                </v-text-field>
+              </v-col>
+            </v-row>
+            <!-- Discount Checkbox-->
+            <v-row dense class="mt-[-8]">
+              <v-col cols="12" sm="6">
+                <v-checkbox
+                  v-model="course.checkedDiscountPrice"
+                  :label="`${$t('there is a new discount')} (${$t('baht')})`"
+                  color="#FF6B81"
+                  @click="
+                    checkBoxFunc(
+                      course_index,
+                      order.courses,
+                      course.checkedDiscountPrice
+                    )
+                  "
+                  :disabled="course.checkedDiscountPercent"
+                ></v-checkbox>
+              </v-col>
+              <!-- <v-col cols="12" sm="6">
+                <v-checkbox
+                  v-model="course.checkedDiscountPercent"
+                  :label="`${$t('there is a new discount')} (${$t(
+                    'percentage'
+                  )})`"
+                  color="#FF6B81"
+                  @click="
+                    checkBoxFunc(
+                      course_index,
+                      order.courses,
+                      course.checkedDiscountPercent
+                    )
+                  "
+                  :disabled="course.checkedDiscountPrice"
+                ></v-checkbox>
+              </v-col> -->
+            </v-row>
+            <v-row dense>
+              <v-col
+                cols="12"
+                v-if="
+                  course.checkedDiscountPrice || course.checkedDiscountPercent
+                "
+              >
+                <!-- v-model="discout_from_admin[course_index]"
+                  @keypress.enter="CalTotalPrice(discout_from_admin)"
+                  @blur="CalTotalPrice(discout_from_admin)" -->
+                <v-text-field
+                  dense
+                  type="number"
+                  class="input-text-right"
+                  :placeholder="
+                    course.checkedDiscountPrice
+                      ? $t('specify discount/baht')
+                      : $t('specify discount/percent')
+                  "
+                  v-model="course.ortherDiscountPrice"
+                  @keypress.enter="CalTotalPrice()"
+                  @blur="CalTotalPrice()"
+                  outlined
+                  color="#FF6B81"
+                  :rules="[moreDiscount(course.price)]"
+                  :max="course.price"
+                  :min="0"
+                ></v-text-field>
+              </v-col>
+              <!-- หมายเหตุราคา -->
               <v-col cols="12">
                 <label-custom :text="$t(`price note`)"></label-custom>
                 <v-textarea
@@ -642,7 +790,7 @@
                     <v-col class="text-lg font-bold"
                       >{{ $t("total price") }} :</v-col
                     >
-                    <v-col
+                    <!-- <v-col
                       cols="auto"
                       class="text-lg font-bold text-pink-500"
                       >{{
@@ -650,8 +798,18 @@
                           undefined,
                           { minimumFractionDigits: 2 }
                         )
-                      }}</v-col
-                    >
+                      }}
+                    </v-col> -->
+                    <v-col cols="auto" class="text-lg font-bold text-pink-500">
+                      {{
+                        (totalPricees * students?.length).toLocaleString(
+                          undefined,
+                          {
+                            minimumFractionDigits: 2,
+                          }
+                        )
+                      }}
+                    </v-col>
                     <v-col cols="auto" class="text-lg font-bold">{{
                       $t("baht")
                     }}</v-col>
@@ -945,6 +1103,14 @@ export default {
     pay_date_str: "",
     pay_date: "",
     loading_course: false,
+    discout_percent_admin: [],
+    newPrice: "",
+    totalPricees: 0,
+    checkDiscount: 0,
+    totalDiscount: 0,
+    checkedBox: false,
+    dataIndex: 0,
+    totalDiscountPercent: 0,
     getDayOfWeek: "",
     getTimedatas: [],
   }),
@@ -1088,7 +1254,65 @@ export default {
       GetTimeAddStudent: "CourseModules/GetTimeAddStudent",
       GetCoachAddStudent: "CourseModules/GetCoachAddStudent",
     }),
+    checkBoxFunc(index, items, bool) {
+      this.checkedBox = bool;
+      this.dataIndex = index;
+      items.map((checkbox, indexs) => {
+        checkbox.checked = indexs === index;
+        // checkbox.ortherDiscountPrice = 0;
+      });
+      if (!this.checkedBox) {
+        items[index].ortherDiscountPrice = 0;
+        // }
+      }
+      this.CalTotalPrice();
+    },
+    moreDiscount(maxPrice) {
+      return (value) => {
+        if (value >= maxPrice) {
+          return `${this.$t("number must be")} ${maxPrice}`;
+        }
+        if (value < 1) {
+          return this.$t("number must be 1");
+        }
+        if (!value) {
+          return this.$t("please enter discount");
+        }
+        return true;
+      };
+    },
+    CalTotalPrice() {
+      let countAllPrice = 0;
+      for (let i = 0; i < this.order?.courses.length; i++) {
+        let itemsData = this.order?.courses[i];
+        itemsData.discountOther = itemsData.ortherDiscountPrice;
+        itemsData.netPrice =
+          Number(itemsData.priceDiscount) - Number(itemsData.discountOther);
+        if (itemsData?.checkedDiscountPrice) {
+          countAllPrice += itemsData.netPrice;
+        } else if (itemsData.checkedDiscountPercent) {
+          // if (itemsData.discountOther) {
+          //   let discountAmount =
+          //     (Number(itemsData.discountOther) / 100) * itemsData.price;
+          //   let pricePercen = itemsData.price - discountAmount;
+          //   netPrice += pricePercen;
+          // }
+        } else {
+          countAllPrice += Number(itemsData.priceDiscount);
+        }
+      }
 
+      this.totalPricees = countAllPrice;
+      this.order.total_price = Number(countAllPrice);
+    },
+    calTime(course, dayOfWeekId) {
+      const filteredData = this.day_add_student?.filter(
+        (item) => item.dayName === dayOfWeekId
+      );
+      for (const items of filteredData) {
+        this.getDayOfWeek = items?.dayOfWeekId;
+      }
+    },
     selectDay(course, items) {
       course.coach = {};
       course.time = {};
@@ -1144,15 +1368,15 @@ export default {
       const index = this.students.indexOf(item);
       if (index >= 0) this.students.splice(index, 1);
     },
-    CalTotalPrice() {
-      this.order.total_price = 0;
-      for (let course of this.order.courses) {
-        if (course.price) {
-          this.order.total_price =
-            this.order.total_price + parseInt(course.price);
-        }
-      }
-    },
+    // CalTotalPrice() {
+    //   this.order.total_price = 0;
+    //   for (let course of this.order.courses) {
+    //     if (course.price) {
+    //       this.order.total_price =
+    //         this.order.total_price + parseInt(course.price);
+    //     }
+    //   }
+    // },
     selectCourseType(type, course) {
       course.category_id = "";
       course.course_id = "";
@@ -1172,6 +1396,12 @@ export default {
       course.price = 0;
       course.detail = "";
       course.remark = "";
+      course.ortherDiscountPrice = 0;
+      (course.price = 0),
+        (course.discount = 0),
+        (course.priceDiscount = 0),
+        (course.discountOther = 0),
+        (course.netPrice = 0);
     },
     async selectPackage(course) {
       course.option = {};
@@ -1216,15 +1446,26 @@ export default {
         selected: true,
         parents: [],
         students: [],
+        checkedDiscountPrice: false,
+        checkedDiscountPercent: false,
+        ortherDiscountPrice: 0,
+        discount: 0,
+        priceDiscount: 0,
+        discountOther: 0,
+        netPrice: 0,
       });
     },
     async Calprice(course) {
       course.price = course.option.pricePerPerson;
+      course.discount = course.option.discountPrice;
+      course.priceDiscount =
+        course.option.pricePerPerson - course.option.discountPrice;
       course.time = {};
       course.day = {};
       course.coach = {};
-      // course.price = course.option.net_price;
       this.CalTotalPrice();
+      // course.price = course.option.net_price;
+      // this.CalTotalPrice();
       await this.GetDayAddStudent({
         course_id: course.course_id,
         package_id: course?.option?.packageId,
@@ -1310,13 +1551,24 @@ export default {
       course.price = 0;
       course.detail = "";
       course.remark = "";
+      course.checkedDiscountPrice = false;
+      course.checkedDiscountPercent = false;
+      course.ortherDiscountPrice = 0;
+      (course.price = 0),
+        (course.discount = 0),
+        (course.priceDiscount = 0),
+        (course.discountOther = 0),
+        (course.netPrice = 0);
+
       if (courseId) {
         await this.GetCourse(courseId).then(() => {
           if (this.course_data) {
             course.course_data = this.course_data;
           }
-
           if (this.course_data.course_type_id === "CT_2") {
+            course.price = this.course_data.price_course;
+            course.discount = this.course_data.discount;
+            course.priceDiscount = this.course_data.calculate_price;
             course.start_date = this.course_data.course_study_start_date;
             course.start_date_str = new Date(
               course.start_date
@@ -1348,12 +1600,14 @@ export default {
             // calcutaleDiscount =
             //   this.course_data?.price_course - this.course_data?.discountPrice;
 
-            course.price =
-              this.course_data?.course_type_id == "CT_2"
-                ? parseInt(this.course_data?.calculate_price)
-                : parseInt(this.course_data.price_course);
+            // course.price =
+            //   this.course_data?.course_type_id == "CT_2"
+            //     ? parseInt(this.course_data?.calculate_price)
+            //     : parseInt(this.course_data.price_course);
+            course.price = parseInt(this.course_data.price_course);
             course.time = this.course_data.days_of_class[0].times[0];
-            this.CalTotalPrice();
+
+            this?.CalTotalPrice();
           }
         });
       }
@@ -1370,200 +1624,254 @@ export default {
         });
       }
     },
+    // selectCourse(courseId, course) {
+    //   course.package_data = {};
+    //   course.package = "";
+    //   course.option = {};
+    //   course.option_data = {};
+    //   course.day = "";
+    //   course.time = "";
+    //   course.time_str = "";
+    //   course.coach = "";
+    //   course.manu_start_date = false;
+    //   course.start_date_str = "";
+    //   course.start_date = "";
+    //   course.price = 0;
+    //   course.detail = "";
+    //   course.remark = "";
+    //   if (courseId) {
+    //     this.GetCourse(courseId).then(() => {
+    //       if (this.course_data) {
+    //         course.course_data = this.course_data;
+    //       }
+
+    //       if (this.course_data.course_type_id === "CT_2") {
+    //         course.start_date = this.course_data.course_study_start_date;
+    //         course.start_date_str = new Date(
+    //           course.start_date
+    //         ).toLocaleDateString(
+    //           this.$i18n.locale == "th" ? "th-TH" : "en-US",
+    //           {
+    //             year: "numeric",
+    //             month: "long",
+    //             day: "numeric",
+    //           }
+    //         );
+    //         course.coach = this.course_data.coachs[0];
+    //         let startTimePart =
+    //           this.course_data.course_period_start_date.split(":");
+    //         let endTimePart =
+    //           this.course_data.course_period_end_date.split(":");
+    //         let period_start = `${startTimePart[0].padStart(
+    //           2,
+    //           "0"
+    //         )}:${startTimePart[1].padStart(2, "0")}`;
+    //         let period_end = `${endTimePart[0].padStart(
+    //           2,
+    //           "0"
+    //         )}:${endTimePart[1].padStart(2, "0")}`;
+    //         course.time_str = `${period_start}-${period_end} ${this.$t(
+    //           "o'clock"
+    //         )}`;
+    //         course.price = parseInt(this.course_data.price_course);
+    //         course.time = this.course_data.days_of_class[0].times[0];
+    //         this.CalTotalPrice();
+    //       }
+    //     });
+    //   }
+    // },
     save() {
-      this.GetAllCourseMonitor().then(() => {
-        this.$refs.course_form.validate();
-        let isValiDateCourse = [];
-        let studentFail = false;
-        if (this.validate_form && this.course_monitors?.length > 0) {
-          for (let course of this.order.courses) {
-            if (course.package_data.students < this.students?.length) {
-              studentFail = true;
-            } else {
-              if (
-                this.course_monitors.filter(
-                  (v) =>
-                    v.courseMonitorEntity_coach_id === course.coach.coach_id &&
-                    v.courseMonitorEntity_course_id === course.course_id &&
-                    v.courseMonitorEntity_day_of_week_id ===
-                      course.time.dayOfWeekId &&
-                    v.courseMonitorEntity_time_id === course.time.timeId
-                )?.length > 0
-              ) {
-                if (
-                  this.course_monitors.some(
-                    (v) =>
-                      v.courseMonitorEntity_coach_id ===
-                        course.coach.coach_id &&
-                      v.courseMonitorEntity_course_id === course.course_id &&
-                      v.courseMonitorEntity_day_of_week_id ===
-                        course.time.dayOfWeekId &&
-                      v.courseMonitorEntity_time_id === course.time.timeId &&
-                      v.courseMonitorEntity_current_student +
-                        course.students?.length <=
-                        v.courseMonitorEntity_maximum_student &&
-                      v.courseMonitorEntity_status === "Open"
-                  )
-                ) {
-                  isValiDateCourse.push(true);
-                } else {
-                  isValiDateCourse.push(false);
+      // this.GetAllCourseMonitor().then(() => {
+      this.$refs.course_form.validate();
+      // let isValiDateCourse = [];
+      // let studentFail = false;
+      if (this.validate_form) {
+        // if (this.validate_form && this.course_monitors?.length > 0) {
+        // for (let course of this.order.courses) {
+        //   if (course.package_data.students < this.students?.length) {
+        //     studentFail = true;
+        //   }
+        // else {
+        //   if (
+        //     this.course_monitors.filter(
+        //       (v) =>
+        //         v.courseMonitorEntity_coach_id === course.coach.coach_id &&
+        //         v.courseMonitorEntity_course_id === course.course_id &&
+        //         v.courseMonitorEntity_day_of_week_id ===
+        //           course.time.dayOfWeekId &&
+        //         v.courseMonitorEntity_time_id === course.time.timeId
+        //     )?.length > 0
+        //   ) {
+        //     if (
+        //       this.course_monitors.some(
+        //         (v) =>
+        //           v.courseMonitorEntity_coach_id ===
+        //             course.coach.coach_id &&
+        //           v.courseMonitorEntity_course_id === course.course_id &&
+        //           v.courseMonitorEntity_day_of_week_id ===
+        //             course.time.dayOfWeekId &&
+        //           v.courseMonitorEntity_time_id === course.time.timeId &&
+        //           v.courseMonitorEntity_current_student +
+        //             course.students?.length <=
+        //             v.courseMonitorEntity_maximum_student &&
+        //           v.courseMonitorEntity_status === "Open"
+        //       )
+        //     ) {
+        //       isValiDateCourse.push(true);
+        //     } else {
+        //       isValiDateCourse.push(false);
+        //     }
+        //   } else {
+        //     isValiDateCourse.push(true);
+        //   }
+        // }
+        // }
+        // if (studentFail) {
+        //   Swal.fire({
+        //     icon: "error",
+        //     title: this.$t("the number of students is incorrect"),
+        //     text: this.$t(
+        //       "the number of students exceeds the number of students allowed in the package"
+        //     ),
+        //     timer: 3000,
+        //     timerProgressBar: true,
+        //     showCancelButton: false,
+        //     showConfirmButton: false,
+        //   });
+        // } else if (isValiDateCourse.includes(false)) {
+        //   Swal.fire({
+        //     icon: "error",
+        //     title: this.$t("something went wrong"),
+        //     text: this.$t(
+        //       "the selected course is full and payment cannot be made"
+        //     ),
+        //     timer: 3000,
+        //     timerProgressBar: true,
+        //     showCancelButton: false,
+        //     showConfirmButton: false,
+        //   });
+        // } else {
+        Swal.fire({
+          icon: "question",
+          title: this.$t("do you want to add learner?"),
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("no"),
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            if (this.order.payment_status === "warn") {
+              let account = [];
+              let course_name_noti = [];
+              let course_name_noti_en = [];
+              this.order.courses.forEach((course) => {
+                course_name_noti.push(course?.course_data?.course_name_th);
+                course_name_noti_en.push(course?.course_data?.course_name_en);
+                course.students = [];
+                course.coach_id = course.coach.coach_id;
+                course.coach_name = course.coach.coach_name;
+                for (const student of this.students) {
+                  if (student) {
+                    account.push({
+                      studentId: student,
+                    });
+                    course.students.push({
+                      account_id: student,
+                      student_name: null,
+                      username: null,
+                      firstname_en: null,
+                      lastname_en: null,
+                      tel: null,
+                      parents: [],
+                      is_account: false,
+                      is_other: false,
+                    });
+                  }
                 }
-              } else {
-                isValiDateCourse.push(true);
+              });
+              this.order.type = "addStudent";
+              this.changeOrderData(this.order);
+              await this.saveOrder({
+                regis_type: "addStudent",
+                courseData: this.course_data,
+              });
+              if (this.order_is_status) {
+                let payload = {
+                  notificationName: this.notification_name,
+                  notificationNameEn: "Notification of course application",
+                  notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(
+                    course_name_noti?.length > 1 ? ", " : ""
+                  )} ให้คุณแล้ว (รอชำระเงิน)`,
+                  notificationDescriptionEn: `Admin applies for course ${course_name_noti_en?.join(
+                    course_name_noti_en?.length > 1 ? ", " : ""
+                  )} already given to you (waiting for payment)`,
+                  accountId: account,
+                  // path: null,
+                  path: "/order/history",
+                };
+                this.sendNotification(payload);
+                // router.replace({ name: "Finance" });
               }
+              router.replace({ name: "Finance" });
+            } else {
+              let account = [];
+              let course_name_noti = [];
+              let course_name_noti_en = [];
+              this.order.courses.forEach((course) => {
+                course_name_noti.push(course?.course_data?.course_name_th);
+                course_name_noti_en.push(course?.course_data?.course_name_en);
+                course.students = [];
+                course.coach_id = course.coach.coach_id;
+                course.coach_name = course.coach.coach_name;
+                for (const student of this.students) {
+                  if (student) {
+                    account.push({
+                      studentId: student,
+                    });
+                    course.students.push({
+                      account_id: student,
+                      student_name: null,
+                      username: null,
+                      firstname_en: null,
+                      lastname_en: null,
+                      tel: null,
+                      parents: [],
+                      is_account: false,
+                      is_other: false,
+                    });
+                  }
+                }
+              });
+              this.order.type = "addStudent";
+              this.changeOrderData(this.order);
+              await this.saveOrder({
+                regis_type: "addStudent",
+                discount: this.course_data?.discountPrice,
+                courseData: this.course_data,
+              });
+              if (this.order_is_status) {
+                let payload = {
+                  notificationName: this.notification_name,
+                  notificationNameEn: "Notification of course application",
+                  notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(
+                    course_name_noti?.length > 1 ? "และ" : ""
+                  )} ให้คุณแล้ว`,
+                  notificationDescriptionEn: `Admin applies for course ${course_name_noti_en?.join(
+                    course_name_noti_en?.length > 1 ? "and" : ""
+                  )} already given to you`,
+                  accountId: account,
+                  path: null,
+                };
+                this.sendNotification(payload);
+                // router.replace({ name: "Finance" });
+              }
+              router.replace({ name: "Finance" });
             }
           }
-          if (studentFail) {
-            Swal.fire({
-              icon: "error",
-              title: this.$t("the number of students is incorrect"),
-              text: this.$t(
-                "the number of students exceeds the number of students allowed in the package"
-              ),
-              timer: 3000,
-              timerProgressBar: true,
-              showCancelButton: false,
-              showConfirmButton: false,
-            });
-          } else if (isValiDateCourse.includes(false)) {
-            Swal.fire({
-              icon: "error",
-              title: this.$t("something went wrong"),
-              text: this.$t(
-                "the selected course is full and payment cannot be made"
-              ),
-              timer: 3000,
-              timerProgressBar: true,
-              showCancelButton: false,
-              showConfirmButton: false,
-            });
-          } else {
-            Swal.fire({
-              icon: "question",
-              title: this.$t("do you want to add learner?"),
-              showDenyButton: false,
-              showCancelButton: true,
-              confirmButtonText: this.$t("agree"),
-              cancelButtonText: this.$t("no"),
-            }).then(async (result) => {
-              if (result.isConfirmed) {
-                if (this.order.payment_status === "warn") {
-                  let account = [];
-                  let course_name_noti = [];
-                  let course_name_noti_en = [];
-                  this.order.courses.forEach((course) => {
-                    course_name_noti.push(course?.course_data?.course_name_th);
-                    course_name_noti_en.push(
-                      course?.course_data?.course_name_en
-                    );
-                    course.students = [];
-                    course.coach_id = course.coach.coach_id;
-                    course.coach_name = course.coach.coach_name;
-                    for (const student of this.students) {
-                      if (student) {
-                        account.push({
-                          studentId: student,
-                        });
-                        course.students.push({
-                          account_id: student,
-                          student_name: null,
-                          username: null,
-                          firstname_en: null,
-                          lastname_en: null,
-                          tel: null,
-                          parents: [],
-                          is_account: false,
-                          is_other: false,
-                        });
-                      }
-                    }
-                  });
-                  this.order.type = "addStudent";
-                  this.changeOrderData(this.order);
-                  await this.saveOrder({
-                    regis_type: "addStudent",
-                    courseData: this.course_data,
-                  });
-                  if (this.order_is_status) {
-                    let payload = {
-                      notificationName: this.notification_name,
-                      notificationNameEn: "Notification of course application",
-                      notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(
-                        course_name_noti?.length > 1 ? ", " : ""
-                      )} ให้คุณแล้ว (รอชำระเงิน)`,
-                      notificationDescriptionEn: `Admin applies for course ${course_name_noti_en?.join(
-                        course_name_noti_en?.length > 1 ? ", " : ""
-                      )} already given to you (waiting for payment)`,
-                      accountId: account,
-                      // path: null,
-                      path: "/order/history",
-                    };
-                    this.sendNotification(payload);
-                    // router.replace({ name: "Finance" });
-                  }
-                  router.replace({ name: "Finance" });
-                } else {
-                  let account = [];
-                  let course_name_noti = [];
-                  let course_name_noti_en = [];
-                  this.order.courses.forEach((course) => {
-                    course_name_noti.push(course?.course_data?.course_name_th);
-                    course_name_noti_en.push(
-                      course?.course_data?.course_name_en
-                    );
-                    course.students = [];
-                    course.coach_id = course.coach.coach_id;
-                    course.coach_name = course.coach.coach_name;
-                    for (const student of this.students) {
-                      if (student) {
-                        account.push({
-                          studentId: student,
-                        });
-                        course.students.push({
-                          account_id: student,
-                          student_name: null,
-                          username: null,
-                          firstname_en: null,
-                          lastname_en: null,
-                          tel: null,
-                          parents: [],
-                          is_account: false,
-                          is_other: false,
-                        });
-                      }
-                    }
-                  });
-                  this.order.type = "addStudent";
-                  this.changeOrderData(this.order);
-                  await this.saveOrder({
-                    regis_type: "addStudent",
-                    discount: this.course_data?.discountPrice,
-                    courseData: this.course_data,
-                  });
-                  if (this.order_is_status) {
-                    let payload = {
-                      notificationName: this.notification_name,
-                      notificationNameEn: "Notification of course application",
-                      notificationDescription: `แอดมินสมัครคอร์ส ${course_name_noti?.join(
-                        course_name_noti?.length > 1 ? "และ" : ""
-                      )} ให้คุณแล้ว`,
-                      notificationDescriptionEn: `Admin applies for course ${course_name_noti_en?.join(
-                        course_name_noti_en?.length > 1 ? "and" : ""
-                      )} already given to you`,
-                      accountId: account,
-                      path: null,
-                    };
-                    this.sendNotification(payload);
-                    // router.replace({ name: "Finance" });
-                  }
-                  router.replace({ name: "Finance" });
-                }
-              }
-            });
-          }
-        }
-      });
+        });
+        // }
+      }
+      // });
     },
     ClearData() {
       this.students = [];
@@ -1600,6 +1908,13 @@ export default {
             selected: true,
             parents: [],
             students: [],
+            checkedDiscountPrice: false,
+            checkedDiscountPercent: false,
+            ortherDiscountPrice: 0,
+            discount: 0,
+            priceDiscount: 0,
+            discountOther: 0,
+            netPrice: 0,
           },
         ],
         created_by: "",

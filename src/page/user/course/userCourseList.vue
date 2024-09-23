@@ -242,14 +242,15 @@ export default {
 
         if (!this.waitingProcess) {
           this.waitingProcess = true;
-
-          await this.GetCoursesFilter({
-            category_id: this.$route.params.category_id,
-            status: ["Active", "Reserve"],
-            course_type_id: this.type_selected,
-            limit: this.filter_course_option.limit,
-            page: this.filter_course_option.page + 1,
-          });
+          if (!this.search_course) {
+            await this.GetCoursesFilter({
+              category_id: this.$route.params.category_id,
+              status: ["Active", "Reserve"],
+              course_type_id: this.type_selected,
+              limit: this.filter_course_option.limit,
+              page: this.filter_course_option.page + 1,
+            });
+          }
 
           this.isDataReceived = false;
           this.waitingProcess = false;

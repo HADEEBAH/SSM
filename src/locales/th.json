@@ -420,6 +420,7 @@
     "my account setting": "การจัดการ",
     "my account": "หน้าผู้ใช้งาน",
     "more details" : "รายละเอียดเพิ่มเติม",
+    "more discount" : "ส่วนลดเพิ่มเติม",
     
     "name of representative": "ชื่อผู้แทน",
     "nationality": "สัญชาติ",
@@ -506,6 +507,7 @@
     "payment notification":"แจ้งเตือนการชำระเงิน",
     "payment method" : "วิธีการชำระเงิน",
     "pending" : "รอชำระเงิน",
+    "percentage":"เปอร์เซ็น",
     "performance" : "ผลงาน",
     "period" : "ช่วงเวลา",
     "periods" : "ระยะเวลา",
@@ -733,6 +735,7 @@
     "specify the remaining number of times" : "ระบุจำนวนครั้งคงเหลือ",
     "specify coach" : "ระบุโค้ช",
     "specify discount/baht" :"ระบุส่วนลด/บาท",
+    "specify discount/percent": "ระบุส่วนลด/เปอร์เซ็นต์",
     "specify email" : "ระบุอีเมล",
     "specify first name(english)" : "ระบุชื่อ(ภาษาอังกฤษ)",
     "specify first name(Thai)" : "ระบุชื่อ(ภาษาไทย)",
@@ -803,6 +806,7 @@
     "some students or students have already purchased the course":"นักเรียนคนนี้หรือนักเรียนบางส่วนได้ซื้อหลักสูตรแล้ว",
     "select congenital disease":"กรุณาเลือกโรคประจำตัว/อาหารที่แพ้",
 
+
     "study time": "เวลาเรียน",
     "take annual leave" : "ลาพักร้อนประจำปี",
     "take leave form" : "แบบฟอร์มการลา",
@@ -851,6 +855,7 @@
     "the organizer of the lesson is longer than the specified length": "ผู้จัดสอนความยาวเกินกว่าที่กำหนด",
     "the wls has been edited" : "อาณาจักแก้ไขสำเร็จแล้ว",
     "this item cannot be made. Because it is a short course": "ไม่สามารถทำรายการนี้ได้ เนื่องกจากเป็นคอร์สระยะสั้น",
+    "there is a new discount":"มีส่วนลดเพิ่มเติม",
     "there is a discount" : "มีส่วนลด",
     "there is no substitute teacher" : "ไม่มีผู้สอนแทน", 
     "there are special privileges for monthly/term/yearly subscriptions" : "มีสิทธิ์พิเศษสำหรับการสมัครรายเดือน / รายเทอม / รายปี",
@@ -870,6 +875,7 @@
     "today's teaching program"  : "รายการสอนวันนี้",
     "total" : "รวมทั้งหมด",
     "total price":"ราคารวม",
+    "total amount":"จำนวนเงินรวมทั้งสิ้น",
     "time" : "ครั้ง",
     "times" : "เวลา",
     "transaction time" : "เวลาทำรายการ",
@@ -901,7 +907,7 @@
     "user": "ผู้ใช้",
     "user role": "บทบาทผู้ใช้งาน",
     "unsuccessful":"ไม่สำเร็จ",
-    "unable to register due to course and package status being closed":"ไม่สามารถลงทะเบียนได้เนื่องจากสถานะหลักสูตรและแพ็คเกจถูกปิด",
+    "unable to register due to course and package status being closed": "ไม่สามารถลงทะเบียนได้เนื่องจากที่นั่งเต็ม หรือ หลักสูตรและแพ็คเกจถูกปิด",
     "unable to delete course" : "ไม่สามารถลบคอร์สได้",
     "unable to close course" : "ไม่สามารถปิดคอร์สได้",
     "unable to change roles": "ไม่สามารถเปลี่ยนบทบาทได้",
@@ -1043,6 +1049,7 @@
 
     "next":"ถัดไป",
     "please enter the student's name":"กรุณากรอกชื่อผู้เรียน",
+    "please enter discount":"กรุณากรอกส่วนลด",
     
     "price" : "ราคา",
     "price note":"หมายเหตุราคา",
