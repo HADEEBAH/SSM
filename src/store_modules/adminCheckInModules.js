@@ -178,6 +178,7 @@ const adminCheckInModules = {
                     await data.data.forEach(filterData => {
                         if (filterData.checkinStudent) {
                             let dateCheckIn = ''
+                            let studentCheckInId = ''
                             let studyDate = ''
                             let satuscheckin = ''
                             let studentName = ''
@@ -196,22 +197,29 @@ const adminCheckInModules = {
                             // Display the status sorted by date
                             filterData.checkinStudent.forEach(entry => {
                                 dateCheckIn = entry.checkInTimeStamp
+                                studentCheckInId = entry.checkinStudentId
                                 studyDate = entry.date
-                                satuscheckin = entry.status ? (
-                                    entry.status === "emergency leave" ? "ลาฉุกเฉิน" : (
-                                        entry.status === "punctual" ? "ตรงเวลา" : (
-                                            entry.status === "absent" ? "ขาด" : (
-                                                entry.status === "leave" ? "ลา" : (
-                                                    entry.status === "late" ? "สาย" : (
-                                                        entry.status === "noCheckin" ? "ยังไม่เช็คอิน" : (
-                                                            entry.status === "nostatusCheckin" ? "ยังไม่สถานะเช็คอิน" : null
-                                                        )
+                                satuscheckin = entry.status
+                                if (!studentCheckInId) {
+                                    satuscheckin = entry.status === null ? "ยังไม่มีการเช็คอิน" : ''
+                                } else if (studentCheckInId && !dateCheckIn) {
+                                    satuscheckin = entry.status === null ? "ยังไม่มีการเช็คอิน" : ''
+                                } else if (studentCheckInId && dateCheckIn && !satuscheckin) {
+                                    satuscheckin = entry.status === null ? "ยังไม่มีการเลือกสถานะ" : ''
+                                } else {
+                                    satuscheckin = entry.status ? (
+                                        entry.status === "emergency leave" ? "ลาฉุกเฉิน" : (
+                                            entry.status === "punctual" ? "ตรงเวลา" : (
+                                                entry.status === "absent" ? "ขาด" : (
+                                                    entry.status === "leave" ? "ลา" : (
+                                                        entry.status === "late" ? "สาย" : null
                                                     )
                                                 )
                                             )
                                         )
-                                    )
-                                ) : null
+                                    ) : null
+                                }
+
                                 checkInCountPerDay = entry.countCheckIn
                                 totalCheckInCount = entry.totalDay
                                 studentName = `${entry.firstNameTh} ${entry.lastNameTh}`
@@ -235,7 +243,8 @@ const adminCheckInModules = {
                                     // "แพ็คเกจ": packages ? packages : '-',
                                     "ช่วงเวลา": options ? options : '-',
                                     "ชื่อนักเรียน": filterData.checkinStudent ? studentName : '-',
-                                    "สถานะเช็คอิน": filterData.checkinStudent ? satuscheckin !== null ? satuscheckin : "ยังไม่มีการเลือกสถานะ" : '-',
+                                    "สถานะการเข้าสอนของโค้ช": filterData.checkinStudent ? totalCheckInCount : '0',
+                                    "สถานะเช็คอิน": filterData.checkinStudent ? satuscheckin ? satuscheckin : '' : '',
                                     "จำนวนที่เช็คอิน": filterData.checkinStudent ? checkInCountPerDay : '0',
                                     "วันเรียนทั้งหมด": filterData.checkinStudent ? totalCheckInCount : '0',
                                     // "สถานะเช็คอิน": filterData.checkinStudent ? satuscheckin : '-',

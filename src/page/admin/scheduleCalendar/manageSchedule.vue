@@ -1224,7 +1224,7 @@
 
                 <v-autocomplete
                   v-model="export_data.check_in_status_options"
-                  :items="filteredCheckInStatusOptions"
+                  :items="checkInStatusOptions"
                   :item-text="$i18n.locale == 'th' ? 'nameTh' : 'nameEn'"
                   item-value="value"
                   outlined
@@ -1472,7 +1472,7 @@ export default {
       {
         nameEn: "no check in",
         nameTh: "ยังไม่มีการเช็คอิน",
-        value: "noCheckeIn",
+        value: "noCheckIn",
       },
       {
         nameEn: "no status has been selected yet",
@@ -1535,17 +1535,17 @@ export default {
       options_data: "CourseModules/getOptions",
       getCheckinFilter: "adminCheckInModules/getCheckinFilter",
     }),
-    filteredCheckInStatusOptions() {
-      let options = this.checkInStatusOptions;
-      if (this.storedData.account_id == "200438430336") {
-        options.push({
-          nameEn: "no check in",
-          nameTh: "ยังไม่มีการเช็คอิน",
-          value: "noCheckIn",
-        });
-      }
-      return options;
-    },
+    // filteredCheckInStatusOptions() {
+    //   let options = this.checkInStatusOptions;
+    //   if (this.storedData.account_id == "200438430336") {
+    //     options.push({
+    //       nameEn: "no check in",
+    //       nameTh: "ยังไม่มีการเช็คอิน",
+    //       value: "noCheckIn",
+    //     });
+    //   }
+    //   return options;
+    // },
     formattedStartTime: {
       get() {
         // Return time with minutes set to 00
