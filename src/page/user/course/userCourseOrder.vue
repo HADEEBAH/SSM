@@ -1230,9 +1230,9 @@ export default {
           ],
           is_account: false,
           is_other: true,
-          class: "",
-          nickName: "",
-          otherClass: "",
+          class: null,
+          nickName: null,
+          otherClass: null,
         });
       } else {
         this.course_order.students.forEach((student, index) => {
@@ -1280,11 +1280,11 @@ export default {
           parents: [],
           is_account: false,
           is_other: true,
-          class: "",
-          nickName: "",
-          school: "",
-          congenital: "",
-          otherClass: "",
+          class: null,
+          nickName: null,
+          school: null,
+          congenital: null,
+          otherClass: null,
         });
       } else {
         this.course_order.students.forEach((student, index) => {
@@ -1748,10 +1748,10 @@ export default {
       return originalArray;
     },
     CreateReserve() {
-      let checkNickname = "";
-      let checkClass = "";
-      let checkSchool = "";
-      let checkcongenital = "";
+      let checkNickname = null;
+      let checkClass = null;
+      let checkSchool = null;
+      let checkcongenital = null;
       let roles = "";
       let yourself = this.course_order.apply_for_yourself;
 

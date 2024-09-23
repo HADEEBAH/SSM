@@ -563,9 +563,12 @@ const orderModules = {
             );
             let itemRole = '';
 
-            for (const items of data.data.roles) {
-              itemRole = items.roleId;
+            if (data?.data?.roles) {
+              for (const items of data?.data?.roles) {
+                itemRole = items.roleId;
+              }
             }
+            
 
             if (!studentUpdate.some(v => v.studentId === student.account_id)) {
               if (itemRole === 'R_5') {
@@ -584,7 +587,7 @@ const orderModules = {
                   studentUpdate.push({
                     "studentId": student.account_id,
                     "nicknameTh": student.nicknameTh,
-                    "class": ''
+                    "class": null
                   });
                 }
               }

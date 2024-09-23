@@ -899,15 +899,15 @@ export default {
             this.checkData.school = this.global_data_relation_checked?.school
               ? this.global_data_relation_checked.school
               : {
-                  schoolNameEn: "",
-                  schoolNameTh: "",
+                  schoolNameEn: null,
+                  schoolNameTh: null,
                 };
 
             this.checkData.class = this.global_data_relation_checked?.class
               ? this.global_data_relation_checked?.class
               : {
-                  classNameTh: "",
-                  classNameEn: "",
+                  classNameTh: null,
+                  classNameEn: null,
                 };
             this.roles.map((val) => {
               if (this.global_role_code === val.roleNumber) {
