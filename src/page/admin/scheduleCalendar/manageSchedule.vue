@@ -1218,38 +1218,6 @@
               </v-col>
               <v-col cols="12" sm="6">
                 <label class="font-weight-bold">{{
-                  $t("check in status")
-                }}</label>
-                <!-- :items="checkInStatusOptions" -->
-
-                <v-autocomplete
-                  v-model="export_data.check_in_status_options"
-                  :items="checkInStatusOptions"
-                  :item-text="$i18n.locale == 'th' ? 'nameTh' : 'nameEn'"
-                  item-value="value"
-                  outlined
-                  multiple
-                  color="#FF6B81"
-                  item-color="#FF6B81"
-                  class="py-1"
-                  :placeholder="this.$t('please select check in status')"
-                  dense
-                >
-                  <template v-slot:selection="{ item, index }">
-                    <v-chip dark v-if="index === 0" color="#FF6B81">
-                      <span>{{
-                        $i18n.locale == "th" ? item.nameTh : item.nameEn
-                      }}</span>
-                    </v-chip>
-                    <span v-if="index === 1" class="grey--text text-caption">
-                      (+{{ export_data.check_in_status_options.length - 1 }}
-                      {{ $t("others") }})
-                    </span>
-                  </template>
-                </v-autocomplete>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <label class="font-weight-bold">{{
                   $t("coach checkin status")
                 }}</label>
                 <!-- :items="checkInStatusOptions" -->
@@ -1266,6 +1234,7 @@
                   class="py-1"
                   :placeholder="this.$t('please select a coach checkin status')"
                   dense
+                  @change="checkStatusOptions"
                 >
                   <template v-slot:selection="{ item, index }">
                     <v-chip dark v-if="index === 0" color="#FF6B81">
@@ -1275,6 +1244,39 @@
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
                       (+{{ export_data.coach_check_in_status.length - 1 }}
+                      {{ $t("others") }})
+                    </span>
+                  </template>
+                </v-autocomplete>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <label class="font-weight-bold">{{
+                  $t("check in status")
+                }}</label>
+                <!-- :items="checkInStatusOptions" -->
+
+                <v-autocomplete
+                  v-model="export_data.check_in_status_options"
+                  :items="checkInStatusOptions"
+                  :item-text="$i18n.locale == 'th' ? 'nameTh' : 'nameEn'"
+                  item-value="value"
+                  :disabled="coachCheckInData"
+                  outlined
+                  multiple
+                  color="#FF6B81"
+                  item-color="#FF6B81"
+                  class="py-1"
+                  :placeholder="this.$t('please select check in status')"
+                  dense
+                >
+                  <template v-slot:selection="{ item, index }">
+                    <v-chip dark v-if="index === 0" color="#FF6B81">
+                      <span>{{
+                        $i18n.locale == "th" ? item.nameTh : item.nameEn
+                      }}</span>
+                    </v-chip>
+                    <span v-if="index === 1" class="grey--text text-caption">
+                      (+{{ export_data.check_in_status_options.length - 1 }}
                       {{ $t("others") }})
                     </span>
                   </template>
@@ -1551,6 +1553,7 @@ export default {
       coach_check_in_status: [],
       storedData: "",
     },
+    coachCheckInData: false,
   }),
 
   created() {
@@ -1668,7 +1671,13 @@ export default {
       GetOptions: "CourseModules/GetOptions",
       CheckInFilter: "adminCheckInModules/CheckInFilter",
     }),
-
+    async checkStatusOptions() {
+      this.coachCheckInData = false;
+      this.coachCheckInData =
+        this.export_data.coach_check_in_status.length === 1 &&
+        this.export_data.coach_check_in_status.includes("noCheckIn");
+      return this.coachCheckInData;
+    },
     async exportCheckin() {
       this.loading_export = true;
       await this.CheckInFilter({ export_data: this.export_data });

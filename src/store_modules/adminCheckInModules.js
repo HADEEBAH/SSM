@@ -174,7 +174,7 @@ const adminCheckInModules = {
                     }
                 }
                 // let localhost = "http://localhost:3000"
-                // let endpoint = `${localhost}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}${courseType}`
+                // let endpoint = `${localhost}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}${courseType}${coachCheckInStatus}`
                 let endpoint = `${process.env.VUE_APP_URL}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}${courseType}${coachCheckInStatus}`
                 let { data } = await axios.get(endpoint, config)
                 if (data.statusCode == 200) {
