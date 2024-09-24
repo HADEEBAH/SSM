@@ -568,7 +568,7 @@ const orderModules = {
                 itemRole = items.roleId;
               }
             }
-            
+
 
             if (!studentUpdate.some(v => v.studentId === student.account_id)) {
               if (itemRole === 'R_5') {
@@ -1083,17 +1083,17 @@ const orderModules = {
               : course.time.timeId,
             // time: course.time,
             time: !course.apply_for_others && !course.apply_for_yourself ? {
-              start: course.coach.start, // Default to 19:00 if not available
-              end: course.coach.end,     // Default to 20:00 if not available
+              start: course.coach.start || course.time.start, // Default to 19:00 if not available
+              end: course.coach.end || course.time.end,     // Default to 20:00 if not available
               timeData: [
                 {
-                  maximumStudent: course.coach.maximumStudent,
-                  dayOfWeekId: course.coach.dayOfWeekId,
-                  timeId: course.coach.timeId,
-                  courseCoachId: course.coach.courseCoachId,
-                  coach_name: course.coach.fullNameTh,
-                  coach_name_en: course.coach.fullNameEn,
-                  coach_id: course.coach.coachId
+                  maximumStudent: course.coach.maximumStudent || course.time.maximumStudent,
+                  dayOfWeekId: course.coach.dayOfWeekId || course.time.dayOfWeekId,
+                  timeId: course.coach.timeId || course.time.timeId,
+                  courseCoachId: course.coach.courseCoachId || course.day.course_coach_id,
+                  coach_name: course.coach.fullNameTh || course.coach_name,
+                  coach_name_en: course.coach.fullNameEn || course.coach_name_en,
+                  coach_id: course.coach.coachId || course.coach
                 }
               ]
             } : course.time,
