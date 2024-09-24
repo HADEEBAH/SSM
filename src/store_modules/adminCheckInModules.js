@@ -132,6 +132,7 @@ const adminCheckInModules = {
             let startDate = ''
             let endDate = ''
             let courseType = ''
+            let coachCheckInStatus = ''
             if (export_data) {
                 for (const idCoach of export_data.coach_id) {
                     coachId += `&accountId=${idCoach}`
@@ -154,6 +155,9 @@ const adminCheckInModules = {
                 for (const typeCourse of export_data.course_type_id) {
                     courseType += `&courseTypeId=${typeCourse}`
                 }
+                for (const checkInStatusCoach of export_data.coach_check_in_status) {
+                    coachCheckInStatus += `&stateCkeckIn=${checkInStatusCoach}`
+                }
 
                 export_data.start_time ? startTime = `startTime=${export_data.start_time}` : ''
                 export_data.end_time ? endTime = `&endTime=${export_data.end_time}` : ''
@@ -171,7 +175,7 @@ const adminCheckInModules = {
                 }
                 // let localhost = "http://localhost:3000"
                 // let endpoint = `${localhost}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}${courseType}`
-                let endpoint = `${process.env.VUE_APP_URL}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}${courseType}`
+                let endpoint = `${process.env.VUE_APP_URL}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}${courseType}${coachCheckInStatus}`
                 let { data } = await axios.get(endpoint, config)
                 if (data.statusCode == 200) {
                     let reports = []
