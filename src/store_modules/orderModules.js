@@ -1155,6 +1155,7 @@ const orderModules = {
           let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/account/student/list`, studentUpdate, config)
           if (data.statusCode === 201) {
             try {
+              // const localhost = 'http://localhost:3002'
               let { data } = await axios.post(
                 // `${localhost}/api/v1/order/regis/course`,
                 `${process.env.VUE_APP_URL}/api/v1/order/regis/course`,

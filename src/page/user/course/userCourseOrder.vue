@@ -657,8 +657,8 @@
                     @keydown="Validation($event, 'free-nonum')"
                     @input="realtimeCheckNickname(student.nicknameTh)"
                   ></v-text-field>
-                    <!-- :disabled="student?.nicknameData" -->
-                  </v-col>
+                  <!-- :disabled="student?.nicknameData" -->
+                </v-col>
                 <!-- CLASS -->
                 <v-col cols="12" sm="6" v-if="student.role === 'R_5'">
                   <labelCustom required :text="$t('class')"></labelCustom>
@@ -1460,6 +1460,8 @@ export default {
         let coach =
           this.coachSelect || this.course_order.coach_id ? true : false;
         let student = this.course_order.students.length > 0 ? true : false;
+        let missingAccountIds =
+          this.course_order.students.filter((v) => !v.account_id).length > 0;
         // if (this.course_order.students.length > 0) {
         //   if (
         //     this.course_order.students.filter((v) => !v.account_id).length > 0
@@ -1470,11 +1472,19 @@ export default {
         //   }
         // }
         // return !(time && day && coach && student);
-
-        return time && day && coach && student ? false : true;
+        return time && day && coach && student && !missingAccountIds
+          ? false
+          : true;
       } else {
-        let student = this.course_order.students.length > 0 ? true : false;
+        // let student = this.course_order.students.length > 0 ? true : false;
+        // return !student;
+        let hasStudents = this.course_order.students.length > 0;
+        let missingAccountIds =
+          this.course_order.students.filter((v) => !v.account_id).length > 0;
+
+        let student = hasStudents && !missingAccountIds;
         return !student;
+
         // let student = true;
         // if (this.course_order.students.length > 0) {
         //   if (
