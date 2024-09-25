@@ -729,6 +729,18 @@ const orderModules = {
             showCancelButton: false,
             showConfirmButton: false,
           });
+        } else if (error.response.data.message === "User not found.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("unable to register"),
+            text: VueI18n.t(
+              "please enter the student's name"
+            ),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
         }
       }
     },
@@ -1018,7 +1030,7 @@ const orderModules = {
                       studentUpdate.push({
                         "studentId": student.account_id,
                         "nicknameTh": student.nicknameTh,
-                        "class": student.class
+                        // "class": student.class
                       });
                     }
                   }
@@ -1556,6 +1568,18 @@ const orderModules = {
             title: VueI18n.t("something went wrong"),
             text: VueI18n.t(
               "please filter yourse class or nickname"
+            ),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (err.response.data.message === "Parameter missing. Required username.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("unable to register"),
+            text: VueI18n.t(
+              "please enter the student's name"
             ),
             timer: 3000,
             timerProgressBar: true,
