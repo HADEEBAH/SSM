@@ -190,6 +190,8 @@ const adminCheckInModules = {
                             let totalCheckInCount = ''
                             let packages = ''
                             let options = ''
+                            let checkCoachChecked = ''
+
                             const compareDates = (a, b) => {
                                 const dateA = new Date(a.date);
                                 const dateB = new Date(b.date);
@@ -229,6 +231,7 @@ const adminCheckInModules = {
                                 studentName = `${entry.firstNameTh} ${entry.lastNameTh}`
                                 packages = entry.packageName
                                 options = entry.option_name
+                                checkCoachChecked = entry.checkInCoachStatus
 
 
                                 reports.push({
@@ -247,7 +250,7 @@ const adminCheckInModules = {
                                     // "แพ็คเกจ": packages ? packages : '-',
                                     "ช่วงเวลา": options ? options : '-',
                                     "ชื่อนักเรียน": filterData.checkinStudent ? studentName : '-',
-                                    "สถานะการเข้าสอนของโค้ช": filterData.checkinStudent ? totalCheckInCount : '0',
+                                    "สถานะการเข้าสอนของโค้ช": filterData.checkinStudent ? checkCoachChecked === 'punctual' ? 'เช็คอินแล้ว' : 'ยังไม่เช็คอิน' : '-',
                                     "สถานะเช็คอิน": filterData.checkinStudent ? satuscheckin ? satuscheckin : '' : '',
                                     "จำนวนที่เช็คอิน": filterData.checkinStudent ? checkInCountPerDay : '0',
                                     "วันเรียนทั้งหมด": filterData.checkinStudent ? totalCheckInCount : '0',
