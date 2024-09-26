@@ -187,7 +187,7 @@
         show-select
         class="elevation-1 header-table"
         :items-per-page="itemsPerPage"
-        :server-items-length="search_bool ? orders.totalRows : orders.count"
+        :server-items-length="search_filter ? orders.totalRows : orders.count"
         :options.sync="options"
         ref="orders"
         :footer-props="{

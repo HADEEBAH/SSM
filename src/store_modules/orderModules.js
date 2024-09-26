@@ -1317,7 +1317,7 @@ const orderModules = {
               context.commit("SetOrderIsStatus", false);
               if (error?.response?.data?.message == "Parents cannot purchase courses for them") {
                 Swal.fire({
-                  icon: "error",
+                  icon: "warning",
                   title: VueI18n.t("unable to register"),
                   text: VueI18n.t(
                     "parents cannot resave the course to their parents"
@@ -1329,8 +1329,8 @@ const orderModules = {
                 });
               } else if (error?.response?.data?.message === "Over Registration") {
                 Swal.fire({
-                  icon: "error",
-                  title: VueI18n.t("something went wrong"),
+                  icon: "warning",
+                  title: VueI18n.t("unable to registere"),
                   text: VueI18n.t(
                     "cannot register , The seats are full"
                   ),
@@ -1342,7 +1342,7 @@ const orderModules = {
               } else if (error?.response?.data?.message == "Unable to register due to course and package status being closed.") {
                 Swal.fire({
                   icon: "warning",
-                  title: VueI18n.t("cannot register"),
+                  title: VueI18n.t("unable to register"),
                   text: VueI18n.t(
                     "unable to register due to course and package status being closed"
                   ),
@@ -1353,11 +1353,9 @@ const orderModules = {
                 });
               } else if (error?.response?.data?.message == "Cannot register , Because your orders are duplicated.") {
                 Swal.fire({
-                  icon: "error",
+                  icon: "warning",
                   title: VueI18n.t("unable to register"),
-                  text: VueI18n.t(
-                    "unable to register due to course and package status being closed"
-                  ),
+                  text: VueI18n.t("because your orders are duplicated"),
                   timer: 3000,
                   timerProgressBar: true,
                   showCancelButton: false,
@@ -1366,7 +1364,7 @@ const orderModules = {
               } else if (error?.response?.data?.message == "Over Registration") {
                 Swal.fire({
                   icon: "warning",
-                  title: VueI18n.t("something went wrong"),
+                  title: VueI18n.t("unable to register"),
                   text: VueI18n.t(
                     "cannot register , The seats are full"
                   ),
@@ -1377,7 +1375,7 @@ const orderModules = {
                 });
               } else if (error?.response?.data?.message == "over study end date") {
                 Swal.fire({
-                  icon: "error",
+                  icon: "warning",
                   title: VueI18n.t("unable to register"),
                   text: VueI18n.t(
                     "the class period has ended"
@@ -1389,7 +1387,7 @@ const orderModules = {
                 });
               } else if (error?.response?.data?.message == "over register date") {
                 Swal.fire({
-                  icon: "error",
+                  icon: "warning",
                   title: VueI18n.t("unable to register"),
                   text: VueI18n.t(
                     "outside the register date"
@@ -1401,7 +1399,7 @@ const orderModules = {
                 });
               } else if (error?.response?.data?.message == "Cannot register , fail at course monitor , course-coach or seats are full") {
                 Swal.fire({
-                  icon: "error",
+                  icon: "warning",
                   title: VueI18n.t("unable to register"),
                   text: VueI18n.t(
                     "unable to register Due to insufficient seats or the coach teaching in another package"
@@ -1416,7 +1414,7 @@ const orderModules = {
                   // icon: "error",
                   // title: VueI18n.t("unable to register"),
                   icon: "warning",
-                  title: VueI18n.t("warning"),
+                  title: VueI18n.t("unable to register"),
                   text: VueI18n.t(
                     "duplicate user in this course Unable to register"
                   ),
@@ -1430,9 +1428,9 @@ const orderModules = {
                 });
               } else if (error?.response?.data?.message === "User is duplicate in this course. Cannot enroll again") {
                 Swal.fire({
-                  icon: "error",
+                  icon: "warning",
                   title: VueI18n.t(
-                    "something went wrong"
+                    "unable to register"
                   ),
                   text: VueI18n.t(
                     "duplicate user in this course Unable to register"
@@ -1444,9 +1442,9 @@ const orderModules = {
                 });
               } else if (error?.response?.data?.message === "The price is not correct!!") {
                 Swal.fire({
-                  icon: "error",
+                  icon: "warning",
                   title: VueI18n.t(
-                    "something went wrong"
+                    "unable to register"
                   ),
                   text: VueI18n.t(
                     "the price is not correct payment cannot be processed"
@@ -1458,9 +1456,9 @@ const orderModules = {
                 });
               } else if (error?.response?.data?.message === "Cannot register , The seats are full.") {
                 Swal.fire({
-                  icon: "error",
+                  icon: "warning",
                   title: VueI18n.t(
-                    "something went wrong"
+                    "unable to register"
                   ),
                   text: VueI18n.t(
                     "cannot register , The seats are full"
@@ -1472,9 +1470,9 @@ const orderModules = {
                 });
               } else if (error?.response?.data?.message === "register duplicate") {
                 Swal.fire({
-                  icon: "error",
+                  icon: "warning",
                   title: VueI18n.t(
-                    "something went wrong"
+                    "unable to register"
                   ),
                   text: VueI18n.t(
                     "some students or students have already purchased the course"
@@ -1486,9 +1484,9 @@ const orderModules = {
                 });
               } else if (error?.response?.data?.message === "register Duplicate") {
                 Swal.fire({
-                  icon: "error",
+                  icon: "warning",
                   title: VueI18n.t(
-                    "something went wrong"
+                    "unable to register"
                   ),
                   text: VueI18n.t(
                     "some students or students have already purchased the course"
@@ -1500,7 +1498,7 @@ const orderModules = {
                 });
               } else if (error === "please enter your name and class") {
                 Swal.fire({
-                  icon: "error",
+                  icon: "warning",
                   title: VueI18n.t("unable to register"),
                   text: VueI18n.t(
                     "please enter your name and class"
@@ -1513,7 +1511,8 @@ const orderModules = {
               } else {
                 Swal.fire({
                   icon: "error",
-                  title: VueI18n.t("something went wrong"),
+                  title: VueI18n.t("unable to register"),
+                  text: error,
                   timer: 3000,
                   timerProgressBar: true,
                   showCancelButton: false,
@@ -1521,13 +1520,12 @@ const orderModules = {
                 });
               }
             }
-
           }
         } catch (error) {
           if (error?.response?.data?.message == "schoolTh not found.") {
             Swal.fire({
               icon: "warning",
-              title: VueI18n.t("something went wrong"),
+              title: VueI18n.t("this item cannot be made"),
               text: VueI18n.t(
                 "please filter yourse school"
               ),
@@ -1539,7 +1537,7 @@ const orderModules = {
           } else if (error?.response?.data?.message == "congenitalDiseaseTh not found.") {
             Swal.fire({
               icon: "warning",
-              title: VueI18n.t("something went wrong"),
+              title: VueI18n.t("this item cannot be made"),
               text: VueI18n.t(
                 "please filter yourse congenitalDisease"
               ),
@@ -1551,7 +1549,7 @@ const orderModules = {
           } else if (error?.response?.data?.message == "class not found.") {
             Swal.fire({
               icon: "warning",
-              title: VueI18n.t("something went wrong"),
+              title: VueI18n.t("this item cannot be made"),
               text: VueI18n.t(
                 "please filter yourse more class"
               ),
@@ -1563,7 +1561,7 @@ const orderModules = {
           } else if (error?.response?.data?.message == " not found nickname.") {
             Swal.fire({
               icon: "warning",
-              title: VueI18n.t("something went wrong"),
+              title: VueI18n.t("this item cannot be made"),
               text: VueI18n.t(
                 "please filter yourse nickname"
               ),
@@ -1582,7 +1580,7 @@ const orderModules = {
         if (err == "please enter your name and class") {
           Swal.fire({
             icon: "warning",
-            title: VueI18n.t("something went wrong"),
+            title: VueI18n.t("this item cannot be made"),
             text: VueI18n.t(
               "please filter yourse class or nickname"
             ),
@@ -1594,7 +1592,7 @@ const orderModules = {
         } else {
           Swal.fire({
             icon: "error",
-            title: VueI18n.t("something went wrong"),
+            title: VueI18n.t("this item cannot be made"),
             text: err,
             timer: 3000,
             timerProgressBar: true,

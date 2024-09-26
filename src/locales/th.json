@@ -85,6 +85,7 @@
     "because this course is full":"เนื่องจากคอร์สนี้เต็ม",
 
 
+
     "can't apply": "ไม่สามารถสมัครได้",
     "Can not use the same accountID to create Relations." : "ไม่สามารถใช้ผู้ใช้เดียวกันเพื่อสร้างความสัมพันธ์ได้",
     "can't find items in the basket" : "ไม่พบข้อมูลในตะกร้า",
@@ -857,6 +858,7 @@
     "the organizer of the lesson is longer than the specified length": "ผู้จัดสอนความยาวเกินกว่าที่กำหนด",
     "the wls has been edited" : "อาณาจักแก้ไขสำเร็จแล้ว",
     "this item cannot be made. Because it is a short course": "ไม่สามารถทำรายการนี้ได้ เนื่องกจากเป็นคอร์สระยะสั้น",
+    "this item cannot be made": "ไม่สามารถทำรายการนี้ได้",
     "there is a new discount":"มีส่วนลดเพิ่มเติม",
     "there is a discount" : "มีส่วนลด",
     "there is no substitute teacher" : "ไม่มีผู้สอนแทน", 
