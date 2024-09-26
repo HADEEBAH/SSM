@@ -1218,15 +1218,49 @@
               </v-col>
               <v-col cols="12" sm="6">
                 <label class="font-weight-bold">{{
+                  $t("coach checkin status")
+                }}</label>
+                <!-- :items="checkInStatusOptions" -->
+
+                <v-autocomplete
+                  v-model="export_data.coach_check_in_status"
+                  :items="coachCheckInStatusOptions"
+                  :item-text="$i18n.locale == 'th' ? 'nameTh' : 'nameEn'"
+                  item-value="value"
+                  outlined
+                  multiple
+                  color="#FF6B81"
+                  item-color="#FF6B81"
+                  class="py-1"
+                  :placeholder="this.$t('please select a coach checkin status')"
+                  dense
+                  @change="checkStatusOptions"
+                >
+                  <template v-slot:selection="{ item, index }">
+                    <v-chip dark v-if="index === 0" color="#FF6B81">
+                      <span>{{
+                        $i18n.locale == "th" ? item.nameTh : item.nameEn
+                      }}</span>
+                    </v-chip>
+                    <span v-if="index === 1" class="grey--text text-caption">
+                      (+{{ export_data.coach_check_in_status.length - 1 }}
+                      {{ $t("others") }})
+                    </span>
+                  </template>
+                </v-autocomplete>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <label class="font-weight-bold">{{
                   $t("check in status")
                 }}</label>
                 <!-- :items="checkInStatusOptions" -->
 
                 <v-autocomplete
                   v-model="export_data.check_in_status_options"
-                  :items="filteredCheckInStatusOptions"
+                  :items="checkInStatusOptions"
                   :item-text="$i18n.locale == 'th' ? 'nameTh' : 'nameEn'"
                   item-value="value"
+                  :disabled="coachCheckInData"
                   outlined
                   multiple
                   color="#FF6B81"
@@ -1472,8 +1506,25 @@ export default {
       // {
       //   nameEn: "no check in",
       //   nameTh: "ยังไม่มีการเช็คอิน",
-      //   value: "noCheckeIn",
+      //   value: "noCheckIn",
       // },
+      {
+        nameEn: "no status has been selected yet",
+        nameTh: "ยังไม่มีการเลือกสถานะ",
+        value: "noStatus",
+      },
+    ],
+    coachCheckInStatusOptions: [
+      {
+        nameEn: "already check-in",
+        nameTh: "เช็คอินแล้ว",
+        value: "CheckIn",
+      },
+      {
+        nameEn: "No check-in yet",
+        nameTh: "ยังไม่มีการเช็คอิน",
+        value: "noCheckIn",
+      },
     ],
     // {
     //     // nameEn: "no check in",
@@ -1499,8 +1550,10 @@ export default {
       package_id: [],
       options_id: [],
       course_type_id: [],
+      coach_check_in_status: [],
       storedData: "",
     },
+    coachCheckInData: false,
   }),
 
   created() {
@@ -1530,17 +1583,17 @@ export default {
       options_data: "CourseModules/getOptions",
       getCheckinFilter: "adminCheckInModules/getCheckinFilter",
     }),
-    filteredCheckInStatusOptions() {
-      let options = this.checkInStatusOptions;
-      if (this.storedData.account_id == "200438430336") {
-        options.push({
-          nameEn: "no check in",
-          nameTh: "ยังไม่มีการเช็คอิน",
-          value: "noCheckIn",
-        });
-      }
-      return options;
-    },
+    // filteredCheckInStatusOptions() {
+    //   let options = this.checkInStatusOptions;
+    //   if (this.storedData.account_id == "200438430336") {
+    //     options.push({
+    //       nameEn: "no check in",
+    //       nameTh: "ยังไม่มีการเช็คอิน",
+    //       value: "noCheckIn",
+    //     });
+    //   }
+    //   return options;
+    // },
     formattedStartTime: {
       get() {
         // Return time with minutes set to 00
@@ -1618,7 +1671,13 @@ export default {
       GetOptions: "CourseModules/GetOptions",
       CheckInFilter: "adminCheckInModules/CheckInFilter",
     }),
-
+    async checkStatusOptions() {
+      this.coachCheckInData = false;
+      this.coachCheckInData =
+        this.export_data.coach_check_in_status.length === 1 &&
+        this.export_data.coach_check_in_status.includes("noCheckIn");
+      return this.coachCheckInData;
+    },
     async exportCheckin() {
       this.loading_export = true;
       await this.CheckInFilter({ export_data: this.export_data });
@@ -1657,6 +1716,7 @@ export default {
         package_id: [],
         options_id: [],
         course_type_id: [],
+        coach_check_in_status: [],
       };
     },
     width() {
