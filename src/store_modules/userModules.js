@@ -177,12 +177,12 @@ const userModules = {
                     data.data.image = data.data.image && data.data.image != "" ? `${process.env.VUE_APP_URL}/api/v1/files/${data.data.image}` : ""
                     context.commit("SetShowById", [])
                     data.data.class = data.data.class ? data.data.class : {
-                        classNameTh: "",
-                        classNameEn: ""
+                        classNameTh: null,
+                        classNameEn: null
                     }
                     data.data.school = data.data.school ? data.data.school : {
-                        schoolNameTh: "",
-                        schoolNameEn: ""
+                        schoolNameTh: null,
+                        schoolNameEn: null
                     }
                     context.commit("SetShowById", data.data)
                 }

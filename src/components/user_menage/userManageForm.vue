@@ -314,7 +314,7 @@
                               <label-custom :text="$t('class')"></label-custom>
                               <v-autocomplete
                                 :value="
-                                  show_by_id.class.classNameTh === ''
+                                  !show_by_id.class.classNameTh || show_by_id.class.classNameTh === ''
                                     ? $t('please enter the class')
                                     : show_by_id.class.classNameTh
                                 "
@@ -407,7 +407,7 @@
 
                               <v-autocomplete
                                 :value="
-                                  show_by_id.class.classNameTh === ''
+                                  show_by_id.class.classNameTh === '' || !show_by_id.class.classNameTh
                                     ? $t('please enter the class')
                                     : show_by_id.class.classNameTh
                                 "

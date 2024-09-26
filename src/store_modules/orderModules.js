@@ -562,9 +562,12 @@ const orderModules = {
             );
             let itemRole = '';
 
-            for (const items of data.data.roles) {
-              itemRole = items.roleId;
+            if (data?.data?.roles) {
+              for (const items of data?.data?.roles) {
+                itemRole = items.roleId;
+              }
             }
+
 
             if (!studentUpdate.some(v => v.studentId === student.account_id)) {
               if (itemRole === 'R_5') {
@@ -583,7 +586,7 @@ const orderModules = {
                   studentUpdate.push({
                     "studentId": student.account_id,
                     "nicknameTh": student.nicknameTh,
-                    "class": ''
+                    "class": null
                   });
                 }
               }
@@ -719,6 +722,18 @@ const orderModules = {
             title: VueI18n.t("unable to register"),
             text: VueI18n.t(
               "please enter your name and class"
+            ),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error.response.data.message === "User not found.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("unable to register"),
+            text: VueI18n.t(
+              "please enter the student's name"
             ),
             timer: 3000,
             timerProgressBar: true,
@@ -1015,7 +1030,7 @@ const orderModules = {
                       studentUpdate.push({
                         "studentId": student.account_id,
                         "nicknameTh": student.nicknameTh,
-                        "class": student.class
+                        // "class": student.class
                       });
                     }
                   }
@@ -1081,17 +1096,17 @@ const orderModules = {
               : course.time.timeId,
             // time: course.time,
             time: !course.apply_for_others && !course.apply_for_yourself ? {
-              start: course.coach.start || course.time.start,
-              end: course.coach.end || course.time.start,
+              start: course.coach.start || course.time.start, // Default to 19:00 if not available
+              end: course.coach.end || course.time.end,     // Default to 20:00 if not available
               timeData: [
                 {
                   maximumStudent: course.coach.maximumStudent || course.time.maximumStudent,
                   dayOfWeekId: course.coach.dayOfWeekId || course.time.dayOfWeekId,
                   timeId: course.coach.timeId || course.time.timeId,
-                  courseCoachId: course.coach.courseCoachId || course.coach.course_coach_id,
-                  coach_name: course.coach.fullNameTh || course.coach.coach_name,
-                  coach_name_en: course.coach.fullNameEn || course.coach.coach_name_en,
-                  coach_id: course.coach.coachId || course.coach.coach_id
+                  courseCoachId: course.coach.courseCoachId || course.day.course_coach_id,
+                  coach_name: course.coach.fullNameTh || course.coach_name,
+                  coach_name_en: course.coach.fullNameEn || course.coach_name_en,
+                  coach_id: course.coach.coachId || course.coach
                 }
               ]
             } : course.time,
@@ -1161,6 +1176,7 @@ const orderModules = {
           let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/account/student/list`, studentUpdate, config)
           if (data.statusCode === 201) {
             try {
+              // const localhost = 'http://localhost:3002'
               let { data } = await axios.post(
                 // `${localhost}/api/v1/order/regis/course`,
                 `${process.env.VUE_APP_URL}/api/v1/order/regis/course`,
@@ -1583,6 +1599,18 @@ const orderModules = {
             title: VueI18n.t("this item cannot be made"),
             text: VueI18n.t(
               "please filter yourse class or nickname"
+            ),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (err.response.data.message === "Parameter missing. Required username.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("unable to register"),
+            text: VueI18n.t(
+              "please enter the student's name"
             ),
             timer: 3000,
             timerProgressBar: true,

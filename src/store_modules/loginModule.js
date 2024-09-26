@@ -197,12 +197,12 @@ const loginModules = {
                 if (data.statusCode === 200) {
                     if (data.data?.userOneId) {
                         data.data.school = data.data?.school ? data.data.school : {
-                            schoolNameTh : "",
-                            schoolNameEn : "",
+                            schoolNameTh : null,
+                            schoolNameEn : null,
                         }
                         data.data.class = data.data?.class ? data.data.class : {
-                            classNameTh : "",
-                            classNameEn : "",
+                            classNameTh : null,
+                            classNameEn : null,
                         }
                         if (type === 'student') {
                             context.commit("SetUserStudentData", [data.data])

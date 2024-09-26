@@ -216,13 +216,13 @@
             outlined
             @keydown="Validation($event, 'free-nonum')"
             dense
-            :disabled="profile_detail?.nicknameTh"
             @input="
               realtimeCheckNickname(
                 course_order.students.find((v) => !v.is_other).nicknameTh
               )
             "
           >
+            <!-- :disabled="profile_detail?.nicknameTh" -->
           </v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -243,9 +243,9 @@
                 course_order.students.find((v) => !v.is_other)
               )
             "
-            :disabled="profile_detail.class.classNameTh"
             :placeholder="$t('please specify class')"
           >
+            <!-- :disabled="profile_detail.class.classNameTh" -->
             <template #no-data>
               <v-list-item>
                 {{ $t("data not found") }}
@@ -263,8 +263,8 @@
             outlined
             dense
             color="#ff6b81"
-            :disabled="profile_detail.school.schoolNameTh"
           >
+            <!-- :disabled="profile_detail.school.schoolNameTh" -->
           </v-text-field>
         </v-col>
         <!-- Food allergicList -->
@@ -279,8 +279,8 @@
             outlined
             dense
             color="#ff6b81"
-            :disabled="profile_detail.congenitalDisease !== null"
           >
+            <!-- :disabled="profile_detail.congenitalDisease !== null" -->
           </v-text-field>
         </v-col>
         <v-col
@@ -653,11 +653,11 @@
                     outlined
                     v-model="student.nicknameTh"
                     :placeholder="$t('nickname')"
-                    :disabled="student?.nicknameData"
                     color="#ff6B81"
                     @keydown="Validation($event, 'free-nonum')"
                     @input="realtimeCheckNickname(student.nicknameTh)"
                   ></v-text-field>
+                  <!-- :disabled="student?.nicknameData" -->
                 </v-col>
                 <!-- CLASS -->
                 <v-col cols="12" sm="6" v-if="student.role === 'R_5'">
@@ -673,9 +673,9 @@
                     outlined
                     dense
                     @input="realtimeCheckClass(student.class, student)"
-                    :disabled="student?.classData"
                     :placeholder="$t('please specify class')"
                   >
+                    <!-- :disabled="student?.classData" -->
                     <template #no-data>
                       <v-list-item>
                         {{ $t("data not found") }}
@@ -693,8 +693,8 @@
                     outlined
                     dense
                     color="#ff6b81"
-                    :disabled="student.schoolData"
                   >
+                    <!-- :disabled="student.schoolData" -->
                   </v-text-field>
                 </v-col>
                 <!-- ALERGICT -->
@@ -709,8 +709,8 @@
                     outlined
                     dense
                     color="#ff6b81"
-                    :disabled="student.congenitalData"
                   >
+                    <!-- :disabled="student.congenitalData" -->
                   </v-text-field>
                 </v-col>
                 <v-col
@@ -1230,9 +1230,9 @@ export default {
           ],
           is_account: false,
           is_other: true,
-          class: "",
-          nickName: "",
-          otherClass: "",
+          class: null,
+          nickName: null,
+          otherClass: null,
         });
       } else {
         this.course_order.students.forEach((student, index) => {
@@ -1280,11 +1280,11 @@ export default {
           parents: [],
           is_account: false,
           is_other: true,
-          class: "",
-          nickName: "",
-          school: "",
-          congenital: "",
-          otherClass: "",
+          class: null,
+          nickName: null,
+          school: null,
+          congenital: null,
+          otherClass: null,
         });
       } else {
         this.course_order.students.forEach((student, index) => {
@@ -1460,6 +1460,8 @@ export default {
         let coach =
           this.coachSelect || this.course_order.coach_id ? true : false;
         let student = this.course_order.students.length > 0 ? true : false;
+        let missingAccountIds =
+          this.course_order.students.filter((v) => !v.account_id).length > 0;
         // if (this.course_order.students.length > 0) {
         //   if (
         //     this.course_order.students.filter((v) => !v.account_id).length > 0
@@ -1470,11 +1472,19 @@ export default {
         //   }
         // }
         // return !(time && day && coach && student);
-
-        return time && day && coach && student ? false : true;
+        return time && day && coach && student && !missingAccountIds
+          ? false
+          : true;
       } else {
-        let student = this.course_order.students.length > 0 ? true : false;
+        // let student = this.course_order.students.length > 0 ? true : false;
+        // return !student;
+        let hasStudents = this.course_order.students.length > 0;
+        let missingAccountIds =
+          this.course_order.students.filter((v) => !v.account_id).length > 0;
+
+        let student = hasStudents && !missingAccountIds;
         return !student;
+
         // let student = true;
         // if (this.course_order.students.length > 0) {
         //   if (
@@ -1748,10 +1758,10 @@ export default {
       return originalArray;
     },
     CreateReserve() {
-      let checkNickname = "";
-      let checkClass = "";
-      let checkSchool = "";
-      let checkcongenital = "";
+      let checkNickname = null;
+      let checkClass = null;
+      let checkSchool = null;
+      let checkcongenital = null;
       let roles = "";
       let yourself = this.course_order.apply_for_yourself;
 
