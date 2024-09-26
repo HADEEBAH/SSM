@@ -132,6 +132,7 @@ const adminCheckInModules = {
             let startDate = ''
             let endDate = ''
             let courseType = ''
+            let coachCheckInStatus = ''
             if (export_data) {
                 for (const idCoach of export_data.coach_id) {
                     coachId += `&accountId=${idCoach}`
@@ -154,6 +155,9 @@ const adminCheckInModules = {
                 for (const typeCourse of export_data.course_type_id) {
                     courseType += `&courseTypeId=${typeCourse}`
                 }
+                for (const checkInStatusCoach of export_data.coach_check_in_status) {
+                    coachCheckInStatus += `&stateCkeckIn=${checkInStatusCoach}`
+                }
 
                 export_data.start_time ? startTime = `startTime=${export_data.start_time}` : ''
                 export_data.end_time ? endTime = `&endTime=${export_data.end_time}` : ''
@@ -170,15 +174,15 @@ const adminCheckInModules = {
                     }
                 }
                 // let localhost = "http://localhost:3000"
-                // let endpoint = `${localhost}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}${courseType}`
-                let endpoint = `${process.env.VUE_APP_URL}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}${courseType}`
-                // let endpoint = `${process.env.VUE_APP_URL}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}`
+                // let endpoint = `${localhost}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}${courseType}${coachCheckInStatus}`
+                let endpoint = `${process.env.VUE_APP_URL}/api/v1/admincourse/export-coach-checkin?${startTime}${endTime}${coachId}${courseId}${startDate}${endDate}${courseStatus}${packageId}${optionId}${checkInStatus}${courseType}${coachCheckInStatus}`
                 let { data } = await axios.get(endpoint, config)
                 if (data.statusCode == 200) {
                     let reports = []
                     await data.data.forEach(filterData => {
                         if (filterData.checkinStudent) {
                             let dateCheckIn = ''
+                            let studentCheckInId = ''
                             let studyDate = ''
                             let satuscheckin = ''
                             let studentName = ''
@@ -186,6 +190,8 @@ const adminCheckInModules = {
                             let totalCheckInCount = ''
                             let packages = ''
                             let options = ''
+                            let checkCoachChecked = ''
+
                             const compareDates = (a, b) => {
                                 const dateA = new Date(a.date);
                                 const dateB = new Date(b.date);
@@ -197,23 +203,35 @@ const adminCheckInModules = {
                             // Display the status sorted by date
                             filterData.checkinStudent.forEach(entry => {
                                 dateCheckIn = entry.checkInTimeStamp
+                                studentCheckInId = entry.checkinStudentId
                                 studyDate = entry.date
-                                satuscheckin = entry.status ? (
-                                  entry.status === "emergency leave" ? "ลาฉุกเฉิน" : (
-                                    entry.status === "punctual" ? "ตรงเวลา" : (
-                                      entry.status === "absent" ? "ขาด" : (
-                                        entry.status === "leave" ? "ลา" : (
-                                          entry.status === "late" ? "สาย" : null
+                                satuscheckin = entry.status
+                                if (!studentCheckInId) {
+                                    satuscheckin = entry.status === null ? "ยังไม่มีการเช็คอิน" : ''
+                                } else if (studentCheckInId && !dateCheckIn) {
+                                    satuscheckin = entry.status === null ? "ยังไม่มีการเช็คอิน" : ''
+                                } else if (studentCheckInId && dateCheckIn && !satuscheckin) {
+                                    satuscheckin = entry.status === null ? "ยังไม่มีการเลือกสถานะ" : ''
+                                } else {
+                                    satuscheckin = entry.status ? (
+                                        entry.status === "emergency leave" ? "ลาฉุกเฉิน" : (
+                                            entry.status === "punctual" ? "ตรงเวลา" : (
+                                                entry.status === "absent" ? "ขาด" : (
+                                                    entry.status === "leave" ? "ลา" : (
+                                                        entry.status === "late" ? "สาย" : null
+                                                    )
+                                                )
+                                            )
                                         )
-                                      )
-                                    )
-                                  )
-                                ) : null
+                                    ) : null
+                                }
+
                                 checkInCountPerDay = entry.countCheckIn
                                 totalCheckInCount = entry.totalDay
                                 studentName = `${entry.firstNameTh} ${entry.lastNameTh}`
                                 packages = entry.packageName
                                 options = entry.option_name
+                                checkCoachChecked = entry.checkInCoachStatus
 
 
                                 reports.push({
@@ -232,7 +250,8 @@ const adminCheckInModules = {
                                     // "แพ็คเกจ": packages ? packages : '-',
                                     "ช่วงเวลา": options ? options : '-',
                                     "ชื่อนักเรียน": filterData.checkinStudent ? studentName : '-',
-                                    "สถานะเช็คอิน": filterData.checkinStudent ? satuscheckin !== null ? satuscheckin : "ยังไม่มีการเลือกสถานะ" : '-',
+                                    "สถานะการเข้าสอนของโค้ช": filterData.checkinStudent ? checkCoachChecked === 'punctual' ? 'เช็คอินแล้ว' : 'ยังไม่เช็คอิน' : '-',
+                                    "สถานะเช็คอิน": filterData.checkinStudent ? satuscheckin ? satuscheckin : '' : '',
                                     "จำนวนที่เช็คอิน": filterData.checkinStudent ? checkInCountPerDay : '0',
                                     "วันเรียนทั้งหมด": filterData.checkinStudent ? totalCheckInCount : '0',
                                     // "สถานะเช็คอิน": filterData.checkinStudent ? satuscheckin : '-',
