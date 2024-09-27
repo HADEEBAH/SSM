@@ -445,8 +445,10 @@ const coachModules = {
           items.compensationEndTime = items.compensationEndTime ? moment(items.compensationEndTime).format("HH:mm") : ''
           return items
         })
+        // const { data } = await axios.patch(`http://localhost:3000/api/v1/checkin/checkin-studentall`, students, config)
+        const { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/checkin/checkin-studentall`, students, config)
         // const { data } = await axios.patch(`http://localhost:3000/api/v1/checkin/studentall`, students, config)
-        const { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/checkin/studentall`, students, config)
+        // const { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/checkin/studentall`, students, config)
         if (data.statusCode == 200) {
           context.commit("SetStudentCheckInIsLoading", false)
           await Swal.fire({

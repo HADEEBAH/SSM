@@ -1254,7 +1254,6 @@
                   $t("check in status")
                 }}</label>
                 <!-- :items="checkInStatusOptions" -->
-
                 <v-autocomplete
                   v-model="export_data.check_in_status_options"
                   :items="checkInStatusOptions"
@@ -1676,6 +1675,10 @@ export default {
       this.coachCheckInData =
         this.export_data.coach_check_in_status.length === 1 &&
         this.export_data.coach_check_in_status.includes("noCheckIn");
+
+      if (this.coachCheckInData) {
+        this.export_data.check_in_status_options = [];
+      }
       return this.coachCheckInData;
     },
     async exportCheckin() {
