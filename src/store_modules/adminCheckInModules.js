@@ -429,11 +429,15 @@ const adminCheckInModules = {
                 // const { data } = await axios.get(`${localhost}/api/v1/adminfeature/schedule?courseId=${course}&coachId=${coach}&dowId=${dayOfWeek}&timeId=${time}&timeStart=${timeStart}&timeEnd=${timeEnd}`, config)
                 const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminfeature/schedule?courseId=${course}&coachId=${coach}&dowId=${dayOfWeek}&timeId=${time}&timeStart=${timeStart}&timeEnd=${timeEnd}`, config)
                 if (data.statusCode == 200) {
-                    for await (let items of data.data) {
-                        // data.data.map(items => {
+                    // for await (let items of data.data) {
+                    data.data.map((items) => {
+                        const momentDate = moment(items.date).format("YYYY/MM/DD")
+                        items.dateMoment = moment(momentDate)
+                        // items.momentDate =
                         if (items?.checkInStudent) {
                             // context.dispatch("CheckInCoach", { checkInData: checkIn, index: index })
                             items?.checkInStudent.map(item => {
+
                                 item.status ? item.status : item.status = 'punctual'
 
                                 if (item?.compensationDate) {
@@ -457,9 +461,13 @@ const adminCheckInModules = {
                         }
 
                         response.push(items)
-                        // return items
-                        // })
-                    }
+                    })
+
+                    // data.data.map(items => {
+
+                    // return items
+                    // })
+                    // }
                     await context.commit("SetScheduleCheckin", response)
                     context.commit("SetScheduleCheckinIsLoadIng", false)
                 }
@@ -494,8 +502,9 @@ const adminCheckInModules = {
                     }
                     return items
                 })
-                // const { data } = await axios.patch(`http://localhost:3000/api/v1/adminfeature/checkinallstudent`, dataPayload, config)
-                const { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/adminfeature/checkinallstudent`, dataPayload, config)
+                // const { data } = await axios.patch(`http://localhost:3000/api/v1/checkin/checkin-studentall`, dataPayload, config)
+                const { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/checkin/checkin-studentall`, dataPayload, config)
+                // const { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/adminfeature/checkinallstudent`, dataPayload, config)
                 if (data.statusCode == 200) {
                     Swal.fire({
                         icon: "success",

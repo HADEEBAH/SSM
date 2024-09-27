@@ -156,12 +156,14 @@
                 <v-col class="d-flex align-center font-bold text-base"
                   >{{ GenDate(schedule.date) }}
                 </v-col>
+                <!-- :disabled="schedule.checkedIn == 1" -->
+                <!-- <pre>{{ schedule }}</pre> -->
                 <v-col cols="auto">
                   <v-btn
                     depressed
                     color="#ff6b81"
-                    :dark="!schedule.checkedIn == 1"
-                    :disabled="schedule.checkedIn == 1"
+                    :dark="!checkDisable(schedule)"
+                    :disabled="checkDisable(schedule)"
                     @click="CheckedInCoach(schedule, IndexSchedule)"
                   >
                     {{ $t("check in teach") }}
@@ -725,6 +727,16 @@ export default {
       UpdateCheckinStudents: "adminCheckInModules/UpdateCheckinStudents",
       CheckInCoach: "adminCheckInModules/CheckInCoach",
     }),
+
+    checkDisable(schedule) {
+      const current = moment().format("YYYY/MM/DD");
+      const currentMoment = moment(current);
+      let ckeckedBool = false;
+      if (schedule.checkedIn === 1) {
+        ckeckedBool = true;
+      }
+      return currentMoment.isBefore(schedule.dateMoment) || ckeckedBool;
+    },
     FilterStatusCheckIn() {
       for (const items of this.scheduleCheckin) {
         if (items.courseTypeId === "CT_2") {
@@ -851,7 +863,7 @@ export default {
               await this.UpdateCheckinStudents({
                 payload: scheduleData.checkInStudent.map((items) => {
                   items.date = scheduleData.date.replaceAll("/", "-");
-                  items.courseId = scheduleData.courseId
+                  items.courseId = scheduleData.courseId;
                   return items;
                 }),
               });
