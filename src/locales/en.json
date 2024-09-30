@@ -312,6 +312,8 @@
     "enter username" : "Enter username",
     "error information": "Error information",
     "email" : "Email",
+    "email is duplicate" : "Email is duplicate",
+    
     "emergency leave" : "Emergency leave",
     "edit holiday": "Edit holiday",
     "end time": "End time",
@@ -576,6 +578,9 @@
     "please confirm the new password again" : "Please confirm the new password again",
     "please confirm your passwords are the same" : "Please confirm your passwords are the same",
     "please enter discount" : "Please enter discount",
+    "please enter a ref code" : "Please enter ref code",
+    "please enter a client id" : "Please enter client id",
+    "please enter a secret key" : "Please enter secret key",
     "please enter a checkbox" : "Please enter a checkbox",
     "please enter the class" : "Please enter the class",
     "please enter a 10-digit phone number" : "Please enter a 10-digit phone number",

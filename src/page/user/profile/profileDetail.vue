@@ -673,19 +673,19 @@ export default {
                 email: this.profile_detail.email,
                 schoolTh: this.profile_detail.school.schoolNameTh
                   ? this.profile_detail.school.schoolNameTh
-                  : null,
+                  : "",
                 nicknameTh: this.profile_detail?.nicknameTh
                   ? this.profile_detail.nicknameTh
-                  : null,
+                  : "",
                 congenitalDiseaseTh: this.profile_detail?.congenitalDisease
                   ? this.profile_detail.congenitalDisease
-                  : null,
+                  : "",
                 className:
                   this.profile_detail?.userRoles?.roleId == "R_5"
                     ? this.otherClass
                       ? this.otherClass
                       : this.selectedClass?.classNameTh || this.selectedClass
-                    : null,
+                    : "",
               };
 
               this.user_detail = JSON.parse(localStorage.getItem("userDetail"));

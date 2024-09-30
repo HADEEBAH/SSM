@@ -150,11 +150,13 @@ const RegisterModules = {
             context.commit("SetIsLoading", true)
             try {
                 let phone_number = context.state.user_one_id.phone_number.replaceAll("-", "")
+                // let localhost = "http://localhost:3000"
+                // let { data } = await axios.post(`${localhost}/api/v1/register`
                 let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/register`, {
                     "accountTitleTh": "",
                     "firstNameTh": context.state.user_one_id.firstname_th,
                     "lastNameTh": context.state.user_one_id.lastname_th,
-                    "accountTitleEng": "",
+                    "accountTitleEng": null,
                     "firstNameEng": context.state.user_one_id.firstname_en,
                     "lastNameEng": context.state.user_one_id.lastname_en,
                     "idCardType": "",
@@ -199,32 +201,76 @@ const RegisterModules = {
                 context.commit("SetIsLoading", false)
                 let text = ""
                 if (response?.data.statusCode === 400) {
-                    switch (response.data.message) {
-                        case "The mobile no must be at least 10 characters.":
-                            text = VueI18n.t("mobile number must have at least 10 characters")
-                            break;
-                        case "username duplicate in wsl":
-                            text = VueI18n.t("username already exists in warraphat")
-                            break;
-                        case "username duplicate in oneID":
-                            text = VueI18n.t("username already exists")
-                            break;
-                        case "The password format is invalid.":
-                            text = VueI18n.t("the password format is incorrect")
-                            break;
-                        case "The first name eng format is invalid.":
-                            text = VueI18n.t("the English name format is invalid")
-                            break;
-                        case "The last name th format is invalid.":
-                            text = VueI18n.t("invalid last name thai format")
-                            break;
-                        case "The last name en format is invalid.":
-                            text = VueI18n.t("invalid last name eng format")
-                            break;
+                    //     case "The mobile no must be at least 10 characters.":
+                    //         text = VueI18n.t("mobile number must have at least 10 characters")
+                    //         break;
+                    //     case "username duplicate in wsl":
+                    //         text = VueI18n.t("username already exists in warraphat")
+                    //         break;
+                    //     case "username duplicate in oneID":
+                    //         text = VueI18n.t("username already exists")
+                    //         break;
+                    //     case "The password format is invalid.":
+                    //         text = VueI18n.t("the password format is incorrect")
+                    //         break;
+                    //     case "The first name eng format is invalid.":
+                    //         text = VueI18n.t("the English name format is invalid")
+                    //         break;
+                    //     case "The last name th format is invalid.":
+                    //         text = VueI18n.t("invalid last name thai format")
+                    //         break;
+                    //     case "The last name en format is invalid.":
+                    //         text = VueI18n.t("invalid last name eng format")
+                    //         break;
+                    // }
+
+                    if (response.data.message?.mobile_no?.includes("The mobile no field is required.")) {
+                        text = VueI18n.t("please enter your phone number")
+
+                    } else if (response.data.message?.username?.includes("The username field is required.")) {
+                        text = VueI18n.t("please enter your username")
+
+                    } else if (response.data.message?.password?.includes("The password field is required.")) {
+                        text = VueI18n.t("enter password")
+
+                    } else if (response.data.message?.ref_code?.includes("The ref code field is required.")) {
+                        text = VueI18n.t("please enter a ref code")
+
+                    } else if (response.data.message?.clientId?.includes("The client id field is required.")) {
+                        text = VueI18n.t("please enter your username")
+
+                    } else if (response.data.message?.secretKey?.includes("The secret key field is required.")) {
+                        text = VueI18n.t("please enter a secret key")
+
+                    } else if (response.data.message?.email?.includes("email duplicate")) {
+                        text = VueI18n.t("email is duplicate")
+
+                    } else if (response.data.message === 'The mobile no must be at least 10 characters.') {
+                        text = VueI18n.t("mobile number must have at least 10 characters")
+
+                    } else if (response.data.message === "username duplicate in wsl") {
+                        text = VueI18n.t("username already exists in warraphat")
+
+                    } else if (response.data.message === 'username duplicate in oneID') {
+                        text = VueI18n.t("username already exists")
+
+                    } else if (response.data.message === 'The password format is invalid.') {
+                        text = VueI18n.t("the password format is incorrect")
+
+                    } else if (response.data.message === 'The last name th format is invalid.') {
+                        text = VueI18n.t("invalid last name thai format")
+
+                    } else if (response.data.message === 'The first name eng format is invalid.') {
+                        text = VueI18n.t("the English name format is invalid")
+                    } else if (response.data.message === 'The last name en format is invalid.') {
+                        text = VueI18n.t("invalid last name eng format")
+                    } else {
+                        text = "byee"
+
                     }
                     setTimeout(() => {
                         Swal.fire({
-                            icon: 'error',
+                            icon: 'warning',
                             title: `${VueI18n.t("please fill out the information correctly")}`,
                             text: text ? text : response.data.message,
                             showDenyButton: false,
@@ -252,12 +298,14 @@ const RegisterModules = {
             context.commit("SetIsLoading", true)
             try {
                 let phone_number = context.state.user_one_id.phone_number.replaceAll("-", "")
+                // let localhost = "http://localhost:3000"
+                // let { data } = await axios.post(`${localhost}/api/v1/register`
                 let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/register`
                     , {
-                        "accountTitleTh": "",
+                        "accountTitleTh": null,
                         "firstNameTh": context.state.user_one_id.firstname_th,
                         "lastNameTh": context.state.user_one_id.lastname_th,
-                        "accountTitleEng": "",
+                        "accountTitleEng": null,
                         "firstNameEng": context.state.user_one_id.firstname_en,
                         "lastNameEng": context.state.user_one_id.lastname_en,
                         "idCardType": "",
