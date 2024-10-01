@@ -151,7 +151,7 @@
                             <v-text-field
                               :disabled="!isEnabled"
                               @keydown="validate($event, 'th')"
-                              placeholder="-"
+                              :placeholder="$t('please filter yourse nickname')"
                               v-model="show_by_id.nicknameTh"
                               outlined
                               dense
@@ -166,7 +166,7 @@
                             <v-text-field
                               :disabled="!isEnabled"
                               @keydown="validate($event, 'en')"
-                              placeholder="-"
+                              :placeholder="$t('please filter yourse nickname')"
                               v-model="show_by_id.nicknameEn"
                               :rules="rules.name"
                               outlined
@@ -212,7 +212,9 @@
                             <label-custom :text="$t('class')"></label-custom>
                             <v-text-field
                               :disabled="!isEnabled"
-                              placeholder="-"
+                              :placeholder="
+                                $t('please filter yourse more class')
+                              "
                               v-model="show_by_id.class.classNameTh"
                               outlined
                               dense
@@ -246,7 +248,9 @@
                             ></label-custom>
                             <v-text-field
                               :disabled="!isEnabled"
-                              placeholder="-"
+                              :placeholder="
+                                $t('please filter yourse congenitalDisease')
+                              "
                               v-model="show_by_id.congenitalDisease"
                               outlined
                               dense
@@ -262,7 +266,7 @@
                             <v-text-field
                               :disabled="!isEnabled"
                               @keydown="validate($event, 'th')"
-                              placeholder="-"
+                              :placeholder="$t('please filter yourse school')"
                               v-model="show_by_id.school.schoolNameTh"
                               outlined
                               dense
@@ -423,7 +427,7 @@
                             <v-text-field
                               :disabled="!isEnabled"
                               @keydown="validate($event, 'th')"
-                              placeholder="-"
+                              :placeholder="$t('please filter yourse nickname')"
                               v-model="show_by_id.nicknameTh"
                               outlined
                               dense
@@ -438,7 +442,7 @@
                             <v-text-field
                               :disabled="!isEnabled"
                               @keydown="validate($event, 'en')"
-                              placeholder="-"
+                              :placeholder="$t('please filter yourse nickname')"
                               v-model="show_by_id.nicknameEn"
                               :rules="rules.name"
                               outlined
@@ -517,7 +521,9 @@
                             ></label-custom>
                             <v-text-field
                               :disabled="!isEnabled"
-                              placeholder="-"
+                              :placeholder="
+                                $t('please filter yourse congenitalDisease')
+                              "
                               v-model="show_by_id.congenitalDisease"
                               outlined
                               dense
@@ -531,7 +537,7 @@
                             <v-text-field
                               :disabled="!isEnabled"
                               @keydown="validate($event, 'th')"
-                              placeholder="-"
+                              :placeholder="$t('please filter yourse school')"
                               v-model="show_by_id.school.schoolNameTh"
                               outlined
                               dense
@@ -720,7 +726,9 @@
                                     <v-text-field
                                       :disabled="!isEnabled"
                                       @keydown="validate($event, 'th')"
-                                      placeholder="-"
+                                      :placeholder="
+                                        $t('please filter yourse nickname')
+                                      "
                                       v-model="show_by_id.nicknameTh"
                                       outlined
                                       dense
@@ -735,7 +743,9 @@
                                     <v-text-field
                                       :disabled="!isEnabled"
                                       @keydown="validate($event, 'en')"
-                                      placeholder="-"
+                                      :placeholder="
+                                        $t('please filter yourse nickname')
+                                      "
                                       v-model="show_by_id.nicknameEn"
                                       :rules="rules.name"
                                       outlined
@@ -790,7 +800,9 @@
                                     ></label-custom>
                                     <v-text-field
                                       :disabled="!isEnabled"
-                                      placeholder="-"
+                                      :placeholder="
+                                        $t('please filter yourse more class')
+                                      "
                                       v-model="show_by_id.class.classNameTh"
                                       outlined
                                       dense
@@ -819,7 +831,11 @@
                                     ></label-custom>
                                     <v-text-field
                                       :disabled="!isEnabled"
-                                      placeholder="-"
+                                      :placeholder="
+                                        $t(
+                                          'please filter yourse congenitalDisease'
+                                        )
+                                      "
                                       v-model="show_by_id.congenitalDisease"
                                       outlined
                                       dense
@@ -835,7 +851,9 @@
                                     <v-text-field
                                       :disabled="!isEnabled"
                                       @keydown="validate($event, 'th')"
-                                      placeholder="-"
+                                      :placeholder="
+                                        $t('please filter yourse school')
+                                      "
                                       v-model="show_by_id.school.schoolNameTh"
                                       outlined
                                       dense

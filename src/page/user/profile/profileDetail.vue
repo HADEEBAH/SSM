@@ -77,7 +77,7 @@
         <v-col cols="12" sm="6">
           <label-custom :text="$t('nickname')"></label-custom>
           <v-text-field
-            placeholder="-"
+            :placeholder="$t('please filter yourse nickname')"
             v-model="profile_detail.nicknameTh"
             outlined
             color="#ff6b81"
@@ -198,7 +198,7 @@
           <label-custom :text="$t('please enter your class')"></label-custom>
           <v-text-field
             v-model="otherClass"
-            placeholder="-"
+            :placeholder="$t('please specify more details of class')"
             outlined
             color="#ff6b81"
             dense
@@ -418,10 +418,11 @@ export default {
       this.isEnabled = true;
       this.buttonName = this.$t("save");
     },
-    cancel() {
-      this.GetProfileDetail(this.$route.params.profile_id);
+    async cancel() {
+      await this.GetProfileDetail(this.$route.params.profile_id);
       this.isDisabled = true;
       this.isEnabled = false;
+      this.selectedClass = "";
     },
     closeDialogPorfile(value) {
       this.changeProfileFail(value);
