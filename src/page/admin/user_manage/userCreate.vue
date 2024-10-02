@@ -173,7 +173,7 @@
                             <v-text-field
                               disabled
                               @keydown="validate($event, 'th')"
-                              placeholder="-"
+                              :placeholder="$t('please filter yourse nickname')"
                               v-model="checkData.nicknameTh"
                               outlined
                               dense
@@ -187,7 +187,7 @@
                             <v-text-field
                               disabled
                               @keydown="validate($event, 'en')"
-                              placeholder="-"
+                              :placeholder="$t('please filter yourse nickname')"
                               v-model="checkData.nicknameEn"
                               outlined
                               dense
@@ -255,7 +255,7 @@
                             <v-text-field
                               disabled
                               @keydown="validate($event, 'th')"
-                              placeholder="-"
+                              :placeholder="$t('please filter yourse school')"
                               v-model="checkData.school.schoolNameTh"
                               outlined
                               dense
@@ -282,7 +282,9 @@
                             ></label-custom>
                             <v-text-field
                               disabled
-                              placeholder="-"
+                              :placeholder="
+                                $t('please filter yourse congenitalDisease')
+                              "
                               v-model="checkData.congenitalDisease"
                               outlined
                               dense

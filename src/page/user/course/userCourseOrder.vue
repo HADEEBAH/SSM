@@ -221,6 +221,7 @@
                 course_order.students.find((v) => !v.is_other).nicknameTh
               )
             "
+            :placeholder="$t('please filter yourse nickname')"
           >
             <!-- :disabled="profile_detail?.nicknameTh" -->
           </v-text-field>
@@ -292,7 +293,7 @@
         >
           <labelCustom
             required
-            :text="$t('please enter your class')"
+            :text="$t('enter your more class')"
           ></labelCustom>
           <v-text-field
             v-model="myCheckClassData"
@@ -652,7 +653,7 @@
                     dense
                     outlined
                     v-model="student.nicknameTh"
-                    :placeholder="$t('nickname')"
+                    :placeholder="$t('please filter yourse nickname')"
                     color="#ff6B81"
                     @keydown="Validation($event, 'free-nonum')"
                     @input="realtimeCheckNickname(student.nicknameTh)"
@@ -660,7 +661,15 @@
                   <!-- :disabled="student?.nicknameData" -->
                 </v-col>
                 <!-- CLASS -->
-                <v-col cols="12" sm="6" v-if="student.role === 'R_5'">
+                <v-col
+                  cols="12"
+                  sm="6"
+                  v-if="
+                    student.role === 'R_5' ||
+                    student.role === 'R_4' ||
+                    !student.role
+                  "
+                >
                   <labelCustom required :text="$t('class')"></labelCustom>
                   <!-- :disabled="student?.classData" -->
 
@@ -684,7 +693,15 @@
                   </v-autocomplete>
                 </v-col>
                 <!-- SCHOOL -->
-                <v-col cols="12" sm="6" v-if="student.role === 'R_5'">
+                <v-col
+                  cols="12"
+                  sm="6"
+                  v-if="
+                    student.role === 'R_5' ||
+                    student.role === 'R_4' ||
+                    !student.role
+                  "
+                >
                   <labelCustom required :text="$t('school')"></labelCustom>
                   <!-- :disabled="student?.classData" -->
                   <v-text-field
@@ -698,7 +715,15 @@
                   </v-text-field>
                 </v-col>
                 <!-- ALERGICT -->
-                <v-col cols="12" sm="6" v-if="student.role === 'R_5'">
+                <v-col
+                  cols="12"
+                  sm="6"
+                  v-if="
+                    student.role === 'R_5' ||
+                    student.role === 'R_4' ||
+                    !student.role
+                  "
+                >
                   <label-custom
                     required
                     :text="$t('congenital disease')"
@@ -716,11 +741,16 @@
                 <v-col
                   cols="12"
                   sm="6"
-                  v-if="student.class === 'อื่นๆ' && student.role === 'R_5'"
+                  v-if="
+                    student.class === 'อื่นๆ' &&
+                    (student.role === 'R_5' ||
+                      student.role === 'R_4' ||
+                      !student.role)
+                  "
                 >
                   <labelCustom
                     required
-                    :text="$t('please enter your class')"
+                    :text="$t('enter your more class')"
                   ></labelCustom>
                   <v-text-field
                     v-model="student.otherClass"

@@ -1000,7 +1000,7 @@ const orderModules = {
 
               `${process.env.VUE_APP_URL}/api/v1/account/auth/${student.account_id}`
             );
-            let itemRole = '';
+            let itemRole = null;
 
             for (const items of data.data.roles) {
               itemRole = items.roleId;
@@ -1010,7 +1010,7 @@ const orderModules = {
                 if (!studentUpdate.some(v => v.studentId === student.account_id)) {
                   // console.log('itemRole :>> ', itemRole);
                   // !itemRole ||
-                  if (itemRole === 'R_5' || type_checked === true) {
+                  if (itemRole === 'R_5' || itemRole === 'R_4' || type_checked === true || !data.data.roles || !itemRole) {
                     if (student.nicknameTh && student.class) {
                       let checkClass = student.class === 'อื่นๆ' ? student.class = 'Other' : student.class
                       studentUpdate.push({

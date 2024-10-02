@@ -77,7 +77,7 @@
         <v-col cols="12" sm="6">
           <label-custom :text="$t('nickname')"></label-custom>
           <v-text-field
-            placeholder="-"
+            :placeholder="$t('please filter yourse nickname')"
             v-model="profile_detail.nicknameTh"
             outlined
             color="#ff6b81"
@@ -198,7 +198,7 @@
           <label-custom :text="$t('please enter your class')"></label-custom>
           <v-text-field
             v-model="otherClass"
-            placeholder="-"
+            :placeholder="$t('please specify more details of class')"
             outlined
             color="#ff6b81"
             dense
@@ -418,10 +418,11 @@ export default {
       this.isEnabled = true;
       this.buttonName = this.$t("save");
     },
-    cancel() {
-      this.GetProfileDetail(this.$route.params.profile_id);
+    async cancel() {
+      await this.GetProfileDetail(this.$route.params.profile_id);
       this.isDisabled = true;
       this.isEnabled = false;
+      this.selectedClass = "";
     },
     closeDialogPorfile(value) {
       this.changeProfileFail(value);
@@ -673,19 +674,19 @@ export default {
                 email: this.profile_detail.email,
                 schoolTh: this.profile_detail.school.schoolNameTh
                   ? this.profile_detail.school.schoolNameTh
-                  : null,
+                  : "",
                 nicknameTh: this.profile_detail?.nicknameTh
                   ? this.profile_detail.nicknameTh
-                  : null,
+                  : "",
                 congenitalDiseaseTh: this.profile_detail?.congenitalDisease
                   ? this.profile_detail.congenitalDisease
-                  : null,
+                  : "",
                 className:
                   this.profile_detail?.userRoles?.roleId == "R_5"
                     ? this.otherClass
                       ? this.otherClass
                       : this.selectedClass?.classNameTh || this.selectedClass
-                    : null,
+                    : "",
               };
 
               this.user_detail = JSON.parse(localStorage.getItem("userDetail"));

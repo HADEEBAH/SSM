@@ -211,7 +211,9 @@
                                 v-model="show_by_id.nicknameTh"
                                 v-bind:disabled="isDisabled"
                                 @keydown="validate($event, 'th')"
-                                placeholder="-"
+                                :placeholder="
+                                  $t('please filter yourse nickname')
+                                "
                                 outlined
                                 dense
                                 color="#ff6b81"
@@ -226,7 +228,9 @@
                                 v-model="show_by_id.nicknameEn"
                                 v-bind:disabled="isDisabled"
                                 @keydown="validate($event, 'en-special')"
-                                placeholder="-"
+                                :placeholder="
+                                  $t('please filter yourse nickname')
+                                "
                                 outlined
                                 dense
                                 color="#ff6b81"
@@ -254,7 +258,9 @@
                                     ? rules.nicknName
                                     : ''
                                 "
-                                placeholder="-"
+                                :placeholder="
+                                  $t('please filter yourse nickname')
+                                "
                                 outlined
                                 dense
                                 color="#ff6b81"
@@ -269,7 +275,9 @@
                                 v-model="show_by_id.nicknameEn"
                                 v-bind:disabled="isDisabled"
                                 @keydown="validate($event, 'en-special')"
-                                placeholder="-"
+                                :placeholder="
+                                  $t('please filter yourse nickname')
+                                "
                                 outlined
                                 dense
                                 color="#ff6b81"
@@ -314,7 +322,8 @@
                               <label-custom :text="$t('class')"></label-custom>
                               <v-autocomplete
                                 :value="
-                                  !show_by_id.class.classNameTh || show_by_id.class.classNameTh === ''
+                                  !show_by_id.class.classNameTh ||
+                                  show_by_id.class.classNameTh === ''
                                     ? $t('please enter the class')
                                     : show_by_id.class.classNameTh
                                 "
@@ -335,11 +344,11 @@
                             </v-col>
                             <v-col cols="12" sm="6" v-if="openTypeClass">
                               <label-custom
-                                :text="$t('please enter your class')"
+                                :text="$t('enter your more class')"
                               ></label-custom>
                               <v-text-field
                                 v-model="otherClass"
-                                placeholder="-"
+                                :placeholder="$t('Please enter your class')"
                                 outlined
                                 color="#ff6b81"
                                 dense
@@ -355,7 +364,9 @@
                               ></label-custom>
                               <v-text-field
                                 :disabled="!isEnabled"
-                                placeholder="-"
+                                :placeholder="
+                                  $t('please filter yourse congenitalDisease')
+                                "
                                 v-model="show_by_id.congenitalDisease"
                                 outlined
                                 dense
@@ -370,7 +381,7 @@
                               <v-text-field
                                 v-bind:disabled="isDisabled"
                                 @keydown="validate($event, 'th')"
-                                placeholder="-"
+                                :placeholder="$t('please filter yourse school')"
                                 v-model="show_by_id.school.schoolNameTh"
                                 outlined
                                 dense
@@ -407,7 +418,8 @@
 
                               <v-autocomplete
                                 :value="
-                                  show_by_id.class.classNameTh === '' || !show_by_id.class.classNameTh
+                                  show_by_id.class.classNameTh === '' ||
+                                  !show_by_id.class.classNameTh
                                     ? $t('please enter the class')
                                     : show_by_id.class.classNameTh
                                 "
@@ -428,11 +440,11 @@
                             </v-col>
                             <v-col cols="12" sm="6" v-if="openTypeClass">
                               <label-custom
-                                :text="$t('please enter your class')"
+                                :text="$t('enter your more class')"
                               ></label-custom>
                               <v-text-field
                                 v-model="otherClass"
-                                placeholder="-"
+                                :placeholder="$t('Please enter your class')"
                                 outlined
                                 color="#ff6b81"
                                 dense
@@ -448,7 +460,9 @@
                               ></label-custom>
                               <v-text-field
                                 :disabled="!isEnabled"
-                                placeholder="-"
+                                :placeholder="
+                                  $t('please filter yourse congenitalDisease')
+                                "
                                 v-model="show_by_id.congenitalDisease"
                                 outlined
                                 dense
@@ -466,7 +480,7 @@
                               <v-text-field
                                 v-bind:disabled="isDisabled"
                                 @keydown="validate($event, 'th')"
-                                placeholder="-"
+                                :placeholder="$t('please filter yourse school')"
                                 v-model="show_by_id.school.schoolNameTh"
                                 outlined
                                 dense
@@ -485,7 +499,7 @@
                               <v-text-field
                                 v-bind:disabled="isDisabled"
                                 @keydown="validate($event, 'th')"
-                                placeholder="-"
+                                :placeholder="$t('please filter yourse school')"
                                 v-model="show_by_id.school.schoolNameTh"
                                 outlined
                                 dense

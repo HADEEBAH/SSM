@@ -1688,6 +1688,11 @@ export default {
       // }else{
       //   return true
       // }
+      // const current = moment().format("YYYY/MM/DD");
+      // const currentMoment = moment(current);
+      // const teachingDate = this.$route.params.date;
+      // const countDate = currentMoment.isBefore(teachingDate);
+      // console.log("countDate :>> ", countDate);
 
       return false;
     },
