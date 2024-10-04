@@ -699,8 +699,9 @@ const CourseModules = {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach_id}/date/${date}/time/${time_id}`, config)
 
         if (data.statusCode === 200) {
-
-          if (data.data.length > 0 && data.data?.filter(v => v?.potential?.checkInPotentialId).length !== data.data.length) {
+          console.log('data.data.length :>> ', data.data.length);
+          console.log('data.data?.filter(v => v?.potential?.checkInPotentialId).length :>> ', data.data?.filter(v => v?.potential?.checkInPotentialId).length);
+          if (data.data.length > 0 && data.data?.filter(v => v?.potential?.checkInPotentialId).length === data.data.length) {
             context.commit("SetStudentList", data.data)
             context.commit("SetNoChackInStudentList", [])
           } else {
