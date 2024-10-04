@@ -516,9 +516,11 @@
                     <v-tab value="student booking">{{
                       $t("students reserve")
                     }}</v-tab>
-                    <v-tab value="student potential">{{
-                      $t("students complete the course")
-                    }}</v-tab>
+                    <v-tab
+                      value="student potential"
+                      @click="studentsPotentials()"
+                      >{{ $t("students complete the course") }}</v-tab
+                    >
                   </v-tabs>
                 </v-col>
                 <v-col cols="auto">
@@ -1308,7 +1310,6 @@
                   </template>
                 </v-tab-item>
                 <!-- นักเรียนจองคิว -->
-                <!-- <pre>{{ student_reserve_list }}</pre> -->
                 <v-tab-item valus="student booking">
                   <v-row dense v-if="course_data.reservation">
                     <v-col class="pr-3" cols="12" align="right">
@@ -1446,6 +1447,8 @@
                 </v-tab-item>
                 <!-- นักเรียนจบคอร์ส -->
                 <v-tab-item valus="student potential">
+                  <!-- Search Students -->
+
                   <v-card flat dent class="mb-3 rounded-lg">
                     <v-card-text class="py-2 bg-[#FCE0E7] rounded-lg">
                       <v-row dense class="d-flex align-center">
@@ -1463,20 +1466,6 @@
 
                             {{ $t("search for student name, coach name") }}
                           </v-btn>
-                          <!-- <v-text-field
-                            v-model="search_student_potential"
-                            class="bg-white rounded-lg"
-                            dense
-                            outlined
-                            hide-details
-                            :placeholder="
-                              $t('search for student name, coach name')
-                            "
-                            prepend-inner-icon="mdi-magnify"
-                            @input="
-                              searchStudentPotential(search_student_potential)
-                            "
-                          ></v-text-field> -->
                         </v-col>
                       </v-row>
                     </v-card-text>
@@ -1489,8 +1478,9 @@
                       ></v-progress-circular>
                     </v-col>
                   </v-row>
+
                   <template v-else>
-                    <div
+                    <!-- <div
                       v-if="
                         search_student_potential
                           ? search_student_potential_datas?.length === 0
@@ -1498,7 +1488,7 @@
                               (v) => v.studentPotentialArr?.length > 0
                             ).length === 0
                       "
-                    >
+                     >
                       <v-card dense outlined>
                         <v-card-text>
                           <v-row>
@@ -1515,7 +1505,7 @@
                           ? search_student_potential_datas
                           : coachListPotential(coach_list)"
                         :key="`${coach_index}-potential_index`"
-                      >
+                       >
                         <v-card
                           @click="seletedCoachPotential(coach, coach_index)"
                           outlined
@@ -1697,6 +1687,261 @@
                                 </div>
                               </div>
                             </div>
+                          </div>
+                        </v-expand-transition>
+                      </div>
+                    </template> -->
+
+                    <div v-if="students_potential.length < 0">
+                      <v-card dense outlined>
+                        <v-card-text>
+                          <v-row>
+                            <v-col class="font-bold" align="center">
+                              {{ $t("no data found") }}
+                            </v-col>
+                          </v-row>
+                        </v-card-text>
+                      </v-card>
+                    </div>
+                    <template v-else>
+                      <div
+                        v-for="(coach_data, coach_index) in students_potential"
+                        :key="`${coach_index}-coach_index`"
+                      >
+                        <v-card
+                          @click="
+                            seletedCoachPotential(coach_data, coach_index)
+                          "
+                          outlined
+                          dense
+                          class="rounded-lg cursor-pointer mb-3 bg-[#FCFCFC]"
+                        >
+                          <v-card-text class="pa-2">
+                            <v-row dense class="d-flex align-center">
+                              <v-col cols="auto">
+                                <v-icon color="#ff6b81">mdi-account</v-icon>
+                              </v-col>
+                              <v-col class="font-bold">
+                                {{ $t("coach") }}:
+                                {{
+                                  $i18n.locale == "th"
+                                    ? `${coach_data.coachName}`
+                                    : `${coach_data.coachNameEn}`
+                                }}
+                              </v-col>
+                              <v-col cols="auto">
+                                <v-icon
+                                  >{{
+                                    selected_coach_potential === coach_index
+                                      ? "mdi-chevron-up"
+                                      : "mdi-chevron-down"
+                                  }}
+                                </v-icon>
+                              </v-col>
+                            </v-row>
+                          </v-card-text>
+                        </v-card>
+                        <v-expand-transition>
+                          <div
+                            v-if="selected_coach_potential === coach_index"
+                            class="pa-3 bg-[#FCFCFC] rounded-b-lg"
+                          >
+                            <v-row
+                              dense
+                              v-if="student_potential_list_is_loading"
+                            >
+                              <v-col align="center">
+                                <v-progress-circular
+                                  indeterminate
+                                  color="red"
+                                ></v-progress-circular>
+                              </v-col>
+                            </v-row>
+                            <div v-else>
+                              <div v-if="coach_data?.students?.length === 0">
+                                <v-card dense outlined>
+                                  <v-card-text>
+                                    <v-row>
+                                      <v-col class="font-bold" align="center">
+                                        {{
+                                          $t("student information not found")
+                                        }}
+                                      </v-col>
+                                    </v-row>
+                                  </v-card-text>
+                                </v-card>
+                              </div>
+                              <div v-if="coach_data?.students?.length > 0">
+                                <v-row dense class="d-flex align-center mb-2">
+                                  <v-col>
+                                    <v-divider></v-divider>
+                                  </v-col>
+                                  <v-col cols="auto">{{
+                                    $t("student information")
+                                  }}</v-col>
+                                  <v-col>
+                                    <v-divider></v-divider>
+                                  </v-col>
+                                </v-row>
+                                <v-card class="mb-2" flat dense>
+                                  <v-card-text
+                                    class="pa-2 bg-[#FCE0E7] rounded-lg"
+                                  >
+                                    <v-row dense class="text-md font-bold">
+                                      <v-col cols="1" align="center">{{
+                                        $t("no.")
+                                      }}</v-col>
+                                      <v-col cols align="center"
+                                        >{{
+                                          $t("first name") +
+                                          " - " +
+                                          $t("last name")
+                                        }}
+                                      </v-col>
+                                      <v-col cols="2" align="center"
+                                        >{{ $t("period") }}
+                                      </v-col>
+                                      <v-col cols="2" align="center"
+                                        >{{ $t("number of times") }}
+                                      </v-col>
+                                      <v-col cols="4"></v-col>
+                                    </v-row>
+                                  </v-card-text>
+                                </v-card>
+                                <div v-if="coach_data?.students?.length > 0">
+                                  <v-card
+                                    class="mb-2"
+                                    outlined
+                                    dense
+                                    v-for="(
+                                      students_data, students_index
+                                    ) in coach_data.students"
+                                    :key="`${students_index}-students_index`"
+                                  >
+                                    <v-card-text class="pa-2">
+                                      <v-row
+                                        dense
+                                        class="text-md font-bold flex align-center"
+                                      >
+                                        <!-- INDEX -->
+                                        <v-col cols="1" align="center"
+                                          >{{ students_index + 1 }}
+                                        </v-col>
+                                        <!-- STD NAME -->
+                                        <v-col cols align="center">
+                                          {{
+                                            $i18n.locale == "th"
+                                              ? `${students_data.firstNameTh} ${students_data.lastNameTh}`
+                                              : `${students_data.firstNameEn} ${students_data.lastNameEn}`
+                                          }}
+                                        </v-col>
+                                        <!-- CPO -->
+                                        <v-col cols="2" align="center"
+                                          >{{
+                                            $i18n.locale == "th"
+                                              ? students_data.optionName
+                                              : students_data.optionNameEn
+                                          }}
+                                        </v-col>
+                                        <!-- COUNT CHECKIn -->
+                                        <v-col cols="2" align="center"
+                                          >{{ students_data.countCheckIn }}/{{
+                                            students_data.totalPotential
+                                          }}
+                                        </v-col>
+                                        <!-- ประเมิน / โปรไฟล์ -->
+                                        <!-- <v-col cols="4">
+                                          <v-row dense>
+                                            <v-col class="pa-0">
+                                              <v-btn
+                                                text
+                                                class="px-1"
+                                                color="#ff6b81"
+                                                @click="
+                                                  showDialogAssessment(
+                                                    students_data
+                                                  )
+                                                "
+                                              >
+                                                <v-icon
+                                                  >mdi-check-decagram-outline
+                                                </v-icon>
+                                                {{ $t("view evaluation") }}
+                                              </v-btn>
+                                            </v-col>
+                                            <v-col class="pa-0">
+                                              <v-btn
+                                                text
+                                                :to="{
+                                                  name: 'UserDetail',
+                                                  params: {
+                                                    account_id:
+                                                      students_data.studentId,
+                                                    action: 'view',
+                                                    from: 'courseDetail',
+                                                  },
+                                                }"
+                                                class="px-1"
+                                                color="#ff6b81"
+                                              >
+                                                <v-icon>
+                                                  mdi-clipboard-text-search-outline
+                                                </v-icon>
+                                                {{ $t("view profile") }}
+                                              </v-btn>
+                                            </v-col>
+                                          </v-row>
+                                        </v-col> -->
+                                        <v-col cols="4">
+                                          <v-row dense>
+                                            <v-col class="pa-0">
+                                              <v-btn
+                                                text
+                                                class="px-1"
+                                                color="#ff6b81"
+                                                @click="
+                                                  showDialogAssessmentPotential(
+                                                    students_data
+                                                  )
+                                                "
+                                              >
+                                                <v-icon
+                                                  >mdi-check-decagram-outline
+                                                </v-icon>
+                                                {{ $t("view evaluation") }}
+                                              </v-btn>
+                                            </v-col>
+                                            <v-col class="pa-0">
+                                              <v-btn
+                                                text
+                                                :to="{
+                                                  name: 'UserDetail',
+                                                  params: {
+                                                    account_id:
+                                                      students_data.studentId,
+                                                    action: 'view',
+                                                    from: 'courseDetail',
+                                                  },
+                                                }"
+                                                class="px-1"
+                                                color="#ff6b81"
+                                              >
+                                                <v-icon>
+                                                  mdi-clipboard-text-search-outline
+                                                </v-icon>
+                                                {{ $t("view profile") }}
+                                              </v-btn>
+                                            </v-col>
+                                          </v-row>
+                                        </v-col>
+                                      </v-row>
+                                    </v-card-text>
+                                  </v-card>
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- {{ 5555555555 }} -->
                           </div>
                         </v-expand-transition>
                       </div>
@@ -2201,6 +2446,512 @@
           </v-card-text>
         </v-card>
       </v-dialog>
+      <!-- DIALOG ASSESSMENT POTENTIAL -->
+      <v-dialog
+        width="60vw"
+        v-if="show_dialog_assessmet_potential"
+        v-model="show_dialog_assessmet_potential"
+      >
+        <v-card>
+          <v-card-text class="pa-2">
+            <v-row dense>
+              <v-col></v-col>
+              <v-col class="pa-0" cols="auto">
+                <v-btn
+                  icon
+                  color="red"
+                  @click="closeDialogAssessmentPotential()"
+                  ><v-icon>mdi-close</v-icon></v-btn
+                >
+              </v-col>
+            </v-row>
+            <v-row dense class="mb-3">
+              <v-col align="center" class="font-bold text-lg">
+                {{ $t("assessment") }}
+              </v-col>
+            </v-row>
+            <v-card
+              v-if="student_data_assessment_potential?.checkInPotentialId"
+              class="mb-3"
+              outlined
+            >
+              <v-card-text>
+                <v-row>
+                  <v-col cols="auto">
+                    <v-img
+                      width="40"
+                      height="40"
+                      src="@/assets/course/potential.png"
+                    ></v-img>
+                  </v-col>
+                  <v-col cols class="font-bold text-lg"
+                    >{{ $t("assess the overview") }}
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <v-card flat>
+                      <v-card-text class="bg-[#FBF3F5]">
+                        <v-row dense>
+                          <v-col>{{ $t("developmental level") }} </v-col>
+                        </v-row>
+                        <v-row dense>
+                          <v-col>
+                            <v-select
+                              outlined
+                              dense
+                              v-model="
+                                student_data_assessment_potential.evolution
+                              "
+                              :items="evolution_options"
+                              hide-details
+                              readonly
+                            >
+                              <template v-slot:item="{ item }">
+                                <v-list-item-content>
+                                  <v-list-item-title>
+                                    <v-rating
+                                      readonly
+                                      :length="item.num_value"
+                                      :value="item.num_value"
+                                      color="#ff6b81"
+                                    ></v-rating>
+                                  </v-list-item-title>
+                                </v-list-item-content>
+                              </template>
+                              <template v-slot:selection="{ item }">
+                                <v-rating
+                                  readonly
+                                  :length="item.num_value"
+                                  :value="item.num_value"
+                                  color="#ff6b81"
+                                ></v-rating>
+                              </template>
+                            </v-select>
+                          </v-col>
+                        </v-row>
+                        <v-row dense>
+                          <v-col>
+                            <span class="text-[#999999]">
+                              {{ $t("interest level") }}:
+                            </span>
+                            {{
+                              student_data_assessment_potential.Interest || "-"
+                            }}
+                          </v-col>
+                        </v-row>
+                        <v-row dense>
+                          <v-col>
+                            <span class="text-[#999999]"
+                              >{{ $t("comments") }}:
+                            </span>
+                            {{
+                              student_data_assessment_potential.remark || "-"
+                            }}
+                          </v-col>
+                        </v-row>
+                        <v-row dense>
+                          <v-col cols="12">
+                            <b>{{ $t("attachments") }}: </b>
+                            <v-card
+                              outlined
+                              @click="openFile(file.attachmentPotential)"
+                              flat
+                              class="mb-3"
+                              v-for="(
+                                file, index_file
+                              ) in student_data_assessment_potential.attachmentPotential"
+                              :key="index_file"
+                            >
+                              <v-card-text
+                                class="border-2 border-[#ff6b81] rounded-lg"
+                              >
+                                <v-row>
+                                  <v-col align="center">
+                                    <imgFileType
+                                      :mime_type="file.filesType"
+                                    ></imgFileType>
+                                  </v-col>
+                                  <v-col cols="12" sm="10" align="start">
+                                    <span class="font-bold">{{
+                                      file.originalFilesName
+                                    }}</span
+                                    ><br />
+                                    <span class="text-caption"
+                                      >{{ $t("file size") }} :
+                                      {{
+                                        (file.filesSize / 1000000).toFixed(2)
+                                      }}
+                                      MB</span
+                                    >
+                                  </v-col>
+                                </v-row>
+                              </v-card-text>
+                            </v-card>
+                          </v-col>
+                        </v-row>
+                      </v-card-text>
+                    </v-card>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+            <div
+              v-if="student_data_assessment_potential?.assessment?.length > 0"
+            >
+              <v-card
+                class="mb-3"
+                v-for="(
+                  assess, index
+                ) in student_data_assessment_potential?.assessment"
+                :key="`${index}-assess`"
+              >
+                <v-card-text>
+                  <v-row dense>
+                    <v-col cols="auto">
+                      <v-icon color="#ff6b81">mdi-calendar-month</v-icon>
+                    </v-col>
+                    <v-col class="font-bold">
+                      {{
+                        new Date(assess.date).toLocaleDateString(
+                          $i18n.locale == "th" ? "th-TH" : "en-US",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          }
+                        )
+                      }}
+                    </v-col>
+                    <v-col cols="auto">
+                      <v-chip
+                        class="font-bold"
+                        :color="
+                          check_in_status_options.filter(
+                            (v) => v.value === assess.status
+                          )[0].bg_color
+                        "
+                        :style="`color:${
+                          check_in_status_options.filter(
+                            (v) => v.value === assess.status
+                          )[0].color
+                        }`"
+                        v-if="
+                          check_in_status_options.filter(
+                            (v) => v.value === assess.status
+                          )?.length > 0
+                        "
+                        >{{
+                          $t(
+                            check_in_status_options.filter(
+                              (v) => v.value === assess.status
+                            )[0].label
+                          )
+                        }}
+                      </v-chip>
+                    </v-col>
+                  </v-row>
+                  <v-row dense>
+                    <v-col> {{ $t("developmental level") }}</v-col>
+                  </v-row>
+                  <v-row dense>
+                    <v-col>
+                      <v-select
+                        outlined
+                        dense
+                        v-model="assess.evolution"
+                        :items="evolution_options"
+                        hide-details
+                        readonly
+                      >
+                        <template v-slot:item="{ item }">
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              <v-rating
+                                readonly
+                                :length="item.num_value"
+                                :value="item.num_value"
+                                color="#ff6b81"
+                              ></v-rating>
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </template>
+                        <template v-slot:selection="{ item }">
+                          <v-rating
+                            readonly
+                            :length="item.num_value"
+                            :value="item.num_value"
+                            color="#ff6b81"
+                          ></v-rating>
+                        </template>
+                      </v-select>
+                    </v-col>
+                  </v-row>
+                  <v-row dense>
+                    <v-col> {{ $t("interest level") }}</v-col>
+                  </v-row>
+                  <v-row dense>
+                    <v-col>
+                      <v-select
+                        outlined
+                        dense
+                        v-model="assess.Interest"
+                        :items="interest_options"
+                        hide-details
+                        readonly
+                      >
+                        <template v-slot:item="{ item }">
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              <v-rating
+                                readonly
+                                :length="item.num_value"
+                                :value="item.num_value"
+                                color="#ff6b81"
+                              ></v-rating>
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </template>
+                        <template v-slot:selection="{ item }">
+                          <v-rating
+                            readonly
+                            :length="item.num_value"
+                            :value="item.num_value"
+                            color="#ff6b81"
+                          ></v-rating>
+                        </template>
+                      </v-select>
+                    </v-col>
+                  </v-row>
+                  <v-row dense>
+                    <v-col>
+                      <span class="text-[#999999]"> {{ $t("comments") }}: </span
+                      >{{ assess.remark }}
+                    </v-col>
+                  </v-row>
+                  <v-card
+                    outlined
+                    @click="openFile(file.attachmentFiles)"
+                    flat
+                    class="mb-3"
+                    v-for="(file, index_file) in assess.assessmentFiles"
+                    :key="index_file"
+                  >
+                    <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
+                      <v-row>
+                        <v-col align="center">
+                          <imgFileType
+                            :mime_type="file.filesType"
+                          ></imgFileType>
+                        </v-col>
+                        <v-col cols="12" sm="10" align="start">
+                          <span class="font-bold">{{
+                            file.originalFilesName
+                          }}</span
+                          ><br />
+                          <span class="text-caption"
+                            >{{ $t("file size") }} :
+                            {{ (file.filesSize / 1000000).toFixed(2) }}
+                            MB</span
+                          >
+                        </v-col>
+                      </v-row>
+                    </v-card-text>
+                  </v-card>
+                </v-card-text>
+              </v-card>
+            </div>
+            <div v-else-if="student_data_assessment?.assessment">
+              <v-card outlined class="mb-3">
+                <v-card-text>
+                  <v-row dense>
+                    <v-col cols="auto">
+                      <v-icon color="#ff6b81">mdi-calendar-month</v-icon>
+                    </v-col>
+                    <v-col class="font-bold">
+                      {{
+                        new Date(
+                          student_data_assessment.date
+                        ).toLocaleDateString(
+                          $i18n.locale == "th" ? "th-TH" : "en-US",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          }
+                        )
+                      }}
+                    </v-col>
+                    <v-col cols="auto">
+                      <v-chip
+                        class="font-bold"
+                        :color="
+                          check_in_status_options.filter(
+                            (v) => v.value === student_data_assessment.status
+                          )[0].bg_color
+                        "
+                        :style="`color:${
+                          check_in_status_options.filter(
+                            (v) => v.value === student_data_assessment.status
+                          )[0].color
+                        }`"
+                        v-if="
+                          check_in_status_options.filter(
+                            (v) => v.value === student_data_assessment.status
+                          )?.length > 0
+                        "
+                        >{{
+                          $t(
+                            check_in_status_options.filter(
+                              (v) => v.value === student_data_assessment.status
+                            )[0].label
+                          )
+                        }}
+                      </v-chip>
+                    </v-col>
+                  </v-row>
+                  <v-row dense>
+                    <v-col>{{ $t("developmental level") }} </v-col>
+                  </v-row>
+                  <v-row dense>
+                    <v-col>
+                      <v-select
+                        outlined
+                        dense
+                        v-model="student_data_assessment.assessment.evolution"
+                        :items="evolution_options"
+                        hide-details
+                        readonly
+                      >
+                        <template v-slot:item="{ item }">
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              <v-rating
+                                readonly
+                                :length="item.num_value"
+                                :value="item.num_value"
+                                color="#ff6b81"
+                              ></v-rating>
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </template>
+                        <template v-slot:selection="{ item }">
+                          <v-rating
+                            readonly
+                            :length="item.num_value"
+                            :value="item.num_value"
+                            color="#ff6b81"
+                          ></v-rating>
+                        </template>
+                      </v-select>
+                    </v-col>
+                  </v-row>
+                  <v-row dense>
+                    <v-col>{{ $t("interest level") }}</v-col>
+                  </v-row>
+                  <v-row dense>
+                    <v-col>
+                      <v-select
+                        outlined
+                        dense
+                        v-model="student_data_assessment.assessment.interest"
+                        :items="interest_options"
+                        hide-details
+                        readonly
+                      >
+                        <template v-slot:item="{ item }">
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              <v-rating
+                                readonly
+                                :length="item.num_value"
+                                :value="item.num_value"
+                                color="#ff6b81"
+                              ></v-rating>
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </template>
+                        <template v-slot:selection="{ item }">
+                          <v-rating
+                            readonly
+                            :length="item.num_value"
+                            :value="item.num_value"
+                            color="#ff6b81"
+                          ></v-rating>
+                        </template>
+                      </v-select>
+                    </v-col>
+                  </v-row>
+                  <v-row dense>
+                    <v-col>
+                      <span class="text-[#999999]"> {{ $t("comments") }}: </span
+                      >{{ student_data_assessment.assessment.remark }}
+                    </v-col>
+                  </v-row>
+                  <v-card
+                    outlined
+                    @click="openFile(file.attFiles)"
+                    flat
+                    class="mb-3"
+                    v-for="(file, index_file) in student_data_assessment
+                      .assessment.attachment"
+                    :key="index_file"
+                  >
+                    <v-card-text class="border-2 border-[#ff6b81] rounded-lg">
+                      <v-row>
+                        <v-col align="center">
+                          <imgFileType
+                            :mime_type="file.filesType"
+                          ></imgFileType>
+                        </v-col>
+                        <v-col cols="12" sm="10" align="start">
+                          <span class="font-bold">{{
+                            file.originalFilesName
+                          }}</span
+                          ><br />
+                          <span class="text-caption"
+                            >{{ $t("file size") }} :
+                            {{ (file.filesSize / 1000000).toFixed(2) }}
+                            MB</span
+                          >
+                        </v-col>
+                      </v-row>
+                    </v-card-text>
+                  </v-card>
+                </v-card-text>
+              </v-card>
+            </div>
+            <v-card
+              outlined
+              class="mb-3"
+              v-if="
+                !student_data_assessment?.potential &&
+                student_data_assessment?.assessment?.length == 0
+              "
+            >
+              <v-card-text>
+                <v-row dense>
+                  <v-col align="center"
+                    >{{ $t("assessment not found") }}
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+            <v-row dense>
+              <v-col align="center">
+                <v-btn
+                  color="#ff6b81"
+                  @click="closeDialogAssessment()"
+                  depressed
+                  dark
+                  class="btn-size-lg"
+                  >{{ $t("agree") }}</v-btn
+                >
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
       <!-- EXPORT : STUDENT -->
       <v-dialog
         width="40vw"
@@ -2384,6 +3135,7 @@ export default {
     packageValidate: false,
     slide_group: null,
     show_dialog_assessmet: false,
+    show_dialog_assessmet_potential: false,
     evolution_options: [
       { label: "ดีมาก", value: "very good", num_value: 5 },
       { label: "ดี", value: "good", num_value: 4 },
@@ -2426,6 +3178,7 @@ export default {
     artwork_files: [],
     preview_artwork_files: [],
     student_data_assessment: {},
+    student_data_assessment_potential: {},
     check_in_status_options: [
       {
         label: "punctual",
@@ -2508,6 +3261,7 @@ export default {
         "CourseModules/getStudentPotentialListIsLoading",
       no_check_in_student_list: "CourseModules/getNoChackInStudentList",
       export_is_loading: "CourseModules/export_is_loading",
+      students_potential: "CourseModules/getAllStudentPotentialList",
     }),
     breadcrumbs() {
       return [
@@ -2616,8 +3370,13 @@ export default {
       ExportReserveCourse: "CourseModules/ExportReserveCourse",
       UpdateStatusReserveAdmin: "reserveCourseModules/UpdateStatusReserveAdmin",
       UpdateAllStatusReserve: "reserveCourseModules/UpdateAllStatusReserve",
+      GetAllStudentPotentialList: "CourseModules/GetAllStudentPotentialList",
     }),
-
+    async studentsPotentials() {
+      await this.GetAllStudentPotentialList({
+        course_id: this.$route.params.course_id,
+      });
+    },
     UpdateReserveAll() {
       // items
       // let hasWaitingStatus = items.some((item) => item.status === "waiting");
@@ -2691,10 +3450,11 @@ export default {
       }
     },
     DisableButtonExport() {
-      return this.search_student_potential
-        ? !this.search_student_potential_datas.length > 0
-        : !this.coach_list.filter((v) => v.studentPotentialArr?.length > 0)
-            .length > 0;
+      // return this.search_student_potential
+      //   ? !this.search_student_potential_datas.length > 0
+      //   : !this.coach_list.filter((v) => v.studentPotentialArr?.length > 0)
+      //       .length > 0;
+      return !this.students_potential;
     },
     // searchStudentPotential(search) {
     //   let coach_list_search = [];
@@ -2879,10 +3639,11 @@ export default {
         this.selected_coach_potential = null;
       } else {
         this.selected_coach_potential = index;
-        this.GetStudentPotentialByCoach({
-          course_id: this.$route.params.course_id,
-          coach_id: coach.coachId,
-        });
+        // this.GetStudentPotentialByCoach({
+        //   course_id: this.$route.params.course_id,
+        //   coach_id: coach.coachId,
+        // });
+        this.students_potential;
       }
     },
     getDateFormattor(date, format) {
@@ -3001,9 +3762,22 @@ export default {
         "DW DD MMT YYYYT"
       );
     },
+    showDialogAssessmentPotential(student_data) {
+      let assmentData = {};
+      for (let items of student_data.assessment) {
+        // items = assmentData
+        assmentData = items;
+      }
+      (this.show_dialog_assessmet_potential = true),
+        (this.student_data_assessment_potential = assmentData);
+    },
     closeDialogAssessment() {
       this.show_dialog_assessmet = false;
       this.student_data_assessment = {};
+    },
+    closeDialogAssessmentPotential() {
+      (this.show_dialog_assessmet_potential = false),
+        (this.student_data_assessment_potential = {});
     },
     previewArtWorkFile(event) {
       const selectedFiles = event.target.files;

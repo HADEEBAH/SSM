@@ -206,7 +206,8 @@ const CourseModules = {
     time_add_student: [],
     coach_add_student: [],
     open_time_add_student: [],
-    open_day_add_student: []
+    open_day_add_student: [],
+    all_students_potential_list: []
 
 
   },
@@ -427,6 +428,10 @@ const CourseModules = {
     SetOpenDayAddStudent(state, payload) {
       state.open_day_add_student = payload
     },
+    SetAllStudentPotentialList(state, payload) {
+      state.all_students_potential_list = payload
+    },
+
 
   },
   actions: {
@@ -696,6 +701,8 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
+        // const localhost = 'http://localhost:3000'
+        // let { data } = await axios.get(`${localhost}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach_id}/date/${date}/time/${time_id}`, config)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach_id}/date/${date}/time/${time_id}`, config)
 
         if (data.statusCode === 200) {
@@ -724,6 +731,32 @@ const CourseModules = {
         context.commit("SetStudentListIsLoadIng", false)
       }
     },
+
+    // STUDENT :: LIST POTENTIAL STUDENTS
+    async GetAllStudentPotentialList(context, { course_id }) {
+      context.commit("SetStudentPotentialListIsLoading", true)
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/studentlist/potential/${course_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/potential/${course_id}`, config)
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/potential/${course_id}`, config)
+        if (data.statusCode === 200) {
+          context.commit("SetAllStudentPotentialList", data.data)
+          context.commit("SetStudentPotentialListIsLoading", false)
+        }
+      } catch (error) {
+        context.commit("SetStudentPotentialListIsLoading", false)
+      }
+
+    },
+
     // STUDENT :: LIST POTENTIAL BY COACH
     async GetStudentPotentialByCoach(context, { course_id, coach_id }) {
       context.commit("SetStudentPotentialListIsLoading", true)
@@ -2110,6 +2143,7 @@ const CourseModules = {
 
               if (date.checked) {
                 // const localhost = 'http://localhost:3000'
+                // let { data } = await axios.get(`${localhost}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach.coachId}/date/${date.date}/time/${date.timeId}`, config)
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach.coachId}/date/${date.date}/time/${date.timeId}`, config)
                 if (data.statusCode === 200) {
                   if (data.data.length > 0) {
@@ -2268,7 +2302,8 @@ const CourseModules = {
         let checking = []
         let coachPotential = coach_list.filter(v => v.studentPotentialArr?.length > 0)
         for await (let coach of coachPotential) {
-          let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach.coachId}`, config)
+          let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/potential/${course_id}`, config)
+          // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach.coachId}`, config)
           if (data.statusCode === 200) {
             for await (let student of data.data) {
               report.push({
@@ -2547,6 +2582,9 @@ const CourseModules = {
     },
     getOpenDayAddStudent(state) {
       return state.open_day_add_student
+    },
+    getAllStudentPotentialList(state) {
+      return state.all_students_potential_list
     },
 
   },
