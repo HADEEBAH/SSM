@@ -146,11 +146,20 @@
             <v-form v-model="validate_form" ref="validate_form">
               <v-data-table
                 class="header-table border"
-                :items="coach_check_in.checkInCoachId ? student_check_in : []"
+                :items="
+                  coach_check_in.checkInCoachId
+                    ? matchStartTime(student_check_in)
+                    : []
+                "
                 item-key="no"
                 :expanded.sync="expanded_index"
                 :headers="headers"
               >
+                <template v-slot:[`item.number`]="{ index }">
+                  <tr>
+                    <td>{{ index + 1 }}</td>
+                  </tr>
+                </template>
                 <template v-slot:[`item.fullname`]="{ item }">
                   {{
                     $i18n.locale == "th"
@@ -430,6 +439,7 @@
                         v.status == 'late' ||
                         v.status == 'emergency leave')
                   )" -->
+                <!-- <pre>{{ student_check_in }}</pre> -->
                 <v-card
                   class="mb-2"
                   flat
@@ -437,14 +447,16 @@
                   v-for="(student, index_student) in student_check_in.filter(
                     (v) =>
                       v.type === 'general' &&
-                      (v.status === 'punctual' || v.status === 'late')
+                      (v.status === 'punctual' || v.status === 'late') &&
+                      v.timeStart === this.startTime &&
+                      v.timeEnd === this.endTime
                   )"
                   :key="`${index_student}-student`"
                 >
                   <v-card-text>
                     <v-row class="d-flex align-center">
                       <v-col cols="12" sm class="text-lg font-bold">
-                        {{ student.no }}
+                        {{ index_student + 1 }}
                         {{
                           $i18n.locale == "th"
                             ? student.fullname
@@ -1472,6 +1484,8 @@ export default {
     show_attachment_dialog: false,
     files_attachment_dialog: null,
     is_loading: false,
+    startTime: "",
+    endTime: "",
   }),
   created() {
     this.GetStudentByTimeId({
@@ -1482,6 +1496,8 @@ export default {
   },
   mounted() {
     this.$store.dispatch("NavberUserModules/changeTitleNavber", "management");
+    this.startTime = this.$route.params.timeStart;
+    this.endTime = this.$route.params.timeEnd;
   },
   watch: {
     coach_check_in: function () {
@@ -1572,7 +1588,12 @@ export default {
     },
     headers() {
       return [
-        { text: this.$t("no."), align: "center", sortable: false, value: "no" },
+        {
+          text: this.$t("no."),
+          align: "center",
+          sortable: false,
+          value: "number",
+        },
         {
           text: `${this.$t("first name")} - ${this.$t("last name")}`,
           align: "center",
@@ -1675,6 +1696,16 @@ export default {
       DeleteAssessmentPotentialFile:
         "CoachModules/DeleteAssessmentPotentialFile",
     }),
+    matchStartTime(items) {
+      const matchedStudents = items.filter((student) => {
+        return (
+          student.timeStart === this.startTime &&
+          student.timeEnd === this.endTime
+        );
+      });
+      return matchedStudents;
+    },
+
     showAttachmentDialog(item) {
       this.files_attachment_dialog = item.url ? item.url : item;
       this.show_attachment_dialog = true;
