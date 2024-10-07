@@ -1073,10 +1073,13 @@
                                                   align="center"
                                                   v-else
                                                   >{{
-                                                    $i18n.locale == "th"
-                                                      ? student.cpo?.optionName
-                                                      : student.cpo
-                                                          ?.optionNameEn
+                                                    student.cpo
+                                                      ? $i18n.locale == "th"
+                                                        ? student.cpo
+                                                            ?.optionName
+                                                        : student.cpo
+                                                            ?.optionNameEn
+                                                      : "-"
                                                   }}
                                                 </v-col>
                                                 <v-col
@@ -1836,11 +1839,14 @@
                                           }}
                                         </v-col>
                                         <!-- CPO -->
-                                        <v-col cols="2" align="center"
-                                          >{{
-                                            $i18n.locale == "th"
-                                              ? students_data.optionName
-                                              : students_data.optionNameEn
+                                        <v-col cols="2" align="center">
+                                          {{
+                                            students_data.optionName ||
+                                            students_data.optionNameEn
+                                              ? $i18n.locale == "th"
+                                                ? students_data.optionName
+                                                : students_data.optionNameEn
+                                              : "-"
                                           }}
                                         </v-col>
                                         <!-- COUNT CHECKIn -->
