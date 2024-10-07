@@ -739,9 +739,9 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.get(`${localhost}/api/v1/studentlist/potential/${course_id}`, config)
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/potential/${course_id}`, config)
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/studentlist/potential/${course_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/potential/${course_id}`, config)
         if (data.statusCode === 200) {
           context.commit("SetAllStudentPotentialList", data.data)
           context.commit("SetStudentPotentialListIsLoading", false)
@@ -2357,9 +2357,9 @@ const CourseModules = {
         let checking = []
         let checkingDate = []
         let corrrectedReport = []
-        const localhost = 'http://localhost:3000'
-        let { data } = await axios.get(`${localhost}/api/v1/studentlist/potential/${course_id}`, config)
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/potential/${course_id}`, config)
+        // const localhost = 'http://localhost:3000'
+        // let { data } = await axios.get(`${localhost}/api/v1/studentlist/potential/${course_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/potential/${course_id}`, config)
         if (data.statusCode === 200) {
           for await (let items of data.data) {
             for (const item of items.students) {
