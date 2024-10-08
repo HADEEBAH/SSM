@@ -138,19 +138,16 @@
               >
             </v-col>
           </v-row>
-          <!-- <pre>
-            student_check_in : {{ student_check_in }}
-            coach_check_in :{{ coach_check_in }}
-          </pre> -->
+          <!-- :items="
+                  coach_check_in.checkInCoachId
+                    ? matchStartTime(student_check_in)
+                    : []
+                " -->
           <v-card elevation="1" class="mb-2">
             <v-form v-model="validate_form" ref="validate_form">
               <v-data-table
                 class="header-table border"
-                :items="
-                  coach_check_in.checkInCoachId
-                    ? matchStartTime(student_check_in)
-                    : []
-                "
+                :items="coach_check_in.checkInCoachId ? student_check_in : []"
                 item-key="no"
                 :expanded.sync="expanded_index"
                 :headers="headers"
@@ -432,14 +429,9 @@
                   ).length > 0
                 "
               >
-                <!-- v-for="(student, index_student) in student_check_in.filter(
-                    (v) =>
-                      v.type === 'general' &&
-                      (v.status == 'punctual' ||
-                        v.status == 'late' ||
-                        v.status == 'emergency leave')
-                  )" -->
-                <!-- <pre>{{ student_check_in }}</pre> -->
+                <!-- &&
+                      v.timeStart === this.startTime &&
+                      v.timeEnd === this.endTime -->
                 <v-card
                   class="mb-2"
                   flat
@@ -447,9 +439,7 @@
                   v-for="(student, index_student) in student_check_in.filter(
                     (v) =>
                       v.type === 'general' &&
-                      (v.status === 'punctual' || v.status === 'late') &&
-                      v.timeStart === this.startTime &&
-                      v.timeEnd === this.endTime
+                      (v.status === 'punctual' || v.status === 'late')
                   )"
                   :key="`${index_student}-student`"
                 >
@@ -1696,15 +1686,15 @@ export default {
       DeleteAssessmentPotentialFile:
         "CoachModules/DeleteAssessmentPotentialFile",
     }),
-    matchStartTime(items) {
-      const matchedStudents = items.filter((student) => {
-        return (
-          student.timeStart === this.startTime &&
-          student.timeEnd === this.endTime
-        );
-      });
-      return matchedStudents;
-    },
+    // matchStartTime(items) {
+    //   const matchedStudents = items.filter((student) => {
+    //     return (
+    //       student.timeStart === this.startTime &&
+    //       student.timeEnd === this.endTime
+    //     );
+    //   });
+    //   return matchedStudents;
+    // },
 
     showAttachmentDialog(item) {
       this.files_attachment_dialog = item.url ? item.url : item;

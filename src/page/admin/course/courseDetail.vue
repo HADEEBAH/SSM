@@ -1073,10 +1073,13 @@
                                                   align="center"
                                                   v-else
                                                   >{{
-                                                    $i18n.locale == "th"
-                                                      ? student.cpo?.optionName
-                                                      : student.cpo
-                                                          ?.optionNameEn
+                                                    student.cpo
+                                                      ? $i18n.locale == "th"
+                                                        ? student.cpo
+                                                            ?.optionName
+                                                        : student.cpo
+                                                            ?.optionNameEn
+                                                      : "-"
                                                   }}
                                                 </v-col>
                                                 <v-col
@@ -1836,11 +1839,14 @@
                                           }}
                                         </v-col>
                                         <!-- CPO -->
-                                        <v-col cols="2" align="center"
-                                          >{{
-                                            $i18n.locale == "th"
-                                              ? students_data.optionName
-                                              : students_data.optionNameEn
+                                        <v-col cols="2" align="center">
+                                          {{
+                                            students_data.optionName ||
+                                            students_data.optionNameEn
+                                              ? $i18n.locale == "th"
+                                                ? students_data.optionName
+                                                : students_data.optionNameEn
+                                              : "-"
                                           }}
                                         </v-col>
                                         <!-- COUNT CHECKIn -->
@@ -2504,6 +2510,9 @@
                                 student_data_assessment_potential.evolution
                               "
                               :items="evolution_options"
+                              :placeholder="
+                                $t('no information has been filled in yet')
+                              "
                               hide-details
                               readonly
                             >
@@ -2553,6 +2562,7 @@
                         <v-row dense>
                           <v-col cols="12">
                             <b>{{ $t("attachments") }}: </b>
+
                             <v-card
                               outlined
                               @click="openFile(file.attachmentPotential)"
@@ -2663,6 +2673,9 @@
                         :items="evolution_options"
                         hide-details
                         readonly
+                        :placeholder="
+                          $t('no information has been filled in yet')
+                        "
                       >
                         <template v-slot:item="{ item }">
                           <v-list-item-content>
@@ -2699,6 +2712,9 @@
                         :items="interest_options"
                         hide-details
                         readonly
+                        :placeholder="
+                          $t('no information has been filled in yet')
+                        "
                       >
                         <template v-slot:item="{ item }">
                           <v-list-item-content>
@@ -2941,7 +2957,7 @@
               <v-col align="center">
                 <v-btn
                   color="#ff6b81"
-                  @click="closeDialogAssessment()"
+                  @click="closeDialogAssessmentPotential()"
                   depressed
                   dark
                   class="btn-size-lg"

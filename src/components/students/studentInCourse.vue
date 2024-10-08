@@ -213,9 +213,11 @@
                 v-if="studentType === 'potential'"
               >
                 {{
-                  $i18n.locale == "th"
-                    ? `${item.optionName}`
-                    : `${item.optionNameEn}`
+                  item.optionName
+                    ? $i18n.locale == "th"
+                      ? `${item.optionName}`
+                      : `${item.optionNameEn}`
+                    : "-"
                 }}
               </template>
               <template

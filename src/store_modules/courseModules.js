@@ -704,7 +704,7 @@ const CourseModules = {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach_id}/date/${date}/time/${time_id}`, config)
 
         if (data.statusCode === 200) {
-          if (data.data.length > 0 && data.data?.filter(v => v?.potential?.checkInPotentialId).length === data.data.length) {
+          if (data.data.length > 0 && data.data?.filter(v => v?.potential?.checkInPotentialId).length !== data.data.length) {
             context.commit("SetStudentList", data.data)
             context.commit("SetNoChackInStudentList", [])
           } else {
@@ -742,7 +742,6 @@ const CourseModules = {
         // let localhost = "http://localhost:3000"
         // let { data } = await axios.get(`${localhost}/api/v1/studentlist/potential/${course_id}`, config)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/potential/${course_id}`, config)
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/potential/${course_id}`, config)
         if (data.statusCode === 200) {
           context.commit("SetAllStudentPotentialList", data.data)
           context.commit("SetStudentPotentialListIsLoading", false)
