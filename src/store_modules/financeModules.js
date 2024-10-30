@@ -34,6 +34,8 @@ const financeModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
+        // let localhost = "http://localhost:3000"
+        // let endpoint = `${localhost}/api/v1/adminpayment/filter?`
         let endpoint = `${process.env.VUE_APP_URL}/api/v1/adminpayment/filter?`
         endpoint = endpoint + `studentName=${filter.students}&`
         endpoint = endpoint + `status=${filter.payment_status}&`
@@ -90,19 +92,19 @@ const financeModules = {
                 "นักเรียน": order.student_name,
                 "ชื่อเล่นนักเรียน": order.nickname,
                 "ระดับชั้น": order.class_name,
-                "โรคประจำตัว": order.class_name,//
-                "โรงเรียน": order.class_name,//
+                "โรคประจำตัว": order.congenitalDiseaseText,
+                "โรงเรียน": order.schoolNameTh,
                 "ผู้ซื้อ": order.created_by_name,
                 "วันที่ออกเอกสาร": moment().format("DD/MM/YYYY HH:mm"),
-                "หมายเหตุ": order.class_name,//
+                "หมายเหตุ": order.remark
 
 
               })
             });
             if (data.data.length === reports.length) {
               reports.push({
-                "วันที่ออกเอกสาร": 'ยอดชำระแล้ว',
-                "หมายเลขออเดอร์": sumSuccess,
+                // "วันที่ออกเอกสาร": 'ยอดชำระแล้ว',
+                // "หมายเลขออเดอร์": sumSuccess,
                 "สถานะ": "ยอดรอดำเนินการ",
                 "วันที่ชำระ": sumPending,
                 "ประเภทการชำระเงิน": "ยอดยกเลิก",
@@ -113,8 +115,8 @@ const financeModules = {
                 "แพคเก็จ": sumPrice,
                 "ระยะเวลา": '',
                 "โค้ช": '',
-                "นักเรียน": '',
-                "ชื่อเล่นนักเรียน": '',
+                "นักเรียน": 'ยอดชำระแล้ว',
+                "ชื่อเล่นนักเรียน": sumSuccess,
                 "ระดับชั้น": '',
                 "ผู้ซื้อ": '',
               })
