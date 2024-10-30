@@ -74,7 +74,7 @@
                   :items="coachsOptions(coach)"
                   item-value="accountId"
                   :item-text="
-                    $i18n.locale == 'th' ? 'fullNameTh' : 'fullNameEh'
+                    $i18n.locale == 'th' ? 'fullNameTh' : 'fullNameEn'
                   "
                   item-color="#ff6b81"
                   @change="findTeachDays(coach, coach_index)"

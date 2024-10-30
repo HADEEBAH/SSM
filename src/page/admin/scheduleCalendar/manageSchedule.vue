@@ -498,7 +498,7 @@
                 <v-card-text>
                   <v-row dense>
                     <!-- วันที่ -->
-                    <v-col cols="12" sm="8">
+                    <v-col cols="12">
                       <label class="font-weight-bold">{{ $t("date") }}</label>
 
                       <v-menu
@@ -537,7 +537,7 @@
                       </v-menu>
                     </v-col>
                     <!-- Switch -->
-                    <v-col cols="12" sm="4" class="align-self-center">
+                    <!-- <v-col cols="12" sm="4" class="align-self-center">
                       <v-switch
                         v-model="holidaySwitch"
                         :label="$t('all days')"
@@ -545,11 +545,11 @@
                         inset
                         @change="changeSwitchHoliday($event)"
                       ></v-switch>
-                    </v-col>
+                    </v-col> -->
                   </v-row>
                   <!-- เวลา -->
-                  <v-row v-if="!holidaySwitch" dense>
-                    <!-- เวลาเริ่ม -->
+                  <!-- <v-row v-if="!holidaySwitch" dense>
+                    เวลาเริ่ม
                     <v-col cols="6">
                       <label class="font-weight-bold">{{
                         $t("start time")
@@ -582,7 +582,7 @@
                         color="#FF6B81"
                       ></VueTimepicker>
                     </v-col>
-                    <!-- เวลาสิ้นสุด -->
+                    เวลาสิ้นสุด
                     <v-col cols="6">
                       <label class="font-weight-bold">{{
                         $t("end time")
@@ -616,14 +616,14 @@
                         color="#FF6B81"
                       ></VueTimepicker>
                     </v-col>
-                  </v-row>
-
+                  </v-row> -->
+                  <!-- ชื่อวันหยุด -->
                   <v-row dense>
                     <v-col cols="12">
                       <label class="font-weight-bold">{{
                         $t("holiday name")
                       }}</label>
-                      <v-textarea
+                      <v-text-field
                         v-model="nameHoliday"
                         outlined
                         :placeholder="
@@ -633,8 +633,49 @@
                         "
                         :rules="holiday_name"
                         color="#FF6B81"
-                      ></v-textarea>
+                      ></v-text-field>
                     </v-col>
+                  </v-row>
+                  <pre>{{ holiday_course?.length }}</pre>
+                  <!-- ข้อมูลคอร์สทป-->
+                  <v-row dense v-if="holiday_course?.length > 0">
+                    <!-- ชื่อคอร์สชดเชย -->
+                    <v-col cols="12">
+                      <label class="font-weight-bold">{{ $t("course") }}</label>
+                      <v-autocomplete
+                        dense
+                        outlined
+                        v-model="courses"
+                        color="#FF6B81"
+                        :items="holiday_course"
+                        item-value="courseId"
+                        :item-text="
+                          $i18n.locale == 'th' ? 'courseNameTh' : 'courseNameEn'
+                        "
+                        item-color="#ff6b81"
+                        :placeholder="$t('select course')"
+                      >
+                      </v-autocomplete>
+                    </v-col>
+                    <!-- วันชดเชย -->
+                    <v-col> </v-col>
+                    <!-- เวลาชดเชย -->
+                    <v-row dense>
+                      <!-- เวลาเริ่ม -->
+                      <v-col cols="6">
+                        <label class="font-weight-bold">{{
+                          $t("start time")
+                        }}</label>
+                        <br />
+                      </v-col>
+                      <!-- เวลาสิ้นสุด -->
+                      <v-col cols="6">
+                        <label class="font-weight-bold">{{
+                          $t("end time")
+                        }}</label>
+                        <br />
+                      </v-col>
+                    </v-row>
                   </v-row>
                 </v-card-text>
 
@@ -1411,6 +1452,29 @@ export default {
         typeOfValue: "CT_2",
       },
     ],
+    selectedCourses: [
+      {
+        courseId: "11111",
+        fullNameTh: "aaaaaa",
+        fullNameEn: "AAAAA",
+      },
+      {
+        courseId: "222",
+        fullNameTh: "bbbb",
+        fullNameEn: "BBBBB",
+      },
+      {
+        courseId: "333",
+        fullNameTh: "cccc",
+        fullNameEn: "CCCCC",
+      },
+      {
+        courseId: "444",
+        fullNameTh: "dddd",
+        fullNameEn: "DDDDD",
+      },
+    ],
+    courses: null,
 
     show_dialog_holoday: false,
     dialog_show_success: false,
@@ -1553,6 +1617,9 @@ export default {
       storedData: "",
     },
     coachCheckInData: false,
+    // selected_date: null,
+    // selected_month: null,
+    // selected_year: null,
   }),
 
   created() {
@@ -1581,6 +1648,7 @@ export default {
       packages: "CourseModules/getPackages",
       options_data: "CourseModules/getOptions",
       getCheckinFilter: "adminCheckInModules/getCheckinFilter",
+      holiday_course: "ManageScheduleModules/getFilterCourseHoliday",
     }),
     // filteredCheckInStatusOptions() {
     //   let options = this.checkInStatusOptions;
@@ -1669,6 +1737,7 @@ export default {
       GetPackages: "CourseModules/GetPackages",
       GetOptions: "CourseModules/GetOptions",
       CheckInFilter: "adminCheckInModules/CheckInFilter",
+      GetFilterCourseHoliday: "ManageScheduleModules/GetFilterCourseHoliday",
     }),
     async checkStatusOptions() {
       this.coachCheckInData = false;
@@ -1865,6 +1934,8 @@ export default {
         this.$i18n.locale == "th" ? "th-TH" : "en-US",
         options
       );
+      const [holidayYears, holidayMonth, holidayDate] = item.split("-");
+      this.GetFilterCourseHoliday({ holidayDate, holidayMonth, holidayYears });
     },
 
     async filterSchedules() {
@@ -2197,6 +2268,7 @@ export default {
       this.setDataEditDialog = {};
       this.editHolidayDates = null;
       this.holidaydatesTh = null;
+      this.holiday_course.length = 0;
     },
     courseDate() {
       let courseTodayDate = moment(new Date()).format("YYYY-MM-DD");

@@ -20,6 +20,7 @@ const manageScheduleModules = {
     data_in_schedule: [],
     data_filter_schedule: null,
     data_search_schedule: null,
+    holiday_course: null
   },
   mutations: {
     SetGetAllCourseIsLoading(state, value) {
@@ -108,6 +109,9 @@ const manageScheduleModules = {
         state.data_search_schedule = null
       }
 
+    },
+    SetFilterCourseHoliday(state, payload) {
+      state.holiday_course = payload
     },
   },
   actions: {
@@ -535,6 +539,30 @@ const manageScheduleModules = {
     async GetSearchSchedule(context, search) {
       await context.commit("SetSearchFilterSchedule", search);
     },
+    async GetFilterCourseHoliday(context, { holidayDate, holidayMonth, holidayYears }) {
+      try {
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${localhost}/api/v1/schedule/holiday?holidayDate=${holidayDate}&holidayMonth=${holidayMonth}&holidayYears=${holidayYears}`)
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/holiday?holidayDate=${holidayDate}&holidayMonth=${holidayMonth}&holidayYears=${holidayYears}`)
+        if (data.statusCode === 200) {
+          let checked = false
+          checked = data.data ? true : false
+          console.log('checked :>> ', checked);
+          context.commit("SetFilterCourseHoliday", data.data);
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "warning",
+          title: VueI18n.t("this item cannot be made"),
+          text: error,
+          showDenyButton: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+        });
+      }
+    },
 
   },
   getters: {
@@ -574,6 +602,9 @@ const manageScheduleModules = {
     },
     getSearchFilterSchedule(state) {
       return state.data_search_schedule;
+    },
+    getFilterCourseHoliday(state) {
+      return state.holiday_course;
     },
   },
 };
