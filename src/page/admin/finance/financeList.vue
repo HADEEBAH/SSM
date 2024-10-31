@@ -197,6 +197,13 @@
           'items-per-page-text': 'Rows per page:',
         }"
       >
+        <template v-slot:[`item.courseName`]="{ item }">
+          {{
+            $i18n.locale == "th"
+              ? item.course[0].courseNameTh
+              : item.course[0].courseNameEn
+          }}
+        </template>
         <template v-slot:[`item.total_price`]="{ item }">
           {{
             item.total_price.toLocaleString(undefined, {
@@ -479,7 +486,7 @@
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
                       (+{{ export_filter.course_type_id.length - 1 }}
-                      {{ $t("Others") }})
+                      {{ $t("others") }})
                     </span>
                   </template>
                 </v-autocomplete>
@@ -584,7 +591,7 @@
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
                       (+{{ export_filter.order_number?.length - 1 }}
-                      {{ $t("Others") }})
+                      {{ $t("others") }})
                     </span>
                   </template>
                 </v-combobox>
@@ -986,7 +993,8 @@ export default {
           text: this.$t("course name"),
           align: "start",
           sortable: false,
-          value: this.$i18n.locale == "th" ? "course_nameTh" : "course_nameEn",
+          value: "courseName",
+          // value: this.$i18n.locale == "th" ? "course_nameTh" : "course_nameEn",
         },
         {
           text: this.$t("price"),
@@ -1059,17 +1067,25 @@ export default {
       this.export_filter.order_number = [];
       this.selected.forEach((order) => {
         order.course?.forEach((courses) => {
-          console.log("courses :>> ", courses);
-          if (!this.export_filter.course_id.includes(order.course_id)) {
-            this.export_filter.course_id.push(courses.courseId);
-          }
+          this.export_filter.course_id.push(courses.courseId);
+          // close duplicate courseID
+          const uniqueCourses = new Set(this.export_filter.course_id);
+          const newCourses = Array.from(uniqueCourses);
+          this.export_filter.course_id = [...newCourses];
 
           if (
             !this.export_filter.course_type_id.includes(order.course_type_id)
           ) {
             this.export_filter.course_type_id.push(courses.courseTypeId);
+            // close duplicate course type id
+            const uniqueCourseTypes = new Set(
+              this.export_filter.course_type_id
+            );
+            const newCourseType = Array.from(uniqueCourseTypes);
+            this.export_filter.course_type_id = [...newCourseType];
           }
         });
+
         if (!this.export_filter.payment_type.includes(order.payment_type)) {
           this.export_filter.payment_type.push(order.payment_type);
         }
