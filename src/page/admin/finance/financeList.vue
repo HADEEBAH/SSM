@@ -1051,7 +1051,6 @@ export default {
       }
     },
     ShowDialogExport() {
-      console.log("this.selected :>> ", this.selected);
       this.export_filter.course_id = [];
       this.export_filter.course_type_id = [];
       this.export_filter.students = [];
@@ -1059,14 +1058,18 @@ export default {
       this.export_filter.payment_status = [];
       this.export_filter.order_number = [];
       this.selected.forEach((order) => {
-        if (!this.export_filter.course_id.includes(order.course_id)) {
-          this.export_filter.course_id.push(order.course.courseId);
-        }
+        order.course?.forEach((courses) => {
+          console.log("courses :>> ", courses);
+          if (!this.export_filter.course_id.includes(order.course_id)) {
+            this.export_filter.course_id.push(courses.courseId);
+          }
 
-        if (!this.export_filter.course_type_id.includes(order.course_type_id)) {
-          this.export_filter.course_type_id.push(order.course.courseTypeId);
-        }
-
+          if (
+            !this.export_filter.course_type_id.includes(order.course_type_id)
+          ) {
+            this.export_filter.course_type_id.push(courses.courseTypeId);
+          }
+        });
         if (!this.export_filter.payment_type.includes(order.payment_type)) {
           this.export_filter.payment_type.push(order.payment_type);
         }
