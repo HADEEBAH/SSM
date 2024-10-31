@@ -179,6 +179,7 @@
           </img-card>
         </v-col>
       </v-row>
+      <!-- <pre>{{ selected }}</pre> -->
       <v-data-table
         v-model="selected"
         :headers="columns"
@@ -1050,6 +1051,7 @@ export default {
       }
     },
     ShowDialogExport() {
+      console.log("this.selected :>> ", this.selected);
       this.export_filter.course_id = [];
       this.export_filter.course_type_id = [];
       this.export_filter.students = [];
@@ -1058,11 +1060,13 @@ export default {
       this.export_filter.order_number = [];
       this.selected.forEach((order) => {
         if (!this.export_filter.course_id.includes(order.course_id)) {
-          this.export_filter.course_id.push(order.course_id);
+          this.export_filter.course_id.push(order.course.courseId);
         }
+
         if (!this.export_filter.course_type_id.includes(order.course_type_id)) {
-          this.export_filter.course_type_id.push(order.course_type_id);
+          this.export_filter.course_type_id.push(order.course.courseTypeId);
         }
+
         if (!this.export_filter.payment_type.includes(order.payment_type)) {
           this.export_filter.payment_type.push(order.payment_type);
         }
