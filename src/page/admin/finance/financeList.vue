@@ -316,7 +316,7 @@
                   item-text="fullname"
                   item-value="userOneId"
                   class="py-1"
-                  :label="$t('please enter the student name')"
+                  :placeholder="$t('please enter the student name')"
                   outlined
                   color="#FF6B81"
                   item-color="#FF6B81"
@@ -366,7 +366,7 @@
                     $i18n.locale == 'th' ? 'namePayment' : 'namePaymentEn'
                   "
                   item-value="valuePayment"
-                  :label="$t('please select a status')"
+                  :placeholder="$t('please select a status')"
                   outlined
                   color="#FF6B81"
                   item-color="#FF6B81"
@@ -401,7 +401,7 @@
                   :item-text="$i18n.locale == 'th' ? 'name' : 'nameEn'"
                   item-value="value"
                   v-model="export_filter.payment_type"
-                  :label="$t('please select a payment type')"
+                  :placeholder="$t('please select a payment type')"
                   outlined
                   multiple
                   hide-details
@@ -431,7 +431,7 @@
                   :item-text="$i18n.locale == 'th' ? 'course_th' : 'course_en'"
                   item-value="course_id"
                   v-model="export_filter.course_id"
-                  :label="$t('please select a course')"
+                  :placeholder="$t('please select a course')"
                   outlined
                   multiple
                   hide-details
@@ -465,7 +465,7 @@
                   :item-text="$i18n.locale == 'th' ? 'typeName' : 'typeNameEn'"
                   item-value="typeOfValue"
                   v-model="export_filter.course_type_id"
-                  :label="$t('please select a course type')"
+                  :placeholder="$t('please select a course type')"
                   outlined
                   multiple
                   color="#FF6B81"
@@ -495,7 +495,7 @@
                       item-value="packageId"
                       v-model="export_filter.package_id"
                       class="py-1"
-                      :label="$t('please select a package')"
+                      :placeholder="$t('please select a package')"
                       outlined
                       multiple
                       color="#FF6B81"
@@ -528,7 +528,7 @@
                       item-value="optionId"
                       v-model="export_filter.option_id"
                       class="py-1"
-                      :label="$t('please select a period')"
+                      :placeholder="$t('please select a period')"
                       outlined
                       multiple
                       color="#FF6B81"
@@ -618,7 +618,7 @@
                               ? export_filter.date_doc_start
                               : GenDate(export_filter.date_doc_start)
                           "
-                          :label="$t('please select a start date')"
+                          :placeholder="$t('please select a start date')"
                           outlined
                           prepend-icon="mdi-calendar"
                           readonly
@@ -654,7 +654,7 @@
                               ? export_filter.date_doc_end
                               : GenDate(export_filter.date_doc_end)
                           "
-                          :label="$t('please select an end date')"
+                          :placeholder="$t('please select an end date')"
                           outlined
                           prepend-icon="mdi-calendar"
                           readonly
@@ -697,7 +697,7 @@
                               ? export_filter.date_pay_start
                               : GenDate(export_filter.date_pay_start)
                           "
-                          :label="$t('please select a start date')"
+                          :placeholder="$t('please select a start date')"
                           outlined
                           prepend-icon="mdi-calendar"
                           readonly
@@ -734,7 +734,7 @@
                               ? export_filter.date_pay_end
                               : GenDate(export_filter.date_pay_end)
                           "
-                          :label="$t('please select an end date')"
+                          :placeholder="$t('please select an end date')"
                           outlined
                           prepend-icon="mdi-calendar"
                           readonly
@@ -760,7 +760,7 @@
               <v-col cols="12" sm="6">
                 <label-custom :text="$t('service value')"></label-custom>
                 <v-text-field
-                  :label="$t('please enter the service value start')"
+                  :placeholder="$t('please enter the service value start')"
                   outlined
                   dense
                   type="number"
@@ -771,7 +771,7 @@
               <v-col cols="12" sm="6">
                 <label-custom :text="$t('to')"></label-custom>
                 <v-text-field
-                  :label="$t('please enter the service value end')"
+                  :placeholder="$t('please enter the service value end')"
                   outlined
                   dense
                   type="number"
