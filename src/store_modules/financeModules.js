@@ -62,7 +62,7 @@ const financeModules = {
           let sumTotal = 0
           if (data.data.length > 0) {
             data.data.forEach(order => {
-              sumTotal = parseFloat(order.price) - parseFloat(order.other_discount)
+              sumTotal = (parseFloat(order?.price || 0) - parseFloat(order?.discount || 0))- parseFloat(order?.other_discount || 0)
               sumPrice = sumPrice + parseFloat(sumTotal)
               // sumPrice = sumPrice + parseFloat(order.price)
               if (order.payment_status === 'success') {
@@ -70,13 +70,13 @@ const financeModules = {
                 // sumSuccess = sumSuccess + parseFloat(order.price)
               }
               if (order.payment_status === 'pending') {
-                sumPending = sumPending + parseFloat(order.price)
+                sumPending = sumPending  + (parseFloat(order?.price || 0) - parseFloat(order?.discount || 0))- parseFloat(order?.other_discount || 0)
               }
               if (order.payment_status === 'cancel') {
-                sumCancel = sumCancel + parseFloat(order.price)
+                sumCancel = sumCancel + (parseFloat(order?.price || 0) - parseFloat(order?.discount || 0))- parseFloat(order?.other_discount || 0)
               }
               if (order.payment_status === 'fail') {
-                sumfail = sumfail + parseFloat(order.price)
+                sumfail = sumfail  + (parseFloat(order?.price || 0) - parseFloat(order?.discount || 0))- parseFloat(order?.other_discount || 0)
               }
               reports.push({
                 "วันที่สร้าง": moment(order.created_date).format("DD/MM/YYYY HH:mm"),
