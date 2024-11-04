@@ -584,16 +584,8 @@
                   clearable
                   color="#FF6B81"
                   item-color="#FF6B81"
+                  @paste="handlePaste"
                 >
-                  <template v-slot:no-data>
-                    <v-list-item>
-                      <v-list-item-content>
-                        <v-list-item-title>
-                          {{ $t("please preese enter after finish") }}
-                        </v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </template>
                   <template v-slot:selection="{ item, index }">
                     <v-chip dark v-if="index === 0" color="#FF6B81">
                       <span>{{ item }}</span>
@@ -1050,6 +1042,26 @@ export default {
       searchNameUser: "loginModules/searchNameUser",
       FilterFinanceData: "OrderModules/FilterFinanceData",
     }),
+    handlePaste(event) {
+      event.preventDefault();
+      const pastedData = event.clipboardData.getData("text");
+
+      // Initialize export_filter.order_number if undefined
+      if (!Array.isArray(this.export_filter.order_number)) {
+        this.export_filter.order_number = [];
+      }
+
+      // Split pasted data by comma or whitespace and remove any empty strings
+      const orderNumbers = pastedData.split(/[\s,]+/).filter(Boolean);
+
+      // Add each order number if it doesn't already exist in export_filter.order_number
+      orderNumbers.forEach((orderNumber) => {
+        if (!this.export_filter.order_number.includes(orderNumber)) {
+          this.export_filter.order_number.push(orderNumber);
+        }
+      });
+    },
+
     GenDate(date) {
       return new Date(date).toLocaleDateString(
         this.$i18n.locale == "th" ? "th-TH" : "en-US",
@@ -1164,6 +1176,7 @@ export default {
         payment_status: [],
         option_id: [],
         package_id: [],
+        order_number: [],
         select_date_doc_start: false,
         select_date_doc_end: false,
         date_doc_start: "",
