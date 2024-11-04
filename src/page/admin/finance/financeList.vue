@@ -585,6 +585,15 @@
                   color="#FF6B81"
                   item-color="#FF6B81"
                 >
+                  <template v-slot:no-data>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-list-item-title>
+                          {{ $t("please preese enter after finish") }}
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </template>
                   <template v-slot:selection="{ item, index }">
                     <v-chip dark v-if="index === 0" color="#FF6B81">
                       <span>{{ item }}</span>
