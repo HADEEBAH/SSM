@@ -83,6 +83,7 @@
     "booking status": "สถานะการจอง",
     "because your orders are duplicated": "เนื่องจากคำสั่งซื้อของคุณซ้ำกัน",
     "because this course is full":"เนื่องจากคอร์สนี้เต็ม",
+    "because you have chosen this course":"เนื่องจากคุณเลือกคอร์สนี้แล้ว",
 
 
 
@@ -228,6 +229,7 @@
     "discount" : "ส่วนลด",
     "don't have an account yet?" : "ยังไม่มีบัญชีใช่หรือไม่?",
     "dashboard" : "แดชบอร์ด",
+    "do you want to check in" : "ต้องการเช็คอินใช่หรือไม่?",
     "do you want to confirm your payment?" : "ต้องการยืนยันการชำระเงินใช่หรือไม่?",
     "do you want to delete course?" : "คุณต้องการลบคอร์สใช่หรือไม่?",
     "do you want to delete a holiday?" : "คุณต้องการลบวันหยุดใช่หรือไม่?",
@@ -521,8 +523,6 @@
     "permission management": "การจัดการสิทธิ์",
     "phone number" : "เบอร์โทรศัพท์",
     "personal information" : "ข้อมูลส่วนตัว",
-    "please preese enter after finish":"กรุณากดปุ่ม enter ทุกครั้ง",
-    "please enter order number":"หมายเลขคำสั่งซื้อ",
     "please specify congenital disease": "โปรดระบุโรคประจำตัว",
     "please specify class": "โปรดระบุระดับชั้น",
     "please specify more details of class": "โปรดระบุระดับชั้นเพิ่มเติม",
@@ -897,9 +897,12 @@
     "to day" : "ไปวันที่",
     "teaching days cannot be closed": "ไม่สามารถปิดวันสอนได้",
     "the system will not display information if the user does not enter student and parent information" :"ระบบจะไม่แสดงข้อมูลหากผู้ใช้ไม่ทำการกรอกข้อมูลของนักเรียนและผู้ปกครองตามเทมเพลต",
+    "the compensatory day overlaps with the coach's leave day. please select a new compensatory day": "วันชดเชยทับซ้อนกับวันลาของโค้ช กรุณาเลือกวันชดเชยใหม่",
+    "the compensatory day overlaps with the holiday. please select a new compensatory day": "วันชดเชยทับซ้อนกับวันหยุด กรุณาเลือกวันชดเชยใหม่",
 
 
-
+    "unable to update the compensation day":"ไม่สามารถอัปเดตวันชดเชยได้เนื่องจากวันชดเชยตรงกับวันหยุด โปรดเลือกวันชดเชยใหม่",
+   "unable to update the compensation day because the compensation day coincides with the coach's leave":"ไม่สามารถอัปเดตวันชดเชยได้เนื่องจากวันชดเชยตรงกับวันลาโค้ช กรุณาเลือกวันชดเชยใหม่",
     "unable to study on the specified date. because there are already classes on the specified date" : "ไม่สามารถเรียนชดเชยวันที่ระบุได้ เนื่องจากวันที่ระบุมีเรียนอยู่แล้ว",
     "unpaid" : "ยังไม่ชำระเงิน",
     "upload attachment" : "อัปโหลดไฟล์แนบ",
@@ -912,6 +915,7 @@
     "username not found": "ไม่มี username",
     "username already exists": "username นี้ถูกใช้แล้ว",
     "username already exists in warraphat" : "username นี้ถูกใช้แล้วในระบบโรงเรียนวรพัฒน์",
+    "unable to update the compensation date due to overlapping times":"ไม่สามารถอัปเดตวันที่ชดเชยได้เนื่องจากเวลาที่ทับซ้อนกัน โปรดเลือกวันที่ชดเชยใหม่",
 
     "user page": "หน้าผู้ใช้งาน",
     "username (English)": "ชื่อผู้ใช้(ภาษาอังกฤษ)",
