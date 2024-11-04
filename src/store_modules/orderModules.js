@@ -76,7 +76,17 @@ const orderModules = {
       type: "",
       order_step: 0,
       order_number: "",
-      courses: [],
+      courses: [
+        {
+          course_list: [],
+          package_list: [],
+          option_list: [],
+          day_of_week_list: [],
+          time_list: [],
+          coach_list: [],
+          course_type_id: 'CT_1',
+        }
+      ],
       created_by: "",
       payment_status: "",
       payment_type: "",
@@ -104,6 +114,7 @@ const orderModules = {
     history_list_option: {},
     filter_finance_data: [],
     order_number_detail: [],
+    package_add_student: []
   },
   mutations: {
     SetOrderNumberDetail(state, payload) {
@@ -200,6 +211,34 @@ const orderModules = {
     SetFilterFinance(state, payload) {
       state.filter_finance_data = payload
     },
+    SetAdminCourseType(state, { payload, index }) {
+      state.order.courses[index].course_type_id = payload
+    },
+    SetAdminCourseDetail(state, { payload, index }) {
+      state.order.courses[index].course_list = payload
+    },
+    SetAdminPackageDetail(state, { payload, index }) {
+      state.order.courses[index].package_list = payload
+    },
+    SetAdminOptionDetail(state, { payload, index }) {
+      state.order.courses[index].option_list = payload
+    },
+    SetAdminDayDetail(state, { payload, index }) {
+      state.order.courses[index].day_of_week_list = payload
+    },
+    SetDayAddStudent(state, { payload, index }) {
+      state.order.courses[index].day_of_week_list = payload
+    },
+    SetAdminTimeDetail(state, { payload, index }) {
+      state.order.courses[index].time_list = payload
+    },
+    SetTimeAddStudent(state, { payload, index }) {
+      state.order.courses[index].time_list = payload
+    },
+    SetAdminCoachDetail(state, { payload, index }) {
+      state.order.courses[index].coach_list = payload
+    },
+
   },
   actions: {
     async getHistory(context) {
@@ -1127,10 +1166,11 @@ const orderModules = {
             student: students,
             statusDiscountPrice: course.checkedDiscountPrice,
             statusDiscountPercent: course.checkedDiscountPercent,
-            discount: course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice
+            discount: course.course_type_id === "CT_1" ? course?.option?.discountStatus ? course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice
               ? course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice
-              : '0',
-            adminDiscount: course.discountOther ? course.discountOther : 0
+              : '0' : '0' : course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice ? course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice : 0,
+
+            adminDiscount: course.discountOther ? course.discountOther : "0"
           })
           // if (moreDiscount) {
           //   payload.courses.forEach((course, index) => {
@@ -2537,6 +2577,173 @@ const orderModules = {
         });
       }
     },
+    async GetCoursesFilter(context, { category_id, status, course_type_id, index }) {
+
+      try {
+        if (!status) {
+          status = ["Active", "Reserve"]
+        }
+        if (!course_type_id) {
+          course_type_id = 'CT_1'
+        }
+
+
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/course/limit?category_id=${category_id}&status=${status}&course_type_id=${course_type_id}&limit=${limit}&page=${page}${query}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/limit?category_id=${category_id}&status=${status}&course_type_id=${course_type_id}&limit=${null}&page=${null}`)
+        if (data.statusCode === 200) {
+          // for (const course of data.data) {
+          //   // let course_studant_amount = 0
+          //   course.student_course_data = []
+          //   course.show = false
+          //   course.course_url = course.course_img ? `${process.env.VUE_APP_URL}/api/v1/files/${course.course_img}` : ""
+          // }
+          data.data.map((course) => {
+            course.student_course_data = []
+            course.show = false
+            course.course_url = course.course_img ? `${process.env.VUE_APP_URL}/api/v1/files/${course.course_img}` : null
+          })
+          context.commit("SetAdminCourseDetail", { payload: data.data, index: index })
+          // context.commit("SetCourses", data.data)
+        } else {
+          context.commit("SetCoursesIsLoading", false)
+          throw { message: data.message }
+        }
+      } catch (error) {
+        context.commit("SetCoursesIsLoading", false)
+        console.log(error)
+      }
+
+    },
+    async GetPackagesAddStudent(context, { course_id, index }) {
+      try {
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/course/detail/addstudent/status-course/${course_id}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/addstudent/status-course/${course_id}`)
+        if (data.statusCode === 200) {
+
+          context.commit("SetAdminPackageDetail", { payload: data.data, index: index })
+
+        } else {
+          throw { error: data }
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async GetOptionAddStudent(context, { course_id, package_id, index }) {
+      try {
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/course/detail/addstudent/status-package/${course_id}/${package_id}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/addstudent/status-package/${course_id}/${package_id}`)
+        if (data.statusCode === 200) {
+          context.commit("SetAdminOptionDetail", { payload: data.data, index: index })
+        } else {
+          throw { error: data }
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async GetDayAddStudent(context, { course_id, package_id, option_id, index }) {
+      let getDayDuplicate = []
+      try {
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/course/detail/addstudent/status-day/${course_id}/${package_id}/${option_id}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/addstudent/status-day/${course_id}/${package_id}/${option_id}`)
+        if (data.statusCode === 200) {
+          let dayOpen = data?.data?.filter((item) => item?.status === "Open");
+          for (const itemsDays of dayOpen) {
+            if (getDayDuplicate?.length === 0) {
+              getDayDuplicate.push(itemsDays)
+            } else if (!getDayDuplicate.some((items) => itemsDays.dayOfWeekName === items.dayOfWeekName)) {
+              getDayDuplicate.push(itemsDays)
+            }
+          }
+          for (const items of data.data) {
+            let dayArray = items.dayOfWeekName.split(',')
+            let dayString = dayOfWeekArray(dayArray)
+            items.dayName = dayString
+
+          }
+          context.commit("SetAdminDayDetail", { payload: getDayDuplicate, index: index })
+          context.commit("SetDayAddStudent", { payload: dayOpen, index: index })
+
+        } else {
+          throw { error: data }
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async GetTimeAddStudent(context, { course_id, package_id, option_id, day_ofweek_id, index }) {
+      let getTimeDuplicate = []
+      try {
+        let payloads = {}
+        payloads.courseId = course_id
+        payloads.packageId = package_id
+        payloads.optionId = option_id
+        payloads.dayOfWeekIds = day_ofweek_id
+
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.post(`${localhost}/api/v1/course/detail/addstudent/status-time`, payloads)
+        let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/course/detail/addstudent/status-time`, payloads)
+        if (data.statusCode === 201) {
+
+          let timeOpen = data?.data?.filter((item) => item?.status === "Open");
+
+          for (const itemsTime of timeOpen) {
+            if (getTimeDuplicate?.length === 0) {
+              getTimeDuplicate.push(itemsTime)
+            } else if (!getTimeDuplicate.some((items) => itemsTime.start === items.start && itemsTime.end === items.end)) {
+              getTimeDuplicate.push(itemsTime)
+
+            }
+          }
+
+
+
+          context.commit("SetAdminTimeDetail", { payload: getTimeDuplicate, index: index })
+          context.commit("SetTimeAddStudent", { payload: timeOpen, index: index })
+        } else {
+          throw { error: data }
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async GetCoachAddStudent(context, { course_id, package_id, option_id, day_ofweek_id, time_id, index }) {
+      try {
+
+        let payloads = {}
+        payloads.courseId = course_id
+        payloads.packageId = package_id
+        payloads.optionId = option_id
+        payloads.dayOfWeekIds = day_ofweek_id
+        payloads.timeIds = time_id
+
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.post(`${localhost}/api/v1/course/detail/addstudent/status-coach`, payloads)
+        let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/course/detail/addstudent/status-coach`, payloads)
+        if (data.statusCode === 201) {
+
+          for (const items of data.data) {
+            items.fullNameTh = `${items.firstNameTh} ${items.lastNameTh}`
+            items.fullNameEn = `${items.firstNameEn} ${items.lastNameEn}`
+          }
+          context.commit("SetAdminCoachDetail", { payload: data.data, index: index })
+        } else {
+          throw { error: data }
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    // ChangeCourseType(context, { course, index }) {
+    //   // context.commit("SetOrder", orderData);
+    //   context.commit("SetAdminCoachDetail", { payload: course, index: index })
+
+    // },
   },
   getters: {
     orderHistory(state) {
@@ -2605,7 +2812,13 @@ const orderModules = {
     },
     getOrderNumberDetail(state) {
       return state.order_number_detail
-    }
+    },
+    getCourses(state) {
+      return state.courses
+    },
+    getPackagesAddStudent(state) {
+      return state.package_add_student
+    },
   },
 };
 
