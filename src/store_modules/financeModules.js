@@ -34,6 +34,8 @@ const financeModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
+        // let localhost = "http://localhost:3000"
+        // let endpoint = `${localhost}/api/v1/adminpayment/filter?`
         let endpoint = `${process.env.VUE_APP_URL}/api/v1/adminpayment/filter?`
         endpoint = endpoint + `studentName=${filter.students}&`
         endpoint = endpoint + `status=${filter.payment_status}&`
@@ -57,21 +59,24 @@ const financeModules = {
           let sumSuccess = 0
           let sumCancel = 0
           let sumfail = 0
+          let sumTotal = 0
           if (data.data.length > 0) {
             data.data.forEach(order => {
-
-              sumPrice = sumPrice + parseFloat(order.price)
+              sumTotal = (parseFloat(order?.price || 0) - parseFloat(order?.discount || 0))- parseFloat(order?.other_discount || 0)
+              sumPrice = sumPrice + parseFloat(sumTotal)
+              // sumPrice = sumPrice + parseFloat(order.price)
               if (order.payment_status === 'success') {
-                sumSuccess = sumSuccess + parseFloat(order.price)
+                sumSuccess = sumSuccess + parseFloat(sumTotal)
+                // sumSuccess = sumSuccess + parseFloat(order.price)
               }
               if (order.payment_status === 'pending') {
-                sumPending = sumPending + parseFloat(order.price)
+                sumPending = sumPending  + (parseFloat(order?.price || 0) - parseFloat(order?.discount || 0))- parseFloat(order?.other_discount || 0)
               }
               if (order.payment_status === 'cancel') {
-                sumCancel = sumCancel + parseFloat(order.price)
+                sumCancel = sumCancel + (parseFloat(order?.price || 0) - parseFloat(order?.discount || 0))- parseFloat(order?.other_discount || 0)
               }
               if (order.payment_status === 'fail') {
-                sumfail = sumfail + parseFloat(order.price)
+                sumfail = sumfail  + (parseFloat(order?.price || 0) - parseFloat(order?.discount || 0))- parseFloat(order?.other_discount || 0)
               }
               reports.push({
                 "วันที่สร้าง": moment(order.created_date).format("DD/MM/YYYY HH:mm"),
@@ -80,7 +85,8 @@ const financeModules = {
                 "วันที่ชำระ": order.paid_date,
                 "ประเภทการชำระเงิน": order.payment_type ? order.payment_type == 'cash' ? 'เงินสด' :
                   ['Credit Card', 'Credit Card Installment'].some(v => v == order.payment_type) ? 'บัตเครดิต/เดบิต' : 'โอนเงินเข้าบัญชี' : '',
-                "ราคา": parseFloat(order.price).toLocaleString(undefined, { minimumFractionDigits: 2 }),
+                "ราคา": parseFloat(sumTotal).toLocaleString(undefined, { minimumFractionDigits: 2 }),
+                // "ราคา": parseFloat(order.price).toLocaleString(undefined, { minimumFractionDigits: 2 }),
                 "ผู้รับเงิน": order.payment?.recipient ? `${order.accountRecipientFirstNameTh} ${order.accountRecipientLastNameTh}` : '',
                 "คอร์ส": order.courseNameTh,
                 "ประเภทคอร์ส": order.courseTypeNameTh,
@@ -90,27 +96,36 @@ const financeModules = {
                 "นักเรียน": order.student_name,
                 "ชื่อเล่นนักเรียน": order.nickname,
                 "ระดับชั้น": order.class_name,
+                "โรคประจำตัว": order.congenitalDiseaseText,
+                "โรงเรียน": order.schoolNameTh,
                 "ผู้ซื้อ": order.created_by_name,
                 "วันที่ออกเอกสาร": moment().format("DD/MM/YYYY HH:mm"),
+                "หมายเหตุ": order.remark
+
 
               })
             });
             if (data.data.length === reports.length) {
               reports.push({
-                "วันที่ออกเอกสาร": 'ยอดชำระแล้ว',
-                "หมายเลขออเดอร์": sumSuccess,
+                // "วันที่ออกเอกสาร": 'ยอดชำระแล้ว',
+                // "หมายเลขออเดอร์": sumSuccess,
                 "สถานะ": "ยอดรอดำเนินการ",
-                "วันที่ชำระ": sumPending,
+                "วันที่ชำระ": parseFloat(sumPending).toLocaleString(undefined, { minimumFractionDigits: 2 }),
+                // "วันที่ชำระ": sumPending,
                 "ประเภทการชำระเงิน": "ยอดยกเลิก",
-                "ราคา": sumCancel,
+                "ราคา": parseFloat(sumCancel).toLocaleString(undefined, { minimumFractionDigits: 2 }),
+                // "ราคา": sumCancel,
                 "ผู้รับเงิน": 'ยอดเกิดข้อผิดพลาด',
-                "คอร์ส": sumfail,
+                "คอร์ส": parseFloat(sumfail).toLocaleString(undefined, { minimumFractionDigits: 2 }),
+                // "คอร์ส": sumfail,
                 "ประเภทคอร์ส": 'รวม',
-                "แพคเก็จ": sumPrice,
+                "แพคเก็จ": parseFloat(sumPrice).toLocaleString(undefined, { minimumFractionDigits: 2 }),
+                // "แพคเก็จ": sumPrice,
                 "ระยะเวลา": '',
                 "โค้ช": '',
-                "นักเรียน": '',
-                "ชื่อเล่นนักเรียน": '',
+                "นักเรียน": 'ยอดชำระแล้ว',
+                "ชื่อเล่นนักเรียน": parseFloat(sumSuccess).toLocaleString(undefined, { minimumFractionDigits: 2 }),
+                // "ชื่อเล่นนักเรียน": sumSuccess,
                 "ระดับชั้น": '',
                 "ผู้ซื้อ": '',
               })
