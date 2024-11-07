@@ -536,88 +536,7 @@
                         ></v-date-picker>
                       </v-menu>
                     </v-col>
-                    <!-- Switch -->
-                    <!-- <v-col cols="12" sm="4" class="align-self-center">
-                      <v-switch
-                        v-model="holidaySwitch"
-                        :label="$t('all days')"
-                        color="#FF6B81"
-                        inset
-                        @change="changeSwitchHoliday($event)"
-                      ></v-switch>
-                    </v-col> -->
                   </v-row>
-
-                  <!-- เวลา -->
-                  <!-- <v-row v-if="!holidaySwitch" dense>
-                    เวลาเริ่ม
-                    <v-col cols="6">
-                      <label class="font-weight-bold">{{
-                        $t("start time")
-                      }}</label>
-                      <br />
-                      <v-text-field
-                        readonly
-                        outlined
-                        dense
-                        style="
-                          position: absolute;
-                          display: block;
-                          z-index: 4;
-                          max-width: 141.5px;
-                        "
-                        @focus="SelectedStartDate($event)"
-                        :rules="compensation_start_time"
-                        v-model="holidayStartTime"
-                        color="#FF6B81"
-                      >
-                      </v-text-field>
-                      <VueTimepicker
-                        class="time-picker-hidden"
-                        hide-clear-button
-                        input-class="input-size-lg"
-                        advanced-keyboard
-                        v-model="holidayStartTime"
-                        close-on-complete
-                        @change="resetTime()"
-                        color="#FF6B81"
-                      ></VueTimepicker>
-                    </v-col>
-                    เวลาสิ้นสุด
-                    <v-col cols="6">
-                      <label class="font-weight-bold">{{
-                        $t("end time")
-                      }}</label>
-                      <br />
-                      <v-text-field
-                        readonly
-                        outlined
-                        dense
-                        style="
-                          position: absolute;
-                          display: block;
-                          z-index: 4;
-                          max-width: 141.5px;
-                        "
-                        @focus="SelectedStartDate($event)"
-                        :rules="compensation_end_time"
-                        v-model="holidayEndTime"
-                        color="#FF6B81"
-                      >
-                      </v-text-field>
-                      <VueTimepicker
-                        :disabled="!holidayStartTime"
-                        class="time-picker-hidden"
-                        hide-clear-button
-                        input-class="input-size-lg"
-                        advanced-keyboard
-                        v-model="holidayEndTime"
-                        close-on-complete
-                        :hour-range="checkHour(holidayStartTime)"
-                        color="#FF6B81"
-                      ></VueTimepicker>
-                    </v-col>
-                  </v-row> -->
                   <!-- ชื่อวันหยุด -->
                   <v-row dense>
                     <v-col cols="12">
@@ -644,7 +563,7 @@
                     v-for="(compenData, compenData_index) in compensation"
                     :key="compenData_index"
                   >
-                    <v-row dense>
+                    <v-row dense v-if="holiday_course?.length > 0">
                       <v-col cols="12">
                         <label class="font-weight-bold">{{
                           $t("course")
@@ -652,25 +571,31 @@
                         <v-autocomplete
                           dense
                           outlined
-                          v-model="compenData.courses"
+                          v-model="compenData.courseData"
                           color="#FF6B81"
                           :items="holiday_course"
-                          item-value="courseId"
                           :item-text="
                             $i18n.locale == 'th'
                               ? 'courseNameTh'
                               : 'courseNameEn'
                           "
                           item-color="#ff6b81"
+                          return-object
                           :placeholder="$t('select course')"
                         >
                         </v-autocomplete>
                       </v-col>
                       <!-- วัน/เวลาชดเชย -->
-                      <v-col cols="12">
+                      <v-col
+                        cols="12"
+                        v-if="
+                          compenData.courseData &&
+                          compenData.courseData.courseTypeId === 'CT_1'
+                        "
+                      >
                         <v-row dense>
                           <!-- DATE -->
-                          <v-col cols="12" md="6">
+                          <v-col cols="12">
                             {{ $t("compensation date") }}
                             <v-menu
                               v-model="compenData.menuDate"
@@ -711,112 +636,91 @@
                               ></v-date-picker>
                             </v-menu>
                           </v-col>
+                          <!-- Time -->
+                          <!-- <v-col cols="12" dense>
+                            {{ $t("period") }}
+                            <v-row dense class="mb-3">
+                              Start Time
+                              <v-col class="px-2" cols="12" sm="6">
+                                <v-text-field
+                                  outlined
+                                  dense
+                                  :disabled="!compenData.dateSrt"
+                                  :style="`width:${widthTime()}px;`"
+                                  style="
+                                    position: absolute;
+                                    display: block;
+                                    z-index: 4;
+                                  "
+                                  @focus="compensationStartDate($event)"
+                                  :rules="compensation_start_time_rule"
+                                  v-model="add_compensation_start_time"
+                                  color="#ff6b81"
+                                >
+                                </v-text-field>
+                                <VueTimepicker
+                                  class="time-picker-hidden"
+                                  hide-clear-button
+                                  :style="`width:${widthTime()}px;`"
+                                  input-class="input-size-lg"
+                                  advanced-keyboard
+                                  v-model="add_compensation_start_time"
+                                  close-on-complete
+                                  color="#ff6b81"
+                                  @change="updateTimeStart($event, compenData)"
+                                ></VueTimepicker>
+                              </v-col>
+                              End Time
+                              <v-col class="px-2" cols="12" sm="6">
+                                <v-text-field
+                                  outlined
+                                  dense
+                                  :disabled="!compenData.timeStart"
+                                  :style="`width:${widthTime()}px;`"
+                                  style="
+                                    position: absolute;
+                                    display: block;
+                                    z-index: 4;
+                                  "
+                                  @focus="compensationStartDate($event)"
+                                  :rules="compensation_end_time_rule"
+                                  v-model="add_compensation_end_time"
+                                  color="#ff6b81"
+                                >
+                                </v-text-field>
+                                <VueTimepicker
+                                  class="time-picker-hidden"
+                                  hide-clear-button
+                                  :style="`width:${widthTime()}px;`"
+                                  input-class="input-size-lg"
+                                  advanced-keyboard
+                                  v-model="add_compensation_end_time"
+                                  close-on-complete
+                                  color="#ff6b81"
+                                  @change="updateTimeEnd($event, compenData)"
+                                  :hour-range="checkHourEnd(compenData)"
+                                ></VueTimepicker>
+                              </v-col>
+                            </v-row>
+                          </v-col> -->
                         </v-row>
                       </v-col>
                     </v-row>
                   </div>
-
-                  <v-row dense v-if="holiday_course?.length > 0">
-                    <!-- ชื่อคอร์สชดเชย -->
-                    <v-col cols="12">
-                      <label class="font-weight-bold">{{ $t("course") }}</label>
-                      <v-autocomplete
-                        dense
+                  <!-- v-if="holiday_course?.length > 0" -->
+                </v-card-text>
+                <v-card-text>
+                  <v-row dense>
+                    <v-col cols="12" align="center">
+                      <v-btn
+                        @click="addCourse()"
+                        class="w-full"
                         outlined
-                        v-model="courses"
-                        color="#FF6B81"
-                        :items="holiday_course"
-                        item-value="courseId"
-                        :item-text="
-                          $i18n.locale == 'th' ? 'courseNameTh' : 'courseNameEn'
-                        "
-                        item-color="#ff6b81"
-                        :placeholder="$t('select course')"
+                        color="green"
                       >
-                      </v-autocomplete>
-                    </v-col>
-                    <!-- วัน/เวลาชดเชย -->
-                    <v-col cols="12">
-                      <v-row dense>
-                        <!-- DATE -->
-                        <v-col cols="12" md="6">
-                          {{ $t("compensation date") }}
-                          <v-menu
-                            v-model="menuCompensationDate"
-                            :close-on-content-click="true"
-                            transition="scale-transition"
-                            min-width="auto"
-                            color="#ff6b81"
-                          >
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-text-field
-                                :rules="compensation_date_rule"
-                                dense
-                                outlined
-                                readonly
-                                :placeholder="$t('choose a compensation date')"
-                                v-bind="attrs"
-                                v-on="on"
-                                v-model="compensation_date_str"
-                                append-icon="mdi-calendar"
-                                color="#ff6b81"
-                              >
-                              </v-text-field>
-                            </template>
-                            <!-- :allowed-dates="allowedDates" -->
-
-                            <v-date-picker
-                              v-model="compensation_date"
-                              :min="new Date().toISOString()"
-                              @input="inputDateArr(compensation_date)"
-                              :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
-                              color="#ff6b81"
-                            ></v-date-picker>
-                          </v-menu>
-                        </v-col>
-                        <!-- TIME -->
-                        >>> {{ compensation_start_time_obj }} >>>>
-                        {{ compensation_start_time }}
-                        <v-col cols="12" md="6">
-                          {{ $t("period") }}
-                          <v-col class="px-2" cols="12" sm="6">
-                            <v-text-field
-                              outlined
-                              dense
-                              :disabled="!compensation_date"
-                              :style="`width:${widthTime()}px;`"
-                              style="
-                                position: absolute;
-                                display: block;
-                                z-index: 4;
-                              "
-                              @focus="compensationStartDate($event)"
-                              :rules="compensation_start_time_rule"
-                              v-model="compensation_start_time"
-                              color="#ff6b81"
-                            >
-                            </v-text-field>
-                            <VueTimepicker
-                              class="time-picker-hidden"
-                              hide-clear-button
-                              :style="`width:${widthTime()}px;`"
-                              input-class="input-size-lg"
-                              advanced-keyboard
-                              v-model="compensation_start_time_obj"
-                              close-on-complete
-                              color="#ff6b81"
-                              @change="
-                                ChengeTimeMin(
-                                  course.compensation_start_time_obj,
-                                  index,
-                                  date_index,
-                                  'start'
-                                )
-                              "
-                            ></VueTimepicker>
-                          </v-col>
-                        </v-col>
-                      </v-row>
+                        <v-icon>mdi-plus-box-multiple</v-icon>
+                        {{ $t("add course") }}
+                      </v-btn>
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -1766,6 +1670,9 @@ export default {
         timeEnd: "",
       },
     ],
+    add_compensation_start_time: "",
+    add_compensation_end_time: "",
+    course_type: [],
   }),
 
   created() {
@@ -1838,13 +1745,24 @@ export default {
       ];
     },
     compensation_start_time_rule() {
-      return [(val) => val > 0 || this.$t("please select a start time")];
+      return [
+        (val) => {
+          // Check if val is in "HH:mm" format
+          const isValidTime = /^([01]\d|2[0-3]):([0-5]\d)$/.test(val);
+          return isValidTime || this.$t("please select a start time");
+        },
+      ];
     },
     compensation_end_time_rule() {
       return [
-        (val) => (val || "").length > 0 || this.$t("please select an end time"),
+        (val) => {
+          // Check if val is in "HH:mm" format
+          const isValidTime = /^([01]\d|2[0-3]):([0-5]\d)$/.test(val);
+          return isValidTime || this.$t("please select an end time");
+        },
       ];
     },
+
     holiday_name() {
       return [
         (val) =>
@@ -1939,6 +1857,7 @@ export default {
       GetOptions: "CourseModules/GetOptions",
       CheckInFilter: "adminCheckInModules/CheckInFilter",
       GetFilterCourseHoliday: "ManageScheduleModules/GetFilterCourseHoliday",
+      SetFilterCourseHoliday: "ManageScheduleModules/SetFilterCourseHoliday",
     }),
     compensationStartDate(e) {
       e.target.parentNode.parentNode.parentNode.parentNode.parentNode
@@ -1960,6 +1879,24 @@ export default {
       this.compensation_start_time = "";
       this.compensation_end_time_obj = { HH: "", mm: "" };
       this.compensation_end_time = "";
+    },
+    updateTimeStart(newTime, compenData) {
+      this.add_compensation_start_time = newTime.displayTime;
+      compenData.timeStart = newTime.displayTime;
+    },
+    updateTimeEnd(newTime, compenData) {
+      this.add_compensation_end_time = newTime.displayTime;
+      compenData.timeEnd = newTime.displayTime;
+    },
+    checkHourEnd(time) {
+      let hour = [];
+      let h = parseInt(time?.timeStart?.split(":")[0], 10);
+
+      for (let hr = h + 1; hr < 24; hr++) {
+        hour.push(hr);
+      }
+
+      return hour;
     },
     async checkStatusOptions() {
       this.coachCheckInData = false;
@@ -2172,6 +2109,16 @@ export default {
       );
       const [holidayYears, holidayMonth, holidayDate] = item.split("-");
       this.GetFilterCourseHoliday({ holidayDate, holidayMonth, holidayYears });
+      this.compensation = [
+        {
+          course: "",
+          dateSrt: "",
+          date: "",
+          menuDate: false,
+          timeStart: "",
+          timeEnd: "",
+        },
+      ];
     },
 
     async filterSchedules() {
@@ -2381,6 +2328,22 @@ export default {
                 }
               }
             }
+
+            let dataForm = [];
+            let courseData = {};
+            this.compensation?.map((items) => {
+              if (items.courseData) {
+                (courseData = items.courseData ? items.courseData : null),
+                  (courseData.selectStudyDate =
+                    items.date && items.courseData.courseTypeId === "CT_1"
+                      ? items.date
+                      : null);
+              }
+              // console.log("courseData :>> ", courseData);
+              return dataForm?.push(courseData);
+            });
+            // console.log("dataForm :>> ", dataForm);
+            this.SetFilterCourseHoliday(dataForm);
           }
         });
       }
@@ -2491,9 +2454,30 @@ export default {
       this.editHolidayDates = null;
     },
 
+    addCourse() {
+      this.compensation.push({
+        course: "",
+        dateSrt: "",
+        date: "",
+        menuDate: false,
+        timeStart: "",
+        timeEnd: "",
+      });
+      // console.log("this.compensation :>> ", this.compensation);
+    },
+
     closeDialog() {
       this.$refs.add_holidat_dialog.reset();
-
+      this.compensation = [
+        {
+          course: "",
+          dateSrt: "",
+          date: "",
+          menuDate: false,
+          timeStart: "",
+          timeEnd: "",
+        },
+      ];
       this.show_dialog_holoday = false;
       this.holidaydates = "";
       this.holidaySwitch = true;
