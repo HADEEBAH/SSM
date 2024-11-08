@@ -502,7 +502,7 @@
                       <label class="font-weight-bold">{{ $t("date") }}</label>
 
                       <v-menu
-                        v-model="selectHolidaydates"
+                        v-model="create_holiday_date_bool"
                         :close-on-content-click="false"
                         :nudge-right="40"
                         transition="scale-transition"
@@ -520,31 +520,33 @@
                             v-on="on"
                             :rules="dates"
                             color="#FF6B81"
-                            v-model="holidaydatesTh"
+                            v-model="create_holiday_date_string"
                           >
                           </v-text-field>
                         </template>
 
                         <v-date-picker
-                          v-model="holidaydates"
+                          v-model="create_holiday_date_picker"
                           @input="
-                            setHolidaydates(holidaydates),
-                              (selectHolidaydates = false)
+                            setHolidaydates(create_holiday_date_picker),
+                              (create_holiday_date_bool = false)
                           "
                           :min="tomorrowDate()"
                           :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
                         ></v-date-picker>
                       </v-menu>
                     </v-col>
-                  </v-row>
-                  <!-- ชื่อวันหยุด -->
-                  <v-row dense>
+                    <!-- </v-row> -->
+                    <!-- ชื่อวันหยุด -->
+                    <!-- <v-row dense> -->
                     <v-col cols="12">
                       <label class="font-weight-bold">{{
                         $t("holiday name")
                       }}</label>
+
                       <v-text-field
                         v-model="nameHoliday"
+                        dense
                         outlined
                         :placeholder="
                           $t(
@@ -559,83 +561,72 @@
 
                   <!-- ข้อมูลคอร์สทป-->
 
-                  <div
-                    v-for="(compenData, compenData_index) in compensation"
-                    :key="compenData_index"
-                  >
-                    <v-row dense v-if="holiday_course?.length > 0">
-                      <v-col cols="12">
-                        <label class="font-weight-bold">{{
-                          $t("course")
-                        }}</label>
-                        <v-autocomplete
-                          dense
-                          outlined
-                          v-model="compenData.courseData"
-                          color="#FF6B81"
-                          :items="holiday_course"
-                          :item-text="
-                            $i18n.locale == 'th'
-                              ? 'courseNameTh'
-                              : 'courseNameEn'
-                          "
-                          item-color="#ff6b81"
-                          return-object
-                          :placeholder="$t('select course')"
-                        >
-                        </v-autocomplete>
-                      </v-col>
-                      <!-- วัน/เวลาชดเชย -->
-                      <v-col
-                        cols="12"
-                        v-if="
-                          compenData.courseData &&
-                          compenData.courseData.courseTypeId === 'CT_1'
-                        "
-                      >
-                        <v-row dense>
+                  <!-- <pre>{{ holiday_course }}</pre> -->
+                  <div v-if="holiday_course?.length > 0">
+                    <div
+                      v-for="(items, items_index) in holiday_course"
+                      :key="items_index"
+                    >
+                      <v-card class="mb-6" v-if="items.courseTypeId == 'CT_1'">
+                        <v-card-text>
+                          <label class="font-weight-bold">{{
+                            $t("course")
+                          }}</label>
+                          <v-text-field
+                            dense
+                            outlined
+                            readonly
+                            color="#FF6B81"
+                            :value="
+                              $i18n.locale == 'th'
+                                ? items.courseNameTh
+                                : items.courseNameEn
+                            "
+                          >
+                          </v-text-field>
+                          <!-- วัน/เวลาชดเชย -->
+                          <!-- <v-col cols="12">
+                          <v-row dense> -->
                           <!-- DATE -->
-                          <v-col cols="12">
-                            {{ $t("compensation date") }}
-                            <v-menu
-                              v-model="compenData.menuDate"
-                              :close-on-content-click="true"
-                              transition="scale-transition"
-                              min-width="auto"
-                              color="#ff6b81"
-                            >
-                              <template v-slot:activator="{ on, attrs }">
-                                <v-text-field
-                                  :rules="compensation_date_rule"
-                                  dense
-                                  outlined
-                                  readonly
-                                  :placeholder="
-                                    $t('choose a compensation date')
-                                  "
-                                  v-bind="attrs"
-                                  v-on="on"
-                                  v-model="compenData.dateSrt"
-                                  append-icon="mdi-calendar"
-                                  color="#ff6b81"
-                                >
-                                </v-text-field>
-                              </template>
-                              <!-- :allowed-dates="allowedDates" -->
-
-                              <v-date-picker
-                                v-model="compenData.date"
-                                :min="new Date().toISOString()"
-                                @input="
-                                  inputDateArr(compenData.date, compenData)
-                                "
-                                :locale="
-                                  $i18n.locale == 'th' ? 'th-TH' : 'en-US'
-                                "
+                          <!-- <v-col cols="12"> -->
+                          <label class="font-weight-bold">{{
+                            $t("compensation date")
+                          }}</label>
+                          <v-menu
+                            v-model="items.compensation_date_bool"
+                            :close-on-content-click="true"
+                            transition="scale-transition"
+                            min-width="auto"
+                            color="#ff6b81"
+                          >
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-text-field
+                                :rules="compensation_date_rule"
+                                dense
+                                outlined
+                                readonly
+                                :placeholder="$t('choose a compensation date')"
+                                v-bind="attrs"
+                                v-on="on"
+                                v-model="items.compensation_date_string"
+                                append-icon="mdi-calendar"
                                 color="#ff6b81"
-                              ></v-date-picker>
-                            </v-menu>
-                          </v-col>
+                              >
+                              </v-text-field>
+                            </template>
+                            <!-- :allowed-dates="allowedDates" -->
+
+                            <v-date-picker
+                              v-model="items.selectStudyDate"
+                              :min="new Date().toISOString()"
+                              @input="
+                                inputDateArr(items.selectStudyDate, items)
+                              "
+                              :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
+                              color="#ff6b81"
+                            ></v-date-picker>
+                          </v-menu>
+                          <!-- </v-col> -->
                           <!-- Time -->
                           <!-- <v-col cols="12" dense>
                             {{ $t("period") }}
@@ -703,28 +694,14 @@
                               </v-col>
                             </v-row>
                           </v-col> -->
-                        </v-row>
-                      </v-col>
-                    </v-row>
+                          <!-- </v-row>
+                        </v-col> -->
+                        </v-card-text>
+                      </v-card>
+                    </div>
                   </div>
-                  <!-- v-if="holiday_course?.length > 0" -->
                 </v-card-text>
-                <v-card-text>
-                  <v-row dense>
-                    <v-col cols="12" align="center">
-                      <v-btn
-                        @click="addCourse()"
-                        class="w-full"
-                        outlined
-                        color="green"
-                      >
-                        <v-icon>mdi-plus-box-multiple</v-icon>
-                        {{ $t("add course") }}
-                      </v-btn>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-
+                <!-- <pre>{{ holiday_course }}</pre>/ -->
                 <v-card-actions>
                   <v-row dense>
                     <v-col cols="12" align="center">
@@ -1673,6 +1650,13 @@ export default {
     add_compensation_start_time: "",
     add_compensation_end_time: "",
     course_type: [],
+    compensation_date_bool: false,
+    compensation_date_string: "",
+    selectStudyDate: "",
+    course_index: 0,
+    create_holiday_date_bool: false,
+    create_holiday_date_string: "",
+    create_holiday_date_picker: "",
   }),
 
   created() {
@@ -1704,6 +1688,7 @@ export default {
       options_data: "CourseModules/getOptions",
       getCheckinFilter: "adminCheckInModules/getCheckinFilter",
       holiday_course: "ManageScheduleModules/getFilterCourseHoliday",
+      create_holiday: "ManageScheduleModules/getCreateHoliday",
     }),
 
     // filteredCheckInStatusOptions() {
@@ -1858,7 +1843,14 @@ export default {
       CheckInFilter: "adminCheckInModules/CheckInFilter",
       GetFilterCourseHoliday: "ManageScheduleModules/GetFilterCourseHoliday",
       SetFilterCourseHoliday: "ManageScheduleModules/SetFilterCourseHoliday",
+      CreateHoliday: "ManageScheduleModules/CreateHoliday",
     }),
+    // checkedCourse() {
+    //   // let checked_course = [];
+    //   this.holiday_course?.map((items) => {
+    //     console.log("items :>> ", items);
+    //   });
+    // },
     compensationStartDate(e) {
       e.target.parentNode.parentNode.parentNode.parentNode.parentNode
         .getElementsByClassName("time-picker-hidden")[0]
@@ -1871,14 +1863,16 @@ export default {
         month: "long",
         day: "numeric",
       };
-      compenData.dateSrt = new Date(newDate).toLocaleDateString(
+      compenData.compensation_date_string = new Date(
+        newDate
+      ).toLocaleDateString(
         this.$i18n.locale == "th" ? "th-TH" : "en-US",
         options
       );
-      this.compensation_start_time_obj = { HH: "", mm: "" };
-      this.compensation_start_time = "";
-      this.compensation_end_time_obj = { HH: "", mm: "" };
-      this.compensation_end_time = "";
+      // this.compensation_start_time_obj = { HH: "", mm: "" };
+      // this.compensation_start_time = "";
+      // this.compensation_end_time_obj = { HH: "", mm: "" };
+      // this.compensation_end_time = "";
     },
     updateTimeStart(newTime, compenData) {
       this.add_compensation_start_time = newTime.displayTime;
@@ -2103,7 +2097,7 @@ export default {
         month: "long",
         day: "numeric",
       };
-      this.holidaydatesTh = new Date(item).toLocaleDateString(
+      this.create_holiday_date_string = new Date(item).toLocaleDateString(
         this.$i18n.locale == "th" ? "th-TH" : "en-US",
         options
       );
@@ -2225,6 +2219,57 @@ export default {
           cancelButtonText: this.$t("no"),
         }).then(async (result) => {
           if (result.isConfirmed) {
+            // let payload = {
+            //   holidayName: this.nameHoliday,
+            //   holidayDate: this.holidaydates.split("-")[2],
+            //   holidayMonth: this.holidaydates.split("-")[1],
+            //   holidayYears: this.holidaydates.split("-")[0],
+            // };
+            // await this.CreateHoliday(payload);
+            // if (this.create_holiday === true) {
+            //   const mappedData = this.holiday_course.map((course) => ({
+            //     courseId: course.courseId,
+            //     courseNameTh: course.courseNameTh,
+            //     courseNameEn: course.courseNameEn,
+            //     courseTypeId: course.courseTypeId,
+            //     selectStudyDate:
+            //       course.courseTypeId == "CT_1" ? course.selectStudyDate : null,
+            //     students: course.students.map((student) => ({
+            //       studentId: student.studentId,
+            //       firstNameTh: student.firstNameTh,
+            //       lastNameTh: student.lastNameTh,
+            //       packageName: student.packageName,
+            //       optionName: student.optionName,
+            //       optionNameEn: student.optionNameEn,
+            //       timeStart: student.timeStart,
+            //       timeEnd: student.timeEnd,
+            //       orderId: student.orderId,
+            //       coachId: student.coachId,
+            //       dayOfWeekId: student.dayOfWeekId,
+            //       orderItemId: student.orderItemId,
+            //       timeId: student.timeId,
+            //       coursePackageOptionId: student.coursePackageOptionId,
+            //       orderStudentId: student.orderStudentId,
+            //       dayOfWeekName: student.dayOfWeekName,
+            //     })),
+            //   }));
+            //   await this.SetFilterCourseHoliday(mappedData);
+            //   this.closeDialog();
+            // } else {
+            //   this.closeDialog();
+            // }
+
+            // await this.GetAllHolidays();
+            // await this.GetAllCourse();
+            // await this.GetDataInSchedule({
+            //   month: this.select_month,
+            //   year: this.select_year,
+            //   search: this.filter_search,
+            //   courseId: this.selectedCourse,
+            //   coachId: this.selectedCoach,
+            //   status: this.selectedCourseType,
+            // });
+
             try {
               let config = {
                 headers: {
@@ -2236,17 +2281,9 @@ export default {
 
               let payload = {
                 holidayName: this.nameHoliday,
-                description: "",
-                allDay: this.holidaySwitch,
-                holidayDate: this.holidaydates.split("-")[2],
-                holidayMonth: this.holidaydates.split("-")[1],
-                holidayYears: this.holidaydates.split("-")[0],
-                holidayStartTime: this.holidayStartTime
-                  ? this.holidayStartTime
-                  : null,
-                holidayEndTime: this.holidayEndTime
-                  ? this.holidayEndTime
-                  : null,
+                holidayDate: this.create_holiday_date_picker.split("-")[2],
+                holidayMonth: this.create_holiday_date_picker.split("-")[1],
+                holidayYears: this.create_holiday_date_picker.split("-")[0],
               };
               let { data } = await axios.post(
                 `${process.env.VUE_APP_URL}/api/v1/holiday/create`,
@@ -2290,6 +2327,36 @@ export default {
                     showCancelButton: false,
                     showConfirmButton: false,
                   });
+                  const mappedData = this.holiday_course.map((course) => ({
+                    courseId: course.courseId,
+                    courseNameTh: course.courseNameTh,
+                    courseNameEn: course.courseNameEn,
+                    courseTypeId: course.courseTypeId,
+                    selectStudyDate:
+                      course.courseTypeId == "CT_1"
+                        ? course.selectStudyDate
+                        : null,
+                    students: course.students.map((student) => ({
+                      studentId: student.studentId,
+                      firstNameTh: student.firstNameTh,
+                      lastNameTh: student.lastNameTh,
+                      packageName: student.packageName,
+                      optionName: student.optionName,
+                      optionNameEn: student.optionNameEn,
+                      timeStart: student.timeStart,
+                      timeEnd: student.timeEnd,
+                      orderId: student.orderId,
+                      coachId: student.coachId,
+                      dayOfWeekId: student.dayOfWeekId,
+                      orderItemId: student.orderItemId,
+                      timeId: student.timeId,
+                      coursePackageOptionId: student.coursePackageOptionId,
+                      orderStudentId: student.orderStudentId,
+                      dayOfWeekName: student.dayOfWeekName,
+                    })),
+                  }));
+                  await this.SetFilterCourseHoliday(mappedData);
+                  this.closeDialog();
                 } else {
                   Swal.fire({
                     icon: "error",
@@ -2308,42 +2375,28 @@ export default {
                   "Holiday with the same date already exists."
                 ) {
                   Swal.fire({
-                    icon: "info",
+                    icon: "warning",
                     title: this.$t("something went wrong"),
                     text: this.$t("this date is already built into a holiday"),
                     timer: 3000,
                     timerProgressBar: true,
                     showCancelButton: false,
                     showConfirmButton: false,
-                  }).then(async (result) => {
-                    if (result.isConfirmed) {
-                      this.holidaydates = "";
-                      this.holidaySwitch = true;
-                      this.holidayStartTime = "";
-                      this.holidayEndTime = "";
-                      this.nameHoliday = "";
-                      this.GetAllHolidays();
-                    }
                   });
+                  this.closeDialog();
+                  // .then(async (result) => {
+                  //   if (result.isConfirmed) {
+                  //     this.holidaydates = "";
+                  //     this.holidaySwitch = true;
+                  //     this.holidayStartTime = "";
+                  //     this.holidayEndTime = "";
+                  //     this.nameHoliday = "";
+                  //     this.GetAllHolidays();
+                  //   }
+                  // });
                 }
               }
             }
-
-            let dataForm = [];
-            let courseData = {};
-            this.compensation?.map((items) => {
-              if (items.courseData) {
-                (courseData = items.courseData ? items.courseData : null),
-                  (courseData.selectStudyDate =
-                    items.date && items.courseData.courseTypeId === "CT_1"
-                      ? items.date
-                      : null);
-              }
-              // console.log("courseData :>> ", courseData);
-              return dataForm?.push(courseData);
-            });
-            // console.log("dataForm :>> ", dataForm);
-            this.SetFilterCourseHoliday(dataForm);
           }
         });
       }

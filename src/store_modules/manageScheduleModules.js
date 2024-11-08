@@ -21,7 +21,8 @@ const manageScheduleModules = {
     data_filter_schedule: null,
     data_search_schedule: null,
     holiday_course: null,
-    course_in_holidays: []
+    course_in_holidays: [],
+    create_holiday: ''
   },
   mutations: {
     SetGetAllCourseIsLoading(state, value) {
@@ -116,8 +117,10 @@ const manageScheduleModules = {
     },
     SetCourseHoliday(state, payload) {
       state.course_in_holidays = payload
-
-    }
+    },
+    SetCreateHoliday(state, payload) {
+      state.create_holiday = payload
+    },
   },
   actions: {
     ResetFilte(context) {
@@ -550,9 +553,6 @@ const manageScheduleModules = {
         // let { data } = await axios.get(`${localhost}/api/v1/schedule/holiday?holidayDate=${holidayDate}&holidayMonth=${holidayMonth}&holidayYears=${holidayYears}`)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/holiday?holidayDate=${holidayDate}&holidayMonth=${holidayMonth}&holidayYears=${holidayYears}`)
         if (data.statusCode === 200) {
-          let checked = false
-          checked = data.data ? true : false
-          console.log('checked :>> ', checked);
           context.commit("SetFilterCourseHoliday", data.data);
         }
       } catch (error) {
@@ -569,7 +569,6 @@ const manageScheduleModules = {
       }
     },
     async SetFilterCourseHoliday(context, dataForm) {
-      // console.log('dataForm 22:>> ', dataForm);
       try {
         // let localhost = "http://localhost:3000"
         // let { data } = await axios.post(`${localhost}/api/v1/schedule/holiday`, dataForm)
@@ -590,6 +589,50 @@ const manageScheduleModules = {
         });
       }
     },
+    async CreateHoliday(context, payload) {
+      try {
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.post( `${localhost}/api/v1/holiday/create`,payload)
+        let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/holiday/create`, payload)
+        if (data.statusCode === 201) {
+          context.commit("SetCreateHoliday", true);
+          Swal.fire({
+            icon: "success",
+            title: this.$t("succeed"),
+            text: this.$t("save data successfully"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        }
+      } catch (error) {
+
+        if (error?.response?.data?.message === 'Holiday with the same date already exists.') {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("this date is already built into a holiday"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          })
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: error,
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          })
+        }
+
+      }
+    },
+
 
 
 
@@ -634,6 +677,9 @@ const manageScheduleModules = {
     },
     getFilterCourseHoliday(state) {
       return state.holiday_course;
+    },
+    getCreateHoliday(state) {
+      return state.create_holiday;
     },
   },
 };
