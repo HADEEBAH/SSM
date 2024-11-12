@@ -76,22 +76,12 @@ const orderModules = {
       type: "",
       order_step: 0,
       order_number: "",
-      courses: [
-        // {
-        //   course_list: [],
-        //   package_list: [],
-        //   option_list: [],
-        //   day_of_week_list: [],
-        //   time_list: [],
-        //   coach_list: [],
-        //   course_type_id: 'CT_1',
-        // }
-      ],
+      courses: [],
       created_by: "",
       payment_status: "",
       payment_type: "",
       total_price: 0,
-      pay_date: "",
+      payDate: "",
     },
 
     orders: [],
@@ -581,9 +571,9 @@ const orderModules = {
       try {
         let order = cart_data;
         let payload = {
-          order_id: "",
+          orderId: "",
           courses: {},
-          created_by: "",
+          createdBy: "",
           paymentStatus: "pending",
           paymentType: "",
           totalPrice: 0
@@ -746,7 +736,7 @@ const orderModules = {
             order_step: 0,
             order_number: "",
             courses: [],
-            created_by: "",
+            createdBy: "",
             payment_status: "",
             payment_type: "",
             total_price: 0,
@@ -787,9 +777,9 @@ const orderModules = {
     //   try {
     //     let order = cart_data;
     //     let payload = {
-    //       order_id: "",
+    //       orderId: "",
     //       courses: {},
-    //       created_by: "",
+    //       createdBy: "",
     //       paymentStatus: "pending",
     //       paymentType: "",
     //       totalPrice: 0,
@@ -960,7 +950,7 @@ const orderModules = {
     //         order_step: 0,
     //         order_number: "",
     //         courses: [],
-    //         created_by: "",
+    //         createdBy: "",
     //         payment_status: "",
     //         payment_type: "",
     //         total_price: 0,
@@ -1019,14 +1009,14 @@ const orderModules = {
           }
         }
         let payload = {
-          order_id: "",
+          orderId: "",
           courses: [],
-          created_by: order.created_by,
+          createdBy: order.createdBy,
           paymentStatus: "pending",
           paymentType: order.payment_type,
           totalPrice: 0,
           regisType: regis_type,
-          pay_date: order.pay_date,
+          payDate: order.payDate ? order.payDate : null,
           discountPrice: discount ? discount : 0
         };
         let total_price = 0;
@@ -1114,63 +1104,123 @@ const orderModules = {
             }
           }
 
+          console.log('course :>> ', course);
+          console.log('courseData :>> ', courseData);
+
           payload.courses.push({
-            courseId: course.course_id,
-            courseTypeId: course.course_type_id,
+            courseId: course.course_id ? course.course_id : null,
+            courseTypeId: course.course_type_id ? course.course_type_id : null,
             coursePackageOptionId: course.option.course_package_option_id || course.option.coursePackageOptionsId ? course.option.course_package_option_id || course.option.coursePackageOptionsId : null,
-            dayName: course.day?.dayName
-              ? course.day.dayName
-              : course.day.day
-                ? dayOfWeekArray(course.day.day)
-                : "",
-            dayOfWeekId: course?.time?.timeData
-              ? course.time.timeData.filter(
-                (v) => v.coach_id === course.coach_id
-              )[0].dayOfWeekId
-              : course.time.dayOfWeekId,
-            timeId: course?.time?.timeData
-              ? course.time.timeData.filter(
-                (v) => v.coach_id === course.coach_id
-              )[0].timeId
-              : course.time.timeId,
-            // time: course.time,
-            time: !course.apply_for_others && !course.apply_for_yourself ? {
-              start: course.coach.start || course.time.start, // Default to 19:00 if not available
-              end: course.coach.end || course.time.end,     // Default to 20:00 if not available
-              timeData: [
-                {
-                  maximumStudent: course.coach.maximumStudent || course.time.maximumStudent,
-                  dayOfWeekId: course.coach.dayOfWeekId || course.time.dayOfWeekId,
-                  timeId: course.coach.timeId || course.time.timeId,
-                  courseCoachId: course.coach.courseCoachId || course.day.course_coach_id,
-                  coach_name: course.coach.fullNameTh || course.coach_name,
-                  coach_name_en: course.coach.fullNameEn || course.coach_name_en,
-                  coach_id: course.coach.coachId || course.coach
-                }
-              ]
-            } : course.time,
+            timeStart: course.coach.start || course.time.start,
+            timeEnd: course.coach.end || course.time.end,
+            maximumStudent: course.coach.maximumStudent || course.course_type_id == 'CT_2' ? course.time.maximumStudent : course?.time?.timeData[0]?.maximumStudent,
+            dayOfWeekId: course.coach.dayOfWeekId || course.course_type_id == 'CT_2' ? course.time.dayOfWeekId : course?.time?.timeData[0]?.dayOfWeekId,
+            timeId: course.coach.timeId || course.course_type_id == 'CT_2' ? course.time.timeId : course?.time?.timeData[0]?.timeId,
+            courseCoachId: course.course_type_id == 'CT_2' ? course.coach.course_coach_id ? course.coach.course_coach_id : courseData.coachs[0]?.course_coach_id : course.coach.courseCoachId ? course.coach.courseCoachId : course?.time?.timeData[0]?.courseCoachId,
+            coachNameTh: course.course_type_id == 'CT_2' ? course.coach_name : course?.time?.timeData[0]?.coach_name,
+            coachNameEn: course.course_type_id == 'CT_2' ? course.coach.coach_name_en ? course.coach.coach_name_en : courseData.coachs[0]?.coach_name_en : courseData.coachs[0]?.coach_name_en,
+            // coachNameEn: course.coach.fullNameEn || course.coach.coach_name_en || course.time.timeData[0].coach_name_en,
+            // coachId: course.coach.coachId || course.coach.coach_id || course.time.timeData[0].coach_id,
             startDate: course.start_date ? course.start_date : moment(new Date()).format("YYYY-MM-DD"),
-            remark: course.remark ? course.remark : "",
-            // price: course.option?.net_price
-            //   ? course.option.net_price
-            //   : course.price,
+            remark: course.remark ? course.remark : null,
             price: course.option?.price_unit
               ? course.option.price_unit
               : order.type !== "cart" ? course.price : course.coursePrice,
 
             originalPrice: courseData ? courseData.price_course : 0,
-            coach: {
-              accountId: course.coach_id || course.coach.coachId ? course.coach_id || course.coach.coachId : course.coach,
-              fullName: course.coach_name || course.coach.fullNameTh,
-            },
+
             student: students,
-            statusDiscountPrice: course.checkedDiscountPrice,
-            statusDiscountPercent: course.checkedDiscountPercent,
+            statusDiscountPrice: course.checkedDiscountPrice ? course.checkedDiscountPrice : false,
+            statusDiscountPercent: course.checkedDiscountPercent ? course.checkedDiscountPercent : false,
             discount: course.course_type_id === "CT_1" ? course?.option?.discountStatus ? course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice
               ? course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice
               : '0' : '0' : course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice ? course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice : 0,
 
             adminDiscount: course.discountOther ? course.discountOther : "0"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            // courseId: course.course_id,
+            // courseTypeId: course.course_type_id,
+            // coursePackageOptionId: course.option.course_package_option_id || course.option.coursePackageOptionsId ? course.option.course_package_option_id || course.option.coursePackageOptionsId : null,
+            // dayName: course.day?.dayName
+            //   ? course.day.dayName
+            //   : course.day.day
+            //     ? dayOfWeekArray(course.day.day)
+            //     : "",
+            // dayOfWeekId: course?.time?.timeData
+            //   ? course.time.timeData.filter(
+            //     (v) => v.coach_id === course.coach_id
+            //   )[0].dayOfWeekId
+            //   : course.time.dayOfWeekId,
+            // timeId: course?.time?.timeData
+            //   ? course.time.timeData.filter(
+            //     (v) => v.coach_id === course.coach_id
+            //   )[0].timeId
+            //   : course.time.timeId,
+            // // time: course.time,
+            // time: !course.apply_for_others && !course.apply_for_yourself ? {
+            //   start: course.coach.start || course.time.start, // Default to 19:00 if not available
+            //   end: course.coach.end || course.time.end,     // Default to 20:00 if not available
+            //   timeData: [
+            //     {
+            //       maximumStudent: course.coach.maximumStudent || course.time.maximumStudent,
+            //       dayOfWeekId: course.coach.dayOfWeekId || course.time.dayOfWeekId,
+            //       timeId: course.coach.timeId || course.time.timeId,
+            //       courseCoachId: course.coach.courseCoachId || course.day.course_coach_id,
+            //       coach_name: course.coach.fullNameTh || course.coach_name,
+            //       coach_name_en: course.coach.fullNameEn || course.coach_name_en,
+            //       coach_id: course.coach.coachId || course.coach
+            //     }
+            //   ]
+            // } : course.time,
+            // startDate: course.start_date ? course.start_date : moment(new Date()).format("YYYY-MM-DD"),
+            // remark: course.remark ? course.remark : "",
+            // // price: course.option?.net_price
+            // //   ? course.option.net_price
+            // //   : course.price,
+            // price: course.option?.price_unit
+            //   ? course.option.price_unit
+            //   : order.type !== "cart" ? course.price : course.coursePrice,
+
+            // originalPrice: courseData ? courseData.price_course : 0,
+            // coach: {
+            //   accountId: course.coach_id || course.coach.coachId ? course.coach_id || course.coach.coachId : course.coach,
+            //   fullName: course.coach_name || course.coach.fullNameTh,
+            // },
+            // student: students,
+            // statusDiscountPrice: course.checkedDiscountPrice,
+            // statusDiscountPercent: course.checkedDiscountPercent,
+            // discount: course.course_type_id === "CT_1" ? course?.option?.discountStatus ? course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice
+            //   ? course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice
+            //   : '0' : '0' : course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice ? course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice : 0,
+
+            // adminDiscount: course.discountOther ? course.discountOther : "0"
           })
           // if (moreDiscount) {
           //   payload.courses.forEach((course, index) => {
@@ -1181,7 +1231,7 @@ const orderModules = {
           //     }
           //   });
           // }
-
+          console.log('payload.courses :>> ', payload.courses);
           let price = 0
           if (order.type == "addStudent") {
             // price = course.price;
@@ -1224,14 +1274,14 @@ const orderModules = {
                 config
               );
               if (data.statusCode === 201) {
-                let payment_payload = {
-                  orderId: data.data.orderNumber,
-                  total: data.data.totalPrice,
-                  subtotal: 0.0,
-                  vat: 0,
-                  vatRate: 0,
-                  orderDesc: "",
-                };
+                // let payment_payload = {
+                //   orderId: data.data.orderNumber,
+                //   total: data.data.totalPrice,
+                //   subtotal: 0.0,
+                //   vat: 0,
+                //   vatRate: 0,
+                //   orderDesc: "",
+                // };
                 // const localhost = 'http://localhost:3000'
 
                 let user_data = JSON.parse(localStorage.getItem("userDetail"));
@@ -1263,110 +1313,110 @@ const orderModules = {
                   };
                   localStorage.setItem("userDetail", JSON.stringify(payload));
                 }
-                if (order.type !== "addStudent") {
-                  // const localhost = 'http://localhost:3003'
-                  // let payment = await axios.post(
-                  //   `${localhost}/api/v1/payment/code`,
-                  //   payment_payload
-                  // );
+                // if (order.type !== "addStudent") {
+                //   // const localhost = 'http://localhost:3003'
+                //   // let payment = await axios.post(
+                //   //   `${localhost}/api/v1/payment/code`,
+                //   //   payment_payload
+                //   // );
 
-                  let payment = await axios.post(
-                    `${process.env.VUE_APP_URL}/api/v1/payment/code`,
-                    payment_payload
-                  );
-                  if (payment.data.statusCode === 201) {
-                    window.location.href = payment.data.data;
-                    setTimeout(() => {
-                      localStorage.removeItem("Order");
-                      context.commit("SetResetCourseData");
-                      context.commit("SetOrder", {
-                        type: "",
-                        order_step: 0,
-                        order_number: "",
-                        courses: [],
-                        created_by: "",
-                        payment_status: "",
-                        payment_type: "",
-                        total_price: 0,
-                      });
-                      context.commit("SetOrderIsLoading", false);
-                    }, 500);
-                  }
-                } else {
-                  if (order.payment_status === "paid") {
-                    let payment_payload = {
-                      orderId: data.data.orderNumber,
-                      paymentType: order.payment_type,
-                      total: data.data.totalPrice,
-                      recipient: user_data.account_id,
-                      payDate: order.pay_date
-                    };
-                    // let endpoint = 'http://localhost:3003'
-                    let endpoint = process.env.VUE_APP_URL;
-                    let payment = await axios.patch(
-                      `${endpoint}/api/v1/payment/data/${data.data.orderNumber}`,
-                      payment_payload
-                    );
-                    if (payment.data.statusCode === 200) {
-                      Swal.fire({
-                        icon: "success",
-                        title: VueI18n.t("succeed"),
-                        text: VueI18n.t("the transaction has been completed"),
-                        showDenyButton: false,
-                        showCancelButton: false,
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                      });
-                      // router.replace({ name: "Finance" });
-                      localStorage.removeItem("Order");
-                      context.commit("SetResetCourseData");
-                      context.commit("SetOrder", {
-                        type: "",
-                        order_step: 0,
-                        order_number: "",
-                        courses: [],
-                        created_by: "",
-                        payment_status: "",
-                        payment_type: "",
-                        total_price: 0,
-                      });
-                      context.commit("SetOrderIsLoading", false);
-                    }
-                  } else {
-                    // const order_enpoint = `${process.env.VUE_APP_URL}/api/v1/order/update/${data.data.orderNumber}`
-                    // const payment_payload = {
-                    //   paymentType: "",
-                    //   paymentStatus: "pending",
-                    // };
-                    // await axios.patch(order_enpoint, payment_payload)
-                    Swal.fire({
-                      icon: "success",
-                      title: VueI18n.t("succeed"),
-                      text: VueI18n.t("the transaction has been completed"),
-                      showDenyButton: false,
-                      showCancelButton: false,
-                      showConfirmButton: false,
-                      timer: 3000,
-                      timerProgressBar: true,
-                    });
-                    // router.replace({ name: "Finance" });
-                    localStorage.removeItem("Order");
-                    context.commit("SetResetCourseData");
-                    context.commit("SetOrder", {
-                      type: "",
-                      order_step: 0,
-                      order_number: "",
-                      courses: [],
-                      created_by: "",
-                      payment_status: "",
-                      payment_type: "",
-                      total_price: 0,
-                    });
-                    context.commit("SetOrderIsLoading", false);
-                    context.commit("SetOrderIsStatus", true);
-                  }
-                }
+                //   let payment = await axios.post(
+                //     `${process.env.VUE_APP_URL}/api/v1/payment/code`,
+                //     payment_payload
+                //   );
+                //   if (payment.data.statusCode === 201) {
+                //     window.location.href = payment.data.data;
+                //     setTimeout(() => {
+                //       localStorage.removeItem("Order");
+                //       context.commit("SetResetCourseData");
+                //       context.commit("SetOrder", {
+                //         type: "",
+                //         order_step: 0,
+                //         order_number: "",
+                //         courses: [],
+                //         createdBy: "",
+                //         payment_status: "",
+                //         payment_type: "",
+                //         total_price: 0,
+                //       });
+                //       context.commit("SetOrderIsLoading", false);
+                //     }, 500);
+                //   }
+                // } else {
+                //   if (order.payment_status === "paid") {
+                //     let payment_payload = {
+                //       orderId: data.data.orderNumber,
+                //       paymentType: order.payment_type,
+                //       total: data.data.totalPrice,
+                //       recipient: user_data.account_id,
+                //       payDate: order.pay_date
+                //     };
+                //     // let endpoint = 'http://localhost:3003'
+                //     let endpoint = process.env.VUE_APP_URL;
+                //     let payment = await axios.patch(
+                //       `${endpoint}/api/v1/payment/data/${data.data.orderNumber}`,
+                //       payment_payload
+                //     );
+                //     if (payment.data.statusCode === 200) {
+                //       Swal.fire({
+                //         icon: "success",
+                //         title: VueI18n.t("succeed"),
+                //         text: VueI18n.t("the transaction has been completed"),
+                //         showDenyButton: false,
+                //         showCancelButton: false,
+                //         showConfirmButton: false,
+                //         timer: 3000,
+                //         timerProgressBar: true,
+                //       });
+                //       // router.replace({ name: "Finance" });
+                //       localStorage.removeItem("Order");
+                //       context.commit("SetResetCourseData");
+                //       context.commit("SetOrder", {
+                //         type: "",
+                //         order_step: 0,
+                //         order_number: "",
+                //         courses: [],
+                //         createdBy: "",
+                //         payment_status: "",
+                //         payment_type: "",
+                //         total_price: 0,
+                //       });
+                //       context.commit("SetOrderIsLoading", false);
+                //     }
+                //   } else {
+                //     // const order_enpoint = `${process.env.VUE_APP_URL}/api/v1/order/update/${data.data.orderNumber}`
+                //     // const payment_payload = {
+                //     //   paymentType: "",
+                //     //   paymentStatus: "pending",
+                //     // };
+                //     // await axios.patch(order_enpoint, payment_payload)
+                //     Swal.fire({
+                //       icon: "success",
+                //       title: VueI18n.t("succeed"),
+                //       text: VueI18n.t("the transaction has been completed"),
+                //       showDenyButton: false,
+                //       showCancelButton: false,
+                //       showConfirmButton: false,
+                //       timer: 3000,
+                //       timerProgressBar: true,
+                //     });
+                //     // router.replace({ name: "Finance" });
+                //     localStorage.removeItem("Order");
+                //     context.commit("SetResetCourseData");
+                //     context.commit("SetOrder", {
+                //       type: "",
+                //       order_step: 0,
+                //       order_number: "",
+                //       courses: [],
+                //       createdBy: "",
+                //       payment_status: "",
+                //       payment_type: "",
+                //       total_price: 0,
+                //     });
+                //     context.commit("SetOrderIsLoading", false);
+                //     context.commit("SetOrderIsStatus", true);
+                //   }
+                // }
               }
             } catch (error) {
               context.commit("SetOrderIsLoading", false);
@@ -1645,7 +1695,7 @@ const orderModules = {
             showCancelButton: false,
             showConfirmButton: false,
           });
-        } else if (err.response.data.message === "Parameter missing. Required username.") {
+        } else if (err?.response?.data?.message === "Parameter missing. Required username.") {
           Swal.fire({
             icon: "warning",
             title: VueI18n.t("unable to register"),
