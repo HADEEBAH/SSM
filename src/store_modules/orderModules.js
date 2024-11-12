@@ -1104,8 +1104,7 @@ const orderModules = {
             }
           }
 
-          console.log('course :>> ', course);
-          console.log('courseData :>> ', courseData);
+
 
           payload.courses.push({
             courseId: course.course_id ? course.course_id : null,
@@ -1113,14 +1112,13 @@ const orderModules = {
             coursePackageOptionId: course.option.course_package_option_id || course.option.coursePackageOptionsId ? course.option.course_package_option_id || course.option.coursePackageOptionsId : null,
             timeStart: course.coach.start || course.time.start,
             timeEnd: course.coach.end || course.time.end,
-            maximumStudent: course.coach.maximumStudent || course.course_type_id == 'CT_2' ? course.time.maximumStudent : course?.time?.timeData[0]?.maximumStudent,
-            dayOfWeekId: course.coach.dayOfWeekId || course.course_type_id == 'CT_2' ? course.time.dayOfWeekId : course?.time?.timeData[0]?.dayOfWeekId,
-            timeId: course.coach.timeId || course.course_type_id == 'CT_2' ? course.time.timeId : course?.time?.timeData[0]?.timeId,
-            courseCoachId: course.course_type_id == 'CT_2' ? course.coach.course_coach_id ? course.coach.course_coach_id : courseData.coachs[0]?.course_coach_id : course.coach.courseCoachId ? course.coach.courseCoachId : course?.time?.timeData[0]?.courseCoachId,
-            coachNameTh: course.course_type_id == 'CT_2' ? course.coach_name : course?.time?.timeData[0]?.coach_name,
-            coachNameEn: course.course_type_id == 'CT_2' ? course.coach.coach_name_en ? course.coach.coach_name_en : courseData.coachs[0]?.coach_name_en : courseData.coachs[0]?.coach_name_en,
-            // coachNameEn: course.coach.fullNameEn || course.coach.coach_name_en || course.time.timeData[0].coach_name_en,
-            // coachId: course.coach.coachId || course.coach.coach_id || course.time.timeData[0].coach_id,
+            maximumStudent: course.course_type_id == 'CT_2' ? course.time.maximumStudent : (course.coach.maximumStudent ? course.coach.maximumStudent : (regis_type == 'cart' ? course?.time?.maximumStudent : course?.time?.timeData[0].maximumStudent)),
+            dayOfWeekId: course.course_type_id == 'CT_2' ? course.time.dayOfWeekId : (course.coach.dayOfWeekId ? course.coach.dayOfWeekId : (regis_type == 'cart' ? course?.time?.dayOfWeekId : course?.time?.timeData[0]?.dayOfWeekId)),
+            timeId: course.course_type_id == 'CT_2' ? course.time.timeId : (course.coach.timeId ? course.coach.timeId : (regis_type == 'cart' ? course?.time?.timeId : course?.time?.timeData[0]?.timeId)),
+            courseCoachId: course.course_type_id == 'CT_2' ? (course.coach.course_coach_id ? course.coach.course_coach_id : (regis_type == 'cart' ? course.day.course_coach_id : courseData.coachs[0]?.course_coach_id)) : (course.coach.courseCoachId ? course.coach.courseCoachId : (regis_type == 'cart' ? course.day.course_coach_id : course?.time?.timeData[0]?.courseCoachId)),
+            coachNameTh: course.course_type_id == 'CT_2' ? (course.coach.coach_name ? course.coach.coach_name : (regis_type == 'cart' ? course.coach_name : courseData.coachs[0]?.coach_name)) : (course.coach.fullNameTh ? course.coach.fullNameTh : (regis_type == 'cart' ? course.coach_name : courseData.coachs[0]?.coach_name)),
+            coachNameEn: course.course_type_id == 'CT_2' ? (course.coach.coach_name_en ? course.coach.coach_name_en : (regis_type == 'cart' ? course.coach_name_en : courseData.coachs[0]?.coach_name_en)) : (course.coach.fullNameEn ? course.coach.fullNameEn : (regis_type == 'cart' ? course.coach_name_en : courseData.coachs[0]?.coach_name_en)),
+            coachId: course.course_type_id == 'CT_2' ? (course.coach_id ? course.coach_id : (regis_type == 'cart' ? course.coach : course.coach.coach_id)) : (course.coach_id ? course.coach_id : (regis_type == 'cart' ? course.coach : course.coach.coachId)),
             startDate: course.start_date ? course.start_date : moment(new Date()).format("YYYY-MM-DD"),
             remark: course.remark ? course.remark : null,
             price: course.option?.price_unit
@@ -1128,7 +1126,6 @@ const orderModules = {
               : order.type !== "cart" ? course.price : course.coursePrice,
 
             originalPrice: courseData ? courseData.price_course : 0,
-
             student: students,
             statusDiscountPrice: course.checkedDiscountPrice ? course.checkedDiscountPrice : false,
             statusDiscountPercent: course.checkedDiscountPercent ? course.checkedDiscountPercent : false,
@@ -1137,31 +1134,6 @@ const orderModules = {
               : '0' : '0' : course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice ? course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice : 0,
 
             adminDiscount: course.discountOther ? course.discountOther : "0"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1231,7 +1203,6 @@ const orderModules = {
           //     }
           //   });
           // }
-          console.log('payload.courses :>> ', payload.courses);
           let price = 0
           if (order.type == "addStudent") {
             // price = course.price;
