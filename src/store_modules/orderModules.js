@@ -77,15 +77,15 @@ const orderModules = {
       order_step: 0,
       order_number: "",
       courses: [
-        {
-          course_list: [],
-          package_list: [],
-          option_list: [],
-          day_of_week_list: [],
-          time_list: [],
-          coach_list: [],
-          course_type_id: 'CT_1',
-        }
+        // {
+        //   course_list: [],
+        //   package_list: [],
+        //   option_list: [],
+        //   day_of_week_list: [],
+        //   time_list: [],
+        //   coach_list: [],
+        //   course_type_id: 'CT_1',
+        // }
       ],
       created_by: "",
       payment_status: "",
@@ -767,7 +767,7 @@ const orderModules = {
             showCancelButton: false,
             showConfirmButton: false,
           });
-        } else if (error.response.data.message === "User not found.") {
+        } else if (error?.response?.data?.message === "User not found.") {
           Swal.fire({
             icon: "warning",
             title: VueI18n.t("unable to register"),
