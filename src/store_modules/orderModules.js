@@ -1079,10 +1079,10 @@ const orderModules = {
                   accountId: student.parents[0].account_id,
                   parentFirstnameTh: student.parents[0].firstname_th
                     ? student.parents[0].firstname_th
-                    : "",
+                    : null,
                   parentLastnameTh: student.parents[0].lastname_en
                     ? student.parents[0].lastname_en
-                    : "",
+                    : null,
                   parentFirstnameEn: student.parents[0].firstname_en,
                   parentLastnameEn: student.parents[0].lastname_en,
                   parentTel: student.parents[0].tel,
@@ -1124,7 +1124,6 @@ const orderModules = {
             price: course.option?.price_unit
               ? course.option.price_unit
               : order.type !== "cart" ? course.price : course.coursePrice,
-
             originalPrice: courseData ? courseData.price_course : 0,
             student: students,
             statusDiscountPrice: course.checkedDiscountPrice ? course.checkedDiscountPrice : false,
@@ -1132,7 +1131,6 @@ const orderModules = {
             discount: course.course_type_id === "CT_1" ? course?.option?.discountStatus ? course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice
               ? course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice
               : '0' : '0' : course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice ? course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice : 0,
-
             adminDiscount: course.discountOther ? course.discountOther : "0"
 
 
@@ -1245,14 +1243,14 @@ const orderModules = {
                 config
               );
               if (data.statusCode === 201) {
-                // let payment_payload = {
-                //   orderId: data.data.orderNumber,
-                //   total: data.data.totalPrice,
-                //   subtotal: 0.0,
-                //   vat: 0,
-                //   vatRate: 0,
-                //   orderDesc: "",
-                // };
+                let payment_payload = {
+                  orderId: data.data.orderNumber,
+                  total: data.data.totalPrice,
+                  subtotal: 0.0,
+                  vat: 0,
+                  vatRate: 0,
+                  orderDesc: "",
+                };
                 // const localhost = 'http://localhost:3000'
 
                 let user_data = JSON.parse(localStorage.getItem("userDetail"));
@@ -1284,110 +1282,110 @@ const orderModules = {
                   };
                   localStorage.setItem("userDetail", JSON.stringify(payload));
                 }
-                // if (order.type !== "addStudent") {
-                //   // const localhost = 'http://localhost:3003'
-                //   // let payment = await axios.post(
-                //   //   `${localhost}/api/v1/payment/code`,
-                //   //   payment_payload
-                //   // );
+                if (order.type !== "addStudent") {
+                  // const localhost = 'http://localhost:3003'
+                  // let payment = await axios.post(
+                  //   `${localhost}/api/v1/payment/code`,
+                  //   payment_payload
+                  // );
 
-                //   let payment = await axios.post(
-                //     `${process.env.VUE_APP_URL}/api/v1/payment/code`,
-                //     payment_payload
-                //   );
-                //   if (payment.data.statusCode === 201) {
-                //     window.location.href = payment.data.data;
-                //     setTimeout(() => {
-                //       localStorage.removeItem("Order");
-                //       context.commit("SetResetCourseData");
-                //       context.commit("SetOrder", {
-                //         type: "",
-                //         order_step: 0,
-                //         order_number: "",
-                //         courses: [],
-                //         createdBy: "",
-                //         payment_status: "",
-                //         payment_type: "",
-                //         total_price: 0,
-                //       });
-                //       context.commit("SetOrderIsLoading", false);
-                //     }, 500);
-                //   }
-                // } else {
-                //   if (order.payment_status === "paid") {
-                //     let payment_payload = {
-                //       orderId: data.data.orderNumber,
-                //       paymentType: order.payment_type,
-                //       total: data.data.totalPrice,
-                //       recipient: user_data.account_id,
-                //       payDate: order.pay_date
-                //     };
-                //     // let endpoint = 'http://localhost:3003'
-                //     let endpoint = process.env.VUE_APP_URL;
-                //     let payment = await axios.patch(
-                //       `${endpoint}/api/v1/payment/data/${data.data.orderNumber}`,
-                //       payment_payload
-                //     );
-                //     if (payment.data.statusCode === 200) {
-                //       Swal.fire({
-                //         icon: "success",
-                //         title: VueI18n.t("succeed"),
-                //         text: VueI18n.t("the transaction has been completed"),
-                //         showDenyButton: false,
-                //         showCancelButton: false,
-                //         showConfirmButton: false,
-                //         timer: 3000,
-                //         timerProgressBar: true,
-                //       });
-                //       // router.replace({ name: "Finance" });
-                //       localStorage.removeItem("Order");
-                //       context.commit("SetResetCourseData");
-                //       context.commit("SetOrder", {
-                //         type: "",
-                //         order_step: 0,
-                //         order_number: "",
-                //         courses: [],
-                //         createdBy: "",
-                //         payment_status: "",
-                //         payment_type: "",
-                //         total_price: 0,
-                //       });
-                //       context.commit("SetOrderIsLoading", false);
-                //     }
-                //   } else {
-                //     // const order_enpoint = `${process.env.VUE_APP_URL}/api/v1/order/update/${data.data.orderNumber}`
-                //     // const payment_payload = {
-                //     //   paymentType: "",
-                //     //   paymentStatus: "pending",
-                //     // };
-                //     // await axios.patch(order_enpoint, payment_payload)
-                //     Swal.fire({
-                //       icon: "success",
-                //       title: VueI18n.t("succeed"),
-                //       text: VueI18n.t("the transaction has been completed"),
-                //       showDenyButton: false,
-                //       showCancelButton: false,
-                //       showConfirmButton: false,
-                //       timer: 3000,
-                //       timerProgressBar: true,
-                //     });
-                //     // router.replace({ name: "Finance" });
-                //     localStorage.removeItem("Order");
-                //     context.commit("SetResetCourseData");
-                //     context.commit("SetOrder", {
-                //       type: "",
-                //       order_step: 0,
-                //       order_number: "",
-                //       courses: [],
-                //       createdBy: "",
-                //       payment_status: "",
-                //       payment_type: "",
-                //       total_price: 0,
-                //     });
-                //     context.commit("SetOrderIsLoading", false);
-                //     context.commit("SetOrderIsStatus", true);
-                //   }
-                // }
+                  let payment = await axios.post(
+                    `${process.env.VUE_APP_URL}/api/v1/payment/code`,
+                    payment_payload
+                  );
+                  if (payment.data.statusCode === 201) {
+                    window.location.href = payment.data.data;
+                    setTimeout(() => {
+                      localStorage.removeItem("Order");
+                      context.commit("SetResetCourseData");
+                      context.commit("SetOrder", {
+                        type: "",
+                        order_step: 0,
+                        order_number: "",
+                        courses: [],
+                        createdBy: "",
+                        payment_status: "",
+                        payment_type: "",
+                        total_price: 0,
+                      });
+                      context.commit("SetOrderIsLoading", false);
+                    }, 500);
+                  }
+                } else {
+                  if (order.payment_status === "paid") {
+                    let payment_payload = {
+                      orderId: data.data.orderNumber,
+                      paymentType: order.payment_type,
+                      total: data.data.totalPrice,
+                      recipient: user_data.account_id,
+                      payDate: order.pay_date
+                    };
+                    // let endpoint = 'http://localhost:3003'
+                    let endpoint = process.env.VUE_APP_URL;
+                    let payment = await axios.patch(
+                      `${endpoint}/api/v1/payment/data/${data.data.orderNumber}`,
+                      payment_payload
+                    );
+                    if (payment.data.statusCode === 200) {
+                      Swal.fire({
+                        icon: "success",
+                        title: VueI18n.t("succeed"),
+                        text: VueI18n.t("the transaction has been completed"),
+                        showDenyButton: false,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                      });
+                      // router.replace({ name: "Finance" });
+                      localStorage.removeItem("Order");
+                      context.commit("SetResetCourseData");
+                      context.commit("SetOrder", {
+                        type: "",
+                        order_step: 0,
+                        order_number: "",
+                        courses: [],
+                        createdBy: "",
+                        payment_status: "",
+                        payment_type: "",
+                        total_price: 0,
+                      });
+                      context.commit("SetOrderIsLoading", false);
+                    }
+                  } else {
+                    // const order_enpoint = `${process.env.VUE_APP_URL}/api/v1/order/update/${data.data.orderNumber}`
+                    // const payment_payload = {
+                    //   paymentType: "",
+                    //   paymentStatus: "pending",
+                    // };
+                    // await axios.patch(order_enpoint, payment_payload)
+                    Swal.fire({
+                      icon: "success",
+                      title: VueI18n.t("succeed"),
+                      text: VueI18n.t("the transaction has been completed"),
+                      showDenyButton: false,
+                      showCancelButton: false,
+                      showConfirmButton: false,
+                      timer: 3000,
+                      timerProgressBar: true,
+                    });
+                    // router.replace({ name: "Finance" });
+                    localStorage.removeItem("Order");
+                    context.commit("SetResetCourseData");
+                    context.commit("SetOrder", {
+                      type: "",
+                      order_step: 0,
+                      order_number: "",
+                      courses: [],
+                      createdBy: "",
+                      payment_status: "",
+                      payment_type: "",
+                      total_price: 0,
+                    });
+                    context.commit("SetOrderIsLoading", false);
+                    context.commit("SetOrderIsStatus", true);
+                  }
+                }
               }
             } catch (error) {
               context.commit("SetOrderIsLoading", false);
@@ -1580,6 +1578,342 @@ const orderModules = {
                   text: VueI18n.t(
                     "please enter your name and class"
                   ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message === "User not found.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t("unable to register"),
+                  text: VueI18n.t(
+                    "this user could not be found"
+                  ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.coursePackageOptionId === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "coursePackageOptionId is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.courseId === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "courseId is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.accountId === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "accountId is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.parentFirstnameTh === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "parentFirstnameTh is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.parentLastnameTh === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "parentLastnameTh is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.parentFirstnameEn === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "parentFirstnameEn is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.parentTel === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "parentTel is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.courseTypeId === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "courseTypeId is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.timeStart === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "timeStart is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.timeEnd === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "timeEnd is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.dayOfWeekId === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "dayOfWeekId is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.timeId === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "timeId is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.courseCoachId === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "courseCoachId is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.coachNameTh === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "coachNameTh is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.coachNameEn === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "coachNameEn is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.coachId === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "coachId is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.price === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "price is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.originalPrice === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "originalPrice is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.statusDiscountPrice === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "statusDiscountPrice is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.statusDiscountPercent === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "statusDiscountPercent is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.discount === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "discount is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.adminDiscount === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "adminDiscount is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.student === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "student is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.startDate === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "startDate is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.userName === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "userName is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.isOther === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "isOther is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.parent === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "parent is Require",
                   timer: 3000,
                   timerProgressBar: true,
                   showCancelButton: false,
