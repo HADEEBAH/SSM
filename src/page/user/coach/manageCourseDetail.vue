@@ -1477,11 +1477,13 @@ export default {
     startTime: "",
     endTime: "",
   }),
-  created() {
-    this.GetStudentByTimeId({
+  async created() {
+    await this.GetStudentByTimeId({
       course_id: this.$route.params.courseId,
       date: this.$route.params.date,
       time_id: this.$route.params.timeId,
+      time_start: this.$route.params.timeStart,
+      time_end : this.$route.params.timeEnd
     });
   },
   mounted() {
@@ -1521,13 +1523,15 @@ export default {
         }
       });
     },
-    tab: function () {
-      this.GetStudentByTimeId({
+    tab: async function () {
+      await this.GetStudentByTimeId({
         course_id: this.$route.params.courseId,
         date: this.$route.params.date,
         time_id: this.$route.params.timeId,
+        time_start: this.$route.params.timeStart,
+        time_end :this.$route.params.timeEnd
       });
-      this.GetCoachCheckIn({
+      await this.GetCoachCheckIn({
         course_id: this.$route.params.courseId,
         date: this.$route.params.date,
         time_id: this.$route.params.timeId,
@@ -1940,6 +1944,8 @@ export default {
               course_id: this.$route.params.courseId,
               date: this.$route.params.date,
               time_id: this.$route.params.timeId,
+              time_start: this.$route.params.timeStart,
+              time_end : this.$route.params.timeEnd
             });
 
             if (potential_student.length > 0) {
@@ -1993,6 +1999,8 @@ export default {
               course_id: this.$route.params.courseId,
               date: this.$route.params.date,
               time_id: this.$route.params.timeId,
+              time_start: this.$route.params.timeStart,
+              time_end: this.$route.params.timeEnd
             });
             let payload = {
               notificationName: "แจ้งเตือนการประเมินผู้เรียน",
@@ -2048,6 +2056,8 @@ export default {
               course_id: this.$route.params.courseId,
               date: this.$route.params.date,
               time_id: this.$route.params.timeId,
+              time_start: this.$route.params.timeStart,
+              time_end: this.$route.params.timeEnd
             });
             let payload = {
               notificationName: "แจ้งเตือนการเช็คอิน",
