@@ -577,6 +577,7 @@
                   v-model="export_filter.order_number"
                   :items="export_filter.order_number"
                   :placeholder="$t('please enter order number')"
+                  ref="myComboBox"
                   outlined
                   dense
                   multiple
@@ -1160,8 +1161,12 @@ export default {
           break;
       }
     },
-    Export() {
-      this.financeFilter({ filter: this.export_filter });
+    async Export() {
+      await this.$refs["myComboBox"].blur();
+      this.$nextTick(() => {
+        console.log(this.value);
+        this.financeFilter({ filter: this.export_filter });
+      });
     },
     closeDialog() {
       this.show_dialog = false;
