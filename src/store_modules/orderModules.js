@@ -577,7 +577,7 @@ const orderModules = {
           created_by: null,
           payment_status: "pending",
           payment_type: null,
-          total_price: 0,
+          // total_price: 0,
           regis_type: "cart",
           pay_date: null,
           discount_price: 0
@@ -739,7 +739,7 @@ const orderModules = {
           throw "please enter your name and class";
         }
 
-        payload.totalPrice = total_price;
+        payload.total_price = total_price;
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -747,10 +747,10 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        const localhost = 'http://localhost:3002'
+        // const localhost = 'http://localhost:3002'
         let { data } = await axios.post(
-          `${localhost}/api/v1/order/cart`,
-          // `${process.env.VUE_APP_URL}/api/v1/order/cart`,
+          // `${localhost}/api/v1/order/cart`,
+          `${process.env.VUE_APP_URL}/api/v1/order/cart`,
           payload,
           config
         );
@@ -1054,7 +1054,7 @@ const orderModules = {
           created_by: order.created_by,
           payment_status: "pending",
           payment_type: order.payment_type,
-          total_price: 0,
+          // total_price: 0,
           regis_type: regis_type,
           pay_date: order.pay_date ? order.pay_date : null,
           discount_price: discount ? discount : 0
@@ -1257,7 +1257,7 @@ const orderModules = {
           throw "please enter your name and class";
         }
 
-        payload.totalPrice = total_price;
+        payload.total_price = total_price;
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -2899,7 +2899,7 @@ const orderModules = {
                 regis_type: "cart",
                 pay_date: null,
                 discount_price: 0,
-                totalPrice: 0
+                // total_price: 0
               };
               for await (let course of order.courses) {
 
@@ -3077,7 +3077,7 @@ const orderModules = {
               regis_type: "cart",
               pay_date: null,
               discount_price: 0,
-              totalPrice: 0
+              // totalPrice: 0
 
             };
             for await (let course of order.courses) {
