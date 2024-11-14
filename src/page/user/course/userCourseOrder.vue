@@ -2075,6 +2075,7 @@ export default {
             this.saveCart({
               cart_data: this.order,
               discount: this.course_data?.discount,
+              courseData: this.course_data,
             });
             // this.resetCourseData();
             // this.show_dialog_cart = true;
