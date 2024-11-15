@@ -2896,7 +2896,7 @@ const orderModules = {
                 payment_status: "",
                 payment_type: null,
                 total_price: 0,
-                regis_type: "cart",
+                regis_type: "reserve",
                 pay_date: null,
                 discount_price: 0,
                 // total_price: 0
@@ -3093,7 +3093,7 @@ const orderModules = {
               payment_status: "",
               payment_type: null,
               total_price: 0,
-              regis_type: "cart",
+              regis_type: "reserve",
               pay_date: null,
               discount_price: 0,
               // totalPrice: 0
