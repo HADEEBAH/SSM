@@ -326,6 +326,81 @@ const reserveCourseModules = {
               showCancelButton: false,
               showConfirmButton: false,
             })
+          } else if (error?.response?.data?.message === "register duplicate") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: VueI18n.t(
+                "some students or students have already purchased the course"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message == "Unable to register due to course and package status being closed.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t("unable to register"),
+              text: VueI18n.t(
+                "unable to register due to course and package status being closed"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message == "Cannot register , fail at course monitor , course-coach or seats are full") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t("unable to register"),
+              text: VueI18n.t(
+                "unable to register Due to insufficient seats or the coach teaching in another package"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error.response.data.message == "over register date") {
+            Swal.fire({
+              icon: "error",
+              title: VueI18n.t("unable to register"),
+              text: VueI18n.t(
+                "outside the register date"
+              ),
+              showDenyButton: false,
+              showCancelButton: false,
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+            });
+          } else if (error?.response?.data?.message === "Over Registration") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t("unable to registere"),
+              text: VueI18n.t(
+                "cannot register , The seats are full"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message === "Unable to purchase the course because the course is in reserved status.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t("unable to register"),
+              text: VueI18n.t(
+                "unable to purchase the course because the course is in reserved status"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
           } else if (error.response.data.message === "duplicate pending order") {
             Swal.fire({
               // icon: "error",
@@ -433,6 +508,81 @@ const reserveCourseModules = {
               showCancelButton: false,
               showConfirmButton: false,
             })
+          } else if (error?.response?.data?.message === "register duplicate") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: VueI18n.t(
+                "some students or students have already purchased the course"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message == "Unable to register due to course and package status being closed.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t("unable to register"),
+              text: VueI18n.t(
+                "unable to register due to course and package status being closed"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message == "Cannot register , fail at course monitor , course-coach or seats are full") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t("unable to register"),
+              text: VueI18n.t(
+                "unable to register Due to insufficient seats or the coach teaching in another package"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error.response.data.message == "over register date") {
+            Swal.fire({
+              icon: "error",
+              title: VueI18n.t("unable to register"),
+              text: VueI18n.t(
+                "outside the register date"
+              ),
+              showDenyButton: false,
+              showCancelButton: false,
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+            });
+          } else if (error?.response?.data?.message === "Over Registration") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t("unable to registere"),
+              text: VueI18n.t(
+                "cannot register , The seats are full"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message === "Unable to purchase the course because the course is in reserved status.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t("unable to register"),
+              text: VueI18n.t(
+                "unable to purchase the course because the course is in reserved status"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
           } else if (error.response.data.message === "duplicate pending order") {
             Swal.fire({
               // icon: "error",
@@ -540,6 +690,81 @@ const reserveCourseModules = {
               showCancelButton: false,
               showConfirmButton: false,
             })
+          } else if (error?.response?.data?.message === "register duplicate") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: VueI18n.t(
+                "some students or students have already purchased the course"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message == "Unable to register due to course and package status being closed.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t("unable to register"),
+              text: VueI18n.t(
+                "unable to register due to course and package status being closed"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message == "Cannot register , fail at course monitor , course-coach or seats are full") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t("unable to register"),
+              text: VueI18n.t(
+                "unable to register Due to insufficient seats or the coach teaching in another package"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error.response.data.message == "over register date") {
+            Swal.fire({
+              icon: "error",
+              title: VueI18n.t("unable to register"),
+              text: VueI18n.t(
+                "outside the register date"
+              ),
+              showDenyButton: false,
+              showCancelButton: false,
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+            });
+          } else if (error?.response?.data?.message === "Over Registration") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t("unable to registere"),
+              text: VueI18n.t(
+                "cannot register , The seats are full"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message === "Unable to purchase the course because the course is in reserved status.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t("unable to register"),
+              text: VueI18n.t(
+                "unable to purchase the course because the course is in reserved status"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
           } else if (error.response.data.message === "duplicate pending order") {
             Swal.fire({
               // icon: "error",

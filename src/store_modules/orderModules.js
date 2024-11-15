@@ -729,10 +729,18 @@ const orderModules = {
           //   discountPrice: discount
 
           // };
-          let price = course.option?.net_price
-            ? course.option.net_price
-            : course.price;
-          total_price = total_price + price * course.students.length;
+          let count_price = course.course_type_id === "CT_1" ? (course.option.price_unit ? course.option.price_unit : 0) : course.price ? course.price : 0
+          let count_discount = course.course_type_id === "CT_1" ? (course.option.discount_price ? course.option.discount_price : 0) : courseData.discount ? courseData.discount : 0
+          let total_count = count_price - count_discount || 0
+          let total_student = course?.students?.length ? course?.students?.length : 0
+          let total_all = (total_count) * (total_student)
+          total_price = total_all
+
+
+          // let price = course.option?.net_price
+          //   ? course.option.net_price
+          //   : course.price;
+          // total_price = total_price + price * course.students.length;
         }
 
         if (!allStudentsValid) {
@@ -804,6 +812,340 @@ const orderModules = {
             text: VueI18n.t(
               "please enter the student's name"
             ),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.coursePackageOptionId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "coursePackageOptionId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.courseId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "courseId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.accountId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "accountId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.parentFirstnameTh === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "parentFirstnameTh is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.parentLastnameTh === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "parentLastnameTh is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.parentFirstnameEn === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "parentFirstnameEn is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.parentTel === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "parentTel is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.courseTypeId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "courseTypeId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.timeStart === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "timeStart is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.timeEnd === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "timeEnd is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.dayOfWeekId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "dayOfWeekId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.timeId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "timeId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.courseCoachId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "courseCoachId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.coachNameTh === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "coachNameTh is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.coachNameEn === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "coachNameEn is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.coachId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "coachId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.price === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "price is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.originalPrice === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "originalPrice is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.statusDiscountPrice === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "statusDiscountPrice is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.statusDiscountPercent === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "statusDiscountPercent is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.discount === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "discount is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.adminDiscount === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "adminDiscount is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.student === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "student is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.startDate === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "startDate is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.username === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "username is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.isOther === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "isOther is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.parent === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "parent is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("this item cannot be made"),
+            text: error,
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -1438,6 +1780,18 @@ const orderModules = {
                   showCancelButton: false,
                   showConfirmButton: false,
                 });
+              } if (error?.response?.data?.message === "Unable to purchase the course because the course is in reserved status.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t("unable to register"),
+                  text: VueI18n.t(
+                    "unable to purchase the course because the course is in reserved status"
+                  ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
               } else if (error?.response?.data?.message === "Over Registration") {
                 Swal.fire({
                   icon: "warning",
@@ -2000,6 +2354,342 @@ const orderModules = {
               text: VueI18n.t(
                 "please filter yourse more class"
               ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message === "Unable to purchase the course because the course is in reserved status.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t("unable to register"),
+              text: VueI18n.t(
+                "unable to purchase the course because the course is in reserved status"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.coursePackageOptionId === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "coursePackageOptionId is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.courseId === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "courseId is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.accountId === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "accountId is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.parentFirstnameTh === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "parentFirstnameTh is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.parentLastnameTh === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "parentLastnameTh is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.parentFirstnameEn === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "parentFirstnameEn is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.parentTel === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "parentTel is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.courseTypeId === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "courseTypeId is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.timeStart === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "timeStart is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.timeEnd === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "timeEnd is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.dayOfWeekId === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "dayOfWeekId is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.timeId === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "timeId is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.courseCoachId === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "courseCoachId is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.coachNameTh === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "coachNameTh is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.coachNameEn === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "coachNameEn is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.coachId === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "coachId is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.price === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "price is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.originalPrice === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "originalPrice is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.statusDiscountPrice === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "statusDiscountPrice is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.statusDiscountPercent === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "statusDiscountPercent is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.discount === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "discount is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.adminDiscount === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "adminDiscount is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.student === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "student is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.startDate === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "startDate is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.username === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "username is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.isOther === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "isOther is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.parent === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "parent is Require",
               timer: 3000,
               timerProgressBar: true,
               showCancelButton: false,
@@ -2686,7 +3376,7 @@ const orderModules = {
               item.option.total_price = item.option.net_price * item.students.length
             } else {
               item.net_price = item.price;
-              item.total_price = item.price * item.students.length
+              // item.total_price = item.price * item.students.length
             }
 
           }
@@ -3290,6 +3980,17 @@ const orderModules = {
             icon: "error",
             title: VueI18n.t("something went wrong"),
             text: VueI18n.t("parents cannot resave the course to their parents"),
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+          });
+        } else if (error.response?.data?.message === 'Cannot resave the course to their parents.') {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("warning"),
+            text: VueI18n.t("cannot resave the course to their parents"),
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,

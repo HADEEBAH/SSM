@@ -462,6 +462,10 @@ export default {
                 account_id: this.user_login.account_id,
               });
             }
+            this.GetCartList({
+              limit: 100,
+              page: 1,
+            });
           }
         }
       });
@@ -514,83 +518,13 @@ export default {
         this.policy_show = true;
       } else {
         this.order_is_loading = true;
-
         if (this.cart_list.filter((v) => v.checked === true).length > 0) {
-          // let isValiDateCourse = [];
           this.order.courses = this.cart_list.filter((v) => v.checked === true);
           this.order.total_price = this.total_price;
           this.order.payment_status = "pending";
           this.order.created_by = this.user_login.account_id;
           this.order.type = "cart";
           this.changeOrderData(this.order);
-
-          // await this.GetAllCourseMonitor().then(async () => {
-          //   this.order.courses.forEach((course) => {
-          //     if (
-          //       this.course_monitors.filter(
-          //         (v) =>
-          //           v.courseMonitorEntity_coach_id === course.coach &&
-          //           v.courseMonitorEntity_course_id === course.course_id &&
-          //           v.courseMonitorEntity_day_of_week_id ===
-          //             course.day_of_week_id &&
-          //           v.courseMonitorEntity_time_id === course.time_id
-          //       ).length > 0
-          //     ) {
-          //       if (
-          //         this.course_monitors.some(
-          //           (v) =>
-          //             v.courseMonitorEntity_coach_id === course.coach &&
-          //             v.courseMonitorEntity_course_id === course.course_id &&
-          //             v.courseMonitorEntity_day_of_week_id ===
-          //               course.day_of_week_id &&
-          //             v.courseMonitorEntity_time_id === course.time_id &&
-          //             v.courseMonitorEntity_current_student +
-          //               course.students.length <=
-          //               v.courseMonitorEntity_maximum_student &&
-          //             v.courseMonitorEntity_status === "Open"
-          //         )
-          //       ) {
-          //         isValiDateCourse.push(true);
-          //       } else {
-          //         isValiDateCourse.push(false);
-          //       }
-          //     } else {
-          //       isValiDateCourse.push(true);
-          //     }
-          //   });
-          //   if (isValiDateCourse.includes(false)) {
-          //     Swal.fire({
-          //       icon: "error",
-          //       title: this.$t("something went wrong"),
-          //       text: this.$t(
-          //         "the selected course is full and payment cannot be made"
-          //       ),
-          //       timer: 3000,
-          //       timerProgressBar: true,
-          //       showCancelButton: false,
-          //       showConfirmButton: false,
-          //     });
-          //   } else {
-          //     this.order_is_loading = true;
-          //     await this.saveOrder({ regis_type: "cart" })
-          //       .then(() => {
-          //         for (const cart of this.order.courses) {
-          //           for (const id of cart.order_tmp_id) {
-          //             this.DeleteCart({
-          //               cart_id: id,
-          //               account_id: this.user_login.account_id,
-          //             });
-          //           }
-          //         }
-          //       })
-          //       .catch((err) => {
-          //         console.log("err :>> ", err);
-          //       });
-          //     this.order_is_loading = false;
-
-          //     this.total_price = 0;
-          //   }
-          // });
 
           await this.saveOrder({ regis_type: "cart" })
             .then(() => {
@@ -608,21 +542,13 @@ export default {
             });
         }
 
+        await this.GetCartList({
+          limit: 100,
+          page: 1,
+        });
+
         this.order_is_loading = true;
-        // await this.saveOrder({ regis_type: "cart" })
-        //   .then(() => {
-        //     for (const cart of this.order.courses) {
-        //       for (const id of cart.order_tmp_id) {
-        //         this.DeleteCart({
-        //           cart_id: id,
-        //           account_id: this.user_login.account_id,
-        //         });
-        //       }
-        //     }
-        //   })
-        //   .catch((err) => {
-        //     console.log("err :>> ", err);
-        //   });
+
         this.order_is_loading = false;
 
         this.total_price = 0;

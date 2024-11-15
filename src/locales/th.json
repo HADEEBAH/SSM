@@ -203,6 +203,7 @@
     "currently our class is full of students. thank you for your interest in our course." : "ขณะนี้คลาสเรามีผู้เรียนเต็มจำนวนแล้ว ขอบคุณท่านที่สนใจคอร์สของเรา",
     "current students" : "ผู้เรียนปัจจุบัน",
     "course has been created":"( สร้างคอร์สเรียบร้อยแล้ว )",
+    "cannot resave the course to their parents":"ไม่สามารถบันทึกหลักสูตรใหม่ให้ผู้ปกครองได้",
 
    
     "day" : "วัน",
@@ -1092,6 +1093,7 @@
     "upload the cover image of the course":"อัปโหลดภาพหน้าปกคอร์สเรียน",
     "upload privileged images":"อัปโหลดภาพสิทธิ์พิเศษ",
     "upload Learning Journey":"อัปโหลดภาพ Learning Journey",
+    "unable to purchase the course because the course is in reserved status":"ไม่สามารถซื้อหลักสูตรได้เนื่องจากหลักสูตรอยู่ในสถานะจอง",
 
     "organized by":"จัดสอนโดย",
     "z":"z",
