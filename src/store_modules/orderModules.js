@@ -2972,7 +2972,7 @@ const orderModules = {
                   ? course_data.time.timeData.filter(
                     (v) => v.coach_id === course_data.coach_id
                   )[0].coach_name_en : course_data.coachs[0].coach_name_en,
-                coach_id: course_data.coach_id ? course_data.coach_id : null,
+                coach_id: course_data.course_type_id == 'CT_2' ? course_data.coach ? course_data.coach : null : course_data.coach_id ? course_data.coach_id : null,
                 start_date: moment().format("YYYY-MM-DD"),
                 remark: null,
                 price: course_data.course_type_id === "CT_1" ? (course_data.option.price_unit ? course_data.option.price_unit : 0) : course_data.price ? course_data.price : 0,
@@ -3170,7 +3170,7 @@ const orderModules = {
                 ? course_data.time.timeData.filter(
                   (v) => v.coach_id === course_data.coach_id
                 )[0].coach_name_en : course_data.coachs[0].coach_name_en,
-              coach_id: course_data.coach_id ? course_data.coach_id : null,
+              coach_id: course_data.course_type_id == 'CT_2' ? course_data.coach ? course_data.coach : null : course_data.coach_id ? course_data.coach_id : null,
               start_date: moment().format("YYYY-MM-DD"),
               remark: null,
               price: course_data.course_type_id === "CT_1" ? (course_data.option.price_unit ? course_data.option.price_unit : 0) : course_data.price ? course_data.price : 0,
@@ -3235,7 +3235,6 @@ const orderModules = {
             };
             let { data } = await axios.post(
               // `http://localhost:3002/api/v1/order/reserve/create`,
-
               `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
               payload,
               config

@@ -814,7 +814,8 @@
           <v-btn
             v-if="
               course_seat?.status === 'Close' ||
-              course_order.students.length + course_seat?.countSeatByCourse >
+              Number(course_order.students.length) +
+                Number(course_seat?.countSeatByCourse) >
                 course_seat?.maxStudentByCourse ||
               course_data.course_status === 'Reserve'
             "
