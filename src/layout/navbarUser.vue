@@ -176,12 +176,13 @@
               </v-card-text>
             </v-card>
           </v-menu>
+          <!-- :content="amount_cart_list" -->
 
           <v-badge
-            v-if="amount_cart_list > 0"
+            v-if="cart_list?.length > 0"
             class="mr-5"
             color="red"
-            :content="amount_cart_list"
+            :content="cart_list?.length"
           >
             <router-link
               dark
