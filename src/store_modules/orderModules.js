@@ -771,7 +771,7 @@ const orderModules = {
               "unable to register"
             ),
             text: VueI18n.t(
-              "unable to register"
+              "unable to add students to cart because the course already has students listed in the cart"
             ),
             timer: 3000,
             timerProgressBar: true,

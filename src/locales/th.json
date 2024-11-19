@@ -1094,6 +1094,7 @@
     "upload privileged images":"อัปโหลดภาพสิทธิ์พิเศษ",
     "upload Learning Journey":"อัปโหลดภาพ Learning Journey",
     "unable to purchase the course because the course is in reserved status":"ไม่สามารถซื้อหลักสูตรได้เนื่องจากหลักสูตรอยู่ในสถานะจอง",
+    "unable to add students to cart because the course already has students listed in the cart":"ไม่สามารถเพิ่มนักเรียนลงตะกร้าได้เนื่องจากหลักสูตรมีนักเรียนอยู่ในรายการรถเข็นแล้ว",
 
     "organized by":"จัดสอนโดย",
     "z":"z",
