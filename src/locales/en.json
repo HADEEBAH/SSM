@@ -93,6 +93,8 @@
     "booking status": "Booking status",
     "because your orders are duplicated": "Because your orders are duplicated",
     "because this course is full":"เนื่องจากคอร์สนี้เต็ม",
+    "because you have chosen this course":"Because you have chosen this course",
+
     
 
     "cash":"Cash",
@@ -249,6 +251,7 @@
     "discount" : "Discount",
     "don't have an account yet?" : "Don't have an account yet?",
     "dashboard" : "Dashboard",
+    "do you want to check in" : "Do you want to check in?",
     "do you want to confirm your payment?" : "Do you want to confirm your payment?",
     "do you want to delete a holiday?" : "Do you want to delete a holiday?",
     "do you want to create a holiday?": "Do you want to create a holiday?",
@@ -557,6 +560,7 @@
     "permission management": "Permission management",
     "personal" : "Personal",
     "phone number" : "Phone number",
+    "please enter order number":"Please enter order number",
     "please specify congenital disease": "Please specify congenital disease",
     "please specify class": "Please specify class",
     "please specify more details of class": "Please specify more details of class",
@@ -932,8 +936,12 @@
     "tuesday" : "Tuesday",
     "type of take leave": "Type of take leave",
     "teaching days cannot be closed": "Unable to close the teaching day",
-   
+    "the compensatory day overlaps with the coach's leave day. please select a new compensatory day": "The compensatory day overlaps with the coach's leave day. please select a new compensatory day",
+    "the compensatory day overlaps with the holiday. please select a new compensatory day": "The compensatory day overlaps with the holiday. please select a new compensatory day",
 
+    "unable to update the compensation day":"Unable to update the compensation day because the compensation day falls on a holiday, please select a new compensatory day",
+   "unable to update the compensation day because the compensation day coincides with the coach's leave":"Unable to update the compensation day because the compensation day coincides with the coach's leave, please select a new compensatory day",
+    "unable to update the compensation date due to overlapping times":"Unable to update the compensation date due to overlapping times, please select new compensation date",
     "unable to study on the specified date. because there are already classes on the specified date" : "Unable to study on the specified date. Because there are already classes on the specified date",
     "unpaid" : "Unpaid",
     "upload attachment" : "Upload file",

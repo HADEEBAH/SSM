@@ -179,6 +179,7 @@
           </img-card>
         </v-col>
       </v-row>
+      <!-- <pre>{{ selected }}</pre> -->
       <v-data-table
         v-model="selected"
         :headers="columns"
@@ -196,6 +197,13 @@
           'items-per-page-text': 'Rows per page:',
         }"
       >
+        <template v-slot:[`item.courseName`]="{ item }">
+          {{
+            $i18n.locale == "th"
+              ? item.course[0].courseNameTh
+              : item.course[0].courseNameEn
+          }}
+        </template>
         <template v-slot:[`item.total_price`]="{ item }">
           {{
             item.total_price.toLocaleString(undefined, {
@@ -316,7 +324,7 @@
                   item-text="fullname"
                   item-value="userOneId"
                   class="py-1"
-                  :label="$t('please enter the student name')"
+                  :placeholder="$t('please enter the student name')"
                   outlined
                   color="#FF6B81"
                   item-color="#FF6B81"
@@ -366,7 +374,7 @@
                     $i18n.locale == 'th' ? 'namePayment' : 'namePaymentEn'
                   "
                   item-value="valuePayment"
-                  :label="$t('please select a status')"
+                  :placeholder="$t('please select a status')"
                   outlined
                   color="#FF6B81"
                   item-color="#FF6B81"
@@ -401,7 +409,7 @@
                   :item-text="$i18n.locale == 'th' ? 'name' : 'nameEn'"
                   item-value="value"
                   v-model="export_filter.payment_type"
-                  :label="$t('please select a payment type')"
+                  :placeholder="$t('please select a payment type')"
                   outlined
                   multiple
                   hide-details
@@ -431,7 +439,7 @@
                   :item-text="$i18n.locale == 'th' ? 'course_th' : 'course_en'"
                   item-value="course_id"
                   v-model="export_filter.course_id"
-                  :label="$t('please select a course')"
+                  :placeholder="$t('please select a course')"
                   outlined
                   multiple
                   hide-details
@@ -465,7 +473,7 @@
                   :item-text="$i18n.locale == 'th' ? 'typeName' : 'typeNameEn'"
                   item-value="typeOfValue"
                   v-model="export_filter.course_type_id"
-                  :label="$t('please select a course type')"
+                  :placeholder="$t('please select a course type')"
                   outlined
                   multiple
                   color="#FF6B81"
@@ -478,7 +486,7 @@
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
                       (+{{ export_filter.course_type_id.length - 1 }}
-                      {{ $t("Others") }})
+                      {{ $t("others") }})
                     </span>
                   </template>
                 </v-autocomplete>
@@ -495,7 +503,7 @@
                       item-value="packageId"
                       v-model="export_filter.package_id"
                       class="py-1"
-                      :label="$t('please select a package')"
+                      :placeholder="$t('please select a package')"
                       outlined
                       multiple
                       color="#FF6B81"
@@ -528,7 +536,7 @@
                       item-value="optionId"
                       v-model="export_filter.option_id"
                       class="py-1"
-                      :label="$t('please select a period')"
+                      :placeholder="$t('please select a period')"
                       outlined
                       multiple
                       color="#FF6B81"
@@ -569,6 +577,7 @@
                   v-model="export_filter.order_number"
                   :items="export_filter.order_number"
                   :placeholder="$t('please enter order number')"
+                  ref="myComboBox"
                   outlined
                   dense
                   multiple
@@ -576,6 +585,7 @@
                   clearable
                   color="#FF6B81"
                   item-color="#FF6B81"
+                  @paste="handlePaste"
                 >
                   <template v-slot:selection="{ item, index }">
                     <v-chip dark v-if="index === 0" color="#FF6B81">
@@ -583,7 +593,7 @@
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
                       (+{{ export_filter.order_number?.length - 1 }}
-                      {{ $t("Others") }})
+                      {{ $t("others") }})
                     </span>
                   </template>
                 </v-combobox>
@@ -618,7 +628,7 @@
                               ? export_filter.date_doc_start
                               : GenDate(export_filter.date_doc_start)
                           "
-                          :label="$t('please select a start date')"
+                          :placeholder="$t('please select a start date')"
                           outlined
                           prepend-icon="mdi-calendar"
                           readonly
@@ -654,7 +664,7 @@
                               ? export_filter.date_doc_end
                               : GenDate(export_filter.date_doc_end)
                           "
-                          :label="$t('please select an end date')"
+                          :placeholder="$t('please select an end date')"
                           outlined
                           prepend-icon="mdi-calendar"
                           readonly
@@ -697,7 +707,7 @@
                               ? export_filter.date_pay_start
                               : GenDate(export_filter.date_pay_start)
                           "
-                          :label="$t('please select a start date')"
+                          :placeholder="$t('please select a start date')"
                           outlined
                           prepend-icon="mdi-calendar"
                           readonly
@@ -734,7 +744,7 @@
                               ? export_filter.date_pay_end
                               : GenDate(export_filter.date_pay_end)
                           "
-                          :label="$t('please select an end date')"
+                          :placeholder="$t('please select an end date')"
                           outlined
                           prepend-icon="mdi-calendar"
                           readonly
@@ -760,7 +770,7 @@
               <v-col cols="12" sm="6">
                 <label-custom :text="$t('service value')"></label-custom>
                 <v-text-field
-                  :label="$t('please enter the service value start')"
+                  :placeholder="$t('please enter the service value start')"
                   outlined
                   dense
                   type="number"
@@ -771,7 +781,7 @@
               <v-col cols="12" sm="6">
                 <label-custom :text="$t('to')"></label-custom>
                 <v-text-field
-                  :label="$t('please enter the service value end')"
+                  :placeholder="$t('please enter the service value end')"
                   outlined
                   dense
                   type="number"
@@ -985,7 +995,8 @@ export default {
           text: this.$t("course name"),
           align: "start",
           sortable: false,
-          value: this.$i18n.locale == "th" ? "course_nameTh" : "course_nameEn",
+          value: "courseName",
+          // value: this.$i18n.locale == "th" ? "course_nameTh" : "course_nameEn",
         },
         {
           text: this.$t("price"),
@@ -1032,6 +1043,26 @@ export default {
       searchNameUser: "loginModules/searchNameUser",
       FilterFinanceData: "OrderModules/FilterFinanceData",
     }),
+    handlePaste(event) {
+      event.preventDefault();
+      const pastedData = event.clipboardData.getData("text");
+
+      // Initialize export_filter.order_number if undefined
+      if (!Array.isArray(this.export_filter.order_number)) {
+        this.export_filter.order_number = [];
+      }
+
+      // Split pasted data by comma or whitespace and remove any empty strings
+      const orderNumbers = pastedData.split(/[\s,]+/).filter(Boolean);
+
+      // Add each order number if it doesn't already exist in export_filter.order_number
+      orderNumbers.forEach((orderNumber) => {
+        if (!this.export_filter.order_number.includes(orderNumber)) {
+          this.export_filter.order_number.push(orderNumber);
+        }
+      });
+    },
+
     GenDate(date) {
       return new Date(date).toLocaleDateString(
         this.$i18n.locale == "th" ? "th-TH" : "en-US",
@@ -1057,12 +1088,26 @@ export default {
       this.export_filter.payment_status = [];
       this.export_filter.order_number = [];
       this.selected.forEach((order) => {
-        if (!this.export_filter.course_id.includes(order.course_id)) {
-          this.export_filter.course_id.push(order.course_id);
-        }
-        if (!this.export_filter.course_type_id.includes(order.course_type_id)) {
-          this.export_filter.course_type_id.push(order.course_type_id);
-        }
+        order.course?.forEach((courses) => {
+          this.export_filter.course_id.push(courses.courseId);
+          // close duplicate courseID
+          const uniqueCourses = new Set(this.export_filter.course_id);
+          const newCourses = Array.from(uniqueCourses);
+          this.export_filter.course_id = [...newCourses];
+
+          if (
+            !this.export_filter.course_type_id.includes(order.course_type_id)
+          ) {
+            this.export_filter.course_type_id.push(courses.courseTypeId);
+            // close duplicate course type id
+            const uniqueCourseTypes = new Set(
+              this.export_filter.course_type_id
+            );
+            const newCourseType = Array.from(uniqueCourseTypes);
+            this.export_filter.course_type_id = [...newCourseType];
+          }
+        });
+
         if (!this.export_filter.payment_type.includes(order.payment_type)) {
           this.export_filter.payment_type.push(order.payment_type);
         }
@@ -1116,8 +1161,12 @@ export default {
           break;
       }
     },
-    Export() {
-      this.financeFilter({ filter: this.export_filter });
+    async Export() {
+      await this.$refs["myComboBox"].blur();
+      this.$nextTick(() => {
+        console.log(this.value);
+        this.financeFilter({ filter: this.export_filter });
+      });
     },
     closeDialog() {
       this.show_dialog = false;
@@ -1132,6 +1181,7 @@ export default {
         payment_status: [],
         option_id: [],
         package_id: [],
+        order_number: [],
         select_date_doc_start: false,
         select_date_doc_end: false,
         date_doc_start: "",
