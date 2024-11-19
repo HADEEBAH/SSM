@@ -207,7 +207,8 @@ const CourseModules = {
     coach_add_student: [],
     open_time_add_student: [],
     open_day_add_student: [],
-    all_students_potential_list: []
+    all_students_potential_list: [],
+    get_all_time: []
 
 
   },
@@ -430,6 +431,9 @@ const CourseModules = {
     },
     SetAllStudentPotentialList(state, payload) {
       state.all_students_potential_list = payload
+    },
+    SetgetTime(state, payload) {
+      state.get_all_time = payload
     },
 
 
@@ -1764,6 +1768,8 @@ const CourseModules = {
         // let { data } = await axios.post(`${localhost}/api/v1/course/detail/addstudent/status-time`, payloads)
         let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/course/detail/addstudent/status-time`, payloads)
         if (data.statusCode === 201) {
+          context.commit("SetgetTime", data.data)
+
 
           let timeOpen = data?.data?.filter((item) => item?.status === "Open");
 
@@ -1775,7 +1781,6 @@ const CourseModules = {
 
             }
           }
-
 
 
           context.commit("SetOpenTimeAddStudent", getTimeDuplicate)
@@ -2648,6 +2653,9 @@ const CourseModules = {
     },
     getAllStudentPotentialList(state) {
       return state.all_students_potential_list
+    },
+    getAllTime(state) {
+      return state.get_all_time
     },
 
   },

@@ -177,7 +177,10 @@
                         cols="4"
                         class="text-md font-semibold text-[#FF6B81]"
                       >
-                        {{ item.option.discount_price }} {{ $t("baht") }}</v-col
+                        {{
+                          item.option.discount ? item.option.discount_price : 0
+                        }}
+                        {{ $t("baht") }}</v-col
                       >
                     </v-row>
                     <v-row dense v-if="item.course_type_id === 'CT_2'">
@@ -202,8 +205,8 @@
                       >
                         {{
                           item.course_type_id === "CT_1"
-                            ? item.option.total_price.toLocaleString()
-                            : item.total_price.toLocaleString()
+                            ? item.option.total_price?.toLocaleString()
+                            : item.total_price?.toLocaleString()
                         }}
                         {{ $t("baht") }}</v-col
                       >
@@ -262,7 +265,7 @@
           <v-col cols="6" sm="4">
             {{ $t("total") }}
             <b class="text-[#ff6b81]"
-              >{{ total_price.toLocaleString() }} {{ $t("baht") }}</b
+              >{{ total_price?.toLocaleString() }} {{ $t("baht") }}</b
             >
           </v-col>
           <v-col cols="6" sm="4" align="end">

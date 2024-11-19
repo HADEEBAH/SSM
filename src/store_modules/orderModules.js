@@ -666,28 +666,16 @@ const orderModules = {
           payload.courses.push({
             course_id: course.course_id ? course.course_id : null,
             course_type_id: course.course_type_id ? course.course_type_id : null,
-            course_package_option_id: course.option.course_package_option_id ? course.option.course_package_option_id : null,
-            time_start: course.time.start ? course.time.start : null,
-            time_end: course.time.end ? course.time.end : null,
-            // maximumStudent: course.course_type_id == 'CT_2' ? course.time.maximumStudent : (course.coach.maximumStudent ? course.coach.maximumStudent : (regis_type == 'cart' ? course?.time?.maximumStudent : course?.time?.timeData[0].maximumStudent)),
-            day_of_week_id: course.course_type_id == 'CT_2' ? course.time.dayOfWeekId : (course?.time?.timeData
-              ? course.time.timeData.filter(
-                (v) => v.coach_id === course.coach_id
-              )[0].dayOfWeekId : null),
-            time_id: course.course_type_id == 'CT_2' ? course.time.timeId : (course?.time?.timeData
-              ? course.time.timeData.filter(
-                (v) => v.coach_id === course.coach_id
-              )[0].timeId : null),
-            course_coach_id: course.course_type_id == 'CT_2' ? course.time.timeId : (course?.time?.timeData
-              ? course.time.timeData.filter(
-                (v) => v.coach_id === course.coach_id
-              )[0].courseCoachId : null),
-            coach_name_th: course.coach_name ? course.coach_name : null,
-            coach_name_en: course?.time?.timeData
-              ? course.time.timeData.filter(
-                (v) => v.coach_id === course.coach_id
-              )[0].coach_name_en : courseData.coachs[0].coach_name_en,
-            coach_id: course.coach_id ? course.coach_id : null,
+            course_package_option_id: course.course_type_id == 'CT_1' ? course.coach.coursePackageOptionsId ? course.coach.coursePackageOptionsId : null : null,
+            time_start: course.course_type_id == 'CT_1' ? course.coach.start ? course.coach.start : null : course.time.start ? course.time.start : null,
+            time_end: course.course_type_id == 'CT_1' ? course.coach.end ? course.coach.end : null : course.time.end ? course.time.end : null,
+            maximumStudent: course.course_type_id == 'CT_1' ? course.coach.maximumStudent ? course.coach.maximumStudent : null : course.time.maximumStudent,
+            day_of_week_id: course.course_type_id == 'CT_1' ? course.coach.dayOfWeekId ? course.coach.dayOfWeekId : null : course.time.dayOfWeekId,
+            time_id: course.course_type_id == 'CT_1' ? course.coach.timeId ? course.coach.timeId : null : course.time.timeId,
+            course_coach_id: course.course_type_id == 'CT_1' ? course.coach.courseCoachId ? course.coach.courseCoachId : null : courseData.coachs[0]?.course_coach_id,
+            coach_name_th: course.course_type_id == 'CT_1' ? course.coach.fullNameTh ? course.coach.fullNameTh : null : course.coach_name ? course.coach_name : null,
+            coach_name_en: course.course_type_id == 'CT_1' ? course.coach.fullNameEn ? course.coach.fullNameEn : null : null,
+            coach_id: course.course_type_id == 'CT_1' ? course.coach.coachId ? course.coach.coachId : null : course.coach_id ? course.coach_id : null,
             start_date: moment().format("YYYY-MM-DD"),
             remark: null,
             price: course.course_type_id === "CT_1" ? (course.option.price_unit ? course.option.price_unit : 0) : course.price ? course.price : 0,
@@ -699,36 +687,7 @@ const orderModules = {
             admin_discount: 0
           })
 
-          // payload.courses = {
-          //   courseId: course.course_id,
-          //   courseName: course.course_name,
-          //   coursePackageOptionId: course.option.course_package_option_id
-          //     ? course.option.course_package_option_id
-          //     : "",
-          //   dayOfWeekId: course?.time?.timeData
-          //     ? course.time.timeData.filter(
-          //       (v) => v.coach_id === course.coach_id
-          //     )[0].dayOfWeekId
-          //     : course.time.dayOfWeekId,
-          //   timeId: course?.time?.timeData
-          //     ? course.time.timeData.filter(
-          //       (v) => v.coach_id === course.coach_id
-          //     )[0].timeId
-          //     : course.time.timeId,
-          //   time: course.time ? course.time : "",
-          //   startDate: "",
-          //   remark: "",
-          //   price: course.option.net_price
-          //     ? course.option.net_price
-          //     : course.price,
-          //   coach: {
-          //     accountId: course.coach_id,
-          //     fullName: course.coach_name,
-          //   },
-          //   student: students,
-          //   discountPrice: discount
 
-          // };
           let count_price = course.course_type_id === "CT_1" ? (course.option.price_unit ? course.option.price_unit : 0) : course.price ? course.price : 0
           let count_discount = course.course_type_id === "CT_1" ? (course.option.discount_price ? course.option.discount_price : 0) : courseData.discount ? courseData.discount : 0
           let total_count = count_price - count_discount || 0
@@ -799,6 +758,20 @@ const orderModules = {
             title: VueI18n.t("unable to register"),
             text: VueI18n.t(
               "please enter your name and class"
+            ),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message === "Unable to add students to cart because the course already has students listed in the cart.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: VueI18n.t(
+              "unable to register"
             ),
             timer: 3000,
             timerProgressBar: true,
@@ -1154,212 +1127,6 @@ const orderModules = {
         }
       }
     },
-
-    // async saveCart(context, { cart_data }) {
-    //   try {
-    //     let order = cart_data;
-    //     let payload = {
-    //       orderId: "",
-    //       courses: {},
-    //       createdBy: "",
-    //       paymentStatus: "pending",
-    //       paymentType: "",
-    //       totalPrice: 0,
-    //     };
-    //     let total_price = 0;
-    //     let studentUpdate = []
-    //     await order.courses.forEach((course) => {
-    //       let students = [];
-    //       course.students.forEach(async (student) => {
-    //         let { data } = await axios.get(
-    //           `http://localhost:3000/api/v1/account/auth/${student.account_id}`
-    //         );
-    //         let itemRole = ''
-
-    //         for (const items of data.data.roles) {
-    //           itemRole = items.roleId
-    //         }
-
-    //         if (!studentUpdate.some(v => v.studentId === student.account_id)) {
-    //           if (itemRole === 'R_5') {
-    //             if (student.nicknameTh && student.class) {
-    //               studentUpdate.push(
-    //                 {
-    //                   "studentId": student.account_id,
-    //                   "nicknameTh": student.nicknameTh,
-    //                   "class": student.class
-    //                 },
-    //               )
-    //             } else {
-    //               console.log('itemRole  :>> ', itemRole);
-    //               throw "please enter your name and class"
-    //             }
-    //           } else {
-    //             if (student.nicknameTh) {
-    //               studentUpdate.push(
-    //                 {
-    //                   "studentId": student.account_id,
-    //                   "nicknameTh": student.nicknameTh,
-    //                   "class": ''
-    //                 },
-    //               )
-    //             }
-    //           }
-    //           // if (student.account_id && student.nicknameTh && student.class) {
-
-    //           //   if (student.role === 'R_5') {
-    //           //     console.log('student :>> ', student);
-
-    //           //     studentUpdate.push(
-    //           //       {
-    //           //         "studentId": student.account_id,
-    //           //         "nicknameTh": student.nicknameTh,
-    //           //         "class": student.class
-    //           //       },
-    //           //     )
-    //           //   } else {
-    //           //     studentUpdate.push(
-    //           //       {
-    //           //         "studentId": student.account_id,
-    //           //         "nicknameTh": student.nicknameTh,
-    //           //         "class": ''
-    //           //       },
-    //           //     )
-    //           //   }
-
-    //           // } else {
-    //           //   throw "please enter your name and class"
-    //           // }
-    //         }
-    //         if (student.parents[0]) {
-    //           students.push({
-    //             accountId: student.account_id ? student.account_id : "",
-    //             userName: student.username,
-    //             firstNameTh: student.firstname,
-    //             lastNameTh: student.lastname,
-    //             tel: student.tel,
-    //             isOther: student.is_other,
-    //             parent: {
-    //               accountId: student.parents[0].account_id,
-    //               parentFirstnameTh: student.parents[0].firstname_th
-    //                 ? student.parents[0].firstname_th
-    //                 : "",
-    //               parentLastnameTh: student.parents[0].lastname_th
-    //                 ? student.parents[0].lastname_th
-    //                 : "",
-    //               parentFirstnameEn: student.parents[0].firstname_en,
-    //               parentLastnameEn: student.parents[0].lastname_en,
-    //               parentTel: student.parents[0].tel,
-    //             },
-    //           });
-    //         } else {
-    //           students.push({
-    //             accountId: student.account_id ? student.account_id : "",
-    //             userName: student.username,
-    //             firstNameTh: student.firstname,
-    //             lastNameTh: student.lastname,
-    //             tel: student.tel,
-    //             isOther: student.is_other,
-    //             parent: {},
-    //           });
-    //         }
-    //       });
-    //       payload.courses = {
-    //         courseId: course.course_id,
-    //         courseName: course.course_name,
-    //         coursePackageOptionId: course.option.course_package_option_id
-    //           ? course.option.course_package_option_id
-    //           : "",
-    //         dayOfWeekId: course?.time?.timeData
-    //           ? course.time.timeData.filter(
-    //             (v) => v.coach_id === course.coach_id
-    //           )[0].dayOfWeekId
-    //           : course.time.dayOfWeekId,
-    //         timeId: course?.time?.timeData
-    //           ? course.time.timeData.filter(
-    //             (v) => v.coach_id === course.coach_id
-    //           )[0].timeId
-    //           : course.time.timeId,
-    //         time: course.time ? course.time : "",
-    //         startDate: "",
-    //         remark: "",
-    //         price: course.option.net_price
-    //           ? course.option.net_price
-    //           : course.price,
-    //         coach: {
-    //           accountId: course.coach_id,
-    //           fullName: course.coach_name,
-    //         },
-    //         student: students,
-    //       };
-    //       let price = course.option?.net_price
-    //         ? course.option.net_price
-    //         : course.price;
-    //       total_price = total_price + price * course.students.length;
-    //     });
-    //     payload.totalPrice = total_price;
-    //     let config = {
-    //       headers: {
-    //         "Access-Control-Allow-Origin": "*",
-    //         "Content-type": "Application/json",
-    //         Authorization: `Bearer ${VueCookie.get("token")}`,
-    //       },
-    //     };
-    //     let { data } = await axios.post(
-    //       `${process.env.VUE_APP_URL}/api/v1/order/cart`,
-    //       payload,
-    //       config
-    //     );
-    //      if (data.statusCode === 201) {
-
-    //       await Swal.fire({
-    //         icon: "success",
-    //         title: VueI18n.t("succeed"),
-    //         text: VueI18n.t(
-    //           "the course has been successfully added to the cart"
-    //         ),
-    //         showCancelButton: false,
-    //         showConfirmButton: false,
-    //         showDenyButton: false,
-    //         timer: 3000,
-    //         timerProgressBar: true,
-    //       }).finally(() => {
-    //         router.push({ name: "CartList" });
-    //       });
-    //       localStorage.removeItem("Order");
-    //       context.commit("SetResetCourseData");
-    //       context.commit("SetOrder", {
-    //         order_step: 0,
-    //         order_number: "",
-    //         courses: [],
-    //         createdBy: "",
-    //         payment_status: "",
-    //         payment_type: "",
-    //         total_price: 0,
-    //       });
-
-    //     }
-
-    //   } catch (error) {
-    //     console.log(error);
-    //     if (error === "please enter your name and class") {
-    //       Swal.fire({
-    //         icon: "error",
-    //         title: VueI18n.t("unable to register"),
-    //         text: VueI18n.t(
-    //           "please enter your name and class"
-    //         ),
-    //         timer: 3000,
-    //         timerProgressBar: true,
-    //         showCancelButton: false,
-    //         showConfirmButton: false,
-    //       });
-    //     }
-    //   }
-    // },
-
-
-    // async saveOrder(context, { moreDiscount }) {
     async saveOrder(context, { regis_type, my_data_class, type_checked, discount, courseData }) {
 
       // othert_data_class
@@ -1485,21 +1252,21 @@ const orderModules = {
               break; // Exit the loop if the criteria are not met
             }
           }
-
+          let date_start = moment(course.course_data?.course_study_start_date?.trim()).format("YYYY-MM-DD");
           payload.courses.push({
             course_id: course.course_id ? course.course_id : null,
             course_type_id: course.course_type_id ? course.course_type_id : null,
-            course_package_option_id: course.option.course_package_option_id || course.option.coursePackageOptionsId ? course.option.course_package_option_id || course.option.coursePackageOptionsId : null,
-            time_start: course.coach.start || course.time.start,
-            time_end: course.coach.end || course.time.end,
-            // maximumStudent: course.course_type_id == 'CT_2' ? course.time.maximumStudent : (course.coach.maximumStudent ? course.coach.maximumStudent : (regis_type == 'cart' ? course?.time?.maximumStudent : course?.time?.timeData[0].maximumStudent)),
-            day_of_week_id: course.course_type_id == 'CT_2' ? course.time.dayOfWeekId : (course.coach.dayOfWeekId ? course.coach.dayOfWeekId : (regis_type == 'cart' ? course?.time?.dayOfWeekId : course?.time?.timeData[0]?.dayOfWeekId)),
-            time_id: course.course_type_id == 'CT_2' ? course.time.timeId : (course.coach.timeId ? course.coach.timeId : (regis_type == 'cart' ? course?.time?.timeId : course?.time?.timeData[0]?.timeId)),
-            course_coach_id: course.course_type_id == 'CT_2' ? (course.coach.course_coach_id ? course.coach.course_coach_id : (regis_type == 'cart' ? course.day.course_coach_id : courseData.coachs[0]?.course_coach_id)) : (course.coach.courseCoachId ? course.coach.courseCoachId : (regis_type == 'cart' ? course.day.course_coach_id : course?.time?.timeData[0]?.courseCoachId)),
-            coach_name_th: course.course_type_id == 'CT_2' ? (course.coach.coach_name ? course.coach.coach_name : (regis_type == 'cart' ? course.coach_name : courseData.coachs[0]?.coach_name)) : (course.coach.fullNameTh ? course.coach.fullNameTh : (regis_type == 'cart' ? course.coach_name : courseData.coachs[0]?.coach_name)),
-            coach_name_en: course.course_type_id == 'CT_2' ? (course.coach.coach_name_en ? course.coach.coach_name_en : (regis_type == 'cart' ? course.coach_name_en : courseData.coachs[0]?.coach_name_en)) : (course.coach.fullNameEn ? course.coach.fullNameEn : (regis_type == 'cart' ? course.coach_name_en : courseData.coachs[0]?.coach_name_en)),
-            coach_id: course.course_type_id == 'CT_2' ? (course.coach_id ? course.coach_id : (regis_type == 'cart' ? course.coach : course.coach.coach_id)) : (course.coach_id ? course.coach_id : (regis_type == 'cart' ? course.coach : course.coach.coachId)),
-            start_date: course.start_date ? course.start_date : moment(new Date()).format("YYYY-MM-DD"),
+            course_package_option_id: regis_type === "cart" ? (course.course_package_option_id ? course.course_package_option_id : null) : (course.course_type_id == 'CT_1' ? course.coach.coursePackageOptionsId ? course.coach.coursePackageOptionsId : null : null),
+            time_start: regis_type === "cart" ? (course.time.start ? course.time.start : null) : (course.course_type_id == 'CT_1' ? (course.coach.start ? course.coach.start : null) : course.time.start ? course.time.start : null),
+            time_end: regis_type === "cart" ? (course.time.end ? course.time.end : null) : (course.course_type_id == 'CT_1' ? course.coach.end ? course.coach.end : null : course.time.end ? course.time.end : null),
+            maximumStudent: regis_type === "cart" ? (course.time.maximumStudent ? course.time.maximumStudent : null) : (course.course_type_id == 'CT_1' ? course.coach.maximumStudent ? course.coach.maximumStudent : null : course.time.maximumStudent),
+            day_of_week_id: regis_type === "cart" ? (course.time.dayOfWeekId ? course.time.dayOfWeekId : null) : (course.course_type_id == 'CT_1' ? course.coach.dayOfWeekId ? course.coach.dayOfWeekId : null : course.time.dayOfWeekId),
+            time_id: regis_type === "cart" ? (course.time.timeId ? course.time.timeId : null) : (course.course_type_id == 'CT_1' ? course.coach.timeId ? course.coach.timeId : null : course.time.timeId),
+            course_coach_id: regis_type === "cart" ? (course.day.course_coach_id ? course.day.course_coach_id : null) : (course.course_type_id == 'CT_1' ? (course.coach.courseCoachId ? course.coach.courseCoachId : null) : courseData.coachs[0]?.course_coach_id),
+            coach_name_th: regis_type === "cart" ? (course.coach_name ? course.coach_name : null) : (course.course_type_id == 'CT_1' ? course.coach.fullNameTh ? course.coach.fullNameTh : null : course.coach_name ? course.coach_name : null),
+            coach_name_en: regis_type === "cart" ? (course.coach_name_en ? course.coach_name_en : null) : (course.course_type_id == 'CT_1' ? course.coach.fullNameEn ? course.coach.fullNameEn : null : null),
+            coach_id: regis_type === "cart" ? (course.coach ? course.coach : null) : (course.course_type_id == 'CT_1' ? course.coach.coachId ? course.coach.coachId : null : course.coach_id ? course.coach_id : null),
+            start_date: course.course_type_id === "CT_2" ? (date_start ? date_start : moment(new Date()).format("YYYY-MM-DD")) : (course.start_date ? course.start_date : moment(new Date()).format("YYYY-MM-DD")),
             remark: course.remark ? course.remark : null,
             price: course.option?.price_unit
               ? course.option.price_unit
@@ -1508,67 +1275,8 @@ const orderModules = {
             student: students,
             status_discount_price: course.checkedDiscountPrice ? course.checkedDiscountPrice : false,
             status_discount_percent: course.checkedDiscountPercent ? course.checkedDiscountPercent : false,
-            discount: course.course_type_id === "CT_2" ? (regis_type == 'cart' ? course.discountPrice : discount ? discount : course.discount ? course.discount : 0) : course.discount ? course.discount : course.option.discount_price ? course.option.discount_price : 0,
+            discount: course.course_type_id === "CT_2" ? (regis_type == 'cart' ? course.discountPrice : discount ? discount : course.discount ? course.discount : 0) : course.option.discount === true || course.checkedDiscountPrice === true ? (course.discount ? course.discount : course.option.discount_price ? course.option.discount_price : 0) : 0,
             admin_discount: course.discountOther ? course.discountOther : "0"
-
-
-
-            // courseId: course.course_id,
-            // courseTypeId: course.course_type_id,
-            // coursePackageOptionId: course.option.course_package_option_id || course.option.coursePackageOptionsId ? course.option.course_package_option_id || course.option.coursePackageOptionsId : null,
-            // dayName: course.day?.dayName
-            //   ? course.day.dayName
-            //   : course.day.day
-            //     ? dayOfWeekArray(course.day.day)
-            //     : "",
-            // dayOfWeekId: course?.time?.timeData
-            //   ? course.time.timeData.filter(
-            //     (v) => v.coach_id === course.coach_id
-            //   )[0].dayOfWeekId
-            //   : course.time.dayOfWeekId,
-            // timeId: course?.time?.timeData
-            //   ? course.time.timeData.filter(
-            //     (v) => v.coach_id === course.coach_id
-            //   )[0].timeId
-            //   : course.time.timeId,
-            // // time: course.time,
-            // time: !course.apply_for_others && !course.apply_for_yourself ? {
-            //   start: course.coach.start || course.time.start, // Default to 19:00 if not available
-            //   end: course.coach.end || course.time.end,     // Default to 20:00 if not available
-            //   timeData: [
-            //     {
-            //       maximumStudent: course.coach.maximumStudent || course.time.maximumStudent,
-            //       dayOfWeekId: course.coach.dayOfWeekId || course.time.dayOfWeekId,
-            //       timeId: course.coach.timeId || course.time.timeId,
-            //       courseCoachId: course.coach.courseCoachId || course.day.course_coach_id,
-            //       coach_name: course.coach.fullNameTh || course.coach_name,
-            //       coach_name_en: course.coach.fullNameEn || course.coach_name_en,
-            //       coach_id: course.coach.coachId || course.coach
-            //     }
-            //   ]
-            // } : course.time,
-            // startDate: course.start_date ? course.start_date : moment(new Date()).format("YYYY-MM-DD"),
-            // remark: course.remark ? course.remark : "",
-            // // price: course.option?.net_price
-            // //   ? course.option.net_price
-            // //   : course.price,
-            // price: course.option?.price_unit
-            //   ? course.option.price_unit
-            //   : order.type !== "cart" ? course.price : course.coursePrice,
-
-            // originalPrice: courseData ? courseData.price_course : 0,
-            // coach: {
-            //   accountId: course.coach_id || course.coach.coachId ? course.coach_id || course.coach.coachId : course.coach,
-            //   fullName: course.coach_name || course.coach.fullNameTh,
-            // },
-            // student: students,
-            // statusDiscountPrice: course.checkedDiscountPrice,
-            // statusDiscountPercent: course.checkedDiscountPercent,
-            // discount: course.course_type_id === "CT_1" ? course?.option?.discountStatus ? course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice
-            //   ? course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice
-            //   : '0' : '0' : course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice ? course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice : 0,
-
-            // adminDiscount: course.discountOther ? course.discountOther : "0"
           })
           // if (moreDiscount) {
           //   payload.courses.forEach((course, index) => {
@@ -1580,10 +1288,31 @@ const orderModules = {
           //   });
           // }
           let price = 0
+          let discount_per_course = 0
+          let students_amount = 0
           if (order.type == "addStudent") {
             // price = course.price;
             // total_price = order.total_price * course.students.length;
             total_price = order.total_price * course.students.length;
+          } else if (regis_type === '') {
+            if (course.course_type_id === "CT_1") {
+              if (course.option.discount) {
+                price = course.option?.price_unit
+                discount_per_course = course.option?.discount_price
+                students_amount = course.students?.length
+                total_price = (price - discount_per_course) * students_amount
+              } else {
+                price = course.option?.price_unit
+                students_amount = course.students?.length
+                total_price = (price) * students_amount
+              }
+            } else {
+              price = courseData.price_course
+              discount_per_course = courseData.discount
+              students_amount = course.students?.length
+              total_price = (price - discount_per_course) * students_amount
+            }
+
           } else {
             price = course.option?.net_price
               ? course.option.net_price
@@ -3385,6 +3114,8 @@ const orderModules = {
           setTimeout(() => {
             context.commit("SetCartListIsLoading", false);
           }, 200);
+          context.commit("SetCartListIsLoading", false);
+
         } else {
           throw { error: data };
         }
@@ -3546,7 +3277,7 @@ const orderModules = {
     },
     // RESERVE COURSE
     // async CreateReserveCourse(context, { course_data, profile_id, }) {
-    async CreateReserveCourse(context, { course_data }) {
+    async CreateReserveCourse(context, { course_data, course_detail }) {
       // console.log('profile_id :>> ', profile_id);
       // profile_data
       // console.log('profile_data :>> ', profile_data);
@@ -3598,7 +3329,6 @@ const orderModules = {
                 // for (const items of course_data.students) {
                 //   student.is_waraphat = items.IsWaraphat
                 // }
-
                 if (student.parents[0]) {
                   studentsArr.push({
 
@@ -3641,28 +3371,16 @@ const orderModules = {
               payload.courses.push({
                 course_id: course_data.course_id ? course_data.course_id : null,
                 course_type_id: course_data.course_type_id ? course_data.course_type_id : null,
-                course_package_option_id: course_data.option.course_package_option_id ? course_data.option.course_package_option_id : null,
-                time_start: course_data.time.start ? course_data.time.start : null,
-                time_end: course_data.time.end ? course_data.time.end : null,
-                // maximumStudent: course_data.course_type_id == 'CT_2' ? course_data.time.maximumStudent : (course_data.coach.maximumStudent ? course_data.coach.maximumStudent : (regis_type == 'cart' ? course?.time?.maximumStudent : course?.time?.timeData[0].maximumStudent)),
-                day_of_week_id: course_data.course_type_id == 'CT_2' ? course_data.time.dayOfWeekId : (course_data?.time?.timeData
-                  ? course_data.time.timeData.filter(
-                    (v) => v.coach_id === course_data.coach_id
-                  )[0].dayOfWeekId : null),
-                time_id: course_data.course_type_id == 'CT_2' ? course_data.time.timeId : (course_data?.time?.timeData
-                  ? course_data.time.timeData.filter(
-                    (v) => v.coach_id === course_data.coach_id
-                  )[0].timeId : null),
-                course_coach_id: course_data.course_type_id == 'CT_2' ? course_data.time.timeId : (course_data?.time?.timeData
-                  ? course_data.time.timeData.filter(
-                    (v) => v.coach_id === course_data.coach_id
-                  )[0].courseCoachId : null),
-                coach_name_th: course_data.coach_name ? course_data.coach_name : null,
-                coach_name_en: course_data.course_type_id == 'CT_2' ? null : course_data?.time?.timeData
-                  ? course_data.time.timeData.filter(
-                    (v) => v.coach_id === course_data.coach_id
-                  )[0].coach_name_en : course_data.coachs[0].coach_name_en,
-                coach_id: course_data.course_type_id == 'CT_2' ? course_data.coach ? course_data.coach : null : course_data.coach_id ? course_data.coach_id : null,
+                course_package_option_id: course_data.course_type_id == 'CT_1' ? course_data.coach.coursePackageOptionsId ? course_data.coach.coursePackageOptionsId : null : null,
+                time_start: course_data.course_type_id == 'CT_1' ? course_data.coach.start ? course_data.coach.start : null : course_data.time.start ? course_data.time.start : null,
+                time_end: course_data.course_type_id == 'CT_1' ? course_data.coach.end ? course_data.coach.end : null : course_data.time.end ? course_data.time.end : null,
+                maximumStudent: course_data.course_type_id == 'CT_1' ? course_data.coach.maximumStudent ? course_data.coach.maximumStudent : null : course_data.time.maximumStudent,
+                day_of_week_id: course_data.course_type_id == 'CT_1' ? course_data.coach.dayOfWeekId ? course_data.coach.dayOfWeekId : null : course_data.time.dayOfWeekId,
+                time_id: course_data.course_type_id == 'CT_1' ? course_data.coach.timeId ? course_data.coach.timeId : null : course_data.time.timeId,
+                course_coach_id: course_data.course_type_id == 'CT_1' ? (course_data.coach.courseCoachId ? course_data.coach.courseCoachId : null) : course_detail.coachs[0]?.course_coach_id ? course_detail.coachs[0]?.course_coach_id : null,
+                coach_name_th: course_data.course_type_id == 'CT_1' ? course_data.coach.fullNameTh ? course_data.coach.fullNameTh : null : course_data.coach_name ? course_data.coach_name : null,
+                coach_name_en: course_data.course_type_id == 'CT_1' ? course_data.coach.fullNameEn ? course_data.coach.fullNameEn : null : null,
+                coach_id: course_data.course_type_id == 'CT_1' ? course_data.coach.coachId ? course_data.coach.coachId : null : course_data.coach ? course_data.coach : null,
                 start_date: moment().format("YYYY-MM-DD"),
                 remark: null,
                 price: course_data.course_type_id === "CT_1" ? (course_data.option.price_unit ? course_data.option.price_unit : 0) : course_data.price ? course_data.price : 0,
@@ -3670,55 +3388,9 @@ const orderModules = {
                 student: studentsArr,
                 status_discount_price: false,
                 status_discount_percent: false,
-                discount: course_data.course_type_id === "CT_1" ? (course_data.option.discount_price ? course_data.option.discount_price : 0) : course_data.discount ? course_data.discount : 0,
+                discount: course_data.course_type_id === "CT_1" ? (course_data.option.discount_price ? course_data.option.discount_price : 0) : course_detail.discount ? course_detail.discount : 0,
                 admin_discount: 0
               })
-              // console.log('student.account_id :>> ', student.account_id);
-              // let payload = {
-              //   studentId: student.account_id,
-              //   coursePackageOptionId: null,
-              //   dayOfWeekId: null,
-              //   timeId: null,
-              //   courseId: course_data.course_id,
-              //   // parentId: profile_id,
-              //   parentId: course_data.apply_for_parent ? profile_id : null,
-
-              //   // coachId: course_data.coach_id ? course_data.coach_id : null,
-              //   coachId: course_data.course_type_id === "CT_1" ? course_data.coach_id ? course_data.coach_id : null : coach_id ? coach_id : null,
-
-              //   orderTmpId: null,
-              //   IsWaraphat: student.IsWaraphat,
-              //   username: student.username,
-              // };
-
-              // if (course_data.course_type_id === "CT_1") {
-              //   payload.dayOfWeekId = course_data?.time?.timeData
-              //     ? course_data.time.timeData.filter(
-              //       (v) => v.coach_id === course_data.coach_id
-              //     )[0].dayOfWeekId
-              //     : course_data.time.dayOfWeekId;
-              //   payload.coursePackageOptionId =
-              //     course_data.option.course_package_option_id;
-              //   payload.timeId = course_data?.time?.timeData
-              //     ? course_data.time.timeData.filter(
-              //       (v) => v.coach_id === course_data.coach_id
-              //     )[0].timeId
-              //     : course_data.time.timeId;
-              // }
-              // if (course_data.course_type_id === "CT_2") {
-              //   payload.dayOfWeekId = course_data?.time?.timeData
-              //     ? course_data.time.timeData.filter(
-              //       (v) => v.coach_id === course_data.coach_id
-              //     )[0].dayOfWeekId
-              //     : course_data.time.dayOfWeekId;
-              //   payload.coursePackageOptionId =
-              //     course_data.option.course_package_option_id;
-              //   payload.timeId = course_data?.time?.timeData
-              //     ? course_data.time.timeData.filter(
-              //       (v) => v.coach_id === course_data.coach_id
-              //     )[0].timeId
-              //     : course_data.time.timeId;
-              // }
               let config = {
                 headers: {
                   "Access-Control-Allow-Origin": "*",
@@ -3839,28 +3511,20 @@ const orderModules = {
             payload.courses.push({
               course_id: course_data.course_id ? course_data.course_id : null,
               course_type_id: course_data.course_type_id ? course_data.course_type_id : null,
-              course_package_option_id: course_data.option.course_package_option_id ? course_data.option.course_package_option_id : null,
-              time_start: course_data.time.start ? course_data.time.start : null,
-              time_end: course_data.time.end ? course_data.time.end : null,
-              // maximumStudent: course_data.course_type_id == 'CT_2' ? course_data.time.maximumStudent : (course_data.coach.maximumStudent ? course_data.coach.maximumStudent : (regis_type == 'cart' ? course?.time?.maximumStudent : course?.time?.timeData[0].maximumStudent)),
-              day_of_week_id: course_data.course_type_id == 'CT_2' ? course_data.time.dayOfWeekId : (course_data?.time?.timeData
-                ? course_data.time.timeData.filter(
-                  (v) => v.coach_id === course_data.coach_id
-                )[0].dayOfWeekId : null),
-              time_id: course_data.course_type_id == 'CT_2' ? course_data.time.timeId : (course_data?.time?.timeData
-                ? course_data.time.timeData.filter(
-                  (v) => v.coach_id === course_data.coach_id
-                )[0].timeId : null),
-              course_coach_id: course_data.course_type_id == 'CT_2' ? course_data.time.timeId : (course_data?.time?.timeData
-                ? course_data.time.timeData.filter(
-                  (v) => v.coach_id === course_data.coach_id
-                )[0].courseCoachId : null),
-              coach_name_th: course_data.coach_name ? course_data.coach_name : null,
-              coach_name_en: course_data.course_type_id == 'CT_2' ? null : course_data?.time?.timeData
-                ? course_data.time.timeData.filter(
-                  (v) => v.coach_id === course_data.coach_id
-                )[0].coach_name_en : course_data.coachs[0].coach_name_en,
-              coach_id: course_data.course_type_id == 'CT_2' ? course_data.coach ? course_data.coach : null : course_data.coach_id ? course_data.coach_id : null,
+              course_package_option_id: course_data.course_type_id == 'CT_1' ? course_data.coach.coursePackageOptionsId ? course_data.coach.coursePackageOptionsId : null : null,
+              time_start: course_data.course_type_id == 'CT_1' ? course_data.coach.start ? course_data.coach.start : null : course_data.time.start ? course_data.time.start : null,
+              time_end: course_data.course_type_id == 'CT_1' ? course_data.coach.end ? course_data.coach.end : null : course_data.time.end ? course_data.time.end : null,
+              maximumStudent: course_data.course_type_id == 'CT_1' ? course_data.coach.maximumStudent ? course_data.coach.maximumStudent : null : course_data.time.maximumStudent,
+              day_of_week_id: course_data.course_type_id == 'CT_1' ? course_data.coach.dayOfWeekId ? course_data.coach.dayOfWeekId : null : course_data.time.dayOfWeekId,
+
+              time_id: course_data.course_type_id == 'CT_1' ? course_data.coach.timeId ? course_data.coach.timeId : null : course_data.time.timeId,
+
+              course_coach_id: course_data.course_type_id == 'CT_1' ? (course_data.coach.courseCoachId ? course_data.coach.courseCoachId : null) : course_detail.coachs[0]?.course_coach_id ? course_detail.coachs[0]?.course_coach_id : null,
+
+              coach_name_th: course_data.course_type_id == 'CT_1' ? course_data.coach.fullNameTh ? course_data.coach.fullNameTh : null : course_data.coach_name ? course_data.coach_name : null,
+              coach_name_en: course_data.course_type_id == 'CT_1' ? course_data.coach.fullNameEn ? course_data.coach.fullNameEn : null : null,
+
+              coach_id: course_data.course_type_id == 'CT_1' ? (course_data.coach.coachId ? course_data.coach.coachId : null) : course_data.coach ? course_data.coach : null,
               start_date: moment().format("YYYY-MM-DD"),
               remark: null,
               price: course_data.course_type_id === "CT_1" ? (course_data.option.price_unit ? course_data.option.price_unit : 0) : course_data.price ? course_data.price : 0,
@@ -3868,54 +3532,10 @@ const orderModules = {
               student: studentsArr,
               status_discount_price: false,
               status_discount_percent: false,
-              discount: course_data.course_type_id === "CT_1" ? (course_data.option.discount_price ? course_data.option.discount_price : 0) : course_data.discount ? course_data.discount : 0,
+              discount: course_data.course_type_id === "CT_1" ? (course_data.option.discount_price ? course_data.option.discount_price : 0) : course_detail.discount ? course_detail.discount : 0,
               admin_discount: 0
             })
-            // let payload = {
-            //   studentId: student.account_id,
-            //   // studentId: profile_id,
-            //   coursePackageOptionId: null,
-            //   dayOfWeekId: null,
-            //   timeId: null,
-            //   courseId: course_data.course_id,
-            //   // parentId: profile_id,
-            //   parentId: course_data.apply_for_parent ? profile_id : null,
-            //   // parentId: yourself == true ? null : student.account_id,
-            //   coachId: course_data.course_type_id === "CT_1" ? course_data.coach_id ? course_data.coach_id : null : coach_id ? coach_id : null,
-            //   orderTmpId: null,
-            //   IsWaraphat: student.IsWaraphat,
-            //   username: student.username,
 
-            // };
-
-            // if (course_data.course_type_id === "CT_1") {
-            //   payload.dayOfWeekId = course_data?.time?.timeData
-            //     ? course_data.time.timeData.filter(
-            //       (v) => v.coach_id === course_data.coach_id
-            //     )[0].dayOfWeekId
-            //     : course_data.time.dayOfWeekId;
-            //   payload.coursePackageOptionId =
-            //     course_data.option.course_package_option_id;
-            //   payload.timeId = course_data?.time?.timeData
-            //     ? course_data.time.timeData.filter(
-            //       (v) => v.coach_id === course_data.coach_id
-            //     )[0].timeId
-            //     : course_data.time.timeId;
-            // }
-            // if (course_data.course_type_id === "CT_2") {
-            //   payload.dayOfWeekId = course_data?.time?.timeData
-            //     ? course_data.time.timeData.filter(
-            //       (v) => v.coach_id === course_data.coach_id
-            //     )[0].dayOfWeekId
-            //     : course_data.time.dayOfWeekId;
-            //   payload.coursePackageOptionId =
-            //     course_data.option.course_package_option_id;
-            //   payload.timeId = course_data?.time?.timeData
-            //     ? course_data.time.timeData.filter(
-            //       (v) => v.coach_id === course_data.coach_id
-            //     )[0].timeId
-            //     : course_data.time.timeId;
-            // }
             let config = {
               headers: {
                 "Access-Control-Allow-Origin": "*",
