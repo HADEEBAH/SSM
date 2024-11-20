@@ -1510,7 +1510,7 @@ const orderModules = {
                 }
               }
             } catch (error) {
-              context.commit("SetRegisStatus", error);
+              context.commit("SetRegisStatus", error?.response?.data);
 
               context.commit("SetOrderIsLoading", false);
               context.commit("SetOrderIsStatus", false);

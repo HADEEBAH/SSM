@@ -530,7 +530,7 @@ export default {
           this.changeOrderData(this.order);
 
           await this.saveOrder({ regis_type: "cart" });
-          if (this.regis_status?.response.status === 201) {
+          if (this.regis_status.statusCode === 201) {
             for (const cart of this.order.courses) {
               for (const id of cart.order_tmp_id) {
                 this.DeleteCart({
