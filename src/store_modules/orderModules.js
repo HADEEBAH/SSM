@@ -751,7 +751,15 @@ const orderModules = {
         }
 
       } catch (error) {
-        console.log(error);
+        context.commit("SetOrder", {
+          order_step: 0,
+          order_number: "",
+          courses: [],
+          created_by: "",
+          payment_status: "",
+          payment_type: "",
+          total_price: 0,
+        });
         if (error === "please enter your name and class") {
           Swal.fire({
             icon: "error",
