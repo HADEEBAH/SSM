@@ -104,7 +104,8 @@ const orderModules = {
     history_list_option: {},
     filter_finance_data: [],
     order_number_detail: [],
-    package_add_student: []
+    package_add_student: [],
+    regis_status: ''
   },
   mutations: {
     SetOrderNumberDetail(state, payload) {
@@ -227,6 +228,10 @@ const orderModules = {
     },
     SetAdminCoachDetail(state, { payload, index }) {
       state.order.courses[index].coach_list = payload
+    },
+    SetRegisStatus(state, payload) {
+      state.regis_status = payload
+
     },
 
   },
@@ -1358,6 +1363,8 @@ const orderModules = {
                 config
               );
               if (data.statusCode === 201) {
+                context.commit("SetRegisStatus", data);
+
                 let payment_payload = {
                   orderId: data.data.orderNumber,
                   total: data.data.totalPrice,
@@ -1503,6 +1510,8 @@ const orderModules = {
                 }
               }
             } catch (error) {
+              context.commit("SetRegisStatus", error);
+
               context.commit("SetOrderIsLoading", false);
               context.commit("SetOrderIsStatus", false);
               if (error?.response?.data?.message == "Parents cannot purchase courses for them") {
@@ -4411,6 +4420,9 @@ const orderModules = {
     },
     getPackagesAddStudent(state) {
       return state.package_add_student
+    },
+    getRegisStatus(state) {
+      return state.regis_status
     },
   },
 };

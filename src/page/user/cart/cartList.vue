@@ -529,20 +529,20 @@ export default {
           this.order.type = "cart";
           this.changeOrderData(this.order);
 
-          await this.saveOrder({ regis_type: "cart" })
-            .then(() => {
-              for (const cart of this.order.courses) {
-                for (const id of cart.order_tmp_id) {
-                  this.DeleteCart({
-                    cart_id: id,
-                    account_id: this.user_login.account_id,
-                  });
-                }
+          await this.saveOrder({ regis_type: "cart" });
+          if (this.regis_status?.response.status === 201) {
+            for (const cart of this.order.courses) {
+              for (const id of cart.order_tmp_id) {
+                this.DeleteCart({
+                  cart_id: id,
+                  account_id: this.user_login.account_id,
+                });
               }
-            })
-            .catch((err) => {
-              console.log("err :>> ", err);
-            });
+            }
+          } else {
+            this.policy = false;
+            this.selected_all = false;
+          }
         }
 
         await this.GetCartList({
@@ -572,6 +572,7 @@ export default {
       order: "OrderModules/getOrder",
       amount_cart_list: "OrderModules/getAmountCartList",
       order_is_loading: "OrderModules/getOrderIsLoading",
+      regis_status: "OrderModules/getRegisStatus",
     }),
     setFunctions() {
       return "";

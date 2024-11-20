@@ -22,7 +22,6 @@
                   <v-progress-circular
                     indeterminate
                     color="#ff6b81"
-                    v-model="reserveLoading"
                   ></v-progress-circular>
                 </v-row> </template
             ></v-img>
@@ -89,7 +88,7 @@
           </v-row>
         </v-radio-group>
 
-        <template v-if="course_order.day">
+        <template v-if="course_order.day && time_list?.length > 0">
           <v-row>
             <v-col class="text-lg font-bold">{{
               $t("choose a class time")

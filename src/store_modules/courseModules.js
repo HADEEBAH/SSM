@@ -1745,7 +1745,8 @@ const CourseModules = {
 
           }
           context.commit("SetOpenDayAddStudent", getDayDuplicate)
-          context.commit("SetDayAddStudent", dayOpen)
+          context.commit("SetDayAddStudent", data.data)
+          // context.commit("SetDayAddStudent", dayOpen)
 
         } else {
           throw { error: data }
@@ -1773,7 +1774,7 @@ const CourseModules = {
 
           let timeOpen = data?.data?.filter((item) => item?.status === "Open");
 
-          for (const itemsTime of timeOpen) {
+          for (const itemsTime of data.data) {
             if (getTimeDuplicate?.length === 0) {
               getTimeDuplicate.push(itemsTime)
             } else if (!getTimeDuplicate.some((items) => itemsTime.start === items.start && itemsTime.end === items.end)) {

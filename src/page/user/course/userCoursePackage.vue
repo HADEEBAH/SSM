@@ -126,7 +126,11 @@
         }}</v-col>
       </v-row>
       <v-row justify="center" v-else>
-        <v-col cols="12" class="text-center">
+        <v-col
+          cols="12"
+          class="text-center"
+          v-if="course_data.packages?.length <= 0"
+        >
           <span class="font-weight-bold">
             {{ $t("There is no activation package. Please contact the staff") }}
           </span>
