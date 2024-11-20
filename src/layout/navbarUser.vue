@@ -179,10 +179,10 @@
           <!-- :content="amount_cart_list" -->
 
           <v-badge
-            v-if="cart_list?.length > 0"
+            v-if="amount_cart_list > 0"
             class="mr-5"
             color="red"
-            :content="cart_list?.length"
+            :content="amount_cart_list"
           >
             <router-link
               dark
