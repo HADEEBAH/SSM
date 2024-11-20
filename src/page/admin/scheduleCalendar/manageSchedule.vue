@@ -2360,15 +2360,16 @@ export default {
                   dayOfWeekName: student.dayOfWeekName,
                 })),
               }));
+              await this.SetFilterCourseHoliday(mappedData);
             } else {
-              mappedData.push({
+              mappedData = {
                 holidayName: this.nameHoliday,
                 holidayDate: this.create_holiday_date_picker.split("-")[2],
                 holidayMonth: this.create_holiday_date_picker.split("-")[1],
                 holidayYears: this.create_holiday_date_picker.split("-")[0],
-              });
+              };
+              this.CreateHoliday({ payload: mappedData });
             }
-            await this.SetFilterCourseHoliday(mappedData);
             if (this.course_in_holidays.response.status === 201) {
               // success
               this.closeDialog();

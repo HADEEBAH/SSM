@@ -22,7 +22,7 @@ const manageScheduleModules = {
     data_search_schedule: null,
     holiday_course: null,
     course_in_holidays: [],
-    create_holiday: '',
+    create_holiday: [],
   },
   mutations: {
     SetGetAllCourseIsLoading(state, value) {
@@ -605,7 +605,7 @@ const manageScheduleModules = {
 
       }
     },
-    async CreateHoliday(context, payload) {
+    async CreateHoliday(context, { payload }) {
       try {
         // let localhost = "http://localhost:3000"
         // let { data } = await axios.post( `${localhost}/api/v1/holiday/create`,payload)
@@ -623,6 +623,7 @@ const manageScheduleModules = {
           });
         }
       } catch (error) {
+        context.commit("SetCourseHoliday", error);
 
         if (error?.response?.data?.message === 'Holiday with the same date already exists.') {
           Swal.fire({
