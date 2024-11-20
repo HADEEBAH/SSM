@@ -234,9 +234,8 @@
               </v-row>
             </v-alert>
           </div>
-
-          <!-- แก้ไขวันหยุด -->
         </v-card>
+        <!-- แก้ไขวันหยุด -->
         <v-card class="pa-2 max-h-[300px] overflow-auto rounded-lg">
           <div class="font-bold">{{ $t("holiday") }}</div>
           <v-card-text
@@ -283,7 +282,7 @@
                 <v-card-title>
                   <v-row dense>
                     <v-col class="absolute top-0 right-0" cols="12" align="end">
-                      <v-btn icon @click="closeDialog">
+                      <v-btn icon @click="show_dialog_edit_holoday = false">
                         <v-icon color="#ff6b81">mdi-close</v-icon>
                       </v-btn>
                     </v-col>
@@ -297,7 +296,7 @@
                 <v-card-text>
                   <v-row dense>
                     <!-- วันที่ -->
-                    <v-col cols="12" sm="8">
+                    <v-col cols="12" sm="12">
                       <label class="font-weight-bold">{{ $t("date") }}</label>
                       <v-menu
                         v-model="selectEditHolidaydates"
@@ -317,6 +316,7 @@
                             v-on="on"
                             color="#FF6B81"
                             v-model="holidaydatesTh"
+                            disabled
                           ></v-text-field>
                         </template>
 
@@ -331,103 +331,15 @@
                         ></v-date-picker>
                       </v-menu>
                     </v-col>
-                    <!-- Switch -->
-                    <v-col
-                      cols="12"
-                      sm="4"
-                      class="text-center align-self-center"
-                    >
-                      <v-switch
-                        v-model="setDataEditDialog.allDay"
-                        :label="$t('all days')"
-                        color="#FF6B81"
-                        inset
-                        @change="changeSwish(setDataEditDialog)"
-                      ></v-switch>
-                    </v-col>
                   </v-row>
-
-                  <v-row dense v-if="setDataEditDialog.allDay === false">
-                    <!-- เวลาเริ่ม -->
-
-                    <v-col cols="12" sm="6">
-                      <label class="font-weight-bold">{{
-                        $t("start time")
-                      }}</label>
-                      <br />
-                      <!-- :rules="start_time" -->
-                      <v-text-field
-                        outlined
-                        dense
-                        style="
-                          position: absolute;
-                          display: block;
-                          z-index: 4;
-                          max-width: 141.5px;
-                        "
-                        @focus="SelectedStartDate($event)"
-                        :rules="compensation_start_time"
-                        :value="setDataEditDialog.holidayStartTime"
-                        color="#FF6B81"
-                      ></v-text-field>
-                      <VueTimepicker
-                        class="time-picker-hidden"
-                        hide-clear-button
-                        input-class="input-size-lg"
-                        advanced-keyboard
-                        @change="resetTimeEdit()"
-                        v-model="setDataEditDialog.ob_holidayStartTime"
-                        close-on-complete
-                        color="#FF6B81"
-                      >
-                      </VueTimepicker>
-                    </v-col>
-                    <!-- เวลาสิ้นสุด -->
-                    <v-col cols="12" sm="6">
-                      <label class="font-weight-bold">{{
-                        $t("end time")
-                      }}</label>
-                      <br />
-                      <!-- :rules="start_time" -->
-                      <v-text-field
-                        outlined
-                        dense
-                        style="
-                          position: absolute;
-                          display: block;
-                          z-index: 4;
-                          max-width: 141.5px;
-                        "
-                        @focus="SelectedStartDate($event)"
-                        :rules="compensation_end_time"
-                        :value="setDataEditDialog.holidayEndTime"
-                        color="#FF6B81"
-                      ></v-text-field>
-                      <VueTimepicker
-                        class="time-picker-hidden"
-                        hide-clear-button
-                        input-class="input-size-lg"
-                        advanced-keyboard
-                        @change="
-                          setDataEditDialog.holidayEndTime = `${setDataEditDialog.ob_holidayEndTime.HH} : ${setDataEditDialog.ob_holidayEndTime.mm}`
-                        "
-                        v-model="setDataEditDialog.ob_holidayEndTime"
-                        close-on-complete
-                        :hour-range="
-                          checkHourEdit(setDataEditDialog.ob_holidayStartTime)
-                        "
-                        color="#FF6B81"
-                      >
-                      </VueTimepicker>
-                    </v-col>
-                  </v-row>
-
+                  <!-- ชื่อวันหยุด -->
                   <v-row dense>
                     <v-col cols="12">
                       <label class="font-weight-bold">{{
                         $t("holiday name")
                       }}</label>
-                      <v-textarea
+                      <v-text-field
+                        dense
                         v-model="setDataEditDialog.holidayName"
                         outlined
                         :placeholder="
@@ -437,7 +349,7 @@
                         "
                         :rules="holiday_name"
                         color="#FF6B81"
-                      ></v-textarea>
+                      ></v-text-field>
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -1409,7 +1321,7 @@ import VueCookie from "vue-cookie";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { mapActions, mapGetters } from "vuex";
-import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
+// import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import headerPage from "@/components/header/headerPage.vue";
 import { inputValidation } from "@/functions/functions";
 import moment from "moment";
@@ -1419,7 +1331,7 @@ export default {
   components: {
     calendarAdmin,
     dialogCard,
-    VueTimepicker,
+    // VueTimepicker,
     headerPage,
   },
   data: () => ({
