@@ -221,6 +221,7 @@
     "course has been created":"( Course has been created )",
     "coach information not found": "Coach information not found",
     "check in status" : "Check in status",
+    "can't select these dates because they are duplications of existing schedules":"Can't select these dates because they are duplications of existing schedules",
 
 
 

@@ -1689,6 +1689,7 @@ export default {
       getCheckinFilter: "adminCheckInModules/getCheckinFilter",
       holiday_course: "ManageScheduleModules/getFilterCourseHoliday",
       create_holiday: "ManageScheduleModules/getCreateHoliday",
+      course_in_holidays: "ManageScheduleModules/getCourseHoliday",
     }),
 
     // filteredCheckInStatusOptions() {
@@ -2207,6 +2208,201 @@ export default {
       inputValidation(e, type);
     },
 
+    // async CreateHolidays() {
+    //   this.$refs.add_holidat_dialog.validate();
+    //   if (this.add_holidat_dialog) {
+    //     Swal.fire({
+    //       icon: "question",
+    //       title: this.$t("do you want to create a holiday?"),
+    //       showDenyButton: false,
+    //       showCancelButton: true,
+    //       confirmButtonText: this.$t("agree"),
+    //       cancelButtonText: this.$t("no"),
+    //     }).then(async (result) => {
+    //       if (result.isConfirmed) {
+    //         // let payload = {
+    //         //   holidayName: this.nameHoliday,
+    //         //   holidayDate: this.holidaydates.split("-")[2],
+    //         //   holidayMonth: this.holidaydates.split("-")[1],
+    //         //   holidayYears: this.holidaydates.split("-")[0],
+    //         // };
+    //         // await this.CreateHoliday(payload);
+    //         // if (this.create_holiday === true) {
+    //         //   const mappedData = this.holiday_course.map((course) => ({
+    //         //     courseId: course.courseId,
+    //         //     courseNameTh: course.courseNameTh,
+    //         //     courseNameEn: course.courseNameEn,
+    //         //     courseTypeId: course.courseTypeId,
+    //         //     selectStudyDate:
+    //         //       course.courseTypeId == "CT_1" ? course.selectStudyDate : null,
+    //         //     students: course.students.map((student) => ({
+    //         //       studentId: student.studentId,
+    //         //       firstNameTh: student.firstNameTh,
+    //         //       lastNameTh: student.lastNameTh,
+    //         //       packageName: student.packageName,
+    //         //       optionName: student.optionName,
+    //         //       optionNameEn: student.optionNameEn,
+    //         //       timeStart: student.timeStart,
+    //         //       timeEnd: student.timeEnd,
+    //         //       orderId: student.orderId,
+    //         //       coachId: student.coachId,
+    //         //       dayOfWeekId: student.dayOfWeekId,
+    //         //       orderItemId: student.orderItemId,
+    //         //       timeId: student.timeId,
+    //         //       coursePackageOptionId: student.coursePackageOptionId,
+    //         //       orderStudentId: student.orderStudentId,
+    //         //       dayOfWeekName: student.dayOfWeekName,
+    //         //     })),
+    //         //   }));
+    //         //   await this.SetFilterCourseHoliday(mappedData);
+    //         //   this.closeDialog();
+    //         // } else {
+    //         //   this.closeDialog();
+    //         // }
+
+    //         // await this.GetAllHolidays();
+    //         // await this.GetAllCourse();
+    //         // await this.GetDataInSchedule({
+    //         //   month: this.select_month,
+    //         //   year: this.select_year,
+    //         //   search: this.filter_search,
+    //         //   courseId: this.selectedCourse,
+    //         //   coachId: this.selectedCoach,
+    //         //   status: this.selectedCourseType,
+    //         // });
+
+    //         try {
+    //           let config = {
+    //             headers: {
+    //               "Access-Control-Allow-Origin": "*",
+    //               "Content-type": "Application/json",
+    //               Authorization: `Bearer ${VueCookie.get("token")}`,
+    //             },
+    //           };
+
+    //           let payload = {
+    //             holidayName: this.nameHoliday,
+    //             holidayDate: this.create_holiday_date_picker.split("-")[2],
+    //             holidayMonth: this.create_holiday_date_picker.split("-")[1],
+    //             holidayYears: this.create_holiday_date_picker.split("-")[0],
+    //           };
+    //           let { data } = await axios.post(
+    //             `${process.env.VUE_APP_URL}/api/v1/holiday/create`,
+    //             payload,
+    //             config
+    //           );
+
+    //           this.GetAllHolidays();
+    //           this.GetDataInSchedule({
+    //             month: this.select_month,
+    //             year: this.select_year,
+    //             // search: this.select_search ? this.select_search : "",
+    //             search: this.filter_search,
+    //             courseId: this.selectedCourse,
+    //             coachId: this.selectedCoach,
+    //             status: this.selectedCourseType,
+    //           });
+
+    //           // Reset validation state
+    //           this.$refs.add_holidat_dialog.reset();
+    //           // Reset form fields
+    //           this.show_dialog_holoday = false;
+    //           this.holidaydates = "";
+    //           this.holidaySwitch = true;
+    //           this.holidayStartTime = "";
+    //           this.holidayEndTime = "";
+    //           this.nameHoliday = "";
+    //           this.show_dialog_edit_holoday = false;
+    //           this.setDataEditDialog = {};
+    //           this.editHolidayDates = null;
+    //           this.holidaydatesTh = null;
+
+    //           if (data.statusCode === 201) {
+    //             if (data.data && data.message == "Created Sucessful") {
+    //               Swal.fire({
+    //                 icon: "success",
+    //                 title: this.$t("succeed"),
+    //                 text: this.$t("save data successfully"),
+    //                 timer: 3000,
+    //                 timerProgressBar: true,
+    //                 showCancelButton: false,
+    //                 showConfirmButton: false,
+    //               });
+    //               const mappedData = this.holiday_course.map((course) => ({
+    //                 courseId: course.courseId,
+    //                 courseNameTh: course.courseNameTh,
+    //                 courseNameEn: course.courseNameEn,
+    //                 courseTypeId: course.courseTypeId,
+    //                 selectStudyDate:
+    //                   course.courseTypeId == "CT_1"
+    //                     ? course.selectStudyDate
+    //                     : null,
+    //                 students: course.students.map((student) => ({
+    //                   studentId: student.studentId,
+    //                   firstNameTh: student.firstNameTh,
+    //                   lastNameTh: student.lastNameTh,
+    //                   packageName: student.packageName,
+    //                   optionName: student.optionName,
+    //                   optionNameEn: student.optionNameEn,
+    //                   timeStart: student.timeStart,
+    //                   timeEnd: student.timeEnd,
+    //                   orderId: student.orderId,
+    //                   coachId: student.coachId,
+    //                   dayOfWeekId: student.dayOfWeekId,
+    //                   orderItemId: student.orderItemId,
+    //                   timeId: student.timeId,
+    //                   coursePackageOptionId: student.coursePackageOptionId,
+    //                   orderStudentId: student.orderStudentId,
+    //                   dayOfWeekName: student.dayOfWeekName,
+    //                 })),
+    //               }));
+    //               await this.SetFilterCourseHoliday(mappedData);
+    //               this.closeDialog();
+    //             } else {
+    //               Swal.fire({
+    //                 icon: "error",
+    //                 title: this.$t("save failed"),
+    //                 timer: 3000,
+    //                 timerProgressBar: true,
+    //                 showCancelButton: false,
+    //                 showConfirmButton: false,
+    //               });
+    //             }
+    //           }
+    //         } catch (error) {
+    //           if (error.response.data.statusCode === 400) {
+    //             if (
+    //               error.response.data.message ==
+    //               "Holiday with the same date already exists."
+    //             ) {
+    //               Swal.fire({
+    //                 icon: "warning",
+    //                 title: this.$t("something went wrong"),
+    //                 text: this.$t("this date is already built into a holiday"),
+    //                 timer: 3000,
+    //                 timerProgressBar: true,
+    //                 showCancelButton: false,
+    //                 showConfirmButton: false,
+    //               });
+    //               this.closeDialog();
+    //               // .then(async (result) => {
+    //               //   if (result.isConfirmed) {
+    //               //     this.holidaydates = "";
+    //               //     this.holidaySwitch = true;
+    //               //     this.holidayStartTime = "";
+    //               //     this.holidayEndTime = "";
+    //               //     this.nameHoliday = "";
+    //               //     this.GetAllHolidays();
+    //               //   }
+    //               // });
+    //             }
+    //           }
+    //         }
+    //       }
+    //     });
+    //   }
+    // },
+
     async CreateHolidays() {
       this.$refs.add_holidat_dialog.validate();
       if (this.add_holidat_dialog) {
@@ -2219,189 +2415,56 @@ export default {
           cancelButtonText: this.$t("no"),
         }).then(async (result) => {
           if (result.isConfirmed) {
-            // let payload = {
-            //   holidayName: this.nameHoliday,
-            //   holidayDate: this.holidaydates.split("-")[2],
-            //   holidayMonth: this.holidaydates.split("-")[1],
-            //   holidayYears: this.holidaydates.split("-")[0],
-            // };
-            // await this.CreateHoliday(payload);
-            // if (this.create_holiday === true) {
-            //   const mappedData = this.holiday_course.map((course) => ({
-            //     courseId: course.courseId,
-            //     courseNameTh: course.courseNameTh,
-            //     courseNameEn: course.courseNameEn,
-            //     courseTypeId: course.courseTypeId,
-            //     selectStudyDate:
-            //       course.courseTypeId == "CT_1" ? course.selectStudyDate : null,
-            //     students: course.students.map((student) => ({
-            //       studentId: student.studentId,
-            //       firstNameTh: student.firstNameTh,
-            //       lastNameTh: student.lastNameTh,
-            //       packageName: student.packageName,
-            //       optionName: student.optionName,
-            //       optionNameEn: student.optionNameEn,
-            //       timeStart: student.timeStart,
-            //       timeEnd: student.timeEnd,
-            //       orderId: student.orderId,
-            //       coachId: student.coachId,
-            //       dayOfWeekId: student.dayOfWeekId,
-            //       orderItemId: student.orderItemId,
-            //       timeId: student.timeId,
-            //       coursePackageOptionId: student.coursePackageOptionId,
-            //       orderStudentId: student.orderStudentId,
-            //       dayOfWeekName: student.dayOfWeekName,
-            //     })),
-            //   }));
-            //   await this.SetFilterCourseHoliday(mappedData);
-            //   this.closeDialog();
-            // } else {
-            //   this.closeDialog();
-            // }
-
-            // await this.GetAllHolidays();
-            // await this.GetAllCourse();
-            // await this.GetDataInSchedule({
-            //   month: this.select_month,
-            //   year: this.select_year,
-            //   search: this.filter_search,
-            //   courseId: this.selectedCourse,
-            //   coachId: this.selectedCoach,
-            //   status: this.selectedCourseType,
-            // });
-
-            try {
-              let config = {
-                headers: {
-                  "Access-Control-Allow-Origin": "*",
-                  "Content-type": "Application/json",
-                  Authorization: `Bearer ${VueCookie.get("token")}`,
-                },
-              };
-
-              let payload = {
+            let mappedData = [];
+            if (this.holiday_course?.length > 0) {
+              mappedData = this.holiday_course.map((course) => ({
+                courseId: course.courseId,
+                courseNameTh: course.courseNameTh,
+                courseNameEn: course.courseNameEn,
+                courseTypeId: course.courseTypeId,
+                holidaySelectDate: this.create_holiday_date_picker,
+                selectStudyDate:
+                  course.courseTypeId == "CT_1" ? course.selectStudyDate : null,
                 holidayName: this.nameHoliday,
                 holidayDate: this.create_holiday_date_picker.split("-")[2],
                 holidayMonth: this.create_holiday_date_picker.split("-")[1],
                 holidayYears: this.create_holiday_date_picker.split("-")[0],
-              };
-              let { data } = await axios.post(
-                `${process.env.VUE_APP_URL}/api/v1/holiday/create`,
-                payload,
-                config
-              );
-
-              this.GetAllHolidays();
-              this.GetDataInSchedule({
-                month: this.select_month,
-                year: this.select_year,
-                // search: this.select_search ? this.select_search : "",
-                search: this.filter_search,
-                courseId: this.selectedCourse,
-                coachId: this.selectedCoach,
-                status: this.selectedCourseType,
+                students: course.students.map((student) => ({
+                  studentId: student.studentId,
+                  firstNameTh: student.firstNameTh,
+                  lastNameTh: student.lastNameTh,
+                  packageName: student.packageName,
+                  optionName: student.optionName,
+                  optionNameEn: student.optionNameEn,
+                  timeStart: student.timeStart,
+                  timeEnd: student.timeEnd,
+                  orderId: student.orderId,
+                  coachId: student.coachId,
+                  dayOfWeekId: student.dayOfWeekId,
+                  orderItemId: student.orderItemId,
+                  timeId: student.timeId,
+                  coursePackageOptionId: student.coursePackageOptionId,
+                  orderStudentId: student.orderStudentId,
+                  dayOfWeekName: student.dayOfWeekName,
+                })),
+              }));
+            } else {
+              mappedData.push({
+                holidayName: this.nameHoliday,
+                holidayDate: this.create_holiday_date_picker.split("-")[2],
+                holidayMonth: this.create_holiday_date_picker.split("-")[1],
+                holidayYears: this.create_holiday_date_picker.split("-")[0],
               });
-
-              // Reset validation state
-              this.$refs.add_holidat_dialog.reset();
-              // Reset form fields
-              this.show_dialog_holoday = false;
-              this.holidaydates = "";
-              this.holidaySwitch = true;
-              this.holidayStartTime = "";
-              this.holidayEndTime = "";
-              this.nameHoliday = "";
-              this.show_dialog_edit_holoday = false;
-              this.setDataEditDialog = {};
-              this.editHolidayDates = null;
-              this.holidaydatesTh = null;
-
-              if (data.statusCode === 201) {
-                if (data.data && data.message == "Created Sucessful") {
-                  Swal.fire({
-                    icon: "success",
-                    title: this.$t("succeed"),
-                    text: this.$t("save data successfully"),
-                    timer: 3000,
-                    timerProgressBar: true,
-                    showCancelButton: false,
-                    showConfirmButton: false,
-                  });
-                  const mappedData = this.holiday_course.map((course) => ({
-                    courseId: course.courseId,
-                    courseNameTh: course.courseNameTh,
-                    courseNameEn: course.courseNameEn,
-                    courseTypeId: course.courseTypeId,
-                    selectStudyDate:
-                      course.courseTypeId == "CT_1"
-                        ? course.selectStudyDate
-                        : null,
-                    students: course.students.map((student) => ({
-                      studentId: student.studentId,
-                      firstNameTh: student.firstNameTh,
-                      lastNameTh: student.lastNameTh,
-                      packageName: student.packageName,
-                      optionName: student.optionName,
-                      optionNameEn: student.optionNameEn,
-                      timeStart: student.timeStart,
-                      timeEnd: student.timeEnd,
-                      orderId: student.orderId,
-                      coachId: student.coachId,
-                      dayOfWeekId: student.dayOfWeekId,
-                      orderItemId: student.orderItemId,
-                      timeId: student.timeId,
-                      coursePackageOptionId: student.coursePackageOptionId,
-                      orderStudentId: student.orderStudentId,
-                      dayOfWeekName: student.dayOfWeekName,
-                    })),
-                  }));
-                  await this.SetFilterCourseHoliday(mappedData);
-                  this.closeDialog();
-                } else {
-                  Swal.fire({
-                    icon: "error",
-                    title: this.$t("save failed"),
-                    timer: 3000,
-                    timerProgressBar: true,
-                    showCancelButton: false,
-                    showConfirmButton: false,
-                  });
-                }
-              }
-            } catch (error) {
-              if (error.response.data.statusCode === 400) {
-                if (
-                  error.response.data.message ==
-                  "Holiday with the same date already exists."
-                ) {
-                  Swal.fire({
-                    icon: "warning",
-                    title: this.$t("something went wrong"),
-                    text: this.$t("this date is already built into a holiday"),
-                    timer: 3000,
-                    timerProgressBar: true,
-                    showCancelButton: false,
-                    showConfirmButton: false,
-                  });
-                  this.closeDialog();
-                  // .then(async (result) => {
-                  //   if (result.isConfirmed) {
-                  //     this.holidaydates = "";
-                  //     this.holidaySwitch = true;
-                  //     this.holidayStartTime = "";
-                  //     this.holidayEndTime = "";
-                  //     this.nameHoliday = "";
-                  //     this.GetAllHolidays();
-                  //   }
-                  // });
-                }
-              }
+            }
+            await this.SetFilterCourseHoliday(mappedData);
+            if (this.course_in_holidays.response.status === 201) {
+              // success
+              this.closeDialog();
             }
           }
         });
       }
     },
-
     holidayDates() {
       const date = parseInt(this.holidayDate);
       const month = this.thaiMonths[parseInt(this.holidayMonth) - 1];

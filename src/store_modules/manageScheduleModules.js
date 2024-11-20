@@ -22,7 +22,7 @@ const manageScheduleModules = {
     data_search_schedule: null,
     holiday_course: null,
     course_in_holidays: [],
-    create_holiday: ''
+    create_holiday: '',
   },
   mutations: {
     SetGetAllCourseIsLoading(state, value) {
@@ -577,16 +577,32 @@ const manageScheduleModules = {
           context.commit("SetCourseHoliday", data.data);
         }
       } catch (error) {
-        Swal.fire({
-          icon: "warning",
-          title: VueI18n.t("this item cannot be made"),
-          text: error,
-          showDenyButton: false,
-          showCancelButton: false,
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-        });
+        context.commit("SetCourseHoliday", error);
+
+        if (error?.response?.data?.message === "Can't select these dates because they are duplications of existing schedules.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("can't select these dates because they are duplications of existing schedules"),
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+          });
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: error,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+          });
+        }
+
       }
     },
     async CreateHoliday(context, payload) {
@@ -680,6 +696,9 @@ const manageScheduleModules = {
     },
     getCreateHoliday(state) {
       return state.create_holiday;
+    },
+    getCourseHoliday(state) {
+      return state.course_in_holidays;
     },
   },
 };
