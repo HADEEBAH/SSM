@@ -1511,6 +1511,16 @@ const orderModules = {
                 }
               }
             } catch (error) {
+              context.commit("SetOrder", {
+                type: "",
+                order_step: 0,
+                order_number: "",
+                courses: [],
+                created_by: "",
+                payment_status: "",
+                payment_type: "",
+                total_price: 0,
+              });
               context.commit("SetRegisStatus", error?.response?.data);
 
               context.commit("SetOrderIsLoading", false);

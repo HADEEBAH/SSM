@@ -1591,8 +1591,7 @@ export default {
       changeCourseOrderData: "OrderModules/changeCourseOrderData",
       resetCourseData: "OrderModules/resetCourseData",
       changeOrderData: "OrderModules/changeOrderData",
-      changeDialogRegisterOneId:
-        "RegisterModules/changenmogeDialogRegisterOneId",
+      changeDialogRegisterOneId: "RegisterModules/changeDialogRegisterOneId",
       saveOrder: "OrderModules/saveOrder",
       saveCart: "OrderModules/saveCart",
       checkUsernameOneid: "loginModules/checkUsernameOneid",
