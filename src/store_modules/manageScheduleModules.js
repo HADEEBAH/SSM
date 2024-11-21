@@ -22,8 +22,8 @@ const manageScheduleModules = {
     data_search_schedule: null,
     holiday_course: null,
     course_in_holidays: [],
+    holiday_status: [],
     create_holiday: [],
-    holiday_status: {}
   },
   mutations: {
     SetGetAllCourseIsLoading(state, value) {
@@ -119,12 +119,13 @@ const manageScheduleModules = {
     SetCourseHoliday(state, payload) {
       state.course_in_holidays = payload
     },
+    SetHolidayStatus(state, payload) {
+      state.holiday_status = payload
+    },
     SetCreateHoliday(state, payload) {
       state.create_holiday = payload
     },
-    SetHolidayStatus(state, payload) {
-      state.holiday_status = payload;
-    },
+
 
   },
   actions: {
@@ -613,14 +614,14 @@ const manageScheduleModules = {
     async CreateHoliday(context, { payload }) {
       try {
 
-        // let localhost = "http://localhost:3000"
-        // let { data } = await axios.post( `${localhost}/api/v1/holiday/create`,payload)
-        let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/holiday/create`, payload)
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.post(`${localhost}/api/v1/holiday/create`, payload)
+        // let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/holiday/create`, payload)
         if (data.statusCode === 201) {
-          context.commit("SetCourseHoliday", data.data);
+          context.commit("SetHolidayStatus", data.data);
         }
       } catch (error) {
-        context.commit("SetCourseHoliday", error?.response?.data);
+        context.commit("SetHolidayStatus", error?.response?.data);
         if (error?.response?.data?.message === 'Holiday with the same date already exists.') {
           Swal.fire({
             icon: "warning",

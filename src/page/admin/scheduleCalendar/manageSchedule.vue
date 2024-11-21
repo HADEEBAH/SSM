@@ -1577,7 +1577,7 @@ export default {
     this.GetAllCourse();
     this.GetOptions();
     this.GetPackages();
-    this.holiday_course.length = 0;
+    // this.holiday_course = [];
   },
 
   computed: {
@@ -1737,7 +1737,7 @@ export default {
     this.storedData = JSON.parse(localStorage.getItem("userDetail"));
     this.GetCoachs();
     this.GetFilterCourse();
-    this.holiday_course.length = 0;
+    // this.holiday_course = [];
   },
   methods: {
     ...mapActions({
@@ -2525,7 +2525,7 @@ export default {
       this.setDataEditDialog = {};
       this.editHolidayDates = null;
       this.holidaydatesTh = null;
-      this.holiday_course.length = 0;
+      // this.holiday_course = [];
     },
     courseDate() {
       let courseTodayDate = moment(new Date()).format("YYYY-MM-DD");
