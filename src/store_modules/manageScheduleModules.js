@@ -23,6 +23,7 @@ const manageScheduleModules = {
     holiday_course: null,
     course_in_holidays: [],
     create_holiday: [],
+    holiday_status: {}
   },
   mutations: {
     SetGetAllCourseIsLoading(state, value) {
@@ -121,6 +122,10 @@ const manageScheduleModules = {
     SetCreateHoliday(state, payload) {
       state.create_holiday = payload
     },
+    SetHolidayStatus(state, payload) {
+      state.holiday_status = payload;
+    },
+
   },
   actions: {
     ResetFilte(context) {
@@ -549,9 +554,9 @@ const manageScheduleModules = {
     },
     async GetFilterCourseHoliday(context, { holidayDate, holidayMonth, holidayYears }) {
       try {
-        // let localhost = "http://localhost:3000"
-        // let { data } = await axios.get(`${localhost}/api/v1/schedule/holiday?holidayDate=${holidayDate}&holidayMonth=${holidayMonth}&holidayYears=${holidayYears}`)
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/holiday?holidayDate=${holidayDate}&holidayMonth=${holidayMonth}&holidayYears=${holidayYears}`)
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${localhost}/api/v1/schedule/holiday?holidayDate=${holidayDate}&holidayMonth=${holidayMonth}&holidayYears=${holidayYears}`)
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/holiday?holidayDate=${holidayDate}&holidayMonth=${holidayMonth}&holidayYears=${holidayYears}`)
         if (data.statusCode === 200) {
           context.commit("SetFilterCourseHoliday", data.data);
         }
@@ -570,14 +575,14 @@ const manageScheduleModules = {
     },
     async SetFilterCourseHoliday(context, dataForm) {
       try {
-        // let localhost = "http://localhost:3000"
-        // let { data } = await axios.post(`${localhost}/api/v1/schedule/holiday`, dataForm)
-        let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/schedule/holiday`, dataForm)
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.post(`${localhost}/api/v1/schedule/holiday`, dataForm)
+        // let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/schedule/holiday`, dataForm)
         if (data.statusCode === 201) {
           context.commit("SetCourseHoliday", data.data);
         }
       } catch (error) {
-        context.commit("SetCourseHoliday", error);
+        context.commit("SetCourseHoliday", error?.response?.data);
 
         if (error?.response?.data?.message === "Can't select these dates because they are duplications of existing schedules.") {
           Swal.fire({
@@ -607,24 +612,15 @@ const manageScheduleModules = {
     },
     async CreateHoliday(context, { payload }) {
       try {
+
         // let localhost = "http://localhost:3000"
         // let { data } = await axios.post( `${localhost}/api/v1/holiday/create`,payload)
         let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/holiday/create`, payload)
         if (data.statusCode === 201) {
-          context.commit("SetCreateHoliday", true);
-          Swal.fire({
-            icon: "success",
-            title: this.$t("succeed"),
-            text: this.$t("save data successfully"),
-            timer: 3000,
-            timerProgressBar: true,
-            showCancelButton: false,
-            showConfirmButton: false,
-          });
+          context.commit("SetCourseHoliday", data.data);
         }
       } catch (error) {
-        context.commit("SetCourseHoliday", error);
-
+        context.commit("SetCourseHoliday", error?.response?.data);
         if (error?.response?.data?.message === 'Holiday with the same date already exists.') {
           Swal.fire({
             icon: "warning",
@@ -700,6 +696,9 @@ const manageScheduleModules = {
     },
     getCourseHoliday(state) {
       return state.course_in_holidays;
+    },
+    getHolidayStatus(state) {
+      return state.holiday_status;
     },
   },
 };

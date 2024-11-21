@@ -1602,6 +1602,7 @@ export default {
       holiday_course: "ManageScheduleModules/getFilterCourseHoliday",
       create_holiday: "ManageScheduleModules/getCreateHoliday",
       course_in_holidays: "ManageScheduleModules/getCourseHoliday",
+      holiday_status: "ManageScheduleModules/getHolidayStatus",
     }),
 
     // filteredCheckInStatusOptions() {
@@ -2370,10 +2371,17 @@ export default {
               };
               this.CreateHoliday({ payload: mappedData });
             }
-            if (this.course_in_holidays.response.status === 201) {
-              // success
-              this.closeDialog();
-            }
+            console.log("object :>> ", this.course_in_holidays);
+            console.log("holiday_status :>> ", this.holiday_status);
+
+            // if (this.holiday_status) {
+            //   this.closeDialog();
+
+            // }
+            // if (this.course_in_holidays.response.status === 201) {
+            //   // success
+            //   this.closeDialog();
+            // }
           }
         });
       }
