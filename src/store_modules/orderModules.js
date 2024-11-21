@@ -1265,6 +1265,7 @@ const orderModules = {
               break; // Exit the loop if the criteria are not met
             }
           }
+
           let date_start = moment(course.course_data?.course_study_start_date?.trim()).format("YYYY-MM-DD");
           payload.courses.push({
             course_id: course.course_id ? course.course_id : null,
@@ -1284,11 +1285,11 @@ const orderModules = {
             price: course.option?.price_unit
               ? course.option.price_unit
               : order.type !== "cart" ? course.price : course.coursePrice,
-            original_price: courseData ? courseData.price_course : 0,
+            original_price: 0,
             student: students,
             status_discount_price: course.checkedDiscountPrice ? course.checkedDiscountPrice : false,
             status_discount_percent: course.checkedDiscountPercent ? course.checkedDiscountPercent : false,
-            discount: course.course_type_id === "CT_2" ? (regis_type == 'cart' ? course.discountPrice : discount ? discount : course.discount ? course.discount : 0) : course.option.discount === true || course.checkedDiscountPrice === true ? (course.discount ? course.discount : course.option.discount_price ? course.option.discount_price : 0) : 0,
+            discount: course.course_type_id === "CT_2" ? (regis_type == 'cart' ? course.discountPrice : discount ? discount : course.discount ? course.discount : 0) : course.option.discount === true || course.option.discountStatus === 1 ? (course.discount ? course.discount : course.option.discount_price ? course.option.discount_price : 0) : 0,
             admin_discount: course.discountOther ? course.discountOther : "0"
           })
           // if (moreDiscount) {
