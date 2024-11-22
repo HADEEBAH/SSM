@@ -340,6 +340,20 @@ const reserveCourseModules = {
               showCancelButton: false,
               showConfirmButton: false,
             });
+          } else if (error?.response?.data?.message === "register Duplicate") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: VueI18n.t(
+                "some students or students have already purchased the course"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
           } else if (error?.response?.data?.message == "Unable to register due to course and package status being closed.") {
             Swal.fire({
               icon: "warning",
@@ -452,6 +466,7 @@ const reserveCourseModules = {
             Swal.fire({
               icon: "error",
               title: VueI18n.t("something went wrong"),
+              text: error,
               showDenyButton: false,
               showCancelButton: false,
               showConfirmButton: false,
@@ -463,6 +478,7 @@ const reserveCourseModules = {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("something went wrong"),
+            text: error,
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
@@ -522,175 +538,7 @@ const reserveCourseModules = {
               showCancelButton: false,
               showConfirmButton: false,
             });
-          } else if (error?.response?.data?.message == "Unable to register due to course and package status being closed.") {
-            Swal.fire({
-              icon: "warning",
-              title: VueI18n.t("unable to register"),
-              text: VueI18n.t(
-                "unable to register due to course and package status being closed"
-              ),
-              timer: 3000,
-              timerProgressBar: true,
-              showCancelButton: false,
-              showConfirmButton: false,
-            });
-          } else if (error?.response?.data?.message == "Cannot register , fail at course monitor , course-coach or seats are full") {
-            Swal.fire({
-              icon: "warning",
-              title: VueI18n.t("unable to register"),
-              text: VueI18n.t(
-                "unable to register Due to insufficient seats or the coach teaching in another package"
-              ),
-              timer: 3000,
-              timerProgressBar: true,
-              showCancelButton: false,
-              showConfirmButton: false,
-            });
-          } else if (error.response.data.message == "over register date") {
-            Swal.fire({
-              icon: "error",
-              title: VueI18n.t("unable to register"),
-              text: VueI18n.t(
-                "outside the register date"
-              ),
-              showDenyButton: false,
-              showCancelButton: false,
-              showConfirmButton: false,
-              timer: 3000,
-              timerProgressBar: true,
-            });
-          } else if (error?.response?.data?.message === "Over Registration") {
-            Swal.fire({
-              icon: "warning",
-              title: VueI18n.t("unable to registere"),
-              text: VueI18n.t(
-                "cannot register , The seats are full"
-              ),
-              timer: 3000,
-              timerProgressBar: true,
-              showCancelButton: false,
-              showConfirmButton: false,
-            });
-          } else if (error?.response?.data?.message === "Unable to purchase the course because the course is in reserved status.") {
-            Swal.fire({
-              icon: "warning",
-              title: VueI18n.t("unable to register"),
-              text: VueI18n.t(
-                "unable to purchase the course because the course is in reserved status"
-              ),
-              timer: 3000,
-              timerProgressBar: true,
-              showCancelButton: false,
-              showConfirmButton: false,
-            });
-          } else if (error.response.data.message === "duplicate pending order") {
-            Swal.fire({
-              // icon: "error",
-              // title: VueI18n.t("unable to register"),
-              icon: "warning",
-              title: VueI18n.t("warning"),
-              text: VueI18n.t(
-                "duplicate user in this course Unable to register"
-              ),
-              // text: VueI18n.t("unable to register Because the course is already in your registration history"),
-              showCancelButton: false,
-              showDenyButton: false,
-              showConfirmButton: false,
-              timer: 3000,
-              timerProgressBar: true,
-            })
-          } else if (error.response.data.message === "User is duplicate in this course. Cannot enroll again") {
-            Swal.fire({
-              icon: "error",
-              title: VueI18n.t("duplicate user in this course Unable to register"),
-              showDenyButton: false,
-              showCancelButton: false,
-              showConfirmButton: false,
-              timer: 3000,
-              timerProgressBar: true,
-            })
-          } else if (error.response.data.message === "The price is not correct!!") {
-            Swal.fire({
-              icon: "error",
-              title: VueI18n.t("the price is not correct payment cannot be processed"),
-              showDenyButton: false,
-              showCancelButton: false,
-              showConfirmButton: false,
-              timer: 3000,
-              timerProgressBar: true,
-            })
-          } else if (error.response.data.message === "Cannot cancel reserve because the status is not pending") {
-            Swal.fire({
-              icon: "error",
-              title: VueI18n.t("reservation cannot be cancelled"),
-              text: VueI18n.t("this course is not in pending status"),
-              showDenyButton: false,
-              showCancelButton: false,
-              showConfirmButton: false,
-              timer: 3000,
-              timerProgressBar: true,
-            })
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: VueI18n.t("something went wrong"),
-              showDenyButton: false,
-              showCancelButton: false,
-              showConfirmButton: false,
-              timer: 3000,
-              timerProgressBar: true,
-            })
-          }
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: VueI18n.t("something went wrong"),
-            showDenyButton: false,
-            showCancelButton: false,
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-          })
-        }
-      }
-    },
-    async UpdateAllStatusReserve(context, { courseId }) {
-      try {
-        const config = {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Content-type": "Application/json",
-            Authorization: `Bearer ${VueCookie.get("token")}`,
-          },
-        };
-        // let localhost = "http://localhost:3002"
-        // const { data } = await axios.patch(`${localhost}/api/v1/order/reserve/update/all/${courseId}`, {}, config)
-        const { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/reserve/update/all/${courseId}`, {}, config)
-        if (data.statusCode === 200) {
-          await Swal.fire({
-            icon: "success",
-            title: VueI18n.t("succeed"),
-            text: VueI18n.t("already edited"),
-            timer: 3000,
-            timerProgressBar: true,
-            showCancelButton: false,
-            showConfirmButton: false,
-          })
-        }
-      } catch (error) {
-        if (error.response?.data.statusCode == 400) {
-
-          if (error.response.data.message == "Cannot register , fail at course monitor , course-coach or seats are full") {
-            Swal.fire({
-              icon: "warning",
-              title: VueI18n.t("unable to register"),
-              text: VueI18n.t("unable to register Due to insufficient seats or the coach teaching in another package"),
-              timer: 3000,
-              timerProgressBar: true,
-              showCancelButton: false,
-              showConfirmButton: false,
-            })
-          } else if (error?.response?.data?.message === "register duplicate") {
+          } else if (error?.response?.data?.message === "register Duplicate") {
             Swal.fire({
               icon: "warning",
               title: VueI18n.t(
@@ -827,6 +675,205 @@ const reserveCourseModules = {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("something went wrong"),
+            text: error,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+          })
+        }
+      }
+    },
+    async UpdateAllStatusReserve(context, { courseId }) {
+      try {
+        const config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${VueCookie.get("token")}`,
+          },
+        };
+        // let localhost = "http://localhost:3002"
+        // const { data } = await axios.patch(`${localhost}/api/v1/order/reserve/update/all/${courseId}`, {}, config)
+        const { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/order/reserve/update/all/${courseId}`, {}, config)
+        if (data.statusCode === 200) {
+          await Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("already edited"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          })
+        }
+      } catch (error) {
+        if (error.response?.data.statusCode == 400) {
+
+          if (error.response.data.message == "Cannot register , fail at course monitor , course-coach or seats are full") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t("unable to register"),
+              text: VueI18n.t("unable to register Due to insufficient seats or the coach teaching in another package"),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            })
+          } else if (error?.response?.data?.message === "register duplicate") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: VueI18n.t(
+                "some students or students have already purchased the course"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message === "register Duplicate") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: VueI18n.t(
+                "some students or students have already purchased the course"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message == "Unable to register due to course and package status being closed.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t("unable to register"),
+              text: VueI18n.t(
+                "unable to register due to course and package status being closed"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message == "Cannot register , fail at course monitor , course-coach or seats are full") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t("unable to register"),
+              text: VueI18n.t(
+                "unable to register Due to insufficient seats or the coach teaching in another package"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error.response.data.message == "over register date") {
+            Swal.fire({
+              icon: "error",
+              title: VueI18n.t("unable to register"),
+              text: VueI18n.t(
+                "outside the register date"
+              ),
+              showDenyButton: false,
+              showCancelButton: false,
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+            });
+          } else if (error?.response?.data?.message === "Over Registration") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t("unable to registere"),
+              text: VueI18n.t(
+                "cannot register , The seats are full"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message === "Unable to purchase the course because the course is in reserved status.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t("unable to register"),
+              text: VueI18n.t(
+                "unable to purchase the course because the course is in reserved status"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error.response.data.message === "duplicate pending order") {
+            Swal.fire({
+              // icon: "error",
+              // title: VueI18n.t("unable to register"),
+              icon: "warning",
+              title: VueI18n.t("warning"),
+              text: VueI18n.t(
+                "duplicate user in this course Unable to register"
+              ),
+              // text: VueI18n.t("unable to register Because the course is already in your registration history"),
+              showCancelButton: false,
+              showDenyButton: false,
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+            })
+          } else if (error.response.data.message === "User is duplicate in this course. Cannot enroll again") {
+            Swal.fire({
+              icon: "error",
+              title: VueI18n.t("duplicate user in this course Unable to register"),
+              showDenyButton: false,
+              showCancelButton: false,
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+            })
+          } else if (error.response.data.message === "The price is not correct!!") {
+            Swal.fire({
+              icon: "error",
+              title: VueI18n.t("the price is not correct payment cannot be processed"),
+              showDenyButton: false,
+              showCancelButton: false,
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+            })
+          } else if (error.response.data.message === "Cannot cancel reserve because the status is not pending") {
+            Swal.fire({
+              icon: "error",
+              title: VueI18n.t("reservation cannot be cancelled"),
+              text: VueI18n.t("this course is not in pending status"),
+              showDenyButton: false,
+              showCancelButton: false,
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+            })
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: VueI18n.t("something went wrong"),
+              text: error,
+              showDenyButton: false,
+              showCancelButton: false,
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+            })
+          }
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("something went wrong"),
+            text: error,
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,

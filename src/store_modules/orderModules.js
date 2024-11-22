@@ -629,26 +629,27 @@ const orderModules = {
                 }
               }
             }
+            let parent_data = JSON.parse(localStorage.getItem("userDetail"));
 
-            if (student.parents[0]) {
+            if (course.apply_for_parent === true || student.parents[0]) {
               students.push({
-                account_id: student.account_id ? student.account_id : null,
+                account_id: student.account_id ? student.account_id : "",
                 username: student.username,
                 firstNameTh: student.firstname,
                 lastNameTh: student.lastname,
                 tel: student.tel,
                 is_other: student.is_other,
                 parent: {
-                  account_id: student.parents[0].account_id,
-                  parent_first_name_th: student.parents[0].firstname_th
+                  account_id: course.apply_for_parent === true ? (parent_data.account_id ? parent_data.account_id : null) : student.parents[0].account_id ? student.parents[0].account_id : null,
+                  parent_first_name_th: course.apply_for_parent === true ? (parent_data.first_name_th ? parent_data.first_name_th : null) : student.parents[0].firstname_th
                     ? student.parents[0].firstname_th
-                    : "",
-                  parent_last_name_th: student.parents[0].lastname_th
+                    : null,
+                  parent_last_name_th: course.apply_for_parent === true ? (parent_data.last_name_th ? parent_data.last_name_th : null) : student.parents[0].lastname_th
                     ? student.parents[0].lastname_th
-                    : "",
-                  parent_first_name_en: student.parents[0].firstname_en,
-                  parent_last_name_eh: student.parents[0].lastname_en,
-                  parent_tel: student.parents[0].tel,
+                    : null,
+                  parent_first_name_en: course.apply_for_parent === true ? (parent_data.first_name_en ? parent_data.first_name_en : null) : student.parents[0].firstname_en ? student.parents[0].firstname_en : null,
+                  parent_last_name_en: course.apply_for_parent === true ? (parent_data.last_name_en ? parent_data.last_name_en : null) : student.parents[0].lastname_en ? student.parents[0].lastname_en : null,
+                  parent_tel: course.apply_for_parent === true ? (parent_data.tel ? parent_data.tel : null) : student.parents[0].tel ? student.parents[0].tel : null,
                 },
               });
             } else {
@@ -1196,9 +1197,6 @@ const orderModules = {
             for (const items of data.data.roles) {
               itemRole = items.roleId;
             }
-            console.log('itemRole :>> ', itemRole);
-            console.log('type_checked :>> ', type_checked);
-            console.log('data.data.roles :>> ', data.data.roles);
             if (regis_type !== "cart") {
               if (order.type !== "addStudent") {
                 if (!studentUpdate.some(v => v.studentId === student.account_id)) {
@@ -1233,9 +1231,7 @@ const orderModules = {
               }
             }
             let parent_data = JSON.parse(localStorage.getItem("userDetail"));
-            console.log('parent_data :>> ', parent_data);
             if (course.apply_for_parent === true || student.parents[0]) {
-              console.log('1111 :>> ', 1111);
               students.push({
                 account_id: student.account_id ? student.account_id : "",
                 username: student.username,
@@ -1257,7 +1253,6 @@ const orderModules = {
                 },
               });
             } else {
-              console.log('222 :>> ', 222);
               students.push({
                 account_id: student.account_id ? student.account_id : "",
                 username: student.username,
@@ -1268,13 +1263,11 @@ const orderModules = {
                 parent: {},
               });
             }
-            console.log('student :>> ', student);
 
             if (!allStudentsValid) {
               break; // Exit the loop if the criteria are not met
             }
           }
-          console.log('course :>> ', course);
           let date_start = moment(course.course_data?.course_study_start_date?.trim()).format("YYYY-MM-DD");
           payload.courses.push({
             course_id: course.course_id ? course.course_id : null,
@@ -3366,28 +3359,51 @@ const orderModules = {
                 // for (const items of course_data.students) {
                 //   student.is_waraphat = items.IsWaraphat
                 // }
-                if (student.parents[0]) {
-                  studentsArr.push({
+                // if (student.parents[0]) {
+                //   studentsArr.push({
 
-                    account_id: student.account_id ? student.account_id : null,
+                //     account_id: student.account_id ? student.account_id : null,
+                //     username: student.username,
+                //     firstNameTh: student.firstname,
+                //     lastNameTh: student.lastname,
+                //     tel: student.tel,
+                //     is_other: student.is_other,
+                //     is_waraphat: student.IsWaraphat,
+
+                //     parent: {
+                //       accountId: student.parents[0].account_id,
+                //       parentFirstnameTh: student.parents[0].firstname_th
+                //         ? student.parents[0].firstname_th
+                //         : "",
+                //       parentLastnameTh: student.parents[0].lastname_th
+                //         ? student.parents[0].lastname_th
+                //         : "",
+                //       parentFirstnameEn: student.parents[0].firstname_en,
+                //       parentLastnameEn: student.parents[0].lastname_en,
+                //       parentTel: student.parents[0].tel,
+                //     },
+                //   });
+                // }
+                let parent_data = JSON.parse(localStorage.getItem("userDetail"));
+                if (course_data.apply_for_parent === true || student.parents[0]) {
+                  studentsArr.push({
+                    account_id: student.account_id ? student.account_id : "",
                     username: student.username,
                     firstNameTh: student.firstname,
                     lastNameTh: student.lastname,
                     tel: student.tel,
                     is_other: student.is_other,
-                    is_waraphat: student.IsWaraphat,
-
                     parent: {
-                      accountId: student.parents[0].account_id,
-                      parentFirstnameTh: student.parents[0].firstname_th
+                      account_id: course_data.apply_for_parent === true ? (parent_data.account_id ? parent_data.account_id : null) : student.parents[0].account_id ? student.parents[0].account_id : null,
+                      parent_first_name_th: course_data.apply_for_parent === true ? (parent_data.first_name_th ? parent_data.first_name_th : null) : student.parents[0].firstname_th
                         ? student.parents[0].firstname_th
-                        : "",
-                      parentLastnameTh: student.parents[0].lastname_th
+                        : null,
+                      parent_last_name_th: course_data.apply_for_parent === true ? (parent_data.last_name_th ? parent_data.last_name_th : null) : student.parents[0].lastname_th
                         ? student.parents[0].lastname_th
-                        : "",
-                      parentFirstnameEn: student.parents[0].firstname_en,
-                      parentLastnameEn: student.parents[0].lastname_en,
-                      parentTel: student.parents[0].tel,
+                        : null,
+                      parent_first_name_en: course_data.apply_for_parent === true ? (parent_data.first_name_en ? parent_data.first_name_en : null) : student.parents[0].firstname_en ? student.parents[0].firstname_en : null,
+                      parent_last_name_en: course_data.apply_for_parent === true ? (parent_data.last_name_en ? parent_data.last_name_en : null) : student.parents[0].lastname_en ? student.parents[0].lastname_en : null,
+                      parent_tel: course_data.apply_for_parent === true ? (parent_data.tel ? parent_data.tel : null) : student.parents[0].tel ? student.parents[0].tel : null,
                     },
                   });
                 } else {
