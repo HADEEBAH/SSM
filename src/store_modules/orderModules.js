@@ -73,25 +73,15 @@ const orderModules = {
       students: [],
     },
     order: {
-      type: "",
-      order_step: 0,
-      order_number: "",
-      courses: [
-        {
-          course_list: [],
-          package_list: [],
-          option_list: [],
-          day_of_week_list: [],
-          time_list: [],
-          coach_list: [],
-          course_type_id: 'CT_1',
-        }
-      ],
-      created_by: "",
-      payment_status: "",
-      payment_type: "",
+      courses: [],
+      type: null,
+      // order_step: 0,
+      order_number: null,
+      created_by: null,
+      payment_status: null,
+      payment_type: null,
       total_price: 0,
-      pay_date: "",
+      pay_date: null,
     },
 
     orders: [],
@@ -114,7 +104,8 @@ const orderModules = {
     history_list_option: {},
     filter_finance_data: [],
     order_number_detail: [],
-    package_add_student: []
+    package_add_student: [],
+    regis_status: ''
   },
   mutations: {
     SetOrderNumberDetail(state, payload) {
@@ -237,6 +228,10 @@ const orderModules = {
     },
     SetAdminCoachDetail(state, { payload, index }) {
       state.order.courses[index].coach_list = payload
+    },
+    SetRegisStatus(state, payload) {
+      state.regis_status = payload
+
     },
 
   },
@@ -577,16 +572,20 @@ const orderModules = {
         console.log(error);
       }
     },
-    async saveCart(context, { cart_data, discount }) {
+    async saveCart(context, { cart_data, courseData }) {
+
       try {
         let order = cart_data;
         let payload = {
-          order_id: "",
-          courses: {},
-          created_by: "",
-          paymentStatus: "pending",
-          paymentType: "",
-          totalPrice: 0
+          order_id: null,
+          courses: [],
+          created_by: null,
+          payment_status: "pending",
+          payment_type: null,
+          // total_price: 0,
+          regis_type: "cart",
+          pay_date: null,
+          discount_price: 0
         };
         let total_price = 0;
         let studentUpdate = [];
@@ -630,36 +629,37 @@ const orderModules = {
                 }
               }
             }
+            let parent_data = JSON.parse(localStorage.getItem("userDetail"));
 
-            if (student.parents[0]) {
+            if (course.apply_for_parent === true || student.parents[0]) {
               students.push({
-                accountId: student.account_id ? student.account_id : "",
-                userName: student.username,
+                account_id: student.account_id ? student.account_id : "",
+                username: student.username,
                 firstNameTh: student.firstname,
                 lastNameTh: student.lastname,
                 tel: student.tel,
-                isOther: student.is_other,
+                is_other: student.is_other,
                 parent: {
-                  accountId: student.parents[0].account_id,
-                  parentFirstnameTh: student.parents[0].firstname_th
+                  account_id: course.apply_for_parent === true ? (parent_data.account_id ? parent_data.account_id : null) : student.parents[0].account_id ? student.parents[0].account_id : null,
+                  parent_first_name_th: course.apply_for_parent === true ? (parent_data.first_name_th ? parent_data.first_name_th : null) : student.parents[0].firstname_th
                     ? student.parents[0].firstname_th
-                    : "",
-                  parentLastnameTh: student.parents[0].lastname_th
+                    : null,
+                  parent_last_name_th: course.apply_for_parent === true ? (parent_data.last_name_th ? parent_data.last_name_th : null) : student.parents[0].lastname_th
                     ? student.parents[0].lastname_th
-                    : "",
-                  parentFirstnameEn: student.parents[0].firstname_en,
-                  parentLastnameEn: student.parents[0].lastname_en,
-                  parentTel: student.parents[0].tel,
+                    : null,
+                  parent_first_name_en: course.apply_for_parent === true ? (parent_data.first_name_en ? parent_data.first_name_en : null) : student.parents[0].firstname_en ? student.parents[0].firstname_en : null,
+                  parent_last_name_en: course.apply_for_parent === true ? (parent_data.last_name_en ? parent_data.last_name_en : null) : student.parents[0].lastname_en ? student.parents[0].lastname_en : null,
+                  parent_tel: course.apply_for_parent === true ? (parent_data.tel ? parent_data.tel : null) : student.parents[0].tel ? student.parents[0].tel : null,
                 },
               });
             } else {
               students.push({
-                accountId: student.account_id ? student.account_id : "",
-                userName: student.username,
+                account_id: student.account_id ? student.account_id : null,
+                username: student.username,
                 firstNameTh: student.firstname,
                 lastNameTh: student.lastname,
                 tel: student.tel,
-                isOther: student.is_other,
+                is_other: student.is_other,
                 parent: {},
               });
             }
@@ -669,47 +669,50 @@ const orderModules = {
             break; // Exit the loop if the criteria are not met
           }
 
-          payload.courses = {
-            courseId: course.course_id,
-            courseName: course.course_name,
-            coursePackageOptionId: course.option.course_package_option_id
-              ? course.option.course_package_option_id
-              : "",
-            dayOfWeekId: course?.time?.timeData
-              ? course.time.timeData.filter(
-                (v) => v.coach_id === course.coach_id
-              )[0].dayOfWeekId
-              : course.time.dayOfWeekId,
-            timeId: course?.time?.timeData
-              ? course.time.timeData.filter(
-                (v) => v.coach_id === course.coach_id
-              )[0].timeId
-              : course.time.timeId,
-            time: course.time ? course.time : "",
-            startDate: "",
-            remark: "",
-            price: course.option.net_price
-              ? course.option.net_price
-              : course.price,
-            coach: {
-              accountId: course.coach_id,
-              fullName: course.coach_name,
-            },
+          payload.courses.push({
+            course_id: course.course_id ? course.course_id : null,
+            course_type_id: course.course_type_id ? course.course_type_id : null,
+            course_package_option_id: course.course_type_id == 'CT_1' ? course.coach.coursePackageOptionsId ? course.coach.coursePackageOptionsId : null : null,
+            time_start: course.course_type_id == 'CT_1' ? course.coach.start ? course.coach.start : null : course.time.start ? course.time.start : null,
+            time_end: course.course_type_id == 'CT_1' ? course.coach.end ? course.coach.end : null : course.time.end ? course.time.end : null,
+            maximumStudent: course.course_type_id == 'CT_1' ? course.coach.maximumStudent ? course.coach.maximumStudent : null : course.time.maximumStudent,
+            day_of_week_id: course.course_type_id == 'CT_1' ? course.coach.dayOfWeekId ? course.coach.dayOfWeekId : null : course.time.dayOfWeekId,
+            time_id: course.course_type_id == 'CT_1' ? course.coach.timeId ? course.coach.timeId : null : course.time.timeId,
+            course_coach_id: course.course_type_id == 'CT_1' ? course.coach.courseCoachId ? course.coach.courseCoachId : null : courseData.coachs[0]?.course_coach_id,
+            coach_name_th: course.course_type_id == 'CT_1' ? course.coach.fullNameTh ? course.coach.fullNameTh : null : course.coach_name ? course.coach_name : null,
+            coach_name_en: course.course_type_id == 'CT_1' ? course.coach.fullNameEn ? course.coach.fullNameEn : null : null,
+            coach_id: course.course_type_id == 'CT_1' ? course.coach.coachId ? course.coach.coachId : null : course.coach_id ? course.coach_id : null,
+            start_date: moment().format("YYYY-MM-DD"),
+            remark: null,
+            price: course.course_type_id === "CT_1" ? (course.option.price_unit ? course.option.price_unit : 0) : course.price ? course.price : 0,
+            original_price: 0,
             student: students,
-            discountPrice: discount
+            status_discount_price: false,
+            status_discount_percent: false,
+            discount: course.course_type_id === "CT_1" ? (course.option.discount_price ? course.option.discount_price : 0) : courseData.discount ? courseData.discount : 0,
+            admin_discount: 0
+          })
 
-          };
-          let price = course.option?.net_price
-            ? course.option.net_price
-            : course.price;
-          total_price = total_price + price * course.students.length;
+
+          let count_price = course.course_type_id === "CT_1" ? (course.option.price_unit ? course.option.price_unit : 0) : course.price ? course.price : 0
+          let count_discount = course.course_type_id === "CT_1" ? (course.option.discount_price ? course.option.discount_price : 0) : courseData.discount ? courseData.discount : 0
+          let total_count = count_price - count_discount || 0
+          let total_student = course?.students?.length ? course?.students?.length : 0
+          let total_all = (total_count) * (total_student)
+          total_price = total_all
+
+
+          // let price = course.option?.net_price
+          //   ? course.option.net_price
+          //   : course.price;
+          // total_price = total_price + price * course.students.length;
         }
 
         if (!allStudentsValid) {
           throw "please enter your name and class";
         }
 
-        payload.totalPrice = total_price;
+        payload.total_price = total_price;
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -754,7 +757,15 @@ const orderModules = {
         }
 
       } catch (error) {
-        console.log(error);
+        context.commit("SetOrder", {
+          order_step: 0,
+          order_number: "",
+          courses: [],
+          created_by: "",
+          payment_status: "",
+          payment_type: "",
+          total_price: 0,
+        });
         if (error === "please enter your name and class") {
           Swal.fire({
             icon: "error",
@@ -767,7 +778,21 @@ const orderModules = {
             showCancelButton: false,
             showConfirmButton: false,
           });
-        } else if (error.response.data.message === "User not found.") {
+        } else if (error?.response?.data?.message === "Unable to add students to cart because the course already has students listed in the cart.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: VueI18n.t(
+              "unable to add students to cart because the course already has students listed in the cart"
+            ),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message === "User not found.") {
           Swal.fire({
             icon: "warning",
             title: VueI18n.t("unable to register"),
@@ -779,215 +804,343 @@ const orderModules = {
             showCancelButton: false,
             showConfirmButton: false,
           });
+        } else if (error?.response?.data?.message?.coursePackageOptionId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "coursePackageOptionId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.courseId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "courseId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.accountId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "accountId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.parentFirstnameTh === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "parentFirstnameTh is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.parentLastnameTh === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "parentLastnameTh is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.parentFirstnameEn === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "parentFirstnameEn is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.parentTel === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "parentTel is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.courseTypeId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "courseTypeId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.timeStart === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "timeStart is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.timeEnd === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "timeEnd is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.dayOfWeekId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "dayOfWeekId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.timeId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "timeId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.courseCoachId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "courseCoachId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.coachNameTh === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "coachNameTh is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.coachNameEn === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "coachNameEn is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.coachId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "coachId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.price === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "price is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.originalPrice === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "originalPrice is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.statusDiscountPrice === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "statusDiscountPrice is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.statusDiscountPercent === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "statusDiscountPercent is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.discount === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "discount is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.adminDiscount === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "adminDiscount is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.student === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "student is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.startDate === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "startDate is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.username === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "username is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.isOther === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "isOther is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.parent === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "parent is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("this item cannot be made"),
+            text: error,
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
         }
       }
     },
-
-    // async saveCart(context, { cart_data }) {
-    //   try {
-    //     let order = cart_data;
-    //     let payload = {
-    //       order_id: "",
-    //       courses: {},
-    //       created_by: "",
-    //       paymentStatus: "pending",
-    //       paymentType: "",
-    //       totalPrice: 0,
-    //     };
-    //     let total_price = 0;
-    //     let studentUpdate = []
-    //     await order.courses.forEach((course) => {
-    //       let students = [];
-    //       course.students.forEach(async (student) => {
-    //         let { data } = await axios.get(
-    //           `http://localhost:3000/api/v1/account/auth/${student.account_id}`
-    //         );
-    //         let itemRole = ''
-
-    //         for (const items of data.data.roles) {
-    //           itemRole = items.roleId
-    //         }
-
-    //         if (!studentUpdate.some(v => v.studentId === student.account_id)) {
-    //           if (itemRole === 'R_5') {
-    //             if (student.nicknameTh && student.class) {
-    //               studentUpdate.push(
-    //                 {
-    //                   "studentId": student.account_id,
-    //                   "nicknameTh": student.nicknameTh,
-    //                   "class": student.class
-    //                 },
-    //               )
-    //             } else {
-    //               console.log('itemRole  :>> ', itemRole);
-    //               throw "please enter your name and class"
-    //             }
-    //           } else {
-    //             if (student.nicknameTh) {
-    //               studentUpdate.push(
-    //                 {
-    //                   "studentId": student.account_id,
-    //                   "nicknameTh": student.nicknameTh,
-    //                   "class": ''
-    //                 },
-    //               )
-    //             }
-    //           }
-    //           // if (student.account_id && student.nicknameTh && student.class) {
-
-    //           //   if (student.role === 'R_5') {
-    //           //     console.log('student :>> ', student);
-
-    //           //     studentUpdate.push(
-    //           //       {
-    //           //         "studentId": student.account_id,
-    //           //         "nicknameTh": student.nicknameTh,
-    //           //         "class": student.class
-    //           //       },
-    //           //     )
-    //           //   } else {
-    //           //     studentUpdate.push(
-    //           //       {
-    //           //         "studentId": student.account_id,
-    //           //         "nicknameTh": student.nicknameTh,
-    //           //         "class": ''
-    //           //       },
-    //           //     )
-    //           //   }
-
-    //           // } else {
-    //           //   throw "please enter your name and class"
-    //           // }
-    //         }
-    //         if (student.parents[0]) {
-    //           students.push({
-    //             accountId: student.account_id ? student.account_id : "",
-    //             userName: student.username,
-    //             firstNameTh: student.firstname,
-    //             lastNameTh: student.lastname,
-    //             tel: student.tel,
-    //             isOther: student.is_other,
-    //             parent: {
-    //               accountId: student.parents[0].account_id,
-    //               parentFirstnameTh: student.parents[0].firstname_th
-    //                 ? student.parents[0].firstname_th
-    //                 : "",
-    //               parentLastnameTh: student.parents[0].lastname_th
-    //                 ? student.parents[0].lastname_th
-    //                 : "",
-    //               parentFirstnameEn: student.parents[0].firstname_en,
-    //               parentLastnameEn: student.parents[0].lastname_en,
-    //               parentTel: student.parents[0].tel,
-    //             },
-    //           });
-    //         } else {
-    //           students.push({
-    //             accountId: student.account_id ? student.account_id : "",
-    //             userName: student.username,
-    //             firstNameTh: student.firstname,
-    //             lastNameTh: student.lastname,
-    //             tel: student.tel,
-    //             isOther: student.is_other,
-    //             parent: {},
-    //           });
-    //         }
-    //       });
-    //       payload.courses = {
-    //         courseId: course.course_id,
-    //         courseName: course.course_name,
-    //         coursePackageOptionId: course.option.course_package_option_id
-    //           ? course.option.course_package_option_id
-    //           : "",
-    //         dayOfWeekId: course?.time?.timeData
-    //           ? course.time.timeData.filter(
-    //             (v) => v.coach_id === course.coach_id
-    //           )[0].dayOfWeekId
-    //           : course.time.dayOfWeekId,
-    //         timeId: course?.time?.timeData
-    //           ? course.time.timeData.filter(
-    //             (v) => v.coach_id === course.coach_id
-    //           )[0].timeId
-    //           : course.time.timeId,
-    //         time: course.time ? course.time : "",
-    //         startDate: "",
-    //         remark: "",
-    //         price: course.option.net_price
-    //           ? course.option.net_price
-    //           : course.price,
-    //         coach: {
-    //           accountId: course.coach_id,
-    //           fullName: course.coach_name,
-    //         },
-    //         student: students,
-    //       };
-    //       let price = course.option?.net_price
-    //         ? course.option.net_price
-    //         : course.price;
-    //       total_price = total_price + price * course.students.length;
-    //     });
-    //     payload.totalPrice = total_price;
-    //     let config = {
-    //       headers: {
-    //         "Access-Control-Allow-Origin": "*",
-    //         "Content-type": "Application/json",
-    //         Authorization: `Bearer ${VueCookie.get("token")}`,
-    //       },
-    //     };
-    //     let { data } = await axios.post(
-    //       `${process.env.VUE_APP_URL}/api/v1/order/cart`,
-    //       payload,
-    //       config
-    //     );
-    //      if (data.statusCode === 201) {
-
-    //       await Swal.fire({
-    //         icon: "success",
-    //         title: VueI18n.t("succeed"),
-    //         text: VueI18n.t(
-    //           "the course has been successfully added to the cart"
-    //         ),
-    //         showCancelButton: false,
-    //         showConfirmButton: false,
-    //         showDenyButton: false,
-    //         timer: 3000,
-    //         timerProgressBar: true,
-    //       }).finally(() => {
-    //         router.push({ name: "CartList" });
-    //       });
-    //       localStorage.removeItem("Order");
-    //       context.commit("SetResetCourseData");
-    //       context.commit("SetOrder", {
-    //         order_step: 0,
-    //         order_number: "",
-    //         courses: [],
-    //         created_by: "",
-    //         payment_status: "",
-    //         payment_type: "",
-    //         total_price: 0,
-    //       });
-
-    //     }
-
-    //   } catch (error) {
-    //     console.log(error);
-    //     if (error === "please enter your name and class") {
-    //       Swal.fire({
-    //         icon: "error",
-    //         title: VueI18n.t("unable to register"),
-    //         text: VueI18n.t(
-    //           "please enter your name and class"
-    //         ),
-    //         timer: 3000,
-    //         timerProgressBar: true,
-    //         showCancelButton: false,
-    //         showConfirmButton: false,
-    //       });
-    //     }
-    //   }
-    // },
-
-
-    // async saveOrder(context, { moreDiscount }) {
     async saveOrder(context, { regis_type, my_data_class, type_checked, discount, courseData }) {
 
       // othert_data_class
@@ -1019,15 +1172,15 @@ const orderModules = {
           }
         }
         let payload = {
-          order_id: "",
+          orderId: "",
           courses: [],
           created_by: order.created_by,
-          paymentStatus: "pending",
-          paymentType: order.payment_type,
-          totalPrice: 0,
-          regisType: regis_type,
-          pay_date: order.pay_date,
-          discountPrice: discount ? discount : 0
+          payment_status: "pending",
+          payment_type: order.payment_type,
+          // total_price: 0,
+          regis_type: regis_type,
+          pay_date: order.pay_date ? order.pay_date : null,
+          discount_price: discount ? discount : 0
         };
         let total_price = 0;
         const studentUpdate = []
@@ -1077,100 +1230,69 @@ const orderModules = {
 
               }
             }
-            if (student.parents[0]) {
+            let parent_data = JSON.parse(localStorage.getItem("userDetail"));
+            if (course.apply_for_parent === true || student.parents[0]) {
               students.push({
-                accountId: student.account_id ? student.account_id : "",
-                userName: student.username,
+                account_id: student.account_id ? student.account_id : "",
+                username: student.username,
                 firstNameTh: student.firstname,
                 lastNameTh: student.lastname,
                 tel: student.tel,
-                isOther: student.is_other,
+                is_other: student.is_other,
                 parent: {
-                  accountId: student.parents[0].account_id,
-                  parentFirstnameTh: student.parents[0].firstname_th
+                  account_id: course.apply_for_parent === true ? (parent_data.account_id ? parent_data.account_id : null) : student.parents[0].account_id ? student.parents[0].account_id : null,
+                  parent_first_name_th: course.apply_for_parent === true ? (parent_data.first_name_th ? parent_data.first_name_th : null) : student.parents[0].firstname_th
                     ? student.parents[0].firstname_th
-                    : "",
-                  parentLastnameTh: student.parents[0].lastname_en
-                    ? student.parents[0].lastname_en
-                    : "",
-                  parentFirstnameEn: student.parents[0].firstname_en,
-                  parentLastnameEn: student.parents[0].lastname_en,
-                  parentTel: student.parents[0].tel,
+                    : null,
+                  parent_last_name_th: course.apply_for_parent === true ? (parent_data.last_name_th ? parent_data.last_name_th : null) : student.parents[0].lastname_th
+                    ? student.parents[0].lastname_th
+                    : null,
+                  parent_first_name_en: course.apply_for_parent === true ? (parent_data.first_name_en ? parent_data.first_name_en : null) : student.parents[0].firstname_en ? student.parents[0].firstname_en : null,
+                  parent_last_name_en: course.apply_for_parent === true ? (parent_data.last_name_en ? parent_data.last_name_en : null) : student.parents[0].lastname_en ? student.parents[0].lastname_en : null,
+                  parent_tel: course.apply_for_parent === true ? (parent_data.tel ? parent_data.tel : null) : student.parents[0].tel ? student.parents[0].tel : null,
                 },
               });
             } else {
               students.push({
-                accountId: student.account_id ? student.account_id : "",
-                userName: student.username,
+                account_id: student.account_id ? student.account_id : "",
+                username: student.username,
                 firstNameTh: student.firstname,
                 lastNameTh: student.lastname,
                 tel: student.tel,
-                isOther: student.is_other,
+                is_other: student.is_other,
                 parent: {},
               });
             }
+
             if (!allStudentsValid) {
               break; // Exit the loop if the criteria are not met
             }
           }
-
+          let date_start = moment(course.course_data?.course_study_start_date?.trim()).format("YYYY-MM-DD");
           payload.courses.push({
-            courseId: course.course_id,
-            courseTypeId: course.course_type_id,
-            coursePackageOptionId: course.option.course_package_option_id || course.option.coursePackageOptionsId ? course.option.course_package_option_id || course.option.coursePackageOptionsId : null,
-            dayName: course.day?.dayName
-              ? course.day.dayName
-              : course.day.day
-                ? dayOfWeekArray(course.day.day)
-                : "",
-            dayOfWeekId: course?.time?.timeData
-              ? course.time.timeData.filter(
-                (v) => v.coach_id === course.coach_id
-              )[0].dayOfWeekId
-              : course.time.dayOfWeekId,
-            timeId: course?.time?.timeData
-              ? course.time.timeData.filter(
-                (v) => v.coach_id === course.coach_id
-              )[0].timeId
-              : course.time.timeId,
-            // time: course.time,
-            time: !course.apply_for_others && !course.apply_for_yourself ? {
-              start: course.coach.start || course.time.start, // Default to 19:00 if not available
-              end: course.coach.end || course.time.end,     // Default to 20:00 if not available
-              timeData: [
-                {
-                  maximumStudent: course.coach.maximumStudent || course.time.maximumStudent,
-                  dayOfWeekId: course.coach.dayOfWeekId || course.time.dayOfWeekId,
-                  timeId: course.coach.timeId || course.time.timeId,
-                  courseCoachId: course.coach.courseCoachId || course.day.course_coach_id,
-                  coach_name: course.coach.fullNameTh || course.coach_name,
-                  coach_name_en: course.coach.fullNameEn || course.coach_name_en,
-                  coach_id: course.coach.coachId || course.coach
-                }
-              ]
-            } : course.time,
-            startDate: course.start_date ? course.start_date : moment(new Date()).format("YYYY-MM-DD"),
-            remark: course.remark ? course.remark : "",
-            // price: course.option?.net_price
-            //   ? course.option.net_price
-            //   : course.price,
+            course_id: course.course_id ? course.course_id : null,
+            course_type_id: course.course_type_id ? course.course_type_id : null,
+            course_package_option_id: regis_type === "cart" ? (course.course_package_option_id ? course.course_package_option_id : null) : (course.course_type_id == 'CT_1' ? course.coach.coursePackageOptionsId ? course.coach.coursePackageOptionsId : null : null),
+            time_start: regis_type === "cart" ? (course.time.start ? course.time.start : null) : (course.course_type_id == 'CT_1' ? (course.coach.start ? course.coach.start : null) : course.time.start ? course.time.start : null),
+            time_end: regis_type === "cart" ? (course.time.end ? course.time.end : null) : (course.course_type_id == 'CT_1' ? course.coach.end ? course.coach.end : null : course.time.end ? course.time.end : null),
+            maximumStudent: regis_type === "cart" ? (course.time.maximumStudent ? course.time.maximumStudent : null) : (course.course_type_id == 'CT_1' ? course.coach.maximumStudent ? course.coach.maximumStudent : null : course.time.maximumStudent),
+            day_of_week_id: regis_type === "cart" ? (course.time.dayOfWeekId ? course.time.dayOfWeekId : null) : (course.course_type_id == 'CT_1' ? course.coach.dayOfWeekId ? course.coach.dayOfWeekId : null : course.time.dayOfWeekId),
+            time_id: regis_type === "cart" ? (course.time.timeId ? course.time.timeId : null) : (course.course_type_id == 'CT_1' ? course.coach.timeId ? course.coach.timeId : null : course.time.timeId),
+            course_coach_id: regis_type === "cart" ? (course.day.course_coach_id ? course.day.course_coach_id : null) : (course.course_type_id == 'CT_1' ? (course.coach.courseCoachId ? course.coach.courseCoachId : null) : courseData.coachs[0]?.course_coach_id),
+            coach_name_th: regis_type === "cart" ? (course.coach_name ? course.coach_name : null) : (course.course_type_id == 'CT_1' ? course.coach.fullNameTh ? course.coach.fullNameTh : null : course.coach_name ? course.coach_name : null),
+            coach_name_en: regis_type === "cart" ? (course.coach_name_en ? course.coach_name_en : null) : (course.course_type_id == 'CT_1' ? course.coach.fullNameEn ? course.coach.fullNameEn : null : null),
+            coach_id: regis_type === "cart" ? (course.coach ? course.coach : null) : (course.course_type_id == 'CT_1' ? course.coach.coachId ? course.coach.coachId : null : course.coach_id ? course.coach_id : null),
+            start_date: course.course_type_id === "CT_2" ? (date_start ? date_start : moment(new Date()).format("YYYY-MM-DD")) : (course.start_date ? course.start_date : moment(new Date()).format("YYYY-MM-DD")),
+            remark: course.remark ? course.remark : null,
             price: course.option?.price_unit
               ? course.option.price_unit
               : order.type !== "cart" ? course.price : course.coursePrice,
-
-            originalPrice: courseData ? courseData.price_course : 0,
-            coach: {
-              accountId: course.coach_id || course.coach.coachId ? course.coach_id || course.coach.coachId : course.coach,
-              fullName: course.coach_name || course.coach.fullNameTh,
-            },
+            original_price: 0,
             student: students,
-            statusDiscountPrice: course.checkedDiscountPrice,
-            statusDiscountPercent: course.checkedDiscountPercent,
-            discount: course.course_type_id === "CT_1" ? course?.option?.discountStatus ? course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice
-              ? course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice
-              : '0' : '0' : course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice ? course?.option?.discount_price || course?.course_data?.discount || discount || course?.discountPrice || course?.option?.discountPrice : 0,
-
-            adminDiscount: course.discountOther ? course.discountOther : "0"
+            status_discount_price: course.checkedDiscountPrice ? course.checkedDiscountPrice : false,
+            status_discount_percent: course.checkedDiscountPercent ? course.checkedDiscountPercent : false,
+            discount: course.course_type_id === "CT_2" ? (regis_type == 'cart' ? course.discountPrice : discount ? discount : course.discount ? course.discount : 0) : course.option.discount === true || course.option.discountStatus === 1 ? (course.discount ? course.discount : course.option.discount_price ? course.option.discount_price : 0) : 0,
+            admin_discount: course.discountOther ? course.discountOther : "0"
           })
           // if (moreDiscount) {
           //   payload.courses.forEach((course, index) => {
@@ -1181,12 +1303,32 @@ const orderModules = {
           //     }
           //   });
           // }
-
           let price = 0
+          let discount_per_course = 0
+          let students_amount = 0
           if (order.type == "addStudent") {
             // price = course.price;
             // total_price = order.total_price * course.students.length;
             total_price = order.total_price * course.students.length;
+          } else if (regis_type === '') {
+            if (course.course_type_id === "CT_1") {
+              if (course.option.discount) {
+                price = course.option?.price_unit
+                discount_per_course = course.option?.discount_price
+                students_amount = course.students?.length
+                total_price = (price - discount_per_course) * students_amount
+              } else {
+                price = course.option?.price_unit
+                students_amount = course.students?.length
+                total_price = (price) * students_amount
+              }
+            } else {
+              price = courseData.price_course
+              discount_per_course = courseData.discount
+              students_amount = course.students?.length
+              total_price = (price - discount_per_course) * students_amount
+            }
+
           } else {
             price = course.option?.net_price
               ? course.option.net_price
@@ -1202,7 +1344,7 @@ const orderModules = {
           throw "please enter your name and class";
         }
 
-        payload.totalPrice = total_price;
+        payload.total_price = total_price;
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -1224,6 +1366,8 @@ const orderModules = {
                 config
               );
               if (data.statusCode === 201) {
+                context.commit("SetRegisStatus", data);
+
                 let payment_payload = {
                   orderId: data.data.orderNumber,
                   total: data.data.totalPrice,
@@ -1299,7 +1443,7 @@ const orderModules = {
                       paymentType: order.payment_type,
                       total: data.data.totalPrice,
                       recipient: user_data.account_id,
-                      payDate: order.pay_date
+                      pay_date: order.pay_date
                     };
                     // let endpoint = 'http://localhost:3003'
                     let endpoint = process.env.VUE_APP_URL;
@@ -1369,6 +1513,18 @@ const orderModules = {
                 }
               }
             } catch (error) {
+              context.commit("SetOrder", {
+                type: "",
+                order_step: 0,
+                order_number: "",
+                courses: [],
+                created_by: "",
+                payment_status: "",
+                payment_type: "",
+                total_price: 0,
+              });
+              context.commit("SetRegisStatus", error?.response?.data);
+
               context.commit("SetOrderIsLoading", false);
               context.commit("SetOrderIsStatus", false);
               if (error?.response?.data?.message == "Parents cannot purchase courses for them") {
@@ -1377,6 +1533,18 @@ const orderModules = {
                   title: VueI18n.t("unable to register"),
                   text: VueI18n.t(
                     "parents cannot resave the course to their parents"
+                  ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } if (error?.response?.data?.message === "Unable to purchase the course because the course is in reserved status.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t("unable to register"),
+                  text: VueI18n.t(
+                    "unable to purchase the course because the course is in reserved status"
                   ),
                   timer: 3000,
                   timerProgressBar: true,
@@ -1564,6 +1732,342 @@ const orderModules = {
                   showCancelButton: false,
                   showConfirmButton: false,
                 });
+              } else if (error?.response?.data?.message === "User not found.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t("unable to register"),
+                  text: VueI18n.t(
+                    "this user could not be found"
+                  ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.coursePackageOptionId === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "coursePackageOptionId is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.courseId === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "courseId is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.accountId === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "accountId is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.parentFirstnameTh === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "parentFirstnameTh is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.parentLastnameTh === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "parentLastnameTh is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.parentFirstnameEn === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "parentFirstnameEn is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.parentTel === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "parentTel is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.courseTypeId === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "courseTypeId is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.timeStart === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "timeStart is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.timeEnd === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "timeEnd is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.dayOfWeekId === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "dayOfWeekId is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.timeId === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "timeId is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.courseCoachId === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "courseCoachId is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.coachNameTh === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "coachNameTh is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.coachNameEn === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "coachNameEn is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.coachId === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "coachId is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.price === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "price is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.originalPrice === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "originalPrice is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.statusDiscountPrice === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "statusDiscountPrice is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.statusDiscountPercent === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "statusDiscountPercent is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.discount === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "discount is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.adminDiscount === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "adminDiscount is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.student === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "student is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.startDate === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "startDate is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.username === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "username is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.isOther === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "isOther is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (error?.response?.data?.message?.parent === "Require.") {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t(
+                    "unable to register"
+                  ),
+                  text: "parent is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
               } else {
                 Swal.fire({
                   icon: "error",
@@ -1614,6 +2118,342 @@ const orderModules = {
               showCancelButton: false,
               showConfirmButton: false,
             });
+          } else if (error?.response?.data?.message === "Unable to purchase the course because the course is in reserved status.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t("unable to register"),
+              text: VueI18n.t(
+                "unable to purchase the course because the course is in reserved status"
+              ),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.coursePackageOptionId === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "coursePackageOptionId is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.courseId === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "courseId is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.accountId === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "accountId is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.parentFirstnameTh === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "parentFirstnameTh is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.parentLastnameTh === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "parentLastnameTh is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.parentFirstnameEn === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "parentFirstnameEn is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.parentTel === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "parentTel is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.courseTypeId === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "courseTypeId is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.timeStart === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "timeStart is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.timeEnd === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "timeEnd is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.dayOfWeekId === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "dayOfWeekId is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.timeId === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "timeId is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.courseCoachId === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "courseCoachId is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.coachNameTh === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "coachNameTh is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.coachNameEn === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "coachNameEn is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.coachId === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "coachId is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.price === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "price is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.originalPrice === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "originalPrice is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.statusDiscountPrice === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "statusDiscountPrice is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.statusDiscountPercent === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "statusDiscountPercent is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.discount === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "discount is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.adminDiscount === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "adminDiscount is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.student === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "student is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.startDate === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "startDate is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.username === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "username is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.isOther === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "isOther is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+          } else if (error?.response?.data?.message?.parent === "Require.") {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t(
+                "unable to register"
+              ),
+              text: "parent is Require",
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
           } else if (error?.response?.data?.message == " not found nickname.") {
             Swal.fire({
               icon: "warning",
@@ -1632,8 +2472,8 @@ const orderModules = {
           context.commit("SetOrderIsLoading", false);
 
         }
-      } catch (err) {
-        if (err == "please enter your name and class") {
+      } catch (error) {
+        if (error == "please enter your name and class") {
           Swal.fire({
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
@@ -1645,7 +2485,7 @@ const orderModules = {
             showCancelButton: false,
             showConfirmButton: false,
           });
-        } else if (err.response.data.message === "Parameter missing. Required username.") {
+        } else if (error?.response?.data?.message === "Parameter missing. Required username.") {
           Swal.fire({
             icon: "warning",
             title: VueI18n.t("unable to register"),
@@ -1657,11 +2497,335 @@ const orderModules = {
             showCancelButton: false,
             showConfirmButton: false,
           });
+        } else if (error?.response?.data?.message?.coursePackageOptionId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "coursePackageOptionId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.courseId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "courseId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.accountId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "accountId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.parentFirstnameTh === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "parentFirstnameTh is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.parentLastnameTh === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "parentLastnameTh is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.parentFirstnameEn === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "parentFirstnameEn is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.parentTel === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "parentTel is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.courseTypeId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "courseTypeId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.timeStart === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "timeStart is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.timeEnd === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "timeEnd is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.dayOfWeekId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "dayOfWeekId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.timeId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "timeId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.courseCoachId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "courseCoachId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.coachNameTh === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "coachNameTh is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.coachNameEn === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "coachNameEn is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.coachId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "coachId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.price === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "price is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.originalPrice === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "originalPrice is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.statusDiscountPrice === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "statusDiscountPrice is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.statusDiscountPercent === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "statusDiscountPercent is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.discount === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "discount is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.adminDiscount === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "adminDiscount is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.student === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "student is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.startDate === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "startDate is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.username === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "username is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.isOther === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "isOther is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.parent === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "parent is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
         } else {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("this item cannot be made"),
-            text: err,
+            text: error,
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -1971,7 +3135,7 @@ const orderModules = {
               item.option.total_price = item.option.net_price * item.students.length
             } else {
               item.net_price = item.price;
-              item.total_price = item.price * item.students.length
+              // item.total_price = item.price * item.students.length
             }
 
           }
@@ -1980,6 +3144,8 @@ const orderModules = {
           setTimeout(() => {
             context.commit("SetCartListIsLoading", false);
           }, 200);
+          context.commit("SetCartListIsLoading", false);
+
         } else {
           throw { error: data };
         }
@@ -2086,6 +3252,7 @@ const orderModules = {
       }
     },
     async CancelOrderDeleteScheduleAndMonitor(context, { order_number }) {
+
       try {
         let config = {
           headers: {
@@ -2140,7 +3307,7 @@ const orderModules = {
     },
     // RESERVE COURSE
     // async CreateReserveCourse(context, { course_data, profile_id, }) {
-    async CreateReserveCourse(context, { course_data, profile_id, coach_id }) {
+    async CreateReserveCourse(context, { course_data, course_detail }) {
       // console.log('profile_id :>> ', profile_id);
       // profile_data
       // console.log('profile_data :>> ', profile_data);
@@ -2152,7 +3319,9 @@ const orderModules = {
       // }
 
       try {
-        let count = 0;
+        // let order = context.state.order;
+
+        // let count = 0;
         let CheckStudentIsWaraphat = true
         if (course_data.students.some(v => !v.IsWaraphat && v.is_other)) {
           CheckStudentIsWaraphat = false
@@ -2171,74 +3340,126 @@ const orderModules = {
               CheckStudentIsWaraphat = true
             }
             if (CheckStudentIsWaraphat) {
-              for await (let student of course_data.students) {
-                // console.log('student.account_id :>> ', student.account_id);
-                let payload = {
-                  studentId: student.account_id,
-                  coursePackageOptionId: null,
-                  dayOfWeekId: null,
-                  timeId: null,
-                  courseId: course_data.course_id,
-                  // parentId: profile_id,
-                  parentId: course_data.apply_for_parent ? profile_id : null,
+              let payload = {
+                order_id: null,
+                courses: [],
+                created_by: null,
+                payment_status: "",
+                payment_type: null,
+                total_price: 0,
+                regis_type: "reserve",
+                pay_date: null,
+                discount_price: 0,
+                // total_price: 0
+              };
+              // for await (let course of order.courses) {
+              let studentsArr = [];
 
-                  // coachId: course_data.coach_id ? course_data.coach_id : null,
-                  coachId: course_data.course_type_id === "CT_1" ? course_data.coach_id ? course_data.coach_id : null : coach_id ? coach_id : null,
+              for await (const student of course_data.students) {
+                // for (const items of course_data.students) {
+                //   student.is_waraphat = items.IsWaraphat
+                // }
+                // if (student.parents[0]) {
+                //   studentsArr.push({
 
-                  orderTmpId: null,
-                  IsWaraphat: student.IsWaraphat,
-                  username: student.username,
-                };
+                //     account_id: student.account_id ? student.account_id : null,
+                //     username: student.username,
+                //     firstNameTh: student.firstname,
+                //     lastNameTh: student.lastname,
+                //     tel: student.tel,
+                //     is_other: student.is_other,
+                //     is_waraphat: student.IsWaraphat,
 
-                if (course_data.course_type_id === "CT_1") {
-                  payload.dayOfWeekId = course_data?.time?.timeData
-                    ? course_data.time.timeData.filter(
-                      (v) => v.coach_id === course_data.coach_id
-                    )[0].dayOfWeekId
-                    : course_data.time.dayOfWeekId;
-                  payload.coursePackageOptionId =
-                    course_data.option.course_package_option_id;
-                  payload.timeId = course_data?.time?.timeData
-                    ? course_data.time.timeData.filter(
-                      (v) => v.coach_id === course_data.coach_id
-                    )[0].timeId
-                    : course_data.time.timeId;
-                }
-                if (course_data.course_type_id === "CT_2") {
-                  payload.dayOfWeekId = course_data?.time?.timeData
-                    ? course_data.time.timeData.filter(
-                      (v) => v.coach_id === course_data.coach_id
-                    )[0].dayOfWeekId
-                    : course_data.time.dayOfWeekId;
-                  payload.coursePackageOptionId =
-                    course_data.option.course_package_option_id;
-                  payload.timeId = course_data?.time?.timeData
-                    ? course_data.time.timeData.filter(
-                      (v) => v.coach_id === course_data.coach_id
-                    )[0].timeId
-                    : course_data.time.timeId;
-                }
-                let config = {
-                  headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Content-type": "Application/json",
-                    Authorization: `Bearer ${VueCookie.get("token")}`,
-                  },
-                };
-                let { data } = await axios.post(
-                  // `http://localhost:3002/api/v1/order/reserve/create`,
-                  `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
-                  payload,
-                  config
-                );
-                if (data.statusCode === 201) {
-                  count = count + 1;
+                //     parent: {
+                //       accountId: student.parents[0].account_id,
+                //       parentFirstnameTh: student.parents[0].firstname_th
+                //         ? student.parents[0].firstname_th
+                //         : "",
+                //       parentLastnameTh: student.parents[0].lastname_th
+                //         ? student.parents[0].lastname_th
+                //         : "",
+                //       parentFirstnameEn: student.parents[0].firstname_en,
+                //       parentLastnameEn: student.parents[0].lastname_en,
+                //       parentTel: student.parents[0].tel,
+                //     },
+                //   });
+                // }
+                let parent_data = JSON.parse(localStorage.getItem("userDetail"));
+                if (course_data.apply_for_parent === true || student.parents[0]) {
+                  studentsArr.push({
+                    account_id: student.account_id ? student.account_id : "",
+                    username: student.username,
+                    firstNameTh: student.firstname,
+                    lastNameTh: student.lastname,
+                    tel: student.tel,
+                    is_other: student.is_other,
+                    parent: {
+                      account_id: course_data.apply_for_parent === true ? (parent_data.account_id ? parent_data.account_id : null) : student.parents[0].account_id ? student.parents[0].account_id : null,
+                      parent_first_name_th: course_data.apply_for_parent === true ? (parent_data.first_name_th ? parent_data.first_name_th : null) : student.parents[0].firstname_th
+                        ? student.parents[0].firstname_th
+                        : null,
+                      parent_last_name_th: course_data.apply_for_parent === true ? (parent_data.last_name_th ? parent_data.last_name_th : null) : student.parents[0].lastname_th
+                        ? student.parents[0].lastname_th
+                        : null,
+                      parent_first_name_en: course_data.apply_for_parent === true ? (parent_data.first_name_en ? parent_data.first_name_en : null) : student.parents[0].firstname_en ? student.parents[0].firstname_en : null,
+                      parent_last_name_en: course_data.apply_for_parent === true ? (parent_data.last_name_en ? parent_data.last_name_en : null) : student.parents[0].lastname_en ? student.parents[0].lastname_en : null,
+                      parent_tel: course_data.apply_for_parent === true ? (parent_data.tel ? parent_data.tel : null) : student.parents[0].tel ? student.parents[0].tel : null,
+                    },
+                  });
                 } else {
-                  throw { error: data.data };
-                }
-              }
+                  studentsArr.push({
+                    account_id: student.account_id ? student.account_id : null,
+                    username: student.username,
+                    firstNameTh: student.firstname,
+                    lastNameTh: student.lastname,
+                    tel: student.tel,
+                    is_other: student.is_other,
+                    is_waraphat: student.IsWaraphat,
 
-              if (count === course_data.students.length) {
+                    parent: {},
+                  });
+                }
+
+              }
+              payload.courses.push({
+                course_id: course_data.course_id ? course_data.course_id : null,
+                course_type_id: course_data.course_type_id ? course_data.course_type_id : null,
+                course_package_option_id: course_data.course_type_id == 'CT_1' ? course_data.coach.coursePackageOptionsId ? course_data.coach.coursePackageOptionsId : null : null,
+                time_start: course_data.course_type_id == 'CT_1' ? course_data.coach.start ? course_data.coach.start : null : course_data.time.start ? course_data.time.start : null,
+                time_end: course_data.course_type_id == 'CT_1' ? course_data.coach.end ? course_data.coach.end : null : course_data.time.end ? course_data.time.end : null,
+                maximumStudent: course_data.course_type_id == 'CT_1' ? course_data.coach.maximumStudent ? course_data.coach.maximumStudent : null : course_data.time.maximumStudent,
+                day_of_week_id: course_data.course_type_id == 'CT_1' ? course_data.coach.dayOfWeekId ? course_data.coach.dayOfWeekId : null : course_data.time.dayOfWeekId,
+                time_id: course_data.course_type_id == 'CT_1' ? course_data.coach.timeId ? course_data.coach.timeId : null : course_data.time.timeId,
+                course_coach_id: course_data.course_type_id == 'CT_1' ? (course_data.coach.courseCoachId ? course_data.coach.courseCoachId : null) : course_detail.coachs[0]?.course_coach_id ? course_detail.coachs[0]?.course_coach_id : null,
+                coach_name_th: course_data.course_type_id == 'CT_1' ? course_data.coach.fullNameTh ? course_data.coach.fullNameTh : null : course_data.coach_name ? course_data.coach_name : null,
+                coach_name_en: course_data.course_type_id == 'CT_1' ? course_data.coach.fullNameEn ? course_data.coach.fullNameEn : null : null,
+                coach_id: course_data.course_type_id == 'CT_1' ? course_data.coach.coachId ? course_data.coach.coachId : null : course_data.coach ? course_data.coach : null,
+                start_date: moment().format("YYYY-MM-DD"),
+                remark: null,
+                price: course_data.course_type_id === "CT_1" ? (course_data.option.price_unit ? course_data.option.price_unit : 0) : course_data.price ? course_data.price : 0,
+                original_price: 0,
+                student: studentsArr,
+                status_discount_price: false,
+                status_discount_percent: false,
+                discount: course_data.course_type_id === "CT_1" ? (course_data.option.discount_price ? course_data.option.discount_price : 0) : course_detail.discount ? course_detail.discount : 0,
+                admin_discount: 0
+              })
+              let config = {
+                headers: {
+                  "Access-Control-Allow-Origin": "*",
+                  "Content-type": "Application/json",
+                  Authorization: `Bearer ${VueCookie.get("token")}`,
+                },
+              };
+              let { data } = await axios.post(
+                // `http://localhost:3002/api/v1/order/reserve/create`,
+                `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
+                payload,
+                config
+              );
+              if (data.statusCode === 201) {
+                // count = count + 1;
+                // if (studentsArr.length === course_data.students.length) {
                 await Swal.fire({
                   icon: "success",
                   title: VueI18n.t("succeed"),
@@ -2253,103 +3474,196 @@ const orderModules = {
                 }).finally(() => {
                   router.replace({ name: "UserKingdom" });
                 });
-              }
-            }
-          })
-        } else {
-          if (CheckStudentIsWaraphat) {
-            for await (let student of course_data.students) {
-
-              let payload = {
-                studentId: student.account_id,
-                // studentId: profile_id,
-                coursePackageOptionId: null,
-                dayOfWeekId: null,
-                timeId: null,
-                courseId: course_data.course_id,
-                // parentId: profile_id,
-                parentId: course_data.apply_for_parent ? profile_id : null,
-                // parentId: yourself == true ? null : student.account_id,
-                coachId: course_data.course_type_id === "CT_1" ? course_data.coach_id ? course_data.coach_id : null : coach_id ? coach_id : null,
-                orderTmpId: null,
-                IsWaraphat: student.IsWaraphat,
-                username: student.username,
-
-              };
-
-              if (course_data.course_type_id === "CT_1") {
-                payload.dayOfWeekId = course_data?.time?.timeData
-                  ? course_data.time.timeData.filter(
-                    (v) => v.coach_id === course_data.coach_id
-                  )[0].dayOfWeekId
-                  : course_data.time.dayOfWeekId;
-                payload.coursePackageOptionId =
-                  course_data.option.course_package_option_id;
-                payload.timeId = course_data?.time?.timeData
-                  ? course_data.time.timeData.filter(
-                    (v) => v.coach_id === course_data.coach_id
-                  )[0].timeId
-                  : course_data.time.timeId;
-              }
-              if (course_data.course_type_id === "CT_2") {
-                payload.dayOfWeekId = course_data?.time?.timeData
-                  ? course_data.time.timeData.filter(
-                    (v) => v.coach_id === course_data.coach_id
-                  )[0].dayOfWeekId
-                  : course_data.time.dayOfWeekId;
-                payload.coursePackageOptionId =
-                  course_data.option.course_package_option_id;
-                payload.timeId = course_data?.time?.timeData
-                  ? course_data.time.timeData.filter(
-                    (v) => v.coach_id === course_data.coach_id
-                  )[0].timeId
-                  : course_data.time.timeId;
-              }
-              let config = {
-                headers: {
-                  "Access-Control-Allow-Origin": "*",
-                  "Content-type": "Application/json",
-                  Authorization: `Bearer ${VueCookie.get("token")}`,
-                },
-              };
-              let { data } = await axios.post(
-                // `http://localhost:3002/api/v1/order/reserve/create`,
-
-                `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
-                payload,
-                config
-              );
-              if (data.statusCode === 201) {
-                count = count + 1;
+                // }
 
               } else {
                 throw { error: data.data };
               }
+              // }
+
+              // if (count === course_data.students.length) {
+              //   await Swal.fire({
+              //     icon: "success",
+              //     title: VueI18n.t("succeed"),
+              //     text: VueI18n.t(
+              //       "successfully reserved a course Staff will contact you later"
+              //     ),
+              //     showDenyButton: false,
+              //     showCancelButton: false,
+              //     showConfirmButton: false,
+              //     timer: 3000,
+              //     timerProgressBar: true,
+              //   }).finally(() => {
+              //     router.replace({ name: "UserKingdom" });
+              //   });
+              // }
             }
+          })
+        } else {
+          if (CheckStudentIsWaraphat) {
+            let payload = {
+              order_id: null,
+              courses: [],
+              created_by: null,
+              payment_status: "",
+              payment_type: null,
+              total_price: 0,
+              regis_type: "reserve",
+              pay_date: null,
+              discount_price: 0,
+              // totalPrice: 0
+
+            };
+            // for await (let course of course_data) {
+            let studentsArr = [];
+
+            for await (const student of course_data.students) {
+              // for (const items of course_data.students) {
+              //   student.is_waraphat = items.IsWaraphat
+              // }
+
+
+              if (student.parents[0]) {
+                // let students = [];
+                studentsArr.push({
+                  account_id: student.account_id ? student.account_id : null,
+                  username: student.username,
+                  firstNameTh: student.firstname,
+                  lastNameTh: student.lastname,
+                  tel: student.tel,
+                  is_other: student.is_other,
+                  is_waraphat: student.IsWaraphat,
+
+                  parent: {
+                    account_id: student.parents[0].account_id,
+                    parent_first_name_th: student.parents[0].firstname_th
+                      ? student.parents[0].firstname_th
+                      : "",
+                    parent_last_name_th: student.parents[0].lastname_th
+                      ? student.parents[0].lastname_th
+                      : "",
+                    parent_first_name_en: student.parents[0].firstname_en,
+                    parent_last_name_eh: student.parents[0].lastname_en,
+                    parent_tel: student.parents[0].tel,
+                  },
+                });
+              } else {
+                studentsArr.push({
+                  account_id: student.account_id ? student.account_id : null,
+                  username: student.username,
+                  firstNameTh: student.firstname,
+                  lastNameTh: student.lastname,
+                  tel: student.tel,
+                  is_other: student.is_other,
+                  is_waraphat: student.IsWaraphat,
+
+                  parent: {},
+                });
+              }
+            }
+            payload.courses.push({
+              course_id: course_data.course_id ? course_data.course_id : null,
+              course_type_id: course_data.course_type_id ? course_data.course_type_id : null,
+              course_package_option_id: course_data.course_type_id == 'CT_1' ? course_data.coach.coursePackageOptionsId ? course_data.coach.coursePackageOptionsId : null : null,
+              time_start: course_data.course_type_id == 'CT_1' ? course_data.coach.start ? course_data.coach.start : null : course_data.time.start ? course_data.time.start : null,
+              time_end: course_data.course_type_id == 'CT_1' ? course_data.coach.end ? course_data.coach.end : null : course_data.time.end ? course_data.time.end : null,
+              maximumStudent: course_data.course_type_id == 'CT_1' ? course_data.coach.maximumStudent ? course_data.coach.maximumStudent : null : course_data.time.maximumStudent,
+              day_of_week_id: course_data.course_type_id == 'CT_1' ? course_data.coach.dayOfWeekId ? course_data.coach.dayOfWeekId : null : course_data.time.dayOfWeekId,
+
+              time_id: course_data.course_type_id == 'CT_1' ? course_data.coach.timeId ? course_data.coach.timeId : null : course_data.time.timeId,
+
+              course_coach_id: course_data.course_type_id == 'CT_1' ? (course_data.coach.courseCoachId ? course_data.coach.courseCoachId : null) : course_detail.coachs[0]?.course_coach_id ? course_detail.coachs[0]?.course_coach_id : null,
+
+              coach_name_th: course_data.course_type_id == 'CT_1' ? course_data.coach.fullNameTh ? course_data.coach.fullNameTh : null : course_data.coach_name ? course_data.coach_name : null,
+              coach_name_en: course_data.course_type_id == 'CT_1' ? course_data.coach.fullNameEn ? course_data.coach.fullNameEn : null : null,
+
+              coach_id: course_data.course_type_id == 'CT_1' ? (course_data.coach.coachId ? course_data.coach.coachId : null) : course_data.coach ? course_data.coach : null,
+              start_date: moment().format("YYYY-MM-DD"),
+              remark: null,
+              price: course_data.course_type_id === "CT_1" ? (course_data.option.price_unit ? course_data.option.price_unit : 0) : course_data.price ? course_data.price : 0,
+              original_price: 0,
+              student: studentsArr,
+              status_discount_price: false,
+              status_discount_percent: false,
+              discount: course_data.course_type_id === "CT_1" ? (course_data.option.discount_price ? course_data.option.discount_price : 0) : course_detail.discount ? course_detail.discount : 0,
+              admin_discount: 0
+            })
+
+            let config = {
+              headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-type": "Application/json",
+                Authorization: `Bearer ${VueCookie.get("token")}`,
+              },
+            };
+            let { data } = await axios.post(
+              // `http://localhost:3002/api/v1/order/reserve/create`,
+              `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
+              payload,
+              config
+            );
+            if (data.statusCode === 201) {
+              // count = count + 1;
+              // if (studentsArr.length === course_data.students.length) {
+
+              await Swal.fire({
+                icon: "success",
+                title: VueI18n.t("succeed"),
+                text: VueI18n.t(
+                  "successfully reserved a course Staff will contact you later"
+                ),
+                showDenyButton: false,
+                showCancelButton: false,
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+              }).finally(() => {
+                router.replace({ name: "UserKingdom" })
+
+
+              });
+              // }
+
+            } else {
+              throw { error: data.data };
+            }
+            // }
           }
         }
-        if (count === course_data.students.length) {
-          await Swal.fire({
-            icon: "success",
-            title: VueI18n.t("succeed"),
-            text: VueI18n.t(
-              "successfully reserved a course Staff will contact you later"
-            ),
-            showDenyButton: false,
-            showCancelButton: false,
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-          }).finally(() => {
-            router.replace({ name: "UserKingdom" });
-          });
-        }
+
+        // if (count === course_data.students.length) {
+        //   await Swal.fire({
+        //     icon: "success",
+        //     title: VueI18n.t("succeed"),
+        //     text: VueI18n.t(
+        //       "successfully reserved a course Staff will contact you later"
+        //     ),
+        //     showDenyButton: false,
+        //     showCancelButton: false,
+        //     showConfirmButton: false,
+        //     timer: 3000,
+        //     timerProgressBar: true,
+        //   }).finally(() => {
+        //     router.replace({ name: "UserKingdom" });
+        //   });
+        // }
       } catch (error) {
         if (error.response?.data?.message === 'Parents cannot resave the course to their parents.') {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("something went wrong"),
             text: VueI18n.t("parents cannot resave the course to their parents"),
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+          });
+        } else if (error.response?.data?.message === 'Cannot resave the course to their parents.') {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("warning"),
+            text: VueI18n.t("cannot resave the course to their parents"),
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
@@ -2366,6 +3680,330 @@ const orderModules = {
             showConfirmButton: false,
             timer: 3000,
             timerProgressBar: true,
+          });
+        } else if (error?.response?.data?.message?.coursePackageOptionId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "coursePackageOptionId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.courseId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "courseId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.accountId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "accountId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.parentFirstnameTh === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "parentFirstnameTh is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.parentLastnameTh === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "parentLastnameTh is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.parentFirstnameEn === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "parentFirstnameEn is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.parentTel === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "parentTel is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.courseTypeId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "courseTypeId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.timeStart === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "timeStart is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.timeEnd === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "timeEnd is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.dayOfWeekId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "dayOfWeekId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.timeId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "timeId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.courseCoachId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "courseCoachId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.coachNameTh === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "coachNameTh is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.coachNameEn === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "coachNameEn is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.coachId === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "coachId is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.price === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "price is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.originalPrice === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "originalPrice is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.statusDiscountPrice === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "statusDiscountPrice is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.statusDiscountPercent === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "statusDiscountPercent is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.discount === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "discount is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.adminDiscount === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "adminDiscount is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.student === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "student is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.startDate === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "startDate is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.username === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "username is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.isOther === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "isOther is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message?.parent === "Require.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t(
+              "unable to register"
+            ),
+            text: "parent is Require",
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
           });
         } else {
           Swal.fire({
@@ -2818,6 +4456,9 @@ const orderModules = {
     },
     getPackagesAddStudent(state) {
       return state.package_add_student
+    },
+    getRegisStatus(state) {
+      return state.regis_status
     },
   },
 };

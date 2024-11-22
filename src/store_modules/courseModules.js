@@ -207,7 +207,8 @@ const CourseModules = {
     coach_add_student: [],
     open_time_add_student: [],
     open_day_add_student: [],
-    all_students_potential_list: []
+    all_students_potential_list: [],
+    get_all_time: []
 
 
   },
@@ -430,6 +431,9 @@ const CourseModules = {
     },
     SetAllStudentPotentialList(state, payload) {
       state.all_students_potential_list = payload
+    },
+    SetgetTime(state, payload) {
+      state.get_all_time = payload
     },
 
 
@@ -701,8 +705,8 @@ const CourseModules = {
         }
         // const localhost = 'http://localhost:3000'
         // let { data } = await axios.get(`${localhost}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach_id}/date/${date}/time/${time_id}`, config)
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach_id}/date/${date}/time/${time_id}`, config)
-
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach_id}/date/${date}/time/${time_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach_id}/date/${date}/time/${time_id}/timeStart/${start_time}/timeEnd/${end_time}`, config)
         if (data.statusCode === 200) {
           if (data.data.length > 0 && data.data?.filter(v => v?.potential?.checkInPotentialId).length !== data.data.length) {
             context.commit("SetStudentList", data.data)
@@ -1632,35 +1636,35 @@ const CourseModules = {
 
           if (data.data.courseTypeId === "CT_1") {
             let options = []
-            data.data.coursePackageOption.forEach((package_data) => {
-              if (payload.packages.filter(v => v.package_id === package_data.packageId).length === 0) {
+            data.data.coursePackageOption?.forEach((package_data) => {
+              if (payload.packages.filter(v => v?.package_id === package_data?.packageId).length === 0) {
                 payload.packages.push({
-                  course_package_option_id: package_data.coursePackageOptionId,
-                  package_id: package_data.packageId,
-                  package: package_data.packageName,
-                  students: package_data.studentNumber,
+                  course_package_option_id: package_data?.coursePackageOptionId,
+                  package_id: package_data?.packageId,
+                  package: package_data?.packageName,
+                  students: package_data?.studentNumber,
                   options: [],
                 })
               }
               options.push({
-                course_package_option_id: package_data.coursePackageOptionId,
-                package_id: package_data.packageId,
-                option_id: package_data.optionId,
-                option_name: package_data.optionName,
-                option_name_en: package_data.optionNameEn,
-                period_package: package_data.optionId,
-                amount: package_data.hourPerTime,
-                price_unit: package_data.pricePerPerson,
-                discount: package_data.discountStatus == '1' ? true : false,
-                discount_price: package_data.discountPrice ? package_data.discountPrice : 0,
-                privilege: package_data.optionDescription,
-                total_price: package_data.pricePerPerson,
-                net_price: package_data.pricePerPerson - (package_data.discountPrice ? package_data.discountPrice : 0),
-                net_price_unit: (package_data.pricePerPerson - (package_data.discountPrice ? package_data.discountPrice : 0)) / package_data.hourPerTime,
+                course_package_option_id: package_data?.coursePackageOptionId,
+                package_id: package_data?.packageId,
+                option_id: package_data?.optionId,
+                option_name: package_data?.optionName,
+                option_name_en: package_data?.optionNameEn,
+                period_package: package_data?.optionId,
+                amount: package_data?.hourPerTime,
+                price_unit: package_data?.pricePerPerson,
+                discount: package_data?.discountStatus == '1' ? true : false,
+                discount_price: package_data?.discountPrice ? package_data?.discountPrice : 0,
+                privilege: package_data?.optionDescription,
+                total_price: package_data?.pricePerPerson,
+                net_price: package_data?.pricePerPerson - (package_data?.discountPrice ? package_data?.discountPrice : 0),
+                net_price_unit: (package_data?.pricePerPerson - (package_data?.discountPrice ? package_data?.discountPrice : 0)) / package_data?.hourPerTime,
               })
             })
             for (let package_data of payload.packages) {
-              package_data.options = options?.filter(v => v.package_id === package_data.package_id)?.sort((a, b) => {
+              package_data.options = options?.filter(v => v.package_id === package_data?.package_id)?.sort((a, b) => {
                 return a.amount - b.amount;
               });
             }
@@ -1741,7 +1745,8 @@ const CourseModules = {
 
           }
           context.commit("SetOpenDayAddStudent", getDayDuplicate)
-          context.commit("SetDayAddStudent", dayOpen)
+          context.commit("SetDayAddStudent", data.data)
+          // context.commit("SetDayAddStudent", dayOpen)
 
         } else {
           throw { error: data }
@@ -1764,10 +1769,12 @@ const CourseModules = {
         // let { data } = await axios.post(`${localhost}/api/v1/course/detail/addstudent/status-time`, payloads)
         let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/course/detail/addstudent/status-time`, payloads)
         if (data.statusCode === 201) {
+          context.commit("SetgetTime", data.data)
+
 
           let timeOpen = data?.data?.filter((item) => item?.status === "Open");
 
-          for (const itemsTime of timeOpen) {
+          for (const itemsTime of data.data) {
             if (getTimeDuplicate?.length === 0) {
               getTimeDuplicate.push(itemsTime)
             } else if (!getTimeDuplicate.some((items) => itemsTime.start === items.start && itemsTime.end === items.end)) {
@@ -1775,7 +1782,6 @@ const CourseModules = {
 
             }
           }
-
 
 
           context.commit("SetOpenTimeAddStudent", getTimeDuplicate)
@@ -2648,6 +2654,9 @@ const CourseModules = {
     },
     getAllStudentPotentialList(state) {
       return state.all_students_potential_list
+    },
+    getAllTime(state) {
+      return state.get_all_time
     },
 
   },

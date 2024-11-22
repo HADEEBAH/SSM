@@ -86,10 +86,6 @@ const RegisterModules = {
         SetRegisterByOne(state, value) {
             state.register_by_one = value
         }
-
-
-
-
     },
     actions: {
         async RemoveRelation(context, { studentId, parentId }) {
@@ -518,11 +514,11 @@ const RegisterModules = {
             }
 
         },
-        changeDialogRegisterOneId(context, value) {
+        async changeDialogRegisterOneId(context, value) {
             if (value) {
-                context.commit("ShowDialogRegisterOneId", value)
+                await context.commit("ShowDialogRegisterOneId", value)
             } else {
-                context.commit("ShowDialogRegisterOneId", value)
+                await context.commit("ShowDialogRegisterOneId", value)
                 // localStorage.context.commit("UserOneId", {
                 //     firstname_th: "",
                 //     lastname_th: "",
@@ -534,7 +530,7 @@ const RegisterModules = {
                 //     confirm_password: "",
                 //     accept_terms: false,
                 // }
-                context.commit("UserOneId", {
+                await context.commit("UserOneId", {
                     firstname_th: "",
                     lastname_th: "",
                     firstname_en: "",

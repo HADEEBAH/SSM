@@ -1702,20 +1702,21 @@ export default {
     },
     //check in by date
     CheckInByDate() {
-      // let check_in_date = moment(this.$route.params.date).format("YYYY-MM-DD")
-      // let today = moment().format("YYYY-MM-DD")
-      // if(check_in_date == today){
-      //   return false
-      // }else{
-      //   return true
-      // }
+      let check_in_date = moment(this.$route.params.date).format("YYYY-MM-DD")
+      let today = moment().format("YYYY-MM-DD")
+      if(moment(today).isSame(check_in_date)){
+        return false
+      }else{
+        return true
+      }
+
       // const current = moment().format("YYYY/MM/DD");
       // const currentMoment = moment(current);
       // const teachingDate = this.$route.params.date;
       // const countDate = currentMoment.isBefore(teachingDate);
       // console.log("countDate :>> ", countDate);
 
-      return false;
+      // return false;
     },
     genTime(time) {
       if (time) {

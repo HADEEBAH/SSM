@@ -70,37 +70,46 @@
         </v-row>
         <v-radio-group v-model="course_order.day" @change="resetTime">
           <v-row>
+            <!-- v-for="(date, date_index) in course_data.days" -->
+
             <v-col
               cols="12"
               sm="6"
-              v-for="(date, date_index) in course_data.days"
+              v-for="(date, date_index) in uniqueDays"
               :key="date_index"
             >
               <v-radio
                 :label="date.dayName"
                 color="#ff6B81"
                 :value="date"
+                @click="selectedDate(date)"
               ></v-radio>
             </v-col>
           </v-row>
         </v-radio-group>
-        <template v-if="course_order.day">
+
+        <template v-if="course_order.day && time_list?.length > 0">
           <v-row>
             <v-col class="text-lg font-bold">{{
               $t("choose a class time")
             }}</v-col>
           </v-row>
-          <v-radio-group v-model="course_order.time" @change="getCoach">
+          <!-- @change="getCoach" -->
+          <v-radio-group v-model="course_order.time">
             <v-row>
               <v-col
                 cols="12"
                 sm="6"
-                v-for="(time, time_index) in course_order.day.times"
+                v-for="(time, time_index) in time_list"
                 :key="time_index"
               >
                 <v-row dense>
                   <v-col cols="auto" class="d-flex aling-center">
-                    <v-radio color="#ff6B81" :value="time">
+                    <v-radio
+                      color="#ff6B81"
+                      :value="time"
+                      @click="selectedTime(time)"
+                    >
                       <template v-slot:label>
                         {{ `${time.start}-${time.end}` }}
                       </template>
@@ -118,17 +127,20 @@
                 $t("choose a coach")
               }}</v-col>
             </v-row>
+            <!-- :items="all_course_seat" -->
+
             <v-autocomplete
               dense
-              v-model="course_order.coach_id"
+              v-model="course_order.coach"
               color="pink"
               @change="coachSelected($event)"
               :rules="coachRules"
-              :items="all_course_seat"
-              :item-text="$i18n.locale == 'th' ? 'fullnameTh' : 'fullnameEn'"
+              :items="coach_add_student"
+              :item-text="$i18n.locale == 'th' ? 'fullNameTh' : 'fullNameEn'"
               item-value="coachId"
               item-color="pink"
               outlined
+              return-object
               :placeholder="$t('choose a coach')"
             >
               <template v-slot:no-data>
@@ -156,9 +168,7 @@
                       {{
                         `(${
                           item?.countSeatByCourse ? item?.countSeatByCourse : 0
-                        }/${
-                          item?.maxStudentByCourse ? item.maxStudentByCourse : 0
-                        })`
+                        }/${item?.maximumStudent ? item.maximumStudent : 0})`
                       }}
                     </span></v-list-item-title
                   >
@@ -811,11 +821,19 @@
           >
         </v-col>
         <v-col cols="12" sm="6">
+          <!-- v-if="
+              course_seat?.status === 'Close' ||
+              Number(course_order.students.length) +
+                Number(course_seat?.countSeatByCourse) >
+                course_seat?.maxStudentByCourse ||
+              course_data.course_status === 'Reserve'
+            " -->
           <v-btn
             v-if="
-              course_seat?.status === 'Close' ||
-              course_order.students.length + course_seat?.countSeatByCourse >
-                maxStudentByCourse ||
+              allSeatDatas?.status === 'Close' ||
+              Number(course_order.students.length) +
+                Number(allSeatDatas?.countSeatByCourse) >
+                allSeatDatas?.maximumStudent ||
               course_data.course_status === 'Reserve'
             "
             class="w-full"
@@ -827,6 +845,7 @@
             "
             outlined
             dense
+            :loading="reserveLoading"
             @click="CreateReserve"
             :color="validateButton || ValidateReserve() ? '#C4C4C4' : '#ff6b81'"
             >{{ $t("reserve") }}
@@ -1210,6 +1229,9 @@ export default {
     inputNickName: "",
     myCheckClassData: "",
     otherCheckClassData: "",
+    dayOfWeekIdList: [],
+    allSeatDatas: {},
+    reserveLoading: false,
   }),
   async created() {
     this.order_data = JSON.parse(localStorage.getItem("Order"));
@@ -1223,6 +1245,13 @@ export default {
     if (!this.course_order.course_id) {
       this.$router.replace({ name: "UserKingdom" });
     }
+    // let user_data = JSON.parse(localStorage.getItem("Order"));
+    // // console.log("user_data :>> ", user_data);
+    // this.GetDayAddStudent({
+    //   course_id: user_data?.course_id,
+    //   package_id: user_data?.option?.package_id,
+    //   option_id: user_data?.option?.period_package,
+    // });
   },
   watch: {
     "course_order.time": function () {
@@ -1406,12 +1435,35 @@ export default {
       course_seat: "CourseModules/getCourseSeats",
       all_course_seat: "CourseModules/getAllSeats",
       check_date: "CourseModules/getCheckDate",
+      open_time_add_student: "CourseModules/getAllTime",
+      time_list: "CourseModules/getOpenTimeAddStudent",
+      coach_add_student: "CourseModules/getCoachAddStudent",
 
       // getUserOneId
     }),
+
+    uniqueDays() {
+      // Filter unique dayNames by keeping the first occurrence
+      const unique = [];
+      const map = new Map();
+      for (const item of this?.course_order?.day_list) {
+        if (!map.has(item.dayName)) {
+          map.set(item.dayName, true);
+          unique.push(item);
+        }
+      }
+      return unique;
+    },
+
+    // coachRules() {
+    //   return [
+    //     (val) => (val || {}).length > 5 || this.$t("please select a coach"),
+    //   ];
+    // },
     coachRules() {
       return [
-        (val) => (val || "").length > 5 || this.$t("please select a coach"),
+        (val) =>
+          (val || "").toString().length > 5 || this.$t("please select a coach"),
       ];
     },
     usernameRules() {
@@ -1539,8 +1591,7 @@ export default {
       changeCourseOrderData: "OrderModules/changeCourseOrderData",
       resetCourseData: "OrderModules/resetCourseData",
       changeOrderData: "OrderModules/changeOrderData",
-      changeDialogRegisterOneId:
-        "RegisterModules/changenmogeDialogRegisterOneId",
+      changeDialogRegisterOneId: "RegisterModules/changeDialogRegisterOneId",
       saveOrder: "OrderModules/saveOrder",
       saveCart: "OrderModules/saveCart",
       checkUsernameOneid: "loginModules/checkUsernameOneid",
@@ -1553,29 +1604,65 @@ export default {
       GetCourseSeats: "CourseModules/GetCourseSeats",
       GetAllSeats: "CourseModules/GetAllSeats",
       GetCheckDate: "CourseModules/GetCheckDate",
+      GetTimeAddStudent: "CourseModules/GetTimeAddStudent",
+      GetCoachAddStudent: "CourseModules/GetCoachAddStudent",
     }),
-    getCoach() {
-      if (this.course_order.time) {
-        let checkDayId = [];
-        let checkTimeId = [];
-        let checkCoachId = [];
-        for (const items of this.course_order.time.timeData) {
-          checkDayId.push(items.dayOfWeekId);
-          checkTimeId.push(items.timeId);
-          checkCoachId.push(items.coach_id);
-        }
-        this.GetAllSeats({
-          courseId: this.course_order?.course_id,
-          coursePackageOptionsId:
-            this.course_order?.option?.course_package_option_id,
-          dayOfWeekId: checkDayId,
-          timeId: checkTimeId,
-          coachId: checkCoachId,
-          studentId: "",
-          courseTypeId: this.course_order?.course_type_id,
-        });
-      }
+
+    async selectedDate(item) {
+      // this.course_order.time_list = [];
+      this.dayOfWeekIdList = this.course_order.day_list
+        .filter(
+          (item) => item.dayOfWeekName === this.course_order.day.dayOfWeekName
+        )
+        ?.map((items) => items.dayOfWeekId);
+
+      await this.GetTimeAddStudent({
+        course_id: item.courseId,
+        package_id: item.packageId,
+        option_id: item.optionId,
+        day_ofweek_id: this.dayOfWeekIdList,
+      });
+
+      this.course_order.time_list = await this.time_list;
     },
+
+    async selectedTime(items) {
+      let timeIdList = this.open_time_add_student
+        .filter((item) => item.start === items.start && item.end === items.end)
+        ?.map((items) => items.timeId);
+
+      await this.GetCoachAddStudent({
+        course_id: items.courseId,
+        package_id: items.packageId,
+        option_id: items.optionId,
+        day_ofweek_id: this.dayOfWeekIdList,
+        time_id: timeIdList,
+      });
+      this.course_order.coach_list = await this.coach_add_student;
+    },
+
+    // getCoach() {
+    //   if (this.course_order.time) {
+    //     let checkDayId = [];
+    //     let checkTimeId = [];
+    //     let checkCoachId = [];
+    //     for (const items of this.course_order.time.timeData) {
+    //       checkDayId.push(items.dayOfWeekId);
+    //       checkTimeId.push(items.timeId);
+    //       checkCoachId.push(items.coach_id);
+    //     }
+    //     this.GetAllSeats({
+    //       courseId: this.course_order?.course_id,
+    //       coursePackageOptionsId:
+    //         this.course_order?.option?.course_package_option_id,
+    //       dayOfWeekId: checkDayId,
+    //       timeId: checkTimeId,
+    //       coachId: checkCoachId,
+    //       studentId: "",
+    //       courseTypeId: this.course_order?.course_type_id,
+    //     });
+    //   }
+    // },
 
     realtimeCheckNickname(items) {
       this.inputNickName = items;
@@ -1761,23 +1848,25 @@ export default {
       }
     },
     coachSelected(coach_id) {
+      this.allSeatDatas = coach_id;
+
       this.coachSelect = false;
       this.course_order.coach_id = coach_id;
 
-      const matchedData = this?.course_order?.time?.timeData?.find(
-        (item) => item.coach_id === coach_id
-      );
+      // const matchedData = this?.course_order?.time?.timeData?.find(
+      //   (item) => item.coach_id === coach_id
+      // );
 
-      this.GetCourseSeats({
-        courseId: this.course_order?.course_id,
-        coursePackageOptionsId:
-          this.course_order?.option?.course_package_option_id,
-        dayOfWeekId: matchedData.dayOfWeekId,
-        timeId: matchedData.timeId,
-        coachId: matchedData.coach_id,
-        studentId: "",
-        courseTypeId: this.course_order?.course_type_id,
-      });
+      // this.GetCourseSeats({
+      //   courseId: this.course_order?.course_id,
+      //   coursePackageOptionsId:
+      //     this.course_order?.option?.course_package_option_id,
+      //   dayOfWeekId: matchedData.dayOfWeekId,
+      //   timeId: matchedData.timeId,
+      //   coachId: matchedData.coach_id,
+      //   studentId: "",
+      //   courseTypeId: this.course_order?.course_type_id,
+      // });
       this.coachSelect = true;
     },
     resetTime() {
@@ -1840,9 +1929,11 @@ export default {
               if (this.course_order.course_type_id == "CT_1") {
                 this.course_order.coach = this.course_order.coach_id;
                 this.course_order.coach_name =
-                  this.course_order.time.timeData.filter(
-                    (v) => v.coach_id === this.course_order.coach_id
-                  )[0].coach_name;
+                  this.course_order.coach.fullNameTh;
+                // this.course_order.coach_name =
+                //   this.course_order.time.timeData.filter(
+                //     (v) => v.coach_id === this.course_order.coach_id
+                //   )[0].coach_name;
               } else {
                 this.course_order.time =
                   this.course_data.days_of_class[0].times[0];
@@ -1865,13 +1956,15 @@ export default {
               for (const item of this.course_data.coachs) {
                 id_coach = item.coach_id;
               }
-
+              this.reserveLoading = true;
               this.CreateReserveCourse({
                 course_data: this.course_order,
                 profile_id: this.profile_detail?.userOneId,
                 // profile_data: this.profile_detail,
                 coach_id: id_coach,
+                course_detail: this.course_data,
               });
+              this.reserveLoading = false;
             }
           });
         }
@@ -1905,7 +1998,7 @@ export default {
     checkMaximumStudent() {
       let max = false;
       if (this.course_order.course_type_id === "CT_1") {
-        if (this.course_seat?.maxStudentByCourse) {
+        if (this.course_order.coach.maximumStudent) {
           // max =
           //   this.course_seat?.maxStudentByCourse <=
           //   this.course_order.students.length +
@@ -2058,13 +2151,14 @@ export default {
                 this.course_data.coachs[0].coach_name;
               this.course_order.coach_id = this.course_data.coachs[0].coach_id;
               this.course_order.coach = this.course_data.coachs[0].coach_id;
-            } else {
-              this.course_order.coach = this.course_order.coach_id;
-              this.course_order.coach_name =
-                this.course_order.time.timeData.filter(
-                  (v) => v.coach_id === this.course_order.coach_id
-                )[0].coach_name;
             }
+            // else {
+            //   this.course_order.coach = this.course_order.coach_id;
+            //   this.course_order.coach_name =
+            //     this.course_order.time.timeData.filter(
+            //       (v) => v.coach_id === this.course_order.coach_id
+            //     )[0].coach_name;
+            // }
             this.order.courses.push({ ...this.course_order });
             this.order.created_by = this.user_login.account_id;
             this.changeOrderData(this.order);
@@ -2075,6 +2169,7 @@ export default {
             this.saveCart({
               cart_data: this.order,
               discount: this.course_data?.discount,
+              courseData: this.course_data,
             });
             // this.resetCourseData();
             // this.show_dialog_cart = true;
@@ -2161,9 +2256,11 @@ export default {
                 }
                 this.course_order.coach = this.course_order.coach_id;
                 this.course_order.coach_name =
-                  this.course_order.time.timeData.filter(
-                    (v) => v.coach_id === this.course_order.coach_id
-                  )[0].coach_name;
+                  this.course_order.coach.fullNameTh;
+                // this.course_order.coach_name =
+                //   this.course_order.time.timeData.filter(
+                //     (v) => v.coach_id === this.course_order.coach_id
+                //   )[0].coach_name;
               } else {
                 //  CT_2
 

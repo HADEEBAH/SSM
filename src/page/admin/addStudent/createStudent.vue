@@ -426,7 +426,7 @@
                   dense
                   :rules="rules.time"
                   v-model="course.time"
-                  :items="course.time_list"
+                  :items="groupedTimeList(course)"
                   :placeholder="$t('choose a time')"
                   outlined
                   return-object
@@ -1348,7 +1348,7 @@ export default {
         this.getDayOfWeek = items?.dayOfWeekId;
       }
     },
-    selectDay(course, items, index) {
+    async selectDay(course, items, index) {
       course.coach = {};
       course.time = {};
       this.open_time = true;
@@ -1360,13 +1360,35 @@ export default {
         });
       this.getDayOfWeek = "";
       this.getDayOfWeek = filterDayAddStudent;
-      this.GetTimeAddStudent({
+      await this.GetTimeAddStudent({
         course_id: course.course_id,
         package_id: course?.option?.packageId,
         option_id: course?.option?.optionId,
         day_ofweek_id: this.getDayOfWeek,
         index: index,
       });
+      await this.groupedTimeList(course);
+    },
+
+    groupedTimeList(course) {
+      let timeOpen = course?.time_list?.filter(
+        (item) => item?.status === "Open"
+      );
+      let getTimeDuplicate = [];
+
+      for (const itemsTime of timeOpen) {
+        if (getTimeDuplicate?.length === 0) {
+          getTimeDuplicate.push(itemsTime);
+        } else if (
+          !getTimeDuplicate.some(
+            (items) =>
+              itemsTime.start === items.start && itemsTime.end === items.end
+          )
+        ) {
+          getTimeDuplicate.push(itemsTime);
+        }
+      }
+      return getTimeDuplicate;
     },
 
     todayDate() {
@@ -1388,8 +1410,8 @@ export default {
     periodOptions(items) {
       return items.filter((item) => item.status === "Open");
     },
-    coachOptions(timeData) {
-      return timeData.filter((coach) => coach.status_coach === "Open");
+    coachOptions(optionData) {
+      return optionData.filter((coach) => coach.status_coach === "Open");
       // return items.filter((coach) => coach.status_coach === "Open");
     },
     minStartDate(startDate) {
