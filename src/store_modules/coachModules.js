@@ -164,7 +164,7 @@ const coachModules = {
       }
     },
     // ASSESSMENT POTENTIAL
-    async UpdateAssessmentPotential(context, { students, course_id, time_id, date }) {
+    async UpdateAssessmentPotential(context, { students, course_id, time_id, date, time_start, time_end }) {
       context.commit("SetStudentCheckInIsLoading", true)
       try {
         let config = {
@@ -211,6 +211,8 @@ const coachModules = {
               course_id: course_id,
               date: date,
               time_id: time_id,
+              time_start: time_start,
+              time_end: time_end
             })
           })
         }
@@ -220,7 +222,7 @@ const coachModules = {
       }
     },
     // ASSESSMENT
-    async AssessmentStudent(context, { students, course_id, date, time_id }) {
+    async AssessmentStudent(context, { students, course_id, date, time_id, time_start, time_end }) {
       context.commit("SetStudentCheckInIsLoading", true)
       try {
         let config = {
@@ -302,6 +304,8 @@ const coachModules = {
               course_id: course_id,
               date: date,
               time_id: time_id,
+              time_start: time_start,
+              time_end: time_end
             })
           })
         }
@@ -429,7 +433,7 @@ const coachModules = {
         })
       }
     },
-    async UpdateCheckInStudent(context, { students, course_id, date, time_id }) {
+    async UpdateCheckInStudent(context, { students, course_id, date, time_id, time_start, time_end }) {
       try {
         context.commit("SetStudentCheckInIsLoading", true)
         let config = {
@@ -464,6 +468,8 @@ const coachModules = {
               course_id: course_id,
               date: date,
               time_id: time_id,
+              time_start: time_start,
+              time_end: time_end
             })
           })
         }
@@ -484,6 +490,8 @@ const coachModules = {
             course_id: course_id,
             date: date,
             time_id: time_id,
+            time_start: time_start,
+            time_end: time_end
           })
         } else {
           Swal.fire({
@@ -498,12 +506,14 @@ const coachModules = {
             course_id: course_id,
             date: date,
             time_id: time_id,
+            time_start: time_start,
+            time_end: time_end
           })
         }
 
       }
     },
-    async GetStudentByTimeId(context, { course_id, date, time_id }) {
+    async GetStudentByTimeId(context, { course_id, date, time_id, time_start = null, time_end = null }) {
       context.commit("SetStudentCheckInLoading", true)
       context.commit("SetStudentCheckIn", [])
       try {
@@ -515,8 +525,10 @@ const coachModules = {
           },
         };
         // let localhost = "http://localhost:3000"
-        // let { data } = await axios.get(`${localhost}/api/v1/coachmanagement/coach/${course_id}/date/${date}/time/${time_id}`, config)
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${course_id}/date/${date}/time/${time_id}`, config)
+        // let { data } = await axios.get(`${localhost}/api/v1/coachmanagement/coach/${course_id}/date/${date}/time/${time_id}/timeStart/${time_start}/timeEnd/${time_end}`, config)
+        // console.log('data', data)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${course_id}/date/${date}/time/${time_id}/timeStart/${time_start}/timeEnd/${time_end}`, config)
+
         // .then(async(result)=>{
         //   if (result.data.data.length !== 0 && context.state.coach_check_in?.checkInCoachId) {
         //     await axios.patch(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/more/student/list?courseId=${course_id}&date=${date}&timeId=${time_id}`,null, config)
@@ -556,7 +568,7 @@ const coachModules = {
       }
     },
 
-    async CheckInCoach(context, { course_id, time_id, date, type, time_start, time_end }) {
+    async CheckInCoach(context, { course_id, time_id, time_start, time_end, date, type }) {
       context.commit("SetCoachCheckInIsLoading", true)
       try {
         let config = {
@@ -567,9 +579,10 @@ const coachModules = {
           },
         };
         let user_detail = JSON.parse(localStorage.getItem("userDetail"));
+        // console.log('user_detail', user_detail)
         // let loaclhost = "http://localhost:3000"
-        // const { data } = await axios.post(`http://localhost:3000/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}`, {
-        const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}`, {
+        // const { data } = await axios.post(`${loaclhost}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}/timeStart/${time_start}/timeEnd/${time_end}`, {
+          const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}/timeStart/${time_start}/timeEnd/${time_end}`, {
           "date": date,
           "timeId": time_id,
           "timeStart": time_start,
@@ -581,6 +594,8 @@ const coachModules = {
             course_id: course_id,
             date: date,
             time_id: time_id,
+            time_start: time_start,
+            time_end: time_end
           })
           context.commit("SetCoachCheckInIsLoading", false)
         } else {

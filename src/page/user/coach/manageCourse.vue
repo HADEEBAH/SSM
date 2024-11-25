@@ -1974,6 +1974,8 @@ export default {
         course_id: course.course_id,
         date: course.start_date,
         time_id: course.time_id,
+        time_start: course.start_time,
+        time_end: course.end_time,
       });
       course.show_summary = false;
       course.show_assessment = !course.show_assessment;
@@ -1988,6 +1990,8 @@ export default {
         course_id: course.course_id,
         date: course.start_date,
         time_id: course.time_id,
+        time_start: course.start_time,
+        time_end: course.end_time,
       });
       course.show_summary = false;
       course.show_assessment = false;
