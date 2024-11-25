@@ -116,19 +116,24 @@
         </v-col>
       </v-row>
       <!-- {{ selected_package }} -->
-      <v-row v-if="selected_package?.package_id && selected_package?.package_id !== ''">
+      <v-row
+        v-if="
+          selected_package?.package_id && selected_package?.package_id !== ''
+        "
+      >
         <v-col>{{
           `${selected_package?.package} 1 : ${selected_package?.students}`
         }}</v-col>
       </v-row>
       <v-row justify="center" v-else>
-        <v-col cols="12" class="text-center">
+        <v-col
+          cols="12"
+          class="text-center"
+          v-if="course_data.packages?.length <= 0"
+        >
           <span class="font-weight-bold">
-            {{
-              $t("There is no activation package. Please contact the staff")
-            }}
+            {{ $t("There is no activation package. Please contact the staff") }}
           </span>
-          
         </v-col>
       </v-row>
       <v-slide-group center-active v-if="selected_package?.package_id !== ''">
@@ -385,6 +390,7 @@ export default {
       course_order: "OrderModules/getCourseOrder",
       order: "OrderModules/getOrder",
       course_artwork: "CourseModules/getCourseArtwork",
+      day_add_student: "CourseModules/getDayAddStudent",
     }),
     SetFunction() {
       this.GetArtworkByCourse({ course_id: this.$route.params.course_id });
@@ -397,6 +403,7 @@ export default {
       changeCourseOrderData: "OrderModules/changeCourseOrderData",
       changeOrderData: "OrderModules/changeOrderData",
       GetArtworkByCourse: "CourseModules/GetArtworkByCourse",
+      GetDayAddStudent: "CourseModules/GetDayAddStudent",
     }),
     SelectedImg(img) {
       this.img_selected = img;
@@ -406,7 +413,7 @@ export default {
       this.img_selected = "";
       this.show_full_img = false;
     },
-    selectedPackage(option) {
+    async selectedPackage(option) {
       this.course_order.option = option;
       this.course_order.price = option.total_price;
       this.course_order.time_count = option.amount;
@@ -426,10 +433,16 @@ export default {
       this.course_order.parents = [];
       this.course_order.students = [];
       this.order.order_step = 1;
+      await this.GetDayAddStudent({
+        course_id: this.course_order?.course_id,
+        package_id: this.course_order?.option?.package_id,
+        option_id: this.course_order?.option?.option_id,
+      });
+      this.course_order.day_list = await this.day_add_student;
       this.changeCourseOrderData(this.course_order);
       this.changeOrderData(this.order);
       localStorage.setItem("Order", JSON.stringify(this.course_order));
-      this.$router.push({ name: "userCourseOrder" });
+      await this.$router.push({ name: "userCourseOrder" });
     },
   },
 };

@@ -221,6 +221,8 @@
     "course has been created":"( Course has been created )",
     "coach information not found": "Coach information not found",
     "check in status" : "Check in status",
+    "cannot resave the course to their parents":"Cannot resave the course to their parents",
+
 
 
 
@@ -560,6 +562,7 @@
     "permission management": "Permission management",
     "personal" : "Personal",
     "phone number" : "Phone number",
+    "please enter order number":"Please enter order number",
     "please specify congenital disease": "Please specify congenital disease",
     "please specify class": "Please specify class",
     "please specify more details of class": "Please specify more details of class",
@@ -1114,6 +1117,8 @@
     "upload the cover image of the course":"Upload the cover image of the course",
     "upload privileged images":"upload privileged images",
     "upload Learning Journey":"Upload Learning Journey",
+    "unable to purchase the course because the course is in reserved status":"Unable to purchase the course because the course is in reserved status",
+    "unable to add students to cart because the course already has students listed in the cart":"Unable to add students to cart because the course already has students listed in the cart",
 
 
     "organized by":"Organized by",
