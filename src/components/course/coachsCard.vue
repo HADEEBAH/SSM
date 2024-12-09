@@ -1,7 +1,7 @@
 <template>
   <div>
-    {{ setFunction }}
-    <template v-for="(coach, coach_index) in course_data.coachs">
+    <!-- {{ setFunction }} -->
+    <template v-for="(coach, coach_index) in coach_data">
       <v-card
         v-if="coach.teach_day_data.length > 0"
         :class="`bg-[${color}] mb-5`"
@@ -28,8 +28,8 @@
               <v-col
                 cols="auto"
                 v-if="
-                  course_data.coachs.filter((v) => v.teach_day_data.length > 0)
-                    .length > 1
+                  coach_data.filter((v) => v.teach_day_data.length > 0).length >
+                  1
                 "
               >
                 <template v-if="!teach_day?.course_coach_id">
@@ -218,13 +218,7 @@
                         :filled="disable"
                         dense
                         style="position: absolute; z-index: 4"
-                        @focus="
-                          SelectedStartDate(
-                            $event,
-                            teach_day.class_date,
-                            class_date.class_date_range.start_time
-                          )
-                        "
+                        @focus="SelectedStartDate($event)"
                         :rules="start_time"
                         v-model="class_date.class_date_range.start_time"
                       ></v-text-field>
@@ -277,6 +271,8 @@
                     required
                     :text="$t('acceptable students')"
                   ></label-custom>
+                  <!-- @change="ChangeCourseData(course_data)" -->
+
                   <v-text-field
                     class="input-text-right"
                     dense
@@ -287,7 +283,6 @@
                     :suffix="$t('person')"
                     @focus="$event.target.select()"
                     :rules="students"
-                    @change="ChangeCourseData(course_data)"
                     v-model="class_date.students"
                     :placeholder="$t('specify students who can accept')"
                     color="#ff6b81"
@@ -297,7 +292,7 @@
                   <v-btn
                     :disabled="disable"
                     text
-                    v-if="class_date_index === teach_day.class_date.length - 1"
+                    v-if="class_date_index === teach_day.class_date?.length - 1"
                     color="green"
                     @click="addTime(teach_day)"
                   >
@@ -386,9 +381,11 @@ export default {
   watch: {},
   computed: {
     ...mapGetters({
+      courses_data: "CourseModules/getCoursesData",
       course_data: "CourseModules/getCourseData",
       teach_days: "CourseModules/getTeachDays",
       course_monitors: "CourseMonitorModules/getCourseMonitor",
+      coach_data: "CourseModules/getCoachData",
     }),
     course() {
       return [
@@ -419,18 +416,18 @@ export default {
           (val || "") > 0 || this.$t("please specify the number of students"),
       ];
     },
-    setFunction() {
-      if (this.course_data.course_id) {
-        this.GetShortCourseMonitor({
-          course_id: this.course_data.course_id,
-        });
-      }
-      return "";
-    },
+    // setFunction() {
+    //   if (this.course_data.course_id) {
+    //     this.GetShortCourseMonitor({
+    //       course_id: this.course_data.course_id,
+    //     });
+    //   }
+    //   return "";
+    // },
   },
   methods: {
     ...mapActions({
-      ChangeCourseData: "CourseModules/ChangeCourseData",
+      // ChangeCourseData: "CourseModules/ChangeCourseData",
       GetTeachDays: "CourseModules/GetTeachDays",
       DeleteDayOfWeek: "CourseModules/DeleteDayOfWeek",
       DeleteTime: "CourseModules/DeleteTime",
@@ -492,28 +489,28 @@ export default {
       date.start_time = `${date.start_time_object.HH}:${date.start_time_object.mm}`;
       if (
         parseInt(date.start_time_object.HH) +
-          parseInt(this.course_data.course_hours_obj.HH) >=
+          parseInt(this?.courses_data?.course_hour_time?.HH) >=
         24
       ) {
         date.end_time_object.HH = `${
           parseInt(date.start_time_object.HH) +
-          parseInt(this.course_data.course_hours_obj.HH) -
+          parseInt(this?.courses_data?.course_hour_time?.HH) -
           24
         }`.padStart(2, "0");
       } else {
         date.end_time_object.HH = `${
           parseInt(date.start_time_object.HH) +
-          parseInt(this.course_data.course_hours_obj.HH)
+          parseInt(this?.courses_data?.course_hour_time?.HH)
         }`.padStart(2, "0");
       }
       if (
         parseInt(date.start_time_object.mm) +
-          parseInt(this.course_data.course_hours_obj.mm) >
+          parseInt(this?.courses_data?.course_hour_time?.mm) >
         59
       ) {
         date.end_time_object.mm = `${
           parseInt(date.start_time_object.mm) +
-          parseInt(this.course_data.course_hours_obj.mm) -
+          parseInt(this?.courses_data?.course_hour_time?.mm) -
           60
         }`.padStart(2, "0");
 
@@ -529,7 +526,7 @@ export default {
       } else {
         date.end_time_object.mm = `${
           parseInt(date.start_time_object.mm) +
-          parseInt(this.course_data.course_hours_obj.mm)
+          parseInt(this?.courses_data?.course_hour_time?.mm)
         }`.padStart(2, "0");
       }
       date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`;
@@ -541,6 +538,7 @@ export default {
         .getElementsByTagName("input")[0]
         .focus();
     },
+
     checkStudyByDay(e, data) {
       if (!data.class_open) {
         if (
@@ -589,9 +587,7 @@ export default {
       coach.splice(index, 1);
     },
     coachsOptions(coach_selected) {
-      const selectedCoachIds = this.course_data.coachs.map(
-        (coach) => coach.coach_id
-      );
+      const selectedCoachIds = this.coach_data.map((coach) => coach.coach_id);
       const availableCoaches = this.coachs.filter(
         (coach) =>
           !selectedCoachIds.includes(coach.accountId) ||
@@ -602,7 +598,7 @@ export default {
     },
     filteredDays(coachIndex, teachDayIndex, state) {
       if (state === "create") {
-        const teachDayData = this.course_data.coachs[coachIndex].teach_day_data;
+        const teachDayData = this.coach_data[coachIndex].teach_day_data;
         const currentTeachDay = teachDayData[teachDayIndex];
         const usedDays = [];
         teachDayData.forEach((teachDay) => {
@@ -620,10 +616,11 @@ export default {
       value.splice(value.indexOf(item.value), 1);
     },
     disabledMinutes(hour, coachIndex, teachDayIndex) {
-      const teach_days_used =
-        this.course_data.coachs[coachIndex].teach_days_used;
+      const teach_days_used = this.coach_data[coachIndex].teach_days_used;
+      // this.course_data.coachs[coachIndex].teach_days_used;
       const current_teach_day =
-        this.course_data.coachs[coachIndex].teach_day_data[teachDayIndex];
+        this.coach_data[coachIndex].teach_day_data[teachDayIndex];
+      // this.course_data.coachs[coachIndex].teach_day_data[teachDayIndex];
       const used_minutes = [];
       teach_days_used.forEach((teach_day) => {
         if (
@@ -653,7 +650,9 @@ export default {
       return used_minutes;
     },
     selectDays(selectedDays, coachIndex, teachDayIndex) {
-      const teachDayData = this.course_data.coachs[coachIndex].teach_day_data;
+      const teachDayData = this.coach_data[coachIndex].teach_day_data;
+      // const teachDayData = this.course_data.coachs[coachIndex].teach_day_data;
+
       const currentTeachDay = teachDayData[teachDayIndex];
 
       const conflictTeachDay = teachDayData.find(
@@ -667,11 +666,13 @@ export default {
           (day) => !selectedDays.includes(day)
         );
       } else {
-        this.course_data.coachs[coachIndex].disabled_hours = [];
-        const teach_days_used =
-          this.course_data.coachs[coachIndex].teach_days_used;
+        this.coach_data[coachIndex].disabled_hours = [];
+        // this.course_data.coachs[coachIndex].disabled_hours = [];
+        const teach_days_used = this.coach_data[coachIndex].teach_days_used;
+        // this.course_data.coachs[coachIndex].teach_days_used;
         const current_teach_day =
-          this.course_data.coachs[coachIndex].teach_day_data[teachDayIndex];
+          this.coach_data[coachIndex].teach_day_data[teachDayIndex];
+        // this.course_data.coachs[coachIndex].teach_day_data[teachDayIndex];
         const used_hours = [];
         teach_days_used.forEach((teach_day) => {
           if (
@@ -689,43 +690,51 @@ export default {
             });
           }
         });
-        this.course_data.coachs[coachIndex].disabled_hours = used_hours;
+        this.coach_data[coachIndex].disabled_hours = used_hours;
+        // this.course_data.coachs[coachIndex].disabled_hours = used_hours;
         currentTeachDay.teach_day = selectedDays;
       }
-      this.ChangeCourseData(this.course_data);
+      // this.ChangeCourseData(this.course_data);
     },
 
     genStartTimeEndTime(value, coach_index, teach_day_index, class_date_index) {
       if (value) {
         const end = moment(value).add(this.course_data.course_hours, "hour");
-        this.course_data.coachs[coach_index].teach_day_data[
-          teach_day_index
-        ].class_date[class_date_index].class_date_range.end_time = end;
+        this.coach_data[coach_index].teach_day_data[teach_day_index].class_date[
+          class_date_index
+        ].class_date_range.end_time = end;
+        // this.course_data.coachs[coach_index].teach_day_data[
+        //   teach_day_index
+        // ].class_date[class_date_index].class_date_range.end_time = end;
       }
-      this.ChangeCourseData(this.course_data);
+      // this.ChangeCourseData(this.course_data);
     },
     limitEndTime(value, coach_index, teach_day_index, class_date_index) {
       let start =
-        this.course_data.coachs[coach_index].teach_day_data[teach_day_index]
-          .class_date[class_date_index].class_date_range.start_time;
+        // this.course_data.coachs[coach_index].teach_day_data[teach_day_index]
+        this.coach_data[coach_index].teach_day_data[teach_day_index].class_date[
+          class_date_index
+        ].class_date_range.start_time;
       let end = moment(value);
       if (start.isAfter(end)) {
         const endTime = moment(start).add(
           this.course_data.course_hours,
           "hour"
         );
-        this.course_data.coachs[coach_index].teach_day_data[
-          teach_day_index
-        ].class_date[class_date_index].class_date_range.end_time = endTime;
+        // this.course_data.coachs[coach_index].teach_day_data[
+        this.coach_data[coach_index].teach_day_data[teach_day_index].class_date[
+          class_date_index
+        ].class_date_range.end_time = endTime;
       }
-      this.ChangeCourseData(this.course_data);
+      // this.ChangeCourseData(this.course_data);
     },
     findTeachDays(coach_data, coach_index) {
       this.select_coachs.push(coach_data.coach_id);
       this.GetTeachDays(coach_data).then(() => {
-        this.course_data.coachs[coach_index].teach_days_used = this.teach_days;
+        this.coach_data[coach_index].teach_days_used = this.teach_days;
+        // this.course_data.coachs[coach_index].teach_days_used = this.teach_days;
       });
-      this.ChangeCourseData(this.course_data);
+      // this.ChangeCourseData(this.course_data);
     },
     addTeachDay(data) {
       data.teach_day_data.push({
@@ -745,11 +754,11 @@ export default {
           },
         ],
       });
-      this.ChangeCourseData(this.course_data);
+      // this.ChangeCourseData(this.course_data);
     },
     removeTeachDay(data, index) {
       data.splice(index, 1);
-      this.ChangeCourseData(this.course_data);
+      // this.ChangeCourseData(this.course_data);
     },
     addTime(data) {
       data.class_date.push({
@@ -763,11 +772,11 @@ export default {
         },
         students: 0,
       });
-      this.ChangeCourseData(this.course_data);
+      // this.ChangeCourseData(this.course_data);
     },
     removeTime(data, index) {
       data.splice(index, 1);
-      this.ChangeCourseData(this.course_data);
+      // this.ChangeCourseData(this.course_data);
     },
     removeTimeData(data, time_id) {
       Swal.fire({

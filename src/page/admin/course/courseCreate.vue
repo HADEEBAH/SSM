@@ -74,7 +74,11 @@
         <!-- Step 1 -->
         <v-stepper-content step="1" class="pa-2 pt-3">
           <v-form ref="course_form" v-model="steps[step - 1]">
-            <course-card :categorys="categorys" :coachs="coachs"></course-card>
+            <course-card
+              :categorys="categorys"
+              :coachs="coachs"
+              :course_type="course_data.course_type_id"
+            ></course-card>
           </v-form>
         </v-stepper-content>
         <!-- Step 2 -->
@@ -85,7 +89,7 @@
                 <template v-slot:actions>
                   <v-btn outlined color="#FF6B81" @click="addCoach">
                     <v-icon>mdi-plus-circle-outline</v-icon>
-                    {{ $t("add a coach") }}
+                    {{ $t("add a coach 55") }}
                   </v-btn>
                 </template>
               </headerCard>
@@ -103,13 +107,10 @@
             <package-card></package-card>
             <v-row dense>
               <v-col class="d-flex align-center justify-center" cols="12">
-                <v-btn
-                  outlined
-                  color="#FF6B81"
-                  @click="addPackage(course_data.packages)"
-                  ><v-icon>mdi-plus-circle-outline</v-icon
-                  >{{ $t("add package") }}</v-btn
-                >
+                <v-btn outlined color="#FF6B81" @click="addPackage()"
+                  ><v-icon>mdi-plus-circle-outline</v-icon>
+                  {{ $t("add package") }}
+                </v-btn>
               </v-col>
             </v-row>
           </v-form>
@@ -282,10 +283,11 @@
                   "
                   text
                   @click="step = step - 1"
-                  >{{ $t("back") }}</v-btn
+                  >{{ $t("back 55") }}</v-btn
                 >
               </v-col>
               <v-col cols="12" sm="auto" v-if="step < 4">
+                <!-- :disabled="!steps[step - 1]" -->
                 <v-btn
                   :dark="steps[step - 1]"
                   color="#FF6B81"
@@ -294,8 +296,8 @@
                   "
                   class="white--text"
                   depressed
-                  @click="submitStep(step - 1)"
                   :disabled="!steps[step - 1]"
+                  @click="submitStep(step - 1)"
                   >{{ $t("next") }}</v-btn
                 >
               </v-col>
@@ -306,7 +308,7 @@
                   depressed
                   :loading="loading"
                   @click="submitStep(step - 1)"
-                  >{{ $t("create a course") }}</v-btn
+                  >{{ $t("create a course111") }}</v-btn
                 >
               </v-col>
             </v-row>
@@ -320,7 +322,7 @@
                   @click="submitStep(step - 1)"
                   :disabled="!steps[step - 1]"
                   :dark="steps[step - 1]"
-                  >{{ $t("create a course") }}</v-btn
+                  >{{ $t("create a course222") }}</v-btn
                 >
               </v-col>
             </v-row>
@@ -405,22 +407,180 @@ export default {
   },
   computed: {
     ...mapGetters({
-      course_data: "CourseModules/getCourseData",
+      course_data: "CourseModules/getCoursesData",
+      course_create_data: "CourseModules/getCourseData",
       coachs: "CourseModules/getCoachs",
       categorys: "CategoryModules/getCategorys",
+      coach_data: "CourseModules/getCoachData",
+      data_package: "CourseModules/getPackageData",
     }),
   },
   methods: {
     ...mapActions({
-      ChangeCourseData: "CourseModules/ChangeCourseData",
+      // ChangeCourseData: "CourseModules/ChangeCourseData",
       CreateCourse: "CourseModules/CreateCourse",
       ResetCourseData: "CourseModules/ResetCourseData",
+      // CoachData: "CourseModules/CoachData",
     }),
     save() {
-      this.loading = true;
-      this.course_data.course_file = this.file;
-      this.ChangeCourseData(this.course_data);
-      this.CreateCourse();
+      // this.loading = true;
+      // this.course_data.course_file = this.file;
+
+      if (this.course_data.course_type_id === "CT_1") {
+        // const mapped_coachs = this.coach_data.map((coach) => ({
+        //   accountId: coach.coach_id,
+        //   registerDateRange: {
+        //     courseRegisterStartDate:
+        //       coach.register_date_range?.start_date || "",
+        //     courseRegisterEndDate: coach.register_date_range?.end_date || "",
+        //   },
+        //   classDateRange: {
+        //     courseStudyStartDate: coach.class_date_range?.start_date || "",
+        //     courseStudyEndDate: coach.class_date_range?.end_date || "",
+        //   },
+        //   period: {
+        //     coursePeriodStartDate: coach.period?.start_time || "",
+        //     coursePeriodEndDate: coach.period?.end_time || "",
+        //   },
+        // }));
+
+        // const mapped_dayOfweek = this.coach_data.flatMap((coach) =>
+        //   coach.teach_day_data.map((teachDay) => ({
+        //     accountId: coach.coach_id,
+        //     status: teachDay.class_open ? "Active" : "Inactive",
+        //     day: teachDay.teach_day,
+        //     times: teachDay.class_date.map((date) => ({
+        //       start: date.class_date_range?.start_time || "",
+        //       end: date.class_date_range?.end_time || "",
+        //       maximumStudent: date.students || "0",
+        //     })),
+        //   }))
+        // );
+        const mapped_coachs = this.coach_data.map((coach) => ({
+          coach_id: coach.coach_id,
+          day_of_week: coach.teach_day_data.map((dayData) => ({
+            status: dayData.class_open ? "Active" : "Inactive",
+            day: dayData.teach_day.join(","),
+            times: dayData.class_date.map((classDate) => ({
+              start: classDate.class_date_range.start_time,
+              end: classDate.class_date_range.end_time,
+              maximum_student: classDate.students,
+            })),
+          })),
+        }));
+
+        const mapped_packages = this.data_package.flatMap((items_package) =>
+          items_package.options.map((option) => ({
+            package_id: items_package.package_id,
+            option_id: option.option_id,
+            hour_per_pime: option.amount ? option.amount : 0, // Static value as it's not in input data
+            option_description:
+              items_package.option_list.find(
+                (opt) => opt.option_id === option.option_id
+              )?.option_name_en || "",
+            discount_status: option.discount || false,
+            discount_price: option.discount_price || 0,
+            price_per_person: option.price_unit || 0,
+            student_number: items_package.students || 0,
+          }))
+        );
+        let payload_create_course = {
+          reservation: !this.course_data.reservation ? false : true,
+          reservation_end_date: this.course_data.reservation_end_date,
+          reservation_start_date: this.course_data.reservation_start_date,
+          category_id: this.course_data.category_id,
+          course_type_id: this.course_data.course_type_id,
+          course_img: null,
+          course_name_th: this.course_data.course_name_th,
+          course_name_en: this.course_data.course_name_en,
+          course_open_date: this.course_data.course_open_date,
+          course_per_time: this.course_data.course_hours,
+          course_student_recived: 0,
+          course_location: this.course_data.location,
+          course_description: this.course_data.description,
+          course_music_performance: this.course_data.music_performance,
+          course_certification: this.course_data.certification,
+          course_price: 0,
+          discount_price: 0,
+          coachs: mapped_coachs ? mapped_coachs : null,
+          // dayOfweek: mapped_dayOfweek ? mapped_dayOfweek : null,
+          course_packages: mapped_packages ? mapped_packages : null,
+        };
+        this.CreateCourse({
+          course_payload: payload_create_course,
+          course_file: this.course_data.course_img,
+          privilege_file: this.course_create_data.privilege_file,
+          artwork_file: this.course_create_data.artwork_file,
+        });
+      } else {
+        let payload_create_course = {
+          reservation: !this.course_data.reservation ? false : true,
+          reservation_end_date: this.course_data.reservation_end_date,
+          reservation_start_date: this.course_data.reservation_start_date,
+          category_id: this.course_data.category_id,
+          course_type_id: this.course_data.course_type_id,
+          course_img: null,
+          course_name_th: this.course_data.course_name_th,
+          course_name_en: this.course_data.course_name_en,
+          course_open_date: this.course_data.course_open_date,
+          course_per_time: this.course_data.course_hours,
+          course_student_recived: 0,
+          course_location: this.course_data.location,
+          course_description: this.course_data.description,
+          course_music_performance: this.course_data.music_performance,
+          course_certification: this.course_data.certification,
+          course_price: this.course_data.price_course
+            ? this.course_data.price_course
+            : 0,
+          discount_price: this.course_data.discount
+            ? this.course_data.discount
+            : 0,
+          discount_bool: this.course_data.checked_discount_bool
+            ? this.course_data.checked_discount_bool
+            : false,
+          coachs: [
+            {
+              coach_id: this.course_data.coach_id,
+              status: "Active",
+              day_of_week: [
+                {
+                  day: this.course_data.teach_day.join(","),
+                  times: [
+                    {
+                      start: this.course_data.course_study_time.start_time,
+                      end: this.course_data.course_study_time.end_time,
+                      maximum_student: this.course_data.student_recived,
+                    },
+                  ],
+                },
+              ],
+              // register_date_range: {
+              //   course_register_start_date:
+              //     this.course_data.course_register_date?.start_date || null,
+              //   course_register_end_date:
+              //     this.course_data.course_register_date?.end_date || null,
+              // },
+              // classDateRange: {
+              //   course_study_start_date:
+              //     this.course_data.course_study_date?.start_date || null,
+              //   course_study_end_date:
+              //     this.course_data.course_study_date?.end_date || null,
+              // },
+              // period: {
+              //   course_period_start_date:
+              //     this.course_data.course_study_time?.start_time || null,
+              //   course_period_end_date:
+              //     this.course_data.course_study_time?.end_time || null,
+              // },
+            },
+          ],
+          course_packages: [],
+        };
+        this.CreateCourse({
+          course_payload: payload_create_course,
+          course_file: this.course_data.course_img,
+        });
+      }
     },
     inputName(e, lang) {
       inputValidation(e, lang);
@@ -490,36 +650,49 @@ export default {
       }
     },
     addCoach() {
-      this.course_data.coachs.push({
-        coach_id: "",
-        coach_name: "",
-        teach_days_used: [],
+      this.coach_data.push({
+        course_id: null,
+        coach_id: null,
+        course_coach_id: null,
+        coach_name: null,
+        register_date_range: {
+          start_date: "",
+          menu_start_date: false,
+          end_date: "",
+          menu_end_date: false,
+        },
         teach_day_data: [
           {
+            day_of_week_id: null,
             class_open: false,
             teach_day: [],
+            course_coach_id: null,
             class_date: [
               {
+                start_time: null,
                 class_date_range: {
-                  start_time: "",
-                  start_time_object: { HH: "", mm: "" },
+                  time_id: null,
+                  day_of_week_id: null,
+                  start_time: null,
+                  start_time_object: {
+                    HH: null,
+                    mm: null,
+                  },
                   menu_start_time: false,
-                  end_time: "",
-                  end_time_object: { HH: "", mm: "" },
+                  end_time: null,
+                  end_time_object: {
+                    HH: null,
+                    mm: null,
+                  },
                   menu_end_time: false,
                 },
+
                 students: 0,
               },
             ],
           },
         ],
         class_date_range: {
-          start_date: "",
-          menu_start_date: false,
-          end_date: "",
-          menu_end_date: false,
-        },
-        register_date_range: {
           start_date: "",
           menu_start_date: false,
           end_date: "",
@@ -532,39 +705,132 @@ export default {
           end_time_object: { HH: "", mm: "" },
         },
       });
-      this.ChangeCourseData(this.course_data);
+
+      // this.course_data.coachs.push({
+      //   coach_id: "",
+      //   coach_name: "",
+      //   teach_days_used: [],
+      //   teach_day_data: [
+      //     {
+      //       class_open: false,
+      //       teach_day: [],
+      //       class_date: [
+      //         {
+      //           class_date_range: {
+      //             start_time: "",
+      //             start_time_object: { HH: "", mm: "" },
+      //             menu_start_time: false,
+      //             end_time: "",
+      //             end_time_object: { HH: "", mm: "" },
+      //             menu_end_time: false,
+      //           },
+      //           students: 0,
+      //         },
+      //       ],
+      //     },
+      //   ],
+      //   class_date_range: {
+      //     start_date: "",
+      //     menu_start_date: false,
+      //     end_date: "",
+      //     menu_end_date: false,
+      //   },
+      //   register_date_range: {
+      //     start_date: "",
+      //     menu_start_date: false,
+      //     end_date: "",
+      //     menu_end_date: false,
+      //   },
+      //   period: {
+      //     start_time: "",
+      //     start_time_object: { HH: "", mm: "" },
+      //     end_time: "",
+      //     end_time_object: { HH: "", mm: "" },
+      //   },
+      // });
+
+      // this.ChangeCourseData(this.course_data);
     },
     removeCoach(data, index) {
       data.splice(index, 1);
-      this.ChangeCourseData(this.course_data);
+      // this.ChangeCourseData(this.course_data);
     },
-    addPackage(data) {
-      data.push({
-        package: "",
-        students: 0,
+    addPackage() {
+      this.data_package.push({
+        package_id: null,
+        package: null,
+        students: 1,
         options: [
           {
-            period_package: "",
-            amount: 0,
-            price_unit: 0,
-            discount: false,
-            discount_price: 0,
-            privilege: "",
-            net_price: 0,
-            net_price_unit: 0,
+            package_id: null,
+            package: null,
+            students: 0,
+            options: [
+              {
+                option_id: null,
+                period_package: null,
+                amount: 0,
+                price_unit: 0,
+                discount: false,
+                discount_price: 0,
+                privilege: null,
+                net_price: 0,
+                net_price_unit: 0,
+              },
+            ],
+          },
+        ],
+        option_selected: [],
+        option_list: [
+          {
+            option_id: "OP_1",
+            option_name: "รายวัน",
+            option_name_en: "Daily",
+          },
+          {
+            option_id: "OP_2",
+            option_name: "รายเดือน",
+            option_name_en: "Monthly",
+          },
+          {
+            option_id: "OP_3",
+            option_name: "รายเทอม",
+            option_name_en: "Per term",
+          },
+          {
+            option_id: "OP_4",
+            option_name: "รายปี",
+            option_name_en: "Yearly",
+          },
+          {
+            option_id: "OP_5",
+            option_name: "ราย 4 ครั้ง",
+            option_name_en: "4 times",
+          },
+          {
+            option_id: "OP_6",
+            option_name: "ราย 2 เดือน",
+            option_name_en: "2 months",
+          },
+          {
+            option_id: "OP_7",
+            option_name: "ราย 10 ครั้ง",
+            option_name_en: "10 times",
           },
         ],
       });
-      this.ChangeCourseData(this.course_data);
+      // this.ChangeCourseData(this.course_data);
     },
     // UPDATE FILE
     uploadPrivilegeFile(event) {
       this.privilege_file = this.$refs.fileInputPrivilege.files[0];
       const allowedTypes = ["image/png", "image/jpeg"];
       if (CheckFileSize(this.privilege_file, event.target.id) === true) {
-        this.course_data.privilege_file =
+        // this.course_data.privilege_file =
+        //   this.$refs.fileInputPrivilege.files[0];
+        this.course_create_data.privilege_file =
           this.$refs.fileInputPrivilege.files[0];
-        this.ChangeCourseData(this.course_data);
+        // this.ChangeCourseData(this.course_data);
         if (
           this.privilege_file &&
           allowedTypes.includes(this.privilege_file.type)
@@ -586,7 +852,9 @@ export default {
         const file = selectedFiles[i];
         if (CheckFileSize(file, event.target.id) === true) {
           if (allowedTypes.includes(file.type)) {
-            this.course_data.artwork_file.push(file);
+            this.course_create_data.artwork_file.push(file);
+            // this.course_data.artwork_file.push(file);
+
             const reader = new FileReader();
             reader.onload = () => {
               fileUrls.push(reader.result);
@@ -603,7 +871,7 @@ export default {
           }
         }
       }
-      this.ChangeCourseData(this.course_data);
+      // this.ChangeCourseData(this.course_data);
     },
     // REMOVE
     removeArtworkFile(index) {

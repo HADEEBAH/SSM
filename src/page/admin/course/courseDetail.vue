@@ -22,7 +22,7 @@
           </img-card>
         </v-col>
         <v-col
-          v-if="course_data.course_type_id === 'CT_1'"
+          v-if="courses_data.course_type_id === 'CT_1'"
           cols="12"
           sm
           @click="tab = 'time and coach'"
@@ -45,7 +45,7 @@
           </img-card>
         </v-col>
         <v-col
-          v-if="course_data.course_type_id === 'CT_1'"
+          v-if="courses_data.course_type_id === 'CT_1'"
           cols="12"
           sm
           @click="tab = 'package'"
@@ -66,7 +66,7 @@
           </img-card>
         </v-col>
         <v-col
-          v-if="course_data.course_type_id === 'CT_1'"
+          v-if="courses_data.course_type_id === 'CT_1'"
           cols="12"
           sm
           @click="tab = 'arkwork'"
@@ -109,7 +109,6 @@
         <v-card-text>
           <v-tabs-items v-model="tab">
             <!-- COURSE -->
-
             <v-tab-item value="course">
               <v-form ref="course_form" v-model="courseValidate">
                 <course-card
@@ -167,7 +166,7 @@
                       @click="addCoach"
                     >
                       <v-icon>mdi-plus-circle-outline</v-icon>
-                      {{ $t("add coach") }}
+                      {{ $t("add coach555") }}
                     </v-btn>
                   </template>
                 </headerCard>
@@ -229,7 +228,7 @@
                     :disabled="!course_edit"
                     outlined
                     color="#ff6b81"
-                    @click="addPackage(course_data.packages)"
+                    @click="addPackage(course_created_data.packages)"
                     ><v-icon>mdi-plus</v-icon> {{ $t("add package") }}</v-btn
                   >
                 </v-col>
@@ -279,14 +278,15 @@
                 >
                   <v-row
                     v-if="
-                      course_data.course_img_privilege || preview_privilege_url
+                      art_work_data.course_img_privilege ||
+                      preview_privilege_url
                     "
                   >
                     <v-col align="center" class="rounded-lg pa-0">
                       <v-img
                         :src="
-                          course_data.course_img_privilege
-                            ? course_data.course_img_privilege
+                          art_work_data.course_img_privilege
+                            ? art_work_data.course_img_privilege
                             : preview_privilege_url
                         "
                         style="max-width: 300px"
@@ -296,7 +296,9 @@
                         align="right"
                       >
                         <v-btn
-                          v-if="course_edit && course_data.course_img_privilege"
+                          v-if="
+                            course_edit && art_work_data.course_img_privilege
+                          "
                           icon
                           class="bg-[#f00]"
                           dark
@@ -317,7 +319,7 @@
                   <v-row
                     v-if="
                       !preview_privilege_url &&
-                      !course_data.course_img_privilege
+                      !art_work_data.course_img_privilege
                     "
                   >
                     <v-col cols="12" class="flex align-center justify-center">
@@ -770,7 +772,9 @@
                                 </v-autocomplete>
                               </v-col>
                               <v-col
-                                v-if="course_data.course_type_id == 'CT_1'"
+                                v-if="
+                                  course_created_data.course_type_id == 'CT_1'
+                                "
                               >
                                 <v-autocomplete
                                   dense
@@ -811,7 +815,9 @@
                               <v-col
                                 cols="3"
                                 align="center"
-                                v-if="course_data.course_type_id === 'CT_1'"
+                                v-if="
+                                  course_created_data.course_type_id === 'CT_1'
+                                "
                                 >{{ $t("package") }}</v-col
                               >
                               <v-col align="right"></v-col>
@@ -883,7 +889,8 @@
                                         cols="3"
                                         align="center"
                                         v-if="
-                                          course_data.course_type_id === 'CT_1'
+                                          course_created_data.course_type_id ===
+                                          'CT_1'
                                         "
                                       >
                                         <v-chip
@@ -987,7 +994,7 @@
                                                 cols="2"
                                                 align="center"
                                                 v-if="
-                                                  course_data.course_type_id ===
+                                                  course_created_data.course_type_id ===
                                                   'CT_1'
                                                 "
                                               >
@@ -995,7 +1002,7 @@
                                               </v-col>
                                               <v-col
                                                 v-if="
-                                                  course_data.course_type_id ===
+                                                  course_created_data.course_type_id ===
                                                   'CT_1'
                                                 "
                                                 cols="2"
@@ -1060,7 +1067,7 @@
                                                   cols="4"
                                                   align="center"
                                                   v-if="
-                                                    course_data.course_type_id ===
+                                                    course_created_data.course_type_id ===
                                                     'CT_2'
                                                   "
                                                 >
@@ -1086,7 +1093,7 @@
                                                   cols="2"
                                                   align="center"
                                                   v-if="
-                                                    course_data.course_type_id ===
+                                                    course_created_data.course_type_id ===
                                                     'CT_1'
                                                   "
                                                 >
@@ -1220,7 +1227,7 @@
                                                   cols="2"
                                                   align="center"
                                                   v-if="
-                                                    course_data.course_type_id ===
+                                                    course_created_data.course_type_id ===
                                                     'CT_1'
                                                   "
                                                 >
@@ -1232,7 +1239,7 @@
                                                 </v-col>
                                                 <v-col
                                                   v-if="
-                                                    course_data.course_type_id ===
+                                                    course_created_data.course_type_id ===
                                                     'CT_1'
                                                   "
                                                   cols="2"
@@ -1314,7 +1321,7 @@
                 </v-tab-item>
                 <!-- นักเรียนจองคิว -->
                 <v-tab-item valus="student booking">
-                  <v-row dense v-if="course_data.reservation">
+                  <v-row dense v-if="course_created_data.reservation">
                     <v-col class="pr-3" cols="12" align="right">
                       <v-btn
                         @click="UpdateReserveAll(student_reserve_list)"
@@ -1946,8 +1953,6 @@
                                 </div>
                               </div>
                             </div>
-
-                            <!-- {{ 5555555555 }} -->
                           </div>
                         </v-expand-transition>
                       </div>
@@ -3104,7 +3109,7 @@
       <student-in-course
         v-if="studentListDialog"
         :statusBool="studentListDialog"
-        :courseId="course_data.course_id"
+        :courseId="course_created_data.course_id"
         :studentType="
           inpotentialBool
             ? (studentType = 'inpotential')
@@ -3231,7 +3236,9 @@ export default {
     inpotentialBool: false,
     studentType: "",
   }),
-  mounted() {},
+  mounted() {
+    this.CoursesData({ course_id: this.$route.params.course_id });
+  },
 
   watch: {
     student_tab: function () {
@@ -3247,24 +3254,46 @@ export default {
           this.preview_artwork_files.push(arkwork);
         }
       }
-      this.preview_privilege_url = this.course_data.course_img_privilege;
+      this.preview_privilege_url = this.art_work_data.course_img_privilege;
     },
-    tab: function () {
-      this.course_edit = false;
-      this.$store.dispatch(
-        "CourseModules/GetCourse",
-        this.$route.params.course_id
-      );
-      this.GetArtworkByCourse({ course_id: this.$route.params.course_id });
-      this.preview_privilege_url = this.course_data.course_img_privilege;
-      this.GetCoachsByCourse({ course_id: this.$route.params.course_id });
+    tab: function (tabName) {
+      if (tabName === "course") {
+        this.CoursesData({ course_id: this.$route.params.course_id });
+      } else if (tabName === "time and coach") {
+        this.CoachData({ course_id: this.$route.params.course_id });
+      } else if (tabName === "package") {
+        this.PackagesData({ course_id: this.$route.params.course_id });
+      } else if (tabName === "student list") {
+        this.$store.dispatch(
+          "CourseModules/GetCourse",
+          this.$route.params.course_id
+        );
+      } else if (tabName === "arkwork") {
+        this.$store.dispatch(
+          "CourseModules/GetCourse",
+          this.$route.params.course_id
+        );
+        this.preview_privilege_url = this.art_work_data.course_img_privilege;
+        this.GetArtworkByCourse({ course_id: this.$route.params.course_id });
+      } else {
+        this.CoursesData({ course_id: this.$route.params.course_id });
+      }
+
+      // this.course_edit = false;
+      // this.$store.dispatch(
+      //   "CourseModules/GetCourse",
+      //   this.$route.params.course_id
+      // );
+      // this.GetArtworkByCourse({ course_id: this.$route.params.course_id });
+      // this.preview_privilege_url = this.art_work_data.course_img_privilege;
+      // this.GetCoachsByCourse({ course_id: this.$route.params.course_id });
     },
   },
   computed: {
     ...mapGetters({
       coachs: "CourseModules/getCoachs",
       categorys: "CategoryModules/getCategorys",
-      course_data: "CourseModules/getCourseData",
+      course_created_data: "CourseModules/getCourseData",
       course_is_loading: "CourseModules/getCourseIsLoading",
       course_artwork: "CourseModules/getCourseArtwork",
       coach_list: "CourseModules/getCoachList",
@@ -3278,6 +3307,10 @@ export default {
       no_check_in_student_list: "CourseModules/getNoChackInStudentList",
       export_is_loading: "CourseModules/export_is_loading",
       students_potential: "CourseModules/getAllStudentPotentialList",
+      courses_data: "CourseModules/getCoursesData",
+      coach_data: "CourseModules/getCoachData",
+      data_package: "CourseModules/getPackageData",
+      art_work_data: "CourseModules/getArtWorkData",
     }),
     breadcrumbs() {
       return [
@@ -3354,14 +3387,21 @@ export default {
       ];
     },
     setFunctions() {
-      this.$store.dispatch(
-        "CourseModules/GetCourse",
-        this.$route.params.course_id
-      );
+      // this.$store.dispatch(
+      //   "CourseModules/GetCourse",
+      //   this.$route.params.course_id
+      // );
+      // this.CoachData({ course_id: this.$route.params.course_id });
+
+      this.CoursesData({ course_id: this.$route.params.course_id });
+      // this.$store.dispatch(
+      //   "CourseModules/CoursesData",
+      //   this.$route.params.course_id
+      // );
       this.$store.dispatch("CategoryModules/GetCategorys");
       this.$store.dispatch("CourseModules/GetCoachs");
-      this.GetArtworkByCourse({ course_id: this.$route.params.course_id });
-      this.GetCoachsByCourse({ course_id: this.$route.params.course_id });
+      // this.GetArtworkByCourse({ course_id: this.$route.params.course_id });
+      // this.GetCoachsByCourse({ course_id: this.$route.params.course_id });
       return "";
     },
   },
@@ -3387,6 +3427,10 @@ export default {
       UpdateStatusReserveAdmin: "reserveCourseModules/UpdateStatusReserveAdmin",
       UpdateAllStatusReserve: "reserveCourseModules/UpdateAllStatusReserve",
       GetAllStudentPotentialList: "CourseModules/GetAllStudentPotentialList",
+      CoursesData: "CourseModules/CoursesData",
+      CoachData: "CourseModules/CoachData",
+      PackagesData: "CourseModules/PackagesData",
+      ArtWorkData: "CourseModules/ArtWorkData",
     }),
     async studentsPotentials() {
       await this.GetAllStudentPotentialList({
@@ -3396,7 +3440,7 @@ export default {
     UpdateReserveAll() {
       // items
       // let hasWaitingStatus = items.some((item) => item.status === "waiting");
-      if (this.course_data.course_status === "Active") {
+      if (this.course_created_data.course_status === "Active") {
         Swal.fire({
           icon: "question",
           title: this.$t("do you want to change your status?"),
@@ -3433,7 +3477,7 @@ export default {
       }
     },
     updateReserve(reserve_id, reserve_data) {
-      if (this.course_data.course_status === "Active") {
+      if (this.course_created_data.course_status === "Active") {
         Swal.fire({
           icon: "question",
           title: this.$t("do you want to change your status?"),
@@ -3627,8 +3671,8 @@ export default {
       this.ExportStudentList({
         coach_list: this.coach_list,
         course_id: this.$route.params.course_id,
-        course_name: this.course_data.course_name_th,
-        course_type_id: this.course_data.course_type_id,
+        course_name: this.course_created_data.course_name_th,
+        course_type_id: this.course_created_data.course_type_id,
         lang,
       });
     },
@@ -3742,9 +3786,9 @@ export default {
       if (CheckFileSize(this.privilege_file, event.target.id) === true) {
         const fileType = this.privilege_file.type;
         if (fileType === "image/png" || fileType === "image/jpeg") {
-          this.course_data.privilege_file =
+          this.course_created_data.privilege_file =
             this.$refs.fileInputPrivilege.files[0];
-          this.ChangeCourseData(this.course_data);
+          this.ChangeCourseData(this.course_created_data);
           if (
             this.privilege_file &&
             allowedTypes.includes(this.privilege_file.type)
@@ -3803,7 +3847,7 @@ export default {
         const file = selectedFiles[i];
         if (CheckFileSize(file, event.target.id) === true) {
           if (allowedTypes.includes(file.type)) {
-            this.course_data.artwork_file.push(file);
+            this.course_created_data.artwork_file.push(file);
             const reader = new FileReader();
             reader.onload = () => {
               fileUrls.push(reader.result);
@@ -3828,7 +3872,7 @@ export default {
           }
         }
       }
-      this.ChangeCourseData(this.course_data);
+      // this.ChangeCourseData(this.course_created_data);
     },
     // REMOVE
     removeArtworkFile(index) {
@@ -3865,30 +3909,93 @@ export default {
           this.RemovePrivilageByCourseID({
             course_id: this.$route.params.course_id,
           }).then(() => {
-            this.course_data.course_img_privilege = null;
+            this.course_created_data.course_img_privilege = null;
             this.preview_privilege_url = null;
           });
         }
       });
     },
-    addPackage(data) {
-      data.push({
-        package: "",
-        students: 0,
+    addPackage() {
+      // data.push({
+      //   package: "",
+      //   students: 0,
+      //   options: [
+      //     {
+      //       period_package: "",
+      //       amount: 0,
+      //       price_unit: 0,
+      //       discount: false,
+      //       discount_price: 0,
+      //       privilege: "",
+      //       net_price: 0,
+      //       net_price_unit: 0,
+      //     },
+      //   ],
+      // });
+      // this.ChangeCourseData(this.course_created_data);
+      this.data_package.push({
+        package_id: null,
+        package: null,
+        students: 1,
         options: [
           {
-            period_package: "",
-            amount: 0,
-            price_unit: 0,
-            discount: false,
-            discount_price: 0,
-            privilege: "",
-            net_price: 0,
-            net_price_unit: 0,
+            package_id: null,
+            package: null,
+            students: 0,
+            options: [
+              {
+                option_id: null,
+                period_package: null,
+                amount: 0,
+                price_unit: 0,
+                discount: false,
+                discount_price: 0,
+                privilege: null,
+                net_price: 0,
+                net_price_unit: 0,
+              },
+            ],
+          },
+        ],
+        option_selected: [],
+        option_list: [
+          {
+            option_id: "OP_1",
+            option_name: "รายวัน",
+            option_name_en: "Daily",
+          },
+          {
+            option_id: "OP_2",
+            option_name: "รายเดือน",
+            option_name_en: "Monthly",
+          },
+          {
+            option_id: "OP_3",
+            option_name: "รายเทอม",
+            option_name_en: "Per term",
+          },
+          {
+            option_id: "OP_4",
+            option_name: "รายปี",
+            option_name_en: "Yearly",
+          },
+          {
+            option_id: "OP_5",
+            option_name: "ราย 4 ครั้ง",
+            option_name_en: "4 times",
+          },
+          {
+            option_id: "OP_6",
+            option_name: "ราย 2 เดือน",
+            option_name_en: "2 months",
+          },
+          {
+            option_id: "OP_7",
+            option_name: "ราย 10 ครั้ง",
+            option_name_en: "10 times",
           },
         ],
       });
-      this.ChangeCourseData(this.course_data);
     },
     async CourseUpdateDetail() {
       this.$refs.course_form.validate();
@@ -3903,8 +4010,8 @@ export default {
         }).then(async (result) => {
           if (result.isConfirmed) {
             let student_list = await this.UpdateCouserDetail({
-              course_id: this.course_data.course_id,
-              course_data: this.course_data,
+              course_id: this.course_created_data.course_id,
+              course_created_data: this.course_created_data,
             });
             if (student_list?.students?.length > 0) {
               const options = {
@@ -3918,12 +4025,12 @@ export default {
                 notificationNameEn:
                   "Notification of postponement of school opening date",
                 notificationDescription: `คอร์ส ${
-                  this.course_data.course_name_th
+                  this.course_created_data.course_name_th
                 } เลื่อนเป็นวันที่ ${new Date(
                   student_list.afterDate
                 )?.toLocaleDateString("th-TH", options)}`,
                 notificationDescriptionEn: `course ${
-                  this.course_data.course_name_en
+                  this.course_created_data.course_name_en
                 } postponed to date ${new Date(
                   student_list.afterDate
                 )?.toLocaleDateString("en-En", options)}`,
@@ -3966,8 +4073,8 @@ export default {
         }).then(async (result) => {
           if (result.isConfirmed) {
             this.UpdateCouserCoach({
-              course_id: this.course_data.course_id,
-              course_data: this.course_data,
+              course_id: this.course_created_data.course_id,
+              course_created_data: this.course_created_data,
             }).then(() => {
               this.course_edit = false;
             });
@@ -3988,8 +4095,8 @@ export default {
         }).then(async (result) => {
           if (result.isConfirmed) {
             this.UpdateCouserPackage({
-              course_id: this.course_data.course_id,
-              course_data: this.course_data,
+              course_id: this.course_created_data.course_id,
+              course_created_data: this.course_created_data,
             }).then(() => {
               this.course_edit = false;
               this.GetCourse(this.$route.params.course_id);
@@ -4012,8 +4119,8 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           await this.UpdateCourseArkwork({
-            course_id: this.course_data.course_id,
-            course_data: this.course_data,
+            course_id: this.course_created_data.course_id,
+            course_created_data: this.course_created_data,
           });
           this.course_edit = false;
         }
@@ -4029,12 +4136,12 @@ export default {
         cancelButtonText: this.$t("no"),
       }).then(async (result) => {
         if (result.isConfirmed) {
-          this.UpdateCourse({ course_data: this.course_data });
+          this.UpdateCourse({ course_created_data: this.course_created_data });
         }
       });
     },
     addCoach() {
-      this.course_data.coachs.push({
+      this.coach_data.push({
         coach_id: "",
         coach_name: "",
         teach_days_used: [],
@@ -4074,11 +4181,11 @@ export default {
           end_time: "",
         },
       });
-      this.ChangeCourseData(this.course_data);
+      this.ChangeCourseData(this.course_created_data);
     },
     removeCoach(data, index) {
       data.splice(index, 1);
-      this.ChangeCourseData(this.course_data);
+      this.ChangeCourseData(this.course_created_data);
     },
     cancelEdit() {
       this.course_edit = false;
