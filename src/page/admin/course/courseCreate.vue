@@ -322,7 +322,7 @@
                   @click="submitStep(step - 1)"
                   :disabled="!steps[step - 1]"
                   :dark="steps[step - 1]"
-                  >{{ $t("create a course222") }}</v-btn
+                  >{{ $t("create a course") }}</v-btn
                 >
               </v-col>
             </v-row>

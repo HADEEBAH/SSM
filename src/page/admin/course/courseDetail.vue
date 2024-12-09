@@ -166,7 +166,7 @@
                       @click="addCoach"
                     >
                       <v-icon>mdi-plus-circle-outline</v-icon>
-                      {{ $t("add coach555") }}
+                      {{ $t("add coach") }}
                     </v-btn>
                   </template>
                 </headerCard>
