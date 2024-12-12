@@ -295,6 +295,9 @@
     "details of take leave": "Details of take leave",
     "dashboard display and system design":"Dashboard display and system design",
     "dashboard Satisfaction Recommendations":"Dashboard Satisfaction Recommendations",
+    "do you want to add new coach":"Do you want to add new coach?",
+    "do you want to add more teachday":"Do you want to add more teachday?",
+    "do you want to delete this coach":"Do you want to delete this coach?",
 
 
 
@@ -940,6 +943,8 @@
     "teaching days cannot be closed": "Unable to close the teaching day",
     "the compensatory day overlaps with the coach's leave day. please select a new compensatory day": "The compensatory day overlaps with the coach's leave day. please select a new compensatory day",
     "the compensatory day overlaps with the holiday. please select a new compensatory day": "The compensatory day overlaps with the holiday. please select a new compensatory day",
+    "time has been deleted":"Time has been deleted",
+
 
     "unable to update the compensation day":"Unable to update the compensation day because the compensation day falls on a holiday, please select a new compensatory day",
    "unable to update the compensation day because the compensation day coincides with the coach's leave":"Unable to update the compensation day because the compensation day coincides with the coach's leave, please select a new compensatory day",

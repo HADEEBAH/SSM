@@ -159,12 +159,9 @@
               <v-card flat class="mb-3">
                 <headerCard :title="$t('details of time and coach')">
                   <template v-slot:actions>
-                    <v-btn
-                      outlined
-                      :disabled="!course_edit"
-                      color="#FF6B81"
-                      @click="addCoach"
-                    >
+                    <!-- :disabled="!course_edit" -->
+
+                    <v-btn outlined color="#FF6B81" @click="addCoach">
                       <v-icon>mdi-plus-circle-outline</v-icon>
                       {{ $t("add coach") }}
                     </v-btn>
@@ -184,7 +181,7 @@
               </v-card>
               <!-- ACTION -->
               <v-row class="px-4" v-if="!course_edit">
-                <v-col align="right">
+                <!-- <v-col align="right">
                   <v-btn
                     color="#FF6B81"
                     class="white--text btn-size-lg"
@@ -193,7 +190,7 @@
                   >
                     {{ $t("edit") }}
                   </v-btn>
-                </v-col>
+                </v-col> -->
               </v-row>
               <v-row class="px-4" v-if="course_edit">
                 <v-col align="right">
@@ -4147,6 +4144,7 @@ export default {
         teach_days_used: [],
         teach_day_data: [
           {
+            edited_coach: false,
             class_open: false,
             teach_day: [],
             class_date: [

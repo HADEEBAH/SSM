@@ -1,344 +1,619 @@
 <template>
   <div>
     <!-- {{ setFunction }} -->
-    <template v-for="(coach, coach_index) in coach_data">
-      <v-card
-        v-if="coach.teach_day_data.length > 0"
-        :class="`bg-[${color}] mb-5`"
-        :key="coach_index"
-      >
-        <!-- TEACH DAY -->
-        <template v-for="(teach_day, teach_day_index) in coach.teach_day_data">
-          <v-card-text :key="`${teach_day_index}-day`" class="border">
-            <v-divider
-              v-if="teach_day_index > 0"
-              :key="teach_day_index"
-            ></v-divider>
-            <v-row dense>
+    <div v-if="!coach_data[0].course_coach_id">
+      <template>
+        <v-row class="fill-height ma-0" align="center" justify="center">
+          <v-progress-circular
+            indeterminate
+            color="#ff6b81"
+          ></v-progress-circular>
+        </v-row>
+      </template>
+    </div>
+    <div v-else>
+      <template v-for="(coach, coach_index) in coach_data">
+        <v-card
+          v-if="coach.teach_day_data.length > 0"
+          :class="`bg-[${color}] mb-5`"
+          :key="coach_index"
+        >
+          <!-- TEACH DAY -->
+          <template
+            v-for="(teach_day, teach_day_index) in coach.teach_day_data"
+          >
+            <v-card-text :key="`${teach_day_index}-day`" class="border">
+              <v-divider
+                v-if="teach_day_index > 0"
+                :key="teach_day_index"
+              ></v-divider>
+              <!-- <v-row dense v-if="!teach_day.day_of_week_id">
               <v-col cols class="d-flex align-center justify-end">
-                <v-switch
-                  @click="checkStudyByDay($event, teach_day)"
-                  :disabled="disable"
-                  v-model="teach_day.class_open"
-                  color="green"
-                  hide-details
-                  :label="$t('teaching')"
-                ></v-switch>
-              </v-col>
-              <v-col
-                cols="auto"
-                v-if="
-                  coach_data.filter((v) => v.teach_day_data.length > 0).length >
-                  1
-                "
-              >
-                <template v-if="!teach_day?.course_coach_id">
-                  <v-btn
-                    icon
-                    small
-                    color="red"
-                    v-if="!disable"
-                    @click="removeCoach(course_data.coachs, coach_index)"
-                    ><v-icon>mdi-close</v-icon></v-btn
-                  >
-                </template>
-                <template v-else>
-                  <v-btn
-                    icon
-                    small
-                    color="red"
-                    v-if="!disable"
-                    @click="
-                      DeleteCoachById(
-                        coach.course_coach_id,
-                        course_data.course_id
-                      )
-                    "
-                    ><v-icon>mdi-close</v-icon></v-btn
-                  >
-                </template>
-              </v-col>
-            </v-row>
-            <v-row dense class="flex align-center justify-end">
-              <v-col cols="12" sm="4">
-                <label-custom required :text="$t('coach')"></label-custom>
-                <v-autocomplete
-                  dense
-                  :disabled="
-                    disable ? disable : coach.course_coach_id ? true : false
-                  "
-                  :outlined="!disable"
-                  :filled="disable"
-                  v-model="coach.coach_id"
-                  color="#FF6B81"
-                  :items="coachsOptions(coach)"
-                  item-value="accountId"
-                  :item-text="
-                    $i18n.locale == 'th' ? 'fullNameTh' : 'fullNameEh'
-                  "
-                  item-color="#ff6b81"
-                  @change="findTeachDays(coach, coach_index)"
-                  :rules="course"
-                  :placeholder="$t('coach')"
-                >
-                  <template v-slot:no-data>
-                    <v-list-item>
-                      <v-list-item-title>
-                        {{ $t("no data found") }}</v-list-item-title
-                      >
-                    </v-list-item>
-                  </template>
-                  <template v-slot:></template>
-                  <template v-slot:item="{ item }">
-                    <v-list-item-content>
-                      <v-list-item-title
-                        ><span
-                          :class="
-                            coach.coach_id === item.accountId ? 'font-bold' : ''
-                          "
-                          >{{
-                            $i18n.locale == "th"
-                              ? item.fullNameTh
-                              : item.fullNameEh
-                          }}</span
-                        ></v-list-item-title
-                      >
-                    </v-list-item-content>
-                    <v-list-item-action>
-                      <v-icon v-if="coach.coach_id === item.accountId"
-                        >mdi-check-circle</v-icon
-                      >
-                    </v-list-item-action>
-                  </template>
-                </v-autocomplete>
-              </v-col>
-              <v-col cols="12" sm="4">
-                <label-custom
-                  required
-                  :text="$t('teaching day')"
-                ></label-custom>
-                <v-autocomplete
-                  dense
-                  :disabled="disable"
-                  :outlined="!disable"
-                  :filled="disable"
-                  chips
-                  :rules="class_date"
-                  deletable-chips
-                  item-color="#ff6b81"
-                  multiple
-                  color="#FF6B81"
-                  :items="filteredDays(coach_index, teach_day_index, state)"
-                  :item-text="$i18n.locale == 'th' ? 'label' : 'label_en'"
-                  item-value="value"
-                  :placeholder="$t('please select a time')"
-                  v-model="teach_day.teach_day"
-                  @change="
-                    selectDays(
-                      teach_day.teach_day,
-                      coach_index,
-                      teach_day_index
-                    )
-                  "
-                >
-                  <template v-slot:selection="{ attrs, item, selected }">
-                    <v-chip
-                      v-bind="attrs"
-                      :input-value="selected"
-                      close
-                      small
-                      :disabled="disable"
-                      color="#ffeeee"
-                      text-color="#ff6b81"
-                      @click:close="removeChip(item, teach_day.teach_day)"
-                    >
-                      <strong>{{
-                        $i18n.locale == "th" ? item.label : item.label_en
-                      }}</strong>
-                    </v-chip>
-                  </template>
-                </v-autocomplete>
-              </v-col>
-              <v-col cols="6" sm="2">
                 <v-btn
-                  text
-                  :disabled="disable"
-                  v-if="teach_day_index === coach.teach_day_data.length - 1"
-                  color="green"
-                  @click="addTeachDay(coach)"
+                  icon
+                  v-if="!teach_day.edited_coach"
+                  color="#FF6B81"
+                  @click="saveUpdateCoach(coach, teach_day)"
                 >
-                  <v-icon>mdi-calendar-plus-outline</v-icon>
-                  {{ $t("add teaching day") }}
+                  <v-icon>mdi-content-save-plus</v-icon>
                 </v-btn>
               </v-col>
-              <v-col cols="6" sm="2">
-                <template v-if="teach_day.day_of_week_id">
-                  <v-btn
-                    :disabled="disable || !edited"
-                    text
-                    color="red"
-                    v-if="coach.teach_day_data.length > 1"
-                    @click="
-                      removeDayOfWeekData(
-                        coach.teach_day_data,
-                        teach_day.day_of_week_id
-                      )
-                    "
-                    ><v-icon>mdi-calendar-plus-outline</v-icon>
-                    {{ $t("delete teaching day") }}
-                  </v-btn>
-                </template>
-                <template v-else>
-                  <v-btn
-                    :disabled="disable"
-                    text
-                    color="red"
-                    v-if="coach.teach_day_data.length > 1"
-                    @click="
-                      removeTeachDay(coach.teach_day_data, teach_day_index)
-                    "
-                    ><v-icon>mdi-calendar-plus-outline</v-icon>
-                    {{ $t("delete teaching day") }}
-                  </v-btn>
-                </template>
-              </v-col>
-            </v-row>
-            <!-- CLASS TIME -->
-            <template
-              v-for="(class_date, class_date_index) in teach_day.class_date"
-            >
-              <v-row dense :key="`${class_date_index}-class-date`">
-                <v-col cols="12" sm="5">
-                  <label-custom required :text="$t('period')"></label-custom>
-                  <v-row dense class="mb-3">
-                    <v-col class="px-2" cols="12" sm="6">
-                      <v-text-field
-                        :disabled="disable"
-                        :outlined="!disable"
-                        :filled="disable"
-                        dense
-                        style="position: absolute; z-index: 4"
-                        @focus="SelectedStartDate($event)"
-                        :rules="start_time"
-                        v-model="class_date.class_date_range.start_time"
-                      ></v-text-field>
-                      <VueTimepicker
-                        class="time-picker-hidden"
-                        :hour-range="
-                          checkHour(teach_day.class_date, class_date_index)
-                        "
-                        :minute-range="
-                          checkMinute(
-                            teach_day.class_date,
-                            class_date.class_date_range.start_time_object.HH
-                          )
-                        "
-                        hide-clear-button
-                        advanced-keyboard
-                        v-model="class_date.class_date_range.start_time_object"
-                        @change="
-                          ChangeStartDate(
-                            class_date.class_date_range,
-                            teach_day.class_date
-                          )
-                        "
-                      >
-                      </VueTimepicker>
-                    </v-col>
-                    <v-col class="px-2" cols="12" sm="6">
-                      <v-text-field
-                        disabled
-                        :outlined="!disable"
-                        :filled="disable"
-                        dense
-                        style="position: absolute; z-index: 4"
-                        :rules="end_time"
-                        v-model="class_date.class_date_range.end_time"
-                      ></v-text-field>
-                      <VueTimepicker
-                        class="time-picker-hidden"
-                        disabled
-                        hide-clear-button
-                        advanced-keyboard
-                        v-model="class_date.class_date_range.end_time_object"
-                        close-on-complete
-                      ></VueTimepicker>
-                    </v-col>
-                  </v-row>
-                </v-col>
-                <v-col cols="12" sm="3">
-                  <label-custom
-                    required
-                    :text="$t('acceptable students')"
-                  ></label-custom>
-                  <!-- @change="ChangeCourseData(course_data)" -->
-
-                  <v-text-field
-                    class="input-text-right"
-                    dense
-                    :disabled="disable"
-                    :outlined="!disable"
-                    :filled="disable"
-                    type="number"
-                    :suffix="$t('person')"
-                    @focus="$event.target.select()"
-                    :rules="students"
-                    v-model="class_date.students"
-                    :placeholder="$t('specify students who can accept')"
-                    color="#ff6b81"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="6" sm="2" class="d-flex align-center">
-                  <v-btn
-                    :disabled="disable"
-                    text
-                    v-if="class_date_index === teach_day.class_date?.length - 1"
+            </v-row> -->
+              <v-row dense>
+                <v-col cols class="d-flex align-center justify-end">
+                  <v-switch
+                    @click="checkStudyByDay($event, teach_day)"
+                    :disabled="teach_day.edited_coach"
+                    v-model="teach_day.class_open"
                     color="green"
-                    @click="addTime(teach_day)"
-                  >
-                    <v-icon>mdi-timer-plus-outline</v-icon>
-                    {{ $t("add time") }}
-                  </v-btn>
+                    hide-details
+                    :label="$t('teaching')"
+                  ></v-switch>
                 </v-col>
-                <v-col cols="6" sm="2" class="d-flex align-center">
-                  <template v-if="class_date.class_date_range.day_of_week_id">
+                <v-col
+                  cols="auto"
+                  v-if="
+                    coach_data.filter((v) => v.teach_day_data.length > 0)
+                      .length > 1
+                  "
+                >
+                  <template v-if="!teach_day?.course_coach_id">
                     <v-btn
-                      :disabled="disable"
-                      v-if="teach_day.class_date.length > 1"
-                      text
+                      icon
+                      small
                       color="red"
-                      @click="
-                        removeTimeData(
-                          teach_day.class_date,
-                          class_date.class_date_range.time_id
-                        )
-                      "
+                      v-if="!disable"
+                      @click="removeCoach(course_data.coachs, coach_index)"
+                      ><v-icon>mdi-close</v-icon></v-btn
                     >
-                      <v-icon>mdi-timer-minus-outline</v-icon>
-                      {{ $t("delete time") }}
-                    </v-btn>
                   </template>
                   <template v-else>
                     <v-btn
-                      :disabled="disable"
-                      v-if="teach_day.class_date.length > 1"
-                      text
+                      icon
+                      small
                       color="red"
+                      v-if="!disable"
                       @click="
-                        removeTime(teach_day.class_date, class_date_index)
+                        DeleteCoachById(
+                          coach.course_coach_id,
+                          course_data.course_id
+                        )
                       "
+                      ><v-icon>mdi-close</v-icon></v-btn
                     >
-                      <v-icon>mdi-timer-minus-outline</v-icon>
-                      {{ $t("delete time") }}
-                    </v-btn>
                   </template>
                 </v-col>
               </v-row>
-            </template>
-          </v-card-text>
-        </template>
-      </v-card>
-    </template>
+              <!-- {{ edited_coach }} -->
+              <v-row dense class="flex align-center justify-end">
+                <v-col cols="12" sm="4">
+                  <label-custom required :text="$t('coach')"></label-custom>
+                  <v-autocomplete
+                    dense
+                    :disabled="
+                      teach_day.edited_coach
+                        ? teach_day.edited_coach
+                        : teach_day.course_coach_id
+                        ? true
+                        : false
+                    "
+                    :outlined="!teach_day.edited_coach"
+                    :filled="teach_day.edited_coach"
+                    v-model="coach.coach_id"
+                    color="#FF6B81"
+                    :items="coachsOptions(coach)"
+                    item-value="accountId"
+                    :item-text="
+                      $i18n.locale == 'th' ? 'fullNameTh' : 'fullNameEh'
+                    "
+                    item-color="#ff6b81"
+                    @change="findTeachDays(coach, coach_index)"
+                    :rules="course"
+                    :placeholder="$t('coach')"
+                  >
+                    <template v-slot:no-data>
+                      <v-list-item>
+                        <v-list-item-title>
+                          {{ $t("no data found") }}</v-list-item-title
+                        >
+                      </v-list-item>
+                    </template>
+                    <template v-slot:></template>
+                    <template v-slot:item="{ item }">
+                      <v-list-item-content>
+                        <v-list-item-title
+                          ><span
+                            :class="
+                              coach.coach_id === item.accountId
+                                ? 'font-bold'
+                                : ''
+                            "
+                            >{{
+                              $i18n.locale == "th"
+                                ? item.fullNameTh
+                                : item.fullNameEh
+                            }}</span
+                          ></v-list-item-title
+                        >
+                      </v-list-item-content>
+                      <v-list-item-action>
+                        <v-icon v-if="coach.coach_id === item.accountId"
+                          >mdi-check-circle</v-icon
+                        >
+                      </v-list-item-action>
+                    </template>
+                  </v-autocomplete>
+                </v-col>
+                <v-col cols="12" sm="4">
+                  <label-custom
+                    required
+                    :text="$t('teaching day')"
+                  ></label-custom>
+                  <v-autocomplete
+                    dense
+                    :disabled="teach_day.edited_coach"
+                    :outlined="!teach_day.edited_coach"
+                    :filled="teach_day.edited_coach"
+                    chips
+                    :rules="class_date"
+                    deletable-chips
+                    item-color="#ff6b81"
+                    multiple
+                    color="#FF6B81"
+                    :items="filteredDays(coach_index, teach_day_index, state)"
+                    :item-text="$i18n.locale == 'th' ? 'label' : 'label_en'"
+                    item-value="value"
+                    :placeholder="$t('please select a time')"
+                    v-model="teach_day.teach_day"
+                    @change="
+                      selectDays(
+                        teach_day.teach_day,
+                        coach_index,
+                        teach_day_index
+                      )
+                    "
+                  >
+                    <template v-slot:selection="{ attrs, item, selected }">
+                      <v-chip
+                        v-bind="attrs"
+                        :input-value="selected"
+                        close
+                        small
+                        :disabled="teach_day.edited_coach"
+                        color="#ffeeee"
+                        text-color="#ff6b81"
+                        @click:close="removeChip(item, teach_day.teach_day)"
+                      >
+                        <strong>{{
+                          $i18n.locale == "th" ? item.label : item.label_en
+                        }}</strong>
+                      </v-chip>
+                    </template>
+                  </v-autocomplete>
+                </v-col>
+                <!-- BUTTONS -->
+                <v-col cols="12" sm="4" v-if="edited">
+                  <v-row dense v-if="teach_day.day_of_week_id">
+                    <v-col cols="12" v-if="teach_day.edited_coach">
+                      <!-- EDIT -->
+                      <v-btn icon color="#FF6B81" @click="editCoach(teach_day)">
+                        <v-icon>mdi-pencil-outline</v-icon>
+                      </v-btn>
+                    </v-col>
+                    <v-col cols="12" sm="8" v-else>
+                      <!-- ADD -->
+                      <v-btn
+                        icon
+                        v-if="
+                          teach_day_index === coach.teach_day_data.length - 1 &&
+                          !teach_day.edited_coach
+                        "
+                        color="green"
+                        @click="addTeachDay(coach)"
+                      >
+                        <v-icon>mdi-calendar-plus-outline</v-icon>
+                        <!-- {{ $t("add teaching day") }} -->
+                      </v-btn>
+                      <!-- SAVE UPDATE-->
+                      <v-btn
+                        icon
+                        v-if="!teach_day.edited_coach"
+                        color="#FF6B81"
+                        @click="saveUpdateCoach(coach, teach_day)"
+                      >
+                        <v-icon>mdi-content-save-plus</v-icon>
+                      </v-btn>
+                      <!-- DELETE COACH -->
+                      <v-btn
+                        icon
+                        color="red"
+                        v-if="
+                          // coach.teach_day_data.length > 1 &&
+                          coach_data.length > 1 && !teach_day.edited_coach
+                        "
+                        @click="removeTeachingDay(teach_day)"
+                        ><v-icon>mdi-trash-can-outline</v-icon>
+                      </v-btn>
+                      <!-- REFRESH -->
+                      <v-btn
+                        icon
+                        v-if="!teach_day.edited_coach"
+                        color="#FF6B81"
+                        @click="refreshCoach(teach_day)"
+                      >
+                        <v-icon>mdi-refresh</v-icon>
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                  <v-row dense v-else>
+                    <v-col cols="12" sm="4">
+                      <v-btn
+                        text
+                        v-if="
+                          teach_day_index === coach.teach_day_data.length - 1
+                        "
+                        color="green"
+                        @click="addTeachDay(coach)"
+                      >
+                        <v-icon>mdi-calendar-plus-outline</v-icon>
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-col>
+                <v-col cols="12" sm="4" v-else>
+                  <v-row dense>
+                    <v-col cols="6">
+                      <v-btn
+                        text
+                        :disabled="disable"
+                        v-if="
+                          teach_day_index === coach.teach_day_data.length - 1
+                        "
+                        color="green"
+                        @click="addTeachDay(coach)"
+                      >
+                        <v-icon>mdi-calendar-plus-outline</v-icon>
+                        {{ $t("add teaching day") }}
+                      </v-btn>
+                    </v-col>
+                    <v-col cols="6">
+                      <template v-if="teach_day.day_of_week_id">
+                        <v-btn
+                          :disabled="disable || !edited"
+                          text
+                          color="red"
+                          v-if="coach.teach_day_data.length > 1"
+                          @click="
+                            removeDayOfWeekData(
+                              coach.teach_day_data,
+                              teach_day.day_of_week_id
+                            )
+                          "
+                          ><v-icon>mdi-calendar-plus-outline</v-icon>
+                          {{ $t("delete teaching day") }}
+                        </v-btn>
+                      </template>
+                      <template v-else>
+                        <v-btn
+                          :disabled="disable"
+                          text
+                          color="red"
+                          v-if="coach.teach_day_data.length > 1"
+                          @click="
+                            removeTeachDay(
+                              coach.teach_day_data,
+                              teach_day_index
+                            )
+                          "
+                          ><v-icon>mdi-calendar-plus-outline</v-icon>
+                          {{ $t("delete teaching day") }}
+                        </v-btn>
+                      </template>
+                    </v-col>
+                  </v-row>
+                </v-col>
+              </v-row>
+              <!-- CLASS TIME -->
+              <template
+                v-for="(class_date, class_date_index) in teach_day.class_date"
+              >
+                <v-row dense :key="`${class_date_index}-class-date`">
+                  <v-col cols="12" sm="5">
+                    <label-custom required :text="$t('period')"></label-custom>
+                    <v-row dense class="mb-3">
+                      <v-col class="px-2" cols="12" sm="6">
+                        <!-- :disabled="disable"
+                        :outlined="!disable"
+                        :filled="disable" -->
+                        <v-text-field
+                          :disabled="class_date.class_date_range.edited_options"
+                          :outlined="
+                            !class_date.class_date_range.edited_options
+                          "
+                          :filled="class_date.class_date_range.edited_options"
+                          dense
+                          style="position: absolute; z-index: 4"
+                          @focus="SelectedStartDate($event)"
+                          :rules="start_time"
+                          v-model="class_date.class_date_range.start_time"
+                        ></v-text-field>
+                        <VueTimepicker
+                          class="time-picker-hidden"
+                          :hour-range="
+                            checkHour(teach_day.class_date, class_date_index)
+                          "
+                          :minute-range="
+                            checkMinute(
+                              teach_day.class_date,
+                              class_date.class_date_range.start_time_object.HH
+                            )
+                          "
+                          hide-clear-button
+                          advanced-keyboard
+                          v-model="
+                            class_date.class_date_range.start_time_object
+                          "
+                          @change="
+                            ChangeStartDate(
+                              class_date.class_date_range,
+                              teach_day.class_date
+                            )
+                          "
+                        >
+                        </VueTimepicker>
+                      </v-col>
+                      <v-col class="px-2" cols="12" sm="6">
+                        <v-text-field
+                          disabled
+                          :outlined="
+                            !class_date.class_date_range.edited_options
+                          "
+                          :filled="class_date.class_date_range.edited_options"
+                          dense
+                          style="position: absolute; z-index: 4"
+                          :rules="end_time"
+                          v-model="class_date.class_date_range.end_time"
+                        ></v-text-field>
+                        <VueTimepicker
+                          class="time-picker-hidden"
+                          disabled
+                          hide-clear-button
+                          advanced-keyboard
+                          v-model="class_date.class_date_range.end_time_object"
+                          close-on-complete
+                        ></VueTimepicker>
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                  <v-col cols="12" sm="3">
+                    <label-custom
+                      required
+                      :text="$t('acceptable students')"
+                    ></label-custom>
+                    <!-- @change="ChangeCourseData(course_data)" -->
+
+                    <v-text-field
+                      class="input-text-right"
+                      dense
+                      :disabled="class_date.class_date_range.edited_options"
+                      :outlined="!class_date.class_date_range.edited_options"
+                      :filled="class_date.class_date_range.edited_options"
+                      type="number"
+                      :suffix="$t('person')"
+                      @focus="$event.target.select()"
+                      :rules="students"
+                      v-model="class_date.students"
+                      :placeholder="$t('specify students who can accept')"
+                      color="#ff6b81"
+                    ></v-text-field>
+                  </v-col>
+                  <!-- BUTTONS -->
+                  <v-col cols="12" sm="4" class="d-flex align-center">
+                    <v-row dense v-if="edited">
+                      <v-col cols="12" sm="4" class="mt-5 d-flex align-center">
+                        <!-- EDIT -->
+                        <v-btn
+                          v-if="class_date.class_date_range.edited_options"
+                          icon
+                          color="#FF6B81"
+                          @click="editOptions(class_date)"
+                        >
+                          <v-icon>mdi-pencil-outline</v-icon>
+                        </v-btn>
+                        <!-- SAVE UPDATE-->
+                        <v-btn
+                          icon
+                          v-if="
+                            !class_date.class_date_range.edited_options &&
+                            class_date.class_date_range.day_of_week_id
+                          "
+                          color="#FF6B81"
+                          @click="saveUpdateOption(class_date)"
+                        >
+                          <v-icon>mdi-content-save-plus</v-icon>
+                        </v-btn>
+                        <!-- ADD TIME -->
+                        <v-btn
+                          text
+                          v-if="
+                            class_date_index ===
+                              teach_day.class_date?.length - 1 &&
+                            !class_date.class_date_range.edited_options
+                          "
+                          color="green"
+                          @click="addTime(teach_day)"
+                        >
+                          <v-icon>mdi-timer-plus-outline</v-icon>
+                          <!-- {{ $t("add time") }} -->
+                        </v-btn>
+                        <!-- DEL TIME -->
+                        <template
+                          v-if="class_date.class_date_range.day_of_week_id"
+                        >
+                          <v-btn
+                            v-if="
+                              teach_day.class_date.length > 1 &&
+                              !class_date.class_date_range.edited_options
+                            "
+                            text
+                            color="red"
+                            @click="
+                              removeTimeData(
+                                teach_day.class_date,
+                                class_date.class_date_range.time_id
+                              )
+                            "
+                          >
+                            <!-- <v-icon>111</v-icon> -->
+                            <v-icon>mdi-timer-minus-outline</v-icon>
+                            <!-- {{ $t("delete time") }} -->
+                          </v-btn>
+                        </template>
+                        <template v-else>
+                          <v-btn
+                            v-if="
+                              teach_day.class_date.length > 1 &&
+                              !class_date.class_date_range.edited_options
+                            "
+                            text
+                            color="red"
+                            @click="
+                              removeTime(teach_day.class_date, class_date_index)
+                            "
+                          >
+                            <!-- <v-icon>22</v-icon> -->
+                            <v-icon>mdi-timer-minus-outline</v-icon>
+                            <!-- {{ $t("delete time") }} -->
+                          </v-btn>
+                        </template>
+                        <!-- REFRESH -->
+                        <v-btn
+                          icon
+                          v-if="
+                            !class_date.class_date_range.edited_options &&
+                            class_date.class_date_range.day_of_week_id
+                          "
+                          color="#FF6B81"
+                          @click="refreshOptionFunction(class_date)"
+                        >
+                          <v-icon>mdi-refresh</v-icon>
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+
+                    <v-row v-else>
+                      <v-col cols="6" class="d-flex align-center">
+                        <v-btn
+                          :disabled="disable"
+                          text
+                          v-if="
+                            class_date_index ===
+                            teach_day.class_date?.length - 1
+                          "
+                          color="green"
+                          @click="addTime(teach_day)"
+                        >
+                          <v-icon>mdi-timer-plus-outline</v-icon>
+                          {{ $t("add time") }}
+                        </v-btn>
+                      </v-col>
+                      <v-col cols="6" class="d-flex align-center">
+                        <template
+                          v-if="class_date.class_date_range.day_of_week_id"
+                        >
+                          <v-btn
+                            :disabled="disable"
+                            v-if="teach_day.class_date.length > 1"
+                            text
+                            color="red"
+                            @click="
+                              removeTimeData(
+                                teach_day.class_date,
+                                class_date.class_date_range.time_id
+                              )
+                            "
+                          >
+                            <v-icon>mdi-timer-minus-outline</v-icon>
+                            {{ $t("delete time") }}
+                          </v-btn>
+                        </template>
+                        <template v-else>
+                          <v-btn
+                            :disabled="disable"
+                            v-if="teach_day.class_date.length > 1"
+                            text
+                            color="red"
+                            @click="
+                              removeTime(teach_day.class_date, class_date_index)
+                            "
+                          >
+                            <v-icon>mdi-timer-minus-outline</v-icon>
+                            {{ $t("delete time") }}
+                          </v-btn>
+                        </template>
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                  <!-- SAVE CREATE NEW COACH &  DEL NEW COACH-->
+                  <v-row dense v-if="!teach_day.day_of_week_id && edited">
+                    <v-col cols class="d-flex align-center justify-end">
+                      <!-- ADD NEW COACH -->
+                      <v-btn
+                        icon
+                        v-if="
+                          !teach_day.edited_coach &&
+                          teach_day_index ===
+                            coach.teach_day_data?.length - 1 &&
+                          class_date_index === teach_day.class_date?.length - 1
+                        "
+                        color="#FF6B81"
+                        @click="
+                          FunctionAddNewCoach(coach, teach_day, coach_index)
+                        "
+                      >
+                        <v-icon>mdi-content-save-plus</v-icon>
+                      </v-btn>
+                      <!-- DEL NEW COACH -->
+                      <v-btn
+                        icon
+                        color="red"
+                        v-if="
+                          !teach_day.edited_coach &&
+                          class_date_index === teach_day.class_date?.length - 1
+                        "
+                        @click="
+                          deleteNewCoach(coach.teach_day_data, teach_day_index)
+                        "
+                        ><v-icon>mdi-trash-can-outline</v-icon>
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                  <v-row
+                    dense
+                    v-if="
+                      teach_day.day_of_week_id &&
+                      !class_date.class_date_range.day_of_week_id &&
+                      class_date_index === teach_day.class_date?.length - 1 &&
+                      edited
+                    "
+                  >
+                    <v-col cols class="d-flex align-center justify-end">
+                      <v-btn
+                        icon
+                        color="#FF6B81"
+                        @click="saveAddNewOptions(coach, teach_day)"
+                      >
+                        <v-icon>mdi-book-clock-outline</v-icon>
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-row>
+              </template>
+            </v-card-text>
+          </template>
+        </v-card>
+      </template>
+    </div>
   </div>
 </template>
 <script>
@@ -372,6 +647,7 @@ export default {
       { label: "วันศุกร์", label_en: "Friday", value: 5 },
       { label: "วันเสาร์", label_en: "Saturday", value: 6 },
     ],
+    add_time_options: false,
   }),
 
   created() {
@@ -386,6 +662,8 @@ export default {
       teach_days: "CourseModules/getTeachDays",
       course_monitors: "CourseMonitorModules/getCourseMonitor",
       coach_data: "CourseModules/getCoachData",
+      refresh_teach_day: "CourseModules/getTeachdayData",
+      refresh_option: "CourseModules/getOptionData",
     }),
     course() {
       return [
@@ -434,7 +712,203 @@ export default {
       GetCourse: "CourseModules/GetCourse",
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
       DeleteCourseCoach: "CourseModules/DeleteCourseCoach",
+      UpdateTeachdayCoach: "CourseModules/UpdateTeachdayCoach",
+      UpdateOptions: "CourseModules/UpdateOptions",
+      AddNewOptions: "CourseModules/AddNewOptions",
+      AddNewCoach: "CourseModules/AddNewCoach",
+      AddNewTeachDay: "CourseModules/AddNewTeachDay",
+      DeleteOPtions: "CourseModules/DeleteOPtions",
+      RefreshTeachDay: "CourseModules/RefreshTeachDay",
+      RefreshOption: "CourseModules/RefreshOption",
     }),
+    editCoach(items) {
+      items.edited_coach = false;
+    },
+    saveUpdateCoach(items, teach_day) {
+      let update_payload = {
+        coach_id: items.coach_id,
+        course_coach_id: items.course_coach_id,
+        course_id: items.course_id,
+        day_of_week_id: teach_day.day_of_week_id,
+        teach_day: teach_day.teach_day.join(","),
+        class_open: teach_day.class_open,
+      };
+      this.UpdateTeachdayCoach({
+        payload: update_payload,
+        course_id: this.$route.params.course_id,
+      });
+      teach_day.edited_coach = true;
+    },
+    FunctionAddNewCoach(coach) {
+      let teaching_day = [];
+      coach.teach_day_data.map((items) => {
+        teaching_day.push(items);
+      });
+      let checked_out = "";
+      checked_out = teaching_day.filter((items) => !items.day_of_week_id);
+
+      if (coach.course_coach_id) {
+        // ADD NEW TEACH DAY
+
+        Swal.fire({
+          icon: "question",
+          title: this.$t("do you want to add more teachday"),
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("cancel"),
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            let data_payload = {
+              coach_id: coach.coach_id, // Placeholder
+              coach_name: coach.coach_name, // Placeholder
+              course_coach_id: coach.course_coach_id, // Assuming all have the same course_coach_id
+              teach_day_data: checked_out.map((teach_day) => ({
+                day_of_week_id: null,
+                class_open: teach_day.class_open ? true : false,
+                teach_day: teach_day.teach_day?.join(","),
+                times: teach_day.class_date
+                  .filter(
+                    (class_date) => !class_date.class_date_range.day_of_week_id
+                  )
+                  .map((option_date) => ({
+                    time_id: null,
+                    start_time: option_date.class_date_range.start_time,
+                    end_time: option_date.class_date_range.end_time,
+                    student_number: option_date.students,
+                  })),
+              })),
+            };
+            this.AddNewTeachDay({
+              payload: data_payload,
+              course_id: this.$route.params.course_id,
+            });
+          }
+        });
+      } else {
+        // ADD NEW COACH
+
+        Swal.fire({
+          icon: "question",
+          title: this.$t("do you want to add new coach"),
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("cancel"),
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            let data_payload = {
+              coach_id: coach.coach_id, // Placeholder
+              coach_name: coach.coach_name, // Placeholder
+              course_coach_id: null, // Assuming all have the same course_coach_id
+              teach_day_data: checked_out.map((teach_day) => ({
+                day_of_week_id: null,
+                class_open: teach_day.class_open ? true : false,
+                teach_day: teach_day.teach_day?.join(","),
+                times: teach_day.class_date
+                  .filter(
+                    (class_date) => !class_date.class_date_range.day_of_week_id
+                  )
+                  .map((option_date) => ({
+                    time_id: null,
+                    start_time: option_date.class_date_range.start_time,
+                    end_time: option_date.class_date_range.end_time,
+                    student_number: option_date.students,
+                  })),
+              })),
+            };
+            this.AddNewCoach({
+              payload: data_payload,
+              course_id: this.$route.params.course_id,
+            });
+          }
+        });
+      }
+    },
+    editOptions(items) {
+      items.class_date_range.edited_options = false;
+    },
+    saveUpdateOption(class_date) {
+      let option_payload = {
+        time_id: class_date.class_date_range.time_id,
+        start_time: class_date.class_date_range.start_time,
+        end_time: class_date.class_date_range.end_time,
+        student_number: class_date.students,
+        day_of_week_id: class_date.class_date_range.day_of_week_id,
+      };
+      this.UpdateOptions({
+        payload: option_payload,
+        course_id: this.$route.params.course_id,
+      });
+    },
+    saveAddNewOptions(coach, teach_day) {
+      let data_payload = {
+        coach_id: coach.coach_id,
+        coach_name: coach.coach_name,
+        course_coach_id: coach.course_coach_id,
+        teach_day_data: [
+          {
+            day_of_week_id: teach_day.day_of_week_id,
+            class_open: teach_day.class_open,
+            teach_day: teach_day.teach_day?.join(","),
+            times: teach_day.class_date
+              .filter(
+                (class_date) => !class_date.class_date_range.day_of_week_id
+              ) // Only include if day_of_week_id exists
+              .map((option_date) => ({
+                time_id: null,
+                start_time: option_date.class_date_range.start_time,
+                end_time: option_date.class_date_range.end_time,
+                student_number: option_date.students,
+              })),
+          },
+        ],
+      };
+      this.AddNewOptions({
+        payload: data_payload,
+        course_id: this.$route.params.course_id,
+        course_coach_id: coach.course_coach_id,
+      });
+    },
+    deleteNewCoach(teach_day, teach_day_index) {
+      teach_day.splice(teach_day_index, 1);
+    },
+
+    removeTeachingDay(teach_day) {
+      Swal.fire({
+        icon: "question",
+        title: this.$t("do you want to delete this coach"),
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          this.DeleteCourseCoach({
+            course_coach_id: teach_day.course_coach_id,
+            course_id: this.$route.params.course_id,
+          });
+        }
+      });
+    },
+    async refreshCoach(teach_day) {
+      await this.RefreshTeachDay({
+        course_id: this.$route.params.course_id,
+        day_of_week_id: teach_day.day_of_week_id,
+        course_coach_id: teach_day.course_coach_id,
+      });
+    },
+    async refreshOptionFunction(class_date) {
+      await this.RefreshOption({
+        course_id: this.$route.params.course_id,
+        time_id: class_date.class_date_range.time_id,
+        day_of_week_id: class_date.class_date_range.day_of_week_id,
+      });
+      class_date.class_date_range.end_time = this.refresh_option.end;
+      class_date.class_date_range.start_time = this.refresh_option.start;
+      class_date.students = this.refresh_option.maximumStudent;
+      // class_date.class_date_range.start_time_object =
+    },
     checkMinute(teach_day, hours) {
       if (teach_day.length > 1) {
         let timeused = [];
@@ -763,6 +1237,7 @@ export default {
     addTime(data) {
       data.class_date.push({
         class_date_range: {
+          edited_options: false,
           start_time: "",
           start_time_object: { HH: "", mm: "" },
           menu_start_time: false,
@@ -778,7 +1253,7 @@ export default {
       data.splice(index, 1);
       // this.ChangeCourseData(this.course_data);
     },
-    removeTimeData(data, time_id) {
+    removeTimeData(teach_day, class_date) {
       Swal.fire({
         icon: "question",
         title: this.$t("do you want to delete this teaching time?"),
@@ -788,11 +1263,9 @@ export default {
         cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
-          this.DeleteTime({ time_id: time_id }).then(() => {
-            this.$store.dispatch(
-              "CourseModules/GetCourse",
-              this.$route.params.course_id
-            );
+          this.DeleteOPtions({
+            course_id: this.$route.params.course_id,
+            time_id: class_date,
           });
         }
       });

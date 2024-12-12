@@ -260,6 +260,7 @@ const CourseModules = {
     },
     coach_data: [
       {
+        edited_coach: true,
         course_id: null,
         coach_id: null,
         course_coach_id: null,
@@ -363,7 +364,15 @@ const CourseModules = {
         ],
       }
     ],
-    art_work_data: []
+    art_work_data: [],
+    update_teachday_coach: [],
+    update_options: [],
+    add_new_options: [],
+    add_new_coach: [],
+    add_new_teach_day: [],
+    delete_option: [],
+    refresh_teach_day: [],
+    refresh_option: [],
 
 
 
@@ -606,6 +615,30 @@ const CourseModules = {
     SetCreateCourseData(state, payload) {
       state.create_course = payload
     },
+    SetUpdateTeachdayCoach(state, payload) {
+      state.update_teachday_coach = payload
+    },
+    SetUpdateOptions(state, payload) {
+      state.update_options = payload
+    },
+    SetAddNewOptions(state, payload) {
+      state.add_new_options = payload
+    },
+    SetAddNewCoach(state, payload) {
+      state.add_new_coach = payload
+    },
+    SetAddNewTeachDay(state, payload) {
+      state.add_new_teach_day = payload
+    },
+    SetDeleteOptions(state, payload) {
+      state.delete_option = payload
+    },
+    SetRefreshTeachDay(state, payload) {
+      state.refresh_teach_day = payload
+    },
+    SetRefreshOption(state, payload) {
+      state.refresh_option = payload
+    },
 
 
   },
@@ -683,7 +716,7 @@ const CourseModules = {
         }
         let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/admincourse/delete-course-coach/${course_coach_id}`, config)
         if (data.statusCode == 200) {
-          context.dispatch("GetCourse", course_id)
+          // context.dispatch("GetCourse", course_id)
           Swal.fire({
             icon: "success",
             title: VueI18n.t("succeed"),
@@ -694,6 +727,8 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
+          await context.dispatch("CoachData", { course_id: course_id })
+
         }
       } catch (error) {
         if (error.response.data.message == "This coach cannot be deleted. Because the middle of teaching") {
@@ -2757,6 +2792,17 @@ const CourseModules = {
         // let { data } = await axios.get(`${localhost}/api/v1/course/detail/manage/teachday-coach/${course_id}`, config)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/manage/teachday-coach/${course_id}`, config)
         if (data.statusCode == 200) {
+          data.data.map((items) => {
+            items.teach_day_data.map((item) => {
+              item.edited_coach = true
+              item.class_date?.map((options) => {
+                options.class_date_range.edited_options = true
+
+                console.log('options :>> ', options.class_date_range);
+
+              })
+            })
+          })
           context.commit("SetCoachData", data.data)
         }
       } catch (error) {
@@ -2853,6 +2899,186 @@ const CourseModules = {
         console.log('error :>> ', error);
       }
     },
+    async UpdateTeachdayCoach(context, { payload, course_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.patch(`${localhost}/api/v1/manage/update-teachday-coach`, payload, config)
+        let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-teachday-coach`, payload, config)
+        if (data.statusCode == 200) {
+          context.commit("SetUpdateTeachdayCoach", data.data)
+          await context.dispatch("CoachData", { course_id: course_id })
+
+
+
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
+    async UpdateOptions(context, { payload, course_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.patch(`${localhost}/api/v1/manage/update-current-time-coach/courseId/${course_id}`, payload, config)
+        let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-current-time-coach/courseId/${course_id}`, payload, config)
+        if (data.statusCode == 200) {
+          context.commit("SetUpdateOptions", data.data)
+          await context.dispatch("CoachData", { course_id: course_id })
+
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
+    async AddNewOptions(context, { payload, course_id, course_coach_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.patch(`${localhost}/api/v1/manage/update-coach/${course_id}/course-coach/${course_coach_id}`, payload, config)
+        let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-coach/${course_id}/course-coach/${course_coach_id}`, payload, config)
+        if (data.statusCode == 200) {
+          context.commit("SetAddNewOptions", data.data)
+          await context.dispatch("CoachData", { course_id: course_id })
+
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
+    async AddNewCoach(context, { payload, course_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.post(`${localhost}/api/v1/manage/create-coach/${course_id}`, payload, config)
+        let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/manage/create-coach/${course_id}`, payload, config)
+        if (data.statusCode == 201) {
+          context.commit("SetAddNewCoach", data.data)
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("time has been deleted"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+          await context.dispatch("CoachData", { course_id: course_id })
+
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
+    async AddNewTeachDay(context, { payload, course_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.post(`${localhost}/api/v1/manage/create-new-teachday/${course_id}`, payload, config)
+        let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/manage/create-new-teachday/${course_id}`, payload, config)
+        if (data.statusCode == 201) {
+          context.commit("SetAddNewTeachDay", data.data)
+          await context.dispatch("CoachData", { course_id: course_id })
+
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
+    async DeleteOPtions(context, { course_id, time_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.delete(`${localhost}/api/v1/manage/time/${time_id}`, config)
+        let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/manage/time/${time_id}`, config)
+        if (data.statusCode == 200) {
+          context.commit("SetDeleteOptions", data.data)
+          await context.dispatch("CoachData", { course_id: course_id })
+
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
+    async RefreshTeachDay(context, { course_id, day_of_week_id, course_coach_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/manage/get-teach-day/courseId/${course_id}/dayOfWeekId/${day_of_week_id}/courseCoachId/${course_coach_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/manage/get-teach-day/courseId/${course_id}/dayOfWeekId/${day_of_week_id}/courseCoachId/${course_coach_id}`, config)
+        if (data.statusCode == 200) {
+          context.commit("SetRefreshTeachDay", data.data)
+          // await context.dispatch("CoachData", { course_id: course_id })
+
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
+    async RefreshOption(context, { course_id, time_id, day_of_week_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/manage/get-teach-time/courseId/${course_id}/timeId/${time_id}/dayOfWeekId/${day_of_week_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/manage/get-teach-time/courseId/${course_id}/timeId/${time_id}/dayOfWeekId/${day_of_week_id}`, config)
+        if (data.statusCode == 200) {
+          context.commit("SetRefreshOption", data.data)
+
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
+
   },
   getters: {
     getPackagesAddStudent(state) {
@@ -2986,6 +3212,12 @@ const CourseModules = {
     },
     getArtWorkData(state) {
       return state.art_work_data
+    },
+    getTeachdayData(state) {
+      return state.refresh_teach_day
+    },
+    getOptionData(state) {
+      return state.refresh_option
     },
 
   },
