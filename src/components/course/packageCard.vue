@@ -1,5 +1,16 @@
 <template>
-  <div>
+  <div v-if="!data_package[0].options[0].course_package_option_id && edited">
+    <template>
+      <v-row class="fill-height ma-0" align="center" justify="center">
+        <v-progress-circular
+          indeterminate
+          color="#ff6b81"
+        ></v-progress-circular>
+      </v-row>
+    </template>
+  </div>
+
+  <div v-else>
     <v-card flat v-for="(item_package, index) in data_package" :key="index">
       <headerCard
         :icon="'mdi-card-account-details-outline'"
@@ -8,26 +19,40 @@
       >
         <template slot="actions">
           <v-btn
+            v-if="
+              !item_package.course_package_option_id &&
+              edited &&
+              item_package.add_new_package
+            "
+            icon
+            color="#FF6B81"
+            @click="saveAddNewPackage(item_package)"
+          >
+            <v-icon>mdi-content-save-all-outline</v-icon>
+          </v-btn>
+          <v-btn
             v-if="!item_package.course_package_option_id"
             icon
             color="red"
-            @click="removePackage(index)"
+            @click="removePackage(index, item_package)"
             ><v-icon>mdi-close</v-icon></v-btn
           >
         </template>
       </headerCard>
       <v-card-text class="pt-0">
         <v-divider class="mb-3"></v-divider>
+        <!-- PACKAGE -->
         <v-card class="bg-grey-card mb-3">
           <v-card-text>
             <v-row dense>
-              <v-col cols="12" sm="6">
+              <!-- PACKAGE -->
+              <v-col cols="12" sm="4">
                 <label-custom required :text="$t('package')"></label-custom>
                 <v-autocomplete
                   dense
-                  :disabled="disable"
-                  :outlined="!disable"
-                  :filled="disable"
+                  :disabled="item_package.edit_package"
+                  :outlined="!item_package.edit_package"
+                  :filled="item_package.edit_package"
                   v-model="item_package.package_id"
                   color="#FF6B81"
                   :rules="rules.packages"
@@ -65,7 +90,8 @@
                   </template>
                 </v-autocomplete>
               </v-col>
-              <v-col cols="12" sm="6">
+              <!-- PACKAGE STUDENS -->
+              <v-col cols="12" sm="4">
                 <label-custom
                   required
                   :text="`${$t('number of students')} (${$t('person')})`"
@@ -74,10 +100,12 @@
                   suffix="คน"
                   type="number"
                   :disabled="
-                    item_package.package_id !== 'PACK_3' ? true : disable
+                    item_package.package_id !== 'PACK_3'
+                      ? true
+                      : item_package.edit_package
                   "
-                  :outlined="!disable"
-                  :filled="disable"
+                  :outlined="!item_package.edit_package"
+                  :filled="item_package.edit_package"
                   :rules="packages_student(item_package.students, index)"
                   @focus="$event.target.select()"
                   class="input-text-right"
@@ -86,9 +114,53 @@
                   v-model.number="item_package.students"
                 ></v-text-field>
               </v-col>
+              <!-- BUTTONS -->
+              <v-col cols="12" sm="4" class="mt-6">
+                <!-- EDIT -->
+                <v-btn
+                  v-if="item_package.edit_package"
+                  icon
+                  color="#FF6B81"
+                  @click="editPackage(item_package)"
+                  ><v-icon>mdi-pencil-outline</v-icon></v-btn
+                >
+                <!-- SAVE -->
+                <v-btn
+                  v-if="
+                    !item_package.edit_package &&
+                    edited &&
+                    !item_package.add_new_package
+                  "
+                  icon
+                  color="#FF6B81"
+                  @click="saveUpdatePackage(index, data_package)"
+                  ><v-icon>mdi-content-save-all-outline</v-icon></v-btn
+                >
+                <!-- DELETE -->
+                <!-- <v-btn
+                  v-if="!item_package.edit_package"
+                  icon
+                  color="#FF6B81"
+                  @click="deletePackage(index, data_package)"
+                  ><v-icon>mdi-delete-outline</v-icon></v-btn
+                > -->
+                <!-- REFRESH -->
+                <v-btn
+                  v-if="
+                    !item_package.edit_package &&
+                    edited &&
+                    !item_package.add_new_package
+                  "
+                  icon
+                  color="#FF6B81"
+                  @click="refreshPackage(item_package)"
+                  ><v-icon>mdi-refresh</v-icon></v-btn
+                >
+              </v-col>
             </v-row>
           </v-card-text>
         </v-card>
+        <!-- OPTIONS -->
         <v-card
           class="bg-grey-card"
           :class="item_package.options.length > 1 ? 'mb-3' : ''"
@@ -97,14 +169,15 @@
         >
           <v-card-text>
             <v-row dense class="d-flex align-center">
+              <!-- period -->
               <v-col cols="12" sm="4">
                 <label-custom required :text="$t('period')"></label-custom>
                 <v-autocomplete
                   dense
                   item-disabled="disabled"
-                  :disabled="disable"
-                  :outlined="!disable"
-                  :filled="disable"
+                  :disabled="option.edit_package_option"
+                  :outlined="!option.edit_package_option"
+                  :filled="option.edit_package_option"
                   v-model="option.option_id"
                   color="#FF6B81"
                   :rules="rules.options"
@@ -162,6 +235,7 @@
                   </template> -->
                 </v-autocomplete>
               </v-col>
+              <!-- NUMBER / PERSON -->
               <v-col cols="12" sm="4">
                 <label-custom
                   required
@@ -170,54 +244,128 @@
                 <v-text-field
                   class="input-text-right"
                   dense
-                  :disabled="disable"
-                  :outlined="!disable"
-                  :filled="disable"
+                  :disabled="option.edit_package_option"
+                  :outlined="!option.edit_package_option"
+                  :filled="option.edit_package_option"
                   @focus="$event.target.select()"
                   :rules="rules.options_amount"
                   type="number"
                   :placeholder="$t('specify the number of times/person')"
-                  v-model.number="option.students"
+                  v-model.number="option.amount"
                   @change="calNetPrice(option)"
                   color="#FF6B81"
                 ></v-text-field>
               </v-col>
-              <v-col cols="6" sm="2">
-                <v-btn
-                  :disabled="disable"
-                  v-if="option_index === item_package.options.length - 1"
-                  @click="addOptions(item_package.options, option_index)"
-                  class="w-full"
-                  outlined
-                  color="green"
-                >
-                  <v-icon>mdi-plus-box-multiple</v-icon>
-                  {{ $t("add period") }}
-                </v-btn>
-              </v-col>
-              <v-col cols="6" sm="2">
-                <template v-if="!option.course_package_option_id">
-                  <v-btn
-                    :disabled="disable"
-                    v-if="item_package.options.length > 1"
-                    class="w-full"
-                    outlined
-                    color="red"
-                    @click="
-                      removeOptions(
-                        item_package.options,
-                        option_index,
-                        item_package
-                      )
-                    "
-                  >
-                    <v-icon>mdi-delete-empty</v-icon>
-                    {{ $t("delete period") }}
-                  </v-btn>
-                </template>
+              <!-- BUTTONS -->
+              <v-col cols="12" sm="4">
+                <v-row dens v-if="edited">
+                  <!-- BUTTONS -->
+                  <v-col cols="12" sm="8">
+                    <!-- EDIT -->
+                    <v-btn
+                      v-if="option.edit_package_option"
+                      icon
+                      color="#FF6B81"
+                      @click="editPackageOption(option)"
+                      ><v-icon>mdi-pencil-outline</v-icon></v-btn
+                    >
+                    <v-btn
+                      v-if="
+                        option_index === item_package.options.length - 1 &&
+                        !option.edit_package_option
+                      "
+                      @click="addOptions(item_package.options)"
+                      icon
+                      color="green"
+                    >
+                      <v-icon>mdi-plus-box-multiple</v-icon>
+                    </v-btn>
+                    <!-- SAVE -->
+                    <v-btn
+                      v-if="
+                        !option.edit_package_option &&
+                        !option.add_new_option &&
+                        !item_package.add_new_package
+                      "
+                      icon
+                      color="#FF6B81"
+                      @click="saveUpdatePackageOption(option, item_package)"
+                      ><v-icon>mdi-content-save-all-outline</v-icon></v-btn
+                    >
+                    <!-- DELETE -->
+                    <v-btn
+                      v-if="!option.edit_package_option"
+                      icon
+                      color="#FF6B81"
+                      @click="
+                        deletePackageOption(
+                          option_index,
+                          option,
+                          item_package.options
+                        )
+                      "
+                      ><v-icon>mdi-delete-outline</v-icon></v-btn
+                    >
+                    <!-- REFRESH -->
+                    <v-btn
+                      v-if="
+                        !option.edit_package_option &&
+                        !option.add_new_option &&
+                        !item_package.add_new_package
+                      "
+                      icon
+                      color="#FF6B81"
+                      @click="refreshPackageOption(option)"
+                      ><v-icon>mdi-refresh</v-icon></v-btn
+                    >
+                  </v-col>
+                </v-row>
+                <v-row dense v-else>
+                  <v-col cols="6" sm="6">
+                    <v-btn
+                      :disabled="disable"
+                      v-if="option_index === item_package.options.length - 1"
+                      @click="
+                        addOptions(
+                          item_package.options,
+                          option_index,
+                          item_package
+                        )
+                      "
+                      class="w-full"
+                      outlined
+                      color="green"
+                    >
+                      <v-icon>mdi-plus-box-multiple</v-icon>
+                      {{ $t("add period") }}
+                    </v-btn>
+                  </v-col>
+                  <v-col cols="6" sm="6">
+                    <template v-if="!option.course_package_option_id">
+                      <v-btn
+                        :disabled="disable"
+                        v-if="item_package.options.length > 1"
+                        class="w-full"
+                        outlined
+                        color="red"
+                        @click="
+                          removeOptions(
+                            item_package.options,
+                            option_index,
+                            item_package
+                          )
+                        "
+                      >
+                        <v-icon>mdi-delete-empty</v-icon>
+                        {{ $t("delete period") }}
+                      </v-btn>
+                    </template>
+                  </v-col>
+                </v-row>
               </v-col>
             </v-row>
             <v-row dense>
+              <!-- PRICE -->
               <v-col cols="12" sm="4">
                 <label-custom
                   required
@@ -226,9 +374,9 @@
                 <v-text-field
                   class="input-text-right"
                   dense
-                  :disabled="disable"
-                  :outlined="!disable"
-                  :filled="disable"
+                  :disabled="option.edit_package_option"
+                  :outlined="!option.edit_package_option"
+                  :filled="option.edit_package_option"
                   :rules="rules.price_unit"
                   @focus="$event.target.select()"
                   type="number"
@@ -240,15 +388,19 @@
               </v-col>
               <v-col>
                 <v-row class="flex align-center">
+                  <!-- DISCOUNT BOOL -->
+
                   <v-col cols="12" sm="auto">
                     <v-checkbox
-                      :disabled="disable"
+                      :disabled="option.edit_package_option"
                       v-model="option.discount"
                       @input="calNetPrice(option)"
                       :label="$t('there is a discount')"
                       color="#FF6B81"
                     ></v-checkbox>
                   </v-col>
+                  <!-- DISCOUNT NUMBER-->
+
                   <v-col cols="12" sm="5" class="pt-8">
                     <v-text-field
                       dense
@@ -256,10 +408,10 @@
                       class="input-text-right"
                       :rules="rules.discount"
                       @focus="$event.target.select()"
-                      :disabled="!option.discount || disable"
+                      :disabled="!option.discount || option.edit_package_option"
                       :placeholder="$t('specify discount/baht')"
-                      :outlined="option.discount || disable"
-                      :filled="!option.discount || disable"
+                      :outlined="option.discount || option.edit_package_option"
+                      :filled="!option.discount || option.edit_package_option"
                       v-model.number="option.discount_price"
                       @change="calNetPrice(option)"
                       color="#FF6B81"
@@ -269,14 +421,15 @@
               </v-col>
             </v-row>
             <v-row dense>
+              <!-- PRIVILAGE -->
               <v-col>
                 <LabelCustom :text="$t('special rights')"></LabelCustom>
                 <v-textarea
                   dense
-                  :disabled="disable"
-                  :outlined="!disable"
-                  :filled="disable"
-                  v-model="option.privilege"
+                  :disabled="option.edit_package_option"
+                  :outlined="!option.edit_package_option"
+                  :filled="option.edit_package_option"
+                  v-model="option.option_description"
                   color="#FF6B81"
                 ></v-textarea>
               </v-col>
@@ -326,6 +479,8 @@
 import HeaderCard from "../header/headerCard.vue";
 import LabelCustom from "../label/labelCustom.vue";
 import { mapGetters, mapActions } from "vuex";
+import Swal from "sweetalert2";
+
 export default {
   props: {
     disable: { type: Boolean, default: false },
@@ -393,6 +548,8 @@ export default {
       // course_data: "CourseModules/getCourseData",
       packages_data: "CourseModules/getPackages",
       options_data: "CourseModules/getOptions",
+      refresh_package: "CourseModules/getrefeshPackage",
+      refresh_package_options: "CourseModules/getrefeshPackageOption",
     }),
 
     rules() {
@@ -447,7 +604,218 @@ export default {
   methods: {
     ...mapActions({
       ChangeCourseData: "CourseModules/ChangeCourseData",
+      UpdatePackage: "CourseModules/UpdatePackage",
+      UpdatePackageOption: "CourseModules/UpdatePackageOption",
+      DeletePackege: "CourseModules/DeletePackege",
+      DeletePackegeOption: "CourseModules/DeletePackegeOption",
+      CreateNewPackage: "CourseModules/CreateNewPackage",
+      CreateNewPackageOption: "CourseModules/CreateNewPackageOption",
+      RefreshPackage: "CourseModules/RefreshPackage",
+      RefreshPackageOption: "CourseModules/RefreshPackageOption",
     }),
+
+    editPackage(item_package) {
+      item_package.edit_package = false;
+    },
+    saveUpdatePackage(index, course_data) {
+      Swal.fire({
+        icon: "question",
+        title: this.$t("do you want to update a package"),
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          let payload = {
+            old_package_id: "",
+            package_id: "",
+            student_number: 0,
+          };
+          if (course_data[index].package === "Exclusive Package") {
+            payload.old_package_id = "PACK_1";
+          } else if (course_data[index].package === "Family Package") {
+            payload.old_package_id = "PACK_2";
+          } else if (course_data[index].package === "Group Package") {
+            payload.old_package_id = "PACK_3";
+          }
+          payload.package_id = course_data[index].package_id;
+          payload.student_number = course_data[index].students;
+          this.UpdatePackage({
+            course_id: this.$route.params.course_id,
+            payload,
+          });
+        }
+      });
+    },
+
+    async refreshPackage(item_package) {
+      let old_package_id = null;
+      if (item_package.package === "Exclusive Package") {
+        old_package_id = "PACK_1";
+      } else if (item_package.package === "Family Package") {
+        old_package_id = "PACK_2";
+      } else if (item_package.package === "Group Package") {
+        old_package_id = "PACK_3";
+      }
+      await this.RefreshPackage({
+        course_id: this.$route.params.course_id,
+        package_id: old_package_id,
+      });
+      item_package.package_id = this.refresh_package.packageId;
+      item_package.students = this.refresh_package.studentNumber;
+    },
+    editPackageOption(item_package) {
+      item_package.edit_package_option = false;
+    },
+    saveUpdatePackageOption(option, item_package) {
+      if (option.course_package_option_id) {
+        // UPDATE OLD OPTION
+
+        Swal.fire({
+          icon: "question",
+          title: this.$t("do you want to update a option"),
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("cancel"),
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            let data_payload = {
+              course_package_option_id: option.course_package_option_id,
+              package_id: option.package_id,
+              option_id: option.option_id,
+              hour_per_time: option.amount,
+              price_per_person: option.price_unit,
+              discount_status: option.discount,
+              discount_price: option.discount_price ? option.discount_price : 0,
+              option_description: option.option_description,
+              net_price_unit: option.net_price_unit,
+              student_number: option.students,
+            };
+            this.UpdatePackageOption({
+              course_id: this.$route.params.course_id,
+              payload: data_payload,
+            });
+          }
+        });
+      } else {
+        // ADD NEW OPTION
+        Swal.fire({
+          icon: "question",
+          title: this.$t("do you want to create a option"),
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("cancel"),
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            let data_payload = {
+              course_package_option_id: null,
+              option_id: option.option_id,
+              hour_per_time: option.amount,
+              price_per_person: option.price_unit,
+              discount_status: option.discount,
+              discount_price: option.discount_price ? option.discount_price : 0,
+              option_description: option.option_description,
+              net_price_unit: option.net_price_unit,
+              package_id: item_package.package_id,
+              student_number: item_package.students,
+            };
+            this.CreateNewPackageOption({
+              course_id: this.$route.params.course_id,
+              payload: data_payload,
+            });
+          }
+        });
+      }
+    },
+    deletePackageOption(option_index, option, data) {
+      if (option.course_package_option_id) {
+        // OLD OPTION
+        Swal.fire({
+          icon: "question",
+          title: this.$t("want to delete a option"),
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("cancel"),
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            this.DeletePackegeOption({
+              course_id: this.$route.params.course_id,
+              cpo: option.course_package_option_id,
+            });
+          }
+        });
+      } else {
+        // NEWUPTION
+        data.splice(option_index, 1);
+      }
+    },
+    async refreshPackageOption(option) {
+      await this.RefreshPackageOption({
+        course_id: this.$route.params.course_id,
+        cpo: option.course_package_option_id,
+      });
+      option.option_id = this.refresh_package_options.optionId;
+      option.amount = this.refresh_package_options.hourPerTime;
+      option.price_unit = this.refresh_package_options.pricePerPerson;
+      option.discount =
+        this.refresh_package_options.discountStatus === 1 ? true : false;
+      option.discount_price = this.refresh_package_options.discountPrice;
+      option.option_description =
+        this.refresh_package_options.optionDescription;
+    },
+    saveAddNewPackage(item_package) {
+      Swal.fire({
+        icon: "question",
+        title: this.$t("do you want to create a package"),
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          let data_payload = {
+            package_id: "",
+            package: "",
+            student_number: 0,
+            options: [],
+          };
+          if (item_package.package_id === "PACK_1") {
+            data_payload.package = "Exclusive Package";
+          } else if (item_package.package_id === "PACK_2") {
+            data_payload.package = "Family Package";
+          } else if (item_package.package_id === "PACK_3") {
+            data_payload.package = "Group Package";
+          }
+
+          // data_payload.package = data_payload.package;
+          data_payload.package_id = item_package.package_id;
+          data_payload.student_number = item_package.students;
+          item_package.options.map((item) => {
+            data_payload.options.push({
+              package_id: item_package.package_id,
+              option_id: item.option_id,
+              hour_per_time: item.amount,
+              price_per_person: item.price_unit ? item.price_unit : 0,
+              discount_price: item.discount_price ? item.discount_price : 0,
+              discount_status: item.discount,
+              option_description: item.option_description
+                ? item.option_description
+                : null,
+              net_price_unit: item.net_price ? item.net_price : 0,
+              student_number: item_package.students ? item_package.students : 0,
+            });
+          });
+          await this.CreateNewPackage({
+            course_id: this.$route.params?.course_id,
+            payload: data_payload,
+          });
+        }
+      });
+    },
 
     packages_student(val, index) {
       let package_id = this.data_package[index].package_id;
@@ -478,8 +846,28 @@ export default {
         (v) => !used_package.includes(v.packageId)
       );
     },
-    removePackage(index) {
-      this.data_package.splice(index, 1);
+    removePackage(index, item_package) {
+      if (item_package.package) {
+        // DELETE OLD PACKAGE
+        Swal.fire({
+          icon: "question",
+          title: this.$t("want to delete a package"),
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("cancel"),
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            this.DeletePackege({
+              course_id: this.$route.params.course_id,
+              package_id: item_package.package_id,
+            });
+          }
+        });
+      } else {
+        // DELETE NEW PACKAGE
+        this.data_package.splice(index, 1);
+      }
     },
     handleFocus() {
       this.selected_option = true;
@@ -600,12 +988,13 @@ export default {
     },
     addOptions(data) {
       data.push({
+        add_new_option: false,
         period_package: "",
         amount: 0,
         price_unit: 0,
         discount: false,
         discount_price: 0,
-        privilege: "",
+        option_description: "",
         net_price: 0,
         net_price_unit: 0,
       });

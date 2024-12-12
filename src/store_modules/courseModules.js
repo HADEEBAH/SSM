@@ -373,6 +373,16 @@ const CourseModules = {
     delete_option: [],
     refresh_teach_day: [],
     refresh_option: [],
+    update_packages: [],
+    update_packages_option: [],
+    deleted_package: {},
+    deleted_package_option: [],
+    add_new_packages: [],
+    add_new_packages_options: [],
+    refresh_package: {},
+    refresh_package_options: {}
+
+
 
 
 
@@ -639,6 +649,31 @@ const CourseModules = {
     SetRefreshOption(state, payload) {
       state.refresh_option = payload
     },
+    SetUpdatePackages(state, payload) {
+      state.update_packages = payload
+    },
+    SetUpdatePackagesOptions(state, payload) {
+      state.update_packages_option = payload
+    },
+    SetDeletePackage(state, payload) {
+      state.deleted_package = payload
+    },
+    SetDeletePackageOption(state, payload) {
+      state.deleted_package_option = payload
+    },
+    SetNewPackages(state, payload) {
+      state.add_new_packages = payload
+    },
+    SetNewPackagesOptions(state, payload) {
+      state.add_new_packages_options = payload
+    },
+    SetRefreshPackage(state, payload) {
+      state.refresh_package = payload
+    },
+    SetRefreshPackageOption(state, payload) {
+      state.refresh_package_options = payload
+    },
+
 
 
   },
@@ -2824,8 +2859,14 @@ const CourseModules = {
         if (data.statusCode == 200) {
           data.data.option_id = ''
           data.data.map((items) => {
+            items.edit_package = true
+            items.add_new_package = false
             items["option_selected"] = []
             items.options?.map((item) => {
+              item.edit_package_option = true
+              item.add_new_option = false
+
+
               items["option_selected"].push(item.option_id)
             })
             items.option_list = [
@@ -3078,6 +3119,426 @@ const CourseModules = {
         console.log('error :>> ', error);
       }
     },
+    async UpdatePackage(context, { course_id, payload }) {
+      // console.log('payload :>> ', payload);
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.patch(`${localhost}/api/v1/manage/update-package/${course_id}`, payload, config)
+        let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-package/${course_id}`, payload, config)
+        if (data.statusCode == 200) {
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("package has been updated"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+          context.commit("SetUpdatePackages", data.data)
+          context.dispatch("PackagesData", { course_id: course_id })
+
+          // await context.dispatch("GetPackages")
+
+        }
+      } catch (error) {
+        if (error.response.data.message == "As the number of seats in the package is less than the number of seats available for current students") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("as the number of seats in the package is less than the number of seats available for current students"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: error,
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
+
+      }
+    },
+    async UpdatePackageOption(context, { course_id, payload }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.patch(`${localhost}/api/v1/manage/update-option/${course_id}`, payload, config)
+        let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-option/${course_id}`, payload, config)
+        if (data.statusCode == 200) {
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("option has been updated"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+          context.dispatch("SetUpdatePackagesOptions", data.data)
+          context.dispatch("PackagesData", { course_id: course_id })
+
+          // await context.dispatch("GetCourse", course_id)
+
+
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "warning",
+          title: VueI18n.t("this item cannot be made"),
+          text: error,
+          timer: 3000,
+          showDenyButton: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        })
+      }
+    },
+    async DeletePackege(context, { course_id, package_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.delete(`${localhost}/api/v1/manage/delete-package/${course_id}/${package_id}`, config)
+        let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/manage/delete-package/${course_id}/${package_id}`, config)
+        if (data.statusCode == 200) {
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("package has been deleted"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+          context.dispatch("SetDeletePackage", data.success)
+          context.dispatch("PackagesData", { course_id: course_id })
+
+
+        }
+      } catch (error) {
+        if (error.response.data.message == "Package cannot be deleted as there are students in this package.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("package cannot be deleted as there are students in this package"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "The package cannot be deleted because there is a student with an order status of pending payment for this package.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("package cannot be deleted as there are students in this package"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "Package cannot be deleted as there are students who have booked this package.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("package cannot be deleted as there are students who have booked this package"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t(error.response.data.message),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
+      }
+    },
+    async DeletePackegeOption(context, { course_id, cpo }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.delete(`${localhost}/api/v1/manage/delete-cpo/${course_id}/${cpo}`, config)
+        let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/manage/delete-cpo/${course_id}/${cpo}`, config)
+        if (data.statusCode == 200) {
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("option has been deleted"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+          context.dispatch("SetDeletePackageOption", data.data)
+          context.dispatch("PackagesData", { course_id: course_id })
+
+        }
+      } catch (error) {
+        if (error.response.data.message == "Package cannot be deleted as there are students in this package.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("option cannot be deleted as there are students in this option"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "The package cannot be deleted because there is a student with an order status of pending payment for this package.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("option cannot be deleted because there is a student with an order status of pending payment for this option"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "Package cannot be deleted as there are students who have booked this package.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("option cannot be deleted as there are students who have booked this option"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t(error.response.data.message),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
+      }
+    },
+    async CreateNewPackage(context, { course_id, payload }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.post(`${localhost}/api/v1/manage/create-package/${course_id}`, payload, config)
+        let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/manage/create-package/${course_id}`, payload, config)
+        if (data.statusCode == 201) {
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("package has been created"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+          context.commit("SetNewPackages", data.data)
+          context.dispatch("PackagesData", { course_id: course_id })
+
+
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "warning",
+          title: VueI18n.t("this item cannot be made"),
+          text: error,
+          timer: 3000,
+          showDenyButton: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        })
+      }
+    },
+    async CreateNewPackageOption(context, { course_id, payload }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.post(`${localhost}/api/v1/manage/create-option/${course_id}`, payload, config)
+        let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/manage/create-option/${course_id}`, payload, config)
+        if (data.statusCode == 201) {
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("option has been created"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+          context.commit("SetNewPackagesOptions", data.data)
+          context.dispatch("PackagesData", { course_id: course_id })
+
+
+
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "warning",
+          title: VueI18n.t("this item cannot be made"),
+          text: error,
+          timer: 3000,
+          showDenyButton: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        })
+      }
+    },
+    async RefreshPackage(context, { course_id, package_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/manage/package/courseId/${course_id}/packageId/${package_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/manage/package/courseId/${course_id}/packageId/${package_id}`, config)
+        if (data.statusCode == 200) {
+
+          context.commit("SetRefreshPackage", data.data)
+
+        }
+      } catch (error) {
+        if (error.response.data.message === "Unable to find course or package") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("warning"),
+            text: VueI18n.t("Unable to find course or package"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: error,
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
+
+      }
+    },
+    async RefreshPackageOption(context, { course_id, cpo }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/manage/option/courseId/${course_id}/coursePackageOptionId/${cpo}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/manage/option/courseId/${course_id}/coursePackageOptionId/${cpo}`, config)
+        if (data.statusCode == 200) {
+          context.commit("SetRefreshPackageOption", data.data)
+        }
+      } catch (error) {
+        if (error.response.data.message == "Unable to find course or option") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("warning"),
+            text: VueI18n.t("unable to find course or option"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: error,
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
+
+      }
+    },
 
   },
   getters: {
@@ -3218,6 +3679,12 @@ const CourseModules = {
     },
     getOptionData(state) {
       return state.refresh_option
+    },
+    getrefeshPackage(state) {
+      return state.refresh_package
+    },
+    getrefeshPackageOption(state) {
+      return state.refresh_package_options
     },
 
   },

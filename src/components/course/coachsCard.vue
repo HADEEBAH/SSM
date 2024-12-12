@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- {{ setFunction }} -->
-    <div v-if="!coach_data[0].course_coach_id">
+    <div v-if="!coach_data[0].course_coach_id && edited">
       <template>
         <v-row class="fill-height ma-0" align="center" justify="center">
           <v-progress-circular

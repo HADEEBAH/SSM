@@ -221,8 +221,9 @@
               </v-form>
               <v-row dense>
                 <v-col align="center">
+                  <!-- :disabled="!course_edit" -->
+
                   <v-btn
-                    :disabled="!course_edit"
                     outlined
                     color="#ff6b81"
                     @click="addPackage(course_created_data.packages)"
@@ -231,7 +232,7 @@
                 </v-col>
               </v-row>
               <!-- ACTION -->
-              <v-row class="px-4" v-if="!course_edit">
+              <!-- <v-row class="px-4" v-if="!course_edit">
                 <v-col align="right">
                   <v-btn
                     color="#FF6B81"
@@ -242,8 +243,8 @@
                     {{ $t("edit") }}
                   </v-btn>
                 </v-col>
-              </v-row>
-              <v-row class="px-4" v-if="course_edit">
+              </v-row> -->
+              <!-- <v-row class="px-4" v-if="course_edit">
                 <v-col align="right">
                   <v-btn
                     color="#FF6B81"
@@ -264,7 +265,7 @@
                     {{ $t("save") }}
                   </v-btn>
                 </v-col>
-              </v-row>
+              </v-row> -->
             </v-tab-item>
             <!-- ARKWORk -->
             <v-tab-item value="arkwork">
@@ -3931,11 +3932,14 @@ export default {
       // });
       // this.ChangeCourseData(this.course_created_data);
       this.data_package.push({
+        add_new_package: true,
         package_id: null,
         package: null,
         students: 1,
         options: [
           {
+            add_new_option: true,
+
             package_id: null,
             package: null,
             students: 0,
