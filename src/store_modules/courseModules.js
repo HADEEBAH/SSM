@@ -101,10 +101,10 @@ const CourseModules = {
       location: "",
       detadescriptionil: "",
       discount: '',
-      checked_discount_bool: '',
+      checked_discount: 0,
       music_performance: "",
       catification: "",
-      price_course: 0,
+      course_price: 0,
       student_recived: 0,
       artwork_file: [],
       coachs: [
@@ -224,6 +224,8 @@ const CourseModules = {
       course_image: null,
       course_hours: 1.0,
       category_id: null,
+      course_price: 0,
+      discount_price: 0,
       courseImg: null,
       menu_course_open_date: false,
       menu_reservation_start_date: null,
@@ -241,6 +243,8 @@ const CourseModules = {
         menu_start_date: false,
         end_date: null,
         menu_end_date: false,
+        start_date_formatted: null,
+        end_date_formatted: null,
       },
       course_study_date: {
         start_time: "",
@@ -256,6 +260,7 @@ const CourseModules = {
         end_time: "",
         end_time_object: { HH: "", mm: "" },
       },
+      checked_discount: false,
       teach_day: [],
     },
     coach_data: [
@@ -317,6 +322,7 @@ const CourseModules = {
                 discount: false,
                 discount_price: 0,
                 privilege: null,
+                option_description: null,
                 net_price: 0,
                 net_price_unit: 0,
               },
@@ -503,7 +509,8 @@ const CourseModules = {
         detail: "",
         music_performance: "",
         catification: "",
-        price_course: 0,
+        course_price: 0,
+        discount_price: 0,
         student_recived: 0,
         artwork_file: [],
         coachs: [
@@ -673,6 +680,275 @@ const CourseModules = {
     SetRefreshPackageOption(state, payload) {
       state.refresh_package_options = payload
     },
+    ResetStateCourseData(state) {
+      state.courses_data.course_name_th = null,
+        state.courses_data.reservation = false,
+        state.courses_data.reservation = false,
+        state.courses_data.course_id = null,
+        state.courses_data.course_name_th = null,
+        state.courses_data.course_name_en = null,
+        state.courses_data.course_open_date = null,
+        state.courses_data.course_type_id = "CT_1",
+        state.courses_data.location = null,
+        state.courses_data.detail = null,
+        state.courses_data.music_performance = null,
+        state.courses_data.certification = null,
+        state.courses_data.course_image = null,
+        state.courses_data.course_hours = 1.0,
+        state.courses_data.category_id = null,
+        state.courses_data.courseImg = null,
+        state.courses_data.menu_course_open_date = false,
+        state.courses_data.menu_reservation_start_date = null,
+        state.courses_data.menu_reservation_end_date = null,
+        state.courses_data.reservation_start_date_str = null,
+        state.courses_data.reservation_start_date = null,
+        state.courses_data.course_hour_time = {
+          HH: '01',
+          mm: '00'
+        },
+        state.courses_data.course_open_date_str = null,
+        state.courses_data.coach_id = null,
+        state.courses_data.course_register_date = {
+          start_date: null,
+          menu_start_date: false,
+          end_date: null,
+          menu_end_date: false,
+          start_date_formatted: null,
+          end_date_formatted: null,
+        },
+        state.courses_data.course_study_date = {
+          start_time: "",
+          start_time_object: { HH: "", mm: "" },
+          menu_start_time: false,
+          end_time: "",
+          end_time_object: { HH: "", mm: "" },
+          menu_end_time: false,
+        },
+        state.courses_data.course_study_time = {
+          start_time: "",
+          start_time_object: { HH: "", mm: "" },
+          end_time: "",
+          end_time_object: { HH: "", mm: "" },
+        },
+        state.courses_data.checked_discount = false,
+        state.courses_data.teach_day = []
+
+      // COACH
+      const resetCoachData = [
+        {
+          edited_coach: true,
+          course_id: null,
+          coach_id: null,
+          course_coach_id: null,
+          coach_name: null,
+          teach_days_used: [],
+          teach_day_data: [
+            {
+              day_of_week_id: null,
+              class_open: false,
+              teach_day: [],
+              course_coach_id: null,
+              class_date: [
+                {
+                  start_time: null,
+                  class_date_range: {
+                    time_id: null,
+                    day_of_week_id: null,
+                    start_time: null,
+                    start_time_object: { HH: null, mm: null },
+                    menu_start_time: false,
+                    end_time: null,
+                    end_time_object: { HH: null, mm: null },
+                    menu_end_time: false,
+                  },
+                  students: 0,
+                },
+              ],
+            },
+          ],
+        },
+      ];
+      state.coach_data = resetCoachData
+
+      // PACKAGE
+      const resetPackageData = [
+        {
+          package_id: null,
+          package: null,
+          students: 1,
+          options: [
+            {
+              package_id: null,
+              package: null,
+              students: 0,
+              options: [
+                {
+                  option_id: null,
+                  period_package: null,
+                  amount: 0,
+                  price_unit: 0,
+                  discount: false,
+                  discount_price: 0,
+                  privilege: null,
+                  option_description: null,
+                  net_price: 0,
+                  net_price_unit: 0,
+                },
+              ],
+
+            },
+          ],
+          option_selected: [],
+          option_list: [
+            {
+              option_id: "OP_1",
+              option_name: "รายวัน",
+              option_name_en: "Daily",
+            },
+            {
+              option_id: "OP_2",
+              option_name: "รายเดือน",
+              option_name_en: "Monthly",
+            },
+            {
+              option_id: "OP_3",
+              option_name: "รายเทอม",
+              option_name_en: "Per term",
+            },
+            {
+              option_id: "OP_4",
+              option_name: "รายปี",
+              option_name_en: "Yearly",
+            },
+            {
+              option_id: "OP_5",
+              option_name: "ราย 4 ครั้ง",
+              option_name_en: "4 times",
+            },
+            {
+              option_id: "OP_6",
+              option_name: "ราย 2 เดือน",
+              option_name_en: "2 months",
+            },
+            {
+              option_id: "OP_7",
+              option_name: "ราย 10 ครั้ง",
+              option_name_en: "10 times",
+            },
+          ],
+        }
+      ];
+      state.data_package = resetPackageData
+
+      // state.coach_data.forEach(coach => {
+      //   coach.edited_coach = true,
+      //     coach.course_id = null,
+      //     coach.coach_id = null,
+      //     coach.course_coach_id = null,
+      //     coach.coach_name = null,
+      //     coach.teach_days_used = [],
+      //     coach.teach_day_data = [
+      //       {
+      //         day_of_week_id: null,
+      //         class_open: false,
+      //         teach_day: [],
+      //         course_coach_id: null,
+      //         class_date: [
+      //           {
+      //             start_time: null,
+      //             class_date_range: {
+      //               time_id: null,
+      //               day_of_week_id: null,
+      //               start_time: null,
+      //               start_time_object: {
+      //                 HH: null,
+      //                 mm: null
+      //               },
+      //               menu_start_time: false,
+      //               end_time: null,
+      //               end_time_object: {
+      //                 HH: null,
+      //                 mm: null
+      //               },
+      //               menu_end_time: false
+      //             },
+      //             students: 0
+      //           }
+      //         ]
+      //       }
+      //     ]
+      // })
+
+      // PACKAGE
+
+
+      // state.data_package.forEach(packages => {
+      //   packages.package_id = null,
+      //     packages.package = null,
+      //     packages.students = 1,
+      //     packages.options = [
+      //       {
+      //         package_id: null,
+      //         package: null,
+      //         students: 0,
+      //         options: [
+      //           {
+      //             option_id: null,
+      //             period_package: null,
+      //             amount: 0,
+      //             price_unit: 0,
+      //             discount: false,
+      //             discount_price: 0,
+      //             privilege: null,
+      //             option_description: null,
+      //             net_price: 0,
+      //             net_price_unit: 0,
+      //           },
+      //         ],
+
+      //       },
+      //     ],
+      //     packages.option_selected = [],
+      //     packages.option_list = [
+      //       {
+      //         option_id: "OP_1",
+      //         option_name: "รายวัน",
+      //         option_name_en: "Daily",
+      //       },
+      //       {
+      //         option_id: "OP_2",
+      //         option_name: "รายเดือน",
+      //         option_name_en: "Monthly",
+      //       },
+      //       {
+      //         option_id: "OP_3",
+      //         option_name: "รายเทอม",
+      //         option_name_en: "Per term",
+      //       },
+      //       {
+      //         option_id: "OP_4",
+      //         option_name: "รายปี",
+      //         option_name_en: "Yearly",
+      //       },
+      //       {
+      //         option_id: "OP_5",
+      //         option_name: "ราย 4 ครั้ง",
+      //         option_name_en: "4 times",
+      //       },
+      //       {
+      //         option_id: "OP_6",
+      //         option_name: "ราย 2 เดือน",
+      //         option_name_en: "2 months",
+      //       },
+      //       {
+      //         option_id: "OP_7",
+      //         option_name: "ราย 10 ครั้ง",
+      //         option_name_en: "10 times",
+      //       },
+      //     ]
+      // })
+
+    }
 
 
 
@@ -825,6 +1101,10 @@ const CourseModules = {
     ChangeCourseData(context, course_data) {
       context.commit("SetCourseData", course_data)
     },
+    // ChangeCoursesData(context, courses_data) {
+    //   console.log('courses_data :>> ', courses_data);
+    //   context.commit("ResetStateCourseData", courses_data)
+    // },
     // COACH :: LIST BY COURSE
     async GetCoachsByCourse(context, { course_id, search }) {
       context.commit("SetCoachListIsLoading", true)
@@ -1039,7 +1319,8 @@ const CourseModules = {
       }
     },
     // COURSE :: UPDATE COURSE DETAIL
-    async UpdateCouserDetail(context, { course_id, course_data }) {
+    async UpdateCouserDetail(context, { course_id, data_payload, course_file }) {
+      // async UpdateCouserDetail(context, { course_id, course_data }) {
       try {
         let config = {
           headers: {
@@ -1048,106 +1329,113 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let payload = {
-          "reservation": course_data.reservation,
-          "reservationEndDate": course_data.reservation_end_date,
-          "reservationStartDate": course_data.reservation_start_date,
-          "courseId": course_data.course_id,
-          "courseTypeId": course_data.course_type_id,
-          "type": course_data.type,
-          "courseNameTh": course_data.course_name_th,
-          "courseNameEn": course_data.course_name_en,
-          "courseImg": typeof course_data.course_img == "object" ? null : course_data.course_img,
-          "categoryId": course_data.category_id,
-          "categoryNameTh": course_data.category_name_th,
-          "courseOpenDate": course_data.course_open_date,
-          "courseOpenDateStr": course_data.course_open_date_str,
-          "coursePerTime": course_data.course_hours,
-          "courseLocation": course_data.location,
-          "courseDescription": course_data.detail,
-          "courseMusicPerformance": course_data.music_performance,
-          "courseCertification": course_data.catification,
-          "coursePrice": parseInt(course_data.price_course),
-          "courseRegisterStartDate": course_data?.coachs[0]?.register_date_range?.start_date ? course_data.coachs[0].register_date_range.start_date : null,
-          "courseRegisterEndDate": course_data?.coachs[0]?.register_date_range?.end_date ? course_data.coachs[0].register_date_range.end_date : null,
-          "coursePeriodStartDate": course_data.coachs[0].period.start_time ? course_data.coachs[0].period.start_time : null,
-          "coursePeriodEndDate": course_data.coachs[0].period.end_time ? course_data.coachs[0].period.end_time : null,
-          "courseStudentRecived": course_data.student_recived,
-          "courseStudyEndDate": course_data?.coachs[0]?.class_date_range?.end_date,
-          "courseStudyStartDate": course_data?.coachs[0]?.class_date_range?.start_date,
-          "checkedDiscount": course_data?.checked_discount_bool,
-          "discountPrice": course_data?.discount ? course_data?.discount : 0,
-          "coachs": [],
-          "dayOfweek": [],
-        }
-        if (course_data.course_type_id === "CT_2") {
+        // let payload = {
+        //   "reservation": course_data.reservation,
+        //   "reservationEndDate": course_data.reservation_end_date,
+        //   "reservationStartDate": course_data.reservation_start_date,
+        //   "courseId": course_data.course_id,
+        //   "courseTypeId": course_data.course_type_id,
+        //   "type": course_data.type,
+        //   "courseNameTh": course_data.course_name_th,
+        //   "courseNameEn": course_data.course_name_en,
+        //   "courseImg": typeof course_data.course_img == "object" ? null : course_data.course_img,
+        //   "categoryId": course_data.category_id,
+        //   "categoryNameTh": course_data.category_name_th,
+        //   "courseOpenDate": course_data.course_open_date,
+        //   "courseOpenDateStr": course_data.course_open_date_str,
+        //   "coursePerTime": course_data.course_hours,
+        //   "courseLocation": course_data.location,
+        //   "courseDescription": course_data.detail,
+        //   "courseMusicPerformance": course_data.music_performance,
+        //   "courseCertification": course_data.catification,
+        //   "coursePrice": parseInt(course_data.course_price),
+        //   "courseRegisterStartDate": course_data?.coachs[0]?.register_date_range?.start_date ? course_data.coachs[0].register_date_range.start_date : null,
+        //   "courseRegisterEndDate": course_data?.coachs[0]?.register_date_range?.end_date ? course_data.coachs[0].register_date_range.end_date : null,
+        //   "coursePeriodStartDate": course_data.coachs[0].period.start_time ? course_data.coachs[0].period.start_time : null,
+        //   "coursePeriodEndDate": course_data.coachs[0].period.end_time ? course_data.coachs[0].period.end_time : null,
+        //   "courseStudentRecived": course_data.student_recived,
+        //   "courseStudyEndDate": course_data?.coachs[0]?.class_date_range?.end_date,
+        //   "courseStudyStartDate": course_data?.coachs[0]?.class_date_range?.start_date,
+        //   "checkedDiscount": course_data?.checked_discount,
+        //   "discountPrice": course_data?.discount ? course_data?.discount : 0,
+        //   "coachs": [],
+        //   "dayOfweek": [],
+        // }
+        // if (course_data.course_type_id === "CT_2") {
 
-          for await (const coach of course_data.coachs.filter(v => v.teach_day_data.length > 0)) {
-            let teach_day_data = []
-            for await (const date of coach.teach_day_data) {
-              let class_date = []
-              for await (const class_date_data of date.class_date) {
-                class_date.push({
-                  "dayOfWeekId": date.day_of_week_id,
-                  "timeId": class_date_data.class_date_range.time_id,
-                  "classDateRange": {
-                    "startTime": class_date_data.class_date_range.start_time ? class_date_data.class_date_range.start_time : null,
-                    "endTime": class_date_data.class_date_range.end_time ? class_date_data.class_date_range.end_time : null,
-                  },
-                  "students": parseInt(class_date_data.students)
-                })
-              }
-              if (date.day_of_week_id) {
-                if (teach_day_data.filter((v) => v.dayOfWeekId === date.day_of_week_id && v.courseCoachId === date.course_coach_id).length === 0) {
-                  teach_day_data.push({
-                    "dayOfWeekId": date.day_of_week_id,
-                    "classOpen": date.class_open,
-                    "teachDay": date.teach_day,
-                    "courseCoachId": date.course_coach_id,
-                    "classDate": class_date
-                  })
-                }
-              } else {
-                teach_day_data.push({
-                  "dayOfWeekId": null,
-                  "classOpen": date.class_open === true ? 'Active' : 'InActive',
-                  "teachDay": date.teach_day,
-                  "courseCoachId": date.course_coach_id ? date.course_coach_id : null,
-                  "classDate": class_date
-                })
-              }
-            }
+        //   for await (const coach of course_data.coachs.filter(v => v.teach_day_data.length > 0)) {
+        //     let teach_day_data = []
+        //     for await (const date of coach.teach_day_data) {
+        //       let class_date = []
+        //       for await (const class_date_data of date.class_date) {
+        //         class_date.push({
+        //           "dayOfWeekId": date.day_of_week_id,
+        //           "timeId": class_date_data.class_date_range.time_id,
+        //           "classDateRange": {
+        //             "startTime": class_date_data.class_date_range.start_time ? class_date_data.class_date_range.start_time : null,
+        //             "endTime": class_date_data.class_date_range.end_time ? class_date_data.class_date_range.end_time : null,
+        //           },
+        //           "students": parseInt(class_date_data.students)
+        //         })
+        //       }
+        //       if (date.day_of_week_id) {
+        //         if (teach_day_data.filter((v) => v.dayOfWeekId === date.day_of_week_id && v.courseCoachId === date.course_coach_id).length === 0) {
+        //           teach_day_data.push({
+        //             "dayOfWeekId": date.day_of_week_id,
+        //             "classOpen": date.class_open,
+        //             "teachDay": date.teach_day,
+        //             "courseCoachId": date.course_coach_id,
+        //             "classDate": class_date
+        //           })
+        //         }
+        //       } else {
+        //         teach_day_data.push({
+        //           "dayOfWeekId": null,
+        //           "classOpen": date.class_open === true ? 'Active' : 'InActive',
+        //           "teachDay": date.teach_day,
+        //           "courseCoachId": date.course_coach_id ? date.course_coach_id : null,
+        //           "classDate": class_date
+        //         })
+        //       }
+        //     }
 
-            payload.coachs.push({
-              "coachId": coach.coach_id,
-              "courseCoachId": coach.course_coach_id ? coach.course_coach_id : null,
-              "coachName": coach.coach_name,
-              "teachDayData": teach_day_data,
-              "classDateRange": {
-                "startDate": coach.class_date_range.start_date ? moment(coach.class_date_range.start_date).format("YYYY-MM-DD") : null,
-                "endDate": coach.class_date_range.end_date ? moment(coach.class_date_range.end_date).format("YYYY-MM-DD") : null,
-              },
-              "registerDateRange": {
-                "startDate": coach.register_date_range.start_date && coach.register_date_range.start_date !== "-" ? moment(coach.register_date_range.start_date).format("YYYY-MM-DD") : null,
-                "endDate": coach.register_date_range.end_date && coach.register_date_range.end_date !== "-" ? moment(coach.register_date_range.end_date).format("YYYY-MM-DD") : null,
-              },
-              "period": {
-                "startTime": coach.period.start_time ? coach.period.start_time : null,
-                "endTime": coach.period.end_time ? coach.period.end_time : null
-              }
-            })
-          }
-        }
+        //     payload.coachs.push({
+        //       "coachId": coach.coach_id,
+        //       "courseCoachId": coach.course_coach_id ? coach.course_coach_id : null,
+        //       "coachName": coach.coach_name,
+        //       "teachDayData": teach_day_data,
+        //       "classDateRange": {
+        //         "startDate": coach.class_date_range.start_date ? moment(coach.class_date_range.start_date).format("YYYY-MM-DD") : null,
+        //         "endDate": coach.class_date_range.end_date ? moment(coach.class_date_range.end_date).format("YYYY-MM-DD") : null,
+        //       },
+        //       "registerDateRange": {
+        //         "startDate": coach.register_date_range.start_date && coach.register_date_range.start_date !== "-" ? moment(coach.register_date_range.start_date).format("YYYY-MM-DD") : null,
+        //         "endDate": coach.register_date_range.end_date && coach.register_date_range.end_date !== "-" ? moment(coach.register_date_range.end_date).format("YYYY-MM-DD") : null,
+        //       },
+        //       "period": {
+        //         "startTime": coach.period.start_time ? coach.period.start_time : null,
+        //         "endTime": coach.period.end_time ? coach.period.end_time : null
+        //       }
+        //     })
+        //   }
+        // }
 
-        let payloadData = new FormData()
-        payloadData.append("payload", JSON.stringify(payload))
-        if (typeof course_data.course_img == "object") {
-          payloadData.append("img_url", course_data.course_img)
-        }
+        // let payloadData = new FormData()
+        // payloadData.append("payload", JSON.stringify(payload))
+        // if (typeof course_data.course_img == "object") {
+        //   payloadData.append("img_url", course_data.course_img)
+        // }
+        const payloadData = new FormData()
+        payloadData.append("payload", JSON.stringify(data_payload))
+        payloadData.append("img_url", course_file)
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.patch(`${localhost}/api/v1/manage/update-course/${course_id}`, payloadData, config)
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-course/${course_id}`, payloadData, config)
         if (data.statusCode === 200) {
-          await context.dispatch("GetArtworkByCourse", { course_id: course_id })
-          await context.dispatch("GetCourse", course_id)
+          // await context.dispatch("GetArtworkByCourse", { course_id: course_id })
+          // await context.dispatch("GetCourse", course_id)
+          await context.dispatch("CoursesData", { course_id: course_id })
+
           Swal.fire({
             icon: "success",
             title: VueI18n.t("succeed"),
@@ -1652,11 +1940,11 @@ const CourseModules = {
             location: data.data.courseLocation,
             detail: data.data.courseDescription,
             discount: data.data.discountPrice,
-            checked_discount_bool: data.data.checkedDiscount,
+            checked_discount: data.data.checkedDiscount,
             calculate_price: data.data.calculateCoursePrice,
             music_performance: data.data.courseMusicPerformance,
             catification: data.data.courseCertification,
-            price_course: data.data.coursePrice,
+            course_price: data.data.coursePrice,
             course_register_start_date: data.data.courseRegisterStartDate ? moment(data.data.courseRegisterStartDate).format("YYYY-MM-DD") : null,
             course_register_end_date: data.data.courseRegisterEndDate ? moment(data.data.courseRegisterEndDate).format("YYYY-MM-DD") : null,
             course_period_start_date: data.data.coursePeriodStartDate ? data.data.coursePeriodStartDate : null,
@@ -2083,8 +2371,8 @@ const CourseModules = {
         //   "courseDescription": course.detail,
         //   "courseMusicPerformance": course.music_performance,
         //   "courseCertification": course.catification,
-        //   "coursePrice": course.price_course,
-        //   "checkedDiscount": course.checked_discount_bool,
+        //   "coursePrice": course.course_price,
+        //   "checkedDiscount": course.checked_discount,
         //   "discountPrice": course.discount ? course.discount : 0,
         //   "coachs": [],
         //   "dayOfweek": [],
@@ -2805,8 +3093,14 @@ const CourseModules = {
         // let { data } = await axios.get(`${localhost}/api/v1/course/detail/manage/courseId/${course_id}`, config)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/manage/courseId/${course_id}`, config)
         if (data.statusCode == 200) {
+          data.data.courseImg = data.data.courseImg !== null ? `https://waraphat.alldemics.com/api/v1/files/${data.data.courseImg}` : data.data.courseImg
           if (data.data.course_type_id === "CT_2") {
             data.data.teach_day = data.data.teach_day.map(Number)
+            data.data.course_register_date.start_date_formatted = moment(data.data.course_register_date.start_date).format("YYYY-MM-DD");
+            data.data.course_register_date.end_date_formatted = moment(data.data.course_register_date.end_date).format("YYYY-MM-DD");
+            data.data.course_study_date.start_date_formatted = moment(data.data.course_study_date.start_date).format("YYYY-MM-DD");
+            data.data.course_study_date.end_date_formatted = moment(data.data.course_study_date.end_date).format("YYYY-MM-DD");
+
           }
           context.commit("SetCoursesData", data.data)
         }
@@ -2832,9 +3126,6 @@ const CourseModules = {
               item.edited_coach = true
               item.class_date?.map((options) => {
                 options.class_date_range.edited_options = true
-
-                console.log('options :>> ', options.class_date_range);
-
               })
             })
           })

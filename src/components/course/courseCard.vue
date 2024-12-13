@@ -349,15 +349,15 @@
 
         <template v-if="course_data.course_type_id === 'CT_1'">
           <v-row dense>
+            <!-- :placeholder="
+                  course_data.description
+                    ? ''
+                    : $t('enter course details') + '...'
+                " -->
             <v-col cols="12">
               <label-custom :text="$t('course details')"></label-custom>
               <vue-editor
                 :editorToolbar="customToolbar"
-                :placeholder="
-                  course_data.description
-                    ? ''
-                    : $t('enter course details') + '...'
-                "
                 :disabled="disable"
                 v-model="course_data.description"
               ></vue-editor>
@@ -365,14 +365,14 @@
           </v-row>
           <v-row dense>
             <v-col cols="12">
-              <label-custom :text="'Performance'"></label-custom>
-              <vue-editor
-                :editorToolbar="customToolbar"
-                :placeholder="
+              <!-- :placeholder="
                   course_data.music_performance
                     ? ''
                     : $t('enter details') + '...'
-                "
+                " -->
+              <label-custom :text="'Performance'"></label-custom>
+              <vue-editor
+                :editorToolbar="customToolbar"
                 :disabled="disable"
                 @text-change="ChangeCourseData(course_data)"
                 v-model="course_data.music_performance"
@@ -383,12 +383,12 @@
 
           <v-row dense>
             <v-col cols="12">
+              <!-- :placeholder="
+                  course_data.certification ? '' : $t('enter details') + '...'
+                " -->
               <label-custom :text="'Certification'"></label-custom>
               <vue-editor
                 :editorToolbar="customToolbar"
-                :placeholder="
-                  course_data.certification ? '' : $t('enter details') + '...'
-                "
                 :disabled="disable"
                 v-model="course_data.certification"
               ></vue-editor>
@@ -465,25 +465,25 @@
                 @focus="$event.target.select()"
                 class="input-text-right"
                 type="number"
-                v-model="course_data.price_course"
+                v-model="course_data.course_price"
                 color="#FF6B81"
               >
               </v-text-field>
             </v-col>
           </v-row>
           <v-row dense>
-            <v-col cols="6" align-self="start">
+            <v-col align-self="start">
               <v-checkbox
-                v-model="course_data.checked_discount_bool"
+                v-model="course_data.checked_discount"
                 :label="$t('there is a discount')"
-                @click="ckeckClick(course_data.checked_discount_bool)"
                 :disabled="disable"
+                @click="ckeckClick(course_data.checked_discount)"
                 color="#FF6B81"
               ></v-checkbox>
             </v-col>
           </v-row>
           <v-row dense>
-            <v-col cols="6" v-if="course_data.checked_discount_bool">
+            <v-col v-if="course_data.checked_discount">
               <v-text-field
                 :placeholder="$t('specify discount/baht')"
                 dense
@@ -492,11 +492,14 @@
                 :rules="rulesDiscount"
                 :min="1"
                 :max="
-                  checkMaxPrice(course_data.discount, course_data.price_course)
+                  checkMaxPrice(
+                    course_data.discount_price,
+                    course_data.course_price
+                  )
                 "
                 outlined
                 type="number"
-                v-model="course_data.discount"
+                v-model="course_data.discount_price"
                 color="#FF6B81"
               >
               </v-text-field
@@ -533,7 +536,9 @@
                         :outlined="!disable"
                         :filled="disable"
                         :rules="start_date"
-                        v-model="register_date_range_str.start_date"
+                        v-model="
+                          course_data.course_register_date.start_date_str
+                        "
                         readonly
                         :placeholder="$t('choose start date')"
                         v-bind="attrs"
@@ -543,7 +548,8 @@
                         <template v-slot:append>
                           <v-icon
                             :color="
-                              course_data.course_register_date.start_date
+                              course_data.course_register_date
+                                .start_date_formatted
                                 ? '#FF6B81'
                                 : ''
                             "
@@ -556,7 +562,9 @@
                       @input="inputDate($event, 'register start date')"
                       @change="StartDateRegisCourse(course_data)"
                       :min="today.toISOString()"
-                      v-model="course_data.course_register_date.start_date"
+                      v-model="
+                        course_data.course_register_date.start_date_formatted
+                      "
                       locale="th-TH"
                     ></v-date-picker>
                   </v-menu>
@@ -567,7 +575,8 @@
                 <v-col>
                   <v-menu
                     :disabled="
-                      disable || !course_data.course_register_date.start_date
+                      disable ||
+                      !course_data.course_register_date.start_date_formatted
                     "
                     v-model="course_data.course_register_date.menu_end_date"
                     :close-on-content-click="false"
@@ -582,13 +591,13 @@
                         dense
                         :disabled="
                           disable ||
-                          !course_data.course_register_date.start_date
+                          !course_data.course_register_date.start_date_formatted
                         "
                         :outlined="!disable"
                         :filled="disable"
                         :rules="end_date"
                         :placeholder="$t('choose an end date')"
-                        v-model="register_date_range_str.end_date"
+                        v-model="course_data.course_register_date.end_date_str"
                         readonly
                         v-bind="attrs"
                         v-on="on"
@@ -597,7 +606,8 @@
                         <template v-slot:append>
                           <v-icon
                             :color="
-                              course_data.course_register_date.end_date
+                              course_data.course_register_date
+                                .end_date_formatted
                                 ? '#FF6B81'
                                 : ''
                             "
@@ -608,12 +618,15 @@
                     </template>
                     <v-date-picker
                       :min="
-                        course_data.course_register_date.start_date
-                          ? course_data.course_register_date.start_date
+                        course_data.course_register_date.start_date_formatted
+                          ? course_data.course_register_date
+                              .start_date_formatted
                           : today.toISOString()
                       "
                       @input="inputDate($event, 'register end date')"
-                      v-model="course_data.course_register_date.end_date"
+                      v-model="
+                        course_data.course_register_date.end_date_formatted
+                      "
                       locale="th-TH"
                     ></v-date-picker>
                   </v-menu>
@@ -679,7 +692,7 @@
                         :filled="disable"
                         :rules="start_date"
                         :placeholder="$t('choose start date')"
-                        v-model="class_date_range_str.start_date"
+                        v-model="course_data.course_study_date.start_date_str"
                         readonly
                         v-bind="attrs"
                         v-on="on"
@@ -688,7 +701,7 @@
                         <template v-slot:append>
                           <v-icon
                             :color="
-                              course_data.course_study_date.start_date
+                              course_data.course_study_date.start_date_formatted
                                 ? '#FF6B81'
                                 : ''
                             "
@@ -699,13 +712,15 @@
                     </template>
                     <v-date-picker
                       :min="
-                        course_data.course_register_date.end_date
-                          ? course_data.course_register_date.end_date
+                        course_data.course_register_date.end_date_formatted
+                          ? course_data.course_register_date.end_date_formatted
                           : today.toISOString()
                       "
                       @change="StartDateStudyCourse(course_data)"
                       @input="inputDate($event, 'class start date')"
-                      v-model="course_data.course_study_date.start_date"
+                      v-model="
+                        course_data.course_study_date.start_date_formatted
+                      "
                       :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
                     ></v-date-picker>
                   </v-menu>
@@ -713,13 +728,12 @@
                 <v-col cols="auto" class="mt-2 px-0"
                   ><v-icon>mdi-minus</v-icon></v-col
                 >
-                {{ course_data?.course_study_date.start_date }}
-
                 <v-col>
                   <v-menu
                     v-model="course_data.course_study_date.menu_end_date"
                     :disabled="
-                      disable || !course_data.course_study_date.start_date
+                      disable ||
+                      !course_data.course_study_date.start_date_formatted
                     "
                     :close-on-content-click="false"
                     transition="scale-transition"
@@ -731,12 +745,13 @@
                       <v-text-field
                         dense
                         :disabled="
-                          disable || !course_data.course_study_date.start_date
+                          disable ||
+                          !course_data.course_study_date.start_date_formatted
                         "
                         :outlined="!disable"
                         :filled="disable"
                         :rules="end_date"
-                        v-model="class_date_range_str.end_date"
+                        v-model="course_data.course_study_date.end_date_str"
                         readonly
                         :placeholder="$t('choose an end date')"
                         v-bind="attrs"
@@ -746,7 +761,7 @@
                         <template v-slot:append>
                           <v-icon
                             :color="
-                              course_data.course_study_date.end_date
+                              course_data.course_study_date.end_date_formatted
                                 ? '#FF6B81'
                                 : ''
                             "
@@ -757,12 +772,12 @@
                     </template>
                     <v-date-picker
                       :min="
-                        course_data.course_study_date.start_date
-                          ? course_data.course_study_date.start_date
+                        course_data.course_study_date.start_date_formatted
+                          ? course_data.course_study_date.start_date_formatted
                           : today.toISOString()
                       "
                       @input="inputDate($event, 'class end date')"
-                      v-model="course_data.course_study_date.end_date"
+                      v-model="course_data.course_study_date.end_date_formatted"
                       :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
                     ></v-date-picker>
                   </v-menu>
@@ -850,7 +865,11 @@
                 :disabled="disable"
                 :outlined="!disable"
                 :filled="disable"
-                :placeholder="$t('enter course details') + '...'"
+                :placeholder="
+                  course_data.description
+                    ? ''
+                    : $t('enter course details') + '...'
+                "
                 color="#FF6B81"
               ></v-textarea>
             </v-col>
@@ -992,7 +1011,7 @@
 <script>
 import LabelCustom from "@/components/label/labelCustom.vue";
 import headerCard from "@/components/header/headerCard.vue";
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import Swal from "sweetalert2";
 import {
@@ -1043,11 +1062,18 @@ export default {
       end_date: "",
     },
     menu_course_open_date: false,
+    menu_course_register_start_date: false,
     course_open_date: null,
+    register_course_start_date: null,
   }),
+  destroyed() {
+    this.ResetStateCourseData();
+  },
   created() {
     if (this.edited) {
-      this.preview_url = this.course_data?.course_img;
+      this.preview_url = this.course_data?.courseImg
+        ? this.course_data?.courseImg
+        : null;
       this.class_date_range_str = {
         start_date: dateFormatter(
           // "2024-12-31 00:00:00",
@@ -1077,6 +1103,12 @@ export default {
   },
   mounted() {},
   watch: {
+    "course_data.courseImg": {
+      immediate: true, // Trigger the watcher immediately upon initialization
+      handler(newImg) {
+        this.preview_url = newImg || ""; // Update preview_url when courseImg changes
+      },
+    },
     // Watch for changes in start_time_object and update start_time
     "course_data.course_study_time.start_time_object": {
       deep: true,
@@ -1110,7 +1142,9 @@ export default {
     disable: function () {
       if (this.edited) {
         if (this.disable) {
-          this.preview_url = this.course_data.course_img;
+          this.preview_url = this.course_data.courseImg
+            ? this.course_data.courseImg
+            : null;
         }
       }
     },
@@ -1146,9 +1180,9 @@ export default {
       this.course_data.reservation_end_date = null;
       this.course_data.coach_id = null;
       this.course_data.student_recived = null;
-      this.course_data.price_course = 0;
-      this.course_data.checked_discount_bool = false;
-      this.course_data.discount = 0;
+      this.course_data.course_price = 0;
+      this.course_data.checked_discount = false;
+      this.course_data.discount_price = 0;
       this.course_data.course_register_date = {
         start_date: null,
         menu_start_date: false,
@@ -1372,22 +1406,23 @@ export default {
     rulesDiscount() {
       return [
         () =>
-          this.course_data.discount !== "" ||
+          this.course_data.discount_price !== "" ||
           this.$t("please fill out the information correctly"),
         () =>
-          parseInt(this.course_data.discount) < this.course_data.price_course ||
+          parseInt(this.course_data.discount_price) <
+            this.course_data.course_price ||
           `${this.$t("number must be lest than")} ${
-            this.course_data.price_course
+            this.course_data.course_price
           }`,
         () =>
-          parseInt(this.course_data.discount) >= 1 ||
+          parseInt(this.course_data.discount_price) >= 1 ||
           this.$t("number must be 1"),
       ];
     },
   },
   methods: {
-    ...mapActions({
-      // ChangeCourseData: "CourseModules/ChangeCourseData",
+    ...mapMutations({
+      ResetStateCourseData: "CourseModules/ResetStateCourseData",
     }),
 
     // formattedStartTime: {
@@ -1402,13 +1437,14 @@ export default {
     //     this.course_data.course_study_time.start_time_object = { HH, mm };
     //   },
     // },
+
     ckeckClick(item) {
       if (item == false) {
-        this.course_data.discount = 0;
+        this.course_data.discount_price = 0;
       }
     },
-    checkMaxPrice(discount, price_course) {
-      return discount < price_course;
+    checkMaxPrice(discount, course_price) {
+      return discount < course_price;
     },
     ChengeReservation(e) {
       if (!e) {
@@ -1563,7 +1599,7 @@ export default {
     },
     removeFile() {
       this.preview_url = null;
-      this.course_data.course_img = null;
+      this.course_data.courseImg = null;
       // this.ChangeCourseData(this.course_data);
     },
     inputName(e, lang) {
@@ -1605,25 +1641,45 @@ export default {
           );
           break;
         case "register start date":
-          this.register_date_range_str.start_date = dateFormatter(
+          this.course_data.course_register_date.menu_start_date = false;
+          this.course_data.course_register_date.start_date_str = dateFormatter(
             e,
             "DD MMT YYYYT"
           );
+          // this.register_date_range_str.start_date = dateFormatter(
+          //   e,
+          //   "DD MMT YYYYT"
+          // );
           break;
         case "register end date":
-          this.register_date_range_str.end_date = dateFormatter(
+          // this.register_date_range_str.end_date = dateFormatter(
+          //   e,
+          //   "DD MMT YYYYT"
+          // );
+          this.course_data.course_register_date.menu_end_date = false;
+          this.course_data.course_register_date.end_date_str = dateFormatter(
             e,
             "DD MMT YYYYT"
           );
           break;
         case "class start date":
-          this.class_date_range_str.start_date = dateFormatter(
+          // this.class_date_range_str.start_date = dateFormatter(
+          //   e,
+          //   "DD MMT YYYYT"
+          // );
+          this.course_data.course_study_date.menu_start_date = false;
+          this.course_data.course_study_date.start_date_str = dateFormatter(
             e,
             "DD MMT YYYYT"
           );
           break;
         case "class end date":
-          this.class_date_range_str.end_date = dateFormatter(e, "DD MMT YYYYT");
+          // this.class_date_range_str.end_date = dateFormatter(e, "DD MMT YYYYT");
+          this.course_data.course_study_date.menu_end_date = false;
+          this.course_data.course_study_date.end_date_str = dateFormatter(
+            e,
+            "DD MMT YYYYT"
+          );
           break;
       }
     },
@@ -1636,7 +1692,7 @@ export default {
       if (CheckFileSize(this.file, event.target.id) === true) {
         const fileType = this.file.type;
         if (fileType === "image/png" || fileType === "image/jpeg") {
-          this.course_data.course_img = this.file;
+          this.course_data.courseImg = this.file;
           // this.ChangeCourseData(this.course_data);
           const reader = new FileReader();
           reader.onload = (e) => {

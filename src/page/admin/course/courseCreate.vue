@@ -89,7 +89,7 @@
                 <template v-slot:actions>
                   <v-btn outlined color="#FF6B81" @click="addCoach">
                     <v-icon>mdi-plus-circle-outline</v-icon>
-                    {{ $t("add a coach 55") }}
+                    {{ $t("add a coach") }}
                   </v-btn>
                 </template>
               </headerCard>
@@ -283,7 +283,7 @@
                   "
                   text
                   @click="step = step - 1"
-                  >{{ $t("back 55") }}</v-btn
+                  >{{ $t("back") }}</v-btn
                 >
               </v-col>
               <v-col cols="12" sm="auto" v-if="step < 4">
@@ -308,7 +308,7 @@
                   depressed
                   :loading="loading"
                   @click="submitStep(step - 1)"
-                  >{{ $t("create a course111") }}</v-btn
+                  >{{ $t("create a course") }}</v-btn
                 >
               </v-col>
             </v-row>
@@ -423,39 +423,10 @@ export default {
       // CoachData: "CourseModules/CoachData",
     }),
     save() {
-      // this.loading = true;
+      this.loading = true;
       // this.course_data.course_file = this.file;
 
       if (this.course_data.course_type_id === "CT_1") {
-        // const mapped_coachs = this.coach_data.map((coach) => ({
-        //   accountId: coach.coach_id,
-        //   registerDateRange: {
-        //     courseRegisterStartDate:
-        //       coach.register_date_range?.start_date || "",
-        //     courseRegisterEndDate: coach.register_date_range?.end_date || "",
-        //   },
-        //   classDateRange: {
-        //     courseStudyStartDate: coach.class_date_range?.start_date || "",
-        //     courseStudyEndDate: coach.class_date_range?.end_date || "",
-        //   },
-        //   period: {
-        //     coursePeriodStartDate: coach.period?.start_time || "",
-        //     coursePeriodEndDate: coach.period?.end_time || "",
-        //   },
-        // }));
-
-        // const mapped_dayOfweek = this.coach_data.flatMap((coach) =>
-        //   coach.teach_day_data.map((teachDay) => ({
-        //     accountId: coach.coach_id,
-        //     status: teachDay.class_open ? "Active" : "Inactive",
-        //     day: teachDay.teach_day,
-        //     times: teachDay.class_date.map((date) => ({
-        //       start: date.class_date_range?.start_time || "",
-        //       end: date.class_date_range?.end_time || "",
-        //       maximumStudent: date.students || "0",
-        //     })),
-        //   }))
-        // );
         const mapped_coachs = this.coach_data.map((coach) => ({
           coach_id: coach.coach_id,
           day_of_week: coach.teach_day_data.map((dayData) => ({
@@ -474,10 +445,9 @@ export default {
             package_id: items_package.package_id,
             option_id: option.option_id,
             hour_per_pime: option.amount ? option.amount : 0, // Static value as it's not in input data
-            option_description:
-              items_package.option_list.find(
-                (opt) => opt.option_id === option.option_id
-              )?.option_name_en || "",
+            option_description: option.option_description
+              ? option.option_description
+              : null,
             discount_status: option.discount || false,
             discount_price: option.discount_price || 0,
             price_per_person: option.price_unit || 0,
@@ -502,13 +472,15 @@ export default {
           course_certification: this.course_data.certification,
           course_price: 0,
           discount_price: 0,
+          course_register_start_date: null,
+          course_register_end_date: null,
           coachs: mapped_coachs ? mapped_coachs : null,
           // dayOfweek: mapped_dayOfweek ? mapped_dayOfweek : null,
           course_packages: mapped_packages ? mapped_packages : null,
         };
         this.CreateCourse({
           course_payload: payload_create_course,
-          course_file: this.course_data.course_img,
+          course_file: this.course_data.courseImg,
           privilege_file: this.course_create_data.privilege_file,
           artwork_file: this.course_create_data.artwork_file,
         });
@@ -529,21 +501,29 @@ export default {
           course_description: this.course_data.description,
           course_music_performance: this.course_data.music_performance,
           course_certification: this.course_data.certification,
-          course_price: this.course_data.price_course
-            ? this.course_data.price_course
+          course_register_start_date:
+            this.course_data.course_register_date.start_date_formatted,
+          course_register_end_date:
+            this.course_data.course_register_date.end_date_formatted,
+          course_study_start_date:
+            this.course_data.course_study_date.start_date_formatted,
+          course_study_end_date:
+            this.course_data.course_study_date.end_date_formatted,
+          course_price: this.course_data.course_price
+            ? this.course_data.course_price
             : 0,
-          discount_price: this.course_data.discount
-            ? this.course_data.discount
+          discount_price: this.course_data.discount_price
+            ? this.course_data.discount_price
             : 0,
-          discount_bool: this.course_data.checked_discount_bool
-            ? this.course_data.checked_discount_bool
+          discount_bool: this.course_data.checked_discount
+            ? this.course_data.checked_discount
             : false,
           coachs: [
             {
               coach_id: this.course_data.coach_id,
-              status: "Active",
               day_of_week: [
                 {
+                  status: "Active",
                   day: this.course_data.teach_day.join(","),
                   times: [
                     {
@@ -554,31 +534,14 @@ export default {
                   ],
                 },
               ],
-              // register_date_range: {
-              //   course_register_start_date:
-              //     this.course_data.course_register_date?.start_date || null,
-              //   course_register_end_date:
-              //     this.course_data.course_register_date?.end_date || null,
-              // },
-              // classDateRange: {
-              //   course_study_start_date:
-              //     this.course_data.course_study_date?.start_date || null,
-              //   course_study_end_date:
-              //     this.course_data.course_study_date?.end_date || null,
-              // },
-              // period: {
-              //   course_period_start_date:
-              //     this.course_data.course_study_time?.start_time || null,
-              //   course_period_end_date:
-              //     this.course_data.course_study_time?.end_time || null,
-              // },
             },
           ],
+          students: this.course_data.student_recived,
           course_packages: [],
         };
         this.CreateCourse({
           course_payload: payload_create_course,
-          course_file: this.course_data.course_img,
+          course_file: this.course_data.courseImg,
         });
       }
     },

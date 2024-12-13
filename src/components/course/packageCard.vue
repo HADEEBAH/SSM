@@ -478,7 +478,7 @@
 <script>
 import HeaderCard from "../header/headerCard.vue";
 import LabelCustom from "../label/labelCustom.vue";
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapMutations } from "vuex";
 import Swal from "sweetalert2";
 
 export default {
@@ -601,6 +601,9 @@ export default {
       );
     },
   },
+  destroyed() {
+    this.ResetStateCourseData();
+  },
   methods: {
     ...mapActions({
       ChangeCourseData: "CourseModules/ChangeCourseData",
@@ -613,7 +616,9 @@ export default {
       RefreshPackage: "CourseModules/RefreshPackage",
       RefreshPackageOption: "CourseModules/RefreshPackageOption",
     }),
-
+    ...mapMutations({
+      ResetStateCourseData: "CourseModules/ResetStateCourseData",
+    }),
     editPackage(item_package) {
       item_package.edit_package = false;
     },

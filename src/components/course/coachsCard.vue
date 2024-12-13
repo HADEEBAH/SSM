@@ -618,7 +618,7 @@
 </template>
 <script>
 import LabelCustom from "../label/labelCustom.vue";
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapMutations } from "vuex";
 import moment from "moment";
 import Swal from "sweetalert2";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
@@ -703,6 +703,9 @@ export default {
     //   return "";
     // },
   },
+  destroyed() {
+    this.ResetStateCourseData();
+  },
   methods: {
     ...mapActions({
       // ChangeCourseData: "CourseModules/ChangeCourseData",
@@ -720,6 +723,9 @@ export default {
       DeleteOPtions: "CourseModules/DeleteOPtions",
       RefreshTeachDay: "CourseModules/RefreshTeachDay",
       RefreshOption: "CourseModules/RefreshOption",
+    }),
+    ...mapMutations({
+      ResetStateCourseData: "CourseModules/ResetStateCourseData",
     }),
     editCoach(items) {
       items.edited_coach = false;

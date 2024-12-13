@@ -146,8 +146,8 @@
                     color="#FF6B81"
                     class="white--text btn-size-lg"
                     depressed
-                    @click="CourseUpdateDetail()"
                     :disabled="!courseValidate"
+                    @click="CourseUpdateDetail()"
                   >
                     {{ $t("save") }}
                   </v-btn>
@@ -3262,10 +3262,15 @@ export default {
       } else if (tabName === "package") {
         this.PackagesData({ course_id: this.$route.params.course_id });
       } else if (tabName === "student list") {
-        this.$store.dispatch(
-          "CourseModules/GetCourse",
-          this.$route.params.course_id
-        );
+        // this.CoursesData({ course_id: this.$route.params.course_id });
+        this.GetCourse(this.$route.params.course_id).then(() => {
+          this.courses_data.course_type_id = this.data_course.course_type_id;
+        });
+
+        //  this.$store.dispatch(
+        //   "CourseModules/GetCourse",
+        //   this.$route.params.course_id
+        // );
       } else if (tabName === "arkwork") {
         this.$store.dispatch(
           "CourseModules/GetCourse",
@@ -3287,6 +3292,7 @@ export default {
       // this.GetCoachsByCourse({ course_id: this.$route.params.course_id });
     },
   },
+
   computed: {
     ...mapGetters({
       coachs: "CourseModules/getCoachs",
@@ -3306,6 +3312,7 @@ export default {
       export_is_loading: "CourseModules/export_is_loading",
       students_potential: "CourseModules/getAllStudentPotentialList",
       courses_data: "CourseModules/getCoursesData",
+      data_course: "CourseModules/getCourseData",
       coach_data: "CourseModules/getCoachData",
       data_package: "CourseModules/getPackageData",
       art_work_data: "CourseModules/getArtWorkData",
@@ -4010,42 +4017,119 @@ export default {
           cancelButtonText: this.$t("no"),
         }).then(async (result) => {
           if (result.isConfirmed) {
-            let student_list = await this.UpdateCouserDetail({
-              course_id: this.course_created_data.course_id,
-              course_created_data: this.course_created_data,
+            let payload = {
+              course_id: this.courses_data?.course_id,
+              course_name_th: this.courses_data?.course_name_th,
+              course_name_en: this.courses_data?.course_name_en,
+              course_open_date: this.courses_data?.course_open_date,
+              course_type_id: this.courses_data?.course_type_id,
+              course_location: this.courses_data?.location,
+              course_description: this.courses_data?.description,
+              music_performance: this.courses_data?.music_performance,
+              course_certification: this.courses_data?.certification,
+              course_image: null,
+              category_id: this.courses_data?.category_id,
+              course_img: null,
+              reservation_start_date: this.courses_data?.reservation_start_date,
+              reservation_end_date: this.courses_data?.reservation_end_date,
+              student_recived: this.courses_data?.student_recived,
+              discount_price: this.courses_data?.discount_price
+                ? this.courses_data?.discount_price
+                : 0,
+              course_register_date: {
+                start_date:
+                  this.courses_data?.course_register_date?.start_date_formatted,
+                end_date:
+                  this.courses_data?.course_register_date?.end_date_formatted,
+              },
+              reservation: this.courses_data?.reservation,
+              coach_id: this.courses_data?.coach_id,
+              course_study_start_date:
+                this.courses_data?.course_study_date?.start_date_formatted,
+              course_study_end_date:
+                this.courses_data?.course_study_date?.end_date_formatted,
+              course_study_time: {
+                time_id: this.courses_data?.course_study_time?.time_id,
+                start_time: this.courses_data?.course_study_time?.start_time,
+                end_time: this.courses_data?.course_study_time?.end_time,
+                students: this.courses_data?.course_study_time?.students,
+                day_of_week_id:
+                  this.courses_data?.course_study_time?.day_of_week_id,
+              },
+              course_study_date: {
+                day_of_week_id:
+                  this.courses_data?.course_study_date?.day_of_week_id,
+                day_of_week_name: this.courses_data?.teach_day?.join(","),
+                course_coach_id:
+                  this.courses_data?.course_study_date?.course_coach_id,
+                status: this.courses_data?.course_study_date?.status,
+              },
+              course_per_time: this.courses_data?.course_hours,
+              course_price: this.courses_data?.course_price,
+              course_period_start_date:
+                this.courses_data?.course_study_date?.start_date_formatted,
+              course_period_end_date:
+                this.courses_data?.course_study_date?.end_date_formatted,
+              // course_checked_discount: this.courses_data?.checked_discount_bool,
+            };
+            await this.UpdateCouserDetail({
+              course_id: this.courses_data?.course_id,
+              data_payload: payload,
+              course_file: this.courses_data?.courseImg,
             });
-            if (student_list?.students?.length > 0) {
-              const options = {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              };
-
-              let payload = {
-                notificationName: "แจ้งเตือนเลื่อนวันเปิดเรียน",
-                notificationNameEn:
-                  "Notification of postponement of school opening date",
-                notificationDescription: `คอร์ส ${
-                  this.course_created_data.course_name_th
-                } เลื่อนเป็นวันที่ ${new Date(
-                  student_list.afterDate
-                )?.toLocaleDateString("th-TH", options)}`,
-                notificationDescriptionEn: `course ${
-                  this.course_created_data.course_name_en
-                } postponed to date ${new Date(
-                  student_list.afterDate
-                )?.toLocaleDateString("en-En", options)}`,
-                accountId: student_list.students,
-                path: null,
-              };
-              this.sendNotification(payload);
-              // }
-            }
 
             this.course_edit = false;
           }
         });
       }
+
+      // this.$refs.course_form.validate();
+      // if (this.courseValidate) {
+      //   Swal.fire({
+      //     icon: "question",
+      //     title: this.$t("do you want to edit your course?"),
+      //     showDenyButton: false,
+      //     showCancelButton: true,
+      //     confirmButtonText: this.$t("agree"),
+      //     cancelButtonText: this.$t("no"),
+      //   }).then(async (result) => {
+      //     if (result.isConfirmed) {
+      //       let student_list = await this.UpdateCouserDetail({
+      //         course_id: this.course_created_data.course_id,
+      //         course_created_data: this.course_created_data,
+      //       });
+      //       if (student_list?.students?.length > 0) {
+      //         const options = {
+      //           year: "numeric",
+      //           month: "long",
+      //           day: "numeric",
+      //         };
+
+      //         let payload = {
+      //           notificationName: "แจ้งเตือนเลื่อนวันเปิดเรียน",
+      //           notificationNameEn:
+      //             "Notification of postponement of school opening date",
+      //           notificationDescription: `คอร์ส ${
+      //             this.course_created_data.course_name_th
+      //           } เลื่อนเป็นวันที่ ${new Date(
+      //             student_list.afterDate
+      //           )?.toLocaleDateString("th-TH", options)}`,
+      //           notificationDescriptionEn: `course ${
+      //             this.course_created_data.course_name_en
+      //           } postponed to date ${new Date(
+      //             student_list.afterDate
+      //           )?.toLocaleDateString("en-En", options)}`,
+      //           accountId: student_list.students,
+      //           path: null,
+      //         };
+      //         this.sendNotification(payload);
+      //         // }
+      //       }
+
+      //       this.course_edit = false;
+      //     }
+      //   });
+      // }
     },
     coachListPotential(coach_list) {
       let coachList = [];
