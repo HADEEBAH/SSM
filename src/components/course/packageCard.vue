@@ -31,7 +31,9 @@
             <v-icon>mdi-content-save-all-outline</v-icon>
           </v-btn>
           <v-btn
-            v-if="!item_package.course_package_option_id"
+            v-if="
+              !item_package.course_package_option_id && data_package?.length > 1
+            "
             icon
             color="red"
             @click="removePackage(index, item_package)"
@@ -740,7 +742,7 @@ export default {
         // OLD OPTION
         Swal.fire({
           icon: "question",
-          title: this.$t("want to delete a option"),
+          title: this.$t("do you want to delete a option"),
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: this.$t("agree"),
@@ -806,7 +808,7 @@ export default {
               hour_per_time: item.amount,
               price_per_person: item.price_unit ? item.price_unit : 0,
               discount_price: item.discount_price ? item.discount_price : 0,
-              discount_status: item.discount,
+              discount_status: item.discount ? true : false,
               option_description: item.option_description
                 ? item.option_description
                 : null,
@@ -856,7 +858,7 @@ export default {
         // DELETE OLD PACKAGE
         Swal.fire({
           icon: "question",
-          title: this.$t("want to delete a package"),
+          title: this.$t("do you want to delete a package"),
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: this.$t("agree"),

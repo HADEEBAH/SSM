@@ -43,7 +43,7 @@
     "all users": "ผู้ใช้งานทั้งหมด",
     "all year": "ทั้งปี",
     "all contacted" : "ติดต่อแล้วทั้งหมด",
-    "already edited": "( แก้ไขเรียบร้อยแล้ว )",
+    "already edited": "แก้ไขเรียบร้อยแล้ว",
     "already registered": "( ลงทะเบียนเรียบร้อยแล้ว )",
     "approved" : "อนุมัติ",
     "approval has been confirmed": "( ยืนยันการอนุมัติเรียบร้อยแล้ว )",
@@ -59,7 +59,7 @@
     "attachments" : "ไฟล์แนบ",
     "attachments file" : "ไฟล์แนบ",
     "all days" : "ทั้งวัน",
-    "already deleted": "( ลบเรียบร้อยแล้ว )",
+    "already deleted": "ลบเรียบร้อยแล้ว",
     "attached file from teaching summary notes":"ไฟล์แนบจากบันทึกสรุปการสอน",
     "attachment from student assessment": "ไฟล์แนบจากประเมินนักเรียน",
     "available course information": "ข้อมูลคอร์สว่าง",
@@ -67,6 +67,9 @@
     "april": "เมษายน",
     "august": "สิงหาคม",
     "all students have been contacted": "ติดต่อนักเรียนทุกคนแล้ว",
+    "add new teachday succeed":"เพิ่มวันสอนสำเร็จ",
+    "add coaach succeed":"เพิ่มโค้ชสำเร็จ",
+
 
     "date list": "รายการวันที่",
     "baht" : "บาท",
@@ -276,6 +279,14 @@
     "do you want to add new coach":"คุณต้องการเพิ่มโค้ชใช่หรือไม่?",
     "do you want to add more teachday":"คุณต้องการเพิ่มวันสอนใช่หรือไม่?",
     "do you want to delete this coach":"คุณต้องการลบโค้ชใช่หรือไม่?",
+    "do you want to edit teachday":"คุณต้องการแก้ไขวันสอนใช่หรือไม่?",
+    "do you want to edit ooption":"คุณต้องการแก้ไขระยะเวลาการสอนใช่หรือไม่?",
+    "do you want to add more option":"คุณต้องการเพิ่มเวลาสอนใช่หรือไม่?",
+    "do you want to update a package":"คุณต้องการแก้ไขแพ็กเกจใช่หรือไม่?",
+    "do you want to delete a package":"คุณต้องการลบแพ็คเกจใช่หรือไม่?",
+    "do you want to update a option":"คุณต้องการแก้ไขช่วงเวลาใช่หรือไม่?",
+    "do you want to delete a option":"คุณต้องการลบช่วงเวลาใช่หรือไม่?",
+    "do you want to create a option":"คุณต้องการเพิ่มช่วงเวลาใช่หรือไม่?",
 
 
 
@@ -495,6 +506,10 @@
     "others" : "อื่นๆ",
     "october": "ตุลาคม",
     "overview":"ภาพรวมการใช้บริการ",
+    "option cannot be deleted as there are students who have booked this option":"ไม่สามารถลบตัวเลือกได้เนื่องจากมีนักเรียนที่มีสถานะคำสั่งซื้ออยู่ระหว่างการชำระเงินสำหรับตัวเลือกนี้",
+    "option has been updated":"แก้ไขช่วงเวลาเรียบร้อยแล้ว",
+    "option has been deleted":"ลบช่วงเวลาเรียบร้อยแล้ว",
+    "option has been created":"เพิ่มช่วงเวลาเรียบร้อยแล้ว",
 
 
     "package" : "แพ็คเกจ",
@@ -673,6 +688,9 @@
     "parent and student usernames must be unique" : "ชื่อผู้ใช้ของผู้ปกครองและนักเรียนต้องไม่ซ้ำกัน",
     "print receipt" : "ออกใบเสร็จฉบับเต็ม",
     "postpone the course opening date": "เลื่อนวันเปิดคอร์ส",
+    "package has been updated":"แก้ไขแพ็คเกจเรียบร้อยแล้ว",
+    "package has been deleted":"ลบแพ็คเกจเรียบร้อยแล้ว",
+    "package has been created":"เพิ่มแพ็คเกจเรียบร้อยแล้ว",
     
 
     "receipt language" : "ใบเสร็จภาษา",

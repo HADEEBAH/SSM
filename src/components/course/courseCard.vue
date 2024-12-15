@@ -1106,7 +1106,11 @@ export default {
     "course_data.courseImg": {
       immediate: true, // Trigger the watcher immediately upon initialization
       handler(newImg) {
-        this.preview_url = newImg || ""; // Update preview_url when courseImg changes
+        if (newImg) {
+          this.preview_url = `https://waraphat.alldemics.com/api/v1/files/${newImg}`;
+        } else {
+          this.preview_url = null;
+        }
       },
     },
     // Watch for changes in start_time_object and update start_time

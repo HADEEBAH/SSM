@@ -465,7 +465,9 @@ export default {
           course_name_en: this.course_data.course_name_en,
           course_open_date: this.course_data.course_open_date,
           course_per_time: this.course_data.course_hours,
-          course_student_recived: 0,
+          course_student_recived: this.course_data.student_recived
+            ? this.course_data.student_recived
+            : 0,
           course_location: this.course_data.location,
           course_description: this.course_data.description,
           course_music_performance: this.course_data.music_performance,
@@ -483,6 +485,8 @@ export default {
           course_file: this.course_data.courseImg,
           privilege_file: this.course_create_data.privilege_file,
           artwork_file: this.course_create_data.artwork_file,
+        }).then(() => {
+          this.loading = false;
         });
       } else {
         let payload_create_course = {
@@ -496,7 +500,9 @@ export default {
           course_name_en: this.course_data.course_name_en,
           course_open_date: this.course_data.course_open_date,
           course_per_time: this.course_data.course_hours,
-          course_student_recived: 0,
+          course_student_recived: this.course_data.student_recived
+            ? this.course_data.student_recived
+            : 0,
           course_location: this.course_data.location,
           course_description: this.course_data.description,
           course_music_performance: this.course_data.music_performance,
@@ -536,12 +542,14 @@ export default {
               ],
             },
           ],
-          students: this.course_data.student_recived,
+          status: "active",
           course_packages: [],
         };
         this.CreateCourse({
           course_payload: payload_create_course,
           course_file: this.course_data.courseImg,
+        }).then(() => {
+          this.loading = false;
         });
       }
     },

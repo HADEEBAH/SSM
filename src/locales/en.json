@@ -45,8 +45,8 @@
     "all" : "All",
     "all days" : "All days",
     "all year": "All year",
-    "already deleted": "( Already deleted )",
-    "already edited": "( Already edited )",
+    "already deleted": "Already deleted",
+    "already edited": "Already edited",
     "all courses" : "Total courses",
     "all students" : "All students",
     "all users": "All users",
@@ -74,6 +74,9 @@
     "average" : "Average",
     "august": "August",
     "all students have been contacted": "All students have been contacted",
+    "add new teachday succeed":"Add new teachday succeed",
+    "add coaach succeed":"Add coaach succeed",
+
 
    
     "baht" : "Baht",
@@ -298,6 +301,19 @@
     "do you want to add new coach":"Do you want to add new coach?",
     "do you want to add more teachday":"Do you want to add more teachday?",
     "do you want to delete this coach":"Do you want to delete this coach?",
+    "do you want to edit teachday":"Do you want to edit teachday?",
+    "do you want to edit ooption":"do you want to edit ooption?",
+    "do you want to add more option":"Do you want to add more option?",
+    "do you want to update a package":"Do you want to update a package?",
+    "do you want to update a option":"Do you want to update a option?",
+    "do you want to delete a package":"Do you want to delete a package?",
+    "do you want to delete a option":"Do you want to delete a option?",
+    "do you want to create a option":"Do you want to create a option?",
+
+
+
+
+
 
 
 
@@ -533,6 +549,11 @@
     "others" : "Others",
     "october": "October",
     "overview":"Overview of service use",
+    "option cannot be deleted as there are students who have booked this option":"Option cannot be deleted as there are students who have booked this option",
+    "option has been updated":"Option has been updated",
+    "option has been deleted":"Option has been deleted",
+    "option has been created":"Option has been created",
+
 
     "package" : "Package",
     "parents cannot resave the course to their parents" : "Parents cannot resave the course to their parents",
@@ -710,6 +731,10 @@
     "parent and student usernames must be unique" : "Parent and student usernames must be unique",
     "print receipt" : "Print receipt",
     "postpone the course opening date": "Postpone the course opening course",
+    "package has been updated":"Package has been updated",
+    "package has been deleted":"Package has been deleted",
+    "package has been created":"Package has been created",
+
 
     "reason for leave" : "Reason for leave",
     "read more":"Read more",

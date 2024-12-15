@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- {{ setFunction }} -->
-    <div v-if="!coach_data[0].course_coach_id && edited">
+    <div v-if="!coach_data[0]?.course_coach_id && edited">
       <template>
         <v-row class="fill-height ma-0" align="center" justify="center">
           <v-progress-circular
@@ -239,7 +239,7 @@
                         icon
                         v-if="!teach_day.edited_coach"
                         color="#FF6B81"
-                        @click="refreshCoach(teach_day)"
+                        @click="refreshCoach(teach_day, coach)"
                       >
                         <v-icon>mdi-refresh</v-icon>
                       </v-btn>
@@ -731,17 +731,28 @@ export default {
       items.edited_coach = false;
     },
     saveUpdateCoach(items, teach_day) {
-      let update_payload = {
-        coach_id: items.coach_id,
-        course_coach_id: items.course_coach_id,
-        course_id: items.course_id,
-        day_of_week_id: teach_day.day_of_week_id,
-        teach_day: teach_day.teach_day.join(","),
-        class_open: teach_day.class_open,
-      };
-      this.UpdateTeachdayCoach({
-        payload: update_payload,
-        course_id: this.$route.params.course_id,
+      Swal.fire({
+        icon: "question",
+        title: this.$t("do you want to edit teachday"),
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          let update_payload = {
+            coach_id: items.coach_id,
+            course_coach_id: items.course_coach_id,
+            course_id: items.course_id,
+            day_of_week_id: teach_day.day_of_week_id,
+            teach_day: teach_day.teach_day.join(","),
+            class_open: teach_day.class_open,
+          };
+          this.UpdateTeachdayCoach({
+            payload: update_payload,
+            course_id: this.$route.params.course_id,
+          });
+        }
       });
       teach_day.edited_coach = true;
     },
@@ -835,45 +846,67 @@ export default {
       items.class_date_range.edited_options = false;
     },
     saveUpdateOption(class_date) {
-      let option_payload = {
-        time_id: class_date.class_date_range.time_id,
-        start_time: class_date.class_date_range.start_time,
-        end_time: class_date.class_date_range.end_time,
-        student_number: class_date.students,
-        day_of_week_id: class_date.class_date_range.day_of_week_id,
-      };
-      this.UpdateOptions({
-        payload: option_payload,
-        course_id: this.$route.params.course_id,
+      Swal.fire({
+        icon: "question",
+        title: this.$t("do you want to edit ooption"),
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          let option_payload = {
+            time_id: class_date.class_date_range.time_id,
+            start_time: class_date.class_date_range.start_time,
+            end_time: class_date.class_date_range.end_time,
+            student_number: class_date.students,
+            day_of_week_id: class_date.class_date_range.day_of_week_id,
+          };
+          this.UpdateOptions({
+            payload: option_payload,
+            course_id: this.$route.params.course_id,
+          });
+        }
       });
     },
     saveAddNewOptions(coach, teach_day) {
-      let data_payload = {
-        coach_id: coach.coach_id,
-        coach_name: coach.coach_name,
-        course_coach_id: coach.course_coach_id,
-        teach_day_data: [
-          {
-            day_of_week_id: teach_day.day_of_week_id,
-            class_open: teach_day.class_open,
-            teach_day: teach_day.teach_day?.join(","),
-            times: teach_day.class_date
-              .filter(
-                (class_date) => !class_date.class_date_range.day_of_week_id
-              ) // Only include if day_of_week_id exists
-              .map((option_date) => ({
-                time_id: null,
-                start_time: option_date.class_date_range.start_time,
-                end_time: option_date.class_date_range.end_time,
-                student_number: option_date.students,
-              })),
-          },
-        ],
-      };
-      this.AddNewOptions({
-        payload: data_payload,
-        course_id: this.$route.params.course_id,
-        course_coach_id: coach.course_coach_id,
+      Swal.fire({
+        icon: "question",
+        title: this.$t("do you want to add more option"),
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          let data_payload = {
+            coach_id: coach.coach_id,
+            coach_name: coach.coach_name,
+            course_coach_id: coach.course_coach_id,
+            teach_day_data: [
+              {
+                day_of_week_id: teach_day.day_of_week_id,
+                class_open: teach_day.class_open,
+                teach_day: teach_day.teach_day?.join(","),
+                times: teach_day.class_date
+                  .filter(
+                    (class_date) => !class_date.class_date_range.day_of_week_id
+                  ) // Only include if day_of_week_id exists
+                  .map((option_date) => ({
+                    time_id: null,
+                    start_time: option_date.class_date_range.start_time,
+                    end_time: option_date.class_date_range.end_time,
+                    student_number: option_date.students,
+                  })),
+              },
+            ],
+          };
+          this.AddNewOptions({
+            payload: data_payload,
+            course_id: this.$route.params.course_id,
+            course_coach_id: coach.course_coach_id,
+          });
+        }
       });
     },
     deleteNewCoach(teach_day, teach_day_index) {
@@ -897,11 +930,14 @@ export default {
         }
       });
     },
-    async refreshCoach(teach_day) {
+    async refreshCoach(teach_day, coach) {
       await this.RefreshTeachDay({
         course_id: this.$route.params.course_id,
         day_of_week_id: teach_day.day_of_week_id,
         course_coach_id: teach_day.course_coach_id,
+      }).then(() => {
+        teach_day.teach_day = this.refresh_teach_day.teach_day;
+        coach.coach_id = this.refresh_teach_day.coachId;
       });
     },
     async refreshOptionFunction(class_date) {
@@ -1154,7 +1190,7 @@ export default {
           this.coach_data[coachIndex].teach_day_data[teachDayIndex];
         // this.course_data.coachs[coachIndex].teach_day_data[teachDayIndex];
         const used_hours = [];
-        teach_days_used.forEach((teach_day) => {
+        teach_days_used?.forEach((teach_day) => {
           if (
             current_teach_day.teach_day.includes(parseInt(teach_day.date_value))
           ) {

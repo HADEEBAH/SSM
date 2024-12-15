@@ -691,6 +691,7 @@ const CourseModules = {
         state.courses_data.course_type_id = "CT_1",
         state.courses_data.location = null,
         state.courses_data.detail = null,
+        state.courses_data.description = null,
         state.courses_data.music_performance = null,
         state.courses_data.certification = null,
         state.courses_data.course_image = null,
@@ -701,7 +702,9 @@ const CourseModules = {
         state.courses_data.menu_reservation_start_date = null,
         state.courses_data.menu_reservation_end_date = null,
         state.courses_data.reservation_start_date_str = null,
+        state.courses_data.reservation_end_date_str = null,
         state.courses_data.reservation_start_date = null,
+        state.courses_data.reservation_end_date = null,
         state.courses_data.course_hour_time = {
           HH: '01',
           mm: '00'
@@ -1427,7 +1430,11 @@ const CourseModules = {
         // }
         const payloadData = new FormData()
         payloadData.append("payload", JSON.stringify(data_payload))
-        payloadData.append("img_url", course_file)
+        if (course_file) {
+          payloadData.append("img_url", course_file)
+        } else {
+          payloadData.append("img_url", null)
+        }
         // let localhost = "http://localhost:3000"
         // let { data } = await axios.patch(`${localhost}/api/v1/manage/update-course/${course_id}`, payloadData, config)
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-course/${course_id}`, payloadData, config)
@@ -1693,7 +1700,7 @@ const CourseModules = {
       }
     },
     // COURSE :: DELETE ARKWORK ID
-    async RemoveArkworkByArkworkId(context, { artwork_data }) {
+    async RemoveArkworkByArkworkId(context, { artwork_data, course_id }) {
       try {
         let config = {
           headers: {
@@ -1714,6 +1721,9 @@ const CourseModules = {
             timer: 3000,
             timerProgressBar: true,
           })
+          await context.dispatch("GetArtworkByCourse", { course_id: course_id })
+
+
         }
       } catch (error) {
         Swal.fire({
@@ -1763,7 +1773,8 @@ const CourseModules = {
       }
     },
     // COURSE :: UPDATE ARKWORK
-    async UpdateCourseArkwork(context, { course_id, course_data }) {
+    async UpdateCourseArkwork(context, { course_id, privilage_file, artwork_files }) {
+      // course_data, 
       try {
         let config = {
           headers: {
@@ -1772,13 +1783,22 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
+        // let payloadData = new FormData()
+        // if (course_data.privilege_file) {
+        //   payloadData.append("img_privilage", course_data.privilege_file)
+        // }
+        // if (course_data.artwork_file) {
+        //   for (let i = 0; i < course_data.artwork_file.length; i++) {
+        //     payloadData.append(`img_artwork`, course_data.artwork_file[i]);
+        //   }
+        // }
         let payloadData = new FormData()
-        if (course_data.privilege_file) {
-          payloadData.append("img_privilage", course_data.privilege_file)
+        if (privilage_file) {
+          payloadData.append("img_privilage", privilage_file)
         }
-        if (course_data.artwork_file) {
-          for (let i = 0; i < course_data.artwork_file.length; i++) {
-            payloadData.append(`img_artwork`, course_data.artwork_file[i]);
+        if (artwork_files) {
+          for (let i = 0; i < artwork_files.length; i++) {
+            payloadData.append(`img_artwork`, artwork_files[i]);
           }
         }
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-artwork/${course_id}`, payloadData, config)
@@ -1877,6 +1897,8 @@ const CourseModules = {
     //COURSE :: Artwork
     async GetArtworkByCourse(context, { course_id }) {
       try {
+        // const localhost = 'http://localhost:3000'
+        // let { data } = await axios.get(`${localhost}/api/v1/course/attcahment/${course_id}`)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/attcahment/${course_id}`)
         if (data.statusCode === 200) {
           if (data.data.length > 0) {
@@ -2451,10 +2473,12 @@ const CourseModules = {
         const data_payload = new FormData()
         data_payload.append("payload", JSON.stringify(course_payload))
         data_payload.append("img_url", course_file)
-        data_payload.append("img_privilage", privilege_file)
+        if (privilege_file) {
+          data_payload.append("img_privilage", privilege_file)
+        }
         if (artwork_file) {
           for (let i = 0; i < artwork_file.length; i++) {
-            data_payload.append(`artwork_file${i}`, artwork_file[i]);
+            data_payload.append(`img_artwork${i}`, artwork_file[i]);
           }
         }
 
@@ -3093,7 +3117,7 @@ const CourseModules = {
         // let { data } = await axios.get(`${localhost}/api/v1/course/detail/manage/courseId/${course_id}`, config)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/manage/courseId/${course_id}`, config)
         if (data.statusCode == 200) {
-          data.data.courseImg = data.data.courseImg !== null ? `https://waraphat.alldemics.com/api/v1/files/${data.data.courseImg}` : data.data.courseImg
+          // data.data.courseImg = data.data.courseImg !== null || '' ? `https://waraphat.alldemics.com/api/v1/files/${data.data.courseImg}` : null
           if (data.data.course_type_id === "CT_2") {
             data.data.teach_day = data.data.teach_day.map(Number)
             data.data.course_register_date.start_date_formatted = moment(data.data.course_register_date.start_date).format("YYYY-MM-DD");
@@ -3245,6 +3269,16 @@ const CourseModules = {
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-teachday-coach`, payload, config)
         if (data.statusCode == 200) {
           context.commit("SetUpdateTeachdayCoach", data.data)
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("already edited"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
           await context.dispatch("CoachData", { course_id: course_id })
 
 
@@ -3268,6 +3302,16 @@ const CourseModules = {
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-current-time-coach/courseId/${course_id}`, payload, config)
         if (data.statusCode == 200) {
           context.commit("SetUpdateOptions", data.data)
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("already edited"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
           await context.dispatch("CoachData", { course_id: course_id })
 
         }
@@ -3289,6 +3333,16 @@ const CourseModules = {
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-coach/${course_id}/course-coach/${course_coach_id}`, payload, config)
         if (data.statusCode == 200) {
           context.commit("SetAddNewOptions", data.data)
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("saved"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
           await context.dispatch("CoachData", { course_id: course_id })
 
         }
@@ -3313,7 +3367,7 @@ const CourseModules = {
           Swal.fire({
             icon: "success",
             title: VueI18n.t("succeed"),
-            text: VueI18n.t("time has been deleted"),
+            text: VueI18n.t("add coaach succeed"),
             timer: 3000,
             showDenyButton: false,
             showCancelButton: false,
@@ -3341,6 +3395,16 @@ const CourseModules = {
         let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/manage/create-new-teachday/${course_id}`, payload, config)
         if (data.statusCode == 201) {
           context.commit("SetAddNewTeachDay", data.data)
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("add new teachday succeed"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
           await context.dispatch("CoachData", { course_id: course_id })
 
         }
@@ -3362,6 +3426,16 @@ const CourseModules = {
         let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/manage/time/${time_id}`, config)
         if (data.statusCode == 200) {
           context.commit("SetDeleteOptions", data.data)
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("already deleted"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
           await context.dispatch("CoachData", { course_id: course_id })
 
         }

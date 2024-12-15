@@ -147,6 +147,7 @@
                     class="white--text btn-size-lg"
                     depressed
                     :disabled="!courseValidate"
+                    :loading="update_loading"
                     @click="CourseUpdateDetail()"
                   >
                     {{ $t("save") }}
@@ -180,8 +181,8 @@
                 </v-card-text>
               </v-card>
               <!-- ACTION -->
-              <v-row class="px-4" v-if="!course_edit">
-                <!-- <v-col align="right">
+              <!-- <v-row class="px-4" v-if="!course_edit">
+                <v-col align="right">
                   <v-btn
                     color="#FF6B81"
                     class="white--text btn-size-lg"
@@ -190,7 +191,7 @@
                   >
                     {{ $t("edit") }}
                   </v-btn>
-                </v-col> -->
+                </v-col>
               </v-row>
               <v-row class="px-4" v-if="course_edit">
                 <v-col align="right">
@@ -212,7 +213,7 @@
                     >{{ $t("save") }}
                   </v-btn>
                 </v-col>
-              </v-row>
+              </v-row> -->
             </v-tab-item>
             <!-- PACKAGE -->
             <v-tab-item value="package">
@@ -3233,6 +3234,7 @@ export default {
     studentListDialog: false,
     inpotentialBool: false,
     studentType: "",
+    update_loading: false,
   }),
   mounted() {
     this.CoursesData({ course_id: this.$route.params.course_id });
@@ -3272,12 +3274,15 @@ export default {
         //   this.$route.params.course_id
         // );
       } else if (tabName === "arkwork") {
-        this.$store.dispatch(
-          "CourseModules/GetCourse",
-          this.$route.params.course_id
-        );
-        this.preview_privilege_url = this.art_work_data.course_img_privilege;
-        this.GetArtworkByCourse({ course_id: this.$route.params.course_id });
+        // this.$store.dispatch(
+        //   "CourseModules/GetCourse",
+        //   this.$route.params.course_id
+        // );
+        this.GetArtworkByCourse({
+          course_id: this.$route.params.course_id,
+        }).then(() => {
+          this.preview_privilege_url = this.art_work_data.course_img_privilege;
+        });
       } else {
         this.CoursesData({ course_id: this.$route.params.course_id });
       }
@@ -3893,7 +3898,10 @@ export default {
         cancelButtonText: this.$t("no"),
       }).then(async (result) => {
         if (result.isConfirmed) {
-          this.RemoveArkworkByArkworkId({ artwork_data: data });
+          this.RemoveArkworkByArkworkId({
+            artwork_data: data,
+            course_id: this.$route.params.course_id,
+          });
           this.preview_artwork_files.splice(index, 1);
         }
       });
@@ -4005,6 +4013,7 @@ export default {
         ],
       });
     },
+
     async CourseUpdateDetail() {
       this.$refs.course_form.validate();
       if (this.courseValidate) {
@@ -4017,6 +4026,7 @@ export default {
           cancelButtonText: this.$t("no"),
         }).then(async (result) => {
           if (result.isConfirmed) {
+            this.update_loading = true;
             let payload = {
               course_id: this.courses_data?.course_id,
               course_name_th: this.courses_data?.course_name_th,
@@ -4025,11 +4035,15 @@ export default {
               course_type_id: this.courses_data?.course_type_id,
               course_location: this.courses_data?.location,
               course_description: this.courses_data?.description,
-              music_performance: this.courses_data?.music_performance,
+              course_music_performance: this.courses_data?.music_performance,
               course_certification: this.courses_data?.certification,
               course_image: null,
               category_id: this.courses_data?.category_id,
-              course_img: null,
+              course_img:
+                !this.courses_data?.courseImg ||
+                this.courses_data?.courseImg?.lastModified
+                  ? null
+                  : this.courses_data?.courseImg,
               reservation_start_date: this.courses_data?.reservation_start_date,
               reservation_end_date: this.courses_data?.reservation_end_date,
               student_recived: this.courses_data?.student_recived,
@@ -4072,12 +4086,14 @@ export default {
                 this.courses_data?.course_study_date?.end_date_formatted,
               // course_checked_discount: this.courses_data?.checked_discount_bool,
             };
+
             await this.UpdateCouserDetail({
               course_id: this.courses_data?.course_id,
               data_payload: payload,
               course_file: this.courses_data?.courseImg,
+            }).then(() => {
+              this.update_loading = false;
             });
-
             this.course_edit = false;
           }
         });
@@ -4204,8 +4220,12 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           await this.UpdateCourseArkwork({
-            course_id: this.course_created_data.course_id,
-            course_created_data: this.course_created_data,
+            // course_id: this.course_created_data.course_id,
+            // course_created_data: this.course_created_data,
+            course_id: this.$route.params.course_id,
+            course_data: this.course_created_data,
+            privilage_file: this.course_created_data.privilege_file,
+            artwork_files: this.course_created_data.artwork_file,
           });
           this.course_edit = false;
         }
