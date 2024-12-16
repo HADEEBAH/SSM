@@ -352,13 +352,85 @@
                       ></v-text-field>
                     </v-col>
                   </v-row>
+
+                  <!-- ข้อมูลคอร์สทป-->
+
+                  <!-- <pre>{{ holiday_course }}</pre> -->
+                  <div v-if="holiday_course?.length > 0">
+                    <div
+                      v-for="(items, items_index) in holiday_course"
+                      :key="items_index"
+                    >
+                      <v-card class="mb-6" v-if="items.courseTypeId == 'CT_1'">
+                        <v-card-text>
+                          <label class="font-weight-bold">{{
+                            $t("course")
+                          }}</label>
+                          <v-text-field
+                            dense
+                            outlined
+                            readonly
+                            color="#FF6B81"
+                            :value="
+                              $i18n.locale == 'th'
+                                ? items.courseNameTh
+                                : items.courseNameEn
+                            "
+                          >
+                          </v-text-field>
+                          <!-- วัน/เวลาชดเชย -->
+                          <label class="font-weight-bold">{{
+                            $t("compensation date")
+                          }}</label>
+                          <v-menu
+                            v-model="items.compensation_date_bool"
+                            :close-on-content-click="true"
+                            transition="scale-transition"
+                            min-width="auto"
+                            color="#ff6b81"
+                          >
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-text-field
+                                :rules="compensation_date_rule"
+                                dense
+                                outlined
+                                readonly
+                                :placeholder="$t('choose a compensation date')"
+                                v-bind="attrs"
+                                v-on="on"
+                                v-model="items.compensation_date_string"
+                                append-icon="mdi-calendar"
+                                color="#ff6b81"
+                              >
+                              </v-text-field>
+                            </template>
+                            <!-- :allowed-dates="allowedDates" -->
+
+                            <v-date-picker
+                              v-model="items.selectStudyDate"
+                              :min="new Date().toISOString()"
+                              @input="
+                                inputDateArr(items.selectStudyDate, items)
+                              "
+                              :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
+                              color="#ff6b81"
+                            ></v-date-picker>
+                          </v-menu>
+                        </v-card-text>
+                      </v-card>
+                    </div>
+                  </div>
                 </v-card-text>
 
                 <v-card-actions>
                   <v-row dense>
                     <!-- Delete -->
                     <v-col cols="6" align="center">
-                      <v-btn class="w-full" depressed @click="deleteHoliday">
+                      <v-btn
+                        class="w-full"
+                        depressed
+                        @click="deletedHolidayFunction(setDataEditDialog)"
+                      >
                         {{ $t("delete holiday") }}
                       </v-btn>
                     </v-col>
@@ -368,7 +440,7 @@
                         depressed
                         color="#FF6B81"
                         class="white--text w-full"
-                        @click="editHolidaysData()"
+                        @click="editHolidaysData(setDataEditDialog)"
                       >
                         {{ $t("save") }}
                       </v-btn>
@@ -1317,9 +1389,9 @@
 <script>
 import calendarAdmin from "@/components/calendar/calendarAdmin.vue";
 import dialogCard from "@/components/dialog/dialogCard.vue";
-import VueCookie from "vue-cookie";
+// import VueCookie from "vue-cookie";
 import Swal from "sweetalert2";
-import axios from "axios";
+// import axios from "axios";
 import { mapActions, mapGetters } from "vuex";
 // import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import headerPage from "@/components/header/headerPage.vue";
@@ -1756,8 +1828,9 @@ export default {
       GetOptions: "CourseModules/GetOptions",
       CheckInFilter: "adminCheckInModules/CheckInFilter",
       GetFilterCourseHoliday: "ManageScheduleModules/GetFilterCourseHoliday",
-      SetFilterCourseHoliday: "ManageScheduleModules/SetFilterCourseHoliday",
+      CreateCourseHoliday: "ManageScheduleModules/CreateCourseHoliday",
       CreateHoliday: "ManageScheduleModules/CreateHoliday",
+      DeleteHoliday: "ManageScheduleModules/DeleteHoliday",
     }),
     // checkedCourse() {
     //   // let checked_course = [];
@@ -2048,7 +2121,7 @@ export default {
       this.filter_dialog = false;
     },
 
-    async deleteHoliday() {
+    async deletedHolidayFunction(items) {
       Swal.fire({
         icon: "question",
         title: this.$t("do you want to delete a holiday?"),
@@ -2058,64 +2131,80 @@ export default {
         cancelButtonText: this.$t("no"),
       }).then(async (result) => {
         if (result.isConfirmed) {
-          try {
-            let config = {
-              headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Content-type": "Application/json",
-                Authorization: `Bearer ${VueCookie.get("token")}`,
-              },
-            };
-            let { data } = await axios.delete(
-              `${process.env.VUE_APP_URL}/api/v1/holiday/id/${this.setDataEditDialog.holidayId}`,
-              config
-            );
-            if (data.statusCode === 200) {
-              this.show_dialog_holoday = false;
-              this.holidaydates = "";
-              this.holidaySwitch = true;
-              this.holidayStartTime = "";
-              this.holidayEndTime = "";
-              this.nameHoliday = "";
-              this.show_dialog_edit_holoday = false;
-              this.setDataEditDialog = {};
-              this.editHolidayDates = null;
-              this.holidaydatesTh = null;
-              (this.show_dialog_edit_holoday = false), this.GetAllHolidays();
-
-              this.GetDataInSchedule({
-                month: this.select_month,
-                year: this.select_year,
-                // search: this.select_search ? this.select_search : "",
-                search: this.filter_search,
-
-                courseId: this.selectedCourse,
-                coachId: this.selectedCoach,
-                status: this.selectedCourseType,
-              });
-              Swal.fire({
-                icon: "success",
-                title: this.$t("succeed"),
-                text: this.$t("save data successfully"),
-                timer: 3000,
-                timerProgressBar: true,
-                showCancelButton: false,
-                showConfirmButton: false,
-              });
-            }
-          } catch (error) {
-            Swal.fire({
-              icon: "error",
-              title: this.$t("something went wrong"),
-              timer: 3000,
-              timerProgressBar: true,
-              showCancelButton: false,
-              showConfirmButton: false,
-            });
-          }
+          this.show_dialog_edit_holoday = false;
+          await this.DeleteHoliday({ holiday_id: items.holidayId });
         }
       });
     },
+
+    // async deleteHoliday() {
+    //   Swal.fire({
+    //     icon: "question",
+    //     title: this.$t("do you want to delete a holiday?"),
+    //     showDenyButton: false,
+    //     showCancelButton: true,
+    //     confirmButtonText: this.$t("agree"),
+    //     cancelButtonText: this.$t("no"),
+    //   }).then(async (result) => {
+    //     if (result.isConfirmed) {
+    //       try {
+    //         let config = {
+    //           headers: {
+    //             "Access-Control-Allow-Origin": "*",
+    //             "Content-type": "Application/json",
+    //             Authorization: `Bearer ${VueCookie.get("token")}`,
+    //           },
+    //         };
+    //         let { data } = await axios.delete(
+    //           `${process.env.VUE_APP_URL}/api/v1/holiday/id/${this.setDataEditDialog.holidayId}`,
+    //           config
+    //         );
+    //         if (data.statusCode === 200) {
+    //           this.show_dialog_holoday = false;
+    //           this.holidaydates = "";
+    //           this.holidaySwitch = true;
+    //           this.holidayStartTime = "";
+    //           this.holidayEndTime = "";
+    //           this.nameHoliday = "";
+    //           this.show_dialog_edit_holoday = false;
+    //           this.setDataEditDialog = {};
+    //           this.editHolidayDates = null;
+    //           this.holidaydatesTh = null;
+    //           (this.show_dialog_edit_holoday = false), this.GetAllHolidays();
+
+    //           this.GetDataInSchedule({
+    //             month: this.select_month,
+    //             year: this.select_year,
+    //             // search: this.select_search ? this.select_search : "",
+    //             search: this.filter_search,
+
+    //             courseId: this.selectedCourse,
+    //             coachId: this.selectedCoach,
+    //             status: this.selectedCourseType,
+    //           });
+    //           Swal.fire({
+    //             icon: "success",
+    //             title: this.$t("succeed"),
+    //             text: this.$t("save data successfully"),
+    //             timer: 3000,
+    //             timerProgressBar: true,
+    //             showCancelButton: false,
+    //             showConfirmButton: false,
+    //           });
+    //         }
+    //       } catch (error) {
+    //         Swal.fire({
+    //           icon: "error",
+    //           title: this.$t("something went wrong"),
+    //           timer: 3000,
+    //           timerProgressBar: true,
+    //           showCancelButton: false,
+    //           showConfirmButton: false,
+    //         });
+    //       }
+    //     }
+    //   });
+    // },
 
     validate(e, type) {
       inputValidation(e, type);
@@ -2361,7 +2450,14 @@ export default {
                   dayOfWeekName: student.dayOfWeekName,
                 })),
               }));
-              await this.SetFilterCourseHoliday(mappedData);
+              await this.CreateCourseHoliday(mappedData).then(() => {
+                if (
+                  this.course_in_holidays !== 400 ||
+                  this.course_in_holidays !== 500
+                ) {
+                  this.show_dialog_holoday = false;
+                }
+              });
             } else {
               mappedData = {
                 holidayName: this.nameHoliday,
@@ -2394,7 +2490,12 @@ export default {
       return `${date} ${month} ${year}`;
     },
 
-    editHolidays(holiday) {
+    async editHolidays(holiday) {
+      await this.GetFilterCourseHoliday({
+        holidayDate: holiday.holidayDate,
+        holidayMonth: holiday.holidayMonth,
+        holidayYears: holiday.holidayYears,
+      });
       this.show_dialog_edit_holoday = true;
       this.setDataEditDialog = { ...holiday };
       let options = {
@@ -2408,7 +2509,7 @@ export default {
       );
     },
 
-    async editHolidaysData() {
+    async editHolidaysData(holiday_data) {
       this.$refs.form_dialog.validate();
       if (this.form_dialog) {
         this.setDataEditDialog.holidayDate = this.editHolidayDates
@@ -2447,7 +2548,41 @@ export default {
             try {
               let payload = {};
               payload = { ...this.setDataEditDialog };
-              this.GetEditHolidays(payload);
+              await this.GetEditHolidays(payload);
+              // let mappedData = [];
+              // mappedData = this.holiday_course.map((course) => ({
+              //   courseId: course.courseId,
+              //   courseNameTh: course.courseNameTh,
+              //   courseNameEn: course.courseNameEn,
+              //   courseTypeId: course.courseTypeId,
+              //   holidaySelectDate: holiday_data.fullDate,
+              //   selectStudyDate:
+              //     course.courseTypeId == "CT_1" ? course.selectStudyDate : null,
+              //   // holidayName: this.nameHoliday,
+              //   // holidayDate: this.create_holiday_date_picker.split("-")[2],
+              //   // holidayMonth: this.create_holiday_date_picker.split("-")[1],
+              //   // holidayYears: this.create_holiday_date_picker.split("-")[0],
+              //   students: course.students.map((student) => ({
+              //     studentId: student.studentId,
+              //     firstNameTh: student.firstNameTh,
+              //     lastNameTh: student.lastNameTh,
+              //     packageName: student.packageName,
+              //     optionName: student.optionName,
+              //     optionNameEn: student.optionNameEn,
+              //     timeStart: student.timeStart,
+              //     timeEnd: student.timeEnd,
+              //     orderId: student.orderId,
+              //     coachId: student.coachId,
+              //     dayOfWeekId: student.dayOfWeekId,
+              //     orderItemId: student.orderItemId,
+              //     timeId: student.timeId,
+              //     coursePackageOptionId: student.coursePackageOptionId,
+              //     orderStudentId: student.orderStudentId,
+              //     dayOfWeekName: student.dayOfWeekName,
+              //   })),
+              // }));
+
+              // await this.EditedHolidayCourse({payload:mappedData})
               // this.GetDataInSchedule({
               //   month: new Date().getMonth() + 1,
               //   year: new Date().getFullYear(),

@@ -24,6 +24,8 @@ const manageScheduleModules = {
     course_in_holidays: [],
     holiday_status: [],
     create_holiday: [],
+    new_delete_holiday: [],
+    edited_course_holiday: []
   },
   mutations: {
     SetGetAllCourseIsLoading(state, value) {
@@ -125,6 +127,14 @@ const manageScheduleModules = {
     SetCreateHoliday(state, payload) {
       state.create_holiday = payload
     },
+    SetDeleteHoliday(state, payload) {
+      state.new_delete_holiday = payload
+    },
+    SetEditCourseHoliday(state, payload) {
+      state.edited_course_holiday = payload
+    },
+
+
 
 
   },
@@ -318,8 +328,10 @@ const manageScheduleModules = {
           },
         };
 
+        let localhost = "http://localhost:3000"
         let { data } = await axios.get(
-          `${process.env.VUE_APP_URL}/api/v1/holiday/id/${holidaysId}`,
+          `${localhost}/api/v1/holiday/id/${holidaysId}`,
+          // `${process.env.VUE_APP_URL}/api/v1/holiday/id/${holidaysId}`,
           config
         );
 
@@ -574,7 +586,7 @@ const manageScheduleModules = {
         });
       }
     },
-    async SetFilterCourseHoliday(context, dataForm) {
+    async CreateCourseHoliday(context, dataForm) {
       try {
         let localhost = "http://localhost:3000"
         let { data } = await axios.post(`${localhost}/api/v1/schedule/holiday`, dataForm)
@@ -646,6 +658,92 @@ const manageScheduleModules = {
 
       }
     },
+    async DeleteHoliday(context, { holiday_id }) {
+      try {
+
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.delete(`${localhost}/api/v1/holiday/id/${holiday_id}`)
+        // let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/holiday/id/${holiday_id}`)
+        if (data.statusCode === 200) {
+          context.commit("SetDeleteHoliday", data.data);
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("delete holiday success"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+          await context.dispatch("GetAllHolidays")
+          await context.dispatch("GetAllCourse")
+
+        }
+      } catch (error) {
+        console.log('error?.response?.data?.message :>> ', error?.response?.data?.message)
+        // if (error?.response?.data?.message === 'Holiday with the same date already exists.') {
+        //   Swal.fire({
+        //     icon: "warning",
+        //     title: VueI18n.t("this item cannot be made"),
+        //     text: VueI18n.t("this date is already built into a holiday"),
+        //     timer: 3000,
+        //     timerProgressBar: true,
+        //     showCancelButton: false,
+        //     showConfirmButton: false,
+        //   })
+        // } else {
+        //   Swal.fire({
+        //     icon: "warning",
+        //     title: VueI18n.t("this item cannot be made"),
+        //     text: error,
+        //     timer: 3000,
+        //     timerProgressBar: true,
+        //     showCancelButton: false,
+        //     showConfirmButton: false,
+        //   })
+        // }
+
+      }
+    },
+    async EditedHolidayCourse(context, { payload }) {
+      try {
+
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.patch(`${localhost}/schedule/holiday`, payload)
+        // let { data } = await axios.patch(`${process.env.VUE_APP_URL}/schedule/holiday`, payload)
+        if (data.statusCode === 201) {
+          context.commit("SetEditCourseHoliday", data.data);
+        }
+      } catch (error) {
+        console.log('error?.response?.data?.message :>> ', error?.response?.data?.message)
+        // if (error?.response?.data?.message === 'Holiday with the same date already exists.') {
+        //   Swal.fire({
+        //     icon: "warning",
+        //     title: VueI18n.t("this item cannot be made"),
+        //     text: VueI18n.t("this date is already built into a holiday"),
+        //     timer: 3000,
+        //     timerProgressBar: true,
+        //     showCancelButton: false,
+        //     showConfirmButton: false,
+        //   })
+        // } else {
+        //   Swal.fire({
+        //     icon: "warning",
+        //     title: VueI18n.t("this item cannot be made"),
+        //     text: error,
+        //     timer: 3000,
+        //     timerProgressBar: true,
+        //     showCancelButton: false,
+        //     showConfirmButton: false,
+        //   })
+        // }
+
+      }
+    },
+
+
+
 
 
 
