@@ -277,15 +277,14 @@
                 >
                   <v-row
                     v-if="
-                      art_work_data.course_img_privilege ||
-                      preview_privilege_url
+                      courses_data.course_img_privilege || preview_privilege_url
                     "
                   >
                     <v-col align="center" class="rounded-lg pa-0">
                       <v-img
                         :src="
-                          art_work_data.course_img_privilege
-                            ? art_work_data.course_img_privilege
+                          courses_data.course_img_privilege
+                            ? courses_data.course_img_privilege
                             : preview_privilege_url
                         "
                         style="max-width: 300px"
@@ -296,7 +295,7 @@
                       >
                         <v-btn
                           v-if="
-                            course_edit && art_work_data.course_img_privilege
+                            course_edit && courses_data.course_img_privilege
                           "
                           icon
                           class="bg-[#f00]"
@@ -318,7 +317,7 @@
                   <v-row
                     v-if="
                       !preview_privilege_url &&
-                      !art_work_data.course_img_privilege
+                      !courses_data.course_img_privilege
                     "
                   >
                     <v-col cols="12" class="flex align-center justify-center">
@@ -3254,8 +3253,11 @@ export default {
           this.preview_artwork_files.push(arkwork);
         }
       }
-      this.preview_privilege_url = this.art_work_data.course_img_privilege;
+
+      // this.preview_privilege_url = `https://waraphat.alldemics.com/api/v1/files/${this.courses_data.course_img_privilege}`;
+      // this.preview_privilege_url = this.courses_data.course_img_privilege;
     },
+
     tab: function (tabName) {
       if (tabName === "course") {
         this.CoursesData({ course_id: this.$route.params.course_id });
@@ -3281,7 +3283,9 @@ export default {
         this.GetArtworkByCourse({
           course_id: this.$route.params.course_id,
         }).then(() => {
-          this.preview_privilege_url = this.art_work_data.course_img_privilege;
+          // this.courses_data.course_img_privilege = `https://waraphat.alldemics.com/api/v1/files/${this.courses_data.course_img_privilege}`;
+          this.preview_privilege_url = this.courses_data.course_img_privilege;
+          // this.preview_privilege_url = this.art_work_data.course_img_privilege;
         });
       } else {
         this.CoursesData({ course_id: this.$route.params.course_id });
@@ -4026,7 +4030,12 @@ export default {
           cancelButtonText: this.$t("no"),
         }).then(async (result) => {
           if (result.isConfirmed) {
+            let path = null;
             this.update_loading = true;
+            if (!this.courses_data?.courseImg?.lastModified) {
+              const url = this.courses_data?.courseImg;
+              path = url?.split("/api/v1/files/")[1];
+            }
             let payload = {
               course_id: this.courses_data?.course_id,
               course_name_th: this.courses_data?.course_name_th,
@@ -4043,7 +4052,7 @@ export default {
                 !this.courses_data?.courseImg ||
                 this.courses_data?.courseImg?.lastModified
                   ? null
-                  : this.courses_data?.courseImg,
+                  : path,
               reservation_start_date: this.courses_data?.reservation_start_date,
               reservation_end_date: this.courses_data?.reservation_end_date,
               student_recived: this.courses_data?.student_recived,
@@ -4226,6 +4235,8 @@ export default {
             course_data: this.course_created_data,
             privilage_file: this.course_created_data.privilege_file,
             artwork_files: this.course_created_data.artwork_file,
+          }).then(() => {
+            this.preview_privilege_url = null;
           });
           this.course_edit = false;
         }

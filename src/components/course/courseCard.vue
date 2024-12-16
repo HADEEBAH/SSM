@@ -6,10 +6,10 @@
         class="border-dashed border-2 rounded-lg"
         style="border: dashed rgb(255, 107, 129)"
       >
-        <v-row v-if="preview_url">
+        <v-row v-if="preview_url || course_data.courseImg">
           <v-col align="center" class="rounded-lg pa-0 my-3">
             <v-img
-              :src="preview_url"
+              :src="preview_url ? preview_url : course_data.courseImg"
               style="max-width: 500px"
               :aspect-ratio="16 / 9"
               class="rounded-lg"
@@ -34,7 +34,7 @@
             </v-img>
           </v-col>
         </v-row>
-        <v-row v-if="!preview_url">
+        <v-row v-if="!preview_url && !course_data.courseImg">
           <v-col cols="12" class="flex align-center justify-center">
             <v-img
               src="@/assets/course/upload_file.png"
@@ -1103,16 +1103,16 @@ export default {
   },
   mounted() {},
   watch: {
-    "course_data.courseImg": {
-      immediate: true, // Trigger the watcher immediately upon initialization
-      handler(newImg) {
-        if (newImg) {
-          this.preview_url = `https://waraphat.alldemics.com/api/v1/files/${newImg}`;
-        } else {
-          this.preview_url = null;
-        }
-      },
-    },
+    // "course_data.courseImg": {
+    //   immediate: true, // Trigger the watcher immediately upon initialization
+    //   handler(newImg) {
+    //     if (newImg) {
+    //       this.preview_url = `https://waraphat.alldemics.com/api/v1/files/${newImg}`;
+    //     } else {
+    //       this.preview_url = null;
+    //     }
+    //   },
+    // },
     // Watch for changes in start_time_object and update start_time
     "course_data.course_study_time.start_time_object": {
       deep: true,
@@ -1701,6 +1701,7 @@ export default {
           const reader = new FileReader();
           reader.onload = (e) => {
             this.preview_url = e.target.result;
+            // this.course_data.preview_url = this.preview_url;
           };
           reader.readAsDataURL(this.file);
         } else {
