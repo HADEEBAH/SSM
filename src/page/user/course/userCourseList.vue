@@ -304,7 +304,7 @@ export default {
       // }
     },
     CutWold(course) {
-      return course.course_detail.slice(0, 122) + "...";
+      return course.course_detail?.slice(0, 122) + "...";
     },
     selectCourseType(course_type) {
       this.type_selected = course_type.course_type_id;

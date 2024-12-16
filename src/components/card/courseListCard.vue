@@ -41,7 +41,7 @@
     <v-card-text class="text-xs pa-2">
       <div>
         <div v-if="course.show" v-html="course.course_detail"></div>
-        <div v-else v-html="course.course_detail.slice(0, 150).trim()"></div>
+        <div v-else v-html="course.course_detail?.slice(0, 150).trim()"></div>
         <span
           v-if="course.course_detail?.length > 150"
           class="text-red-500 cursor-pointer"

@@ -3120,8 +3120,17 @@ const CourseModules = {
         // let { data } = await axios.get(`${localhost}/api/v1/course/detail/manage/courseId/${course_id}`, config)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/manage/courseId/${course_id}`, config)
         if (data.statusCode == 200) {
-          data.data.courseImg = data.data.courseImg !== null || '' || !"https://waraphat.alldemics.com/api/v1/files/" ? `https://waraphat.alldemics.com/api/v1/files/${data.data.courseImg}` : null
-          data.data.course_img_privilege = data.data.course_img_privilege !== null || '' ? `https://waraphat.alldemics.com/api/v1/files/${data.data.course_img_privilege}` : null
+          if (data.data.courseImg) {
+            data.data.courseImg = `${process.env.VUE_APP_URL}/api/v1/files/${data.data.courseImg}`
+          } else {
+            data.data.courseImg = null
+          }
+
+          if (data.data.course_img_privilege) {
+            data.data.course_img_privilege = `${process.env.VUE_APP_URL}/api/v1/files/${data.data.course_img_privilege}`
+          } else {
+            data.data.course_img_privilege = null
+          }
           if (data.data.course_type_id === "CT_2") {
             data.data.teach_day = data.data.teach_day.map(Number)
             data.data.course_register_date.start_date_formatted = moment(data.data.course_register_date.start_date).format("YYYY-MM-DD");

@@ -184,8 +184,8 @@
               </v-row>
               <v-row dense>
                 <v-col class="text-sm">
-                  {{ option.privilege.slice(0, 30).trim() }}
-                  <span v-if="option.privilege.length > 30">...</span>
+                  {{ option?.privilege?.slice(0, 30).trim() }}
+                  <span v-if="option?.privilege?.length > 30">...</span>
                 </v-col>
               </v-row>
             </v-card-text>
