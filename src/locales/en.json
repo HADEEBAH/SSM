@@ -222,6 +222,8 @@
     "coach information not found": "Coach information not found",
     "check in status" : "Check in status",
     "can't select these dates because they are duplications of existing schedules":"Can't select these dates because they are duplications of existing schedules",
+    "cannot resave the course to their parents":"Cannot resave the course to their parents",
+
 
 
 
@@ -985,6 +987,7 @@
     "view student details": "View student details",
     "view personal information" : "View personal information",
     "view portfolio": "View portfolio",
+    "There is no activation package. Please contact the staff": "There is no activation package. Please contact the staff.",
 
 
     "waiting for approval" : "Waiting for approval",
@@ -1117,6 +1120,8 @@
     "upload the cover image of the course":"Upload the cover image of the course",
     "upload privileged images":"upload privileged images",
     "upload Learning Journey":"Upload Learning Journey",
+    "unable to purchase the course because the course is in reserved status":"Unable to purchase the course because the course is in reserved status",
+    "unable to add students to cart because the course already has students listed in the cart":"Unable to add students to cart because the course already has students listed in the cart",
 
 
     "organized by":"Organized by",

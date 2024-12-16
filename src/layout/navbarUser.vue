@@ -176,6 +176,7 @@
               </v-card-text>
             </v-card>
           </v-menu>
+          <!-- :content="amount_cart_list" -->
 
           <v-badge
             v-if="amount_cart_list > 0"

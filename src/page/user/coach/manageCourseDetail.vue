@@ -1477,11 +1477,13 @@ export default {
     startTime: "",
     endTime: "",
   }),
-  created() {
-    this.GetStudentByTimeId({
+  async created() {
+    await this.GetStudentByTimeId({
       course_id: this.$route.params.courseId,
       date: this.$route.params.date,
       time_id: this.$route.params.timeId,
+      time_start: this.$route.params.timeStart,
+      time_end : this.$route.params.timeEnd
     });
   },
   mounted() {
@@ -1521,13 +1523,15 @@ export default {
         }
       });
     },
-    tab: function () {
-      this.GetStudentByTimeId({
+    tab: async function () {
+      await this.GetStudentByTimeId({
         course_id: this.$route.params.courseId,
         date: this.$route.params.date,
         time_id: this.$route.params.timeId,
+        time_start: this.$route.params.timeStart,
+        time_end :this.$route.params.timeEnd
       });
-      this.GetCoachCheckIn({
+      await this.GetCoachCheckIn({
         course_id: this.$route.params.courseId,
         date: this.$route.params.date,
         time_id: this.$route.params.timeId,
@@ -1702,20 +1706,21 @@ export default {
     },
     //check in by date
     CheckInByDate() {
-      // let check_in_date = moment(this.$route.params.date).format("YYYY-MM-DD")
-      // let today = moment().format("YYYY-MM-DD")
-      // if(check_in_date == today){
-      //   return false
-      // }else{
-      //   return true
-      // }
+      let check_in_date = moment(this.$route.params.date).format("YYYY-MM-DD")
+      let today = moment().format("YYYY-MM-DD")
+      if(moment(today).isSame(check_in_date)){
+        return false
+      }else{
+        return true
+      }
+
       // const current = moment().format("YYYY/MM/DD");
       // const currentMoment = moment(current);
       // const teachingDate = this.$route.params.date;
       // const countDate = currentMoment.isBefore(teachingDate);
       // console.log("countDate :>> ", countDate);
 
-      return false;
+      // return false;
     },
     genTime(time) {
       if (time) {
@@ -1939,6 +1944,8 @@ export default {
               course_id: this.$route.params.courseId,
               date: this.$route.params.date,
               time_id: this.$route.params.timeId,
+              time_start: this.$route.params.timeStart,
+              time_end : this.$route.params.timeEnd
             });
 
             if (potential_student.length > 0) {
@@ -1992,6 +1999,8 @@ export default {
               course_id: this.$route.params.courseId,
               date: this.$route.params.date,
               time_id: this.$route.params.timeId,
+              time_start: this.$route.params.timeStart,
+              time_end: this.$route.params.timeEnd
             });
             let payload = {
               notificationName: "แจ้งเตือนการประเมินผู้เรียน",
@@ -2047,6 +2056,8 @@ export default {
               course_id: this.$route.params.courseId,
               date: this.$route.params.date,
               time_id: this.$route.params.timeId,
+              time_start: this.$route.params.timeStart,
+              time_end: this.$route.params.timeEnd
             });
             let payload = {
               notificationName: "แจ้งเตือนการเช็คอิน",

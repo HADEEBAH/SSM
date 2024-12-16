@@ -204,6 +204,7 @@
     "current students" : "ผู้เรียนปัจจุบัน",
     "course has been created":"( สร้างคอร์สเรียบร้อยแล้ว )",
     "can't select these dates because they are duplications of existing schedules":"ไม่สามารถเลือกวันที่เหล่านี้ได้เนื่องจากซ้ำกับกำหนดการที่มีอยู่",
+    "cannot resave the course to their parents":"ไม่สามารถบันทึกหลักสูตรใหม่ให้ผู้ปกครองได้",
 
    
     "day" : "วัน",
@@ -950,6 +951,7 @@
     "view student details": "ดูรายละเอียดผู้เรียน",
     "view personal information" : "ดูข้อมูลส่วนตัว",
     "view portfolio": "ดูพอร์ตโฟลิโอ",
+    "There is no activation package. Please contact the staff": "ไม่มีแพ็คเกจเปิดใช้งาน กรุณาติดต่อเจ้าหน้าที่",
 
     "waiting for approval" : "รออนุมัติ",
     "waiting for payment" : "รอชำระเงิน",
@@ -1093,6 +1095,8 @@
     "upload the cover image of the course":"อัปโหลดภาพหน้าปกคอร์สเรียน",
     "upload privileged images":"อัปโหลดภาพสิทธิ์พิเศษ",
     "upload Learning Journey":"อัปโหลดภาพ Learning Journey",
+    "unable to purchase the course because the course is in reserved status":"ไม่สามารถซื้อหลักสูตรได้เนื่องจากหลักสูตรอยู่ในสถานะจอง",
+    "unable to add students to cart because the course already has students listed in the cart":"ไม่สามารถเพิ่มนักเรียนลงตะกร้าได้เนื่องจากหลักสูตรมีนักเรียนอยู่ในรายการรถเข็นแล้ว",
 
     "organized by":"จัดสอนโดย",
     "z":"z",
