@@ -68,7 +68,14 @@
             {{ $t("choose a course date") }}
           </v-col>
         </v-row>
-        <v-radio-group v-model="course_order.day" @change="resetTime">
+        <div v-if="course_order?.day_list?.length === 0" class="my-2">
+          <v-alert dense text type="warning">
+            <span class="text-center">
+              {{ $t("there is no teaching day. Please contact the staff") }}
+            </span>
+          </v-alert>
+        </div>
+        <v-radio-group v-model="course_order.day" @change="resetTime" v-else>
           <v-row>
             <!-- v-for="(date, date_index) in course_data.days" -->
 
@@ -241,7 +248,7 @@
           <!-- :disabled="profile_detail.class.classNameTh !== ''" -->
 
           <v-autocomplete
-            v-model="course_order.students.find((v) => !v.is_other).class"
+            :v-model="course_order?.students?.find((v) => !v.is_other)?.class"
             :items="class_list"
             item-text="classNameTh"
             outlined
@@ -250,8 +257,8 @@
             dense
             @input="
               realtimeCheckClass(
-                course_order.students.find((v) => !v.is_other).class,
-                course_order.students.find((v) => !v.is_other)
+                course_order?.students?.find((v) => !v.is_other)?.class,
+                course_order?.students?.find((v) => !v.is_other)
               )
             "
             :placeholder="$t('please specify class')"
@@ -298,7 +305,7 @@
           cols="12"
           sm="6"
           v-if="
-            course_order.students.find((v) => !v.is_other).class === 'อื่นๆ'
+            course_order?.students?.find((v) => !v.is_other)?.class === 'อื่นๆ'
           "
         >
           <labelCustom
@@ -1259,13 +1266,13 @@ export default {
       this.coachSelect = false;
     },
 
-    "course_order.students.find((v) => !v.is_other).class": function (
-      newClass
-    ) {
-      if (newClass !== "อื่นๆ") {
-        (this.myCheckClassData = ""), (this.otherCheckClassData = ""); // Reset checkClassData if class is not 'อื่นๆ'
-      }
-    },
+    // "course_order?.students?.find((v) => !v.is_other)?.class": function (
+    //   newClass
+    // ) {
+    //   if (newClass !== "อื่นๆ") {
+    //     (this.myCheckClassData = ""), (this.otherCheckClassData = ""); // Reset checkClassData if class is not 'อื่นๆ'
+    //   }
+    // },
 
     "course_order.apply_for_parent": function () {
       if (this.course_order.apply_for_parent) {

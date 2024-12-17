@@ -288,6 +288,9 @@
     "do you want to update a option":"คุณต้องการแก้ไขช่วงเวลาใช่หรือไม่?",
     "do you want to delete a option":"คุณต้องการลบช่วงเวลาใช่หรือไม่?",
     "do you want to create a option":"คุณต้องการเพิ่มช่วงเวลาใช่หรือไม่?",
+    "day of Week cannot be deleted as there are students who have booked this Day of Week":"ไม่สามารถลบวันในสัปดาห์ได้เนื่องจากมีนักเรียนที่จองวันในสัปดาห์นี้ไว้",
+    "day of Week cannot be deleted because there is a student with an order status of pending payment for this Day of Week":"ไม่สามารถลบวันในสัปดาห์ได้เนื่องจากมีนักเรียนที่มีสถานะคำสั่งรอการชำระเงินสำหรับวันในสัปดาห์นี้",
+    "day of Week cannot be deleted as there are students in this Day of Week":"ไม่สามารถลบวันในสัปดาห์ได้เนื่องจากมีนักเรียนอยู่ในวันในสัปดาห์นี้",
 
 
 
@@ -927,6 +930,8 @@
     "the compensatory day overlaps with the coach's leave day. please select a new compensatory day": "วันชดเชยทับซ้อนกับวันลาของโค้ช กรุณาเลือกวันชดเชยใหม่",
     "the compensatory day overlaps with the holiday. please select a new compensatory day": "วันชดเชยทับซ้อนกับวันหยุด กรุณาเลือกวันชดเชยใหม่",
     "time has been deleted":"ลบช่วงเวลาสำเร็จ",
+    "there is no teaching day. Please contact the staff":"ไม่มีวันเปิดสอน กรุณาติดต่อเจ้าหน้าที่",
+
 
 
     "unable to update the compensation day":"ไม่สามารถอัปเดตวันชดเชยได้เนื่องจากวันชดเชยตรงกับวันหยุด โปรดเลือกวันชดเชยใหม่",

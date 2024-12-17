@@ -2597,15 +2597,51 @@ const CourseModules = {
 
         }
       } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: VueI18n.t("something went wrong"),
-          timer: 3000,
-          showDenyButton: false,
-          showCancelButton: false,
-          showConfirmButton: false,
-          timerProgressBar: true,
-        })
+        if (error.response.data.message == "Day of Week cannot be deleted as there are students who have booked this Day of Week.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("as the number of seats in the package is less than the number of seats available for current students"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "Day of Week cannot be deleted because there is a student with an order status of pending payment for this Day of Week.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("as the number of seats in the package is less than the number of seats available for current students"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "Day of Week cannot be deleted as there are students in this Day of Week.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("as the number of seats in the package is less than the number of seats available for current students"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: error,
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
       }
     },
     // COURSE :: Delete Time

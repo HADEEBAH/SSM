@@ -310,6 +310,10 @@
     "do you want to delete a package":"Do you want to delete a package?",
     "do you want to delete a option":"Do you want to delete a option?",
     "do you want to create a option":"Do you want to create a option?",
+    "day of Week cannot be deleted as there are students who have booked this Day of Week":"Day of Week cannot be deleted as there are students who have booked this Day of Week",
+    "day of Week cannot be deleted because there is a student with an order status of pending payment for this Day of Week":"Day of Week cannot be deleted because there is a student with an order status of pending payment for this Day of Week",
+    "day of Week cannot be deleted as there are students in this Day of Week":"Day of Week cannot be deleted as there are students in this Day of Week",
+
 
 
 
@@ -970,6 +974,7 @@
     "the compensatory day overlaps with the coach's leave day. please select a new compensatory day": "The compensatory day overlaps with the coach's leave day. please select a new compensatory day",
     "the compensatory day overlaps with the holiday. please select a new compensatory day": "The compensatory day overlaps with the holiday. please select a new compensatory day",
     "time has been deleted":"Time has been deleted",
+    "there is no teaching day. Please contact the staff":"There is no teaching day. Please contact the staff",
 
 
     "unable to update the compensation day":"Unable to update the compensation day because the compensation day falls on a holiday, please select a new compensatory day",
