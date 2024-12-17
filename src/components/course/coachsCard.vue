@@ -18,6 +18,16 @@
           :class="`bg-[${color}] mb-5`"
           :key="coach_index"
         >
+          <v-row
+            dense
+            v-if="edited && coach_data?.length > 1 && coach.course_coach_id"
+          >
+            <v-col cols class="d-flex align-center justify-end">
+              <v-btn icon color="red" @click="removeCoachCard(coach)">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
           <!-- TEACH DAY -->
           <template
             v-for="(teach_day, teach_day_index) in coach.teach_day_data"
@@ -232,7 +242,8 @@
                           coach_data.length > 1 && !teach_day.edited_coach
                         "
                         @click="removeTeachingDay(teach_day)"
-                        ><v-icon>mdi-trash-can-outline</v-icon>
+                      >
+                        <v-icon>mdi-trash-can-outline</v-icon>
                       </v-btn>
                       <!-- REFRESH -->
                       <v-btn
@@ -913,7 +924,7 @@ export default {
       teach_day.splice(teach_day_index, 1);
     },
 
-    removeTeachingDay(teach_day) {
+    removeCoachCard(coach) {
       Swal.fire({
         icon: "question",
         title: this.$t("do you want to delete this coach"),
@@ -924,7 +935,24 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.DeleteCourseCoach({
-            course_coach_id: teach_day.course_coach_id,
+            course_coach_id: coach.course_coach_id,
+            course_id: coach.course_id,
+          });
+        }
+      });
+    },
+    removeTeachingDay(teach_day) {
+      Swal.fire({
+        icon: "question",
+        title: this.$t("do you want to delete teachday"),
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          this.DeleteDayOfWeek({
+            day_of_week_id: teach_day.day_of_week_id,
             course_id: this.$route.params.course_id,
           });
         }

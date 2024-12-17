@@ -2560,7 +2560,7 @@ const CourseModules = {
 
     },
     // COURSE :: Delete Day Of Week
-    async DeleteDayOfWeek(context, { day_of_week_id }) {
+    async DeleteDayOfWeek(context, { day_of_week_id, course_id }) {
       try {
         let config = {
           headers: {
@@ -2571,6 +2571,8 @@ const CourseModules = {
         }
         let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/manage/dayOfWeek/${day_of_week_id}`, config)
         if (data.statusCode === 200) {
+          await context.dispatch("CoachData", { course_id: course_id })
+
           if (data.data[0] === "Delete Unsuccessfully:") {
             Swal.fire({
               icon: "error",
@@ -2592,6 +2594,7 @@ const CourseModules = {
               timerProgressBar: true,
             })
           }
+
         }
       } catch (error) {
         Swal.fire({
