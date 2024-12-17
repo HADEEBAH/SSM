@@ -753,27 +753,27 @@ const manageScheduleModules = {
         }
       } catch (error) {
         console.log('error?.response?.data?.message :>> ', error?.response?.data?.message)
-        // if (error?.response?.data?.message === 'Holiday with the same date already exists.') {
-        //   Swal.fire({
-        //     icon: "warning",
-        //     title: VueI18n.t("this item cannot be made"),
-        //     text: VueI18n.t("this date is already built into a holiday"),
-        //     timer: 3000,
-        //     timerProgressBar: true,
-        //     showCancelButton: false,
-        //     showConfirmButton: false,
-        //   })
-        // } else {
-        Swal.fire({
-          icon: "warning",
-          title: VueI18n.t("this item cannot be made"),
-          text: error,
-          timer: 3000,
-          timerProgressBar: true,
-          showCancelButton: false,
-          showConfirmButton: false,
-        })
-        // }
+        if (error?.response?.data?.message === "Can't select these dates because they are duplications of existing schedules.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("can't select these dates because they are duplications of existing schedules"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          })
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: error,
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          })
+        }
 
       }
     },

@@ -2584,7 +2584,11 @@ export default {
                 courseTypeId: course.courseTypeId,
                 holidaySelectDate: holiday_data.fullDate,
                 selectStudyDate:
-                  course.courseTypeId == "CT_1" ? course.selectStudyDate : null,
+                  course.courseTypeId == "CT_1"
+                    ? course.selectStudyDate
+                      ? course.selectStudyDate
+                      : course.scheduleCompensationRefDate
+                    : null,
                 // holidayName: this.nameHoliday,
                 // holidayDate: this.create_holiday_date_picker.split("-")[2],
                 // holidayMonth: this.create_holiday_date_picker.split("-")[1],

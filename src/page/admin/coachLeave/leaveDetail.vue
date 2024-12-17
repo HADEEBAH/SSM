@@ -179,6 +179,30 @@
                         </v-select>
                       </div>
                     </v-col>
+                    <v-col v-if="coach_leave.status === 'approved'">
+                      {{ $t("period") }}
+
+                      <v-row>
+                        <v-col>
+                          <v-text-field
+                            dense
+                            readonly
+                            outlined
+                            color="#ff6b81"
+                            v-model="course.compensationStartTime"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col>
+                          <v-text-field
+                            dense
+                            readonly
+                            outlined
+                            color="#ff6b81"
+                            v-model="course.compensationEndTime"
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                    </v-col>
                   </v-row>
                   <v-row dense v-else-if="course.type === 'date'">
                     <v-col>
