@@ -134,7 +134,7 @@
                     edited &&
                     !item_package.add_new_package
                   "
-                  :disabled="checkedPackage()"
+                  :disabled="checkedPackage(item_package)"
                   icon
                   color="#FF6B81"
                   @click="saveUpdatePackage(index, data_package)"
@@ -291,7 +291,7 @@
                         !option.add_new_option &&
                         !item_package.add_new_package
                       "
-                      :disabled="checkedOption()"
+                      :disabled="checkedOption(option)"
                       icon
                       color="#FF6B81"
                       @click="saveUpdatePackageOption(option, item_package)"
@@ -777,28 +777,33 @@ export default {
       option.option_description =
         this.refresh_package_options.optionDescription;
     },
-    checkedPackage() {
+    checkedPackage(item_package) {
       let package_id = null;
       let student_number = 0;
+      package_id = item_package.package_id;
+      student_number = item_package.students;
 
-      this.data_package?.map((items) => {
-        package_id = items.package_id;
-        student_number = items.students > 0;
-      });
+      // this.data_package?.map((items) => {
+      //   package_id = items.package_id;
+      //   student_number = items.students > 0;
+      // });
       return !package_id || !student_number;
     },
-    checkedOption() {
+    checkedOption(option) {
       let option_id = null;
       let student_anount = 0;
       let price = 0;
+      option_id = option.option_id;
+      student_anount = option.amount;
+      price = option.price_unit > 0;
 
-      this.data_package?.map((items) => {
-        items.options?.map((item) => {
-          option_id = item.option_id;
-          student_anount = item.amount;
-          price = item.price_unit > 0;
-        });
-      });
+      // this.data_package?.map((items) => {
+      //   items.options?.map((item) => {
+      //     option_id = item.option_id;
+      //     student_anount = item.amount;
+      //     price = item.price_unit > 0;
+      //   });
+      // });
       return !option_id || !student_anount || !price;
     },
     checked() {

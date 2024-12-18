@@ -3761,7 +3761,7 @@ const CourseModules = {
           Swal.fire({
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
-            text: VueI18n.t("Package cannot be deleted as there must be at least one package in the course."),
+            text: VueI18n.t("package cannot be deleted as there must be at least one package in the course"),
             timer: 3000,
             showDenyButton: false,
             showCancelButton: false,
