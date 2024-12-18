@@ -1617,6 +1617,14 @@ export default {
 
     async selectedDate(item) {
       // this.course_order.time_list = [];
+      console.log(
+        "this.course_order.day.dayOfWeekName :>> ",
+        this.course_order.day.dayOfWeekName
+      );
+      console.log(
+        "this.course_order.day_list :>> ",
+        this.course_order.day_list
+      );
       this.dayOfWeekIdList = this.course_order.day_list
         .filter(
           (item) => item.dayOfWeekName === this.course_order.day.dayOfWeekName

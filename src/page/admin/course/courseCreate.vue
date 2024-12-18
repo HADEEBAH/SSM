@@ -847,9 +847,11 @@ export default {
     // REMOVE
     removeArtworkFile(index) {
       this.preview_artwork_files.splice(index, 1);
+      this.course_create_data.artwork_file.splice(index, 1);
     },
     removePrivilegeFile() {
       this.preview_privilege_url = null;
+      this.course_create_data.privilege_file = null;
     },
   },
 };

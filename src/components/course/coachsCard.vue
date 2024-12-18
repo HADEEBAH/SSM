@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- {{ setFunction }} -->
-    <div v-if="!coach_data[0]?.course_coach_id && edited">
+    <div v-if="coach_data?.length === 0 && edited">
       <template>
         <v-row class="fill-height ma-0" align="center" justify="center">
           <v-progress-circular
@@ -37,18 +37,6 @@
                 v-if="teach_day_index > 0"
                 :key="teach_day_index"
               ></v-divider>
-              <!-- <v-row dense v-if="!teach_day.day_of_week_id">
-              <v-col cols class="d-flex align-center justify-end">
-                <v-btn
-                  icon
-                  v-if="!teach_day.edited_coach"
-                  color="#FF6B81"
-                  @click="saveUpdateCoach(coach, teach_day)"
-                >
-                  <v-icon>mdi-content-save-plus</v-icon>
-                </v-btn>
-              </v-col>
-            </v-row> -->
               <v-row dense>
                 <v-col cols class="d-flex align-center justify-end">
                   <v-switch
@@ -94,7 +82,6 @@
                   </template>
                 </v-col>
               </v-row>
-              <!-- {{ edited_coach }} -->
               <v-row dense class="flex align-center justify-end">
                 <v-col cols="12" sm="4">
                   <label-custom required :text="$t('coach')"></label-custom>
@@ -333,9 +320,6 @@
                     <label-custom required :text="$t('period')"></label-custom>
                     <v-row dense class="mb-3">
                       <v-col class="px-2" cols="12" sm="6">
-                        <!-- :disabled="disable"
-                        :outlined="!disable"
-                        :filled="disable" -->
                         <v-text-field
                           :disabled="class_date.class_date_range.edited_options"
                           :outlined="
@@ -401,8 +385,6 @@
                       required
                       :text="$t('acceptable students')"
                     ></label-custom>
-                    <!-- @change="ChangeCourseData(course_data)" -->
-
                     <v-text-field
                       class="input-text-right"
                       dense
@@ -578,10 +560,12 @@
                           class_date_index === teach_day.class_date?.length - 1
                         "
                         color="#FF6B81"
+                        :disabled="checkDisableAll()"
                         @click="
                           FunctionAddNewCoach(coach, teach_day, coach_index)
                         "
                       >
+                        <!-- <v-icon>11</v-icon> -->
                         <v-icon>mdi-content-save-plus</v-icon>
                       </v-btn>
                       <!-- DEL NEW COACH -->
@@ -741,6 +725,7 @@ export default {
     editCoach(items) {
       items.edited_coach = false;
     },
+    checkDisableAll() {},
     saveUpdateCoach(items, teach_day) {
       Swal.fire({
         icon: "question",

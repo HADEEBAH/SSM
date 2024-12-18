@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!data_package[0].options[0].course_package_option_id && edited">
+  <div v-if="data_package?.length === 0 && edited">
     <template>
       <v-row class="fill-height ma-0" align="center" justify="center">
         <v-progress-circular
@@ -24,6 +24,7 @@
               edited &&
               item_package.add_new_package
             "
+            :disabled="checked()"
             icon
             color="#FF6B81"
             @click="saveAddNewPackage(item_package)"
@@ -133,6 +134,7 @@
                     edited &&
                     !item_package.add_new_package
                   "
+                  :disabled="checkedPackage()"
                   icon
                   color="#FF6B81"
                   @click="saveUpdatePackage(index, data_package)"
@@ -289,6 +291,7 @@
                         !option.add_new_option &&
                         !item_package.add_new_package
                       "
+                      :disabled="checkedOption()"
                       icon
                       color="#FF6B81"
                       @click="saveUpdatePackageOption(option, item_package)"
@@ -773,6 +776,59 @@ export default {
       option.discount_price = this.refresh_package_options.discountPrice;
       option.option_description =
         this.refresh_package_options.optionDescription;
+    },
+    checkedPackage() {
+      let package_id = null;
+      let student_number = 0;
+
+      this.data_package?.map((items) => {
+        package_id = items.package_id;
+        student_number = items.students > 0;
+      });
+      return !package_id || !student_number;
+    },
+    checkedOption() {
+      let option_id = null;
+      let student_anount = 0;
+      let price = 0;
+
+      this.data_package?.map((items) => {
+        items.options?.map((item) => {
+          option_id = item.option_id;
+          student_anount = item.amount;
+          price = item.price_unit > 0;
+        });
+      });
+      return !option_id || !student_anount || !price;
+    },
+    checked() {
+      let package_id = null;
+      let student_number = 0;
+      let option_id = null;
+      let student_anount = 0;
+      let price = 0;
+      let discount_status = false;
+      let discount_price = 0;
+
+      this.data_package?.map((items) => {
+        package_id = items.package_id;
+        student_number = items.students > 0;
+        items.options?.map((item) => {
+          option_id = item.option_id;
+          student_anount = item.amount;
+          price = item.price_unit > 0;
+          discount_status = item.discount;
+          discount_price = item.discount_price;
+        });
+      });
+      return (
+        !package_id ||
+        !student_number ||
+        !option_id ||
+        !student_anount ||
+        !price ||
+        (!discount_status === true && discount_price > 0)
+      );
     },
     saveAddNewPackage(item_package) {
       Swal.fire({

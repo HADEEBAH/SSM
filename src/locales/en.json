@@ -313,6 +313,7 @@
     "day of Week cannot be deleted as there are students who have booked this Day of Week":"Day of Week cannot be deleted as there are students who have booked this Day of Week",
     "day of Week cannot be deleted because there is a student with an order status of pending payment for this Day of Week":"Day of Week cannot be deleted because there is a student with an order status of pending payment for this Day of Week",
     "day of Week cannot be deleted as there are students in this Day of Week":"Day of Week cannot be deleted as there are students in this Day of Week",
+    "do you want to create a package":"Do you want to create a package?",
 
 
 
@@ -739,6 +740,10 @@
     "package has been updated":"Package has been updated",
     "package has been deleted":"Package has been deleted",
     "package has been created":"Package has been created",
+    "package cannot be deleted as there must be at least one package in the course":"Package cannot be deleted as there must be at least one package in the course",
+    "this teaching day cannot be deleted as the coach must have at least 1 teaching day":"This teaching day cannot be deleted as the coach must have at least 1 teaching day",
+
+
 
 
     "reason for leave" : "Reason for leave",

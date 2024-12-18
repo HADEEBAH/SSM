@@ -1028,6 +1028,8 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.delete(`${localhost}/api/v1/admincourse/delete-course-coach/${course_coach_id}`, config)
         let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/admincourse/delete-course-coach/${course_coach_id}`, config)
         if (data.statusCode == 200) {
           // context.dispatch("GetCourse", course_id)
@@ -1057,6 +1059,28 @@ const CourseModules = {
             timerProgressBar: true,
           })
           context.dispatch("GetCourse", course_id)
+        } else if (error.response.data.message == "User not found.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("can not delete coach"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: error,
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
         }
       }
     },
@@ -2569,6 +2593,8 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.delete(`${localhost}/api/v1/manage/dayOfWeek/${day_of_week_id}`, config)
         let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/manage/dayOfWeek/${day_of_week_id}`, config)
         if (data.statusCode === 200) {
           await context.dispatch("CoachData", { course_id: course_id })
@@ -2624,6 +2650,28 @@ const CourseModules = {
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
             text: VueI18n.t("as the number of seats in the package is less than the number of seats available for current students"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "User not found.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("can not delete coach"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "This teaching day cannot be deleted as the coach must have at least 1 teaching day.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("this teaching day cannot be deleted as the coach must have at least 1 teaching day"),
             timer: 3000,
             showDenyButton: false,
             showCancelButton: false,
@@ -3692,6 +3740,17 @@ const CourseModules = {
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
             text: VueI18n.t("package cannot be deleted as there are students who have booked this package"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "Package cannot be deleted as there must be at least one package in the course.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("Package cannot be deleted as there must be at least one package in the course."),
             timer: 3000,
             showDenyButton: false,
             showCancelButton: false,
