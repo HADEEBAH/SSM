@@ -1070,6 +1070,17 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
+        } else if (error.response.data.message == "Cannot delete a coach as there must be at least 1 coach listed in the course.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("cannot delete a coach as there must be at least 1 coach listed in the course"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
         } else {
           Swal.fire({
             icon: "warning",

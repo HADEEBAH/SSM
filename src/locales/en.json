@@ -225,6 +225,7 @@
     "coach information not found": "Coach information not found",
     "check in status" : "Check in status",
     "cannot resave the course to their parents":"Cannot resave the course to their parents",
+   "cannot delete a coach as there must be at least 1 coach listed in the course": "Cannot delete a coach as there must be at least 1 coach listed in the course",
 
 
 

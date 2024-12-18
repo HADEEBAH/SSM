@@ -207,6 +207,7 @@
     "current students" : "ผู้เรียนปัจจุบัน",
     "course has been created":"( สร้างคอร์สเรียบร้อยแล้ว )",
     "cannot resave the course to their parents":"ไม่สามารถบันทึกหลักสูตรใหม่ให้ผู้ปกครองได้",
+   "cannot delete a coach as there must be at least 1 coach listed in the course": "ไม่สามารถลบโค้ชได้ เนื่องจากต้องมีโค้ชอย่างน้อย 1 คนอยู่ในรายการ",
 
    
     "day" : "วัน",

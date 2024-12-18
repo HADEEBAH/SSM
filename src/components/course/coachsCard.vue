@@ -216,6 +216,7 @@
                         icon
                         v-if="!teach_day.edited_coach"
                         color="#FF6B81"
+                        :disabled="checkDisableCoach(teach_day)"
                         @click="saveUpdateCoach(coach, teach_day)"
                       >
                         <v-icon>mdi-content-save-plus</v-icon>
@@ -421,6 +422,7 @@
                             class_date.class_date_range.day_of_week_id
                           "
                           color="#FF6B81"
+                          :disabled="checkDisableTime(class_date)"
                           @click="saveUpdateOption(class_date)"
                         >
                           <v-icon>mdi-content-save-plus</v-icon>
@@ -457,7 +459,6 @@
                               )
                             "
                           >
-                            <!-- <v-icon>111</v-icon> -->
                             <v-icon>mdi-timer-minus-outline</v-icon>
                             <!-- {{ $t("delete time") }} -->
                           </v-btn>
@@ -560,12 +561,13 @@
                           class_date_index === teach_day.class_date?.length - 1
                         "
                         color="#FF6B81"
-                        :disabled="checkDisableAll()"
+                        :disabled="
+                          checkDisableAddTeachDay(teach_day, class_date)
+                        "
                         @click="
                           FunctionAddNewCoach(coach, teach_day, coach_index)
                         "
                       >
-                        <!-- <v-icon>11</v-icon> -->
                         <v-icon>mdi-content-save-plus</v-icon>
                       </v-btn>
                       <!-- DEL NEW COACH -->
@@ -597,6 +599,7 @@
                         icon
                         color="#FF6B81"
                         @click="saveAddNewOptions(coach, teach_day)"
+                        :disabled="checkDisableTime(class_date)"
                       >
                         <v-icon>mdi-book-clock-outline</v-icon>
                       </v-btn>
@@ -725,7 +728,77 @@ export default {
     editCoach(items) {
       items.edited_coach = false;
     },
-    checkDisableAll() {},
+    checkDisableCoach(teach_day) {
+      let coach_id = null;
+      let teach_days = [];
+
+      this.coach_data?.map((items) => {
+        coach_id = items.coach_id;
+      });
+      teach_days = teach_day.teach_day;
+
+      return !coach_id || teach_days.length === 0;
+    },
+    checkDisableTime(class_date) {
+      let start_time = null;
+      let end_time = null;
+      let student = 0;
+
+      start_time = class_date.class_date_range?.start_time;
+      end_time = class_date.class_date_range?.end_time;
+      student = class_date.students > 0;
+
+      return !start_time || !end_time || !student;
+    },
+    checkDisableAddTeachDay(teach_day, class_date) {
+      let coach_id = null;
+      let teach_days = [];
+      let start_time = null;
+      let end_time = null;
+      let student = 0;
+
+      this.coach_data?.map((items) => {
+        coach_id = items.coach_id;
+      });
+      teach_days = teach_day.teach_day;
+      start_time = class_date.class_date_range?.start_time;
+      end_time = class_date.class_date_range?.end_time;
+      student = class_date.students > 0;
+
+      return (
+        !coach_id ||
+        teach_days.length === 0 ||
+        !start_time ||
+        !end_time ||
+        !student
+      );
+    },
+    checkDisableAll() {
+      let coach_id = null;
+      let teach_days = [];
+      let start_time = null;
+      let end_time = null;
+      let student = 0;
+
+      this.coach_data?.map((items) => {
+        (coach_id = items.coach_id),
+          items.teach_day_data?.map((item1) => {
+            teach_days = item1.teach_day;
+            item1.class_date?.map((item2) => {
+              start_time = item2.class_date_range?.start_time;
+              end_time = item2.class_date_range?.end_time;
+              student = item2.students > 0;
+            });
+          });
+      });
+      return (
+        !coach_id ||
+        teach_days.length === 0 ||
+        !start_time ||
+        !end_time ||
+        !student
+      );
+    },
     saveUpdateCoach(items, teach_day) {
       Swal.fire({
         icon: "question",
