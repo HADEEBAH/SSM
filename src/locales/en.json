@@ -560,6 +560,7 @@
     "option has been updated":"Option has been updated",
     "option has been deleted":"Option has been deleted",
     "option has been created":"Option has been created",
+    "option cannot be deleted as there must be at least one option in the course":"Option cannot be deleted as there must be at least one option in the course",
 
 
     "package" : "Package",
@@ -981,6 +982,10 @@
     "the compensatory day overlaps with the holiday. please select a new compensatory day": "The compensatory day overlaps with the holiday. please select a new compensatory day",
     "time has been deleted":"Time has been deleted",
     "there is no teaching day. Please contact the staff":"There is no teaching day. Please contact the staff",
+    "this Time cannot be deleted. Because have student in course":"This Time cannot be deleted. Because have student in course",
+    "teaching time cannot be deleted because there must be 1 teaching time per teaching day":"Teaching time cannot be deleted because there must be 1 teaching time per teaching day",
+
+
 
 
     "unable to update the compensation day":"Unable to update the compensation day because the compensation day falls on a holiday, please select a new compensatory day",

@@ -284,15 +284,15 @@
     "do you want to edit teachday":"คุณต้องการแก้ไขวันสอนใช่หรือไม่?",
     "do you want to edit ooption":"คุณต้องการแก้ไขระยะเวลาการสอนใช่หรือไม่?",
     "do you want to add more option":"คุณต้องการเพิ่มเวลาสอนใช่หรือไม่?",
-    "do you want to update a package":"คุณต้องการแก้ไขแพ็กเกจใช่หรือไม่?",
+    "do you want to update a package":"คุณต้องการบันทึกการแก้ไขแพ็กเกจใช่หรือไม่?",
     "do you want to delete a package":"คุณต้องการลบแพ็คเกจใช่หรือไม่?",
-    "do you want to update a option":"คุณต้องการแก้ไขช่วงเวลาใช่หรือไม่?",
+    "do you want to update a option":"คุณต้องการบันทึกการแก้ไขช่วงเวลาใช่หรือไม่?",
     "do you want to delete a option":"คุณต้องการลบช่วงเวลาใช่หรือไม่?",
     "do you want to create a option":"คุณต้องการเพิ่มช่วงเวลาใช่หรือไม่?",
     "day of Week cannot be deleted as there are students who have booked this Day of Week":"ไม่สามารถลบวันในสัปดาห์ได้เนื่องจากมีนักเรียนที่จองวันในสัปดาห์นี้ไว้",
     "day of Week cannot be deleted because there is a student with an order status of pending payment for this Day of Week":"ไม่สามารถลบวันในสัปดาห์ได้เนื่องจากมีนักเรียนที่มีสถานะคำสั่งรอการชำระเงินสำหรับวันในสัปดาห์นี้",
     "day of Week cannot be deleted as there are students in this Day of Week":"ไม่สามารถลบวันในสัปดาห์ได้เนื่องจากมีนักเรียนอยู่ในวันในสัปดาห์นี้",
-    "do you want to create a package":"คุณต้องการเพิ่มโค้ชใช่หรือไม่?",
+    "do you want to create a package":"คุณต้องการเพิ่มแพ็คเกจใช่หรือไม่?",
 
 
 
@@ -515,6 +515,8 @@
     "option has been updated":"แก้ไขช่วงเวลาเรียบร้อยแล้ว",
     "option has been deleted":"ลบช่วงเวลาเรียบร้อยแล้ว",
     "option has been created":"เพิ่มช่วงเวลาเรียบร้อยแล้ว",
+    "option cannot be deleted as there must be at least one option in the course":"ไม่สามารถลบตัวเลือกได้เนื่องจากต้องมีอย่างน้อยหนึ่งตัวเลือกในหลักสูตร",
+
 
 
     "package" : "แพ็คเกจ",
@@ -934,7 +936,8 @@
     "time has been deleted":"ลบช่วงเวลาสำเร็จ",
     "there is no teaching day. Please contact the staff":"ไม่มีวันเปิดสอน กรุณาติดต่อเจ้าหน้าที่",
     "this teaching day cannot be deleted as the coach must have at least 1 teaching day":"วันสอนนี้ไม่สามารถลบได้ เนื่องจากโค้ชต้องมีวันสอนอย่างน้อย 1 วัน",
-
+    "this Time cannot be deleted. Because have student in course":"เวลานี้ไม่สามารถลบได้ เพราะมีนักเรียนอยู่ในหลักสูตร",
+    "teaching time cannot be deleted because there must be 1 teaching time per teaching day":"ไม่สามารถลบเวลาสอนได้เนื่องจากต้องมีเวลาสอน 1 ครั้งต่อวันสอน",
 
 
     "unable to update the compensation day":"ไม่สามารถอัปเดตวันชดเชยได้เนื่องจากวันชดเชยตรงกับวันหยุด โปรดเลือกวันชดเชยใหม่",

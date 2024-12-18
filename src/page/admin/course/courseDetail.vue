@@ -220,7 +220,7 @@
               <v-form ref="package_form" v-model="packageValidate">
                 <package-card :disable="!course_edit" edited></package-card>
               </v-form>
-              <v-row dense>
+              <v-row dense v-if="data_package?.length < 3">
                 <v-col align="center">
                   <!-- :disabled="!course_edit" -->
 
@@ -452,6 +452,7 @@
                   <v-row dense>
                     <v-col align="center">
                       <input
+                        id="fileInputArtwork"
                         ref="fileInputArtwork"
                         type="file"
                         @change="previewArtWorkFile"
@@ -3266,7 +3267,7 @@ export default {
       } else if (tabName === "package") {
         this.PackagesData({ course_id: this.$route.params.course_id });
       } else if (tabName === "student list") {
-        // this.CoursesData({ course_id: this.$route.params.course_id });
+        this.GetCoachsByCourse({ course_id: this.$route.params.course_id });
         this.GetCourse(this.$route.params.course_id).then(() => {
           this.courses_data.course_type_id = this.data_course.course_type_id;
         });
@@ -3891,6 +3892,7 @@ export default {
     // REMOVE
     removeArtworkFile(index) {
       this.preview_artwork_files.splice(index, 1);
+      this.course_created_data.artwork_file.splice(index, 1);
     },
     removeArtworkFileData(data, index) {
       Swal.fire({

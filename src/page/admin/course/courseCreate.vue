@@ -107,7 +107,11 @@
             <package-card></package-card>
             <v-row dense>
               <v-col class="d-flex align-center justify-center" cols="12">
-                <v-btn outlined color="#FF6B81" @click="addPackage()"
+                <v-btn
+                  outlined
+                  v-if="data_package?.length < 3"
+                  color="#FF6B81"
+                  @click="addPackage()"
                   ><v-icon>mdi-plus-circle-outline</v-icon>
                   {{ $t("add package") }}
                 </v-btn>

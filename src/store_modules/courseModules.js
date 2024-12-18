@@ -2738,7 +2738,29 @@ const CourseModules = {
           }
         }
       } catch (error) {
-        console.log(error)
+        if (error.response.data.message == "This Time cannot be deleted. Because have student in course") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("this Time cannot be deleted. Because have student in course"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: error,
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
       }
     },
     async GetPackages(context) {
@@ -3551,7 +3573,40 @@ const CourseModules = {
 
         }
       } catch (error) {
-        console.log('error :>> ', error);
+        if (error.response.data.message == "This Time cannot be deleted. Because have student in course") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("this Time cannot be deleted. Because have student in course"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } if (error.response.data.message == "Teaching time cannot be deleted because there must be 1 teaching time per teaching day.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("this Time cannot be deleted. Because have student in course"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: error,
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
       }
     },
     async RefreshTeachDay(context, { course_id, day_of_week_id, course_coach_id }) {
@@ -3837,6 +3892,17 @@ const CourseModules = {
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
             text: VueI18n.t("option cannot be deleted as there are students who have booked this option"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "Option cannot be deleted as there must be at least one option in the course.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("option cannot be deleted as there must be at least one option in the course"),
             timer: 3000,
             showDenyButton: false,
             showCancelButton: false,

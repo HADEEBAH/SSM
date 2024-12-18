@@ -299,7 +299,10 @@
                     >
                     <!-- DELETE -->
                     <v-btn
-                      v-if="!option.edit_package_option"
+                      v-if="
+                        !option.edit_package_option &&
+                        item_package.options?.length > 1
+                      "
                       icon
                       color="#FF6B81"
                       @click="
