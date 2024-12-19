@@ -3277,16 +3277,13 @@ export default {
         //   this.$route.params.course_id
         // );
       } else if (tabName === "arkwork") {
-        // this.$store.dispatch(
-        //   "CourseModules/GetCourse",
-        //   this.$route.params.course_id
-        // );
         this.GetArtworkByCourse({
           course_id: this.$route.params.course_id,
         }).then(() => {
-          // this.courses_data.course_img_privilege = `https://waraphat.alldemics.com/api/v1/files/${this.courses_data.course_img_privilege}`;
           this.preview_privilege_url = this.courses_data.course_img_privilege;
-          // this.preview_privilege_url = this.art_work_data.course_img_privilege;
+          this.preview_artwork_files.map((items) => {
+            this.course_created_data.artwork_file.push(items);
+          });
         });
       } else {
         this.CoursesData({ course_id: this.$route.params.course_id });
@@ -3792,6 +3789,7 @@ export default {
       this.$refs.fileInputPrivilege.click();
     },
     openFileArtworSelector() {
+      this.$refs.fileInputArtwork.value = null;
       this.$refs.fileInputArtwork.click();
     },
     // UPDATE FILE
@@ -3887,14 +3885,13 @@ export default {
           }
         }
       }
-      // this.ChangeCourseData(this.course_created_data);
     },
     // REMOVE
     removeArtworkFile(index) {
       this.preview_artwork_files.splice(index, 1);
       this.course_created_data.artwork_file.splice(index, 1);
     },
-    removeArtworkFileData(data, index) {
+    async removeArtworkFileData(data, index) {
       Swal.fire({
         icon: "question",
         title: this.$t("do you want to delete this file?"),
@@ -3904,11 +3901,23 @@ export default {
         cancelButtonText: this.$t("no"),
       }).then(async (result) => {
         if (result.isConfirmed) {
-          this.RemoveArkworkByArkworkId({
+          await this.RemoveArkworkByArkworkId({
             artwork_data: data,
             course_id: this.$route.params.course_id,
+          }).then(async () => {
+            this.preview_artwork_files.splice(index, 1);
+            await this.course_created_data.artwork_file.splice(index, 1);
+            // await this.GetArtworkByCourse({
+            //   course_id: this.$route.params.course_id,
+            // });
+            //   .then(() => {
+            //   this.preview_privilege_url =
+            //     this.courses_data.course_img_privilege;
+            //   this.preview_artwork_files.map((items) => {
+            //     this.course_created_data.artwork_file.push(items);
+            //   });
+            // });
           });
-          this.preview_artwork_files.splice(index, 1);
         }
       });
     },
@@ -4239,6 +4248,9 @@ export default {
             artwork_files: this.course_created_data.artwork_file,
           }).then(() => {
             this.preview_privilege_url = null;
+            this.preview_artwork_files.map((items) => {
+              this.course_created_data.artwork_file.push(items);
+            });
           });
           this.course_edit = false;
         }

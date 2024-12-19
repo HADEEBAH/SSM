@@ -248,7 +248,7 @@
           <!-- :disabled="profile_detail.class.classNameTh !== ''" -->
 
           <v-autocomplete
-            :v-model="course_order?.students?.find((v) => !v.is_other)?.class"
+            v-model="course_order.students.find((v) => !v.is_other).class"
             :items="class_list"
             item-text="classNameTh"
             outlined

@@ -799,15 +799,12 @@ export default {
       option_id = option.option_id;
       student_anount = option.amount;
       price = option.price_unit > 0;
-
-      // this.data_package?.map((items) => {
-      //   items.options?.map((item) => {
-      //     option_id = item.option_id;
-      //     student_anount = item.amount;
-      //     price = item.price_unit > 0;
-      //   });
-      // });
-      return !option_id || !student_anount || !price;
+      return (
+        !option_id ||
+        !student_anount ||
+        !price ||
+        (option.discount && option.discount_price < 1)
+      );
     },
     checked() {
       let package_id = null;
@@ -815,8 +812,7 @@ export default {
       let option_id = null;
       let student_anount = 0;
       let price = 0;
-      let discount_status = false;
-      let discount_price = 0;
+      let check_discount = null;
 
       this.data_package?.map((items) => {
         package_id = items.package_id;
@@ -825,8 +821,7 @@ export default {
           option_id = item.option_id;
           student_anount = item.amount;
           price = item.price_unit > 0;
-          discount_status = item.discount;
-          discount_price = item.discount_price;
+          check_discount = item.discount && item.discount_price < 1;
         });
       });
       return (
@@ -835,7 +830,7 @@ export default {
         !option_id ||
         !student_anount ||
         !price ||
-        (!discount_status === true && discount_price > 0)
+        check_discount
       );
     },
     saveAddNewPackage(item_package) {

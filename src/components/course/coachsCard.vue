@@ -61,9 +61,10 @@
                       small
                       color="red"
                       v-if="!disable"
-                      @click="removeCoach(course_data.coachs, coach_index)"
-                      ><v-icon>mdi-close</v-icon></v-btn
+                      @click="removeCoach(coach_index)"
                     >
+                      <v-icon>mdi-close</v-icon>
+                    </v-btn>
                   </template>
                   <template v-else>
                     <v-btn
@@ -821,6 +822,8 @@ export default {
             payload: update_payload,
             course_id: this.$route.params.course_id,
           });
+        } else {
+          teach_day.edited_coach = false;
         }
       });
       teach_day.edited_coach = true;
@@ -1185,8 +1188,8 @@ export default {
         }
       });
     },
-    removeCoach(coach, index) {
-      coach.splice(index, 1);
+    removeCoach(index) {
+      this.coach_data.splice(index, 1);
     },
     coachsOptions(coach_selected) {
       const selectedCoachIds = this.coach_data.map((coach) => coach.coach_id);

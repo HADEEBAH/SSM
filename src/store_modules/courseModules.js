@@ -1058,7 +1058,6 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
-          context.dispatch("GetCourse", course_id)
         } else if (error.response.data.message == "User not found.") {
           Swal.fire({
             icon: "warning",
@@ -1093,6 +1092,9 @@ const CourseModules = {
             timerProgressBar: true,
           })
         }
+        await context.dispatch("CoachData", { course_id: course_id })
+
+
       }
     },
     // COURSE TYPES
@@ -1735,7 +1737,9 @@ const CourseModules = {
       }
     },
     // COURSE :: DELETE ARKWORK ID
-    async RemoveArkworkByArkworkId(context, { artwork_data, course_id }) {
+    async RemoveArkworkByArkworkId(context, { artwork_data }) {
+      // course_id
+      // console.log('course_id :>> ', course_id);
       try {
         let config = {
           headers: {
@@ -1756,7 +1760,7 @@ const CourseModules = {
             timer: 3000,
             timerProgressBar: true,
           })
-          await context.dispatch("GetArtworkByCourse", { course_id: course_id })
+          // await context.dispatch("GetArtworkByCourse", { course_id: course_id })
 
 
         }
@@ -2638,7 +2642,7 @@ const CourseModules = {
           Swal.fire({
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
-            text: VueI18n.t("as the number of seats in the package is less than the number of seats available for current students"),
+            text: VueI18n.t("day of Week cannot be deleted as there are students who have booked this Day of Week"),
             timer: 3000,
             showDenyButton: false,
             showCancelButton: false,
@@ -2649,7 +2653,7 @@ const CourseModules = {
           Swal.fire({
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
-            text: VueI18n.t("as the number of seats in the package is less than the number of seats available for current students"),
+            text: VueI18n.t("day of Week cannot be deleted because there is a student with an order status of pending payment for this Day of Week"),
             timer: 3000,
             showDenyButton: false,
             showCancelButton: false,
@@ -2660,7 +2664,7 @@ const CourseModules = {
           Swal.fire({
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
-            text: VueI18n.t("as the number of seats in the package is less than the number of seats available for current students"),
+            text: VueI18n.t("day of Week cannot be deleted as there are students in this Day of Week"),
             timer: 3000,
             showDenyButton: false,
             showCancelButton: false,
@@ -2743,6 +2747,17 @@ const CourseModules = {
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
             text: VueI18n.t("this Time cannot be deleted. Because have student in course"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "Teaching time cannot be deleted because there must be 1 teaching time per teaching day.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("teaching time cannot be deleted because there must be 1 teaching time per teaching day"),
             timer: 3000,
             showDenyButton: false,
             showCancelButton: false,
@@ -3584,11 +3599,11 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
-        } if (error.response.data.message == "Teaching time cannot be deleted because there must be 1 teaching time per teaching day.") {
+        } else if (error.response.data.message == "Teaching time cannot be deleted because there must be 1 teaching time per teaching day.") {
           Swal.fire({
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
-            text: VueI18n.t("this Time cannot be deleted. Because have student in course"),
+            text: VueI18n.t("teaching time cannot be deleted because there must be 1 teaching time per teaching day"),
             timer: 3000,
             showDenyButton: false,
             showCancelButton: false,

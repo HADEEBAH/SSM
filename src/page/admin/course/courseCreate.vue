@@ -342,6 +342,8 @@ import headerCard from "@/components/header/headerCard.vue";
 import CoachsCard from "@/components/course/coachsCard.vue";
 import PackageCard from "@/components/course/packageCard.vue";
 import CourseCard from "@/components/course/courseCard.vue";
+import Swal from "sweetalert2";
+
 import {
   inputValidation,
   dateFormatter,
@@ -595,6 +597,7 @@ export default {
       this.$refs.fileInputPrivilege.click();
     },
     openFileArtworSelector() {
+      this.$refs.fileInputArtwork.value = null;
       this.$refs.fileInputArtwork.click();
     },
     submitStep(index) {
@@ -843,6 +846,15 @@ export default {
             reader.readAsDataURL(file);
           } else {
             // Display error message or handle invalid file type
+            Swal.fire({
+              icon: "error",
+              title: this.$t("something went wrong"),
+              text: this.$t("upload only image files (png, jpeg) only"),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
           }
         }
       }
