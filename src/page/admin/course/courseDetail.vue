@@ -3887,9 +3887,10 @@ export default {
       }
     },
     // REMOVE
-    removeArtworkFile(index) {
-      this.preview_artwork_files.splice(index, 1);
-      this.course_created_data.artwork_file.splice(index, 1);
+
+    async removeArtworkFile(index) {
+      await this?.course_created_data?.artwork_file?.splice(index, 1);
+      this?.preview_artwork_files?.splice(index, 1);
     },
     async removeArtworkFileData(data, index) {
       Swal.fire({
@@ -4245,7 +4246,7 @@ export default {
             course_id: this.$route.params.course_id,
             course_data: this.course_created_data,
             privilage_file: this.course_created_data.privilege_file,
-            artwork_files: this.course_created_data.artwork_file,
+            artwork_files: this?.course_created_data?.artwork_file,
           }).then(() => {
             this.preview_privilege_url = null;
             this.preview_artwork_files.map((items) => {
