@@ -3970,7 +3970,7 @@ export default {
         options: [
           {
             add_new_option: true,
-
+            discount_price: 0,
             package_id: null,
             package: null,
             students: 0,
