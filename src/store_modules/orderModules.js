@@ -1344,7 +1344,7 @@ const orderModules = {
           throw "please enter your name and class";
         }
 
-        payload.total_price = total_price;
+        payload.total_price = total_price ? total_price : 0
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
