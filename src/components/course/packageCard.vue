@@ -456,8 +456,14 @@
                       <v-col
                         cols="auto"
                         class="text-[#FF6B81] font-bold text-right"
-                        >{{ option.net_price?.toLocaleString() }}</v-col
                       >
+                        {{
+                          option.price_unit - option.discount_price
+                            ? option.price_unit - option.discount_price
+                            : 0?.toLocaleString()
+                        }}
+                        <!-- {{ option.net_price?.toLocaleString() }} -->
+                      </v-col>
                       <v-col cols="auto">{{ $t("baht") }} </v-col>
                     </v-row>
                   </v-col>
@@ -467,8 +473,16 @@
                       <v-col
                         cols="auto"
                         class="text-[#FF6B81] font-bold text-right"
-                        >{{ option.net_price_unit?.toLocaleString() }}</v-col
                       >
+                        {{
+                          (option.price_unit - option.discount_price) /
+                          option.amount
+                            ? (option.price_unit - option.discount_price) /
+                              option.amount
+                            : 0?.toLocaleString()
+                        }}
+                        <!-- {{ option.net_price_unit?.toLocaleString() }} -->
+                      </v-col>
                       <v-col cols="auto"
                         >{{ $t("baht") }}/{{ $t("time") }}</v-col
                       >

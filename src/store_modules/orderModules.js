@@ -1554,7 +1554,7 @@ const orderModules = {
               } else if (error?.response?.data?.message === "Over Registration") {
                 Swal.fire({
                   icon: "warning",
-                  title: VueI18n.t("unable to registere"),
+                  title: VueI18n.t("unable to register"),
                   text: VueI18n.t(
                     "cannot register , The seats are full"
                   ),
