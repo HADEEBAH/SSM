@@ -574,7 +574,7 @@ const orderModules = {
               data.data.student_name_list_en = student_name_list_en.join(", ");
             }
           }
-          console.log(data.data.payment);
+          // console.log(data.data.payment);
           if (data.data.payment?.paymentDate) {
             if (data.data.payment.paymentDate) {
               const timestamp = `${data.data.payment.paymentDate} ${data.data.payment.paymentTime}`;
