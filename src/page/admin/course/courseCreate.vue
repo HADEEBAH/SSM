@@ -521,6 +521,9 @@ export default {
             this.course_data.course_study_date.start_date_formatted,
           course_study_end_date:
             this.course_data.course_study_date.end_date_formatted,
+          course_period_start_date:
+            this.course_data.course_study_time.start_time,
+          course_period_end_date: this.course_data.course_study_time.end_time,
           course_price: this.course_data.course_price
             ? this.course_data.course_price
             : 0,

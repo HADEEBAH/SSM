@@ -662,8 +662,8 @@
                   dense
                   outlined
                   :value="
-                    course?.course_data?.price_course
-                      ? course?.course_data?.price_course
+                    course?.course_data?.course_price
+                      ? course?.course_data?.course_price
                       : 0
                   "
                   @keydown="Validation($event, 'number')"
@@ -1681,7 +1681,7 @@ export default {
             course.course_data = this.course_data;
           }
           if (this.course_data.course_type_id === "CT_2") {
-            course.price = this.course_data.price_course;
+            course.price = this.course_data.course_price;
             course.discount = this.course_data.discount;
             course.priceDiscount = this.course_data.calculate_price;
             course.start_date = this.course_data.course_study_start_date;
@@ -1719,7 +1719,7 @@ export default {
             //   this.course_data?.course_type_id == "CT_2"
             //     ? parseInt(this.course_data?.calculate_price)
             //     : parseInt(this.course_data.price_course);
-            course.price = parseInt(this.course_data.price_course);
+            course.price = parseInt(this.course_data.course_price);
             course.time = this.course_data.days_of_class[0].times[0];
 
             this?.CalTotalPrice();

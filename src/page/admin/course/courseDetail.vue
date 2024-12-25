@@ -4102,12 +4102,14 @@ export default {
               course_per_time: this.courses_data?.course_hours,
               course_price: this.courses_data?.course_price,
               course_period_start_date:
-                this.courses_data?.course_study_date?.start_date_formatted,
+                this.course_data?.course_study_time?.start_time_object ||
+                this.courses_data?.course_study_time?.start_time,
               course_period_end_date:
-                this.courses_data?.course_study_date?.end_date_formatted,
+                this.course_data?.course_study_time?.end_time_object ||
+                this.courses_data?.course_study_time?.end_time,
+
               // course_checked_discount: this.courses_data?.checked_discount_bool,
             };
-
             await this.UpdateCouserDetail({
               course_id: this.courses_data?.course_id,
               data_payload: payload,
