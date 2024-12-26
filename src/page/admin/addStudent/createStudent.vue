@@ -678,14 +678,14 @@
               <v-col cols="12" sm="4" v-if="course?.course_type_id == 'CT_1'">
                 <label-custom :text="$t(`discount`)"></label-custom>
                 <!-- :rules="rules.price" -->
-
-                <v-text-field
-                  dense
-                  :value="
+                <!--  :value="
                     course?.option?.discountStatus
                       ? course?.option?.discountPrice || 0
                       : 0
-                  "
+                  " -->
+                <v-text-field
+                  dense
+                  :value="course?.option?.discountPrice || 0"
                   outlined
                   @keydown="Validation($event, 'number')"
                   type="number"
@@ -1535,12 +1535,15 @@ export default {
     },
     async Calprice(course, index) {
       course.price = course.option.pricePerPerson;
-      course.discount = course.option?.discountStatus
-        ? course.option.discountPrice
-        : 0;
+      // course.discount = course.option?.discountStatus
+      //   ? course.option.discountPrice
+      //   : 0;
+      course.discount = course.option?.discountPrice || 0;
       course.priceDiscount =
-        course.option.pricePerPerson -
-        (course.option?.discountStatus ? course.option?.discountPrice || 0 : 0);
+        course.option.pricePerPerson - course.option?.discountPrice || 0;
+      // course.priceDiscount =
+      // course.option.pricePerPerson -
+      // (course.option?.discountStatus ? course.option?.discountPrice || 0 : 0);
       course.time = {};
       course.day = {};
       course.coach = {};
