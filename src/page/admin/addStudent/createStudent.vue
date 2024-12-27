@@ -1132,6 +1132,7 @@ export default {
     totalPricees: 0,
     checkDiscount: 0,
     totalDiscount: 0,
+    discount_price: 0,
     checkedBox: false,
     dataIndex: 0,
     totalDiscountPercent: 0,
@@ -1943,6 +1944,7 @@ export default {
                 course.students = [];
                 course.coach_id = course.coach.coach_id;
                 course.coach_name = course.coach.coach_name;
+                this.discount_price = course?.option?.discountPrice;
                 for (const student of this.students) {
                   if (student) {
                     account.push({
@@ -1966,7 +1968,8 @@ export default {
               this.changeOrderData(this.order);
               await this.saveOrder({
                 regis_type: "addStudent",
-                discount: this.course_data?.discountPrice,
+                // discount: this.course_data?.discount,
+                discount: this.discount_price,
                 courseData: this.course_data,
               });
               if (this.order_is_status) {

@@ -1573,22 +1573,34 @@ const orderModules = {
             status_discount_percent: course.checkedDiscountPercent
               ? course.checkedDiscountPercent
               : false,
+            // discount:
+            //   course.course_type_id === "CT_2"
+            //     ? regis_type == "cart"
+            //       ? course.discountPrice
+            //       : discount
+            //       ? discount
+            //       : course.discount
+            //       ? course.discount
+            //       : 0
+            //     : course.option.discount === true ||
+            //       course.option.discountStatus === 1
+            //     ? course.discount
+            //       ? course.discount
+            //       : course.option.discount_price
+            //       ? course.option.discount_price
+            //       : 0
+            //     : 0,
             discount:
               course.course_type_id === "CT_2"
-                ? regis_type == "cart"
+                ? regis_type === "cart"
                   ? course.discountPrice
                   : discount
                   ? discount
                   : course.discount
                   ? course.discount
                   : 0
-                : course.option.discount === true ||
-                  course.option.discountStatus === 1
-                ? course.discount
-                  ? course.discount
-                  : course.option.discount_price
-                  ? course.option.discount_price
-                  : 0
+                : discount
+                ? course.option.discountPrice
                 : 0,
             admin_discount: course.discountOther ? course.discountOther : "0",
           });
