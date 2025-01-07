@@ -796,7 +796,7 @@
                                 >
                               </v-col>
                             </v-row>
-                            <!-- Herder -->
+                            <!-- Herder Header-->
                             <v-row
                               dense
                               class="mb-3 font-bold"
@@ -3166,9 +3166,8 @@ export default {
       { label: "ดี", value: "good", num_value: 4 },
       { label: "ปรับปรุง", value: "adjust", num_value: 3 },
     ],
-    selected_coach: "",
-    selected_schedule: "",
-
+    selected_coach: null,
+    selected_schedule: null,
     tab: "course",
     filter: {
       dow: "",
@@ -4328,11 +4327,13 @@ export default {
     selectCoach(coach, index) {
       if (this.selected_coach !== index) {
         this.selected_coach = index;
+        this.selected_schedule = null;
         this.dowOption(index);
         this.filterPackageCoach(index);
         this.filterTimeCoach(index);
       } else {
-        this.selected_coach = "";
+        this.selected_coach = null;
+        this.selected_schedule = null;
       }
     },
     selectSchedule(index, date, coach_data) {
@@ -4345,11 +4346,7 @@ export default {
         coach_id: date.coachId,
         coach_data,
       });
-      if (this.selected_schedule !== index) {
-        this.selected_schedule = index;
-      } else {
-        this.selected_schedule = "";
-      }
+      this.selected_schedule = this.selected_schedule === index ? null : index;
     },
     openFile(file) {
       let fileName = `${process.env.VUE_APP_URL}/api/v1/files/${file}`;
