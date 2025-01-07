@@ -831,7 +831,7 @@ export default {
                 {
                   columns: [
                     {
-                      width: "60%",
+                      width: "auto",
                       stack: [
                         {
                           text:
@@ -897,6 +897,7 @@ export default {
                           color: "#ff6b81",
                           alignment: "right",
                         },
+
                         {
                           text: `${this.order_detail.diffAdminDiscountTotal?.toLocaleString(
                             "en-US",

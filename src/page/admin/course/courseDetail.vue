@@ -796,7 +796,7 @@
                                 >
                               </v-col>
                             </v-row>
-                            <!-- Herder Header-->
+                            <!-- Header -->
                             <v-row
                               dense
                               class="mb-3 font-bold"
@@ -1055,8 +1055,8 @@
                                                 <v-col cols="1" align="center"
                                                   >{{ student_index + 1 }}
                                                 </v-col>
-                                                <v-col cols align="center"
-                                                  >{{
+                                                <v-col cols align="center">
+                                                  {{
                                                     $i18n.locale == "th"
                                                       ? `${student.firstNameTh} ${student.lastNameTh}`
                                                       : `${student.firstNameEn} ${student.lastNameEn}`
@@ -1196,115 +1196,246 @@
                                         </div>
                                         <!-- NO student check in -->
                                         <div v-else>
-                                          <v-card
-                                            class="mb-2"
-                                            outlined
-                                            dense
-                                            v-for="(
-                                              student, student_index
-                                            ) in no_check_in_student_list"
-                                            :key="`${student_index}-index`"
+                                          <div
+                                            v-if="
+                                              student_list.filter(
+                                                (v) =>
+                                                  v.packageName ===
+                                                  date.cpo?.packageName
+                                              )?.length > 0
+                                            "
                                           >
-                                            <!-- {{student }} -->
-                                            <v-card-text class="pa-2">
-                                              <v-row
-                                                dense
-                                                class="text-md font-bold flex align-center"
-                                              >
-                                                <v-col cols="1" align="center"
-                                                  >{{ student_index + 1 }}
-                                                </v-col>
-                                                <v-col cols align="center"
-                                                  >{{
-                                                    $i18n.locale == "th"
-                                                      ? `${student.studentName}`
-                                                      : `${student.studentNameEn}`
-                                                  }}
-                                                </v-col>
+                                            <v-card
+                                              class="mb-2"
+                                              outlined
+                                              dense
+                                              v-for="(
+                                                student, student_index
+                                              ) in no_check_in_student_list.filter(
+                                                (v) =>
+                                                  v.packageName ===
+                                                  date.cpo?.packageName
+                                              )"
+                                              :key="`${student_index}-index`"
+                                            >
+                                              <v-card-text class="pa-2">
+                                                <v-row
+                                                  dense
+                                                  class="text-md font-bold flex align-center"
+                                                >
+                                                  <v-col cols="1" align="center"
+                                                    >{{ student_index + 1 }}
+                                                  </v-col>
+                                                  <v-col cols align="center"
+                                                    >{{
+                                                      $i18n.locale == "th"
+                                                        ? `${student.studentName}`
+                                                        : `${student.studentNameEn}`
+                                                    }}
+                                                  </v-col>
 
-                                                <v-col
-                                                  cols="2"
-                                                  align="center"
-                                                  v-if="
-                                                    course_created_data.course_type_id ===
-                                                    'CT_1'
-                                                  "
+                                                  <v-col
+                                                    cols="2"
+                                                    align="center"
+                                                    v-if="
+                                                      course_created_data.course_type_id ===
+                                                      'CT_1'
+                                                    "
+                                                  >
+                                                    {{
+                                                      $i18n.locale == "th"
+                                                        ? student.optionName
+                                                        : student.optionNameEn
+                                                    }}
+                                                  </v-col>
+                                                  <v-col
+                                                    v-if="
+                                                      course_created_data.course_type_id ===
+                                                      'CT_1'
+                                                    "
+                                                    cols="2"
+                                                    align="center"
+                                                  >
+                                                    {{
+                                                      `${student.countCheckIn}/${student.totalDay}`
+                                                    }}
+                                                  </v-col>
+                                                  <v-col
+                                                    v-else
+                                                    cols="4"
+                                                    align="center"
+                                                  >
+                                                    <span class="font-bold">{{
+                                                      `${date.startDate} - ${date.endDate}`
+                                                    }}</span>
+                                                  </v-col>
+                                                  <v-col>
+                                                    <span class="text-sm">{{
+                                                      $t("no check in admin")
+                                                    }}</span>
+                                                  </v-col>
+                                                  <v-col cols="4">
+                                                    <v-row dense>
+                                                      <v-col class="pa-0">
+                                                        <v-btn
+                                                          text
+                                                          class="px-1"
+                                                          color="#ff6b81"
+                                                          disabled
+                                                        >
+                                                          <v-icon
+                                                            >mdi-check-decagram-outline
+                                                          </v-icon>
+                                                          {{
+                                                            $t(
+                                                              "view evaluation"
+                                                            )
+                                                          }}
+                                                        </v-btn>
+                                                      </v-col>
+                                                      <v-col class="pa-0">
+                                                        <v-btn
+                                                          text
+                                                          :to="{
+                                                            name: 'UserDetail',
+                                                            params: {
+                                                              account_id:
+                                                                student.studentId,
+                                                              action: 'view',
+                                                              from: 'courseDetail',
+                                                            },
+                                                          }"
+                                                          class="px-1"
+                                                          color="#ff6b81"
+                                                        >
+                                                          <v-icon>
+                                                            mdi-clipboard-text-search-outline
+                                                          </v-icon>
+                                                          {{
+                                                            $t("view profile")
+                                                          }}
+                                                        </v-btn>
+                                                      </v-col>
+                                                    </v-row>
+                                                  </v-col>
+                                                </v-row>
+                                              </v-card-text>
+                                            </v-card>
+                                          </div>
+                                          <div v-else>
+                                            <v-card
+                                              class="mb-2"
+                                              outlined
+                                              dense
+                                              v-for="(
+                                                student, student_index
+                                              ) in no_check_in_student_list"
+                                              :key="`${student_index}-index`"
+                                            >
+                                              <v-card-text class="pa-2">
+                                                <v-row
+                                                  dense
+                                                  class="text-md font-bold flex align-center"
                                                 >
-                                                  {{
-                                                    $i18n.locale == "th"
-                                                      ? student.optionName
-                                                      : student.optionNameEn
-                                                  }}
-                                                </v-col>
-                                                <v-col
-                                                  v-if="
-                                                    course_created_data.course_type_id ===
-                                                    'CT_1'
-                                                  "
-                                                  cols="2"
-                                                  align="center"
-                                                >
-                                                  {{
-                                                    `${student.countCheckIn}/${student.totalDay}`
-                                                  }}
-                                                </v-col>
-                                                <v-col
-                                                  v-else
-                                                  cols="4"
-                                                  align="center"
-                                                >
-                                                  <span class="font-bold">{{
-                                                    `${date.startDate} - ${date.endDate}`
-                                                  }}</span>
-                                                </v-col>
-                                                <v-col>
-                                                  <span class="text-sm">{{
-                                                    $t("no check in admin")
-                                                  }}</span>
-                                                </v-col>
-                                                <v-col cols="4">
-                                                  <v-row dense>
-                                                    <v-col class="pa-0">
-                                                      <v-btn
-                                                        text
-                                                        class="px-1"
-                                                        color="#ff6b81"
-                                                        disabled
-                                                      >
-                                                        <v-icon
-                                                          >mdi-check-decagram-outline
-                                                        </v-icon>
-                                                        {{
-                                                          $t("view evaluation")
-                                                        }}
-                                                      </v-btn>
-                                                    </v-col>
-                                                    <v-col class="pa-0">
-                                                      <v-btn
-                                                        text
-                                                        :to="{
-                                                          name: 'UserDetail',
-                                                          params: {
-                                                            account_id:
-                                                              student.studentId,
-                                                            action: 'view',
-                                                            from: 'courseDetail',
-                                                          },
-                                                        }"
-                                                        class="px-1"
-                                                        color="#ff6b81"
-                                                      >
-                                                        <v-icon>
-                                                          mdi-clipboard-text-search-outline
-                                                        </v-icon>
-                                                        {{ $t("view profile") }}
-                                                      </v-btn>
-                                                    </v-col>
-                                                  </v-row>
-                                                </v-col>
-                                              </v-row>
-                                            </v-card-text>
-                                          </v-card>
+                                                  <v-col cols="1" align="center"
+                                                    >{{ student_index + 1 }}
+                                                  </v-col>
+                                                  <v-col cols align="center"
+                                                    >{{
+                                                      $i18n.locale == "th"
+                                                        ? `${student.studentName}`
+                                                        : `${student.studentNameEn}`
+                                                    }}
+                                                  </v-col>
+
+                                                  <v-col
+                                                    cols="2"
+                                                    align="center"
+                                                    v-if="
+                                                      course_created_data.course_type_id ===
+                                                      'CT_1'
+                                                    "
+                                                  >
+                                                    {{
+                                                      $i18n.locale == "th"
+                                                        ? student.optionName
+                                                        : student.optionNameEn
+                                                    }}
+                                                  </v-col>
+                                                  <v-col
+                                                    v-if="
+                                                      course_created_data.course_type_id ===
+                                                      'CT_1'
+                                                    "
+                                                    cols="2"
+                                                    align="center"
+                                                  >
+                                                    {{
+                                                      `${student.countCheckIn}/${student.totalDay}`
+                                                    }}
+                                                  </v-col>
+                                                  <v-col
+                                                    v-else
+                                                    cols="4"
+                                                    align="center"
+                                                  >
+                                                    <span class="font-bold">{{
+                                                      `${date.startDate} - ${date.endDate}`
+                                                    }}</span>
+                                                  </v-col>
+                                                  <v-col>
+                                                    <span class="text-sm">{{
+                                                      $t("no check in admin")
+                                                    }}</span>
+                                                  </v-col>
+                                                  <v-col cols="4">
+                                                    <v-row dense>
+                                                      <v-col class="pa-0">
+                                                        <v-btn
+                                                          text
+                                                          class="px-1"
+                                                          color="#ff6b81"
+                                                          disabled
+                                                        >
+                                                          <v-icon
+                                                            >mdi-check-decagram-outline
+                                                          </v-icon>
+                                                          {{
+                                                            $t(
+                                                              "view evaluation"
+                                                            )
+                                                          }}
+                                                        </v-btn>
+                                                      </v-col>
+                                                      <v-col class="pa-0">
+                                                        <v-btn
+                                                          text
+                                                          :to="{
+                                                            name: 'UserDetail',
+                                                            params: {
+                                                              account_id:
+                                                                student.studentId,
+                                                              action: 'view',
+                                                              from: 'courseDetail',
+                                                            },
+                                                          }"
+                                                          class="px-1"
+                                                          color="#ff6b81"
+                                                        >
+                                                          <v-icon>
+                                                            mdi-clipboard-text-search-outline
+                                                          </v-icon>
+                                                          {{
+                                                            $t("view profile")
+                                                          }}
+                                                        </v-btn>
+                                                      </v-col>
+                                                    </v-row>
+                                                  </v-col>
+                                                </v-row>
+                                              </v-card-text>
+                                            </v-card>
+                                          </div>
                                         </div>
                                       </div>
                                     </template>
