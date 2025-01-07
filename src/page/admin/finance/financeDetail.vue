@@ -737,7 +737,9 @@ export default {
                     {
                       text: `${
                         this.pdf_lang == "th" ? "วันที่" : "Date"
-                      } : ${moment(this.order_detail.payment.paid_date).format("DD/MM/YYYY")}`,
+                      } : ${moment(this.order_detail.payment.paid_date).format(
+                        "DD/MM/YYYY"
+                      )}`,
                       margin: [0, 5],
                       color: "#318ce7",
                       fontSize: 10,
@@ -829,7 +831,7 @@ export default {
                 {
                   columns: [
                     {
-                      width: "55%",
+                      width: "60%",
                       stack: [
                         {
                           text:
