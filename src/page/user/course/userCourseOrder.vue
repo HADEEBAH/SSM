@@ -1617,14 +1617,14 @@ export default {
 
     async selectedDate(item) {
       // this.course_order.time_list = [];
-      console.log(
-        "this.course_order.day.dayOfWeekName :>> ",
-        this.course_order.day.dayOfWeekName
-      );
-      console.log(
-        "this.course_order.day_list :>> ",
-        this.course_order.day_list
-      );
+      // console.log(
+      //   "this.course_order.day.dayOfWeekName :>> ",
+      //   this.course_order.day.dayOfWeekName
+      // );
+      // console.log(
+      //   "this.course_order.day_list :>> ",
+      //   this.course_order.day_list
+      // );
       this.dayOfWeekIdList = this.course_order.day_list
         .filter(
           (item) => item.dayOfWeekName === this.course_order.day.dayOfWeekName
@@ -2174,18 +2174,52 @@ export default {
             //       (v) => v.coach_id === this.course_order.coach_id
             //     )[0].coach_name;
             // }
-            this.order.courses.push({ ...this.course_order });
-            this.order.created_by = this.user_login.account_id;
-            this.changeOrderData(this.order);
-            localStorage.setItem(
-              this.user_login.account_id,
-              JSON.stringify(this.order)
-            );
-            this.saveCart({
-              cart_data: this.order,
-              discount: this.course_data?.discount,
-              courseData: this.course_data,
-            });
+
+            // this.order.courses.push({ ...this.course_order });
+            //   this.order.created_by = this.user_login.account_id;
+            //   this.changeOrderData(this.order);
+            //   localStorage.setItem(
+            //     this.user_login.account_id,
+            //     JSON.stringify(this.order)
+            //   );
+            //   this.saveCart({
+            //     cart_data: this.order,
+            //     discount: this.course_data?.discount,
+            //     courseData: this.course_data,
+            //   });
+            if (
+              this.allSeatDatas?.status === "Close" ||
+              Number(this.course_order.students.length) +
+                Number(this.allSeatDatas?.countSeatByCourse) >
+                this.allSeatDatas?.maximumStudent ||
+              this.course_data.course_status === "Reserve"
+            ) {
+              Swal.fire({
+                icon: "error",
+                title: this.$t("unable to register"),
+                text: this.$t(
+                  "unable to add students to cart because the reservation could not be added"
+                ),
+                timer: 3000,
+                timerProgressBar: true,
+                showCancelButton: false,
+                showConfirmButton: false,
+              });
+            } else {
+              this.order.courses.push({ ...this.course_order });
+              this.order.created_by = this.user_login.account_id;
+              this.changeOrderData(this.order);
+              localStorage.setItem(
+                this.user_login.account_id,
+                JSON.stringify(this.order)
+              );
+              this.saveCart({
+                cart_data: this.order,
+                discount: this.course_data?.discount,
+                courseData: this.course_data,
+              });
+            }
+
             // this.resetCourseData();
             // this.show_dialog_cart = true;
             // Swal.fire({

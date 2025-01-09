@@ -477,8 +477,10 @@
                         {{
                           (option.price_unit - option.discount_price) /
                           option.amount
-                            ? (option.price_unit - option.discount_price) /
-                              option.amount
+                            ? (
+                                (option.price_unit - option.discount_price) /
+                                option.amount
+                              ).toFixed(2)
                             : 0?.toLocaleString()
                         }}
                         <!-- {{ option.net_price_unit?.toLocaleString() }} -->

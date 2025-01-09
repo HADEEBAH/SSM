@@ -1671,7 +1671,7 @@ const orderModules = {
           );
           if (data.statusCode === 201) {
             try {
-              // const localhost = 'http://localhost:3002'
+              // const localhost = "http://localhost:3002";
               let { data } = await axios.post(
                 // `${localhost}/api/v1/order/regis/course`,
                 `${process.env.VUE_APP_URL}/api/v1/order/regis/course`,
@@ -1878,6 +1878,36 @@ const orderModules = {
                   icon: "warning",
                   title: VueI18n.t("unable to register"),
                   text: VueI18n.t("cannot register , The seats are full"),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (
+                error?.response?.data?.message ===
+                "Unable to pay because this course been removed."
+              ) {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t("unable to register"),
+                  text: VueI18n.t(
+                    "Unable to pay because this course been removed"
+                  ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (
+                error?.response?.data?.message ===
+                "Unable to pay because this course Package Option has been removed."
+              ) {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t("unable to register"),
+                  text: VueI18n.t(
+                    "Unable to pay because this course Package Option has been removed"
+                  ),
                   timer: 3000,
                   timerProgressBar: true,
                   showCancelButton: false,

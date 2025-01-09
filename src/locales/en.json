@@ -722,6 +722,7 @@
   "package has been created": "Package has been created",
   "package cannot be deleted as there must be at least one package in the course": "Package cannot be deleted as there must be at least one package in the course",
   "package cannot be deleted as there are students in this package": "package cannot be deleted as there are students in this package",
+  "package cannot be deleted as there are students who have booked this package": "package cannot be deleted as there are students who have booked this package",
   "this teaching day cannot be deleted as the coach must have at least 1 teaching day": "This teaching day cannot be deleted as the coach must have at least 1 teaching day",
 
   "reason for leave": "Reason for leave",
@@ -1083,6 +1084,9 @@
   "upload Learning Journey": "Upload Learning Journey",
   "unable to purchase the course because the course is in reserved status": "Unable to purchase the course because the course is in reserved status",
   "unable to add students to cart because the course already has students listed in the cart": "Unable to add students to cart because the course already has students listed in the cart",
+  "unable to add students to cart because the reservation could not be added": "unable to add students to cart because the reservation could not be added",
+  "Unable to pay because this course been removed": "Unable to pay because this course been removed.",
+  "Unable to pay because this course Package Option has been removed": "Unable to pay because this course Package Option has been removed.",
 
   "organized by": "Organized by",
 
