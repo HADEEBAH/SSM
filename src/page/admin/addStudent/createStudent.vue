@@ -662,8 +662,8 @@
                   dense
                   outlined
                   :value="
-                    course?.course_data?.price_course
-                      ? course?.course_data?.price_course
+                    course?.course_data?.course_price
+                      ? course?.course_data?.course_price
                       : 0
                   "
                   @keydown="Validation($event, 'number')"
@@ -678,14 +678,14 @@
               <v-col cols="12" sm="4" v-if="course?.course_type_id == 'CT_1'">
                 <label-custom :text="$t(`discount`)"></label-custom>
                 <!-- :rules="rules.price" -->
-
-                <v-text-field
-                  dense
-                  :value="
+                <!--  :value="
                     course?.option?.discountStatus
                       ? course?.option?.discountPrice || 0
                       : 0
-                  "
+                  " -->
+                <v-text-field
+                  dense
+                  :value="course?.option?.discountPrice || 0"
                   outlined
                   @keydown="Validation($event, 'number')"
                   type="number"
@@ -1132,6 +1132,7 @@ export default {
     totalPricees: 0,
     checkDiscount: 0,
     totalDiscount: 0,
+    discount_price: 0,
     checkedBox: false,
     dataIndex: 0,
     totalDiscountPercent: 0,
@@ -1535,12 +1536,15 @@ export default {
     },
     async Calprice(course, index) {
       course.price = course.option.pricePerPerson;
-      course.discount = course.option?.discountStatus
-        ? course.option.discountPrice
-        : 0;
+      // course.discount = course.option?.discountStatus
+      //   ? course.option.discountPrice
+      //   : 0;
+      course.discount = course.option?.discountPrice || 0;
       course.priceDiscount =
-        course.option.pricePerPerson -
-        (course.option?.discountStatus ? course.option?.discountPrice || 0 : 0);
+        course.option.pricePerPerson - course.option?.discountPrice || 0;
+      // course.priceDiscount =
+      // course.option.pricePerPerson -
+      // (course.option?.discountStatus ? course.option?.discountPrice || 0 : 0);
       course.time = {};
       course.day = {};
       course.coach = {};
@@ -1681,7 +1685,7 @@ export default {
             course.course_data = this.course_data;
           }
           if (this.course_data.course_type_id === "CT_2") {
-            course.price = this.course_data.price_course;
+            course.price = this.course_data.course_price;
             course.discount = this.course_data.discount;
             course.priceDiscount = this.course_data.calculate_price;
             course.start_date = this.course_data.course_study_start_date;
@@ -1719,7 +1723,7 @@ export default {
             //   this.course_data?.course_type_id == "CT_2"
             //     ? parseInt(this.course_data?.calculate_price)
             //     : parseInt(this.course_data.price_course);
-            course.price = parseInt(this.course_data.price_course);
+            course.price = parseInt(this.course_data.course_price);
             course.time = this.course_data.days_of_class[0].times[0];
 
             this?.CalTotalPrice();
@@ -1940,6 +1944,7 @@ export default {
                 course.students = [];
                 course.coach_id = course.coach.coach_id;
                 course.coach_name = course.coach.coach_name;
+                this.discount_price = course?.option?.discountPrice;
                 for (const student of this.students) {
                   if (student) {
                     account.push({
@@ -1963,7 +1968,8 @@ export default {
               this.changeOrderData(this.order);
               await this.saveOrder({
                 regis_type: "addStudent",
-                discount: this.course_data?.discountPrice,
+                // discount: this.course_data?.discount,
+                discount: this.discount_price,
                 courseData: this.course_data,
               });
               if (this.order_is_status) {

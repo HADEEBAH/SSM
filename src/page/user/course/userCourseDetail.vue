@@ -43,7 +43,11 @@
             <v-icon class="mr-2" color="#ff6b81">mdi-currency-usd</v-icon>
           </v-col>
           <v-col class="font-bold"
-            >{{ parseFloat(course_data.price_course).toLocaleString() }}
+            >{{
+              parseFloat(
+                course_data.course_price ? course_data.course_price : 0
+              ).toLocaleString()
+            }}
             {{ $t("baht") }}/{{ $t("course") }}</v-col
           >
         </v-row>
@@ -381,7 +385,8 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           if (this.course_data.course_type_id === "CT_2") {
-            this.course_order.price = parseFloat(this.course_data.price_course);
+            this.course_order.price = parseFloat(this.course_data.course_price);
+            // this.course_order.price = parseFloat(this.course_data.price_course);
             this.CreateReserveCourse({ course_data: this.course_order });
           }
         }
@@ -391,7 +396,12 @@ export default {
       // eslint-disable-next-line no-unused-vars
       let tobay = moment().format("YYYY-MM-DD");
 
-      return !moment(tobay).isBetween( this.course_data.course_register_start_date, this.course_data.course_register_end_date, null, '[]');
+      return !moment(tobay).isBetween(
+        this.course_data.course_register_start_date,
+        this.course_data.course_register_end_date,
+        null,
+        "[]"
+      );
       // return false;
     },
     registerCourse() {
@@ -412,7 +422,8 @@ export default {
         this.course_order.students = [];
       }
       if (this.course_data.course_type_id === "CT_2") {
-        this.course_order.price = parseFloat(this.course_data.price_course);
+        this.course_order.price = parseFloat(this.course_data.course_price);
+        // this.course_order.price = parseFloat(this.course_data.price_course);
         this.changeCourseOrderData(this.course_order);
       }
       this.changeOrderData(this.order);
