@@ -99,12 +99,12 @@ const CourseModules = {
         mm: '00'
       },
       location: "",
-      detail: "",
+      detadescriptionil: "",
       discount: '',
-      checked_discount_bool: '',
+      checked_discount: 0,
       music_performance: "",
       catification: "",
-      price_course: 0,
+      course_price: 0,
       student_recived: 0,
       artwork_file: [],
       coachs: [
@@ -208,7 +208,188 @@ const CourseModules = {
     open_time_add_student: [],
     open_day_add_student: [],
     all_students_potential_list: [],
-    get_all_time: []
+    get_all_time: [],
+    create_course: {},
+    courses_data: {
+      reservation: false,
+      course_id: null,
+      course_name_th: null,
+      course_name_en: null,
+      course_open_date: null,
+      course_type_id: "CT_1",
+      location: null,
+      detail: null,
+      music_performance: null,
+      certification: null,
+      course_image: null,
+      course_hours: 1.0,
+      category_id: null,
+      course_price: 0,
+      discount_price: 0,
+      courseImg: null,
+      menu_course_open_date: false,
+      menu_reservation_start_date: null,
+      menu_reservation_end_date: null,
+      reservation_start_date_str: null,
+      reservation_start_date: null,
+      course_hour_time: {
+        HH: '01',
+        mm: '00'
+      },
+      course_open_date_str: null,
+      coach_id: null,
+      course_register_date: {
+        start_date: null,
+        menu_start_date: false,
+        end_date: null,
+        menu_end_date: false,
+        start_date_formatted: null,
+        end_date_formatted: null,
+      },
+      course_study_date: {
+        start_time: "",
+        start_time_object: { HH: "", mm: "" },
+        menu_start_time: false,
+        end_time: "",
+        end_time_object: { HH: "", mm: "" },
+        menu_end_time: false,
+      },
+      course_study_time: {
+        start_time: "",
+        start_time_object: { HH: "", mm: "" },
+        end_time: "",
+        end_time_object: { HH: "", mm: "" },
+      },
+      checked_discount: false,
+      teach_day: [],
+    },
+    coach_data: [
+      {
+        edited_coach: true,
+        course_id: null,
+        coach_id: null,
+        course_coach_id: null,
+        coach_name: null,
+        teach_days_used: [],
+        teach_day_data: [
+          {
+            day_of_week_id: null,
+            class_open: false,
+            teach_day: [],
+            course_coach_id: null,
+            class_date: [
+              {
+                start_time: null,
+                class_date_range: {
+                  time_id: null,
+                  day_of_week_id: null,
+                  start_time: null,
+                  start_time_object: {
+                    HH: null,
+                    mm: null
+                  },
+                  menu_start_time: false,
+                  end_time: null,
+                  end_time_object: {
+                    HH: null,
+                    mm: null
+                  },
+                  menu_end_time: false
+                },
+                students: 0
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    data_package: [
+      {
+        package_id: null,
+        package: null,
+        students: 1,
+        options: [
+          {
+            package_id: null,
+            package: null,
+            students: 0,
+            options: [
+              {
+                option_id: null,
+                period_package: null,
+                amount: 0,
+                price_unit: 0,
+                discount: false,
+                discount_price: 0,
+                privilege: null,
+                option_description: null,
+                net_price: 0,
+                net_price_unit: 0,
+              },
+            ],
+
+          },
+        ],
+        option_selected: [],
+        option_list: [
+          {
+            option_id: "OP_1",
+            option_name: "รายวัน",
+            option_name_en: "Daily",
+          },
+          {
+            option_id: "OP_2",
+            option_name: "รายเดือน",
+            option_name_en: "Monthly",
+          },
+          {
+            option_id: "OP_3",
+            option_name: "รายเทอม",
+            option_name_en: "Per term",
+          },
+          {
+            option_id: "OP_4",
+            option_name: "รายปี",
+            option_name_en: "Yearly",
+          },
+          {
+            option_id: "OP_5",
+            option_name: "ราย 4 ครั้ง",
+            option_name_en: "4 times",
+          },
+          {
+            option_id: "OP_6",
+            option_name: "ราย 2 เดือน",
+            option_name_en: "2 months",
+          },
+          {
+            option_id: "OP_7",
+            option_name: "ราย 10 ครั้ง",
+            option_name_en: "10 times",
+          },
+        ],
+      }
+    ],
+    art_work_data: [],
+    update_teachday_coach: [],
+    update_options: [],
+    add_new_options: [],
+    add_new_coach: [],
+    add_new_teach_day: [],
+    delete_option: [],
+    refresh_teach_day: [],
+    refresh_option: [],
+    update_packages: [],
+    update_packages_option: [],
+    deleted_package: {},
+    deleted_package_option: [],
+    add_new_packages: [],
+    add_new_packages_options: [],
+    refresh_package: {},
+    refresh_package_options: {}
+
+
+
 
 
   },
@@ -328,7 +509,8 @@ const CourseModules = {
         detail: "",
         music_performance: "",
         catification: "",
-        price_course: 0,
+        course_price: 0,
+        discount_price: 0,
         student_recived: 0,
         artwork_file: [],
         coachs: [
@@ -435,6 +617,342 @@ const CourseModules = {
     SetgetTime(state, payload) {
       state.get_all_time = payload
     },
+    SetCoursesData(state, payload) {
+      state.courses_data = payload
+    },
+    SetCoachData(state, payload) {
+      state.coach_data = payload
+    },
+    SetPackageData(state, payload) {
+      state.data_package = payload
+    },
+    SetArtWorkData(state, payload) {
+      state.art_work_data = payload
+    },
+    SetCreateCourseData(state, payload) {
+      state.create_course = payload
+    },
+    SetUpdateTeachdayCoach(state, payload) {
+      state.update_teachday_coach = payload
+    },
+    SetUpdateOptions(state, payload) {
+      state.update_options = payload
+    },
+    SetAddNewOptions(state, payload) {
+      state.add_new_options = payload
+    },
+    SetAddNewCoach(state, payload) {
+      state.add_new_coach = payload
+    },
+    SetAddNewTeachDay(state, payload) {
+      state.add_new_teach_day = payload
+    },
+    SetDeleteOptions(state, payload) {
+      state.delete_option = payload
+    },
+    SetRefreshTeachDay(state, payload) {
+      state.refresh_teach_day = payload
+    },
+    SetRefreshOption(state, payload) {
+      state.refresh_option = payload
+    },
+    SetUpdatePackages(state, payload) {
+      state.update_packages = payload
+    },
+    SetUpdatePackagesOptions(state, payload) {
+      state.update_packages_option = payload
+    },
+    SetDeletePackage(state, payload) {
+      state.deleted_package = payload
+    },
+    SetDeletePackageOption(state, payload) {
+      state.deleted_package_option = payload
+    },
+    SetNewPackages(state, payload) {
+      state.add_new_packages = payload
+    },
+    SetNewPackagesOptions(state, payload) {
+      state.add_new_packages_options = payload
+    },
+    SetRefreshPackage(state, payload) {
+      state.refresh_package = payload
+    },
+    SetRefreshPackageOption(state, payload) {
+      state.refresh_package_options = payload
+    },
+    ResetStateCourseData(state) {
+      state.courses_data.course_name_th = null,
+        state.courses_data.reservation = false,
+        state.courses_data.reservation = false,
+        state.courses_data.course_id = null,
+        state.courses_data.course_name_th = null,
+        state.courses_data.course_name_en = null,
+        state.courses_data.course_open_date = null,
+        state.courses_data.course_type_id = "CT_1",
+        state.courses_data.location = null,
+        state.courses_data.detail = null,
+        state.courses_data.description = null,
+        state.courses_data.music_performance = null,
+        state.courses_data.certification = null,
+        state.courses_data.course_image = null,
+        state.courses_data.course_hours = 1.0,
+        state.courses_data.category_id = null,
+        state.courses_data.courseImg = null,
+        state.courses_data.menu_course_open_date = false,
+        state.courses_data.menu_reservation_start_date = null,
+        state.courses_data.menu_reservation_end_date = null,
+        state.courses_data.reservation_start_date_str = null,
+        state.courses_data.reservation_end_date_str = null,
+        state.courses_data.reservation_start_date = null,
+        state.courses_data.reservation_end_date = null,
+        state.courses_data.course_hour_time = {
+          HH: '01',
+          mm: '00'
+        },
+        state.courses_data.course_open_date_str = null,
+        state.courses_data.coach_id = null,
+        state.courses_data.course_register_date = {
+          start_date: null,
+          menu_start_date: false,
+          end_date: null,
+          menu_end_date: false,
+          start_date_formatted: null,
+          end_date_formatted: null,
+        },
+        state.courses_data.course_study_date = {
+          start_time: "",
+          start_time_object: { HH: "", mm: "" },
+          menu_start_time: false,
+          end_time: "",
+          end_time_object: { HH: "", mm: "" },
+          menu_end_time: false,
+        },
+        state.courses_data.course_study_time = {
+          start_time: "",
+          start_time_object: { HH: "", mm: "" },
+          end_time: "",
+          end_time_object: { HH: "", mm: "" },
+        },
+        state.courses_data.checked_discount = false,
+        state.courses_data.teach_day = []
+
+      // COACH
+      const resetCoachData = [
+        {
+          edited_coach: true,
+          course_id: null,
+          coach_id: null,
+          course_coach_id: null,
+          coach_name: null,
+          teach_days_used: [],
+          teach_day_data: [
+            {
+              day_of_week_id: null,
+              class_open: false,
+              teach_day: [],
+              course_coach_id: null,
+              class_date: [
+                {
+                  start_time: null,
+                  class_date_range: {
+                    time_id: null,
+                    day_of_week_id: null,
+                    start_time: null,
+                    start_time_object: { HH: null, mm: null },
+                    menu_start_time: false,
+                    end_time: null,
+                    end_time_object: { HH: null, mm: null },
+                    menu_end_time: false,
+                  },
+                  students: 0,
+                },
+              ],
+            },
+          ],
+        },
+      ];
+      state.coach_data = resetCoachData
+
+      // PACKAGE
+      const resetPackageData = [
+        {
+          package_id: null,
+          package: null,
+          students: 1,
+          options: [
+            {
+              package_id: null,
+              package: null,
+              students: 0,
+              options: [
+                {
+                  option_id: null,
+                  period_package: null,
+                  amount: 0,
+                  price_unit: 0,
+                  discount: false,
+                  discount_price: 0,
+                  privilege: null,
+                  option_description: null,
+                  net_price: 0,
+                  net_price_unit: 0,
+                },
+              ],
+
+            },
+          ],
+          option_selected: [],
+          option_list: [
+            {
+              option_id: "OP_1",
+              option_name: "รายวัน",
+              option_name_en: "Daily",
+            },
+            {
+              option_id: "OP_2",
+              option_name: "รายเดือน",
+              option_name_en: "Monthly",
+            },
+            {
+              option_id: "OP_3",
+              option_name: "รายเทอม",
+              option_name_en: "Per term",
+            },
+            {
+              option_id: "OP_4",
+              option_name: "รายปี",
+              option_name_en: "Yearly",
+            },
+            {
+              option_id: "OP_5",
+              option_name: "ราย 4 ครั้ง",
+              option_name_en: "4 times",
+            },
+            {
+              option_id: "OP_6",
+              option_name: "ราย 2 เดือน",
+              option_name_en: "2 months",
+            },
+            {
+              option_id: "OP_7",
+              option_name: "ราย 10 ครั้ง",
+              option_name_en: "10 times",
+            },
+          ],
+        }
+      ];
+      state.data_package = resetPackageData
+
+      // state.coach_data.forEach(coach => {
+      //   coach.edited_coach = true,
+      //     coach.course_id = null,
+      //     coach.coach_id = null,
+      //     coach.course_coach_id = null,
+      //     coach.coach_name = null,
+      //     coach.teach_days_used = [],
+      //     coach.teach_day_data = [
+      //       {
+      //         day_of_week_id: null,
+      //         class_open: false,
+      //         teach_day: [],
+      //         course_coach_id: null,
+      //         class_date: [
+      //           {
+      //             start_time: null,
+      //             class_date_range: {
+      //               time_id: null,
+      //               day_of_week_id: null,
+      //               start_time: null,
+      //               start_time_object: {
+      //                 HH: null,
+      //                 mm: null
+      //               },
+      //               menu_start_time: false,
+      //               end_time: null,
+      //               end_time_object: {
+      //                 HH: null,
+      //                 mm: null
+      //               },
+      //               menu_end_time: false
+      //             },
+      //             students: 0
+      //           }
+      //         ]
+      //       }
+      //     ]
+      // })
+
+      // PACKAGE
+
+
+      // state.data_package.forEach(packages => {
+      //   packages.package_id = null,
+      //     packages.package = null,
+      //     packages.students = 1,
+      //     packages.options = [
+      //       {
+      //         package_id: null,
+      //         package: null,
+      //         students: 0,
+      //         options: [
+      //           {
+      //             option_id: null,
+      //             period_package: null,
+      //             amount: 0,
+      //             price_unit: 0,
+      //             discount: false,
+      //             discount_price: 0,
+      //             privilege: null,
+      //             option_description: null,
+      //             net_price: 0,
+      //             net_price_unit: 0,
+      //           },
+      //         ],
+
+      //       },
+      //     ],
+      //     packages.option_selected = [],
+      //     packages.option_list = [
+      //       {
+      //         option_id: "OP_1",
+      //         option_name: "รายวัน",
+      //         option_name_en: "Daily",
+      //       },
+      //       {
+      //         option_id: "OP_2",
+      //         option_name: "รายเดือน",
+      //         option_name_en: "Monthly",
+      //       },
+      //       {
+      //         option_id: "OP_3",
+      //         option_name: "รายเทอม",
+      //         option_name_en: "Per term",
+      //       },
+      //       {
+      //         option_id: "OP_4",
+      //         option_name: "รายปี",
+      //         option_name_en: "Yearly",
+      //       },
+      //       {
+      //         option_id: "OP_5",
+      //         option_name: "ราย 4 ครั้ง",
+      //         option_name_en: "4 times",
+      //       },
+      //       {
+      //         option_id: "OP_6",
+      //         option_name: "ราย 2 เดือน",
+      //         option_name_en: "2 months",
+      //       },
+      //       {
+      //         option_id: "OP_7",
+      //         option_name: "ราย 10 ครั้ง",
+      //         option_name_en: "10 times",
+      //       },
+      //     ]
+      // })
+
+    }
+
 
 
   },
@@ -510,9 +1028,11 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.delete(`${localhost}/api/v1/admincourse/delete-course-coach/${course_coach_id}`, config)
         let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/admincourse/delete-course-coach/${course_coach_id}`, config)
         if (data.statusCode == 200) {
-          context.dispatch("GetCourse", course_id)
+          // context.dispatch("GetCourse", course_id)
           Swal.fire({
             icon: "success",
             title: VueI18n.t("succeed"),
@@ -523,6 +1043,8 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
+          await context.dispatch("CoachData", { course_id: course_id })
+
         }
       } catch (error) {
         if (error.response.data.message == "This coach cannot be deleted. Because the middle of teaching") {
@@ -536,8 +1058,43 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
-          context.dispatch("GetCourse", course_id)
+        } else if (error.response.data.message == "User not found.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("can not delete coach"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "Cannot delete a coach as there must be at least 1 coach listed in the course.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("cannot delete a coach as there must be at least 1 coach listed in the course"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: error,
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
         }
+        await context.dispatch("CoachData", { course_id: course_id })
+
+
       }
     },
     // COURSE TYPES
@@ -584,6 +1141,10 @@ const CourseModules = {
     ChangeCourseData(context, course_data) {
       context.commit("SetCourseData", course_data)
     },
+    // ChangeCoursesData(context, courses_data) {
+    //   console.log('courses_data :>> ', courses_data);
+    //   context.commit("ResetStateCourseData", courses_data)
+    // },
     // COACH :: LIST BY COURSE
     async GetCoachsByCourse(context, { course_id, search }) {
       context.commit("SetCoachListIsLoading", true)
@@ -798,7 +1359,8 @@ const CourseModules = {
       }
     },
     // COURSE :: UPDATE COURSE DETAIL
-    async UpdateCouserDetail(context, { course_id, course_data }) {
+    async UpdateCouserDetail(context, { course_id, data_payload, course_file }) {
+      // async UpdateCouserDetail(context, { course_id, course_data }) {
       try {
         let config = {
           headers: {
@@ -807,106 +1369,117 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let payload = {
-          "reservation": course_data.reservation,
-          "reservationEndDate": course_data.reservation_end_date,
-          "reservationStartDate": course_data.reservation_start_date,
-          "courseId": course_data.course_id,
-          "courseTypeId": course_data.course_type_id,
-          "type": course_data.type,
-          "courseNameTh": course_data.course_name_th,
-          "courseNameEn": course_data.course_name_en,
-          "courseImg": typeof course_data.course_img == "object" ? null : course_data.course_img,
-          "categoryId": course_data.category_id,
-          "categoryNameTh": course_data.category_name_th,
-          "courseOpenDate": course_data.course_open_date,
-          "courseOpenDateStr": course_data.course_open_date_str,
-          "coursePerTime": course_data.course_hours,
-          "courseLocation": course_data.location,
-          "courseDescription": course_data.detail,
-          "courseMusicPerformance": course_data.music_performance,
-          "courseCertification": course_data.catification,
-          "coursePrice": parseInt(course_data.price_course),
-          "courseRegisterStartDate": course_data?.coachs[0]?.register_date_range?.start_date ? course_data.coachs[0].register_date_range.start_date : null,
-          "courseRegisterEndDate": course_data?.coachs[0]?.register_date_range?.end_date ? course_data.coachs[0].register_date_range.end_date : null,
-          "coursePeriodStartDate": course_data.coachs[0].period.start_time ? course_data.coachs[0].period.start_time : null,
-          "coursePeriodEndDate": course_data.coachs[0].period.end_time ? course_data.coachs[0].period.end_time : null,
-          "courseStudentRecived": course_data.student_recived,
-          "courseStudyEndDate": course_data?.coachs[0]?.class_date_range?.end_date,
-          "courseStudyStartDate": course_data?.coachs[0]?.class_date_range?.start_date,
-          "checkedDiscount": course_data?.checked_discount_bool,
-          "discountPrice": course_data?.discount ? course_data?.discount : 0,
-          "coachs": [],
-          "dayOfweek": [],
-        }
-        if (course_data.course_type_id === "CT_2") {
+        // let payload = {
+        //   "reservation": course_data.reservation,
+        //   "reservationEndDate": course_data.reservation_end_date,
+        //   "reservationStartDate": course_data.reservation_start_date,
+        //   "courseId": course_data.course_id,
+        //   "courseTypeId": course_data.course_type_id,
+        //   "type": course_data.type,
+        //   "courseNameTh": course_data.course_name_th,
+        //   "courseNameEn": course_data.course_name_en,
+        //   "courseImg": typeof course_data.course_img == "object" ? null : course_data.course_img,
+        //   "categoryId": course_data.category_id,
+        //   "categoryNameTh": course_data.category_name_th,
+        //   "courseOpenDate": course_data.course_open_date,
+        //   "courseOpenDateStr": course_data.course_open_date_str,
+        //   "coursePerTime": course_data.course_hours,
+        //   "courseLocation": course_data.location,
+        //   "courseDescription": course_data.detail,
+        //   "courseMusicPerformance": course_data.music_performance,
+        //   "courseCertification": course_data.catification,
+        //   "coursePrice": parseInt(course_data.course_price),
+        //   "courseRegisterStartDate": course_data?.coachs[0]?.register_date_range?.start_date ? course_data.coachs[0].register_date_range.start_date : null,
+        //   "courseRegisterEndDate": course_data?.coachs[0]?.register_date_range?.end_date ? course_data.coachs[0].register_date_range.end_date : null,
+        //   "coursePeriodStartDate": course_data.coachs[0].period.start_time ? course_data.coachs[0].period.start_time : null,
+        //   "coursePeriodEndDate": course_data.coachs[0].period.end_time ? course_data.coachs[0].period.end_time : null,
+        //   "courseStudentRecived": course_data.student_recived,
+        //   "courseStudyEndDate": course_data?.coachs[0]?.class_date_range?.end_date,
+        //   "courseStudyStartDate": course_data?.coachs[0]?.class_date_range?.start_date,
+        //   "checkedDiscount": course_data?.checked_discount,
+        //   "discountPrice": course_data?.discount ? course_data?.discount : 0,
+        //   "coachs": [],
+        //   "dayOfweek": [],
+        // }
+        // if (course_data.course_type_id === "CT_2") {
 
-          for await (const coach of course_data.coachs.filter(v => v.teach_day_data.length > 0)) {
-            let teach_day_data = []
-            for await (const date of coach.teach_day_data) {
-              let class_date = []
-              for await (const class_date_data of date.class_date) {
-                class_date.push({
-                  "dayOfWeekId": date.day_of_week_id,
-                  "timeId": class_date_data.class_date_range.time_id,
-                  "classDateRange": {
-                    "startTime": class_date_data.class_date_range.start_time ? class_date_data.class_date_range.start_time : null,
-                    "endTime": class_date_data.class_date_range.end_time ? class_date_data.class_date_range.end_time : null,
-                  },
-                  "students": parseInt(class_date_data.students)
-                })
-              }
-              if (date.day_of_week_id) {
-                if (teach_day_data.filter((v) => v.dayOfWeekId === date.day_of_week_id && v.courseCoachId === date.course_coach_id).length === 0) {
-                  teach_day_data.push({
-                    "dayOfWeekId": date.day_of_week_id,
-                    "classOpen": date.class_open,
-                    "teachDay": date.teach_day,
-                    "courseCoachId": date.course_coach_id,
-                    "classDate": class_date
-                  })
-                }
-              } else {
-                teach_day_data.push({
-                  "dayOfWeekId": null,
-                  "classOpen": date.class_open === true ? 'Active' : 'InActive',
-                  "teachDay": date.teach_day,
-                  "courseCoachId": date.course_coach_id ? date.course_coach_id : null,
-                  "classDate": class_date
-                })
-              }
-            }
+        //   for await (const coach of course_data.coachs.filter(v => v.teach_day_data.length > 0)) {
+        //     let teach_day_data = []
+        //     for await (const date of coach.teach_day_data) {
+        //       let class_date = []
+        //       for await (const class_date_data of date.class_date) {
+        //         class_date.push({
+        //           "dayOfWeekId": date.day_of_week_id,
+        //           "timeId": class_date_data.class_date_range.time_id,
+        //           "classDateRange": {
+        //             "startTime": class_date_data.class_date_range.start_time ? class_date_data.class_date_range.start_time : null,
+        //             "endTime": class_date_data.class_date_range.end_time ? class_date_data.class_date_range.end_time : null,
+        //           },
+        //           "students": parseInt(class_date_data.students)
+        //         })
+        //       }
+        //       if (date.day_of_week_id) {
+        //         if (teach_day_data.filter((v) => v.dayOfWeekId === date.day_of_week_id && v.courseCoachId === date.course_coach_id).length === 0) {
+        //           teach_day_data.push({
+        //             "dayOfWeekId": date.day_of_week_id,
+        //             "classOpen": date.class_open,
+        //             "teachDay": date.teach_day,
+        //             "courseCoachId": date.course_coach_id,
+        //             "classDate": class_date
+        //           })
+        //         }
+        //       } else {
+        //         teach_day_data.push({
+        //           "dayOfWeekId": null,
+        //           "classOpen": date.class_open === true ? 'Active' : 'InActive',
+        //           "teachDay": date.teach_day,
+        //           "courseCoachId": date.course_coach_id ? date.course_coach_id : null,
+        //           "classDate": class_date
+        //         })
+        //       }
+        //     }
 
-            payload.coachs.push({
-              "coachId": coach.coach_id,
-              "courseCoachId": coach.course_coach_id ? coach.course_coach_id : null,
-              "coachName": coach.coach_name,
-              "teachDayData": teach_day_data,
-              "classDateRange": {
-                "startDate": coach.class_date_range.start_date ? moment(coach.class_date_range.start_date).format("YYYY-MM-DD") : null,
-                "endDate": coach.class_date_range.end_date ? moment(coach.class_date_range.end_date).format("YYYY-MM-DD") : null,
-              },
-              "registerDateRange": {
-                "startDate": coach.register_date_range.start_date && coach.register_date_range.start_date !== "-" ? moment(coach.register_date_range.start_date).format("YYYY-MM-DD") : null,
-                "endDate": coach.register_date_range.end_date && coach.register_date_range.end_date !== "-" ? moment(coach.register_date_range.end_date).format("YYYY-MM-DD") : null,
-              },
-              "period": {
-                "startTime": coach.period.start_time ? coach.period.start_time : null,
-                "endTime": coach.period.end_time ? coach.period.end_time : null
-              }
-            })
-          }
-        }
+        //     payload.coachs.push({
+        //       "coachId": coach.coach_id,
+        //       "courseCoachId": coach.course_coach_id ? coach.course_coach_id : null,
+        //       "coachName": coach.coach_name,
+        //       "teachDayData": teach_day_data,
+        //       "classDateRange": {
+        //         "startDate": coach.class_date_range.start_date ? moment(coach.class_date_range.start_date).format("YYYY-MM-DD") : null,
+        //         "endDate": coach.class_date_range.end_date ? moment(coach.class_date_range.end_date).format("YYYY-MM-DD") : null,
+        //       },
+        //       "registerDateRange": {
+        //         "startDate": coach.register_date_range.start_date && coach.register_date_range.start_date !== "-" ? moment(coach.register_date_range.start_date).format("YYYY-MM-DD") : null,
+        //         "endDate": coach.register_date_range.end_date && coach.register_date_range.end_date !== "-" ? moment(coach.register_date_range.end_date).format("YYYY-MM-DD") : null,
+        //       },
+        //       "period": {
+        //         "startTime": coach.period.start_time ? coach.period.start_time : null,
+        //         "endTime": coach.period.end_time ? coach.period.end_time : null
+        //       }
+        //     })
+        //   }
+        // }
 
-        let payloadData = new FormData()
-        payloadData.append("payload", JSON.stringify(payload))
-        if (typeof course_data.course_img == "object") {
-          payloadData.append("img_url", course_data.course_img)
+        // let payloadData = new FormData()
+        // payloadData.append("payload", JSON.stringify(payload))
+        // if (typeof course_data.course_img == "object") {
+        //   payloadData.append("img_url", course_data.course_img)
+        // }
+        const payloadData = new FormData()
+        payloadData.append("payload", JSON.stringify(data_payload))
+        if (course_file) {
+          payloadData.append("img_url", course_file)
+        } else {
+          payloadData.append("img_url", null)
         }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.patch(`${localhost}/api/v1/manage/update-course/${course_id}`, payloadData, config)
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-course/${course_id}`, payloadData, config)
         if (data.statusCode === 200) {
-          await context.dispatch("GetArtworkByCourse", { course_id: course_id })
-          await context.dispatch("GetCourse", course_id)
+          // await context.dispatch("GetArtworkByCourse", { course_id: course_id })
+          // await context.dispatch("GetCourse", course_id)
+          await context.dispatch("CoursesData", { course_id: course_id })
+
           Swal.fire({
             icon: "success",
             title: VueI18n.t("succeed"),
@@ -1103,7 +1676,7 @@ const CourseModules = {
             "students": package_data.students,
             "options": []
           })
-          package_data.options.forEach((option_data) => {
+          package_data?.options.forEach((option_data) => {
             payload.packages[index].options.push({
               "coursePackageOptionId": option_data.course_package_option_id ? option_data.course_package_option_id : null,
               "packageId": payload.packages[index].packageId,
@@ -1165,6 +1738,8 @@ const CourseModules = {
     },
     // COURSE :: DELETE ARKWORK ID
     async RemoveArkworkByArkworkId(context, { artwork_data }) {
+      // course_id
+      // console.log('course_id :>> ', course_id);
       try {
         let config = {
           headers: {
@@ -1185,6 +1760,9 @@ const CourseModules = {
             timer: 3000,
             timerProgressBar: true,
           })
+          // await context.dispatch("GetArtworkByCourse", { course_id: course_id })
+
+
         }
       } catch (error) {
         Swal.fire({
@@ -1220,6 +1798,8 @@ const CourseModules = {
             timer: 3000,
             timerProgressBar: true,
           })
+          await context.dispatch("CoursesData", { course_id: course_id })
+
         }
       } catch (error) {
         Swal.fire({
@@ -1234,7 +1814,8 @@ const CourseModules = {
       }
     },
     // COURSE :: UPDATE ARKWORK
-    async UpdateCourseArkwork(context, { course_id, course_data }) {
+    async UpdateCourseArkwork(context, { course_id, privilage_file, artwork_files }) {
+      // course_data, 
       try {
         let config = {
           headers: {
@@ -1243,13 +1824,22 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
+        // let payloadData = new FormData()
+        // if (course_data.privilege_file) {
+        //   payloadData.append("img_privilage", course_data.privilege_file)
+        // }
+        // if (course_data.artwork_file) {
+        //   for (let i = 0; i < course_data.artwork_file.length; i++) {
+        //     payloadData.append(`img_artwork`, course_data.artwork_file[i]);
+        //   }
+        // }
         let payloadData = new FormData()
-        if (course_data.privilege_file) {
-          payloadData.append("img_privilage", course_data.privilege_file)
+        if (privilage_file) {
+          payloadData.append("img_privilage", privilage_file)
         }
-        if (course_data.artwork_file) {
-          for (let i = 0; i < course_data.artwork_file.length; i++) {
-            payloadData.append(`img_artwork`, course_data.artwork_file[i]);
+        if (artwork_files) {
+          for (let i = 0; i < artwork_files.length; i++) {
+            payloadData.append(`img_artwork`, artwork_files[i]);
           }
         }
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-artwork/${course_id}`, payloadData, config)
@@ -1267,6 +1857,7 @@ const CourseModules = {
             timer: 3000,
             timerProgressBar: true,
           })
+          await context.dispatch("CoursesData", { course_id: course_id })
 
 
         }
@@ -1348,6 +1939,8 @@ const CourseModules = {
     //COURSE :: Artwork
     async GetArtworkByCourse(context, { course_id }) {
       try {
+        // const localhost = 'http://localhost:3000'
+        // let { data } = await axios.get(`${localhost}/api/v1/course/attcahment/${course_id}`)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/attcahment/${course_id}`)
         if (data.statusCode === 200) {
           if (data.data.length > 0) {
@@ -1411,11 +2004,11 @@ const CourseModules = {
             location: data.data.courseLocation,
             detail: data.data.courseDescription,
             discount: data.data.discountPrice,
-            checked_discount_bool: data.data.checkedDiscount,
+            checked_discount: data.data.checkedDiscount,
             calculate_price: data.data.calculateCoursePrice,
             music_performance: data.data.courseMusicPerformance,
             catification: data.data.courseCertification,
-            price_course: data.data.coursePrice,
+            course_price: data.data.coursePrice,
             course_register_start_date: data.data.courseRegisterStartDate ? moment(data.data.courseRegisterStartDate).format("YYYY-MM-DD") : null,
             course_register_end_date: data.data.courseRegisterEndDate ? moment(data.data.courseRegisterEndDate).format("YYYY-MM-DD") : null,
             course_period_start_date: data.data.coursePeriodStartDate ? data.data.coursePeriodStartDate : null,
@@ -1821,103 +2414,116 @@ const CourseModules = {
       }
     },
     // COURSE :: CREATE
-    async CreateCourse(context) {
+    async CreateCourse(context, { course_payload, course_file, privilege_file, artwork_file }) {
       context.commit("SetCourseIsLoading", true)
       try {
-        let course = context.state.course_data
-        let payload = {
-          "reservation": course.reservation,
-          "reservationEndDate": course.reservation_end_date,
-          "reservationStartDate": course.reservation_start_date,
-          "categoryId": course.category_id,
-          "courseTypeId": course.course_type_id,
-          "courseImg": "",
-          "courseNameTh": course.course_name_th,
-          "courseNameEn": course.course_name_en,
-          "courseOpenDate": course.course_open_date,
-          "coursePerTime": course.course_hours,
-          "startDate": course.start_date,
-          "courseStudentRecived": course.student_recived,
-          "courseLocation": course.location,
-          "courseDescription": course.detail,
-          "courseMusicPerformance": course.music_performance,
-          "courseCertification": course.catification,
-          "coursePrice": course.price_course,
-          "checkedDiscount": course.checked_discount_bool,
-          "discountPrice": course.discount ? course.discount : 0,
-          "coachs": [],
-          "dayOfweek": [],
-          "coursePackages": []
-        }
-        course.coachs.forEach((coach) => {
-          // Short Course
-          payload.coachs.push({
-            "accountId": coach.coach_id,
-            "registerDateRange": {
-              "courseRegisterStartDate": coach.register_date_range.start_date,
-              "courseRegisterEndDate": coach.register_date_range.end_date,
-            },
-            "classDateRange": {
-              "courseStudyStartDate": coach.class_date_range.start_date,
-              "courseStudyEndDate": coach.class_date_range.end_date,
-            },
-            "period": {
-              "coursePeriodStartDate": coach.period.start_time ? coach.period.start_time : '',
-              "coursePeriodEndDate": coach.period.end_time ? coach.period.end_time : '',
-            }
-          })
-          // Day Of Week
-          coach.teach_day_data.forEach((teach_day) => {
-            let times = []
-            teach_day.class_date.forEach((date) => {
-              if (course.course_type_id === "CT_1") {
-                times.push({
-                  "start": date.class_date_range.start_time,
-                  "end": date.class_date_range.end_time,
-                  "maximumStudent": date.students
-                })
-              } else {
-                times.push({
-                  "start": coach.period.start_time,
-                  "end": coach.period.end_time,
-                  "maximumStudent": course.student_recived
-                })
-              }
+        // let course = context.state.course_data
+        // let payload = {
+        //   "reservation": course.reservation,
+        //   "reservationEndDate": course.reservation_end_date,
+        //   "reservationStartDate": course.reservation_start_date,
+        //   "categoryId": course.category_id,
+        //   "courseTypeId": course.course_type_id,
+        //   "courseImg": "",
+        //   "courseNameTh": course.course_name_th,
+        //   "courseNameEn": course.course_name_en,
+        //   "courseOpenDate": course.course_open_date,
+        //   "coursePerTime": course.course_hours,
+        //   "startDate": course.start_date,
+        //   "courseStudentRecived": course.student_recived,
+        //   "courseLocation": course.location,
+        //   "courseDescription": course.detail,
+        //   "courseMusicPerformance": course.music_performance,
+        //   "courseCertification": course.catification,
+        //   "coursePrice": course.course_price,
+        //   "checkedDiscount": course.checked_discount,
+        //   "discountPrice": course.discount ? course.discount : 0,
+        //   "coachs": [],
+        //   "dayOfweek": [],
+        //   "coursePackages": []
+        // }
+        // course.coachs.forEach((coach) => {
+        //   // Short Course
+        //   payload.coachs.push({
+        //     "accountId": coach.coach_id,
+        //     "registerDateRange": {
+        //       "courseRegisterStartDate": coach.register_date_range.start_date,
+        //       "courseRegisterEndDate": coach.register_date_range.end_date,
+        //     },
+        //     "classDateRange": {
+        //       "courseStudyStartDate": coach.class_date_range.start_date,
+        //       "courseStudyEndDate": coach.class_date_range.end_date,
+        //     },
+        //     "period": {
+        //       "coursePeriodStartDate": coach.period.start_time ? coach.period.start_time : '',
+        //       "coursePeriodEndDate": coach.period.end_time ? coach.period.end_time : '',
+        //     }
+        //   })
+        //   // Day Of Week
+        //   coach.teach_day_data.forEach((teach_day) => {
+        //     let times = []
+        //     teach_day.class_date.forEach((date) => {
+        //       if (course.course_type_id === "CT_1") {
+        //         times.push({
+        //           "start": date.class_date_range.start_time,
+        //           "end": date.class_date_range.end_time,
+        //           "maximumStudent": date.students
+        //         })
+        //       } else {
+        //         times.push({
+        //           "start": coach.period.start_time,
+        //           "end": coach.period.end_time,
+        //           "maximumStudent": course.student_recived
+        //         })
+        //       }
 
-            })
-            payload.dayOfweek.push({
-              "accountId": coach.coach_id,
-              "status": teach_day.class_open ? 'Active' : 'InActive',
-              "day": teach_day.teach_day,
-              "times": times
-            })
-          })
-        })
-        if (course.course_type_id === "CT_1") {
-          course.packages.forEach((package_course) => {
-            package_course.options.forEach((option) => {
-              payload.coursePackages.push({
-                "packageId": package_course.package_id,
-                "optionId": option.period_package,
-                "hourPerTime": option.amount,
-                "optionDescription": option.privilege,
-                "discountStatus": option.discount,
-                "discountPrice": option.discount_price,
-                "pricePerPerson": option.price_unit,
-                "studentNumber": package_course.students
-              })
-            })
-          })
-        }
+        //     })
+        //     payload.dayOfweek.push({
+        //       "accountId": coach.coach_id,
+        //       "status": teach_day.class_open ? 'Active' : 'InActive',
+        //       "day": teach_day.teach_day,
+        //       "times": times
+        //     })
+        //   })
+        // })
+        // if (course.course_type_id === "CT_1") {
+        //   course.packages.forEach((package_course) => {
+        //     package_course.options.forEach((option) => {
+        //       payload.coursePackages.push({
+        //         "packageId": package_course.package_id,
+        //         "optionId": option.period_package,
+        //         "hourPerTime": option.amount,
+        //         "optionDescription": option.privilege,
+        //         "discountStatus": option.discount,
+        //         "discountPrice": option.discount_price,
+        //         "pricePerPerson": option.price_unit,
+        //         "studentNumber": package_course.students
+        //       })
+        //     })
+        //   })
+        // }
+        // const data_payload = new FormData()
+        // data_payload.append("payload", JSON.stringify(payload))
+        // data_payload.append("img_url", course.course_img)
+        // data_payload.append("img_privilage", course.privilege_file)
+        // if (course.artwork_file) {
+        //   for (let i = 0; i < course.artwork_file.length; i++) {
+        //     data_payload.append(`artwork_file${i}`, course.artwork_file[i]);
+        //   }
+        // }
+
         const data_payload = new FormData()
-        data_payload.append("payload", JSON.stringify(payload))
-        data_payload.append("img_url", course.course_img)
-        data_payload.append("img_privilage", course.privilege_file)
-        if (course.artwork_file) {
-          for (let i = 0; i < course.artwork_file.length; i++) {
-            data_payload.append(`artwork_file${i}`, course.artwork_file[i]);
+        data_payload.append("payload", JSON.stringify(course_payload))
+        data_payload.append("img_url", course_file)
+        if (privilege_file) {
+          data_payload.append("img_privilage", privilege_file)
+        }
+        if (artwork_file) {
+          for (let i = 0; i < artwork_file.length; i++) {
+            data_payload.append(`img_artwork${i}`, artwork_file[i]);
           }
         }
+
         let config = {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -1941,6 +2547,10 @@ const CourseModules = {
             timer: 3000,
             timerProgressBar: true,
           });
+          context.state.courses_data
+          context.state.coach_data
+          context.state.data_package
+          context.state.course_data
         } else {
           context.commit("SetCourseIsLoading", false)
           throw { message: data }
@@ -1989,7 +2599,7 @@ const CourseModules = {
 
     },
     // COURSE :: Delete Day Of Week
-    async DeleteDayOfWeek(context, { day_of_week_id }) {
+    async DeleteDayOfWeek(context, { day_of_week_id, course_id }) {
       try {
         let config = {
           headers: {
@@ -1998,8 +2608,12 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.delete(`${localhost}/api/v1/manage/dayOfWeek/${day_of_week_id}`, config)
         let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/manage/dayOfWeek/${day_of_week_id}`, config)
         if (data.statusCode === 200) {
+          await context.dispatch("CoachData", { course_id: course_id })
+
           if (data.data[0] === "Delete Unsuccessfully:") {
             Swal.fire({
               icon: "error",
@@ -2021,17 +2635,76 @@ const CourseModules = {
               timerProgressBar: true,
             })
           }
+
         }
       } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: VueI18n.t("something went wrong"),
-          timer: 3000,
-          showDenyButton: false,
-          showCancelButton: false,
-          showConfirmButton: false,
-          timerProgressBar: true,
-        })
+        if (error.response.data.message == "Day of Week cannot be deleted as there are students who have booked this Day of Week.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("day of Week cannot be deleted as there are students who have booked this Day of Week"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "Day of Week cannot be deleted because there is a student with an order status of pending payment for this Day of Week.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("day of Week cannot be deleted because there is a student with an order status of pending payment for this Day of Week"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "Day of Week cannot be deleted as there are students in this Day of Week.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("day of Week cannot be deleted as there are students in this Day of Week"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "User not found.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("can not delete coach"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "This teaching day cannot be deleted as the coach must have at least 1 teaching day.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("this teaching day cannot be deleted as the coach must have at least 1 teaching day"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: error,
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
       }
     },
     // COURSE :: Delete Time
@@ -2069,7 +2742,40 @@ const CourseModules = {
           }
         }
       } catch (error) {
-        console.log(error)
+        if (error.response.data.message == "This Time cannot be deleted. Because have student in course") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("this Time cannot be deleted. Because have student in course"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "Teaching time cannot be deleted because there must be 1 teaching time per teaching day.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("teaching time cannot be deleted because there must be 1 teaching time per teaching day"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: error,
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
       }
     },
     async GetPackages(context) {
@@ -2536,6 +3242,872 @@ const CourseModules = {
         console.log('error :>> ', error);
       }
     },
+    async CoursesData(context, { course_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/course/detail/manage/courseId/${course_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/manage/courseId/${course_id}`, config)
+        if (data.statusCode == 200) {
+          if (data.data.courseImg) {
+            data.data.courseImg = `${process.env.VUE_APP_URL}/api/v1/files/${data.data.courseImg}`
+          } else {
+            data.data.courseImg = null
+          }
+
+          if (data.data.course_img_privilege) {
+            data.data.course_img_privilege = `${process.env.VUE_APP_URL}/api/v1/files/${data.data.course_img_privilege}`
+          } else {
+            data.data.course_img_privilege = null
+          }
+          if (data.data.course_type_id === "CT_2") {
+            data.data.teach_day = data.data.teach_day.map(Number)
+            data.data.course_register_date.start_date_formatted = moment(data.data.course_register_date.start_date).format("YYYY-MM-DD");
+            data.data.course_register_date.end_date_formatted = moment(data.data.course_register_date.end_date).format("YYYY-MM-DD");
+            data.data.course_study_date.start_date_formatted = moment(data.data.course_study_date.start_date).format("YYYY-MM-DD");
+            data.data.course_study_date.end_date_formatted = moment(data.data.course_study_date.end_date).format("YYYY-MM-DD");
+
+          }
+          context.commit("SetCoursesData", data.data)
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
+    async CoachData(context, { course_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/course/detail/manage/teachday-coach/${course_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/manage/teachday-coach/${course_id}`, config)
+        if (data.statusCode == 200) {
+          data.data.map((items) => {
+            items.teach_day_data.map((item) => {
+              item.edited_coach = true
+              item.class_date?.map((options) => {
+                options.class_date_range.edited_options = true
+              })
+            })
+          })
+          context.commit("SetCoachData", data.data)
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
+    async PackagesData(context, { course_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/course/detail/manage/package-course/${course_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/manage/package-course/${course_id}`, config)
+        if (data.statusCode == 200) {
+          data.data.option_id = ''
+          data.data.map((items) => {
+            items.edit_package = true
+            items.add_new_package = false
+            items["option_selected"] = []
+            items.options?.map((item) => {
+              item.edit_package_option = true
+              item.add_new_option = false
+
+
+              items["option_selected"].push(item.option_id)
+            })
+            items.option_list = [
+              {
+                option_id: "OP_1",
+                option_name: "รายวัน",
+                option_name_en: "Daily",
+
+              },
+              {
+                option_id: "OP_2",
+                option_name: "รายเดือน",
+                option_name_en: "Monthly",
+
+              },
+              {
+                option_id: "OP_3",
+                option_name: "รายเทอม",
+                option_name_en: "Per term",
+
+              },
+              {
+                option_id: "OP_4",
+                option_name: "รายปี",
+                option_name_en: "Yearly",
+
+              },
+              {
+                option_id: "OP_5",
+                option_name: "ราย 4 ครั้ง",
+                option_name_en: "4 times",
+
+              },
+              {
+                option_id: "OP_6",
+                option_name: "ราย 2 เดือน",
+                option_name_en: "2 months",
+
+              },
+              {
+                option_id: "OP_7",
+                option_name: "ราย 10 ครั้ง",
+                option_name_en: "10 times",
+
+              }
+            ]
+          })
+          context.commit("SetPackageData", data.data)
+
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
+    async ArtWorkData(context, { checkin_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/studentlist/assessment-potential/?checkInPotentialId=${checkin_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/assessment-potential/?checkInPotentialId=${checkin_id}`, config)
+        if (data.statusCode == 200) {
+          context.commit("SetArtWorkData", data.data)
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
+    async UpdateTeachdayCoach(context, { payload, course_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.patch(`${localhost}/api/v1/manage/update-teachday-coach`, payload, config)
+        let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-teachday-coach`, payload, config)
+        if (data.statusCode == 200) {
+          context.commit("SetUpdateTeachdayCoach", data.data)
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("already edited"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+          await context.dispatch("CoachData", { course_id: course_id })
+
+
+
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
+    async UpdateOptions(context, { payload, course_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.patch(`${localhost}/api/v1/manage/update-current-time-coach/courseId/${course_id}`, payload, config)
+        let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-current-time-coach/courseId/${course_id}`, payload, config)
+        if (data.statusCode == 200) {
+          context.commit("SetUpdateOptions", data.data)
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("already edited"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+          await context.dispatch("CoachData", { course_id: course_id })
+
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
+    async AddNewOptions(context, { payload, course_id, course_coach_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.patch(`${localhost}/api/v1/manage/update-coach/${course_id}/course-coach/${course_coach_id}`, payload, config)
+        let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-coach/${course_id}/course-coach/${course_coach_id}`, payload, config)
+        if (data.statusCode == 200) {
+          context.commit("SetAddNewOptions", data.data)
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("saved"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+          await context.dispatch("CoachData", { course_id: course_id })
+
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
+    async AddNewCoach(context, { payload, course_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.post(`${localhost}/api/v1/manage/create-coach/${course_id}`, payload, config)
+        let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/manage/create-coach/${course_id}`, payload, config)
+        if (data.statusCode == 201) {
+          context.commit("SetAddNewCoach", data.data)
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("add coaach succeed"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+          await context.dispatch("CoachData", { course_id: course_id })
+
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
+    async AddNewTeachDay(context, { payload, course_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.post(`${localhost}/api/v1/manage/create-new-teachday/${course_id}`, payload, config)
+        let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/manage/create-new-teachday/${course_id}`, payload, config)
+        if (data.statusCode == 201) {
+          context.commit("SetAddNewTeachDay", data.data)
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("add new teachday succeed"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+          await context.dispatch("CoachData", { course_id: course_id })
+
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
+    async DeleteOPtions(context, { course_id, time_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.delete(`${localhost}/api/v1/manage/time/${time_id}`, config)
+        let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/manage/time/${time_id}`, config)
+        if (data.statusCode == 200) {
+          context.commit("SetDeleteOptions", data.data)
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("already deleted"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+          await context.dispatch("CoachData", { course_id: course_id })
+
+        }
+      } catch (error) {
+        if (error.response.data.message == "This Time cannot be deleted. Because have student in course") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("this Time cannot be deleted. Because have student in course"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "Teaching time cannot be deleted because there must be 1 teaching time per teaching day.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("teaching time cannot be deleted because there must be 1 teaching time per teaching day"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: error,
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
+      }
+    },
+    async RefreshTeachDay(context, { course_id, day_of_week_id, course_coach_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/manage/get-teach-day/courseId/${course_id}/dayOfWeekId/${day_of_week_id}/courseCoachId/${course_coach_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/manage/get-teach-day/courseId/${course_id}/dayOfWeekId/${day_of_week_id}/courseCoachId/${course_coach_id}`, config)
+        if (data.statusCode == 200) {
+          context.commit("SetRefreshTeachDay", data.data)
+          // await context.dispatch("CoachData", { course_id: course_id })
+
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
+    async RefreshOption(context, { course_id, time_id, day_of_week_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/manage/get-teach-time/courseId/${course_id}/timeId/${time_id}/dayOfWeekId/${day_of_week_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/manage/get-teach-time/courseId/${course_id}/timeId/${time_id}/dayOfWeekId/${day_of_week_id}`, config)
+        if (data.statusCode == 200) {
+          context.commit("SetRefreshOption", data.data)
+
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
+    async UpdatePackage(context, { course_id, payload }) {
+      // console.log('payload :>> ', payload);
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.patch(`${localhost}/api/v1/manage/update-package/${course_id}`, payload, config)
+        let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-package/${course_id}`, payload, config)
+        if (data.statusCode == 200) {
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("package has been updated"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+          context.commit("SetUpdatePackages", data.data)
+          context.dispatch("PackagesData", { course_id: course_id })
+
+          // await context.dispatch("GetPackages")
+
+        }
+      } catch (error) {
+        if (error.response.data.message == "As the number of seats in the package is less than the number of seats available for current students") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("as the number of seats in the package is less than the number of seats available for current students"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: error,
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
+
+      }
+    },
+    async UpdatePackageOption(context, { course_id, payload }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.patch(`${localhost}/api/v1/manage/update-option/${course_id}`, payload, config)
+        let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-option/${course_id}`, payload, config)
+        if (data.statusCode == 200) {
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("option has been updated"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+          context.dispatch("SetUpdatePackagesOptions", data.data)
+          context.dispatch("PackagesData", { course_id: course_id })
+
+          // await context.dispatch("GetCourse", course_id)
+
+
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "warning",
+          title: VueI18n.t("this item cannot be made"),
+          text: error,
+          timer: 3000,
+          showDenyButton: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        })
+      }
+    },
+    async DeletePackege(context, { course_id, package_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.delete(`${localhost}/api/v1/manage/delete-package/${course_id}/${package_id}`, config)
+        let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/manage/delete-package/${course_id}/${package_id}`, config)
+        if (data.statusCode == 200) {
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("package has been deleted"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+          context.dispatch("SetDeletePackage", data.success)
+          context.dispatch("PackagesData", { course_id: course_id })
+
+
+        }
+      } catch (error) {
+        if (error.response.data.message == "Package cannot be deleted as there are students in this package.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("package cannot be deleted as there are students in this package"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "The package cannot be deleted because there is a student with an order status of pending payment for this package.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("package cannot be deleted as there are students in this package"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "Package cannot be deleted as there are students who have booked this package.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("package cannot be deleted as there are students who have booked this package"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "Package cannot be deleted as there must be at least one package in the course.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("package cannot be deleted as there must be at least one package in the course"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t(error.response.data.message),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
+      }
+    },
+    async DeletePackegeOption(context, { course_id, cpo }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.delete(`${localhost}/api/v1/manage/delete-cpo/${course_id}/${cpo}`, config)
+        let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/manage/delete-cpo/${course_id}/${cpo}`, config)
+        if (data.statusCode == 200) {
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("option has been deleted"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+          context.dispatch("SetDeletePackageOption", data.data)
+          context.dispatch("PackagesData", { course_id: course_id })
+
+        }
+      } catch (error) {
+        if (error.response.data.message == "Package cannot be deleted as there are students in this package.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("option cannot be deleted as there are students in this option"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "The package cannot be deleted because there is a student with an order status of pending payment for this package.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("option cannot be deleted because there is a student with an order status of pending payment for this option"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "Package cannot be deleted as there are students who have booked this package.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("option cannot be deleted as there are students who have booked this option"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "Option cannot be deleted as there must be at least one option in the course.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("option cannot be deleted as there must be at least one option in the course"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t(error.response.data.message),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
+      }
+    },
+    async CreateNewPackage(context, { course_id, payload }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.post(`${localhost}/api/v1/manage/create-package/${course_id}`, payload, config)
+        let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/manage/create-package/${course_id}`, payload, config)
+        if (data.statusCode == 201) {
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("package has been created"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+          context.commit("SetNewPackages", data.data)
+          context.dispatch("PackagesData", { course_id: course_id })
+
+
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "warning",
+          title: VueI18n.t("this item cannot be made"),
+          text: error,
+          timer: 3000,
+          showDenyButton: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        })
+      }
+    },
+    async CreateNewPackageOption(context, { course_id, payload }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.post(`${localhost}/api/v1/manage/create-option/${course_id}`, payload, config)
+        let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/manage/create-option/${course_id}`, payload, config)
+        if (data.statusCode == 201) {
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("option has been created"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+          context.commit("SetNewPackagesOptions", data.data)
+          context.dispatch("PackagesData", { course_id: course_id })
+
+
+
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "warning",
+          title: VueI18n.t("this item cannot be made"),
+          text: error,
+          timer: 3000,
+          showDenyButton: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        })
+      }
+    },
+    async RefreshPackage(context, { course_id, package_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/manage/package/courseId/${course_id}/packageId/${package_id}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/manage/package/courseId/${course_id}/packageId/${package_id}`, config)
+        if (data.statusCode == 200) {
+
+          context.commit("SetRefreshPackage", data.data)
+
+        }
+      } catch (error) {
+        if (error.response.data.message === "Unable to find course or package") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("warning"),
+            text: VueI18n.t("Unable to find course or package"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: error,
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
+
+      }
+    },
+    async RefreshPackageOption(context, { course_id, cpo }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/manage/option/courseId/${course_id}/coursePackageOptionId/${cpo}`, config)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/manage/option/courseId/${course_id}/coursePackageOptionId/${cpo}`, config)
+        if (data.statusCode == 200) {
+          context.commit("SetRefreshPackageOption", data.data)
+        }
+      } catch (error) {
+        if (error.response.data.message == "Unable to find course or option") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("warning"),
+            text: VueI18n.t("unable to find course or option"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: error,
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
+
+      }
+    },
+
   },
   getters: {
     getPackagesAddStudent(state) {
@@ -2657,6 +4229,30 @@ const CourseModules = {
     },
     getAllTime(state) {
       return state.get_all_time
+    },
+    getCoursesData(state) {
+      return state.courses_data
+    },
+    getCoachData(state) {
+      return state.coach_data
+    },
+    getPackageData(state) {
+      return state.data_package
+    },
+    getArtWorkData(state) {
+      return state.art_work_data
+    },
+    getTeachdayData(state) {
+      return state.refresh_teach_day
+    },
+    getOptionData(state) {
+      return state.refresh_option
+    },
+    getrefeshPackage(state) {
+      return state.refresh_package
+    },
+    getrefeshPackageOption(state) {
+      return state.refresh_package_options
     },
 
   },

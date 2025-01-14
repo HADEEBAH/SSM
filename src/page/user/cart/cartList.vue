@@ -205,7 +205,9 @@
                       >
                         {{
                           item.course_type_id === "CT_1"
-                            ? item.option.total_price?.toLocaleString()
+                            ? (
+                                item.option.total_price ?? item.total_price
+                              )?.toLocaleString()
                             : item.total_price?.toLocaleString()
                         }}
                         {{ $t("baht") }}</v-col

@@ -206,7 +206,7 @@
                   </v-row>
                   <v-row dense v-else-if="course.type === 'date'">
                     <v-col>
-                      {{ $t("compensation date22") }}
+                      {{ $t("compensation date") }}
                       <v-menu
                         :disabled="
                           coach_leave.status === 'pending' ? false : true
