@@ -4455,13 +4455,13 @@ export default {
       this.course_edit = false;
       this.GetCourse(this.$route.params.course_id);
     },
-    cancelEditCourse() {
+    async cancelEditCourse() {
       this.course_edit = false;
-      this.CoursesData({ course_id: this.$route.params.course_id });
+      await this.CoursesData({ course_id: this.$route.params.course_id });
     },
-    cancelEditArtWork() {
+    async cancelEditArtWork() {
       this.course_edit = false;
-      this.GetArtworkByCourse({
+      await this.GetArtworkByCourse({
         course_id: this.$route.params.course_id,
       }).then(() => {
         this.preview_privilege_url = this.courses_data.course_img_privilege;
