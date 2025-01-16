@@ -137,7 +137,7 @@
                     color="#FF6B81"
                     class="btn-size-lg"
                     outlined
-                    @click="cancelEdit()"
+                    @click="cancelEditCourse()"
                     >{{ $t("cancel") }}</v-btn
                   >
                 </v-col>
@@ -490,7 +490,7 @@
                     color="#FF6B81"
                     class="btn-size-lg"
                     outlined
-                    @click="cancelEdit()"
+                    @click="cancelEditArtWork()"
                     >{{ $t("cancel") }}</v-btn
                   >
                 </v-col>
@@ -4454,6 +4454,21 @@ export default {
     cancelEdit() {
       this.course_edit = false;
       this.GetCourse(this.$route.params.course_id);
+    },
+    cancelEditCourse() {
+      this.course_edit = false;
+      this.CoursesData({ course_id: this.$route.params.course_id });
+    },
+    cancelEditArtWork() {
+      this.course_edit = false;
+      this.GetArtworkByCourse({
+        course_id: this.$route.params.course_id,
+      }).then(() => {
+        this.preview_privilege_url = this.courses_data.course_img_privilege;
+        this.preview_artwork_files.map((items) => {
+          this.course_created_data.artwork_file.push(items);
+        });
+      });
     },
     selectCoach(coach, index) {
       if (this.selected_coach !== index) {
