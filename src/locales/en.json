@@ -223,6 +223,8 @@
   "check in status": "Check in status",
   "cannot resave the course to their parents": "Cannot resave the course to their parents",
   "cannot delete a coach as there must be at least 1 coach listed in the course": "Cannot delete a coach as there must be at least 1 coach listed in the course",
+  "can't select these dates because they are duplications of existing schedules":"can't select these dates because they are duplications of existing schedules",
+
 
   "day": "Day",
   "day and date": "Day and date",
@@ -309,6 +311,8 @@
   "day of Week cannot be deleted because there is a student with an order status of pending payment for this Day of Week": "Day of Week cannot be deleted because there is a student with an order status of pending payment for this Day of Week",
   "day of Week cannot be deleted as there are students in this Day of Week": "Day of Week cannot be deleted as there are students in this Day of Week",
   "do you want to create a package": "Do you want to create a package?",
+  "delete holiday success":"Deleted holiday success",
+
 
   "edit": "Edit",
   "edit user information": "Edit user information",

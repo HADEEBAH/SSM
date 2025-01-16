@@ -2145,6 +2145,40 @@ export default {
     },
 
     async deletedHolidayFunction(items) {
+      // console.log("object :>> ", this.holidaydatesTh);
+      // const thaiDate = this.holidaydatesTh;
+
+      // // Mapping of Thai month names to month numbers
+      // const thaiMonths = {
+      //   มกราคม: "01",
+      //   กุมภาพันธ์: "02",
+      //   มีนาคม: "03",
+      //   เมษายน: "04",
+      //   พฤษภาคม: "05",
+      //   มิถุนายน: "06",
+      //   กรกฎาคม: "07",
+      //   สิงหาคม: "08",
+      //   กันยายน: "09",
+      //   ตุลาคม: "10",
+      //   พฤศจิกายน: "11",
+      //   ธันวาคม: "12",
+      // };
+
+      // // Parse the date
+      // const [day, thaiMonth, thaiYear] = thaiDate.split(" ");
+      // const month = thaiMonths[thaiMonth]; // Get month number
+      // const year = parseInt(thaiYear, 10) - 543; // Convert Buddhist year to Gregorian year
+
+      // // Format the date
+      // const formattedDate = moment(
+      //   `${year}-${month}-${day}`,
+      //   "YYYY-MM-DD"
+      // ).format("YYYY-MM-DD");
+      // let [choseYear, choseMonth] = formattedDate.split("-");
+      // console.log("choseYear :>> ", choseYear);
+      // console.log("choseMonth :>> ", choseMonth);
+      // console.log(formattedDate); // Output: 2025-01-30
+
       Swal.fire({
         icon: "question",
         title: this.$t("do you want to delete a holiday?"),
@@ -2154,8 +2188,16 @@ export default {
         cancelButtonText: this.$t("no"),
       }).then(async (result) => {
         if (result.isConfirmed) {
-          this.show_dialog_edit_holoday = false;
           await this.DeleteHoliday({ holiday_id: items.holidayId });
+          await this.GetDataInSchedule({
+            month: moment().format("MM"),
+            year: moment().format("YYYY"),
+            search: this.filter_search,
+            courseId: this.selectedCourse,
+            coachId: this.selectedCoach,
+            status: this.selectedCourseType,
+          });
+          this.show_dialog_edit_holoday = false;
         }
       });
     },
@@ -2431,6 +2473,7 @@ export default {
       this.show_dialog_holoday = true;
     },
     async CreateHolidays() {
+      let [year, month] = this.create_holiday_date_picker.split("-");
       this.$refs.add_holidat_dialog.validate();
       if (this.add_holidat_dialog) {
         Swal.fire({
@@ -2480,6 +2523,15 @@ export default {
                   this.course_in_holidays !== 400 ||
                   this.course_in_holidays !== 500
                 ) {
+                  this.GetDataInSchedule({
+                    month: month,
+                    year: year,
+                    search: this.filter_search,
+                    courseId: this.selectedCourse,
+                    coachId: this.selectedCoach,
+                    status: this.selectedCourseType,
+                  });
+
                   this.show_dialog_holoday = false;
                   this.closeAddHolidayDialog();
                 }
@@ -2493,8 +2545,6 @@ export default {
               };
               this.CreateHoliday({ payload: mappedData });
             }
-            console.log("object :>> ", this.course_in_holidays);
-            console.log("holiday_status :>> ", this.holiday_status);
 
             // if (this.holiday_status) {
             //   this.closeDialog();

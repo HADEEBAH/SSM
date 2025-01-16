@@ -606,7 +606,7 @@ const manageScheduleModules = {
         if (data.statusCode === 201) {
           context.commit("SetCourseHoliday", data.data);
           await context.dispatch("GetAllHolidays")
-          await context.dispatch("GetAllCourse")
+          // await context.dispatch("GetAllCourse")
         }
       } catch (error) {
         context.commit("SetCourseHoliday", error?.response?.data);
@@ -701,11 +701,10 @@ const manageScheduleModules = {
             timerProgressBar: true,
           })
           await context.dispatch("GetAllHolidays")
-          await context.dispatch("GetAllCourse")
+          // await context.dispatch("GetAllCourse")
 
         }
       } catch (error) {
-        console.log('error?.response?.data?.message :>> ', error?.response?.data?.message)
         // if (error?.response?.data?.message === 'Holiday with the same date already exists.') {
         //   Swal.fire({
         //     icon: "warning",
@@ -717,15 +716,15 @@ const manageScheduleModules = {
         //     showConfirmButton: false,
         //   })
         // } else {
-        //   Swal.fire({
-        //     icon: "warning",
-        //     title: VueI18n.t("this item cannot be made"),
-        //     text: error,
-        //     timer: 3000,
-        //     timerProgressBar: true,
-        //     showCancelButton: false,
-        //     showConfirmButton: false,
-        //   })
+        Swal.fire({
+          icon: "warning",
+          title: VueI18n.t("this item cannot be made"),
+          text: error,
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
+        })
         // }
 
       }
@@ -752,7 +751,6 @@ const manageScheduleModules = {
           });
         }
       } catch (error) {
-        console.log('error?.response?.data?.message :>> ', error?.response?.data?.message)
         if (error?.response?.data?.message === "Can't select these dates because they are duplications of existing schedules.") {
           Swal.fire({
             icon: "warning",
