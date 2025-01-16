@@ -77,6 +77,7 @@
   "add new teachday succeed": "Add new teachday succeed",
   "add coaach succeed": "Add coaach succeed",
   "as the number of seats in the package is less than the number of seats available for current students": "As the number of seats in the package is less than the number of seats available for current students",
+  "add options":"Add options",
 
   "baht": "Baht",
   "back": "Back",
@@ -242,7 +243,7 @@
   "delete parent data": "Delete parent data",
   "delete student information": "Delete student information",
   "delete teaching day": "Delete teaching day",
-  "delete time": "delete time",
+  "delete time": "Delete Time",
   "december": "December",
   "details": "Details",
   "details of time and coach": "Details of time and coach",
@@ -309,6 +310,10 @@
   "day of Week cannot be deleted because there is a student with an order status of pending payment for this Day of Week": "Day of Week cannot be deleted because there is a student with an order status of pending payment for this Day of Week",
   "day of Week cannot be deleted as there are students in this Day of Week": "Day of Week cannot be deleted as there are students in this Day of Week",
   "do you want to create a package": "Do you want to create a package?",
+  "delete":"Delete",
+  "delete package":"Delete Package",
+
+
 
   "edit": "Edit",
   "edit user information": "Edit user information",
@@ -757,6 +762,8 @@
   "recommendation": "(Recommendation: Upload an image with dimensions 1024 x 576 (16:9) and The file size is not more than 5 Mb, must be JPG, PNG files )",
   "role": "Role",
   "recommendations System satisfaction": "Recommendations System satisfaction",
+  "refresh":"Refresh",
+
 
   "study start": "Study start date",
   "study end": "Study end date",
@@ -872,6 +879,10 @@
   "system satisfaction": "System satisfaction",
   "some students or students have already purchased the course": "Some students or students have already purchased the course",
   "select congenital disease": "Select Congenital disease / Food allergic",
+  "save package":"Save Package",
+  "save option":"Save Option",
+  "save teaching day":"Save Teaching day",
+  
 
   "study time": "Study Time",
   "the system will not display information if the user does not enter student and parent information": "The system will not display the information if the user does not fill in the student and parent information according to the template",
@@ -959,6 +970,8 @@
   "there is no teaching day. Please contact the staff": "There is no teaching day. Please contact the staff",
   "this Time cannot be deleted. Because have student in course": "This Time cannot be deleted. Because have student in course",
   "teaching time cannot be deleted because there must be 1 teaching time per teaching day": "Teaching time cannot be deleted because there must be 1 teaching time per teaching day",
+  "teach day":"Add teach day",
+
 
   "unable to update the compensation day": "Unable to update the compensation day because the compensation day falls on a holiday, please select a new compensatory day",
   "unable to update the compensation day because the compensation day coincides with the coach's leave": "Unable to update the compensation day because the compensation day coincides with the coach's leave, please select a new compensatory day",
