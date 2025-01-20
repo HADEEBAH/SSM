@@ -224,6 +224,8 @@
   "check in status": "Check in status",
   "cannot resave the course to their parents": "Cannot resave the course to their parents",
   "cannot delete a coach as there must be at least 1 coach listed in the course": "Cannot delete a coach as there must be at least 1 coach listed in the course",
+  "category":"Category",
+  
 
   "day": "Day",
   "day and date": "Day and date",
@@ -380,6 +382,8 @@
   "full courses": "Full courses",
   "full course information": "Full course information",
   "full day leave": "Full day leave",
+  "filter statistic":"Filter Statistic",
+
 
   "graduating students": "Graduated Students",
   "general": "General",
@@ -525,6 +529,10 @@
   "number must be": "Number must be Equal or less than",
   "number must be lest than": "Number must be less than",
   "number must be 0": "Number must be 0 or more",
+  "number of students currently studying":"Number of students currently studying",
+  "number of students who have purchased courses":"Number of students who have purchased courses",
+
+
 
   "o'clock": "O'clock",
   "optional": "optional",
@@ -882,6 +890,8 @@
   "save package":"Save Package",
   "save option":"Save Option",
   "save teaching day":"Save Teaching day",
+  "statistic":"Statistic",
+
   
 
   "study time": "Study Time",

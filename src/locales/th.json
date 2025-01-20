@@ -207,6 +207,7 @@
   "course has been created": "( สร้างคอร์สเรียบร้อยแล้ว )",
   "cannot resave the course to their parents": "ไม่สามารถบันทึกหลักสูตรใหม่ให้ผู้ปกครองได้",
   "cannot delete a coach as there must be at least 1 coach listed in the course": "ไม่สามารถลบโค้ชได้ เนื่องจากต้องมีโค้ชอย่างน้อย 1 คนอยู่ในรายการ",
+  "category":"อาณาจักร",
 
   "day": "วัน",
   "day and date": "วันและวันที่",
@@ -352,6 +353,7 @@
   "friday": "วันศุกร์",
   "february": "กุมภาพันธ์",
   "from": "จากวันที่",
+  "filter statistic":"กรองจำนวนนักเรียนในคอร์ส",
 
   "graduating students": "ผู้เรียนที่ใกล้จบ",
   "general": "ทั่วไป",
@@ -491,6 +493,8 @@
   "number must be": "ตัวเลขควรที่จะเท่ากันหรือน้อยกว่า",
   "number must be lest than": "ตัวเลขควรที่จะน้อยกว่า",
   "number must be 1": "ตัวเลขควรที่จะเท่ากับ 1 หรือมากกว่า",
+  "number of students currently studying":"จำนวนนักเรียนที่เรียนอยู่ปัจุจบัน",
+  "number of students who have purchased courses":"จำนวนนักเรียนที่เคยซื้อคอร์สเรียน",
 
   "o'clock": "น.",
   "outside the register date": "อยู่นอกระยะเวลารับสมัคร",
@@ -846,6 +850,7 @@
   "save package":"บันทึกแพ็กเกจ",
   "save option":"บันทึกช่วงเวลา",
   "save teaching day":"บันทึกวันสอน",
+  "statistic":"สถิติ",
 
 
   "study time": "เวลาเรียน",
