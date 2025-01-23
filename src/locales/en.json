@@ -78,6 +78,10 @@
   "add coaach succeed": "Add coaach succeed",
   "as the number of seats in the package is less than the number of seats available for current students": "As the number of seats in the package is less than the number of seats available for current students",
   "add options":"Add options",
+  "add video link":"Add video link",
+  "add item":"Add item",
+
+
 
   "baht": "Baht",
   "back": "Back",
@@ -450,6 +454,8 @@
   "listed by": "Listed by",
   "logout": "Log Out",
   "login": "Log in",
+  "link vdo": "Link video",
+
 
   "management": "Management",
   "manage": "Manage",

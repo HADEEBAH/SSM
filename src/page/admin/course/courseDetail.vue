@@ -470,7 +470,167 @@
                     </v-col>
                   </v-row>
                 </v-card-text>
+                <!-- ADD LINK YOUTUBE -->
+                <v-card class="my-5 rounded-lg">
+                  <v-app-bar dark color="#FF6B81">
+                    <v-toolbar-title>{{
+                      $t("add video link")
+                    }}</v-toolbar-title>
+
+                    <v-spacer></v-spacer>
+                  </v-app-bar>
+                  <!-- <iframe width="100%" height="100%" src="https://www.youtube.com/embed/KOFFt04zS6o?si=ahE26X4iqHEtMTAr&autoplay=1&mute=1" title="Zweed n&#39; Roll - ช่วงเวลา (A Moment) [Official Video]" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen allow="autoplay"></iframe> -->
+                  <v-card-text>
+                    <div
+                      v-for="(item_vdo, index_vdo) in linkArray"
+                      :key="index_vdo"
+                    >
+                      <v-row dense>
+                        <!-- 1111 -->
+                        <v-col cols="4" align-self="center">
+                          <v-text-field
+                            :label="$t('link vdo')"
+                            prepend-icon="mdi-youtube"
+                            color="#FF6B81"
+                            v-model="item_vdo.url"
+                          ></v-text-field>
+                        </v-col>
+                        <!-- <v-col></v-col> -->
+                        <!-- 2222 -->
+                        <v-col cols="6">
+                          <v-card flat v-if="item_vdo.url">
+                            <v-btn
+                              icon
+                              small
+                              class="bg-[#cdcdcd] absolute top-2 right-14 z-[4]"
+                              dark
+                              @click="showImageDialog(item_vdo)"
+                              ><v-icon>mdi-eye</v-icon></v-btn
+                            >
+
+                            <div
+                              id="video"
+                              class="rounded-lg d-flex justify-center align-center"
+                              style="
+                                max-height: 50%;
+                                max-width: 80%;
+                                object-fit: cover;
+                                margin: auto;
+                              "
+                              v-html="item_vdo.url"
+                            ></div>
+                          </v-card>
+                        </v-col>
+                        <!-- 3333 -->
+                        <v-col cols="2" align-self="center">
+                          <v-btn
+                            text
+                            @click="deleteLink(index_vdo)"
+                            color="red"
+                          >
+                            <v-icon color="red">mdi-minus-circle</v-icon>
+                            {{ $t("delete item") }}
+                          </v-btn>
+                        </v-col>
+                      </v-row>
+                      <v-divider class="my-2"></v-divider>
+                    </div>
+                    <div
+                      class="rounded-lg d-flex justify-center align-center my-3"
+                    >
+                      <v-btn
+                        @click="addNewLink"
+                        outlined
+                        color="#ff6b81"
+                        class="rounded-lg"
+                      >
+                        <v-icon>mdi-plus-circle</v-icon>
+                        {{ $t("add item") }}
+                      </v-btn>
+                    </div>
+                  </v-card-text>
+                </v-card>
               </v-card>
+
+              <!-- DIALOG SHOW IMAGE -->
+              <v-dialog
+                persistent
+                :width="$vuetify.breakpoint.smAndUp ? '60vw' : ''"
+                v-model="show_attachment_dialog"
+              >
+                <v-card>
+                  <v-container grid-list-xs>
+                    <v-row>
+                      <v-col cols="12" class="text-center">
+                        <v-btn
+                          icon
+                          class="bg-[#cdcdcd] absolute top-1 right-1"
+                          dark
+                          @click="
+                            show_attachment_dialog = !show_attachment_dialog
+                          "
+                          ><v-icon>mdi-close</v-icon></v-btn
+                        >
+                        <span class="font-weight-bold"
+                          >{{ $t("image example") }}
+                        </span>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="12">
+                        <!-- IMAGE -->
+                        <v-img
+                          v-if="typeImg === 'img'"
+                          contain
+                          :src="biggesImage"
+                          class="max-h-[300px] max-w-300px rounded-lg"
+                          :aspect-ratio="16 / 9"
+                        >
+                          <template v-slot:placeholder>
+                            <v-row
+                              class="fill-height ma-0"
+                              align="center"
+                              justify="center"
+                            >
+                              <v-progress-circular
+                                indeterminate
+                                color="#ff6b81"
+                              ></v-progress-circular>
+                            </v-row>
+                          </template>
+                        </v-img>
+                        <!-- VDO -->
+                        <video
+                          v-else-if="typeImg === 'video'"
+                          class="rounded-lg d-flex justify-center align-center"
+                          style="object-fit: cover; margin: auto"
+                          autoplay
+                          muted
+                          controls
+                          loop
+                        >
+                          <source :src="biggesImage" type="video/mp4" />
+                        </video>
+
+                        <!-- YOUTUBE -->
+                        <div
+                          v-else
+                          id="video"
+                          class="rounded-lg d-flex justify-center align-center"
+                          :aspect-ratio="16 / 9"
+                          :style="
+                            $vuetify.breakpoint.smAndUp
+                              ? 'height: 315px; width: 440px; object-fit: cover; margin: auto;'
+                              : 'object-fit: cover; margin: auto;'
+                          "
+                          v-html="biggesImage"
+                        ></div>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-card>
+              </v-dialog>
+
               <!-- ACTION -->
               <v-row class="px-4" v-if="!course_edit">
                 <v-col align="right">
@@ -3365,6 +3525,25 @@ export default {
     inpotentialBool: false,
     studentType: "",
     update_loading: false,
+    linkArray: [
+      {
+        url: `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/KOFFt04zS6o?si=ahE26X4iqHEtMTAr&autoplay=1&mute=1" title="Zweed n&#39; Roll - ช่วงเวลา (A Moment) [Official Video]" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen allow="autoplay"></iframe>`,
+        type: "youtube",
+        close: false,
+      },
+      {
+        url: `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/7JJfJgyHYwU?si=I2JP2DmeGoY4Tr2R&autoplay=1&mute=1" title="Zweed n&#39; Roll - ช่วงเวลา (A Moment) [Official Video]" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen allow="autoplay"></iframe>`,
+        type: "youtube",
+        close: false,
+      },
+      {
+        url: `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/T3E9Wjbq44E?si=HCh7mC9-Z9DvS5pK&autoplay=1&mute=1" title="Zweed n&#39; Roll - ช่วงเวลา (A Moment) [Official Video]" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen allow="autoplay"></iframe>`,
+        type: "youtube",
+        close: false,
+      },
+    ],
+    biggesImage: null,
+    show_attachment_dialog: false,
   }),
   mounted() {
     this.CoursesData({ course_id: this.$route.params.course_id });
@@ -3574,6 +3753,24 @@ export default {
       PackagesData: "CourseModules/PackagesData",
       ArtWorkData: "CourseModules/ArtWorkData",
     }),
+
+    addNewLink() {
+      this.linkArray.push({
+        url: null,
+        type: null,
+        close: false,
+      });
+    },
+    deleteLink(index_vdo) {
+      this.linkArray.splice(index_vdo, 1);
+    },
+
+    showImageDialog(item) {
+      this.biggesImage = item.url ? item.url : item;
+      this.typeImg = item.type;
+      this.show_attachment_dialog = true;
+    },
+
     async studentsPotentials() {
       await this.GetAllStudentPotentialList({
         course_id: this.$route.params.course_id,

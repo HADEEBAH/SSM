@@ -189,7 +189,7 @@
                 </v-col>
               </v-row>
             </v-card-text>
-            <v-card-text align="center">
+            <!-- <v-card-text align="center">
               <v-row
                 dense
                 v-if="
@@ -198,10 +198,10 @@
                 @click="show_dialog_artwork = true"
               >
                 <v-col class="text-sm underline text-[#0076D6]">
-                  {{ $t("see more") }}
+                  {{ $t("see more22") }}
                 </v-col>
               </v-row>
-            </v-card-text>
+            </v-card-text> -->
             <v-card-actions class="absolute inset-x-0 bottom-0">
               <v-row dense>
                 <v-col cols="12">

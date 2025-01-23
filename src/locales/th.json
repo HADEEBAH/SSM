@@ -71,6 +71,8 @@
   "add coaach succeed": "เพิ่มโค้ชสำเร็จ",
   "as the number of seats in the package is less than the number of seats available for current students": "เนื่องจากจำนวนที่นั่งในแพ็คเกจน้อยกว่าจำนวนที่นั่งว่างสำหรับนักศึกษาปัจจุบัน",
   "add options":"เพิ่มช่วงเวลา",
+  "add video link":"เพิ่มลิ้งก์วีดิโอ",
+  "add item":"เพิ่มรายการ",
 
   "date list": "รายการวันที่",
   "baht": "บาท",
@@ -421,6 +423,7 @@
   "listed by": "ทำรายการโดย",
   "logout": "ออกจากระบบ",
   "login": "เข้าสู่ระบบ",
+  "link vdo": "ลิ้งก์วีดีโอ",
 
   "management": "การจัดการ",
   "manage": "จัดการ",
