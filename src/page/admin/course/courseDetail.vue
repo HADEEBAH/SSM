@@ -487,7 +487,7 @@
                     >
                       <v-row dense>
                         <!-- 1111 -->
-                        <v-col cols="4" align-self="center">
+                        <v-col cols="12" sm="4" align-self="center">
                           <v-text-field
                             :label="$t('link vdo')"
                             prepend-icon="mdi-youtube"
@@ -497,32 +497,38 @@
                         </v-col>
                         <!-- <v-col></v-col> -->
                         <!-- 2222 -->
-                        <v-col cols="6">
-                          <v-card flat v-if="item_vdo.url">
+                        <v-col cols="12" sm="6" align="center">
+                          <v-card
+                            class="mt-auto"
+                            v-if="item_vdo.url"
+                            style="height: 80px; width: 160px"
+                          >
                             <v-btn
                               icon
                               small
-                              class="bg-[#cdcdcd] absolute top-2 right-14 z-[4]"
+                              class="bg-[#cdcdcd] absolute top-2 right-3 z-[4]"
                               dark
                               @click="showImageDialog(item_vdo)"
                               ><v-icon>mdi-eye</v-icon></v-btn
                             >
-
                             <div
                               id="video"
-                              class="rounded-lg d-flex justify-center align-center"
                               style="
-                                max-height: 50%;
-                                max-width: 80%;
+                                height: 80px;
+                                width: 160px;
                                 object-fit: cover;
-                                margin: auto;
                               "
                               v-html="item_vdo.url"
                             ></div>
                           </v-card>
                         </v-col>
                         <!-- 3333 -->
-                        <v-col cols="2" align-self="center">
+                        <v-col
+                          cols="12"
+                          sm="2"
+                          align-self="center"
+                          align="center"
+                        >
                           <v-btn
                             text
                             @click="deleteLink(index_vdo)"
@@ -555,7 +561,7 @@
               <!-- DIALOG SHOW IMAGE -->
               <v-dialog
                 persistent
-                :width="$vuetify.breakpoint.smAndUp ? '60vw' : ''"
+                :width="$vuetify.breakpoint.smAndUp ? '100vw' : ''"
                 v-model="show_attachment_dialog"
               >
                 <v-card>
@@ -579,11 +585,22 @@
                     <v-row>
                       <v-col cols="12">
                         <!-- IMAGE -->
+                        <!-- class="max-h-[300px] max-w-300px rounded-lg" -->
+
                         <v-img
                           v-if="typeImg === 'img'"
                           contain
                           :src="biggesImage"
-                          class="max-h-[300px] max-w-300px rounded-lg"
+                          class="rounded-lg"
+                          :style="
+                            $vuetify.breakpoint.lgAndUp
+                              ? 'height: 600px; width: 1000px; object-fit: cover; margin: auto;'
+                              : $vuetify.breakpoint.mdAndUp
+                              ? 'height: 1000px; width: 800px; object-fit: cover; margin: auto;'
+                              : $vuetify.breakpoint.smAndUp
+                              ? 'height: 800px; width: 600px; object-fit: cover; margin: auto;'
+                              : 'object-fit: cover; margin: auto;'
+                          "
                           :aspect-ratio="16 / 9"
                         >
                           <template v-slot:placeholder>
@@ -600,10 +617,20 @@
                           </template>
                         </v-img>
                         <!-- VDO -->
+                        <!-- style="object-fit: cover; margin: auto" -->
+
                         <video
                           v-else-if="typeImg === 'video'"
                           class="rounded-lg d-flex justify-center align-center"
-                          style="object-fit: cover; margin: auto"
+                          :style="
+                            $vuetify.breakpoint.lgAndUp
+                              ? 'height: 600px; width: 1000px; object-fit: cover; margin: auto;'
+                              : $vuetify.breakpoint.mdAndUp
+                              ? 'height: 1000px; width: 800px; object-fit: cover; margin: auto;'
+                              : $vuetify.breakpoint.smAndUp
+                              ? 'height: 800px; width: 600px; object-fit: cover; margin: auto;'
+                              : 'object-fit: cover; margin: auto;'
+                          "
                           autoplay
                           muted
                           controls
@@ -619,8 +646,12 @@
                           class="rounded-lg d-flex justify-center align-center"
                           :aspect-ratio="16 / 9"
                           :style="
-                            $vuetify.breakpoint.smAndUp
-                              ? 'height: 315px; width: 440px; object-fit: cover; margin: auto;'
+                            $vuetify.breakpoint.lgAndUp
+                              ? 'height: 600px; width: 1000px; object-fit: cover; margin: auto;'
+                              : $vuetify.breakpoint.mdAndUp
+                              ? 'height: 1000px; width: 800px; object-fit: cover; margin: auto;'
+                              : $vuetify.breakpoint.smAndUp
+                              ? 'height: 800px; width: 600px; object-fit: cover; margin: auto;'
                               : 'object-fit: cover; margin: auto;'
                           "
                           v-html="biggesImage"

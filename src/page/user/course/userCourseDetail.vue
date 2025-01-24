@@ -456,7 +456,7 @@
     <!-- DIALOG SHOW IMAGE -->
     <v-dialog
       persistent
-      :width="$vuetify.breakpoint.smAndUp ? '60vw' : ''"
+      :width="$vuetify.breakpoint.smAndUp ? '100vw' : ''"
       v-model="show_attachment_dialog"
     >
       <v-card>
@@ -476,11 +476,21 @@
           <v-row>
             <v-col cols="12">
               <!-- IMAGE -->
+              <!-- class="max-h-[300px] max-w-300px rounded-lg" -->
+
               <v-img
                 v-if="typeImg === 'img'"
                 contain
                 :src="biggesImage"
-                class="max-h-[300px] max-w-300px rounded-lg"
+                :style="
+                  $vuetify.breakpoint.lgAndUp
+                    ? 'height: 600px; width: 1000px; object-fit: cover; margin: auto;'
+                    : $vuetify.breakpoint.mdAndUp
+                    ? 'height: 1000px; width: 800px; object-fit: cover; margin: auto;'
+                    : $vuetify.breakpoint.smAndUp
+                    ? 'height: 800px; width: 600px; object-fit: cover; margin: auto;'
+                    : 'object-fit: cover; margin: auto;'
+                "
                 :aspect-ratio="16 / 9"
               >
                 <template v-slot:placeholder>
@@ -497,10 +507,20 @@
                 </template>
               </v-img>
               <!-- VDO -->
+              <!-- style="object-fit: cover; margin: auto" -->
+
               <video
                 v-else-if="typeImg === 'video'"
                 class="rounded-lg d-flex justify-center align-center"
-                style="object-fit: cover; margin: auto"
+                :style="
+                  $vuetify.breakpoint.lgAndUp
+                    ? 'height: 600px; width: 1000px; object-fit: cover; margin: auto;'
+                    : $vuetify.breakpoint.mdAndUp
+                    ? 'height: 1000px; width: 800px; object-fit: cover; margin: auto;'
+                    : $vuetify.breakpoint.smAndUp
+                    ? 'height: 800px; width: 600px; object-fit: cover; margin: auto;'
+                    : 'object-fit: cover; margin: auto;'
+                "
                 autoplay
                 muted
                 controls
@@ -510,14 +530,23 @@
               </video>
 
               <!-- YOUTUBE -->
+              <!-- :style="
+                  $vuetify.breakpoint.smAndUp
+                    ? 'height: 315px; width: 440px; object-fit: cover; margin: auto;'
+                    : 'object-fit: cover; margin: auto;'
+                " -->
               <div
                 v-else
                 id="video"
                 class="rounded-lg d-flex justify-center align-center"
                 :aspect-ratio="16 / 9"
                 :style="
-                  $vuetify.breakpoint.smAndUp
-                    ? 'height: 315px; width: 440px; object-fit: cover; margin: auto;'
+                  $vuetify.breakpoint.lgAndUp
+                    ? 'height: 600px; width: 1000px; object-fit: cover; margin: auto;'
+                    : $vuetify.breakpoint.mdAndUp
+                    ? 'height: 1000px; width: 800px; object-fit: cover; margin: auto;'
+                    : $vuetify.breakpoint.smAndUp
+                    ? 'height: 800px; width: 600px; object-fit: cover; margin: auto;'
                     : 'object-fit: cover; margin: auto;'
                 "
                 v-html="biggesImage"
