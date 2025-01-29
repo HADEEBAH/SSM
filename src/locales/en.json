@@ -423,6 +423,9 @@
   "invalid English languages": "Please enter English text",
   "invalid user name": "Please enter English text or numbers",
   "invalid user password": "Please enter English text",
+  "image":"image",
+  "invalid image":"Invalid image or video extension",
+  
 
   "is complete": "is complete",
 

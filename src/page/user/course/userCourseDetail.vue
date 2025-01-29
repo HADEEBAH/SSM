@@ -65,7 +65,6 @@
               {{ $t("baht") }}/{{ $t("course") }}</v-col
             >
           </v-row>
-          <!-- <pre>{{ course_seat }}</pre> -->
           <rowData
             v-if="course_data.course_type_id === 'CT_2'"
             col_detail="5"
@@ -190,87 +189,149 @@
             </v-expansion-panel>
           </v-expansion-panels>
 
-          <v-row dense class="my-5" v-if="!$vuetify.breakpoint.smAndUp">
-            <v-col
-              cols="6"
-              sm="3"
-              v-for="(event, index) in testCard"
-              :key="index"
-              class="d-flex flex-column"
-            >
-              <!-- IMAGE -->
-              <v-card class="mt-auto" v-if="event.fileType === 'img'">
-                <v-btn
-                  icon
-                  small
-                  class="bg-[#cdcdcd] absolute top-2 right-3 z-[4]"
-                  dark
-                  @click="showImageDialog(event)"
-                  ><v-icon>mdi-eye</v-icon></v-btn
+          <div
+            v-if="
+              course_data.artWorkImage?.length > 0 &&
+              !$vuetify.breakpoint.smAndUp
+            "
+          >
+            <!-- <headerCard title="Learning Journey"></headerCard> -->
+            <v-row dense>
+              <v-col cols="12" class="text-2xl my-5 font-bold">
+                {{ $t("Learning Journey") }}
+              </v-col>
+              <v-col class="text-xl">
+                {{ $t("image") }}
+              </v-col>
+            </v-row>
+            <!-- IMAGE -->
+            <v-row dense class="my-5">
+              <v-col
+                cols="6"
+                v-for="(event, index) in course_data.artWorkImage"
+                :key="index"
+                class="d-flex flex-column"
+              >
+                <!-- IMAGE -->
+                <v-card class="mt-auto">
+                  <v-btn
+                    icon
+                    small
+                    class="bg-[#cdcdcd] absolute top-2 right-3 z-[4]"
+                    dark
+                    @click="showImageDialog(event)"
+                    ><v-icon>mdi-eye</v-icon></v-btn
+                  >
+                  <v-img
+                    :src="event.attachmentUrl"
+                    cover
+                    align="center"
+                    style="
+                      max-width: 100%;
+                      max-height: 100%;
+                      height: 219.6px;
+                      width: 100%;
+                      object-fit: cover;
+                    "
+                    :aspect-ratio="16 / 9"
+                  >
+                    <template v-slot:placeholder>
+                      <v-row
+                        class="fill-height ma-0"
+                        align="center"
+                        justify="center"
+                      >
+                        <v-progress-circular
+                          indeterminate
+                          color="#ff6b81"
+                        ></v-progress-circular>
+                      </v-row>
+                    </template>
+                  </v-img>
+                </v-card>
+              </v-col>
+            </v-row>
+          </div>
+          <!-- VDO -->
+
+          <div
+            v-if="
+              course_data.artWorkVideo?.length > 0 &&
+              !$vuetify.breakpoint.smAndUp
+            "
+          >
+            <v-row dense>
+              <v-col class="text-xl">
+                {{ $t("link vdo") }}
+              </v-col>
+            </v-row>
+            <v-row dense class="my-5">
+              <v-col
+                cols="6"
+                v-for="(event, index) in course_data.artWorkVideo"
+                :key="index"
+                class="d-flex flex-column"
+              >
+                <!-- VDO -->
+                <v-card
+                  class="mt-auto"
+                  v-if="
+                    event.filesType === 'video/mp4' ||
+                    event.filesType === 'video/x-matroska'
+                  "
                 >
-                <v-img
-                  :src="event.link"
-                  cover
-                  align="center"
-                  style="height: 219.6px; width: 100%; object-fit: cover"
-                >
-                  <template v-slot:placeholder>
-                    <v-row
-                      class="fill-height ma-0"
-                      align="center"
-                      justify="center"
-                    >
-                      <v-progress-circular
-                        indeterminate
-                        color="#ff6b81"
-                      ></v-progress-circular>
-                    </v-row>
-                  </template>
-                </v-img>
-              </v-card>
-              <!-- VDO -->
-              <v-card class="mt-auto" v-else-if="event.fileType === 'video'">
-                <v-btn
-                  icon
-                  small
-                  class="bg-[#cdcdcd] absolute top-2 right-3 z-[4]"
-                  dark
-                  @click="showImageDialog(event)"
-                  ><v-icon>mdi-eye</v-icon></v-btn
-                >
-                <!-- <video height="100%" width="100%" class="vdo-content" autoplay muted>
-            <source :src="event.link" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video> -->
-                <video
-                  style="height: 219.6px; width: 100%; object-fit: cover"
-                  autoplay
-                  muted
-                  controls
-                  loop
-                >
-                  <source :src="event.link" type="video/mp4" />
-                </video>
-              </v-card>
-              <!-- YOUTUBE -->
-              <v-card class="mt-auto" v-else>
-                <v-btn
-                  icon
-                  small
-                  class="bg-[#cdcdcd] absolute top-2 right-3 z-[4]"
-                  dark
-                  @click="showImageDialog(event)"
-                  ><v-icon>mdi-eye</v-icon></v-btn
-                >
-                <!-- <iframe height="100%" width="100%" :src="event.link"> </iframe> -->
-                <div
-                  id="video"
-                  style="height: 219.6px; width: 100%; object-fit: cover"
-                  v-html="event.link"
-                ></div>
-              </v-card>
-            </v-col>
-          </v-row>
+                  <v-btn
+                    icon
+                    small
+                    class="bg-[#cdcdcd] absolute top-2 right-3 z-[4]"
+                    dark
+                    @click="showImageDialog(event)"
+                    ><v-icon>mdi-eye</v-icon></v-btn
+                  >
+                  <video
+                    style="
+                      max-width: 100%;
+                      max-height: 100%;
+                      height: 219.6px;
+                      width: 100%;
+                      object-fit: cover;
+                    "
+                    :aspect-ratio="16 / 9"
+                    autoplay
+                    muted
+                    controls
+                    loop
+                  >
+                    <source :src="event.attachmentUrl" type="video/mp4" />
+                  </video>
+                </v-card>
+                <!-- YOUTUBE -->
+                <v-card class="mt-auto" v-else-if="event.filesType === 'link'">
+                  <v-btn
+                    icon
+                    small
+                    class="bg-[#cdcdcd] absolute top-2 right-3 z-[4]"
+                    dark
+                    @click="showImageDialog(event)"
+                    ><v-icon>mdi-eye</v-icon></v-btn
+                  >
+                  <!-- <iframe height="100%" width="100%" :src="event.link"> </iframe> -->
+                  <div
+                    id="video"
+                    style="
+                      max-width: 100%;
+                      max-height: 100%;
+                      height: 219.6px;
+                      width: 100%;
+                      object-fit: cover;
+                    "
+                    v-html="event.attachmentCourse"
+                    :aspect-ratio="16 / 9"
+                  ></div>
+                </v-card>
+              </v-col>
+            </v-row>
+          </div>
 
           <v-row>
             <v-col
@@ -376,83 +437,121 @@
       </v-dialog>
     </v-row>
 
-    <v-row dense class="my-5" v-if="$vuetify.breakpoint.smAndUp">
-      <v-col
-        cols="6"
-        sm="3"
-        v-for="(event, index) in testCard"
-        :key="index"
-        class="d-flex flex-column"
-      >
-        <!-- IMAGE -->
-        <v-card class="mt-auto" v-if="event.fileType === 'img'">
-          <v-btn
-            icon
-            small
-            class="bg-[#cdcdcd] absolute top-2 right-3 z-[4]"
-            dark
-            @click="showImageDialog(event)"
-            ><v-icon>mdi-eye</v-icon></v-btn
+    <!-- IMAGE -->
+    <div
+      v-if="course_data.artWorkImage?.length > 0 && $vuetify.breakpoint.smAndUp"
+    >
+      <v-row dense>
+        <v-col cols="12" class="text-2xl my-5 font-bold">
+          {{ $t("Learning Journey") }}
+        </v-col>
+        <v-col class="text-xl">
+          {{ $t("image") }}
+        </v-col>
+      </v-row>
+
+      <v-row dense class="my-5">
+        <v-col
+          cols="6"
+          sm="3"
+          v-for="(event, index) in course_data.artWorkImage"
+          :key="index"
+          class="d-flex flex-column"
+        >
+          <!-- IMAGE -->
+          <v-card class="mt-auto">
+            <v-btn
+              icon
+              small
+              class="bg-[#cdcdcd] absolute top-2 right-3 z-[4]"
+              dark
+              @click="showImageDialog(event)"
+              ><v-icon>mdi-eye</v-icon></v-btn
+            >
+            <v-img
+              :src="event.attachmentUrl"
+              cover
+              align="center"
+              style="height: 219.6px; width: 100%; object-fit: cover"
+            >
+              <template v-slot:placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-progress-circular
+                    indeterminate
+                    color="#ff6b81"
+                  ></v-progress-circular>
+                </v-row>
+              </template>
+            </v-img>
+          </v-card>
+        </v-col>
+      </v-row>
+    </div>
+    <!-- VDO -->
+
+    <div
+      v-if="course_data.artWorkVideo?.length > 0 && $vuetify.breakpoint.smAndUp"
+    >
+      <v-row dense>
+        <v-col class="text-xl">
+          {{ $t("link vdo") }}
+        </v-col>
+      </v-row>
+      <v-row dense class="my-5">
+        <v-col
+          cols="6"
+          sm="3"
+          v-for="(event, index) in course_data.artWorkVideo"
+          :key="index"
+          class="d-flex flex-column"
+        >
+          <!-- VDO -->
+          <v-card
+            class="mt-auto"
+            v-if="
+              event.filesType === 'video/mp4' ||
+              event.filesType === 'video/x-matroska'
+            "
           >
-          <v-img
-            :src="event.link"
-            cover
-            align="center"
-            style="height: 219.6px; width: 100%; object-fit: cover"
-          >
-            <template v-slot:placeholder>
-              <v-row class="fill-height ma-0" align="center" justify="center">
-                <v-progress-circular
-                  indeterminate
-                  color="#ff6b81"
-                ></v-progress-circular>
-              </v-row>
-            </template>
-          </v-img>
-        </v-card>
-        <!-- VDO -->
-        <v-card class="mt-auto" v-else-if="event.fileType === 'video'">
-          <v-btn
-            icon
-            small
-            class="bg-[#cdcdcd] absolute top-2 right-3 z-[4]"
-            dark
-            @click="showImageDialog(event)"
-            ><v-icon>mdi-eye</v-icon></v-btn
-          >
-          <!-- <video height="100%" width="100%" class="vdo-content" autoplay muted>
-            <source :src="event.link" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video> -->
-          <video
-            style="height: 219.6px; width: 100%; object-fit: cover"
-            autoplay
-            muted
-            controls
-            loop
-          >
-            <source :src="event.link" type="video/mp4" />
-          </video>
-        </v-card>
-        <!-- YOUTUBE -->
-        <v-card class="mt-auto" v-else>
-          <v-btn
-            icon
-            small
-            class="bg-[#cdcdcd] absolute top-2 right-3 z-[4]"
-            dark
-            @click="showImageDialog(event)"
-            ><v-icon>mdi-eye</v-icon></v-btn
-          >
-          <!-- <iframe height="100%" width="100%" :src="event.link"> </iframe> -->
-          <div
-            id="video"
-            style="height: 219.6px; width: 100%; object-fit: cover"
-            v-html="event.link"
-          ></div>
-        </v-card>
-      </v-col>
-    </v-row>
+            <v-btn
+              icon
+              small
+              class="bg-[#cdcdcd] absolute top-2 right-3 z-[4]"
+              dark
+              @click="showImageDialog(event)"
+              ><v-icon>mdi-eye</v-icon></v-btn
+            >
+            <video
+              style="height: 219.6px; width: 100%; object-fit: cover"
+              autoplay
+              muted
+              controls
+              loop
+            >
+              <source :src="event.attachmentUrl" type="video/mp4" />
+            </video>
+          </v-card>
+          <!-- YOUTUBE -->
+          <v-card class="mt-auto" v-else-if="event.filesType === 'link'">
+            <v-btn
+              icon
+              small
+              class="bg-[#cdcdcd] absolute top-2 right-3 z-[4]"
+              dark
+              @click="showImageDialog(event)"
+              ><v-icon>mdi-eye</v-icon></v-btn
+            >
+            <!-- <iframe height="100%" width="100%" :src="event.link"> </iframe> -->
+            <div
+              id="video"
+              style="height: 219.6px; width: 100%; object-fit: cover"
+              v-html="event.attachmentCourse"
+            ></div>
+          </v-card>
+        </v-col>
+      </v-row>
+    </div>
+
     <!-- DIALOG SHOW IMAGE -->
     <v-dialog
       persistent
@@ -467,7 +566,7 @@
                 icon
                 class="bg-[#cdcdcd] absolute top-1 right-1"
                 dark
-                @click="show_attachment_dialog = !show_attachment_dialog"
+                @click="closeShowImage()"
                 ><v-icon>mdi-close</v-icon></v-btn
               >
               <span class="font-weight-bold">{{ $t("image example") }} </span>
@@ -479,9 +578,14 @@
               <!-- class="max-h-[300px] max-w-300px rounded-lg" -->
 
               <v-img
-                v-if="typeImg === 'img'"
+                v-if="
+                  typeImg === 'img' ||
+                  typeImg === 'image/png' ||
+                  typeImg === 'image/jpeg'
+                "
                 contain
                 :src="biggesImage"
+                class="rounded-lg"
                 :style="
                   $vuetify.breakpoint.lgAndUp
                     ? 'height: 600px; width: 1000px; object-fit: cover; margin: auto;'
@@ -510,7 +614,11 @@
               <!-- style="object-fit: cover; margin: auto" -->
 
               <video
-                v-else-if="typeImg === 'video'"
+                v-else-if="
+                  typeImg === 'video' ||
+                  typeImg === 'video/mp4' ||
+                  typeImg === 'video/x-matroska'
+                "
                 class="rounded-lg d-flex justify-center align-center"
                 :style="
                   $vuetify.breakpoint.lgAndUp
@@ -530,11 +638,6 @@
               </video>
 
               <!-- YOUTUBE -->
-              <!-- :style="
-                  $vuetify.breakpoint.smAndUp
-                    ? 'height: 315px; width: 440px; object-fit: cover; margin: auto;'
-                    : 'object-fit: cover; margin: auto;'
-                " -->
               <div
                 v-else
                 id="video"
@@ -567,6 +670,8 @@ import loadingOverlay from "@/components/loading/loadingOverlay.vue";
 import Swal from "sweetalert2";
 import { mapActions, mapGetters } from "vuex";
 import moment from "moment";
+// import headerCard from "@/components/header/headerCard.vue";
+
 // import ImgCard from "@/components/course/imgCard.vue";
 
 export default {
@@ -575,6 +680,7 @@ export default {
     rowData,
     dialogCard,
     loadingOverlay,
+    // headerCard,
     // ImgCard
   },
   data: () => ({
@@ -663,9 +769,18 @@ export default {
     }),
 
     showImageDialog(item) {
-      this.biggesImage = item.link ? item.link : item;
-      this.typeImg = item.fileType;
+      this.biggesImage = item.attachmentUrl
+        ? item.attachmentUrl
+        : item.attachmentCourse
+        ? item.attachmentCourse
+        : item;
+      this.typeImg = item.type ? item.type : item.filesType;
       this.show_attachment_dialog = true;
+    },
+    closeShowImage() {
+      this.show_attachment_dialog = false;
+      this.typeImg = null;
+      this.biggesImage = null;
     },
 
     getTime(time) {

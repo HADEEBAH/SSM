@@ -76,6 +76,7 @@ const CourseModules = {
     courses_is_loading: false,
     course_is_loading: false,
     course_data: {
+      artwork_file: [],
       reservation: false,
       menu_reservation_start_date: "",
       menu_reservation_end_date: "",
@@ -106,7 +107,6 @@ const CourseModules = {
       catification: "",
       course_price: 0,
       student_recived: 0,
-      artwork_file: [],
       coachs: [
         {
           coach_id: "",
@@ -170,6 +170,7 @@ const CourseModules = {
           ],
         },
       ],
+
     },
     courses: [],
     packages_data: [],
@@ -211,6 +212,7 @@ const CourseModules = {
     get_all_time: [],
     create_course: {},
     courses_data: {
+      artwork_file: [],
       reservation: false,
       course_id: null,
       course_name_th: null,
@@ -262,6 +264,13 @@ const CourseModules = {
       },
       checked_discount: false,
       teach_day: [],
+      art_work_link: [
+        {
+          url: '',
+        }
+      ],
+      art_work_image_video: [],
+      short_preview_artwork_files: []
     },
     coach_data: [
       {
@@ -513,6 +522,11 @@ const CourseModules = {
         discount_price: 0,
         student_recived: 0,
         artwork_file: [],
+        art_work_link: [
+          {
+            "url": ""
+          }
+        ],
         coachs: [
           {
             coach_id: "",
@@ -1359,7 +1373,8 @@ const CourseModules = {
       }
     },
     // COURSE :: UPDATE COURSE DETAIL
-    async UpdateCouserDetail(context, { course_id, data_payload, course_file }) {
+    async UpdateCouserDetail(context, { course_id, data_payload, course_file, artwork_files, url_link }) {
+
       // async UpdateCouserDetail(context, { course_id, course_data }) {
       try {
         let config = {
@@ -1465,6 +1480,8 @@ const CourseModules = {
         // if (typeof course_data.course_img == "object") {
         //   payloadData.append("img_url", course_data.course_img)
         // }
+
+
         const payloadData = new FormData()
         payloadData.append("payload", JSON.stringify(data_payload))
         if (course_file) {
@@ -1472,6 +1489,22 @@ const CourseModules = {
         } else {
           payloadData.append("img_url", null)
         }
+
+
+        if (artwork_files) {
+          for (let i = 0; i < artwork_files.length; i++) {
+            payloadData.append(`img_artwork`, artwork_files[i]);
+          }
+        }
+        if (url_link) {
+          for (let i = 0; i < url_link.length; i++) {
+            if (url_link[i].url) {
+              payloadData.append(`link`, url_link[i].url);
+
+            }
+          }
+        }
+
         // let localhost = "http://localhost:3000"
         // let { data } = await axios.patch(`${localhost}/api/v1/manage/update-course/${course_id}`, payloadData, config)
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-course/${course_id}`, payloadData, config)
@@ -1509,6 +1542,7 @@ const CourseModules = {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("something went wrong"),
+            text: VueI18n.t(error.response.data.message),
             timer: 3000,
             showDenyButton: false,
             showCancelButton: false,
@@ -1814,7 +1848,7 @@ const CourseModules = {
       }
     },
     // COURSE :: UPDATE ARKWORK
-    async UpdateCourseArkwork(context, { course_id, privilage_file, artwork_files }) {
+    async UpdateCourseArkwork(context, { course_id, privilage_file, artwork_files, url_link }) {
       // course_data, 
       try {
         let config = {
@@ -1839,9 +1873,22 @@ const CourseModules = {
         }
         if (artwork_files) {
           for (let i = 0; i < artwork_files.length; i++) {
-            payloadData.append(`img_artwork`, artwork_files[i]);
+            if (!artwork_files[i].artworkCourseId) {
+              payloadData.append(`img_artwork`, artwork_files[i]);
+
+            }
           }
         }
+        if (url_link) {
+          for (let i = 0; i < url_link.length; i++) {
+            if (url_link[i].url) {
+              payloadData.append(`link`, url_link[i].url);
+
+            }
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.patch(`${localhost}/api/v1/manage/update-artwork/${course_id}`, payloadData, config)
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-artwork/${course_id}`, payloadData, config)
         if (data.statusCode === 200) {
           await context.dispatch("GetArtworkByCourse", { course_id: course_id })
@@ -1865,6 +1912,7 @@ const CourseModules = {
         Swal.fire({
           icon: "error",
           title: VueI18n.t("something went wrong"),
+          text: VueI18n.t(error.response.data.message),
           timer: 3000,
           showDenyButton: false,
           showCancelButton: false,
@@ -1943,26 +1991,43 @@ const CourseModules = {
         // let { data } = await axios.get(`${localhost}/api/v1/course/attcahment/${course_id}`)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/attcahment/${course_id}`)
         if (data.statusCode === 200) {
-          if (data.data.length > 0) {
-            for (const artwork of data.data) {
+          if (data.data.art_work_image_video.length > 0) {
+            for (const artwork of data.data.art_work_image_video) {
               artwork.attachmentUrl = artwork.attachmentCourse ? `${process.env.VUE_APP_URL}/api/v1/files/${artwork.attachmentCourse}` : null
             }
+            // for (const artwork of data.data) {
+            //   artwork.attachmentUrl = artwork.attachmentCourse ? `${process.env.VUE_APP_URL}/api/v1/files/${artwork.attachmentCourse}` : null
+            // }
           }
+          data.data.art_work_link = data.data?.art_work_link?.length > 0 ? data.data?.art_work_link : data.data.art_work_link = [{
+            url: '',
+          }]
           context.commit("SetCourseArtwork", data.data)
         } else {
           throw { error: data }
         }
       } catch (error) {
-        console.log(error)
+
+        Swal.fire({
+          icon: "error",
+          title: VueI18n.t("something went wrong"),
+          text: VueI18n.t(error.response.data.message),
+          timer: 3000,
+          showDenyButton: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        })
+
       }
     },
     // COURSE :: DETAIL
     async GetCourse(context, course_id) {
       context.commit("SetCourseIsLoading", true)
       try {
-        // const localhost = 'http://localhost:3000'
-        // let { data } = await axios.get(`${localhost}/api/v1/course/detail/${course_id}`)
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
+        const localhost = 'http://localhost:3000'
+        let { data } = await axios.get(`${localhost}/api/v1/course/detail/${course_id}`)
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
         if (data.statusCode === 200) {
           let course_hours_part = data?.data?.coursePerTime?.toFixed(2)?.split(".")
           let course_hours_object = {}
@@ -1975,6 +2040,11 @@ const CourseModules = {
             course_hours_object = {
               HH: data.data.coursePerTime.padStart(2, '0'),
               mm: "00"
+            }
+          }
+          if (data.data.artWorkImage.length > 0) {
+            for (const artwork of data.data.artWorkImage) {
+              artwork.attachmentUrl = artwork.attachmentCourse ? `${process.env.VUE_APP_URL}/api/v1/files/${artwork.attachmentCourse}` : null
             }
           }
           let payload = {
@@ -2024,7 +2094,20 @@ const CourseModules = {
             privilege_file: null,
             artwork_file: [],
             days_of_class: [],
-            days: []
+            days: [],
+            artWorkVideo: data.data.artWorkVideo?.map(artwork => {
+              artwork.attachmentUrl = artwork.attachmentCourse && artwork.filesType !== 'link'
+                ? `${process.env.VUE_APP_URL}/api/v1/files/${artwork.attachmentCourse}`
+                : null;
+              return artwork;
+            }),
+            artWorkImage: data.data.artWorkImage?.map(artwork => {
+              artwork.attachmentUrl = artwork.attachmentCourse
+                ? `${process.env.VUE_APP_URL}/api/v1/files/${artwork.attachmentCourse}`
+                : null;
+              return artwork;
+            })
+
           }
           let teach_day_data = []
           if (data.data.coachs) {
@@ -2285,6 +2368,18 @@ const CourseModules = {
         }
       } catch (error) {
         context.commit("SetCourseIsLoading", false)
+
+        Swal.fire({
+          icon: "error",
+          title: VueI18n.t("something went wrong"),
+          text: VueI18n.t(error.response.data.message),
+          timer: 3000,
+          showDenyButton: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        })
+
         console.log(error)
       }
     },
@@ -2414,7 +2509,7 @@ const CourseModules = {
       }
     },
     // COURSE :: CREATE
-    async CreateCourse(context, { course_payload, course_file, privilege_file, artwork_file }) {
+    async CreateCourse(context, { course_payload, course_file, privilege_file, artwork_file, link_url }) {
       context.commit("SetCourseIsLoading", true)
       try {
         // let course = context.state.course_data
@@ -2523,6 +2618,11 @@ const CourseModules = {
             data_payload.append(`img_artwork${i}`, artwork_file[i]);
           }
         }
+        if (link_url) {
+          for (let i = 0; i < link_url.length; i++) {
+            data_payload.append(`link`, link_url[i].url ? link_url[i].url : null);
+          }
+        }
 
         let config = {
           headers: {
@@ -2556,6 +2656,29 @@ const CourseModules = {
           throw { message: data }
         }
       } catch (error) {
+        if (error.response.data.message == "Image invalid.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("invalid image"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("something went wrong"),
+            text: VueI18n.t(error.response.data.message),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
         context.commit("SetCourseIsLoading", false)
       }
     },
@@ -3255,6 +3378,8 @@ const CourseModules = {
         // let { data } = await axios.get(`${localhost}/api/v1/course/detail/manage/courseId/${course_id}`, config)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/manage/courseId/${course_id}`, config)
         if (data.statusCode == 200) {
+
+
           if (data.data.courseImg) {
             data.data.courseImg = `${process.env.VUE_APP_URL}/api/v1/files/${data.data.courseImg}`
           } else {
@@ -3272,11 +3397,30 @@ const CourseModules = {
             data.data.course_register_date.end_date_formatted = moment(data.data.course_register_date.end_date).format("YYYY-MM-DD");
             data.data.course_study_date.start_date_formatted = moment(data.data.course_study_date.start_date).format("YYYY-MM-DD");
             data.data.course_study_date.end_date_formatted = moment(data.data.course_study_date.end_date).format("YYYY-MM-DD");
-
+            if (data.data?.art_work_image_video?.length > 0) {
+              for (const artwork of data.data.art_work_image_video) {
+                artwork.attachmentUrl = artwork.attachmentCourse ? `${process.env.VUE_APP_URL}/api/v1/files/${artwork.attachmentCourse}` : null
+              }
+            }
+            data.data.art_work_link = data.data?.art_work_link?.length > 0 ? data.data?.art_work_link : data.data.art_work_link = [{
+              url: '',
+            }]
           }
           context.commit("SetCoursesData", data.data)
         }
       } catch (error) {
+
+        Swal.fire({
+          icon: "error",
+          title: VueI18n.t("something went wrong"),
+          text: VueI18n.t(error.response.data.message),
+          timer: 3000,
+          showDenyButton: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        })
+
         console.log('error :>> ', error);
       }
     },
