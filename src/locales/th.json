@@ -700,6 +700,7 @@
   "package cannot be deleted as there must be at least one package in the course": "ไม่สามารถลบแพ็คเกจได้เนื่องจากต้องมีอย่างน้อยหนึ่งแพ็คเกจในหลักสูตร",
   "package cannot be deleted as there are students in this package": "ไม่สามารถลบแพ็คเกจได้เนื่องจากมีนักเรียนลงเรียนอยู่ในแพ็คเกจนี้",
   "package cannot be deleted as there are students who have booked this package": "ไม่สามารถลบแพ็คเกจได้เนื่องจากมีนักเรียนจองเรียนในแพ็คเกจนี้",
+  "please send only YouTube links":"กรุณากรอกลิ้งค์ให้ถูกต้อง",
 
   "receipt language": "ใบเสร็จภาษา",
   "reason for leave": "เหตุผลการลา",

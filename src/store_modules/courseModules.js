@@ -395,7 +395,13 @@ const CourseModules = {
     add_new_packages: [],
     add_new_packages_options: [],
     refresh_package: {},
-    refresh_package_options: {}
+    refresh_package_options: {},
+    course_image_is_loading: false,
+    course_vdo_is_loading: false,
+    course_image: [],
+    course_vdo: [],
+    limit_image: {},
+    limit_vdo: {},
 
 
 
@@ -403,6 +409,24 @@ const CourseModules = {
 
   },
   mutations: {
+    SetLimitImage(state, payload) {
+      state.limit_image = payload
+    },
+    SetLimitVdo(state, payload) {
+      state.limit_vdo = payload
+    },
+    SetCourseImageIsLoading(state, value) {
+      state.course_image_is_loading = value
+    },
+    SetCourseVdoIsLoading(state, value) {
+      state.course_vdo_is_loading = value
+    },
+    SetCourseImage(state, value) {
+      state.course_image = value
+    },
+    SetCourseVdo(state, value) {
+      state.course_vdo = value
+    },
     SetPackageAddStudent(state, payload) {
       state.package_add_student = payload
     },
@@ -1909,16 +1933,40 @@ const CourseModules = {
 
         }
       } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: VueI18n.t("something went wrong"),
-          text: VueI18n.t(error.response.data.message),
-          timer: 3000,
-          showDenyButton: false,
-          showCancelButton: false,
-          showConfirmButton: false,
-          timerProgressBar: true,
-        })
+        if (error.response.data.message.message == "Image invalid.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("invalid image"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message.message == "Please send only YouTube links.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("invalid image"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("something went wrong"),
+            text: VueI18n.t(error.response.data.message.message),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
       }
     },
     // COURSE :: LIST 
@@ -2021,13 +2069,63 @@ const CourseModules = {
 
       }
     },
+
+    async GetCourseImage(context, { course_id, page, limit }) {
+      context.commit("SetCourseImageIsLoading", true)
+      try {
+        // const localhost = 'http://localhost:3000'
+        // let { data } = await axios.get(`${localhost}/api/v1/course/artwork-image/${course_id}?limit=10&page=${page}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/artwork-image/${course_id}?limit=2&page=1`)
+        if (data.statusCode === 200) {
+          if (data.data.length > 0) {
+            for (const artwork of data?.data) {
+              artwork.attachmentUrl = artwork.attachmentCourse ? `${process.env.VUE_APP_URL}/api/v1/files/${artwork?.attachmentCourse}` : null
+            }
+          }
+          await context.commit('SetLimitImage', { limit: limit, page: page, count: data.data.length })
+          await context.commit("SetCourseImage", data.data)
+          context.commit("SetCourseImageIsLoading", false)
+
+        }
+      } catch (error) {
+        context.commit("SetCourseImageIsLoading", false)
+      }
+    },
+
+    async GetCourseVdo(context, { course_id, page, limit }) {
+      context.commit("SetCourseVdoIsLoading", true)
+      try {
+        // const localhost = 'http://localhost:3000'
+        // let { data } = await axios.get(`${localhost}/api/v1/course/artwork-video/${course_id}?limit=10&page=${page}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/artwork-video/${course_id}?limit=2&page=1`)
+        if (data.statusCode === 200) {
+          if (data.data.length > 0) {
+            for (const artwork of data.data) {
+              if (artwork.filesType !== 'link') {
+                artwork.attachmentUrl = artwork.attachmentCourse ? `${process.env.VUE_APP_URL}/api/v1/files/${artwork.attachmentCourse}` : null
+
+              }
+            }
+          }
+          await context.commit('SetLimitVdo', { limit: limit, page: page, count: data.data.length })
+          await context.commit("SetCourseVdo", data.data)
+          context.commit("SetCourseVdoIsLoading", false)
+
+        }
+      } catch (error) {
+        context.commit("SetCourseVdoIsLoading", false)
+      }
+    },
+
+
+
     // COURSE :: DETAIL
     async GetCourse(context, course_id) {
       context.commit("SetCourseIsLoading", true)
       try {
-        const localhost = 'http://localhost:3000'
-        let { data } = await axios.get(`${localhost}/api/v1/course/detail/${course_id}`)
-        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
+        // const localhost = 'http://localhost:3000'
+        // let { data } = await axios.get(`${localhost}/api/v1/course/detail/${course_id}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/${course_id}`)
         if (data.statusCode === 200) {
           let course_hours_part = data?.data?.coursePerTime?.toFixed(2)?.split(".")
           let course_hours_object = {}
@@ -2095,24 +2193,24 @@ const CourseModules = {
             artwork_file: [],
             days_of_class: [],
             days: [],
-            artWorkVideo: data.data.artWorkVideo?.map(artwork => {
-              artwork.attachmentUrl = artwork.attachmentCourse && artwork.filesType !== 'link'
-                ? `${process.env.VUE_APP_URL}/api/v1/files/${artwork.attachmentCourse}`
-                : null;
-              return artwork;
-            }),
-            artWorkImage: data.data.artWorkImage?.map(artwork => {
-              artwork.attachmentUrl = artwork.attachmentCourse
-                ? `${process.env.VUE_APP_URL}/api/v1/files/${artwork.attachmentCourse}`
-                : null;
-              return artwork;
-            })
+            // artWorkVideo: data.data.artWorkVideo?.map(artwork => {
+            //   artwork.attachmentUrl = artwork.attachmentCourse && artwork.filesType !== 'link'
+            //     ? `${process.env.VUE_APP_URL}/api/v1/files/${artwork.attachmentCourse}`
+            //     : null;
+            //   return artwork;
+            // }),
+            // artWorkImage: data.data.artWorkImage?.map(artwork => {
+            //   artwork.attachmentUrl = artwork.attachmentCourse
+            //     ? `${process.env.VUE_APP_URL}/api/v1/files/${artwork.attachmentCourse}`
+            //     : null;
+            //   return artwork;
+            // })
 
           }
           let teach_day_data = []
-          if (data.data.coachs) {
+          if (data.data?.coachs) {
             for await (let coach of data.data.coachs) {
-              for await (let coach_date of data.data.dayOfWeek.filter(v => v.courseCoachId === coach.courseCoachId)) {
+              for await (let coach_date of data.data?.dayOfWeek.filter(v => v.courseCoachId === coach.courseCoachId)) {
                 // DAY OF CLASS
                 if (payload.days_of_class.filter(v => v.day_of_week_id === coach_date.times[0].dayOfWeekId).length === 0) {
                   let dayName = dayOfWeekArray(coach_date.dayOfWeekName)
@@ -4254,6 +4352,24 @@ const CourseModules = {
 
   },
   getters: {
+    getLimitImage(state) {
+      return state.limit_image
+    },
+    getLimitVdo(state) {
+      return state.limit_vdo
+    },
+    getCourseImageIsLoading(state) {
+      return state.course_image_is_loading
+    },
+    getCourseVdoIsLoading(state) {
+      return state.course_vdo_is_loading
+    },
+    getCourseImages(state) {
+      return state.course_image
+    },
+    getCourseVdos(state) {
+      return state.course_vdo
+    },
     getPackagesAddStudent(state) {
       return state.package_add_student
     },
