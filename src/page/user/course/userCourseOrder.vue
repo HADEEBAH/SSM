@@ -352,7 +352,7 @@
             "
             v-model="course_order.apply_for_parent"
             color="#ff6B81"
-            :label="$t('register to student of parent')"
+            :label="$t('register to student of parent22')"
           ></v-checkbox>
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
@@ -364,6 +364,85 @@
           </v-tooltip>
         </v-col>
       </v-row>
+      <!-- STUDENT DETAILS -->
+      <v-card v-if="course_order.apply_for_parent" class="my-5">
+        <v-card-title>
+          {{ $t("students relation") }}
+        </v-card-title>
+        <v-card-text>
+          <!-- <pre>{{ profile_detail }}</pre> -->
+          <v-row
+            dense
+            v-for="(item_student, index_student) in profile_detail?.mystudents"
+            :key="index_student"
+          >
+            <!-- <pre>{{ item_student }}</pre> -->
+
+            <v-col cols="12">
+              <v-checkbox
+                v-model="item_student.selected_student"
+                color="#ff6B81"
+                :label="$t('select this student')"
+                @click="selectedStudent(item_student)"
+              ></v-checkbox>
+            </v-col>
+            <!-- NAME EN -->
+            <v-col cols="12" sm="6">
+              <labelCustom
+                required
+                :text="$t('first name(english)')"
+              ></labelCustom>
+              <v-text-field
+                dense
+                outlined
+                v-model="item_student.firstNameEn"
+                :placeholder="$t('english first name')"
+                readonly
+              ></v-text-field>
+            </v-col>
+            <!-- LASTNAME EN -->
+            <v-col cols="12" sm="6">
+              <labelCustom
+                required
+                :text="$t('last name(english)')"
+              ></labelCustom>
+              <v-text-field
+                dense
+                outlined
+                v-model="item_student.lastNameEn"
+                :placeholder="$t('english last name')"
+                readonly
+              ></v-text-field>
+            </v-col>
+
+            <!-- NAME TH -->
+            <v-col cols="12" sm="6">
+              <labelCustom
+                required
+                :text="$t('first name(thai)')"
+              ></labelCustom>
+              <v-text-field
+                dense
+                outlined
+                v-model="item_student.firstNameTh"
+                :placeholder="$t('thai first name')"
+                readonly
+              ></v-text-field>
+            </v-col>
+            <!-- LASTNAME TH -->
+            <v-col cols="12" sm="6">
+              <labelCustom required :text="$t('last name(thia)')"></labelCustom>
+              <v-text-field
+                dense
+                outlined
+                v-model="item_student.lastNameTh"
+                :placeholder="$t('thia last name')"
+                readonly
+              ></v-text-field>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
       <!-- PARENT RELATION -->
       <template v-if="relations.length > 0 && course_order.apply_for_yourself">
         <v-row dense>
@@ -871,7 +950,7 @@
             dense
             @click="checkOut"
             :color="validateButton ? '#C4C4C4' : '#ff6b81'"
-            >{{ $t("cash out") }}
+            >{{ $t("cash out22") }}
           </v-btn>
         </v-col>
       </v-row>
@@ -1614,6 +1693,12 @@ export default {
       GetTimeAddStudent: "CourseModules/GetTimeAddStudent",
       GetCoachAddStudent: "CourseModules/GetCoachAddStudent",
     }),
+
+    async selectedStudent(item) {
+      console.log("item :>> ", item);
+      this.course_order?.students.push(item);
+      console.log("object :>> ", this.course_order);
+    },
 
     async selectedDate(item) {
       // this.course_order.time_list = [];
@@ -2358,6 +2443,7 @@ export default {
               }
               this.order.created_by = this.user_login.account_id;
               this.changeOrderData(this.order);
+              console.log("this.course_data :>> ", this.course_data);
               if (this.course_order.course_type_id == "CT_1") {
                 if (this.course_order.day && this.course_order.time) {
                   this.saveOrder({
