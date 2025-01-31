@@ -1554,7 +1554,19 @@ const CourseModules = {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("can not update course"),
-            text: VueI18n.t(error.response.data.message),
+            text: VueI18n.t("the current student more than course student recived"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+          context.dispatch("GetCourse", course_id)
+        } else if (error.response.data.message.message == "Image invalid.") {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("invalid image"),
             timer: 3000,
             showDenyButton: false,
             showCancelButton: false,
@@ -1566,7 +1578,7 @@ const CourseModules = {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("something went wrong"),
-            text: VueI18n.t(error.response.data.message),
+            text: VueI18n.t(error.response.data.message.message ? error.response.data.message.message : error.response.data.message),
             timer: 3000,
             showDenyButton: false,
             showCancelButton: false,
@@ -1915,8 +1927,8 @@ const CourseModules = {
         // let { data } = await axios.patch(`${localhost}/api/v1/manage/update-artwork/${course_id}`, payloadData, config)
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-artwork/${course_id}`, payloadData, config)
         if (data.statusCode === 200) {
-          await context.dispatch("GetArtworkByCourse", { course_id: course_id })
-          await context.dispatch("GetCourse", course_id)
+          // await context.dispatch("GetArtworkByCourse", { course_id: course_id })
+          // await context.dispatch("GetCourse", course_id)
 
           Swal.fire({
             icon: "success",
@@ -1955,11 +1967,22 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
+        } else if (error.response.data.message == "File too large") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("file size must not exceed 10 MB"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
         } else {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("something went wrong"),
-            text: VueI18n.t(error.response.data.message.message),
+            text: VueI18n.t(error.response.data.message.message ? error.response.data.message.message : error.response.data.message),
             timer: 3000,
             showDenyButton: false,
             showCancelButton: false,
@@ -2140,11 +2163,11 @@ const CourseModules = {
               mm: "00"
             }
           }
-          if (data.data.artWorkImage.length > 0) {
-            for (const artwork of data.data.artWorkImage) {
-              artwork.attachmentUrl = artwork.attachmentCourse ? `${process.env.VUE_APP_URL}/api/v1/files/${artwork.attachmentCourse}` : null
-            }
-          }
+          // if (data.data.artWorkImage.length > 0) {
+          //   for (const artwork of data.data.artWorkImage) {
+          //     artwork.attachmentUrl = artwork.attachmentCourse ? `${process.env.VUE_APP_URL}/api/v1/files/${artwork.attachmentCourse}` : null
+          //   }
+          // }
           let payload = {
             reservation: data.data.reservationEndDate ? true : false,
             menu_reservation_start_date: "",
@@ -2466,11 +2489,10 @@ const CourseModules = {
         }
       } catch (error) {
         context.commit("SetCourseIsLoading", false)
-
         Swal.fire({
           icon: "error",
           title: VueI18n.t("something went wrong"),
-          text: VueI18n.t(error.response.data.message),
+          text: VueI18n.t(error.response?.data.message),
           timer: 3000,
           showDenyButton: false,
           showCancelButton: false,

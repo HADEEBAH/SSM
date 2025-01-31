@@ -331,6 +331,7 @@
   "forgotten your password?": "ลืมรหัสผ่านใช่หรือไม่?",
   "file size": "ขนาดไฟล์",
   "file size must not exceed 5 MB": "ขนาดไฟล์ต้องไม่เกิน 5 MB",
+  "file size must not exceed 10 MB": "ขนาดไฟล์ต้องไม่เกิน 10 MB",
   "fail": "เกิดข้อผิดพลาด",
   "failed to resolve": "แก้ไขไม่สำเร็จ",
   "failed to delete": "ลบไม่สำเร็จ",

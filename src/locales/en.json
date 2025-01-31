@@ -356,6 +356,7 @@
   "fail": "Fail",
   "file size": "File size",
   "file size must not exceed 5 MB": "File size must not exceed 5 MB",
+  "file size must not exceed 10 MB": "File size must not exceed 10 MB",
   "failed to resolve": "Failed to resolve",
   "failed to delete": "Failed to delete",
   "failed to delete data": "( Failed to delete data )",

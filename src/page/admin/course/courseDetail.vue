@@ -638,7 +638,7 @@
                         ref="fileInputArtwork"
                         type="file"
                         @change="previewArtWorkFile"
-                        accept="image/png, image/jpeg ,video/*"
+                        accept="image/png, image/jpeg ,video/mp4,video/x-matroska *"
                         multiple
                         style="display: none"
                       />
@@ -945,7 +945,7 @@
                     color="#FF6B81"
                     class="white--text btn-size-lg"
                     depressed
-                    :loading="loading"
+                    :loading="update_loading"
                     @click="CourseUpdateArkwork()"
                   >
                     {{ $t("save") }}
@@ -4583,41 +4583,6 @@ export default {
         (this.student_data_assessment_potential = {});
     },
 
-    // previewArtWorkFile(event) {
-    //   const selectedFiles = event.target.files;
-    //   const allowedTypes = ["image/png", "image/jpeg"];
-    //   const fileUrls = [];
-    //   for (let i = 0; i < selectedFiles.length; i++) {
-    //     const file = selectedFiles[i];
-    //     if (CheckFileSize(file, event.target.id) === true) {
-    //       if (allowedTypes.includes(file.type)) {
-    //         this.course_created_data.artwork_file.push(file);
-    //         const reader = new FileReader();
-    //         reader.onload = () => {
-    //           fileUrls.push(reader.result);
-    //           if (fileUrls.length == selectedFiles.length) {
-    //             this.preview_artwork_files = [
-    //               ...this.preview_artwork_files,
-    //               ...fileUrls,
-    //             ];
-    //           }
-    //         };
-    //         reader.readAsDataURL(file);
-    //       } else {
-    //         Swal.fire({
-    //           icon: "error",
-    //           title: this.$t("something went wrong"),
-    //           text: this.$t("upload only image files (png, jpeg) only"),
-    //           timer: 3000,
-    //           timerProgressBar: true,
-    //           showCancelButton: false,
-    //           showConfirmButton: false,
-    //         });
-    //       }
-    //     }
-    //   }
-    // },
-
     previewArtWorkFile(event) {
       let accept = event.target.accept.split(",");
       const selectedFiles = event.target.files;
@@ -5016,7 +4981,7 @@ export default {
         cancelButtonText: this.$t("no"),
       }).then(async (result) => {
         if (result.isConfirmed) {
-          this.loading = true;
+          this.update_loading = true;
           await this.UpdateCourseArkwork({
             // course_id: this.course_created_data.course_id,
             // course_created_data: this.course_created_data,
@@ -5026,15 +4991,32 @@ export default {
             artwork_files: this?.course_artwork?.art_work_image_video,
             // artwork_files: this?.course_created_data?.artwork_file,
             url_link: this.course_artwork.art_work_link,
-          }).then(() => {
-            this.preview_privilege_url = null;
-            this.preview_artwork_files.map((items) => {
-              this.course_created_data.artwork_file.push(items);
+          }).then(async () => {
+            this.update_loading = false;
+            this.course_edit = false;
+
+            await this.GetArtworkByCourse({
+              course_id: this.$route.params.course_id,
+            }).then(async () => {
+              this.preview_privilege_url =
+                this.courses_data.course_img_privilege;
+              this.preview_artwork_files.map((items) => {
+                this.course_created_data.artwork_file.push(items);
+              });
             });
+            await this.GetCourse(this.$route.params.course_id).then(() => {
+              this.courses_data.course_type_id =
+                this.data_course.course_type_id;
+            });
+            // this.update_loading = false;
+            // this.preview_privilege_url = null;
+            // this.preview_artwork_files.map((items) => {
+            //   this.course_created_data.artwork_file.push(items);
+            // });
           });
           this.course_edit = false;
-          this.loading = false;
         }
+        this.course_edit = false;
       });
     },
     updateCourse() {

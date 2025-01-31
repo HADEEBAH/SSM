@@ -199,7 +199,7 @@
               </v-col>
             </v-row>
 
-            <div v-if="course_image_is_loading">
+            <!-- <div v-if="course_image_is_loading">
               <v-row dense>
                 <v-col
                   cols="6"
@@ -214,9 +214,9 @@
                   </v-card>
                 </v-col>
               </v-row>
-            </div>
+            </div> -->
 
-            <div class="horizontal-scroll my-3">
+            <div ref="scrollImageContainer" class="horizontal-scroll my-3">
               <v-card
                 class="horizontal-scroll__item my-2"
                 v-for="(event, index) in course_image"
@@ -242,7 +242,6 @@
                     object-fit: cover;
                   "
                   :aspect-ratio="16 / 9"
-                  @load="checkIndex(index)"
                 >
                   <template v-slot:placeholder>
                     <v-row
@@ -268,7 +267,7 @@
                 {{ $t("VDO") }}
               </v-col>
             </v-row>
-            <div v-if="course_vdo_is_loading">
+            <!-- <div v-if="course_vdo_is_loading">
               <v-row dense>
                 <v-col
                   cols="6"
@@ -283,9 +282,9 @@
                   </v-card>
                 </v-col>
               </v-row>
-            </div>
+            </div> -->
 
-            <div class="horizontal-scroll my-3">
+            <div ref="scrollVdoContainer" class="horizontal-scroll my-3">
               <div
                 class="horizontal-scroll__item my-2"
                 v-for="(event, index) in course_vdo"
@@ -604,6 +603,21 @@
         </v-card>
       </v-dialog>
     </v-row>
+    <div v-if="course_is_loading">
+      <v-row dense>
+        <v-col
+          cols="6"
+          sm="4"
+          v-for="(course, course_index) in 3"
+          :key="course_index"
+        >
+          <v-card>
+            <v-skeleton-loader type="image, list-item"></v-skeleton-loader>
+          </v-card>
+        </v-col>
+      </v-row>
+    </div>
+
     <!-- IMAGE -->
     <div v-if="course_image?.length > 0 && $vuetify.breakpoint.smAndUp">
       <v-row dense>
@@ -615,7 +629,7 @@
         </v-col>
       </v-row>
 
-      <div v-if="course_image_is_loading">
+      <!-- <div v-if="course_image_is_loading">
         <v-row dense>
           <v-col
             cols="6"
@@ -628,9 +642,9 @@
             </v-card>
           </v-col>
         </v-row>
-      </div>
+      </div> -->
 
-      <div class="horizontal-scroll my-3">
+      <div ref="scrollImageContainer" class="horizontal-scroll my-3">
         <v-card
           class="horizontal-scroll__item_pc my-2"
           v-for="(event, index) in course_image"
@@ -645,6 +659,7 @@
           >
             <v-icon>mdi-eye</v-icon>
           </v-btn>
+
           <v-img
             :src="event.attachmentUrl"
             contain
@@ -658,7 +673,6 @@
               object-fit: cover;
             "
             :aspect-ratio="16 / 9"
-            @load="checkIndex(index)"
           >
             <template v-slot:placeholder>
               <v-row class="fill-height ma-0" align="center" justify="center">
@@ -680,7 +694,7 @@
           {{ $t("VDO") }}
         </v-col>
       </v-row>
-      <div v-if="course_vdo_is_loading">
+      <!-- <div v-if="course_vdo_is_loading">
         <v-row dense>
           <v-col
             cols="6"
@@ -693,9 +707,9 @@
             </v-card>
           </v-col>
         </v-row>
-      </div>
+      </div> -->
 
-      <div class="horizontal-scroll my-3">
+      <div ref="scrollVdoContainer" class="horizontal-scroll my-3">
         <div
           class="horizontal-scroll__item_pc my-2"
           v-for="(event, index) in course_vdo"
@@ -973,6 +987,8 @@ export default {
     show_attachment_dialog: false,
     biggesImage: null,
     typeImg: null,
+    // eventRefs: [],
+    // activeIndex: 0,
   }),
   async created() {
     this.order_data = JSON.parse(localStorage.getItem("Order"));
@@ -1020,8 +1036,25 @@ export default {
       limit: 10,
       page: 1,
     });
+    await this.$refs.scrollVdoContainer?.addEventListener(
+      "scroll",
+      this.trackVdoScroll
+    );
+    await this.$refs.scrollImageContainer?.addEventListener(
+      "scroll",
+      this.trackImageScroll
+    );
   },
-
+  async beforeDestroy() {
+    await this.$refs.scrollVdoContainer?.removeEventListener(
+      "scroll",
+      this.trackVdoScroll
+    );
+    await this.$refs.scrollImageContainer?.removeEventListener(
+      "scroll",
+      this.trackImageScroll
+    );
+  },
   computed: {
     ...mapGetters({
       limit_image: "CourseModules/getLimitImage",
@@ -1056,46 +1089,52 @@ export default {
       GetShortCourseMonitor: "CourseMonitorModules/GetShortCourseMonitor",
       GetCourseSeats: "CourseModules/GetCourseSeats",
     }),
+    trackImageScroll() {
+      const scrollImageContainer = this.$refs.scrollImageContainer;
+      if (!scrollImageContainer) return;
 
-    async checkIndex(index) {
-      if ((index + 1) % 7 === 0) {
-        await this.GetCourseImage({
-          course_id: this.$route.params.course_id,
-          limit: this.limit_image.limit,
-          page: this.limit_image.page + 1,
-        }).then(async () => {
-          // console.log("object :>> ", this.course_image);
-        });
+      const scrollLeft = scrollImageContainer.scrollLeft;
+      // Round to nearest 500 and check if it's a new value
+      const roundedScroll = Math.round(scrollLeft / 500) * 500;
+
+      if (
+        roundedScroll !== this.lastLoggedScroll &&
+        roundedScroll % 500 === 0
+      ) {
+        this.lastLoggedScroll = roundedScroll; // Store last logged value to prevent duplicates
+        if (this.lastLoggedScroll > 0) {
+          this.GetCourseImage({
+            course_id: this.$route.params.course_id,
+            limit: this.limit_image.limit,
+            page: this.limit_image.page + 1,
+          });
+        }
       }
     },
-    async checkIndexVdo(index) {
-      if ((index + 1) % 7 === 0) {
-        await this.GetCourseVdo({
-          course_id: this.$route.params.course_id,
-          limit: this.limit_vdo.limit,
-          page: this.limit_vdo.page + 1,
-        }).then(async () => {
-          // console.log("object :>> ", this.course_vdo);
-        });
+
+    trackVdoScroll() {
+      const scrollVdoContainer = this.$refs.scrollVdoContainer;
+      if (!scrollVdoContainer) return;
+
+      const scrollLeft = scrollVdoContainer.scrollLeft;
+      // Round to nearest 500 and check if it's a new value
+      const roundedScroll = Math.round(scrollLeft / 500) * 500;
+
+      if (
+        roundedScroll !== this.lastLoggedScroll &&
+        roundedScroll % 500 === 0
+      ) {
+        this.lastLoggedScroll = roundedScroll; // Store last logged value to prevent duplicates
+        if (this.lastLoggedScroll > 0) {
+          this.GetCourseVdo({
+            course_id: this.$route.params.course_id,
+            limit: this.limit_vdo.limit,
+            page: this.limit_vdo.page + 1,
+          });
+        }
       }
     },
-    // async checkIndex(index) {
-    //   if ((index + 1) % 7 === 0) {
-    //     await this.GetCourseImage({
-    //       course_id: this.$route.params.course_id,
-    //       page: 1 + 1,
-    //     })
-    //       .then(async (response) => {
-    //         // Assuming 'response' contains the data you want to add to this.course_image
-    //         this.course_image.push(...response.data); // Spread operator to add new items to the array
-    //         console.log("Updated course_image :>> ", this.course_image);
-    //       })
-    //       .catch((error) => {
-    //         console.error("Error fetching course image:", error);
-    //       });
-    //     console.log("index:", index);
-    //   }
-    // },
+
     showImageDialog(item) {
       this.biggesImage = item.attachmentUrl
         ? item.attachmentUrl
