@@ -23,9 +23,23 @@
             v-if="edited && coach_data?.length > 1 && coach.course_coach_id"
           >
             <v-col cols class="d-flex align-center justify-end">
-              <v-btn icon color="red" @click="removeCoachCard(coach)">
+              <!-- <v-btn icon color="red" @click="removeCoachCard(coach)">
                 <v-icon>mdi-close</v-icon>
-              </v-btn>
+              </v-btn> -->
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    v-bind="attrs"
+                    v-on="on"
+                    icon
+                    color="red"
+                    @click="removeCoachCard(coach)"
+                  >
+                    <v-icon>mdi-close</v-icon>
+                  </v-btn>
+                </template>
+                <span>{{ $t("delete") }}</span>
+              </v-tooltip>
             </v-col>
           </v-row>
           <!-- TEACH DAY -->
@@ -56,7 +70,7 @@
                   "
                 >
                   <template v-if="!teach_day?.course_coach_id">
-                    <v-btn
+                    <!-- <v-btn
                       icon
                       small
                       color="red"
@@ -64,10 +78,26 @@
                       @click="removeCoach(coach_index)"
                     >
                       <v-icon>mdi-close</v-icon>
-                    </v-btn>
+                    </v-btn> -->
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          icon
+                          small
+                          color="red"
+                          v-bind="attrs"
+                          v-on="on"
+                          v-if="!disable"
+                          @click="removeCoach(coach_index)"
+                        >
+                          <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>{{ $t("close") }}</span>
+                    </v-tooltip>
                   </template>
                   <template v-else>
-                    <v-btn
+                    <!-- <v-btn
                       icon
                       small
                       color="red"
@@ -79,7 +109,29 @@
                         )
                       "
                       ><v-icon>mdi-close</v-icon></v-btn
-                    >
+                    > -->
+
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          icon
+                          small
+                          color="red"
+                          v-bind="attrs"
+                          v-on="on"
+                          v-if="!disable"
+                          @click="
+                            DeleteCoachById(
+                              coach.course_coach_id,
+                              course_data.course_id
+                            )
+                          "
+                        >
+                          <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>{{ $t("close") }}</span>
+                    </v-tooltip>
                   </template>
                 </v-col>
               </v-row>
@@ -194,13 +246,27 @@
                   <v-row dense v-if="teach_day.day_of_week_id">
                     <v-col cols="12" v-if="teach_day.edited_coach">
                       <!-- EDIT -->
-                      <v-btn icon color="#FF6B81" @click="editCoach(teach_day)">
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon
+                            color="#FF6B81"
+                            dark
+                            v-bind="attrs"
+                            v-on="on"
+                            @click="editCoach(teach_day)"
+                          >
+                            mdi-pencil-outline
+                          </v-icon>
+                        </template>
+                        <span>{{ $t("edit") }}</span>
+                      </v-tooltip>
+                      <!-- <v-btn icon color="#FF6B81" @click="editCoach(teach_day)">
                         <v-icon>mdi-pencil-outline</v-icon>
-                      </v-btn>
+                      </v-btn> -->
                     </v-col>
                     <v-col cols="12" sm="8" v-else>
                       <!-- ADD -->
-                      <v-btn
+                      <!-- <v-btn
                         icon
                         v-if="
                           teach_day_index === coach.teach_day_data.length - 1 &&
@@ -210,10 +276,30 @@
                         @click="addTeachDay(coach)"
                       >
                         <v-icon>mdi-calendar-plus-outline</v-icon>
-                        <!-- {{ $t("add teaching day") }} -->
-                      </v-btn>
+                      </v-btn> -->
+                      <v-tooltip
+                        bottom
+                        v-if="
+                          teach_day_index === coach.teach_day_data.length - 1 &&
+                          !teach_day.edited_coach
+                        "
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon
+                            color="green"
+                            dark
+                            class="mx-2"
+                            v-bind="attrs"
+                            v-on="on"
+                            @click="addTeachDay(coach)"
+                          >
+                            mdi-calendar-plus-outline
+                          </v-icon>
+                        </template>
+                        <span>{{ $t("add teaching day") }}</span>
+                      </v-tooltip>
                       <!-- SAVE UPDATE-->
-                      <v-btn
+                      <!-- <v-btn
                         icon
                         v-if="!teach_day.edited_coach"
                         color="#FF6B81"
@@ -221,9 +307,25 @@
                         @click="saveUpdateCoach(coach, teach_day)"
                       >
                         <v-icon>mdi-content-save-plus</v-icon>
-                      </v-btn>
+                      </v-btn> -->
+                      <v-tooltip bottom v-if="!teach_day.edited_coach">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon
+                            class="mx-2"
+                            color="#FF6B81"
+                            dark
+                            v-bind="attrs"
+                            v-on="on"
+                            @click="saveUpdateCoach(coach, teach_day)"
+                          >
+                            mdi-content-save-plus
+                          </v-icon>
+                        </template>
+                        <span>{{ $t("save teaching day") }}</span>
+                      </v-tooltip>
+
                       <!-- DELETE COACH -->
-                      <v-btn
+                      <!-- <v-btn
                         icon
                         color="red"
                         v-if="
@@ -233,21 +335,52 @@
                         @click="removeTeachingDay(teach_day)"
                       >
                         <v-icon>mdi-trash-can-outline</v-icon>
-                      </v-btn>
+                      </v-btn> -->
+                      <v-tooltip
+                        bottom
+                        v-if="coach_data.length > 1 && !teach_day.edited_coach"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon
+                            color="#FF6B81"
+                            dark
+                            v-bind="attrs"
+                            v-on="on"
+                            @click="removeTeachingDay(teach_day)"
+                          >
+                            mdi-trash-can-outline
+                          </v-icon>
+                        </template>
+                        <span>{{ $t("delete teaching day") }}</span>
+                      </v-tooltip>
                       <!-- REFRESH -->
-                      <v-btn
+                      <!-- <v-btn
                         icon
                         v-if="!teach_day.edited_coach"
                         color="#FF6B81"
                         @click="refreshCoach(teach_day, coach)"
                       >
                         <v-icon>mdi-refresh</v-icon>
-                      </v-btn>
+                      </v-btn> -->
+                      <v-tooltip bottom v-if="!teach_day.edited_coach">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon
+                            color="#FF6B81"
+                            dark
+                            v-bind="attrs"
+                            v-on="on"
+                            @click="refreshCoach(teach_day, coach)"
+                          >
+                            mdi-refresh
+                          </v-icon>
+                        </template>
+                        <span>{{ $t("refresh") }}</span>
+                      </v-tooltip>
                     </v-col>
                   </v-row>
                   <v-row dense v-else>
                     <v-col cols="12" sm="4">
-                      <v-btn
+                      <!-- <v-btn
                         text
                         v-if="
                           teach_day_index === coach.teach_day_data.length - 1
@@ -256,7 +389,26 @@
                         @click="addTeachDay(coach)"
                       >
                         <v-icon>mdi-calendar-plus-outline</v-icon>
-                      </v-btn>
+                      </v-btn> -->
+                      <v-tooltip
+                        bottom
+                        v-if="
+                          teach_day_index === coach.teach_day_data.length - 1
+                        "
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon
+                            color="green"
+                            dark
+                            v-bind="attrs"
+                            v-on="on"
+                            @click="addTeachDay(coach)"
+                          >
+                            mdi-calendar-plus-outline
+                          </v-icon>
+                        </template>
+                        <span>{{ $t("teach day") }}</span>
+                      </v-tooltip>
                     </v-col>
                   </v-row>
                 </v-col>
@@ -407,16 +559,33 @@
                     <v-row dense v-if="edited">
                       <v-col cols="12" sm="4" class="mt-5 d-flex align-center">
                         <!-- EDIT -->
-                        <v-btn
+                        <!-- <v-btn
                           v-if="class_date.class_date_range.edited_options"
                           icon
                           color="#FF6B81"
                           @click="editOptions(class_date)"
                         >
                           <v-icon>mdi-pencil-outline</v-icon>
-                        </v-btn>
+                        </v-btn> -->
+                        <v-tooltip
+                          bottom
+                          v-if="class_date.class_date_range.edited_options"
+                        >
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-icon
+                              color="#FF6B81"
+                              dark
+                              v-bind="attrs"
+                              v-on="on"
+                              @click="editOptions(class_date)"
+                            >
+                              mdi-pencil-outline
+                            </v-icon>
+                          </template>
+                          <span>{{ $t("edit") }}</span>
+                        </v-tooltip>
                         <!-- SAVE UPDATE-->
-                        <v-btn
+                        <!-- <v-btn
                           icon
                           v-if="
                             !class_date.class_date_range.edited_options &&
@@ -427,9 +596,30 @@
                           @click="saveUpdateOption(class_date)"
                         >
                           <v-icon>mdi-content-save-plus</v-icon>
-                        </v-btn>
+                        </v-btn> -->
+                        <v-tooltip
+                          bottom
+                          v-if="
+                            !class_date.class_date_range.edited_options &&
+                            class_date.class_date_range.day_of_week_id
+                          "
+                        >
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-icon
+                              color="#FF6B81"
+                              dark
+                              v-bind="attrs"
+                              v-on="on"
+                              @click="saveUpdateOption(class_date)"
+                              class="mx-2"
+                            >
+                              mdi-content-save-plus
+                            </v-icon>
+                          </template>
+                          <span>{{ $t("save") }}</span>
+                        </v-tooltip>
                         <!-- ADD TIME -->
-                        <v-btn
+                        <!-- <v-btn
                           text
                           v-if="
                             class_date_index ===
@@ -440,13 +630,36 @@
                           @click="addTime(teach_day)"
                         >
                           <v-icon>mdi-timer-plus-outline</v-icon>
-                          <!-- {{ $t("add time") }} -->
-                        </v-btn>
+                          {{ $t("add time") }}
+                        </v-btn> -->
+                        <v-tooltip
+                          bottom
+                          v-if="
+                            class_date_index ===
+                              teach_day.class_date?.length - 1 &&
+                            !class_date.class_date_range.edited_options
+                          "
+                        >
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-icon
+                              color="green"
+                              dark
+                              v-bind="attrs"
+                              v-on="on"
+                              class="mx-2"
+                              @click="addTime(teach_day)"
+                            >
+                              mdi-timer-plus-outline
+                            </v-icon>
+                          </template>
+                          <span>{{ $t("add time") }}</span>
+                        </v-tooltip>
+
                         <!-- DEL TIME -->
                         <template
                           v-if="class_date.class_date_range.day_of_week_id"
                         >
-                          <v-btn
+                          <!-- <v-btn
                             v-if="
                               teach_day.class_date.length > 1 &&
                               !class_date.class_date_range.edited_options
@@ -461,11 +674,37 @@
                             "
                           >
                             <v-icon>mdi-timer-minus-outline</v-icon>
-                            <!-- {{ $t("delete time") }} -->
-                          </v-btn>
+                            {{ $t("delete time") }}
+                          </v-btn> -->
+                          <v-tooltip
+                            bottom
+                            v-if="
+                              teach_day.class_date.length > 1 &&
+                              !class_date.class_date_range.edited_options
+                            "
+                          >
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-icon
+                                color="red"
+                                dark
+                                v-bind="attrs"
+                                v-on="on"
+                                class="mx-2"
+                                @click="
+                                  removeTimeData(
+                                    teach_day.class_date,
+                                    class_date.class_date_range.time_id
+                                  )
+                                "
+                              >
+                                mdi-timer-minus-outline
+                              </v-icon>
+                            </template>
+                            <span>{{ $t("delete time") }}</span>
+                          </v-tooltip>
                         </template>
                         <template v-else>
-                          <v-btn
+                          <!-- <v-btn
                             v-if="
                               teach_day.class_date.length > 1 &&
                               !class_date.class_date_range.edited_options
@@ -476,13 +715,38 @@
                               removeTime(teach_day.class_date, class_date_index)
                             "
                           >
-                            <!-- <v-icon>22</v-icon> -->
                             <v-icon>mdi-timer-minus-outline</v-icon>
-                            <!-- {{ $t("delete time") }} -->
-                          </v-btn>
+                            {{ $t("delete time") }}
+                          </v-btn> -->
+                          <v-tooltip
+                            bottom
+                            v-if="
+                              teach_day.class_date.length > 1 &&
+                              !class_date.class_date_range.edited_options
+                            "
+                          >
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-icon
+                                color="red"
+                                dark
+                                v-bind="attrs"
+                                v-on="on"
+                                class="mx-2"
+                                @click="
+                                  removeTime(
+                                    teach_day.class_date,
+                                    class_date_index
+                                  )
+                                "
+                              >
+                                mdi-timer-minus-outline
+                              </v-icon>
+                            </template>
+                            <span>{{ $t("delete time") }}</span>
+                          </v-tooltip>
                         </template>
                         <!-- REFRESH -->
-                        <v-btn
+                        <!-- <v-btn
                           icon
                           v-if="
                             !class_date.class_date_range.edited_options &&
@@ -492,7 +756,28 @@
                           @click="refreshOptionFunction(class_date)"
                         >
                           <v-icon>mdi-refresh</v-icon>
-                        </v-btn>
+                        </v-btn> -->
+                        <v-tooltip
+                          bottom
+                          v-if="
+                            !class_date.class_date_range.edited_options &&
+                            class_date.class_date_range.day_of_week_id
+                          "
+                        >
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-icon
+                              color="#FF6B81"
+                              dark
+                              class="mx-2"
+                              v-bind="attrs"
+                              v-on="on"
+                              @click="refreshOptionFunction(class_date)"
+                            >
+                              mdi-refresh
+                            </v-icon>
+                          </template>
+                          <span>{{ $t("refresh") }}</span>
+                        </v-tooltip>
                       </v-col>
                     </v-row>
 
@@ -553,7 +838,7 @@
                   <v-row dense v-if="!teach_day.day_of_week_id && edited">
                     <v-col cols class="d-flex align-center justify-end">
                       <!-- ADD NEW COACH -->
-                      <v-btn
+                      <!-- <v-btn
                         icon
                         v-if="
                           !teach_day.edited_coach &&
@@ -570,9 +855,43 @@
                         "
                       >
                         <v-icon>mdi-content-save-plus</v-icon>
-                      </v-btn>
+                      </v-btn> -->
+                      <v-tooltip
+                        bottom
+                        v-if="
+                          !teach_day.edited_coach &&
+                          teach_day_index ===
+                            coach.teach_day_data?.length - 1 &&
+                          class_date_index === teach_day.class_date?.length - 1
+                        "
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn
+                            icon
+                            v-if="
+                              !teach_day.edited_coach &&
+                              teach_day_index ===
+                                coach.teach_day_data?.length - 1 &&
+                              class_date_index ===
+                                teach_day.class_date?.length - 1
+                            "
+                            color="#FF6B81"
+                            v-bind="attrs"
+                            v-on="on"
+                            :disabled="
+                              checkDisableAddTeachDay(teach_day, class_date)
+                            "
+                            @click="
+                              FunctionAddNewCoach(coach, teach_day, coach_index)
+                            "
+                          >
+                            <v-icon>mdi-content-save-plus</v-icon>
+                          </v-btn>
+                        </template>
+                        <span>{{ $t("save") }}</span>
+                      </v-tooltip>
                       <!-- DEL NEW COACH -->
-                      <v-btn
+                      <!-- <v-btn
                         icon
                         color="red"
                         v-if="
@@ -583,7 +902,32 @@
                           deleteNewCoach(coach.teach_day_data, teach_day_index)
                         "
                         ><v-icon>mdi-trash-can-outline</v-icon>
-                      </v-btn>
+                      </v-btn> -->
+                      <v-tooltip
+                        bottom
+                        v-if="
+                          !teach_day.edited_coach &&
+                          class_date_index === teach_day.class_date?.length - 1
+                        "
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon
+                            color="red"
+                            dark
+                            v-bind="attrs"
+                            v-on="on"
+                            @click="
+                              deleteNewCoach(
+                                coach.teach_day_data,
+                                teach_day_index
+                              )
+                            "
+                          >
+                            mdi-trash-can-outline
+                          </v-icon>
+                        </template>
+                        <span>{{ $t("delete") }}</span>
+                      </v-tooltip>
                     </v-col>
                   </v-row>
                   <v-row

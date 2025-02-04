@@ -18,7 +18,7 @@
         :title="`${$t('package no.')} ${index + 1}`"
       >
         <template slot="actions">
-          <v-btn
+          <!-- <v-btn
             v-if="
               !item_package.course_package_option_id &&
               edited &&
@@ -30,8 +30,29 @@
             @click="saveAddNewPackage(item_package)"
           >
             <v-icon>mdi-content-save-all-outline</v-icon>
-          </v-btn>
-          <v-btn
+          </v-btn> -->
+          <v-tooltip
+            bottom
+            v-if="
+              !item_package.course_package_option_id &&
+              edited &&
+              item_package.add_new_package
+            "
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                v-bind="attrs"
+                v-on="on"
+                :disabled="checked()"
+                icon
+                color="#FF6B81"
+                @click="saveAddNewPackage(item_package)"
+                ><v-icon>mdi-content-save-all-outline</v-icon></v-btn
+              >
+            </template>
+            <span>{{ $t("save package") }}</span>
+          </v-tooltip>
+          <!-- <v-btn
             v-if="
               !item_package.course_package_option_id && data_package?.length > 1
             "
@@ -39,7 +60,25 @@
             color="red"
             @click="removePackage(index, item_package)"
             ><v-icon>mdi-close</v-icon></v-btn
+          > -->
+          <v-tooltip
+            bottom
+            v-if="
+              !item_package.course_package_option_id && data_package?.length > 1
+            "
           >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                v-bind="attrs"
+                v-on="on"
+                icon
+                color="red"
+                @click="removePackage(index, item_package)"
+                ><v-icon>mdi-close</v-icon></v-btn
+              >
+            </template>
+            <span>{{ $t("delete package") }}</span>
+          </v-tooltip>
         </template>
       </headerCard>
       <v-card-text class="pt-0">
@@ -120,15 +159,29 @@
               <!-- BUTTONS -->
               <v-col cols="12" sm="4" class="mt-6">
                 <!-- EDIT -->
-                <v-btn
+                <!-- <v-btn
                   v-if="item_package.edit_package"
                   icon
                   color="#FF6B81"
                   @click="editPackage(item_package)"
                   ><v-icon>mdi-pencil-outline</v-icon></v-btn
-                >
+                > -->
+                <v-tooltip bottom v-if="item_package.edit_package">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      v-if="item_package.edit_package"
+                      icon
+                      color="#FF6B81"
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="editPackage(item_package)"
+                      ><v-icon>mdi-pencil-outline</v-icon></v-btn
+                    >
+                  </template>
+                  <span>{{ $t("edit") }}</span>
+                </v-tooltip>
                 <!-- SAVE -->
-                <v-btn
+                <!-- <v-btn
                   v-if="
                     !item_package.edit_package &&
                     edited &&
@@ -139,17 +192,30 @@
                   color="#FF6B81"
                   @click="saveUpdatePackage(index, data_package)"
                   ><v-icon>mdi-content-save-all-outline</v-icon></v-btn
-                >
-                <!-- DELETE -->
-                <!-- <v-btn
-                  v-if="!item_package.edit_package"
-                  icon
-                  color="#FF6B81"
-                  @click="deletePackage(index, data_package)"
-                  ><v-icon>mdi-delete-outline</v-icon></v-btn
                 > -->
+                <v-tooltip
+                  bottom
+                  v-if="
+                    !item_package.edit_package &&
+                    edited &&
+                    !item_package.add_new_package
+                  "
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      v-bind="attrs"
+                      v-on="on"
+                      :disabled="checkedPackage(item_package)"
+                      icon
+                      color="#FF6B81"
+                      @click="saveUpdatePackage(index, data_package)"
+                      ><v-icon>mdi-content-save-all-outline</v-icon></v-btn
+                    >
+                  </template>
+                  <span>{{ $t("save package") }}</span>
+                </v-tooltip>
                 <!-- REFRESH -->
-                <v-btn
+                <!-- <v-btn
                   v-if="
                     !item_package.edit_package &&
                     edited &&
@@ -159,7 +225,36 @@
                   color="#FF6B81"
                   @click="refreshPackage(item_package)"
                   ><v-icon>mdi-refresh</v-icon></v-btn
+                > -->
+                <v-tooltip
+                  bottom
+                  v-if="
+                    !item_package.edit_package &&
+                    !item_package.add_new_package &&
+                    edited
+                  "
                 >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      icon
+                      color="#FF6B81"
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="refreshPackage(item_package)"
+                      ><v-icon>mdi-refresh</v-icon></v-btn
+                    >
+                  </template>
+                  <span>{{ $t("refresh") }}</span>
+                </v-tooltip>
+
+                <!-- DELETE -->
+                <!-- <v-btn
+                  v-if="!item_package.edit_package"
+                  icon
+                  color="#FF6B81"
+                  @click="deletePackage(index, data_package)"
+                  ><v-icon>mdi-delete-outline</v-icon></v-btn
+                > -->
               </v-col>
             </v-row>
           </v-card-text>
@@ -266,14 +361,29 @@
                   <!-- BUTTONS -->
                   <v-col cols="12" sm="8">
                     <!-- EDIT -->
-                    <v-btn
+                    <!-- <v-btn
                       v-if="option.edit_package_option"
                       icon
                       color="#FF6B81"
                       @click="editPackageOption(option)"
                       ><v-icon>mdi-pencil-outline</v-icon></v-btn
-                    >
-                    <v-btn
+                    > -->
+                    <v-tooltip bottom v-if="option.edit_package_option">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          icon
+                          color="#FF6B81"
+                          v-bind="attrs"
+                          v-on="on"
+                          @click="editPackageOption(option)"
+                          ><v-icon>mdi-pencil-outline</v-icon></v-btn
+                        >
+                      </template>
+                      <span>{{ $t("edit") }}</span>
+                    </v-tooltip>
+
+                    <!-- ADD OPTIONS -->
+                    <!-- <v-btn
                       v-if="
                         option_index === item_package.options.length - 1 &&
                         !option.edit_package_option
@@ -283,9 +393,31 @@
                       color="green"
                     >
                       <v-icon>mdi-plus-box-multiple</v-icon>
-                    </v-btn>
+                    </v-btn> -->
+
+                    <v-tooltip
+                      bottom
+                      v-if="
+                        option_index === item_package.options.length - 1 &&
+                        !option.edit_package_option
+                      "
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          v-bind="attrs"
+                          v-on="on"
+                          @click="addOptions(item_package.options)"
+                          icon
+                          color="green"
+                        >
+                          <v-icon>mdi-plus-box-multiple</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>{{ $t("add period") }}</span>
+                    </v-tooltip>
+
                     <!-- SAVE -->
-                    <v-btn
+                    <!-- <v-btn
                       v-if="
                         !option.edit_package_option &&
                         !option.add_new_option &&
@@ -296,9 +428,30 @@
                       color="#FF6B81"
                       @click="saveUpdatePackageOption(option, item_package)"
                       ><v-icon>mdi-content-save-all-outline</v-icon></v-btn
+                    > -->
+                    <v-tooltip
+                      bottom
+                      v-if="
+                        !option.edit_package_option &&
+                        !option.add_new_option &&
+                        !item_package.add_new_package
+                      "
                     >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          v-bind="attrs"
+                          v-on="on"
+                          :disabled="checkedOption(option)"
+                          icon
+                          color="#FF6B81"
+                          @click="saveUpdatePackageOption(option, item_package)"
+                          ><v-icon>mdi-content-save-all-outline</v-icon></v-btn
+                        >
+                      </template>
+                      <span>{{ $t("save option") }}</span>
+                    </v-tooltip>
                     <!-- DELETE -->
-                    <v-btn
+                    <!-- <v-btn
                       v-if="
                         !option.edit_package_option &&
                         item_package.options?.length > 1
@@ -313,9 +466,34 @@
                         )
                       "
                       ><v-icon>mdi-delete-outline</v-icon></v-btn
+                    > -->
+                    <v-tooltip
+                      bottom
+                      v-if="
+                        !option.edit_package_option &&
+                        item_package.options?.length > 1
+                      "
                     >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          v-bind="attrs"
+                          v-on="on"
+                          icon
+                          color="#FF6B81"
+                          @click="
+                            deletePackageOption(
+                              option_index,
+                              option,
+                              item_package.options
+                            )
+                          "
+                          ><v-icon>mdi-delete-outline</v-icon></v-btn
+                        >
+                      </template>
+                      <span>{{ $t("delete period") }}</span>
+                    </v-tooltip>
                     <!-- REFRESH -->
-                    <v-btn
+                    <!-- <v-btn
                       v-if="
                         !option.edit_package_option &&
                         !option.add_new_option &&
@@ -325,7 +503,27 @@
                       color="#FF6B81"
                       @click="refreshPackageOption(option)"
                       ><v-icon>mdi-refresh</v-icon></v-btn
+                    > -->
+                    <v-tooltip
+                      bottom
+                      v-if="
+                        !option.edit_package_option &&
+                        !option.add_new_option &&
+                        !item_package.add_new_package
+                      "
                     >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          v-bind="attrs"
+                          v-on="on"
+                          icon
+                          color="#FF6B81"
+                          @click="refreshPackageOption(option)"
+                          ><v-icon>mdi-refresh</v-icon></v-btn
+                        >
+                      </template>
+                      <span>{{ $t("refresh") }}</span>
+                    </v-tooltip>
                   </v-col>
                 </v-row>
                 <v-row dense v-else>

@@ -70,6 +70,7 @@
   "add new teachday succeed": "เพิ่มวันสอนสำเร็จ",
   "add coaach succeed": "เพิ่มโค้ชสำเร็จ",
   "as the number of seats in the package is less than the number of seats available for current students": "เนื่องจากจำนวนที่นั่งในแพ็คเกจน้อยกว่าจำนวนที่นั่งว่างสำหรับนักศึกษาปัจจุบัน",
+  "add options":"เพิ่มช่วงเวลา",
 
   "date list": "รายการวันที่",
   "baht": "บาท",
@@ -292,6 +293,8 @@
   "day of Week cannot be deleted as there are students in this Day of Week": "ไม่สามารถลบวันในสัปดาห์ได้เนื่องจากมีนักเรียนอยู่ในวันในสัปดาห์นี้",
   "do you want to create a package": "คุณต้องการเพิ่มแพ็คเกจใช่หรือไม่?",
   "delete holiday success":"ลบวันหยุดสำเร็จ",
+  "delete":"ลบ",
+  "delete package":"ลบแพ็กเกจ",
 
   "edit": "แก้ไข",
   "edit wls": "แก้ไขอาณาจักร",
@@ -726,6 +729,7 @@
   "recommendation": "( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ ขนาดไฟล์ไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG )",
   "role": "บทบาท",
   "recommendations System satisfaction": "คำแนะนำ ความพึงพอใจของระบบ",
+  "refresh":"รีเฟรข",
 
   "study start": "วันที่เริ่มเรียน",
   "study end": "วันที่เรียนจบ",
@@ -841,6 +845,10 @@
   "system satisfaction": "ความพึงพอใจของระบบ",
   "some students or students have already purchased the course": "นักเรียนคนนี้หรือนักเรียนบางส่วนได้ซื้อหลักสูตรแล้ว",
   "select congenital disease": "กรุณาเลือกโรคประจำตัว/อาหารที่แพ้",
+  "save package":"บันทึกแพ็กเกจ",
+  "save option":"บันทึกช่วงเวลา",
+  "save teaching day":"บันทึกวันสอน",
+
 
   "study time": "เวลาเรียน",
   "take annual leave": "ลาพักร้อนประจำปี",
@@ -928,6 +936,7 @@
   "this teaching day cannot be deleted as the coach must have at least 1 teaching day": "วันสอนนี้ไม่สามารถลบได้ เนื่องจากโค้ชต้องมีวันสอนอย่างน้อย 1 วัน",
   "this Time cannot be deleted. Because have student in course": "เวลานี้ไม่สามารถลบได้ เพราะมีนักเรียนอยู่ในหลักสูตร",
   "teaching time cannot be deleted because there must be 1 teaching time per teaching day": "ไม่สามารถลบเวลาสอนได้เนื่องจากต้องมีเวลาสอน 1 ครั้งต่อวันสอน",
+  "teach day":"เพิ่มวันสอน",
 
   "unable to update the compensation day": "ไม่สามารถอัปเดตวันชดเชยได้เนื่องจากวันชดเชยตรงกับวันหยุด โปรดเลือกวันชดเชยใหม่",
   "unable to update the compensation day because the compensation day coincides with the coach's leave": "ไม่สามารถอัปเดตวันชดเชยได้เนื่องจากวันชดเชยตรงกับวันลาโค้ช กรุณาเลือกวันชดเชยใหม่",
