@@ -582,7 +582,7 @@ const coachModules = {
         // console.log('user_detail', user_detail)
         // let loaclhost = "http://localhost:3000"
         // const { data } = await axios.post(`${loaclhost}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}/timeStart/${time_start}/timeEnd/${time_end}`, {
-          const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}/timeStart/${time_start}/timeEnd/${time_end}`, {
+        const { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/coach/${user_detail.account_id}/course/${course_id}/timeStart/${time_start}/timeEnd/${time_end}`, {
           "date": date,
           "timeId": time_id,
           "timeStart": time_start,
