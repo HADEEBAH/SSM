@@ -209,6 +209,7 @@
   "course has been created": "( สร้างคอร์สเรียบร้อยแล้ว )",
   "cannot resave the course to their parents": "ไม่สามารถบันทึกหลักสูตรใหม่ให้ผู้ปกครองได้",
   "cannot delete a coach as there must be at least 1 coach listed in the course": "ไม่สามารถลบโค้ชได้ เนื่องจากต้องมีโค้ชอย่างน้อย 1 คนอยู่ในรายการ",
+  "can't select these dates because they are duplications of existing schedules":"ไม่สามารถเลือกวันที่เหล่านี้ได้เนื่องจากซ้ำกับกำหนดการที่มีอยู่",
 
   "day": "วัน",
   "day and date": "วันและวันที่",
@@ -293,6 +294,7 @@
   "day of Week cannot be deleted because there is a student with an order status of pending payment for this Day of Week": "ไม่สามารถลบวันในสัปดาห์ได้เนื่องจากมีนักเรียนที่มีสถานะคำสั่งรอการชำระเงินสำหรับวันในสัปดาห์นี้",
   "day of Week cannot be deleted as there are students in this Day of Week": "ไม่สามารถลบวันในสัปดาห์ได้เนื่องจากมีนักเรียนอยู่ในวันในสัปดาห์นี้",
   "do you want to create a package": "คุณต้องการเพิ่มแพ็คเกจใช่หรือไม่?",
+  "delete holiday success":"ลบวันหยุดสำเร็จ",
   "delete":"ลบ",
   "delete package":"ลบแพ็กเกจ",
 
