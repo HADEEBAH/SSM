@@ -1562,6 +1562,17 @@ const CourseModules = {
             timerProgressBar: true,
           })
           context.dispatch("GetCourse", course_id)
+        } else if (error.response.data.message == "Please upload only 1 video link.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("please upload only 1 video link"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
         } else if (error.response.data.message.message == "Image invalid.") {
           Swal.fire({
             icon: "error",
@@ -1967,6 +1978,17 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
+        } else if (error.response.data.message == "Please upload only 1 video link.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("please upload only 1 video link"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
         } else if (error.response.data.message == "File too large") {
           Swal.fire({
             icon: "warning",
@@ -2062,8 +2084,8 @@ const CourseModules = {
         // let { data } = await axios.get(`${localhost}/api/v1/course/attcahment/${course_id}`)
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/attcahment/${course_id}`)
         if (data.statusCode === 200) {
-          if (data.data.art_work_image_video.length > 0) {
-            for (const artwork of data.data.art_work_image_video) {
+          if (data.data?.art_work_image_video?.length > 0) {
+            for (const artwork of data.data?.art_work_image_video) {
               artwork.attachmentUrl = artwork.attachmentCourse ? `${process.env.VUE_APP_URL}/api/v1/files/${artwork.attachmentCourse}` : null
             }
             // for (const artwork of data.data) {
@@ -2781,6 +2803,17 @@ const CourseModules = {
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
             text: VueI18n.t("invalid image"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "Please upload only 1 video link.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("please upload only 1 video link"),
             timer: 3000,
             showDenyButton: false,
             showCancelButton: false,
