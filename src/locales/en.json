@@ -388,6 +388,8 @@
   "full courses": "Full courses",
   "full course information": "Full course information",
   "full day leave": "Full day leave",
+  "first name - last name(thai)": "First name - last name(ไทย)",
+  "first name - last name(eng)": "First name - last name(อังกฤษ)",
 
   "graduating students": "Graduated Students",
   "general": "General",
@@ -606,7 +608,7 @@
   "please filter yourse nickname and class": "Please fill in your nickname, grade level, school name, or congenital disease completely",
   "please filter yourse class": "Please fill in your class",
   "please filter yourse more class": "Please fill in your class",
-  "please filter yourse school": "Please fill in your school name",
+  "please filter yourse school": "Please fill in school name of",
   "please filter yourse nickname": "Please fill in your nickname",
   "please filter yourse class or nickname": "Please fill in your nickname or class",
   "please filter yourse congenitalDisease": "Please fill in your congenital disease",
@@ -896,6 +898,10 @@
   "save package":"Save Package",
   "save option":"Save Option",
   "save teaching day":"Save Teaching day",
+  "select student":"Select",
+  "student detail":"Student detail",
+
+
   
 
   "study time": "Study Time",

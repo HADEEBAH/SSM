@@ -348,6 +348,8 @@
   "first name - last name booker": "ชื่อ-นามสกุลผู้จอง",
   "first name - last name student": "ชื่อ-สกุลผู้เรียน",
   "first name - last name": "ชื่อ-สกุล",
+  "first name - last name(thai)": "ชื่อ-สกุล(ไทย)",
+  "first name - last name(eng)": "ชื่อ-สกุล(อังกฤษ)",
   "filter": "ตัวกรอง",
   "full": "เต็มวัน",
   "full course": "คอร์สเรียนเต็ม",
@@ -571,7 +573,7 @@
   "please filter yourse class": "กรุณากรอกระดับชั้น",
   "please filter yourse more class": "กรุณากรอกระดับชั้น",
   "please filter yourse nickname": "กรุณากรอกชื่อเล่น",
-  "please filter yourse school": "กรุณากรอกชื่อโรงเรียน",
+  "please filter yourse school": "กรุณากรอกชื่อโรงเรียนของนักเรียน",
   "please filter yourse class or nickname": "กรุณากรอกชื่อเล่น หรือ ระดับชั้น",
   "please filter yourse congenitalDisease": "กรุณากรอกโรคประจำตัว/อาหารที่แพ้",
   "please complete personal information": "กรุณากรอกข้อมูลส่วนตัวให้ครบถ้วนหรือกดปุ่มยกเลิกกรณีไม่ต้องการแก้ไขข้อมูล",
@@ -856,6 +858,8 @@
   "save package":"บันทึกแพ็กเกจ",
   "save option":"บันทึกช่วงเวลา",
   "save teaching day":"บันทึกวันสอน",
+  "select student":"เลือก",
+  "student detail":"ข้อมูลเพิ่มเติม",
 
 
   "study time": "เวลาเรียน",
