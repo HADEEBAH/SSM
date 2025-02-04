@@ -377,7 +377,8 @@
         "
         v-if="
           course_order.apply_for_parent &&
-          profile_detail?.userRoles?.roleId === 'R_4'
+          profile_detail?.userRoles?.roleId === 'R_4' &&
+          profile_detail?.mystudents?.length >= 1
         "
       >
         <v-card
@@ -468,7 +469,6 @@
                     outlined
                     v-model="data_student.firstNameEn"
                     :placeholder="$t('english first name')"
-                    disabled
                   ></v-text-field>
                 </v-col>
                 <!-- last eng -->
@@ -482,7 +482,6 @@
                     outlined
                     v-model="data_student.lastNameEn"
                     :placeholder="$t('english last name')"
-                    disabled
                   ></v-text-field>
                 </v-col>
                 <!-- thai name -->
@@ -815,253 +814,773 @@
       </template>
 
       <!-- STUDENT -->
-      <div
-        v-for="(student, index_student) in course_order.students.filter(
-          (v) => v.is_other === true
-        )"
-        :key="index_student"
-      >
-        <v-row dense v-if="!student.selecte_checked">
-          <v-col cols="auto"
-            ><v-icon color="#ff6b81"
-              >mdi-card-account-details-outline</v-icon
-            ></v-col
-          >
-          <v-col class="text-lg font-bold">{{
-            `${$t("learner")} ${index_student + 1}`
-          }}</v-col>
-          <v-col cols="auto">
-            <v-btn @click="removeStudent(student)" small icon color="red" dark
-              ><v-icon>mdi-close</v-icon></v-btn
+      <!-- ADD STUDENT !BY PARENT -->
+      <div v-if="!course_order.apply_for_parent">
+        <div
+          v-for="(student, index_student) in course_order.students.filter(
+            (v) => v.is_other === true
+          )"
+          :key="index_student"
+        >
+          <v-row dense v-if="!student.selecte_checked">
+            <v-col cols="auto"
+              ><v-icon color="#ff6b81"
+                >mdi-card-account-details-outline</v-icon
+              ></v-col
             >
-          </v-col>
-        </v-row>
-        <v-card outlined class="mb-3" v-if="!student.selecte_checked">
-          <v-card-text>
-            <v-row dense class="d-flex align-start">
-              <v-col cols="12">
-                <labelCustom
-                  :text="$t('username') + ' (' + $t('optional') + ')'"
-                ></labelCustom>
-                <v-text-field
-                  dense
-                  outlined
-                  color="#ff6b81"
-                  :rules="usernameRules"
-                  @keydown="Validation($event, 'en-number')"
-                  v-model="student.username"
-                  @keyup.enter="
-                    student.username.length > 3
-                      ? checkUsername(
-                          student.username,
-                          'student',
-                          index_student
-                        )
-                      : ''
-                  "
-                  :placeholder="$t('username')"
-                  append-outer-icon="mdi-magnify"
-                  @click:append-outer="
-                    checkUsername(student.username, 'student', index_student)
-                  "
-                >
-                  <template v-slot:append>
-                    <v-icon v-if="student.account_id" color="green"
-                      >mdi-checkbox-marked-circle-outline</v-icon
-                    >
-                  </template>
-                </v-text-field>
-              </v-col>
-            </v-row>
-            <v-row dense>
-              <v-col>
-                <template v-if="!student.account_id">
-                  <label>
-                    {{ $t("if you don't have an account yet, please") }}
-                  </label>
-                  <label
-                    class="text-[#ff6b81] underline cursor-pointer mt-5"
-                    @click="registerStudent"
-                    >{{ $t("register") }} One ID</label
-                  >
-                </template>
-              </v-col>
-            </v-row>
-            <template v-if="student.account_id">
-              <v-row dense>
-                <v-col cols="12" sm="6">
-                  <labelCustom
-                    required
-                    :text="$t('first name(english)')"
-                  ></labelCustom>
-                  <v-text-field
-                    :disabled="student.account_id ? true : false"
-                    dense
-                    outlined
-                    v-model="student.firstname_en"
-                    :placeholder="$t('english first name')"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6">
-                  <labelCustom
-                    required
-                    :text="$t('last name(english)')"
-                  ></labelCustom>
-                  <v-text-field
-                    :disabled="student.account_id ? true : false"
-                    dense
-                    outlined
-                    v-model="student.lastname_en"
-                    :placeholder="$t('english last name')"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-
-              <v-row dense>
-                <v-col cols="12" sm="6">
-                  <labelCustom required :text="$t('nickname')"></labelCustom>
-                  <v-text-field
-                    dense
-                    outlined
-                    v-model="student.nicknameTh"
-                    :placeholder="$t('please filter yourse nickname')"
-                    color="#ff6B81"
-                    @keydown="Validation($event, 'free-nonum')"
-                    @input="realtimeCheckNickname(student.nicknameTh)"
-                  ></v-text-field>
-                  <!-- :disabled="student?.nicknameData" -->
-                </v-col>
-                <!-- CLASS -->
-                <v-col
-                  cols="12"
-                  sm="6"
-                  v-if="
-                    student.role === 'R_5' ||
-                    student.role === 'R_4' ||
-                    !student.role
-                  "
-                >
-                  <labelCustom required :text="$t('class')"></labelCustom>
-                  <!-- :disabled="student?.classData" -->
-
-                  <v-autocomplete
-                    v-model="student.class"
-                    :items="class_list"
-                    item-text="classNameTh"
-                    color="#ff6B81"
-                    item-color="#ff6b81"
-                    outlined
-                    dense
-                    @input="realtimeCheckClass(student.class, student)"
-                    :placeholder="$t('please specify class')"
-                  >
-                    <!-- :disabled="student?.classData" -->
-                    <template #no-data>
-                      <v-list-item>
-                        {{ $t("data not found") }}
-                      </v-list-item>
-                    </template>
-                  </v-autocomplete>
-                </v-col>
-                <!-- SCHOOL -->
-                <v-col
-                  cols="12"
-                  sm="6"
-                  v-if="
-                    student.role === 'R_5' ||
-                    student.role === 'R_4' ||
-                    !student.role
-                  "
-                >
-                  <labelCustom required :text="$t('school')"></labelCustom>
-                  <!-- :disabled="student?.classData" -->
-                  <v-text-field
-                    :placeholder="$t('please specify the name of the school')"
-                    v-model="student.school"
-                    outlined
-                    dense
-                    color="#ff6b81"
-                  >
-                    <!-- :disabled="student.schoolData" -->
-                  </v-text-field>
-                </v-col>
-                <!-- ALERGICT -->
-                <v-col
-                  cols="12"
-                  sm="6"
-                  v-if="
-                    student.role === 'R_5' ||
-                    student.role === 'R_4' ||
-                    !student.role
-                  "
-                >
-                  <label-custom
-                    required
-                    :text="$t('congenital disease')"
-                  ></label-custom>
-                  <v-text-field
-                    :placeholder="$t('please specify congenital disease')"
-                    v-model="student.congenital"
-                    outlined
-                    dense
-                    color="#ff6b81"
-                  >
-                    <!-- :disabled="student.congenitalData" -->
-                  </v-text-field>
-                </v-col>
-                <v-col
-                  cols="12"
-                  sm="6"
-                  v-if="
-                    student.class === 'อื่นๆ' &&
-                    (student.role === 'R_5' ||
-                      student.role === 'R_4' ||
-                      !student.role)
-                  "
-                >
-                  <labelCustom
-                    required
-                    :text="$t('enter your more class')"
-                  ></labelCustom>
-                  <v-text-field
-                    v-model="student.otherClass"
-                    :placeholder="$t('please specify more details of class')"
-                    outlined
-                    color="#ff6b81"
-                    dense
-                  >
-                  </v-text-field>
-                </v-col>
-              </v-row>
-            </template>
-          </v-card-text>
-        </v-card>
-        <div v-if="!course_order.apply_for_parent">
-          <v-row
-            class="mb-3"
-            dense
-            v-if="
-              index_student ===
-              course_order.students.filter((v) => v.is_other === true).length -
-                1
-            "
-          >
-            <v-col>
-              <v-btn
-                v-if="!checkMaximumStudent()"
-                @click="addStudent"
-                text
-                dense
-                color="#ff6b81"
+            <v-col class="text-lg font-bold">{{
+              `${$t("learner")} ${index_student + 1}`
+            }}</v-col>
+            <v-col cols="auto">
+              <v-btn @click="removeStudent(student)" small icon color="red" dark
+                ><v-icon>mdi-close</v-icon></v-btn
               >
-                <v-icon>mdi-plus-circle-outline</v-icon>
-                {{ $t("add a learner") }}
-              </v-btn>
             </v-col>
           </v-row>
+          <v-card outlined class="mb-3" v-if="!student.selecte_checked">
+            <v-card-text>
+              <v-row dense class="d-flex align-start">
+                <v-col cols="12">
+                  <labelCustom
+                    :text="$t('username') + ' (' + $t('optional') + ')'"
+                  ></labelCustom>
+                  <v-text-field
+                    dense
+                    outlined
+                    color="#ff6b81"
+                    :rules="usernameRules"
+                    @keydown="Validation($event, 'en-number')"
+                    v-model="student.username"
+                    @keyup.enter="
+                      student.username.length > 3
+                        ? checkUsername(
+                            student.username,
+                            'student',
+                            index_student
+                          )
+                        : ''
+                    "
+                    :placeholder="$t('username')"
+                    append-outer-icon="mdi-magnify"
+                    @click:append-outer="
+                      checkUsername(student.username, 'student', index_student)
+                    "
+                  >
+                    <template v-slot:append>
+                      <v-icon v-if="student.account_id" color="green"
+                        >mdi-checkbox-marked-circle-outline</v-icon
+                      >
+                    </template>
+                  </v-text-field>
+                </v-col>
+              </v-row>
+              <v-row dense>
+                <v-col>
+                  <template v-if="!student.account_id">
+                    <label>
+                      {{ $t("if you don't have an account yet, please") }}
+                    </label>
+                    <label
+                      class="text-[#ff6b81] underline cursor-pointer mt-5"
+                      @click="registerStudent"
+                      >{{ $t("register") }} One ID</label
+                    >
+                  </template>
+                </v-col>
+              </v-row>
+              <template v-if="student.account_id">
+                <v-row dense>
+                  <v-col cols="12" sm="6">
+                    <labelCustom
+                      required
+                      :text="$t('first name(english)')"
+                    ></labelCustom>
+                    <v-text-field
+                      :disabled="student.account_id ? true : false"
+                      dense
+                      outlined
+                      v-model="student.firstname_en"
+                      :placeholder="$t('english first name')"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6">
+                    <labelCustom
+                      required
+                      :text="$t('last name(english)')"
+                    ></labelCustom>
+                    <v-text-field
+                      :disabled="student.account_id ? true : false"
+                      dense
+                      outlined
+                      v-model="student.lastname_en"
+                      :placeholder="$t('english last name')"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+
+                <v-row dense>
+                  <v-col cols="12" sm="6">
+                    <labelCustom required :text="$t('nickname')"></labelCustom>
+                    <v-text-field
+                      dense
+                      outlined
+                      v-model="student.nicknameTh"
+                      :placeholder="$t('please filter yourse nickname')"
+                      color="#ff6B81"
+                      @keydown="Validation($event, 'free-nonum')"
+                      @input="realtimeCheckNickname(student.nicknameTh)"
+                    ></v-text-field>
+                    <!-- :disabled="student?.nicknameData" -->
+                  </v-col>
+                  <!-- CLASS -->
+                  <v-col
+                    cols="12"
+                    sm="6"
+                    v-if="
+                      student.role === 'R_5' ||
+                      student.role === 'R_4' ||
+                      !student.role
+                    "
+                  >
+                    <labelCustom required :text="$t('class')"></labelCustom>
+                    <!-- :disabled="student?.classData" -->
+
+                    <v-autocomplete
+                      v-model="student.class"
+                      :items="class_list"
+                      item-text="classNameTh"
+                      color="#ff6B81"
+                      item-color="#ff6b81"
+                      outlined
+                      dense
+                      @input="realtimeCheckClass(student.class, student)"
+                      :placeholder="$t('please specify class')"
+                    >
+                      <!-- :disabled="student?.classData" -->
+                      <template #no-data>
+                        <v-list-item>
+                          {{ $t("data not found") }}
+                        </v-list-item>
+                      </template>
+                    </v-autocomplete>
+                  </v-col>
+                  <!-- SCHOOL -->
+                  <v-col
+                    cols="12"
+                    sm="6"
+                    v-if="
+                      student.role === 'R_5' ||
+                      student.role === 'R_4' ||
+                      !student.role
+                    "
+                  >
+                    <labelCustom required :text="$t('school')"></labelCustom>
+                    <!-- :disabled="student?.classData" -->
+                    <v-text-field
+                      :placeholder="$t('please specify the name of the school')"
+                      v-model="student.school"
+                      outlined
+                      dense
+                      color="#ff6b81"
+                    >
+                      <!-- :disabled="student.schoolData" -->
+                    </v-text-field>
+                  </v-col>
+                  <!-- ALERGICT -->
+                  <v-col
+                    cols="12"
+                    sm="6"
+                    v-if="
+                      student.role === 'R_5' ||
+                      student.role === 'R_4' ||
+                      !student.role
+                    "
+                  >
+                    <label-custom
+                      required
+                      :text="$t('congenital disease')"
+                    ></label-custom>
+                    <v-text-field
+                      :placeholder="$t('please specify congenital disease')"
+                      v-model="student.congenital"
+                      outlined
+                      dense
+                      color="#ff6b81"
+                    >
+                      <!-- :disabled="student.congenitalData" -->
+                    </v-text-field>
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    sm="6"
+                    v-if="
+                      student.class === 'อื่นๆ' &&
+                      (student.role === 'R_5' ||
+                        student.role === 'R_4' ||
+                        !student.role)
+                    "
+                  >
+                    <labelCustom
+                      required
+                      :text="$t('enter your more class')"
+                    ></labelCustom>
+                    <v-text-field
+                      v-model="student.otherClass"
+                      :placeholder="$t('please specify more details of class')"
+                      outlined
+                      color="#ff6b81"
+                      dense
+                    >
+                    </v-text-field>
+                  </v-col>
+                </v-row>
+              </template>
+            </v-card-text>
+          </v-card>
+          <div v-if="!course_order.apply_for_parent">
+            <v-row
+              class="mb-3"
+              dense
+              v-if="
+                index_student ===
+                course_order.students.filter((v) => v.is_other === true)
+                  .length -
+                  1
+              "
+            >
+              <v-col>
+                <v-btn
+                  v-if="!checkMaximumStudent()"
+                  @click="addStudent"
+                  text
+                  dense
+                  color="#ff6b81"
+                >
+                  <v-icon>mdi-plus-circle-outline</v-icon>
+                  {{ $t("add a learner") }}
+                </v-btn>
+              </v-col>
+            </v-row>
+          </div>
         </div>
       </div>
-      <div v-if="course_order.apply_for_parent">
+      <!-- ADD STUDENT BY PARENT && profile_detail?.mystudents?.length > 0 -->
+      <div
+        v-if="
+          course_order.apply_for_parent &&
+          add_student === true &&
+          profile_detail?.mystudents?.length >= 1
+        "
+      >
+        <div
+          v-for="(student, index_student) in course_order.students.filter(
+            (v) => v.is_other === true
+          )"
+          :key="index_student"
+        >
+          <v-row dense v-if="!student.selecte_checked">
+            <v-col cols="auto"
+              ><v-icon color="#ff6b81"
+                >mdi-card-account-details-outline</v-icon
+              ></v-col
+            >
+            <v-col class="text-lg font-bold">{{
+              `${$t("learner")} ${index_student + 1}`
+            }}</v-col>
+            <v-col cols="auto">
+              <v-btn @click="removeStudent(student)" small icon color="red" dark
+                ><v-icon>mdi-close</v-icon></v-btn
+              >
+            </v-col>
+          </v-row>
+          <v-card outlined class="mb-3" v-if="!student.selecte_checked">
+            <v-card-text>
+              <v-row dense class="d-flex align-start">
+                <v-col cols="12">
+                  <labelCustom
+                    :text="$t('username') + ' (' + $t('optional') + ')'"
+                  ></labelCustom>
+                  <v-text-field
+                    dense
+                    outlined
+                    color="#ff6b81"
+                    :rules="usernameRules"
+                    @keydown="Validation($event, 'en-number')"
+                    v-model="student.username"
+                    @keyup.enter="
+                      student.username.length > 3
+                        ? checkUsername(
+                            student.username,
+                            'student',
+                            index_student
+                          )
+                        : ''
+                    "
+                    :placeholder="$t('username')"
+                    append-outer-icon="mdi-magnify"
+                    @click:append-outer="
+                      checkUsername(student.username, 'student', index_student)
+                    "
+                  >
+                    <template v-slot:append>
+                      <v-icon v-if="student.account_id" color="green"
+                        >mdi-checkbox-marked-circle-outline</v-icon
+                      >
+                    </template>
+                  </v-text-field>
+                </v-col>
+              </v-row>
+              <v-row dense>
+                <v-col>
+                  <template v-if="!student.account_id">
+                    <label>
+                      {{ $t("if you don't have an account yet, please") }}
+                    </label>
+                    <label
+                      class="text-[#ff6b81] underline cursor-pointer mt-5"
+                      @click="registerStudent"
+                      >{{ $t("register") }} One ID</label
+                    >
+                  </template>
+                </v-col>
+              </v-row>
+              <template v-if="student.account_id">
+                <v-row dense>
+                  <v-col cols="12" sm="6">
+                    <labelCustom
+                      required
+                      :text="$t('first name(english)')"
+                    ></labelCustom>
+                    <v-text-field
+                      :disabled="student.account_id ? true : false"
+                      dense
+                      outlined
+                      v-model="student.firstname_en"
+                      :placeholder="$t('english first name')"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6">
+                    <labelCustom
+                      required
+                      :text="$t('last name(english)')"
+                    ></labelCustom>
+                    <v-text-field
+                      :disabled="student.account_id ? true : false"
+                      dense
+                      outlined
+                      v-model="student.lastname_en"
+                      :placeholder="$t('english last name')"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+
+                <v-row dense>
+                  <v-col cols="12" sm="6">
+                    <labelCustom required :text="$t('nickname')"></labelCustom>
+                    <v-text-field
+                      dense
+                      outlined
+                      v-model="student.nicknameTh"
+                      :placeholder="$t('please filter yourse nickname')"
+                      color="#ff6B81"
+                      @keydown="Validation($event, 'free-nonum')"
+                      @input="realtimeCheckNickname(student.nicknameTh)"
+                    ></v-text-field>
+                    <!-- :disabled="student?.nicknameData" -->
+                  </v-col>
+                  <!-- CLASS -->
+                  <v-col
+                    cols="12"
+                    sm="6"
+                    v-if="
+                      student.role === 'R_5' ||
+                      student.role === 'R_4' ||
+                      !student.role
+                    "
+                  >
+                    <labelCustom required :text="$t('class')"></labelCustom>
+                    <!-- :disabled="student?.classData" -->
+
+                    <v-autocomplete
+                      v-model="student.class"
+                      :items="class_list"
+                      item-text="classNameTh"
+                      color="#ff6B81"
+                      item-color="#ff6b81"
+                      outlined
+                      dense
+                      @input="realtimeCheckClass(student.class, student)"
+                      :placeholder="$t('please specify class')"
+                    >
+                      <!-- :disabled="student?.classData" -->
+                      <template #no-data>
+                        <v-list-item>
+                          {{ $t("data not found") }}
+                        </v-list-item>
+                      </template>
+                    </v-autocomplete>
+                  </v-col>
+                  <!-- SCHOOL -->
+                  <v-col
+                    cols="12"
+                    sm="6"
+                    v-if="
+                      student.role === 'R_5' ||
+                      student.role === 'R_4' ||
+                      !student.role
+                    "
+                  >
+                    <labelCustom required :text="$t('school')"></labelCustom>
+                    <!-- :disabled="student?.classData" -->
+                    <v-text-field
+                      :placeholder="$t('please specify the name of the school')"
+                      v-model="student.school"
+                      outlined
+                      dense
+                      color="#ff6b81"
+                    >
+                      <!-- :disabled="student.schoolData" -->
+                    </v-text-field>
+                  </v-col>
+                  <!-- ALERGICT -->
+                  <v-col
+                    cols="12"
+                    sm="6"
+                    v-if="
+                      student.role === 'R_5' ||
+                      student.role === 'R_4' ||
+                      !student.role
+                    "
+                  >
+                    <label-custom
+                      required
+                      :text="$t('congenital disease')"
+                    ></label-custom>
+                    <v-text-field
+                      :placeholder="$t('please specify congenital disease')"
+                      v-model="student.congenital"
+                      outlined
+                      dense
+                      color="#ff6b81"
+                    >
+                      <!-- :disabled="student.congenitalData" -->
+                    </v-text-field>
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    sm="6"
+                    v-if="
+                      student.class === 'อื่นๆ' &&
+                      (student.role === 'R_5' ||
+                        student.role === 'R_4' ||
+                        !student.role)
+                    "
+                  >
+                    <labelCustom
+                      required
+                      :text="$t('enter your more class')"
+                    ></labelCustom>
+                    <v-text-field
+                      v-model="student.otherClass"
+                      :placeholder="$t('please specify more details of class')"
+                      outlined
+                      color="#ff6b81"
+                      dense
+                    >
+                    </v-text-field>
+                  </v-col>
+                </v-row>
+              </template>
+            </v-card-text>
+          </v-card>
+          <div v-if="!course_order.apply_for_parent">
+            <v-row
+              class="mb-3"
+              dense
+              v-if="
+                index_student ===
+                course_order.students.filter((v) => v.is_other === true)
+                  .length -
+                  1
+              "
+            >
+              <v-col>
+                <v-btn
+                  v-if="!checkMaximumStudent()"
+                  @click="addStudent"
+                  text
+                  dense
+                  color="#ff6b81"
+                >
+                  <v-icon>mdi-plus-circle-outline</v-icon>
+                  {{ $t("add a learner") }}
+                </v-btn>
+              </v-col>
+            </v-row>
+          </div>
+        </div>
+      </div>
+      <!-- ADD STUDENT BY PARENT && profile_detail?.mystudents?.length < 0 -->
+      <div
+        v-if="
+          course_order.apply_for_parent &&
+          profile_detail?.mystudents?.length <= 0
+        "
+      >
+        <div
+          v-for="(student, index_student) in course_order.students.filter(
+            (v) => v.is_other === true
+          )"
+          :key="index_student"
+        >
+          <v-row dense>
+            <v-col cols="auto"
+              ><v-icon color="#ff6b81"
+                >mdi-card-account-details-outline</v-icon
+              ></v-col
+            >
+            <v-col class="text-lg font-bold">{{
+              `${$t("learner")} ${index_student + 1}`
+            }}</v-col>
+            <v-col cols="auto">
+              <v-btn @click="removeStudent(student)" small icon color="red" dark
+                ><v-icon>mdi-close</v-icon></v-btn
+              >
+            </v-col>
+          </v-row>
+          <v-card outlined class="mb-3">
+            <v-card-text>
+              <v-row dense class="d-flex align-start">
+                <v-col cols="12">
+                  <labelCustom
+                    :text="$t('username') + ' (' + $t('optional') + ')'"
+                  ></labelCustom>
+                  <v-text-field
+                    dense
+                    outlined
+                    color="#ff6b81"
+                    :rules="usernameRules"
+                    @keydown="Validation($event, 'en-number')"
+                    v-model="student.username"
+                    @keyup.enter="
+                      student.username.length > 3
+                        ? checkUsername(
+                            student.username,
+                            'student',
+                            index_student
+                          )
+                        : ''
+                    "
+                    :placeholder="$t('username')"
+                    append-outer-icon="mdi-magnify"
+                    @click:append-outer="
+                      checkUsername(student.username, 'student', index_student)
+                    "
+                  >
+                    <template v-slot:append>
+                      <v-icon v-if="student.account_id" color="green"
+                        >mdi-checkbox-marked-circle-outline</v-icon
+                      >
+                    </template>
+                  </v-text-field>
+                </v-col>
+              </v-row>
+              <v-row dense>
+                <v-col>
+                  <template v-if="!student.account_id">
+                    <label>
+                      {{ $t("if you don't have an account yet, please") }}
+                    </label>
+                    <label
+                      class="text-[#ff6b81] underline cursor-pointer mt-5"
+                      @click="registerStudent"
+                      >{{ $t("register") }} One ID</label
+                    >
+                  </template>
+                </v-col>
+              </v-row>
+              <template v-if="student.account_id">
+                <v-row dense>
+                  <v-col cols="12" sm="6">
+                    <labelCustom
+                      required
+                      :text="$t('first name(english)')"
+                    ></labelCustom>
+                    <v-text-field
+                      :disabled="student.account_id ? true : false"
+                      dense
+                      outlined
+                      v-model="student.firstname_en"
+                      :placeholder="$t('english first name')"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6">
+                    <labelCustom
+                      required
+                      :text="$t('last name(english)')"
+                    ></labelCustom>
+                    <v-text-field
+                      :disabled="student.account_id ? true : false"
+                      dense
+                      outlined
+                      v-model="student.lastname_en"
+                      :placeholder="$t('english last name')"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+
+                <v-row dense>
+                  <v-col cols="12" sm="6">
+                    <labelCustom required :text="$t('nickname')"></labelCustom>
+                    <v-text-field
+                      dense
+                      outlined
+                      v-model="student.nicknameTh"
+                      :placeholder="$t('please filter yourse nickname')"
+                      color="#ff6B81"
+                      @keydown="Validation($event, 'free-nonum')"
+                      @input="realtimeCheckNickname(student.nicknameTh)"
+                    ></v-text-field>
+                    <!-- :disabled="student?.nicknameData" -->
+                  </v-col>
+                  <!-- CLASS -->
+                  <v-col
+                    cols="12"
+                    sm="6"
+                    v-if="
+                      student.role === 'R_5' ||
+                      student.role === 'R_4' ||
+                      !student.role
+                    "
+                  >
+                    <labelCustom required :text="$t('class')"></labelCustom>
+                    <!-- :disabled="student?.classData" -->
+
+                    <v-autocomplete
+                      v-model="student.class"
+                      :items="class_list"
+                      item-text="classNameTh"
+                      color="#ff6B81"
+                      item-color="#ff6b81"
+                      outlined
+                      dense
+                      @input="realtimeCheckClass(student.class, student)"
+                      :placeholder="$t('please specify class')"
+                    >
+                      <!-- :disabled="student?.classData" -->
+                      <template #no-data>
+                        <v-list-item>
+                          {{ $t("data not found") }}
+                        </v-list-item>
+                      </template>
+                    </v-autocomplete>
+                  </v-col>
+                  <!-- SCHOOL -->
+                  <v-col
+                    cols="12"
+                    sm="6"
+                    v-if="
+                      student.role === 'R_5' ||
+                      student.role === 'R_4' ||
+                      !student.role
+                    "
+                  >
+                    <labelCustom required :text="$t('school')"></labelCustom>
+                    <!-- :disabled="student?.classData" -->
+                    <v-text-field
+                      :placeholder="$t('please specify the name of the school')"
+                      v-model="student.school"
+                      outlined
+                      dense
+                      color="#ff6b81"
+                    >
+                      <!-- :disabled="student.schoolData" -->
+                    </v-text-field>
+                  </v-col>
+                  <!-- ALERGICT -->
+                  <v-col
+                    cols="12"
+                    sm="6"
+                    v-if="
+                      student.role === 'R_5' ||
+                      student.role === 'R_4' ||
+                      !student.role
+                    "
+                  >
+                    <label-custom
+                      required
+                      :text="$t('congenital disease')"
+                    ></label-custom>
+                    <v-text-field
+                      :placeholder="$t('please specify congenital disease')"
+                      v-model="student.congenital"
+                      outlined
+                      dense
+                      color="#ff6b81"
+                    >
+                      <!-- :disabled="student.congenitalData" -->
+                    </v-text-field>
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    sm="6"
+                    v-if="
+                      student.class === 'อื่นๆ' &&
+                      (student.role === 'R_5' ||
+                        student.role === 'R_4' ||
+                        !student.role)
+                    "
+                  >
+                    <labelCustom
+                      required
+                      :text="$t('enter your more class')"
+                    ></labelCustom>
+                    <v-text-field
+                      v-model="student.otherClass"
+                      :placeholder="$t('please specify more details of class')"
+                      outlined
+                      color="#ff6b81"
+                      dense
+                    >
+                    </v-text-field>
+                  </v-col>
+                </v-row>
+              </template>
+            </v-card-text>
+          </v-card>
+          <div>
+            <v-row
+              class="mb-3"
+              dense
+              v-if="
+                index_student ===
+                course_order.students.filter((v) => v.is_other === true)
+                  .length -
+                  1
+              "
+            >
+              <v-col>
+                <v-btn
+                  v-if="!checkMaximumStudent()"
+                  @click="addStudent"
+                  text
+                  dense
+                  color="#ff6b81"
+                >
+                  <v-icon>mdi-plus-circle-outline</v-icon>
+                  {{ $t("add a learner") }}
+                </v-btn>
+              </v-col>
+            </v-row>
+          </div>
+        </div>
+      </div>
+      <div
+        v-if="
+          course_order.apply_for_parent &&
+          profile_detail?.mystudents?.length >= 1
+        "
+      >
         <v-row class="mb-3" dense>
           <v-col>
             <v-btn
@@ -1487,6 +2006,7 @@ export default {
     TermOfUse,
   },
   data: () => ({
+    add_student: false,
     remove_student_button: false,
     add_student_button: false,
     validate_coach: false,
@@ -1559,30 +2079,57 @@ export default {
 
     "course_order.apply_for_parent": function () {
       if (this.course_order.apply_for_parent) {
-        this.course_order.students.push({
-          student_name: "",
-          account_id: "",
-          username: "",
-          firstname_en: "",
-          lastname_en: "",
-          tel: "",
-          parents: [
-            {
-              account_id: this.profile_detail.userOneId,
-              firstname_en: this.profile_detail.firstNameEng,
-              lastname_en: this.profile_detail.lastNameEng,
-              firstname_th: this.profile_detail.firstNameTh,
-              lastname_th: this.profile_detail.lastNameTh,
-              tel: this.profile_detail.mobileNo,
-              username: this.profile_detail.userName,
-            },
-          ],
-          is_account: false,
-          is_other: true,
-          class: null,
-          nickName: null,
-          otherClass: null,
-        });
+        if (this.add_student === true) {
+          this.course_order.students.push({
+            student_name: "",
+            account_id: "",
+            username: "",
+            firstname_en: "",
+            lastname_en: "",
+            tel: "",
+            parents: [
+              {
+                account_id: this.profile_detail.userOneId,
+                firstname_en: this.profile_detail.firstNameEng,
+                lastname_en: this.profile_detail.lastNameEng,
+                firstname_th: this.profile_detail.firstNameTh,
+                lastname_th: this.profile_detail.lastNameTh,
+                tel: this.profile_detail.mobileNo,
+                username: this.profile_detail.userName,
+              },
+            ],
+            is_account: false,
+            is_other: true,
+            class: null,
+            nickName: null,
+            otherClass: null,
+          });
+        } else if (this.profile_detail?.mystudents?.length <= 0) {
+          this.course_order.students.push({
+            student_name: "",
+            account_id: "",
+            username: "",
+            firstname_en: "",
+            lastname_en: "",
+            tel: "",
+            parents: [
+              {
+                account_id: this.profile_detail.userOneId,
+                firstname_en: this.profile_detail.firstNameEng,
+                lastname_en: this.profile_detail.lastNameEng,
+                firstname_th: this.profile_detail.firstNameTh,
+                lastname_th: this.profile_detail.lastNameTh,
+                tel: this.profile_detail.mobileNo,
+                username: this.profile_detail.userName,
+              },
+            ],
+            is_account: false,
+            is_other: true,
+            class: null,
+            nickName: null,
+            otherClass: null,
+          });
+        }
       } else {
         this.course_order.students.forEach((student, index) => {
           if (student.is_other === true) {
@@ -2511,6 +3058,7 @@ export default {
     },
     addStudent() {
       if (this.course_order.apply_for_parent) {
+        this.add_student = true;
         this.course_order.students.push({
           account_id: "",
           student_name: "",
@@ -2707,6 +3255,7 @@ export default {
         0
       ) {
         this.course_order.apply_for_others = false;
+        this.course_order.apply_for_parent = false;
       }
     },
     closeDialogParent() {
