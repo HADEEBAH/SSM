@@ -78,6 +78,10 @@
   "add coaach succeed": "Add coaach succeed",
   "as the number of seats in the package is less than the number of seats available for current students": "As the number of seats in the package is less than the number of seats available for current students",
   "add options":"Add options",
+  "add video link":"Add video link",
+  "add item":"Add item",
+
+
 
   "baht": "Baht",
   "back": "Back",
@@ -355,6 +359,7 @@
   "fail": "Fail",
   "file size": "File size",
   "file size must not exceed 5 MB": "File size must not exceed 5 MB",
+  "file size must not exceed 10 MB": "File size must not exceed 10 MB",
   "failed to resolve": "Failed to resolve",
   "failed to delete": "Failed to delete",
   "failed to delete data": "( Failed to delete data )",
@@ -422,6 +427,9 @@
   "invalid English languages": "Please enter English text",
   "invalid user name": "Please enter English text or numbers",
   "invalid user password": "Please enter English text",
+  "image":"image",
+  "invalid image":"Invalid image or video extension",
+  
 
   "is complete": "is complete",
 
@@ -453,6 +461,8 @@
   "listed by": "Listed by",
   "logout": "Log Out",
   "login": "Log in",
+  "link vdo": "Link video",
+
 
   "management": "Management",
   "manage": "Manage",
@@ -732,6 +742,7 @@
   "package cannot be deleted as there are students in this package": "package cannot be deleted as there are students in this package",
   "package cannot be deleted as there are students who have booked this package": "package cannot be deleted as there are students who have booked this package",
   "this teaching day cannot be deleted as the coach must have at least 1 teaching day": "This teaching day cannot be deleted as the coach must have at least 1 teaching day",
+  "please send only YouTube links":"Please send only YouTube links",
 
   "reason for leave": "Reason for leave",
   "read more": "Read more",

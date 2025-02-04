@@ -71,6 +71,8 @@
   "add coaach succeed": "เพิ่มโค้ชสำเร็จ",
   "as the number of seats in the package is less than the number of seats available for current students": "เนื่องจากจำนวนที่นั่งในแพ็คเกจน้อยกว่าจำนวนที่นั่งว่างสำหรับนักศึกษาปัจจุบัน",
   "add options":"เพิ่มช่วงเวลา",
+  "add video link":"เพิ่มลิ้งก์วีดิโอ",
+  "add item":"เพิ่มรายการ",
 
   "date list": "รายการวันที่",
   "baht": "บาท",
@@ -331,6 +333,7 @@
   "forgotten your password?": "ลืมรหัสผ่านใช่หรือไม่?",
   "file size": "ขนาดไฟล์",
   "file size must not exceed 5 MB": "ขนาดไฟล์ต้องไม่เกิน 5 MB",
+  "file size must not exceed 10 MB": "ขนาดไฟล์ต้องไม่เกิน 10 MB",
   "fail": "เกิดข้อผิดพลาด",
   "failed to resolve": "แก้ไขไม่สำเร็จ",
   "failed to delete": "ลบไม่สำเร็จ",
@@ -394,6 +397,9 @@
   "invalid English languages": "กรุณากรอกข้อความภาษาอังกฤษ",
   "invalid user name": "กรุณากรอกข้อความภาษาอังกฤษหรือตัวเลข",
   "invalid user password": "กรุณากรอกข้อความภาษาอังกฤษ",
+  "image":"รูปภาพ",
+  "invalid image":"นามสกุลรูปภาพหรือวิดีโอไม่ถูกต้อง",
+
 
   "january": "มกราคม",
   "june": "มิถุนายน",
@@ -423,6 +429,7 @@
   "listed by": "ทำรายการโดย",
   "logout": "ออกจากระบบ",
   "login": "เข้าสู่ระบบ",
+  "link vdo": "ลิ้งก์วีดีโอ",
 
   "management": "การจัดการ",
   "manage": "จัดการ",
@@ -696,6 +703,7 @@
   "package cannot be deleted as there must be at least one package in the course": "ไม่สามารถลบแพ็คเกจได้เนื่องจากต้องมีอย่างน้อยหนึ่งแพ็คเกจในหลักสูตร",
   "package cannot be deleted as there are students in this package": "ไม่สามารถลบแพ็คเกจได้เนื่องจากมีนักเรียนลงเรียนอยู่ในแพ็คเกจนี้",
   "package cannot be deleted as there are students who have booked this package": "ไม่สามารถลบแพ็คเกจได้เนื่องจากมีนักเรียนจองเรียนในแพ็คเกจนี้",
+  "please send only YouTube links":"กรุณากรอกลิ้งค์ให้ถูกต้อง",
 
   "receipt language": "ใบเสร็จภาษา",
   "reason for leave": "เหตุผลการลา",

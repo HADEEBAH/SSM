@@ -111,12 +111,47 @@ export const generateTimeArrayHours = (timedata) => {
     return output;
 }
 
+// export const CheckFileSize = (file, id) => {
+//     console.log('file :>> ', file);
+//     const key = document.getElementById(id)
+//     const fileSizeInBytes = file.size;
+//     const fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+//     if (fileSizeInMB >= 5 && (file.type === 'image/png' || file.type === 'image/jpeg')) {
+//         key.value = ''
+//         Swal.fire({
+//             icon: "error",
+//             title: VueI18n.t('something went wrong'),
+//             text: VueI18n.t('file size must not exceed 5 MB'),
+//             timer: 3000,
+//             timerProgressBar: true,
+//             showCancelButton: false,
+//             showConfirmButton: false,
+//         })
+//         return false
+//     } else if (fileSizeInMB >= 10 && (file.type === 'video/mp4' || file.fileType === 'video/x-matroska')) {
+//         Swal.fire({
+//             icon: "error",
+//             title: VueI18n.t('something went wrong'),
+//             text: VueI18n.t('file size must not exceed 10 MB'),
+//             timer: 3000,
+//             timerProgressBar: true,
+//             showCancelButton: false,
+//             showConfirmButton: false,
+//         })
+//     }
+//     return true
+// }
+
+
+
 export const CheckFileSize = (file, id) => {
-    const key = document.getElementById(id)
+    const key = document.getElementById(id);
     const fileSizeInBytes = file.size;
     const fileSizeInMB = fileSizeInBytes / (1024 * 1024);
-    if (fileSizeInMB >= 5) {
-        key.value = ''
+
+    // Check for image file size limit (5 MB)
+    if (fileSizeInMB >= 5 && (file.type === 'image/png' || file.type === 'image/jpeg')) {
+        key.value = '';
         Swal.fire({
             icon: "error",
             title: VueI18n.t('something went wrong'),
@@ -125,10 +160,25 @@ export const CheckFileSize = (file, id) => {
             timerProgressBar: true,
             showCancelButton: false,
             showConfirmButton: false,
-        })
-        return false
+        });
+        return false; // Prevent adding this file
     }
-    return true
+
+    // Check for video file size limit (10 MB)
+    if (fileSizeInMB >= 10 && (file.type === 'video/mp4' || file.type === 'video/x-matroska')) {
+        Swal.fire({
+            icon: "error",
+            title: VueI18n.t('something went wrong'),
+            text: VueI18n.t('file size must not exceed 10 MB'),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+        });
+        return false; // Prevent adding this file
+    }
+
+    return true; // Allow the file if no issues
 }
 
 export const CheckFileSizeType = (file, id) => {
