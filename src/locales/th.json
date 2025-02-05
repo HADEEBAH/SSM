@@ -1113,6 +1113,7 @@
   "unable to add students to cart because the course already has students listed in the cart": "ไม่สามารถเพิ่มนักเรียนลงตะกร้าได้เนื่องจากหลักสูตรมีนักเรียนอยู่ในรายการรถเข็นแล้ว",
   "unable to add students to cart because the reservation could not be added": "ไม่สามารถเพิ่มนักเรียนลงตะกร้าได้เนื่องจากไม่สามารถเพิ่มการจองเข้าไปในรายการรถเข็นได้",
 
+  "vdo":"วีดิโอ",
   "organized by": "จัดสอนโดย",
   "z": "z",
   "?": "ใช่หรือไม่"
