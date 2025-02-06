@@ -439,182 +439,189 @@
 
       <!-- DIALOG STUDENT -->
       <v-dialog v-model="dialog_student_detail" persistent max-width="600px">
-        <v-card>
-          <v-container>
-            <v-card-title>
-              <v-row dense>
-                <v-col cols="12" class="absolute right-0 top-0" align="end">
-                  <v-btn icon @click="closeEditStudentData(data_student)">
-                    <v-icon color="#ff6b81">mdi-close</v-icon>
-                  </v-btn>
-                </v-col>
-                <v-col cols="12" align="center" class="font-weight-bold">
-                  {{ $t("student detail") }}
-                </v-col>
-              </v-row>
-            </v-card-title>
-            <v-card-text>
-              <!-- <pre>
-                {{ data_student }}
-              </pre> -->
-              <v-row dense>
-                <!-- eng name -->
-                <v-col cols="12" sm="6">
-                  <labelCustom
-                    required
-                    :text="$t('first name(english)')"
-                  ></labelCustom>
-                  <v-text-field
-                    dense
-                    outlined
-                    v-model="data_student.firstNameEn"
-                    disabled
-                    :placeholder="$t('english first name')"
-                  ></v-text-field>
-                </v-col>
-                <!-- last eng -->
-                <v-col cols="12" sm="6">
-                  <labelCustom
-                    required
-                    :text="$t('last name(english)')"
-                  ></labelCustom>
-                  <v-text-field
-                    dense
-                    outlined
-                    disabled
-                    v-model="data_student.lastNameEn"
-                    :placeholder="$t('english last name')"
-                  ></v-text-field>
-                </v-col>
-                <!-- thai name -->
-                <v-col cols="12" sm="6">
-                  <labelCustom
-                    required
-                    :text="$t('first name(thai)')"
-                  ></labelCustom>
-                  <v-text-field
-                    dense
-                    outlined
-                    v-model="data_student.firstNameTh"
-                    :placeholder="$t('thai first name')"
-                    disabled
-                  ></v-text-field>
-                </v-col>
-                <!-- thai eng -->
-                <v-col cols="12" sm="6">
-                  <labelCustom
-                    required
-                    :text="$t('last name(thai)')"
-                  ></labelCustom>
-                  <v-text-field
-                    dense
-                    outlined
-                    v-model="data_student.lastNameTh"
-                    :placeholder="$t('thai last name')"
-                    disabled
-                  ></v-text-field>
-                </v-col>
-                <!-- nickname -->
-                <v-col cols="12" sm="6">
-                  <labelCustom required :text="$t('nickname')"></labelCustom>
-                  <v-text-field
-                    dense
-                    outlined
-                    v-model="data_student.nicknameTh"
-                    :placeholder="$t('please filter yourse nickname')"
-                    color="#ff6B81"
-                    @keydown="Validation($event, 'free-nonum')"
-                    @input="realtimeCheckNickname(data_student.nicknameTh)"
-                  ></v-text-field>
-                </v-col>
-                <!-- CLASS -->
-                <v-col cols="12" sm="6">
-                  <labelCustom required :text="$t('class')"></labelCustom>
-                  <v-autocomplete
-                    v-model="data_student.class"
-                    :items="class_list"
-                    item-text="classNameTh"
-                    color="#ff6B81"
-                    item-color="#ff6b81"
-                    outlined
-                    dense
-                    :placeholder="$t('please specify class')"
-                  >
-                    <template #no-data>
-                      <v-list-item>
-                        {{ $t("data not found") }}
-                      </v-list-item>
-                    </template>
-                  </v-autocomplete>
-                </v-col>
-                <!-- SCHOOL -->
-                <v-col cols="12" sm="6">
-                  <labelCustom required :text="$t('school')"></labelCustom>
-                  <v-text-field
-                    v-if="data_student && data_student.school"
-                    v-model="data_student.school.schoolNameTh"
-                    :placeholder="$t('please specify the name of the school')"
-                    outlined
-                    dense
-                    color="#ff6b81"
-                  ></v-text-field>
-                </v-col>
-                <!-- ALERGICT -->
-                <v-col cols="12" sm="6">
-                  <label-custom
-                    required
-                    :text="$t('congenital disease')"
-                  ></label-custom>
-                  <v-text-field
-                    :placeholder="$t('please specify congenital disease')"
-                    v-model="data_student.congenitalDisease"
-                    outlined
-                    dense
-                    color="#ff6b81"
-                  >
-                  </v-text-field>
-                </v-col>
-                <!-- OTHER CLASS -->
-                <v-col cols="12" sm="6" v-if="data_student.class === 'อื่นๆ'">
-                  <labelCustom
-                    required
-                    :text="$t('enter your more class')"
-                  ></labelCustom>
-                  <v-text-field
-                    v-model="data_student.otherClass"
-                    :placeholder="$t('please specify more details of class')"
-                    outlined
-                    color="#ff6b81"
-                    dense
-                  >
-                  </v-text-field>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12" sm align="right">
-                  <v-btn
-                    dark
-                    text
-                    :class="$vuetify.breakpoint.smAndUp ? '' : 'w-full'"
-                    color="#ff6b81"
-                    @click="cancelEditStudentDetails(data_student)"
-                    >{{ $t("clear data") }}</v-btn
-                  >
-                </v-col>
-                <v-col cols="12" sm="auto" align="right">
-                  <v-btn
-                    depressed
-                    dark
-                    @click="saveEditStudentDetails(data_student)"
-                    :loading="update_loading"
-                    color="#ff6b81"
-                    >{{ $t("save") }}</v-btn
-                  >
-                </v-col>
-              </v-row>
-            </v-card-text>
-          </v-container>
-        </v-card>
+        <v-form
+          ref="form_student_detail"
+          v-model="validate_form_student_detail"
+        >
+          <v-card>
+            <v-container>
+              <v-card-title>
+                <v-row dense>
+                  <v-col cols="12" class="absolute right-0 top-0" align="end">
+                    <v-btn icon @click="closeEditStudentData(data_student)">
+                      <v-icon color="#ff6b81">mdi-close</v-icon>
+                    </v-btn>
+                  </v-col>
+                  <v-col cols="12" align="center" class="font-weight-bold">
+                    {{ $t("student detail") }}
+                  </v-col>
+                </v-row>
+              </v-card-title>
+              <v-card-text>
+                <v-row dense>
+                  <!-- eng name -->
+                  <v-col cols="12" sm="6">
+                    <labelCustom
+                      required
+                      :text="$t('first name(english)')"
+                    ></labelCustom>
+                    <v-text-field
+                      dense
+                      outlined
+                      v-model="data_student.firstNameEn"
+                      disabled
+                      :placeholder="$t('english first name')"
+                    ></v-text-field>
+                  </v-col>
+                  <!-- last eng -->
+                  <v-col cols="12" sm="6">
+                    <labelCustom
+                      required
+                      :text="$t('last name(english)')"
+                    ></labelCustom>
+                    <v-text-field
+                      dense
+                      outlined
+                      disabled
+                      v-model="data_student.lastNameEn"
+                      :placeholder="$t('english last name')"
+                    ></v-text-field>
+                  </v-col>
+                  <!-- thai name -->
+                  <v-col cols="12" sm="6">
+                    <labelCustom
+                      required
+                      :text="$t('first name(thai)')"
+                    ></labelCustom>
+                    <v-text-field
+                      dense
+                      outlined
+                      v-model="data_student.firstNameTh"
+                      :placeholder="$t('thai first name')"
+                      disabled
+                    ></v-text-field>
+                  </v-col>
+                  <!-- thai eng -->
+                  <v-col cols="12" sm="6">
+                    <labelCustom
+                      required
+                      :text="$t('last name(thai)')"
+                    ></labelCustom>
+                    <v-text-field
+                      dense
+                      outlined
+                      v-model="data_student.lastNameTh"
+                      :placeholder="$t('thai last name')"
+                      disabled
+                    ></v-text-field>
+                  </v-col>
+                  <!-- nickname -->
+                  <v-col cols="12" sm="6">
+                    <labelCustom required :text="$t('nickname')"></labelCustom>
+                    <v-text-field
+                      dense
+                      outlined
+                      v-model="data_student.nicknameTh"
+                      :placeholder="$t('please filter yourse nickname')"
+                      color="#ff6B81"
+                      @keydown="Validation($event, 'free-nonum')"
+                      @input="realtimeCheckNickname(data_student.nicknameTh)"
+                      :rules="rules.nickname"
+                    ></v-text-field>
+                  </v-col>
+                  <!-- CLASS -->
+                  <v-col cols="12" sm="6">
+                    <labelCustom required :text="$t('class')"></labelCustom>
+                    <v-autocomplete
+                      v-model="data_student.class"
+                      :items="class_list"
+                      item-text="classNameTh"
+                      color="#ff6B81"
+                      item-color="#ff6b81"
+                      outlined
+                      dense
+                      :placeholder="$t('please specify class')"
+                      :rules="data_student.class ? '' : rules.class"
+                    >
+                      <template #no-data>
+                        <v-list-item>
+                          {{ $t("data not found") }}
+                        </v-list-item>
+                      </template>
+                    </v-autocomplete>
+                  </v-col>
+                  <!-- SCHOOL -->
+                  <v-col cols="12" sm="6">
+                    <labelCustom required :text="$t('school')"></labelCustom>
+                    <v-text-field
+                      v-if="data_student && data_student.school"
+                      v-model="data_student.school.schoolNameTh"
+                      :placeholder="$t('please specify the name of the school')"
+                      outlined
+                      dense
+                      color="#ff6b81"
+                      :rules="rules.school"
+                    ></v-text-field>
+                  </v-col>
+                  <!-- ALERGICT -->
+                  <v-col cols="12" sm="6">
+                    <label-custom
+                      required
+                      :text="$t('congenital disease')"
+                    ></label-custom>
+                    <v-text-field
+                      :placeholder="$t('please specify congenital disease')"
+                      v-model="data_student.congenitalDisease"
+                      outlined
+                      dense
+                      color="#ff6b81"
+                      :rules="rules.alergict"
+                    >
+                    </v-text-field>
+                  </v-col>
+                  <!-- OTHER CLASS -->
+                  <v-col cols="12" sm="6" v-if="data_student.class === 'อื่นๆ'">
+                    <labelCustom
+                      required
+                      :text="$t('enter your more class')"
+                    ></labelCustom>
+                    <v-text-field
+                      v-model="data_student.otherClass"
+                      :placeholder="$t('please specify more details of class')"
+                      outlined
+                      color="#ff6b81"
+                      dense
+                      :rules="rules.moreClass"
+                    >
+                    </v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12" sm align="right">
+                    <v-btn
+                      dark
+                      text
+                      :class="$vuetify.breakpoint.smAndUp ? '' : 'w-full'"
+                      color="#ff6b81"
+                      @click="cancelEditStudentDetails(data_student)"
+                      >{{ $t("clear data") }}</v-btn
+                    >
+                  </v-col>
+                  <v-col cols="12" sm="auto" align="right">
+                    <v-btn
+                      depressed
+                      dark
+                      @click="saveEditStudentDetails(data_student)"
+                      :loading="update_loading"
+                      color="#ff6b81"
+                      >{{ $t("save") }}</v-btn
+                    >
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-container>
+          </v-card>
+        </v-form>
       </v-dialog>
 
       <!-- PARENT RELATION -->
@@ -2009,6 +2016,7 @@ export default {
     TermOfUse,
   },
   data: () => ({
+    validate_form_student_detail: false,
     add_student: false,
     remove_student_button: false,
     add_student_button: false,
@@ -2283,7 +2291,31 @@ export default {
 
       // getUserOneId
     }),
-
+    rules() {
+      return {
+        nickname: [
+          (val) =>
+            (val || "").length > 0 || this.$t("please filter yourse nickname"),
+        ],
+        class: [
+          (val) =>
+            (val || "").length > 0 || this.$t("please filter yourse class"),
+        ],
+        school: [
+          (val) =>
+            (val || "").length > 0 || this.$t("please filter school name"),
+        ],
+        alergict: [
+          (val) =>
+            (val || "").length > 0 ||
+            this.$t("please filter yourse congenitalDisease"),
+        ],
+        moreClass: [
+          (val) =>
+            (val || "").length > 0 || this.$t("please filter yourse class"),
+        ],
+      };
+    },
     uniqueDays() {
       // Filter unique dayNames by keeping the first occurrence
       const unique = [];
@@ -2479,33 +2511,36 @@ export default {
       items.congenitalDisease = null;
     },
     async saveEditStudentDetails(items) {
-      this.update_loading = true;
-      let data_payload = {
-        studentId: items.accountId,
-        nicknameTh: items.nicknameTh,
-        congenitalDiseaseTh: items.congenitalDisease,
-        schoolTh: items.school.schoolNameTh,
-        firstNameTh: items.firstNameTh,
-        lastNameTh: items.lastNameTh,
-        firstNameEng: items.firstNameEn,
-        lastNameEng: items.lastNameEn,
-        class:
-          items.class === "อื่นๆ"
-            ? items?.otherClass
-            : items?.class?.classNameTh
-            ? items?.class?.classNameTh
-            : items.class,
-      };
-      await this.UpdateStudentDetail({ payload: data_payload });
-      this.order_data = JSON.parse(localStorage.getItem("Order"));
-      this.user_login = JSON.parse(localStorage.getItem("userDetail"));
-      await this.GetProfileDetail(this.user_login.account_id);
-      await this.GetClassList();
-      if (!this.course_order.course_id) {
-        this.$router.replace({ name: "UserKingdom" });
+      this.$refs.form_student_detail.validate();
+      if (this.validate_form_student_detail) {
+        this.update_loading = true;
+        let data_payload = {
+          studentId: items.accountId,
+          nicknameTh: items.nicknameTh,
+          congenitalDiseaseTh: items.congenitalDisease,
+          schoolTh: items.school.schoolNameTh,
+          firstNameTh: items.firstNameTh,
+          lastNameTh: items.lastNameTh,
+          firstNameEng: items.firstNameEn,
+          lastNameEng: items.lastNameEn,
+          class:
+            items.class === "อื่นๆ"
+              ? items?.otherClass
+              : items?.class?.classNameTh
+              ? items?.class?.classNameTh
+              : items.class,
+        };
+        await this.UpdateStudentDetail({ payload: data_payload });
+        this.order_data = JSON.parse(localStorage.getItem("Order"));
+        this.user_login = JSON.parse(localStorage.getItem("userDetail"));
+        await this.GetProfileDetail(this.user_login.account_id);
+        await this.GetClassList();
+        if (!this.course_order.course_id) {
+          this.$router.replace({ name: "UserKingdom" });
+        }
+        this.update_loading = false;
+        this.dialog_student_detail = false;
       }
-      this.update_loading = false;
-      this.dialog_student_detail = false;
     },
     checkedApplyFor(item) {
       if (item === false) {
