@@ -1,6 +1,3 @@
-
-
-
 import axios from "axios";
 import VueI18n from "../i18n";
 function dayOfWeekArray(day) {
@@ -59,10 +56,18 @@ const dashboardModules = {
     get_potential_student: [],
     get_reserve_student: [],
     get_student_list_value: [],
+    get_statustic: [],
+    limit_statistic: {}
 
 
   },
   mutations: {
+    SetGetStatistic(state, payload) {
+      state.get_statustic = payload
+    },
+    SetLimitStatistic(state, payload) {
+      state.limit_statistic = payload
+    },
     SetGetEmptyCourse(state, payload) {
       state.get_empty_course = payload
     },
@@ -132,6 +137,25 @@ const dashboardModules = {
 
   },
   actions: {
+    async GetStatistic(context,) {
+      // {limit, page, search, category, course, courseTypeId}
+      context.commit("SetGetLoading", true)
+
+      try {
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${localhost}/api/v1/dashboard/statistic-course?`)
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/statistic-course?`)
+
+        if (data.statusCode === 200) {
+          // await context.commit('SetLimitStatistic', { limit: limit, page: page, count: data.data.length })
+          context.commit("SetGetStatistic", data.data)
+        }
+      } catch (error) {
+
+        context.commit("SetGetLoading", false)
+
+      }
+    },
 
     // student type 1
     async GetStudentValue(context) {
@@ -453,6 +477,9 @@ const dashboardModules = {
 
   },
   getters: {
+    getStatistic(state) {
+      return state.get_statustic
+    },
     getEmptyCourse(state) {
       return state.get_empty_course
     },
