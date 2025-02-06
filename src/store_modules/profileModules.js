@@ -1,5 +1,7 @@
 import axios from "axios";
 import VueCookie from "vue-cookie"
+import Swal from "sweetalert2";
+import VueI18n from "../i18n";
 const profileModules = {
   namespaced: true,
   state: {
@@ -56,10 +58,6 @@ const profileModules = {
       selecte_checked: false
     },
 
-
-
-
-
     certificate_data: [
       {
         certificate_title: "การแข่งขันเปียโนการกุศล กลายปี 2565",
@@ -91,9 +89,14 @@ const profileModules = {
     relation_detail: [],
     congenital_disease_list: '',
     student_detail: {},
+    update_student_data: {},
+
 
   },
   mutations: {
+    SetUpdateStudentDetail(state, payload) {
+      state.update_student_data = payload
+    },
     SetStudentDetail(state, payload) {
       state.student_detail = payload
     },
@@ -132,6 +135,77 @@ const profileModules = {
 
   },
   actions: {
+    async UpdateStudentDetail(context, { payload }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // const { data } = await axios.patch(`${localhost}/api/v1/account/student`, payload, config)
+        const { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/account/student`, payload, config)
+        if (data.statusCode === 200) {
+          context.commit("SetStudentDetail", data.data)
+        }
+      } catch (error) {
+        if (error?.response?.data?.message == "schoolTh not found.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("please filter yourse school"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (
+          error?.response?.data?.message == "congenitalDiseaseTh not found."
+        ) {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("please filter yourse congenitalDisease"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message == "class not found.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("please filter yourse more class"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (error?.response?.data?.message == "nicknameTh not found.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("please filter yourse nickname"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: error?.response?.data?.message,
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        }
+      }
+    },
     async GetStudentDetail(context, { account_id }) {
       try {
         let config = {
@@ -141,9 +215,9 @@ const profileModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        let localhost = "http://localhost:3000"
-        const { data } = await axios.get(`${localhost}/api/v1/account/student/detail/${account_id}`, config)
-        // const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/student/detail/${account_id}`, config)
+        // let localhost = "http://localhost:3000"
+        // const { data } = await axios.get(`${localhost}/api/v1/account/student/detail/${account_id}`, config)
+        const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/student/detail/${account_id}`, config)
         if (data.statusCode === 200) {
           context.commit("SetStudentDetail", data.data)
         }
@@ -336,6 +410,9 @@ const profileModules = {
 
   },
   getters: {
+    getUpdateStudentDetail(state) {
+      return state.update_student_data
+    },
     getStudentDetail(state) {
       return state.student_detail
     },

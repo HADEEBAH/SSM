@@ -468,6 +468,7 @@
                     dense
                     outlined
                     v-model="data_student.firstNameEn"
+                    disabled
                     :placeholder="$t('english first name')"
                   ></v-text-field>
                 </v-col>
@@ -480,6 +481,7 @@
                   <v-text-field
                     dense
                     outlined
+                    disabled
                     v-model="data_student.lastNameEn"
                     :placeholder="$t('english last name')"
                   ></v-text-field>
@@ -596,14 +598,15 @@
                     :class="$vuetify.breakpoint.smAndUp ? '' : 'w-full'"
                     color="#ff6b81"
                     @click="cancelEditStudentDetails(data_student)"
-                    >{{ $t("cancel") }}</v-btn
+                    >{{ $t("clear data") }}</v-btn
                   >
                 </v-col>
                 <v-col cols="12" sm="auto" align="right">
                   <v-btn
                     depressed
                     dark
-                    @click="saveEditStudentDetails()"
+                    @click="saveEditStudentDetails(data_student)"
+                    :loading="update_loading"
                     color="#ff6b81"
                     >{{ $t("save") }}</v-btn
                   >
@@ -2042,6 +2045,7 @@ export default {
     edited_details: false,
     selected_students: [],
     selected_student_bool: false,
+    update_loading: false,
   }),
   async created() {
     this.order_data = JSON.parse(localStorage.getItem("Order"));
@@ -2421,6 +2425,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      UpdateStudentDetail: "ProfileModules/UpdateStudentDetail",
       GetStudentDetail: "ProfileModules/GetStudentDetail",
       GetClassList: "ProfileModules/GetClassList",
       GetProfileDetail: "ProfileModules/GetProfileDetail",
@@ -2451,23 +2456,7 @@ export default {
       this.data_student = item_student;
       this.dialog_student_detail = true;
     },
-    closeEditStudentData() {
-      // await this.GetStudentDetail({ account_id: items.accountId }).then(
-      //   async () => {
-      //     items.firstNameTh = this.student_detail?.firstNameTh;
-      //     items.lastNameTh = this.student_detail?.lastNameTh;
-      //     items.firstNameEng = this.student_detail?.firstNameEng;
-      //     items.lastNameEng = this.student_detail?.lastNameEng;
-      //     items.nicknameTh = this.student_detail?.nicknameTh;
-      //     items.class = this.student_detail?.class;
-      //     items.school.schoolNameTh = this.student_detail?.school?.schoolNameTh;
-      //     items.congenitalDisease = this.student_detail?.congenitalDisease;
-      //   }
-      // );
-      this.dialog_student_detail = false;
-    },
-
-    async cancelEditStudentDetails(items) {
+    async closeEditStudentData(items) {
       await this.GetStudentDetail({ account_id: items.accountId }).then(
         async () => {
           items.firstNameTh = this.student_detail?.firstNameTh;
@@ -2480,25 +2469,43 @@ export default {
           items.congenitalDisease = this.student_detail?.congenitalDisease;
         }
       );
-    },
-    async saveEditStudentDetails() {
-      // const test = this.profile_detail?.mystudents?.find(
-      //   (item) => item.accountId === items.accountId
-      // );
-
       this.dialog_student_detail = false;
+    },
 
-      //  return {
-      //       items.firstNameTh = this.student_detail?.firstNameTh;
-      //       items.lastNameTh = this.student_detail?.lastNameTh;
-      //       items.firstNameEng = this.student_detail?.firstNameEng;
-      //       items.lastNameEng = this.student_detail?.lastNameEng;
-      //       items.nicknameTh = this.student_detail?.nicknameTh;
-      //       items.class = this.student_detail?.class;
-      //       items.school.schoolNameTh = this.student_detail?.school?.schoolNameTh;
-      //       items.congenitalDisease = this.student_detail?.congenitalDisease;
-      //     }
-      // this.edited_details = true;
+    async cancelEditStudentDetails(items) {
+      items.nicknameTh = null;
+      items.class = null;
+      items.school.schoolNameTh = null;
+      items.congenitalDisease = null;
+    },
+    async saveEditStudentDetails(items) {
+      this.update_loading = true;
+      let data_payload = {
+        studentId: items.accountId,
+        nicknameTh: items.nicknameTh,
+        congenitalDiseaseTh: items.congenitalDisease,
+        schoolTh: items.school.schoolNameTh,
+        firstNameTh: items.firstNameTh,
+        lastNameTh: items.lastNameTh,
+        firstNameEng: items.firstNameEn,
+        lastNameEng: items.lastNameEn,
+        class:
+          items.class === "อื่นๆ"
+            ? items?.otherClass
+            : items?.class?.classNameTh
+            ? items?.class?.classNameTh
+            : items.class,
+      };
+      await this.UpdateStudentDetail({ payload: data_payload });
+      this.order_data = JSON.parse(localStorage.getItem("Order"));
+      this.user_login = JSON.parse(localStorage.getItem("userDetail"));
+      await this.GetProfileDetail(this.user_login.account_id);
+      await this.GetClassList();
+      if (!this.course_order.course_id) {
+        this.$router.replace({ name: "UserKingdom" });
+      }
+      this.update_loading = false;
+      this.dialog_student_detail = false;
     },
     checkedApplyFor(item) {
       if (item === false) {
@@ -2520,41 +2527,6 @@ export default {
           tel: this.profile_detail?.mobileNo,
         },
       ];
-
-      // let payload = {
-      //   account_id: this.edited_details
-      //     ? this.data_student?.accountId
-      //     : item_student.accountId,
-      //   class: this.edited_details
-      //     ? this.data_student?.class?.classNameTh
-      //     : item_student.class?.classNameTh,
-      //   firstname_en: this.edited_details
-      //     ? this.data_student?.firstNameEn
-      //     : item_student.firstNameEn,
-      //   lastname_en: this.edited_details
-      //     ? this.data_student?.lastNameEn
-      //     : item_student.lastNameEn,
-      //   firstname_th: this.edited_details
-      //     ? this.data_student?.firstNameTh
-      //     : item_student.firstNameTh,
-      //   lastname_th: this.edited_details
-      //     ? this.data_student?.lastNameTh
-      //     : item_student.lastNameTh,
-      //   nicknameTh: this.edited_details
-      //     ? this.data_student?.nicknameTh
-      //     : item_student.nicknameTh,
-      //   congenitalDiseaseTh: this.edited_details
-      //     ? this.data_student?.congenitalDisease
-      //     : item_student.congenitalDisease,
-      //   schoolTh: this.edited_details
-      //     ? this.data_student?.school?.schoolNameTh
-      //     : item_student.school?.schoolNameTh,
-      //   parent: parents,
-      //   is_other: true,
-      //   is_account: false,
-      //   selecte_checked: true,
-      //   username: item_student.userName,
-      // };
 
       let payload = {
         account_id: item_student.accountId,
