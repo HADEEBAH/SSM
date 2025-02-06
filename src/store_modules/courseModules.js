@@ -2119,8 +2119,8 @@ const CourseModules = {
       context.commit("SetCourseImageIsLoading", true)
       try {
         // const localhost = 'http://localhost:3000'
-        // let { data } = await axios.get(`${localhost}/api/v1/course/artwork-image/${course_id}?limit=10&page=${page}`)
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/artwork-image/${course_id}?limit=2&page=1`)
+        // let { data } = await axios.get(`${localhost}/api/v1/course/artwork-image/${course_id}?limit=${limit}&page=${page}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/artwork-image/${course_id}?limit=${limit}&page=${page}`)
         if (data.statusCode === 200) {
           if (data.data.length > 0) {
             for (const artwork of data?.data) {
@@ -2142,7 +2142,7 @@ const CourseModules = {
       try {
         // const localhost = 'http://localhost:3000'
         // let { data } = await axios.get(`${localhost}/api/v1/course/artwork-video/${course_id}?limit=10&page=${page}`)
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/artwork-video/${course_id}?limit=2&page=1`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/artwork-video/${course_id}?limit=${limit}&page=${page}`)
         if (data.statusCode === 200) {
           if (data.data.length > 0) {
             for (const artwork of data.data) {
