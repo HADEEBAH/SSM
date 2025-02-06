@@ -78,6 +78,10 @@
   "add coaach succeed": "Add coaach succeed",
   "as the number of seats in the package is less than the number of seats available for current students": "As the number of seats in the package is less than the number of seats available for current students",
   "add options":"Add options",
+  "add video link":"Add video link",
+  "add item":"Add item",
+
+
 
   "baht": "Baht",
   "back": "Back",
@@ -226,6 +230,8 @@
   "cannot delete a coach as there must be at least 1 coach listed in the course": "Cannot delete a coach as there must be at least 1 coach listed in the course",
   "category":"Category",
   
+  "can't select these dates because they are duplications of existing schedules":"can't select these dates because they are duplications of existing schedules",
+
 
   "day": "Day",
   "day and date": "Day and date",
@@ -312,6 +318,7 @@
   "day of Week cannot be deleted because there is a student with an order status of pending payment for this Day of Week": "Day of Week cannot be deleted because there is a student with an order status of pending payment for this Day of Week",
   "day of Week cannot be deleted as there are students in this Day of Week": "Day of Week cannot be deleted as there are students in this Day of Week",
   "do you want to create a package": "Do you want to create a package?",
+  "delete holiday success":"Deleted holiday success",
   "delete":"Delete",
   "delete package":"Delete Package",
 
@@ -354,6 +361,7 @@
   "fail": "Fail",
   "file size": "File size",
   "file size must not exceed 5 MB": "File size must not exceed 5 MB",
+  "file size must not exceed 10 MB": "File size must not exceed 10 MB",
   "failed to resolve": "Failed to resolve",
   "failed to delete": "Failed to delete",
   "failed to delete data": "( Failed to delete data )",
@@ -384,6 +392,8 @@
   "full day leave": "Full day leave",
   "filter statistic":"Filter Statistic",
 
+  "first name - last name(thai)": "First name - last name(ไทย)",
+  "first name - last name(eng)": "First name - last name(อังกฤษ)",
 
   "graduating students": "Graduated Students",
   "general": "General",
@@ -423,6 +433,9 @@
   "invalid English languages": "Please enter English text",
   "invalid user name": "Please enter English text or numbers",
   "invalid user password": "Please enter English text",
+  "image":"image",
+  "invalid image":"Invalid image or video extension",
+  
 
   "is complete": "is complete",
 
@@ -454,6 +467,8 @@
   "listed by": "Listed by",
   "logout": "Log Out",
   "login": "Log in",
+  "link vdo": "Link video",
+
 
   "management": "Management",
   "manage": "Manage",
@@ -601,7 +616,7 @@
   "please filter yourse nickname and class": "Please fill in your nickname, grade level, school name, or congenital disease completely",
   "please filter yourse class": "Please fill in your class",
   "please filter yourse more class": "Please fill in your class",
-  "please filter yourse school": "Please fill in your school name",
+  "please filter yourse school": "Please fill in school name of",
   "please filter yourse nickname": "Please fill in your nickname",
   "please filter yourse class or nickname": "Please fill in your nickname or class",
   "please filter yourse congenitalDisease": "Please fill in your congenital disease",
@@ -737,6 +752,8 @@
   "package cannot be deleted as there are students in this package": "package cannot be deleted as there are students in this package",
   "package cannot be deleted as there are students who have booked this package": "package cannot be deleted as there are students who have booked this package",
   "this teaching day cannot be deleted as the coach must have at least 1 teaching day": "This teaching day cannot be deleted as the coach must have at least 1 teaching day",
+  "please send only YouTube links":"Please send only YouTube links",
+  "please upload only 1 video link":"Please upload only 1 video link",
 
   "reason for leave": "Reason for leave",
   "read more": "Read more",
@@ -891,6 +908,9 @@
   "save option":"Save Option",
   "save teaching day":"Save Teaching day",
   "statistic":"Statistic",
+  "select student":"Select",
+  "student detail":"Student detail",
+
 
   
 

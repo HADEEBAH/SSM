@@ -53,6 +53,7 @@ const profileModules = {
           lastNameTh: ""
         }
       ],
+      selecte_checked: false
     },
 
 
@@ -88,10 +89,14 @@ const profileModules = {
     },
 
     relation_detail: [],
-    congenital_disease_list: ''
+    congenital_disease_list: '',
+    student_detail: {},
 
   },
   mutations: {
+    SetStudentDetail(state, payload) {
+      state.student_detail = payload
+    },
     SetClass(state, payload) {
       state.class_list = payload
     },
@@ -127,6 +132,26 @@ const profileModules = {
 
   },
   actions: {
+    async GetStudentDetail(context, { account_id }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        let localhost = "http://localhost:3000"
+        const { data } = await axios.get(`${localhost}/api/v1/account/student/detail/${account_id}`, config)
+        // const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/account/student/detail/${account_id}`, config)
+        if (data.statusCode === 200) {
+          context.commit("SetStudentDetail", data.data)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
     async GetClassList(context) {
       try {
         let config = {
@@ -228,6 +253,11 @@ const profileModules = {
         if (data.statusCode === 200) {
           const response = data.data
 
+          response.mystudents?.map((item) => {
+            item.selected_student = false
+
+          })
+
           response.image = await response.image && response.image != "" ? `${process.env.VUE_APP_URL}/api/v1/files/${response.image}` : ""
           response.class = await response.class ? response.class : {
             classNameTh: null,
@@ -306,6 +336,9 @@ const profileModules = {
 
   },
   getters: {
+    getStudentDetail(state) {
+      return state.student_detail
+    },
     getUserData(state) {
       return state.user_data
     },

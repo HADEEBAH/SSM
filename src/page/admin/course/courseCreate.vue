@@ -206,7 +206,88 @@
                     v-for="(file, index) in preview_artwork_files"
                     :key="index"
                   >
-                    <v-img
+                    <!-- VDO CARD -->
+                    <v-card
+                      width="100%"
+                      flat
+                      v-if="
+                        file.type === 'video/mp4' ||
+                        file.type === 'video/x-matroska'
+                      "
+                    >
+                      <v-btn
+                        icon
+                        small
+                        class="bg-[#cdcdcd] absolute top-1 right-8 z-[4]"
+                        dark
+                        @click="showImageDialog(file)"
+                        ><v-icon>mdi-eye</v-icon></v-btn
+                      >
+                      <v-btn
+                        icon
+                        small
+                        class="bg-[#f00] absolute top-1 right-0 z-[4]"
+                        dark
+                        @click="removeArtworkFile(index)"
+                        ><v-icon>mdi-close</v-icon></v-btn
+                      >
+                      <video
+                        :src="file.url"
+                        controls
+                        width="100%"
+                        style="max-width: 500px"
+                        :aspect-ratio="16 / 9"
+                        class="rounded-lg"
+                        align="center"
+                      ></video>
+                    </v-card>
+                    <!-- IMAG CARD -->
+                    <v-card
+                      width="100%"
+                      flat
+                      v-if="
+                        file.type === 'image/png' || file.type === 'image/jpeg'
+                      "
+                    >
+                      <v-btn
+                        icon
+                        small
+                        class="bg-[#cdcdcd] absolute top-1 right-8 z-[4]"
+                        dark
+                        @click="showImageDialog(file)"
+                        ><v-icon>mdi-eye</v-icon></v-btn
+                      >
+                      <v-btn
+                        icon
+                        small
+                        class="bg-[#f00] absolute top-1 right-0 z-[4]"
+                        dark
+                        @click="removeArtworkFile(index)"
+                        ><v-icon>mdi-close</v-icon></v-btn
+                      >
+                      <v-img
+                        :src="file.url"
+                        style="max-width: 500px"
+                        :aspect-ratio="16 / 9"
+                        class="rounded-lg"
+                        align="center"
+                      >
+                        <template v-slot:placeholder>
+                          <v-row
+                            class="fill-height ma-0"
+                            align="center"
+                            justify="center"
+                          >
+                            <v-progress-circular
+                              indeterminate
+                              color="#ff6b81"
+                            ></v-progress-circular>
+                          </v-row>
+                        </template>
+                      </v-img>
+                    </v-card>
+
+                    <!-- <v-img
                       :src="file"
                       style="max-width: 300px"
                       :aspect-ratio="16 / 9"
@@ -220,7 +301,7 @@
                         @click="removeArtworkFile(index)"
                         ><v-icon>mdi-close</v-icon></v-btn
                       >
-                    </v-img>
+                    </v-img> -->
                   </v-col>
                 </v-row>
                 <v-row
@@ -259,7 +340,7 @@
                       ref="fileInputArtwork"
                       type="file"
                       @change="previewArtWorkFile"
-                      accept="image/png, image/jpeg"
+                      accept="image/png, image/jpeg ,video/*"
                       multiple
                       style="display: none"
                     />
@@ -272,7 +353,200 @@
                   </v-col>
                 </v-row>
               </v-card-text>
+              <!-- ADD LINK YOUTUBE -->
+              <v-card class="my-5 rounded-lg">
+                <v-app-bar dark color="#FF6B81">
+                  <v-toolbar-title>{{ $t("add video link") }}</v-toolbar-title>
+
+                  <v-spacer></v-spacer>
+                </v-app-bar>
+                <!-- <iframe width="100%" height="100%" src="https://www.youtube.com/embed/KOFFt04zS6o?si=ahE26X4iqHEtMTAr&autoplay=1&mute=1" title="Zweed n&#39; Roll - ช่วงเวลา (A Moment) [Official Video]" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen allow="autoplay"></iframe> -->
+                <v-card-text>
+                  <div
+                    v-for="(
+                      item_vdo, index_vdo
+                    ) in course_create_data.art_work_link"
+                    :key="index_vdo"
+                  >
+                    <v-row dense>
+                      <!-- 1111 -->
+                      <v-col cols="12" sm="4" align-self="center">
+                        <v-text-field
+                          :label="$t('link vdo')"
+                          prepend-icon="mdi-youtube"
+                          color="#FF6B81"
+                          v-model="item_vdo.url"
+                          @input="validateData()"
+                        ></v-text-field>
+                      </v-col>
+                      <!-- <v-col></v-col> -->
+                      <!-- 2222 -->
+                      <v-col cols="12" sm="6" align="center">
+                        <v-card
+                          class="mt-auto"
+                          v-if="item_vdo.url"
+                          style="height: 80px; width: 160px"
+                        >
+                          <v-btn
+                            icon
+                            small
+                            class="bg-[#cdcdcd] absolute top-2 right-3 z-[4]"
+                            dark
+                            @click="showImageDialog(item_vdo)"
+                            ><v-icon>mdi-eye</v-icon></v-btn
+                          >
+                          <div
+                            id="video"
+                            style="
+                              height: 80px;
+                              width: 160px;
+                              object-fit: cover;
+                            "
+                            v-html="item_vdo.url"
+                          ></div>
+                        </v-card>
+                      </v-col>
+                      <!-- 3333 -->
+                      <v-col
+                        cols="12"
+                        sm="2"
+                        align-self="center"
+                        align="center"
+                      >
+                        <v-btn text @click="deleteLink(index_vdo)" color="red">
+                          <v-icon color="red">mdi-minus-circle</v-icon>
+                          {{ $t("delete item") }}
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                    <v-divider class="my-2"></v-divider>
+                  </div>
+                  <div
+                    class="rounded-lg d-flex justify-center align-center my-3"
+                  >
+                    <v-btn
+                      @click="addNewLink"
+                      outlined
+                      color="#ff6b81"
+                      class="rounded-lg"
+                    >
+                      <v-icon>mdi-plus-circle</v-icon>
+                      {{ $t("add item") }}
+                    </v-btn>
+                  </div>
+                </v-card-text>
+              </v-card>
             </v-card>
+            <!-- DIALOG SHOW IMAGE -->
+            <v-dialog
+              persistent
+              :width="$vuetify.breakpoint.smAndUp ? '60vw' : ''"
+              v-model="show_attachment_dialog"
+            >
+              <v-card>
+                <v-container grid-list-xs>
+                  <v-row>
+                    <v-col cols="12" class="text-center">
+                      <v-btn
+                        icon
+                        class="bg-[#cdcdcd] absolute top-1 right-1"
+                        dark
+                        @click="
+                          show_attachment_dialog = !show_attachment_dialog
+                        "
+                        ><v-icon>mdi-close</v-icon></v-btn
+                      >
+                      <span class="font-weight-bold"
+                        >{{ $t("image example") }}
+                      </span>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12">
+                      <!-- IMAGE -->
+                      <!-- class="max-h-[300px] max-w-300px rounded-lg" -->
+
+                      <v-img
+                        v-if="
+                          typeImg === 'img' ||
+                          typeImg === 'image/png' ||
+                          typeImg === 'image/jpeg'
+                        "
+                        contain
+                        :src="biggesImage"
+                        class="rounded-lg"
+                        :style="
+                          $vuetify.breakpoint.lgAndUp
+                            ? 'height: 600px; width: 1000px; object-fit: cover; margin: auto;'
+                            : $vuetify.breakpoint.mdAndUp
+                            ? 'height: 1000px; width: 800px; object-fit: cover; margin: auto;'
+                            : $vuetify.breakpoint.smAndUp
+                            ? 'height: 800px; width: 600px; object-fit: cover; margin: auto;'
+                            : 'object-fit: cover; margin: auto;'
+                        "
+                        :aspect-ratio="16 / 9"
+                      >
+                        <template v-slot:placeholder>
+                          <v-row
+                            class="fill-height ma-0"
+                            align="center"
+                            justify="center"
+                          >
+                            <v-progress-circular
+                              indeterminate
+                              color="#ff6b81"
+                            ></v-progress-circular>
+                          </v-row>
+                        </template>
+                      </v-img>
+                      <!-- VDO -->
+                      <!-- style="object-fit: cover; margin: auto" -->
+                      <video
+                        v-else-if="
+                          typeImg === 'video' ||
+                          typeImg === 'video/mp4' ||
+                          typeImg === 'video/x-matroska'
+                        "
+                        class="rounded-lg d-flex justify-center align-center"
+                        :style="
+                          $vuetify.breakpoint.lgAndUp
+                            ? 'height: 600px; width: 1000px; object-fit: cover; margin: auto;'
+                            : $vuetify.breakpoint.mdAndUp
+                            ? 'height: 1000px; width: 800px; object-fit: cover; margin: auto;'
+                            : $vuetify.breakpoint.smAndUp
+                            ? 'height: 800px; width: 600px; object-fit: cover; margin: auto;'
+                            : 'object-fit: cover; margin: auto;'
+                        "
+                        autoplay
+                        muted
+                        controls
+                        loop
+                      >
+                        <source :src="biggesImage" type="video/mp4" />
+                      </video>
+
+                      <!-- YOUTUBE -->
+                      <div
+                        v-else
+                        id="video"
+                        class="rounded-lg d-flex justify-center align-center"
+                        :aspect-ratio="16 / 9"
+                        :style="
+                          $vuetify.breakpoint.lgAndUp
+                            ? 'height: 600px; width: 1000px; object-fit: cover; margin: auto;'
+                            : $vuetify.breakpoint.mdAndUp
+                            ? 'height: 1000px; width: 800px; object-fit: cover; margin: auto;'
+                            : $vuetify.breakpoint.smAndUp
+                            ? 'height: 800px; width: 600px; object-fit: cover; margin: auto;'
+                            : 'object-fit: cover; margin: auto;'
+                        "
+                        v-html="biggesImage"
+                      ></div>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card>
+            </v-dialog>
           </v-form>
         </v-stepper-content>
         <v-card flat>
@@ -386,6 +660,9 @@ export default {
     artwork_files: [],
     preview_artwork_files: [],
     loading: false,
+    biggesImage: null,
+    show_attachment_dialog: false,
+    typeImg: null,
   }),
   created() {
     if (this.course_data) {
@@ -428,7 +705,106 @@ export default {
       ResetCourseData: "CourseModules/ResetCourseData",
       // CoachData: "CourseModules/CoachData",
     }),
-    save() {
+    addNewLink() {
+      this.course_create_data?.art_work_link?.push({
+        url: null,
+      });
+    },
+    deleteLink(index_vdo) {
+      this.course_create_data.art_work_link.splice(index_vdo, 1);
+      if (this.course_create_data.art_work_link?.length <= 0) {
+        this.addNewLink();
+      }
+    },
+
+    showImageDialog(item) {
+      this.biggesImage = item.url ? item.url : item;
+      this.typeImg = item.type;
+      this.show_attachment_dialog = true;
+    },
+
+    validateData() {
+      try {
+        // this.$loader.open();
+        const urlVideo = this.course_create_data?.art_work_link.map((item) => {
+          return item.url;
+        });
+        if (urlVideo) {
+          const validUrl = this.course_create_data?.art_work_link.map(
+            (item) => {
+              const regexYoutubeIframeUrl =
+                /<iframe.*?src="https:\/\/www\.youtube\.com\/embed\/.*?".*?><\/iframe>/i;
+              const match = item.url.match(regexYoutubeIframeUrl);
+              return match;
+            }
+          );
+          if (validUrl) {
+            this.course_create_data?.art_work_link.map((item) => {
+              const urlVDO = this.updateIframeSize(item.url);
+              const urlUpdate = this.updateIframeSrc(urlVDO);
+              item.url = urlUpdate;
+              return item.url;
+            });
+            // this.submitCreateEmbed();
+          }
+        }
+      } catch (error) {
+        console.log("error :>> ", error);
+        // this.$loader.close();
+        // this.$error.show(error);
+      }
+    },
+    updateIframeSize(urlVideo) {
+      try {
+        const widthRegex = /width="\d+"/;
+        const heightRegex = /height="\d+"/;
+
+        const updatedWidth = `width="100%"`;
+        const updatedHeight = `height="100%"`;
+
+        let updatedUrlVideo = urlVideo.replace(widthRegex, updatedWidth);
+        updatedUrlVideo = updatedUrlVideo.replace(heightRegex, updatedHeight);
+
+        return updatedUrlVideo;
+      } catch (error) {
+        console.log("error :>> ", error);
+
+        // this.$error.show(error);
+      }
+    },
+    updateIframeSrc(urlVideo) {
+      try {
+        const srcPattern =
+          /src="(https:\/\/www\.youtube\.com\/embed\/[^\s?"]+)(\?[^"]*)?"/;
+        const match = urlVideo.match(srcPattern);
+
+        if (!match) {
+          return urlVideo;
+        }
+
+        const baseUrl = match[1];
+        const queryParams = match[2] || "";
+
+        if (
+          queryParams.includes("autoplay=1") &&
+          queryParams.includes("mute=1")
+        ) {
+          return urlVideo;
+        }
+
+        const newUrl = `${baseUrl}${
+          queryParams ? `${queryParams}&` : "?"
+        }autoplay=1&mute=1`;
+
+        return urlVideo.replace(srcPattern, `src="${newUrl}"`);
+      } catch (error) {
+        console.log("error :>> ", error);
+
+        // this.$error.show(error);
+      }
+    },
+
+    async save() {
       this.loading = true;
       // this.course_data.course_file = this.file;
 
@@ -491,6 +867,7 @@ export default {
           course_file: this.course_data.courseImg,
           privilege_file: this.course_create_data.privilege_file,
           artwork_file: this.course_create_data.artwork_file,
+          link_url: this.course_create_data.art_work_link,
         }).then(() => {
           this.loading = false;
         });
@@ -554,9 +931,12 @@ export default {
           status: "active",
           course_packages: [],
         };
-        this.CreateCourse({
+
+        await this.CreateCourse({
           course_payload: payload_create_course,
           course_file: this.course_data.courseImg,
+          artwork_file: this.course_data.art_work_image_video,
+          link_url: this.course_data.art_work_link,
         }).then(() => {
           this.loading = false;
         });
@@ -825,20 +1205,70 @@ export default {
         }
       }
     },
+    // previewArtWorkFile(event) {
+    //   const selectedFiles = event.target.files;
+    //   const allowedTypes = ["image/png", "image/jpeg"];
+    //   const fileUrls = [];
+    //   for (let i = 0; i < selectedFiles.length; i++) {
+    //     const file = selectedFiles[i];
+    //     if (CheckFileSize(file, event.target.id) === true) {
+    //       if (allowedTypes.includes(file.type)) {
+    //         this.course_create_data.artwork_file.push(file);
+    //         // this.course_data.artwork_file.push(file);
+
+    //         const reader = new FileReader();
+    //         reader.onload = () => {
+    //           fileUrls.push(reader.result);
+    //           if (fileUrls.length == selectedFiles.length) {
+    //             this.preview_artwork_files = [
+    //               ...this.preview_artwork_files,
+    //               ...fileUrls,
+    //             ];
+    //           }
+    //         };
+    //         reader.readAsDataURL(file);
+    //       } else {
+    //         // Display error message or handle invalid file type
+    //         Swal.fire({
+    //           icon: "error",
+    //           title: this.$t("something went wrong"),
+    //           text: this.$t("upload only image files (png, jpeg) only"),
+    //           timer: 3000,
+    //           timerProgressBar: true,
+    //           showCancelButton: false,
+    //           showConfirmButton: false,
+    //         });
+    //       }
+    //     }
+    //   }
+    //   // this.ChangeCourseData(this.course_data);
+    // },
+    // REMOVE
+
     previewArtWorkFile(event) {
+      let accept = event.target.accept.split(",");
       const selectedFiles = event.target.files;
-      const allowedTypes = ["image/png", "image/jpeg"];
       const fileUrls = [];
+      let type_file = [];
+      for (let type of accept) {
+        type_file.push(type.split("/")[0]);
+      }
+
       for (let i = 0; i < selectedFiles.length; i++) {
-        const file = selectedFiles[i];
-        if (CheckFileSize(file, event.target.id) === true) {
-          if (allowedTypes.includes(file.type)) {
-            this.course_create_data.artwork_file.push(file);
-            // this.course_data.artwork_file.push(file);
+        let file_type = selectedFiles[i].type.split("/");
+
+        if (type_file.includes(file_type[0])) {
+          if (CheckFileSize(selectedFiles[i], event.target.id) === true) {
+            this.course_create_data.artwork_file.push(selectedFiles[i]);
+
+            const file = selectedFiles[i];
 
             const reader = new FileReader();
             reader.onload = () => {
-              fileUrls.push(reader.result);
+              fileUrls.push({
+                url: reader.result,
+                type: file.type, // Store the file type
+              });
               if (fileUrls.length == selectedFiles.length) {
                 this.preview_artwork_files = [
                   ...this.preview_artwork_files,
@@ -847,26 +1277,23 @@ export default {
               }
             };
             reader.readAsDataURL(file);
-          } else {
-            // Display error message or handle invalid file type
-            Swal.fire({
-              icon: "error",
-              title: this.$t("something went wrong"),
-              text: this.$t("upload only image files (png, jpeg) only"),
-              timer: 3000,
-              timerProgressBar: true,
-              showCancelButton: false,
-              showConfirmButton: false,
-            });
           }
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: this.$t("please upload only photo and video files"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
         }
       }
-      // this.ChangeCourseData(this.course_data);
     },
-    // REMOVE
-    removeArtworkFile(index) {
-      this.preview_artwork_files.splice(index, 1);
-      this.course_create_data.artwork_file.splice(index, 1);
+
+    async removeArtworkFile(index) {
+      await this.course_create_data?.artwork_file?.splice(index, 1);
+      this.preview_artwork_files?.splice(index, 1);
     },
     removePrivilegeFile() {
       this.preview_privilege_url = null;
