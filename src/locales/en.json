@@ -1023,6 +1023,7 @@
   "unable to close course": "Unable to close course",
   "unable to register Due to insufficient seats or the coach teaching in another package": "Unable to register Due to insufficient seats or the coach teaching in another package",
   "unable to register Because the course is already in your registration history": "Because the course is already in your registration history",
+  "upload image and video Learning Journey":"Upload image and video Learning Journey",
 
   "via email": "Via email",
   "view financial status": "View financial status",
@@ -1101,6 +1102,7 @@
 
   "specify the teaching institution, e.g. Manila Tamarind Music Center": "Specify the teaching institution, e.g. Manila Tamarind Music Center",
   "suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file": "Suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file",
+  "suggestion : Should upload an vdo file size not over 10 Mb must be MP4, MKV file":"Suggestion : Should upload an video file size not over 10 Mb must be MP4, MKV file",
   "select wls": "Select WLS",
   "select course": "Select course",
 
@@ -1121,6 +1123,7 @@
   "unable to add students to cart because the reservation could not be added": "unable to add students to cart because the reservation could not be added",
   "Unable to pay because this course been removed": "Unable to pay because this course been removed.",
   "Unable to pay because this course Package Option has been removed": "Unable to pay because this course Package Option has been removed.",
+  "VDO":"Video",
 
   "organized by": "Organized by",
 

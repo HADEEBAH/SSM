@@ -618,17 +618,23 @@
                       cols="12"
                       class="flex align-center justify-center text-h5"
                     >
-                      {{ $t("upload Learning Journey") }}
+                      {{ $t("upload image and video Learning Journey") }}
                     </v-col>
                     <v-col
                       cols="12"
                       class="flex align-center justify-center text-caption"
                     >
-                      ({{
+                      {{
                         $t(
                           "suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file"
                         )
-                      }})
+                      }}
+                      <br />
+                      {{
+                        $t(
+                          "suggestion : Should upload an vdo file size not over 10 Mb must be MP4, MKV file"
+                        )
+                      }}
                     </v-col>
                   </v-row>
                   <v-row dense>
