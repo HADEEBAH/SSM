@@ -1573,7 +1573,7 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
-        } else if (error.response.data.message == "please upload link video iframe only 1 video link.") {
+        } else if (error.response.data.message == "Please upload link video iframe only 1 video link.") {
           Swal.fire({
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
@@ -2000,7 +2000,7 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
-        } else if (error.response.data.message == "please upload link video iframe only 1 video link.") {
+        } else if (error.response.data.message == "Please upload link video iframe only 1 video link.") {
           Swal.fire({
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
@@ -2842,7 +2842,7 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
-        } else if (error.response.data.message == "please upload link video iframe only 1 video link.") {
+        } else if (error.response.data.message == "Please upload link video iframe only 1 video link.") {
           Swal.fire({
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
