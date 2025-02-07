@@ -1573,6 +1573,17 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
+        } else if (error.response.data.message == "please upload link video iframe only 1 video link.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("please upload link video iframe only 1 video link"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
         } else if (error.response.data.message.message == "Image invalid.") {
           Swal.fire({
             icon: "error",
@@ -1983,6 +1994,17 @@ const CourseModules = {
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
             text: VueI18n.t("please upload only 1 video link"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "please upload link video iframe only 1 video link.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("please upload link video iframe only 1 video link"),
             timer: 3000,
             showDenyButton: false,
             showCancelButton: false,
@@ -2814,6 +2836,17 @@ const CourseModules = {
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
             text: VueI18n.t("please upload only 1 video link"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "please upload link video iframe only 1 video link.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("please upload link video iframe only 1 video link"),
             timer: 3000,
             showDenyButton: false,
             showCancelButton: false,

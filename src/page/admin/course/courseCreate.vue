@@ -716,8 +716,8 @@ export default {
         url: null,
       });
     },
-    deleteLink(index_vdo) {
-      this.course_create_data.art_work_link.splice(index_vdo, 1);
+    async deleteLink(index_vdo) {
+      await this.course_create_data.art_work_link.splice(index_vdo, 1);
       if (this.course_create_data.art_work_link?.length <= 0) {
         this.addNewLink();
       }
@@ -733,14 +733,18 @@ export default {
       try {
         // this.$loader.open();
         const urlVideo = this.course_create_data?.art_work_link.map((item) => {
-          return item.url;
+          return item.url ? item.url : item;
         });
         if (urlVideo) {
           const validUrl = this.course_create_data?.art_work_link.map(
             (item) => {
               const regexYoutubeIframeUrl =
                 /<iframe.*?src="https:\/\/www\.youtube\.com\/embed\/.*?".*?><\/iframe>/i;
-              const match = item.url.match(regexYoutubeIframeUrl);
+              // const match = item.url.match(regexYoutubeIframeUrl);
+              // return match;
+              const match = item.url
+                ? item.url?.match(regexYoutubeIframeUrl)
+                : item;
               return match;
             }
           );

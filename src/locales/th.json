@@ -707,6 +707,7 @@
   "package cannot be deleted as there are students who have booked this package": "ไม่สามารถลบแพ็คเกจได้เนื่องจากมีนักเรียนจองเรียนในแพ็คเกจนี้",
   "please send only YouTube links":"กรุณากรอกลิ้งค์ให้ถูกต้อง",
   "please upload only 1 video link":"โปรดอัปโหลดเพียง 1 ลิงก์วิดีโอ",
+  "please upload link video iframe only 1 video link":"โปรดอัปโหลดลิงก์วิดีโอให้ถูกต้อง",
 
   "receipt language": "ใบเสร็จภาษา",
   "reason for leave": "เหตุผลการลา",
