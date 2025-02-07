@@ -1573,6 +1573,17 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
+        } else if (error.response.data.message == "Please upload link video iframe only 1 video link.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("please upload link video iframe only 1 video link"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
         } else if (error.response.data.message.message == "Image invalid.") {
           Swal.fire({
             icon: "error",
@@ -1989,6 +2000,17 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
+        } else if (error.response.data.message == "Please upload link video iframe only 1 video link.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("please upload link video iframe only 1 video link"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
         } else if (error.response.data.message == "File too large") {
           Swal.fire({
             icon: "warning",
@@ -2119,8 +2141,8 @@ const CourseModules = {
       context.commit("SetCourseImageIsLoading", true)
       try {
         // const localhost = 'http://localhost:3000'
-        // let { data } = await axios.get(`${localhost}/api/v1/course/artwork-image/${course_id}?limit=10&page=${page}`)
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/artwork-image/${course_id}?limit=2&page=1`)
+        // let { data } = await axios.get(`${localhost}/api/v1/course/artwork-image/${course_id}?limit=${limit}&page=${page}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/artwork-image/${course_id}?limit=${limit}&page=${page}`)
         if (data.statusCode === 200) {
           if (data.data.length > 0) {
             for (const artwork of data?.data) {
@@ -2142,7 +2164,7 @@ const CourseModules = {
       try {
         // const localhost = 'http://localhost:3000'
         // let { data } = await axios.get(`${localhost}/api/v1/course/artwork-video/${course_id}?limit=10&page=${page}`)
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/artwork-video/${course_id}?limit=2&page=1`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/artwork-video/${course_id}?limit=${limit}&page=${page}`)
         if (data.statusCode === 200) {
           if (data.data.length > 0) {
             for (const artwork of data.data) {
@@ -2814,6 +2836,17 @@ const CourseModules = {
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
             text: VueI18n.t("please upload only 1 video link"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "Please upload link video iframe only 1 video link.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("please upload link video iframe only 1 video link"),
             timer: 3000,
             showDenyButton: false,
             showCancelButton: false,
@@ -3551,9 +3584,11 @@ const CourseModules = {
             data.data.course_study_date.start_date_formatted = moment(data.data.course_study_date.start_date).format("YYYY-MM-DD");
             data.data.course_study_date.end_date_formatted = moment(data.data.course_study_date.end_date).format("YYYY-MM-DD");
             if (data.data?.art_work_image_video?.length > 0) {
-              for (const artwork of data.data.art_work_image_video) {
+              for (const artwork of data.data?.art_work_image_video) {
                 artwork.attachmentUrl = artwork.attachmentCourse ? `${process.env.VUE_APP_URL}/api/v1/files/${artwork.attachmentCourse}` : null
               }
+            } else {
+              data.data.art_work_image_video = []
             }
             data.data.art_work_link = data.data?.art_work_link?.length > 0 ? data.data?.art_work_link : data.data.art_work_link = [{
               url: '',
