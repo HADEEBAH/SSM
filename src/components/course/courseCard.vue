@@ -1085,7 +1085,14 @@
             short_preview_artwork_files?.length == 0
           "
         >
-          <v-col cols="6" sm="3" class="flex align-center justify-center">
+          <!-- <v-col cols="6" sm="3" class="flex align-center justify-center">
+            <v-img
+              src="@/assets/course/upload_file.png"
+              max-height="105"
+              max-width="122"
+            ></v-img>
+          </v-col> -->
+          <v-col cols="12" class="flex align-center justify-center">
             <v-img
               src="@/assets/course/upload_file.png"
               max-height="105"
