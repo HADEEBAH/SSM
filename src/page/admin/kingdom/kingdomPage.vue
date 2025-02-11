@@ -344,6 +344,7 @@ export default {
               category_name_en: this.englishInputText,
               category_description: this.kingdom.detail,
               taught_by: this.kingdom.learning_method,
+              is_active: true,
             };
 
             let bodyFormData = new FormData();
