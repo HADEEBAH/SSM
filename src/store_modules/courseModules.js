@@ -1530,8 +1530,10 @@ const CourseModules = {
         }
 
         // let localhost = "http://localhost:3000"
-        // let { data } = await axios.patch(`${localhost}/api/v1/manage/update-course/${course_id}`, payloadData, config)
-        let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-course/${course_id}`, payloadData, config)
+        // let { data } = await (await axios.patch(`${localhost}/api/v1/manage/update-course/${course_id}`, payloadData, config))
+        // let { data } = await (await axios.patch(`${localhost}/api/v1/manage/update-course/${course_id}`, payloadData, { timeout: 10000, ...config }))
+        let { data } = await (await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-course/${course_id}`, payloadData, { timeout: 10000, ...config }))
+        // let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-course/${course_id}`, payloadData, config)
         if (data.statusCode === 200) {
           // await context.dispatch("GetArtworkByCourse", { course_id: course_id })
           // await context.dispatch("GetCourse", course_id)
@@ -1550,7 +1552,8 @@ const CourseModules = {
           return await data.data
         }
       } catch (error) {
-        if (error.response.data.message == "the current student more than course student recived") {
+
+        if (error?.response?.data?.message == "the current student more than course student recived") {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("can not update course"),
@@ -1562,7 +1565,7 @@ const CourseModules = {
             timerProgressBar: true,
           })
           context.dispatch("GetCourse", course_id)
-        } else if (error.response.data.message == "Please upload only 1 video link.") {
+        } else if (error?.response?.data?.message == "Please upload only 1 video link.") {
           Swal.fire({
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
@@ -1573,7 +1576,7 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
-        } else if (error.response.data.message == "Please upload link video iframe only 1 video link.") {
+        } else if (error?.response?.data?.message == "Please upload link video iframe only 1 video link.") {
           Swal.fire({
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
@@ -1584,7 +1587,7 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
-        } else if (error.response.data.message.message == "Image invalid.") {
+        } else if (error?.response?.data?.message?.message == "Image invalid.") {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("this item cannot be made"),
@@ -1596,17 +1599,43 @@ const CourseModules = {
             timerProgressBar: true,
           })
           context.dispatch("GetCourse", course_id)
-        } else {
+        } else if (error?.response?.data?.message?.message == "Video invalid.") {
           Swal.fire({
             icon: "error",
-            title: VueI18n.t("something went wrong"),
-            text: VueI18n.t(error.response.data.message.message ? error.response.data.message.message : error.response.data.message),
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("invalid image"),
             timer: 3000,
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
             timerProgressBar: true,
           })
+        } else {
+          if (error.message === "timeout of 10000ms exceeded") {
+            Swal.fire({
+              icon: "error",
+              title: VueI18n.t("can not update course"),
+              text: VueI18n.t("video is to large"),
+              timer: 3000,
+              showDenyButton: false,
+              showCancelButton: false,
+              showConfirmButton: false,
+              timerProgressBar: true,
+            })
+            // context.dispatch("GetCourse", course_id)
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: VueI18n.t("something went wrong"),
+              text: error?.response?.data?.message?.message ? error?.response?.data?.message?.message : error?.response?.data?.message,
+              timer: 3000,
+              showDenyButton: false,
+              showCancelButton: false,
+              showConfirmButton: false,
+              timerProgressBar: true,
+            })
+          }
+
         }
 
       }
@@ -1947,7 +1976,8 @@ const CourseModules = {
         }
         // let localhost = "http://localhost:3000"
         // let { data } = await axios.patch(`${localhost}/api/v1/manage/update-artwork/${course_id}`, payloadData, config)
-        let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-artwork/${course_id}`, payloadData, config)
+        // let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-artwork/${course_id}`, payloadData, config)
+        let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-artwork/${course_id}`, payloadData, { timeout: 10000, ...config })
         if (data.statusCode === 200) {
           // await context.dispatch("GetArtworkByCourse", { course_id: course_id })
           // await context.dispatch("GetCourse", course_id)
@@ -1967,7 +1997,7 @@ const CourseModules = {
 
         }
       } catch (error) {
-        if (error.response.data.message.message == "Image invalid.") {
+        if (error?.response?.data?.message?.message == "Image invalid.") {
           Swal.fire({
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
@@ -1978,7 +2008,7 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
-        } else if (error.response.data.message.message == "Please send only YouTube links.") {
+        } else if (error?.response?.data?.message?.message == "Please send only YouTube links.") {
           Swal.fire({
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
@@ -1989,7 +2019,7 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
-        } else if (error.response.data.message == "Please upload only 1 video link.") {
+        } else if (error?.response?.data?.message == "Please upload only 1 video link.") {
           Swal.fire({
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
@@ -2000,7 +2030,7 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
-        } else if (error.response.data.message == "Please upload link video iframe only 1 video link.") {
+        } else if (error?.response?.data?.message == "Please upload link video iframe only 1 video link.") {
           Swal.fire({
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
@@ -2011,7 +2041,7 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
-        } else if (error.response.data.message == "File too large") {
+        } else if (error?.response?.data?.message == "File too large") {
           Swal.fire({
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
@@ -2022,17 +2052,42 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
-        } else {
+        } else if (error?.response?.data?.message?.message == "Video invalid.") {
           Swal.fire({
             icon: "error",
-            title: VueI18n.t("something went wrong"),
-            text: VueI18n.t(error.response.data.message.message ? error.response.data.message.message : error.response.data.message),
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("invalid image"),
             timer: 3000,
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
             timerProgressBar: true,
           })
+        } else {
+          if (error.message === "timeout of 10000ms exceeded") {
+            Swal.fire({
+              icon: "error",
+              title: VueI18n.t("can not update course"),
+              text: VueI18n.t("video is to large"),
+              timer: 3000,
+              showDenyButton: false,
+              showCancelButton: false,
+              showConfirmButton: false,
+              timerProgressBar: true,
+            })
+            // context.dispatch("GetCourse", course_id)
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: VueI18n.t("something went wrong"),
+              text: error?.response?.data?.message.message ? error?.response?.data?.message?.message : error?.response?.data?.message,
+              timer: 3000,
+              showDenyButton: false,
+              showCancelButton: false,
+              showConfirmButton: false,
+              timerProgressBar: true,
+            })
+          }
         }
       }
     },
@@ -2797,7 +2852,8 @@ const CourseModules = {
         }
         // let localhost = "http://localhost:3000"
         // let { data } = await axios.post(`${localhost}/api/v1/course/create`, data_payload, config)
-        let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/course/create`, data_payload, config)
+        // let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/course/create`, data_payload, config)
+        let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/course/create`, data_payload, { timeout: 10000, ...config })
         if (data.statusCode === 201) {
           context.commit("SetCourseIsLoading", false)
           router.replace({ name: "CourseList" })
@@ -2820,7 +2876,7 @@ const CourseModules = {
           throw { message: data }
         }
       } catch (error) {
-        if (error.response.data.message == "Image invalid.") {
+        if (error?.response?.data?.message == "Image invalid.") {
           Swal.fire({
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
@@ -2831,7 +2887,7 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
-        } else if (error.response.data.message == "Please upload only 1 video link.") {
+        } else if (error?.response?.data?.message == "Please upload only 1 video link.") {
           Swal.fire({
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
@@ -2842,7 +2898,7 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
-        } else if (error.response.data.message == "Please upload link video iframe only 1 video link.") {
+        } else if (error?.response?.data?.message == "Please upload link video iframe only 1 video link.") {
           Swal.fire({
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
@@ -2853,17 +2909,42 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
-        } else {
+        } else if (error?.response?.data?.message?.message == "Video invalid.") {
           Swal.fire({
             icon: "error",
-            title: VueI18n.t("something went wrong"),
-            text: VueI18n.t(error.response.data.message),
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("invalid image"),
             timer: 3000,
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
             timerProgressBar: true,
           })
+        } else {
+          if (error.message === "timeout of 10000ms exceeded") {
+            Swal.fire({
+              icon: "error",
+              title: VueI18n.t("can not update course"),
+              text: VueI18n.t("video is to large"),
+              timer: 3000,
+              showDenyButton: false,
+              showCancelButton: false,
+              showConfirmButton: false,
+              timerProgressBar: true,
+            })
+            // context.dispatch("GetCourse", course_id)
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: VueI18n.t("something went wrong"),
+              text: error?.response?.data?.message,
+              timer: 3000,
+              showDenyButton: false,
+              showCancelButton: false,
+              showConfirmButton: false,
+              timerProgressBar: true,
+            })
+          }
         }
         context.commit("SetCourseIsLoading", false)
       }
