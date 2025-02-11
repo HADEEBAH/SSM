@@ -708,6 +708,7 @@
   "please send only YouTube links":"กรุณากรอกลิ้งค์ให้ถูกต้อง",
   "please upload only 1 video link":"โปรดอัปโหลดเพียง 1 ลิงก์วิดีโอ",
   "please upload link video iframe only 1 video link":"โปรดอัปโหลดลิงก์วิดีโอให้ถูกต้อง",
+  "please upload only mp4 file":"กรุณาอัปโหลดเฉพาะไฟล์ MP4 เท่านั้น",
 
   "receipt language": "ใบเสร็จภาษา",
   "reason for leave": "เหตุผลการลา",
@@ -1094,7 +1095,7 @@
   "payee": "ผู้รับเงิน",
   "specify the teaching institution, e.g. Manila Tamarind Music Center": "ระบุสถาบันผู้จัดสอน เช่น ศูนย์ดนตรี Manila Tamarind",
   "suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file": "คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ ขนาดไฟล์ไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG",
-  "suggestion : Should upload an vdo file size not over 10 Mb must be MP4, MKV file":"คำแนะนำ : ควรอัปโหลดวีดิโอที่มีขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ MP4, MKV",
+  "suggestion : Should upload an vdo file size not over 10 Mb must be MP4, MKV file":"คำแนะนำ : ควรอัปโหลดวีดิโอที่มีขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ MP4 เท่านั้น",
   "select wls": "เลือกอาณาจักร",
   "select course": "เลือกคอร์สเรียน",
   "send payment notification": "ส่งแจ้งเตือนการชำระ",
