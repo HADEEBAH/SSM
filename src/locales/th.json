@@ -210,7 +210,7 @@
   "cannot resave the course to their parents": "ไม่สามารถบันทึกหลักสูตรใหม่ให้ผู้ปกครองได้",
   "cannot delete a coach as there must be at least 1 coach listed in the course": "ไม่สามารถลบโค้ชได้ เนื่องจากต้องมีโค้ชอย่างน้อย 1 คนอยู่ในรายการ",
   "can't select these dates because they are duplications of existing schedules":"ไม่สามารถเลือกวันที่เหล่านี้ได้เนื่องจากซ้ำกับกำหนดการที่มีอยู่",
-
+  "close-open kingdom status":"สถานะเปิด-ปิดอาณาจักร",
   "day": "วัน",
   "day and date": "วันและวันที่",
   "daily": "รายวัน",
@@ -297,6 +297,7 @@
   "delete holiday success":"ลบวันหยุดสำเร็จ",
   "delete":"ลบ",
   "delete package":"ลบแพ็กเกจ",
+  "do you want to change kingdom status":"คุณต้องการเปลี่ยนสถานะอาจักร",
 
   "edit": "แก้ไข",
   "edit wls": "แก้ไขอาณาจักร",

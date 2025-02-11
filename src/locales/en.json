@@ -229,6 +229,7 @@
   "cannot resave the course to their parents": "Cannot resave the course to their parents",
   "cannot delete a coach as there must be at least 1 coach listed in the course": "Cannot delete a coach as there must be at least 1 coach listed in the course",
   "can't select these dates because they are duplications of existing schedules":"can't select these dates because they are duplications of existing schedules",
+  "close-open kingdom status":"Close-open Kingdom status",
 
 
   "day": "Day",
@@ -319,6 +320,8 @@
   "delete holiday success":"Deleted holiday success",
   "delete":"Delete",
   "delete package":"Delete Package",
+  "do you want to change kingdom status":"Do you want to change kingdom status",
+
 
 
 
