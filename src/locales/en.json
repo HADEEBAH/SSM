@@ -748,6 +748,7 @@
   "please send only YouTube links":"Please send only YouTube links",
   "please upload only 1 video link":"Please upload only 1 video link",
   "please upload link video iframe only 1 video link":"Please upload link video iframe only 1 video link",
+  "please upload only mp4 file":"Please upload only mp4 file",
 
 
   "reason for leave": "Reason for leave",
@@ -1105,7 +1106,7 @@
 
   "specify the teaching institution, e.g. Manila Tamarind Music Center": "Specify the teaching institution, e.g. Manila Tamarind Music Center",
   "suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file": "Suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file",
-  "suggestion : Should upload an vdo file size not over 10 Mb must be MP4, MKV file":"Suggestion : Should upload an video file size not over 10 Mb must be MP4, MKV file",
+  "suggestion : Should upload an vdo file size not over 10 Mb must be MP4, MKV file":"Suggestion : Should upload an video file size not over 10 Mb must be MP4 only",
   "select wls": "Select WLS",
   "select course": "Select course",
 
