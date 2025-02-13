@@ -1085,7 +1085,14 @@
             short_preview_artwork_files?.length == 0
           "
         >
-          <v-col cols="6" sm="3" class="flex align-center justify-center">
+          <!-- <v-col cols="6" sm="3" class="flex align-center justify-center">
+            <v-img
+              src="@/assets/course/upload_file.png"
+              max-height="105"
+              max-width="122"
+            ></v-img>
+          </v-col> -->
+          <v-col cols="12" class="flex align-center justify-center">
             <v-img
               src="@/assets/course/upload_file.png"
               max-height="105"
@@ -1093,17 +1100,23 @@
             ></v-img>
           </v-col>
           <v-col cols="12" class="flex align-center justify-center text-h5">
-            {{ $t("upload Learning Journey") }}
+            {{ $t("upload image and video Learning Journey") }}
           </v-col>
           <v-col
             cols="12"
             class="flex align-center justify-center text-caption"
           >
-            ({{
+            {{
               $t(
                 "suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file"
               )
-            }})
+            }}
+            <br />
+            {{
+              $t(
+                "suggestion : Should upload an vdo file size not over 10 Mb must be MP4, MKV file"
+              )
+            }}
           </v-col>
         </v-row>
         <v-row dense>
@@ -1113,7 +1126,7 @@
               ref="fileInputArtwork"
               type="file"
               @change="previewArtWorkFile"
-              accept="image/png, image/jpeg ,video/*"
+              accept="image/png, image/jpeg ,video/mp4"
               multiple
               style="display: none"
             />
@@ -1256,7 +1269,7 @@
       </v-card>
     </v-card>
     <!-- DIALOG SHOW IMAGE -->
-    <v-dialog
+    <!-- <v-dialog
       persistent
       :width="$vuetify.breakpoint.smAndUp ? '60vw' : ''"
       v-model="show_attachment_dialog"
@@ -1277,8 +1290,7 @@
           </v-row>
           <v-row>
             <v-col cols="12">
-              <!-- IMAGE -->
-              <!-- class="max-h-[300px] max-w-300px rounded-lg" -->
+              IMAGE
 
               <v-img
                 v-if="
@@ -1313,8 +1325,7 @@
                   </v-row>
                 </template>
               </v-img>
-              <!-- VDO -->
-              <!-- style="object-fit: cover; margin: auto" -->
+              VDO
               <video
                 v-else-if="
                   typeImg === 'video' ||
@@ -1339,7 +1350,7 @@
                 <source :src="biggesImage" type="video/mp4" />
               </video>
 
-              <!-- YOUTUBE -->
+              YOUTUBE
               <div
                 v-else
                 id="video"
@@ -1360,7 +1371,159 @@
           </v-row>
         </v-container>
       </v-card>
+    </v-dialog> -->
+
+    <!-- IMAGE -->
+    <v-dialog
+      v-model="show_attachment_dialog"
+      max-width="888.88px"
+      v-if="
+        typeImg === 'img' || typeImg === 'image/png' || typeImg === 'image/jpeg'
+      "
+    >
+      <v-card>
+        <!-- Close Button -->
+        <v-btn
+          icon
+          small
+          class="bg-[#f00] absolute top-2 right-2 z-[4]"
+          dark
+          @click="closeShowImage()"
+        >
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+
+        <!-- Window Container -->
+        <v-window v-model="activeWindow">
+          <v-window-item>
+            <v-img
+              :src="biggesImage"
+              max-width="100%"
+              max-height="80vh"
+              contain
+            >
+              <template v-slot:placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-progress-circular
+                    indeterminate
+                    color="#ff6b81"
+                  ></v-progress-circular>
+                </v-row>
+              </template>
+            </v-img>
+          </v-window-item>
+        </v-window>
+      </v-card>
     </v-dialog>
+    <!-- VDO -->
+    <v-dialog
+      v-model="show_attachment_dialog"
+      v-else-if="
+        typeImg === 'video' ||
+        typeImg === 'video/mp4' ||
+        typeImg === 'video/x-matroska'
+      "
+      :width="$vuetify.breakpoint.smAndUp ? '888.88px' : ''"
+    >
+      <v-card>
+        <v-carousel
+          hide-delimiters
+          :show-arrows="false"
+          :height="$vuetify.breakpoint.smAndUp ? 'auto' : '100%'"
+        >
+          <v-btn
+            icon
+            small
+            class="bg-[#f00] absolute top-2 right-2 z-[4]"
+            dark
+            @click="closeShowImage()"
+          >
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <v-carousel-item>
+            <!-- VDO -->
+            <template
+              v-if="
+                typeImg === 'video' ||
+                typeImg === 'video/mp4' ||
+                typeImg === 'video/x-matroska'
+              "
+            >
+              <video
+                id="videoPlayer"
+                width="100%"
+                style="height: 100%; width: 100%"
+                class="video-content"
+                autoplay
+                muted
+                controls
+                loop
+              >
+                <source :src="biggesImage" type="video/mp4" />
+              </video>
+            </template>
+          </v-carousel-item>
+        </v-carousel>
+      </v-card>
+    </v-dialog>
+    <!-- YOUTUBE -->
+    <div v-else>
+      <!-- PHONE -->
+      <v-dialog
+        v-model="show_attachment_dialog"
+        v-if="!$vuetify.breakpoint.smAndUp"
+      >
+        <v-card>
+          <v-carousel hide-delimiters :show-arrows="false" height="200">
+            <v-btn
+              icon
+              small
+              class="bg-[#f00] absolute top-2 right-2 z-[4]"
+              dark
+              @click="closeShowImage()"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <v-carousel-item>
+              <!-- youtube -->
+              <template>
+                <div
+                  id="video"
+                  style="height: 100%; width: 100%"
+                  v-html="biggesImage"
+                ></div>
+              </template>
+            </v-carousel-item>
+          </v-carousel>
+        </v-card>
+      </v-dialog>
+      <!-- PC -->
+      <v-dialog v-model="show_attachment_dialog" v-else max-width="888.88px">
+        <v-card>
+          <v-carousel hide-delimiters :show-arrows="false">
+            <v-btn
+              icon
+              small
+              class="bg-[#f00] absolute top-2 right-2 z-[4]"
+              dark
+              @click="closeShowImage()"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <v-carousel-item>
+              <!-- youtube -->
+              <template>
+                <div
+                  id="video"
+                  style="height: 100%; width: 100%"
+                  v-html="biggesImage"
+                ></div>
+              </template>
+            </v-carousel-item>
+          </v-carousel>
+        </v-card>
+      </v-dialog>
+    </div>
 
     <!-- RESERVE -->
     <v-card flat>
@@ -1986,8 +2149,31 @@ export default {
       const selectedFiles = event.target.files;
       const fileUrls = [];
       let type_file = [];
+      let hasNonMp4Video = false;
       for (let type of accept) {
         type_file.push(type.split("/")[0]);
+      }
+
+      for (let i = 0; i < selectedFiles.length; i++) {
+        let file_type = selectedFiles[i].type.split("/");
+
+        // Check if the file is a video but not MP4
+        if (file_type[0] === "video" && file_type[1] !== "mp4") {
+          hasNonMp4Video = true;
+        }
+      }
+      // Show error and stop processing if any video is not MP4
+      if (hasNonMp4Video) {
+        Swal.fire({
+          icon: "info",
+          title: this.$t("something went wrong"),
+          text: this.$t("please upload only mp4 file"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
+        });
+        return;
       }
 
       for (let i = 0; i < selectedFiles.length; i++) {

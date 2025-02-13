@@ -194,7 +194,7 @@
               <v-col cols="12" class="text-2xl my-5 font-bold">
                 {{ $t("Learning Journey") }}
               </v-col>
-              <v-col class="text-xl">
+              <v-col class="text-xl font-bold">
                 {{ $t("image") }}
               </v-col>
             </v-row>
@@ -263,7 +263,7 @@
           <!-- VDO & YOUTUBE -->
           <div v-if="course_vdo?.length > 0 && !$vuetify.breakpoint.smAndUp">
             <v-row dense>
-              <v-col class="text-xl">
+              <v-col class="text-xl font-bold">
                 {{ $t("VDO") }}
               </v-col>
             </v-row>
@@ -624,7 +624,7 @@
         <v-col cols="12" class="text-2xl my-5 font-bold">
           {{ $t("Learning Journey") }}
         </v-col>
-        <v-col class="text-xl">
+        <v-col class="text-xl font-bold">
           {{ $t("image") }}
         </v-col>
       </v-row>
@@ -690,7 +690,7 @@
     <!-- VDO & YOUTUBE -->
     <div v-if="course_vdo?.length > 0 && $vuetify.breakpoint.smAndUp">
       <v-row dense>
-        <v-col class="text-xl">
+        <v-col class="text-xl font-bold">
           {{ $t("VDO") }}
         </v-col>
       </v-row>
@@ -844,7 +844,7 @@
     </div> -->
 
     <!-- DIALOG SHOW IMAGE -->
-    <v-dialog
+    <!-- <v-dialog
       persistent
       :width="$vuetify.breakpoint.smAndUp ? '100vw' : ''"
       v-model="show_attachment_dialog"
@@ -865,8 +865,7 @@
           </v-row>
           <v-row>
             <v-col cols="12">
-              <!-- IMAGE -->
-              <!-- class="max-h-[300px] max-w-300px rounded-lg" -->
+              IMAGE
 
               <v-img
                 v-if="
@@ -901,8 +900,7 @@
                   </v-row>
                 </template>
               </v-img>
-              <!-- VDO -->
-              <!-- style="object-fit: cover; margin: auto" -->
+              VDO
 
               <video
                 v-else-if="
@@ -928,7 +926,7 @@
                 <source :src="biggesImage" type="video/mp4" />
               </video>
 
-              <!-- YOUTUBE -->
+              YOUTUBE
               <div
                 v-else
                 id="video"
@@ -949,7 +947,159 @@
           </v-row>
         </v-container>
       </v-card>
+    </v-dialog> -->
+
+    <!-- IMAGE -->
+    <v-dialog
+      v-model="show_attachment_dialog"
+      max-width="888.88px"
+      v-if="
+        typeImg === 'img' || typeImg === 'image/png' || typeImg === 'image/jpeg'
+      "
+    >
+      <v-card>
+        <!-- Close Button -->
+        <v-btn
+          icon
+          small
+          class="bg-[#f00] absolute top-2 right-2 z-[4]"
+          dark
+          @click="closeShowImage()"
+        >
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+
+        <!-- Window Container -->
+        <v-window v-model="activeWindow">
+          <v-window-item>
+            <v-img
+              :src="biggesImage"
+              max-width="100%"
+              max-height="80vh"
+              contain
+            >
+              <template v-slot:placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-progress-circular
+                    indeterminate
+                    color="#ff6b81"
+                  ></v-progress-circular>
+                </v-row>
+              </template>
+            </v-img>
+          </v-window-item>
+        </v-window>
+      </v-card>
     </v-dialog>
+    <!-- VDO -->
+    <v-dialog
+      v-model="show_attachment_dialog"
+      v-else-if="
+        typeImg === 'video' ||
+        typeImg === 'video/mp4' ||
+        typeImg === 'video/x-matroska'
+      "
+      :width="$vuetify.breakpoint.smAndUp ? '888.88px' : ''"
+    >
+      <v-card>
+        <v-carousel
+          hide-delimiters
+          :show-arrows="false"
+          :height="$vuetify.breakpoint.smAndUp ? 'auto' : '100%'"
+        >
+          <v-btn
+            icon
+            small
+            class="bg-[#f00] absolute top-2 right-2 z-[4]"
+            dark
+            @click="closeShowImage()"
+          >
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <v-carousel-item>
+            <!-- VDO -->
+            <template
+              v-if="
+                typeImg === 'video' ||
+                typeImg === 'video/mp4' ||
+                typeImg === 'video/x-matroska'
+              "
+            >
+              <video
+                id="videoPlayer"
+                width="100%"
+                style="height: 100%; width: 100%"
+                class="video-content"
+                autoplay
+                muted
+                controls
+                loop
+              >
+                <source :src="biggesImage" type="video/mp4" />
+              </video>
+            </template>
+          </v-carousel-item>
+        </v-carousel>
+      </v-card>
+    </v-dialog>
+    <!-- YOUTUBE -->
+    <div v-else>
+      <!-- PHONE -->
+      <v-dialog
+        v-model="show_attachment_dialog"
+        v-if="!$vuetify.breakpoint.smAndUp"
+      >
+        <v-card>
+          <v-carousel hide-delimiters :show-arrows="false" height="200">
+            <v-btn
+              icon
+              small
+              class="bg-[#f00] absolute top-2 right-2 z-[4]"
+              dark
+              @click="closeShowImage()"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <v-carousel-item>
+              <!-- youtube -->
+              <template>
+                <div
+                  id="video"
+                  style="height: 100%; width: 100%"
+                  v-html="biggesImage"
+                ></div>
+              </template>
+            </v-carousel-item>
+          </v-carousel>
+        </v-card>
+      </v-dialog>
+      <!-- PC -->
+      <v-dialog v-model="show_attachment_dialog" v-else max-width="888.88px">
+        <v-card>
+          <v-carousel hide-delimiters :show-arrows="false">
+            <v-btn
+              icon
+              small
+              class="bg-[#f00] absolute top-2 right-2 z-[4]"
+              dark
+              @click="closeShowImage()"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <v-carousel-item>
+              <!-- youtube -->
+              <template>
+                <div
+                  id="video"
+                  style="height: 100%; width: 100%"
+                  v-html="biggesImage"
+                ></div>
+              </template>
+            </v-carousel-item>
+          </v-carousel>
+        </v-card>
+      </v-dialog>
+    </div>
     <loading-overlay :loading="course_is_loading"></loading-overlay>
   </v-container>
 </template>
@@ -1248,5 +1398,17 @@ export default {
   /* font-size: 40px; */
   justify-content: center;
   scroll-snap-align: start;
+}
+.carousel-content {
+  width: auto;
+  height: auto;
+  background: black;
+  align-items: center !important;
+}
+
+.video-content {
+  width: 100%;
+  height: 100%;
+  height: auto;
 }
 </style>

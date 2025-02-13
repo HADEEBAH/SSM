@@ -231,6 +231,7 @@
   "category":"Category",
   
   "can't select these dates because they are duplications of existing schedules":"can't select these dates because they are duplications of existing schedules",
+  "close-open kingdom status":"Close-open Kingdom status",
 
 
   "day": "Day",
@@ -321,6 +322,8 @@
   "delete holiday success":"Deleted holiday success",
   "delete":"Delete",
   "delete package":"Delete Package",
+  "do you want to change kingdom status":"Do you want to change kingdom status",
+
 
 
 
@@ -617,6 +620,7 @@
   "please filter yourse class": "Please fill in your class",
   "please filter yourse more class": "Please fill in your class",
   "please filter yourse school": "Please fill in school name of",
+  "please filter school name": "Please filter school name",
   "please filter yourse nickname": "Please fill in your nickname",
   "please filter yourse class or nickname": "Please fill in your nickname or class",
   "please filter yourse congenitalDisease": "Please fill in your congenital disease",
@@ -754,6 +758,9 @@
   "this teaching day cannot be deleted as the coach must have at least 1 teaching day": "This teaching day cannot be deleted as the coach must have at least 1 teaching day",
   "please send only YouTube links":"Please send only YouTube links",
   "please upload only 1 video link":"Please upload only 1 video link",
+  "please upload link video iframe only 1 video link":"Please upload link video iframe only 1 video link",
+  "please upload only mp4 file":"Please upload only mp4 file",
+
 
   "reason for leave": "Reason for leave",
   "read more": "Read more",
@@ -1032,6 +1039,7 @@
   "unable to close course": "Unable to close course",
   "unable to register Due to insufficient seats or the coach teaching in another package": "Unable to register Due to insufficient seats or the coach teaching in another package",
   "unable to register Because the course is already in your registration history": "Because the course is already in your registration history",
+  "upload image and video Learning Journey":"Upload image and video Learning Journey",
 
   "via email": "Via email",
   "view financial status": "View financial status",
@@ -1110,6 +1118,7 @@
 
   "specify the teaching institution, e.g. Manila Tamarind Music Center": "Specify the teaching institution, e.g. Manila Tamarind Music Center",
   "suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file": "Suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file",
+  "suggestion : Should upload an vdo file size not over 10 Mb must be MP4, MKV file":"Suggestion : Should upload an video file size not over 10 Mb must be MP4 only",
   "select wls": "Select WLS",
   "select course": "Select course",
 
@@ -1130,8 +1139,10 @@
   "unable to add students to cart because the reservation could not be added": "unable to add students to cart because the reservation could not be added",
   "Unable to pay because this course been removed": "Unable to pay because this course been removed.",
   "Unable to pay because this course Package Option has been removed": "Unable to pay because this course Package Option has been removed.",
+  "VDO":"Video",
 
   "organized by": "Organized by",
+  "vdo":"Video",
 
   "z": "z",
   "?": "?"

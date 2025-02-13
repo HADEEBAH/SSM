@@ -320,7 +320,7 @@
                     cols="12"
                     class="flex align-center justify-center text-h5"
                   >
-                    {{ $t("upload Learning Journey") }}
+                    {{ $t("upload image and video Learning Journey") }}
                   </v-col>
                   <v-col
                     cols="12"
@@ -329,6 +329,12 @@
                     {{
                       $t(
                         "suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file"
+                      )
+                    }}
+                    <br />
+                    {{
+                      $t(
+                        "suggestion : Should upload an vdo file size not over 10 Mb must be MP4, MKV file"
                       )
                     }}
                   </v-col>
@@ -340,7 +346,7 @@
                       ref="fileInputArtwork"
                       type="file"
                       @change="previewArtWorkFile"
-                      accept="image/png, image/jpeg ,video/*"
+                      accept="image/png, image/jpeg ,video/mp4"
                       multiple
                       style="display: none"
                     />
@@ -710,8 +716,8 @@ export default {
         url: null,
       });
     },
-    deleteLink(index_vdo) {
-      this.course_create_data.art_work_link.splice(index_vdo, 1);
+    async deleteLink(index_vdo) {
+      await this.course_create_data.art_work_link.splice(index_vdo, 1);
       if (this.course_create_data.art_work_link?.length <= 0) {
         this.addNewLink();
       }
@@ -727,14 +733,18 @@ export default {
       try {
         // this.$loader.open();
         const urlVideo = this.course_create_data?.art_work_link.map((item) => {
-          return item.url;
+          return item.url ? item.url : item;
         });
         if (urlVideo) {
           const validUrl = this.course_create_data?.art_work_link.map(
             (item) => {
               const regexYoutubeIframeUrl =
                 /<iframe.*?src="https:\/\/www\.youtube\.com\/embed\/.*?".*?><\/iframe>/i;
-              const match = item.url.match(regexYoutubeIframeUrl);
+              // const match = item.url.match(regexYoutubeIframeUrl);
+              // return match;
+              const match = item.url
+                ? item.url?.match(regexYoutubeIframeUrl)
+                : item;
               return match;
             }
           );
@@ -1250,8 +1260,33 @@ export default {
       const selectedFiles = event.target.files;
       const fileUrls = [];
       let type_file = [];
+      let hasNonMp4Video = false;
+
       for (let type of accept) {
         type_file.push(type.split("/")[0]);
+      }
+
+      for (let i = 0; i < selectedFiles.length; i++) {
+        let file_type = selectedFiles[i].type.split("/");
+
+        // Check if the file is a video but not MP4
+        if (file_type[0] === "video" && file_type[1] !== "mp4") {
+          hasNonMp4Video = true;
+        }
+      }
+
+      // Show error and stop processing if any video is not MP4
+      if (hasNonMp4Video) {
+        Swal.fire({
+          icon: "info",
+          title: this.$t("something went wrong"),
+          text: this.$t("please upload only mp4 file"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
+        });
+        return;
       }
 
       for (let i = 0; i < selectedFiles.length; i++) {
