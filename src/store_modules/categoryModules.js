@@ -10,11 +10,12 @@ const categoryModules = {
         category: {},
         category_is_loading: false,
         categorys_is_loading: false,
+        update_category: {}
     },
     mutations: {
-        SetShowMore(state, payload){
-            const showMore = state.categorys.find((v)=>v.categoryId  === payload.categoryId).show
-            state.categorys.find((v)=>v.categoryId  === payload.categoryId).show = !showMore
+        SetShowMore(state, payload) {
+            const showMore = state.categorys.find((v) => v.categoryId === payload.categoryId).show
+            state.categorys.find((v) => v.categoryId === payload.categoryId).show = !showMore
         },
         SetCategoryOption(state, payload) {
             state.category_option = payload
@@ -30,7 +31,10 @@ const categoryModules = {
         },
         SetCategorysIsLoading(state, value) {
             state.categorys_is_loading = value
-        }
+        },
+        SetUpdateCategory(state, value) {
+            state.update_category = value
+        },
     },
     actions: {
         async GetCategorys(context) {
@@ -50,6 +54,8 @@ const categoryModules = {
                 context.commit("SetCategorysIsLoading", true)
             }
             try {
+                // let localhost = "http://localhost:3000"
+                // let { data } = await axios.get(`${localhost}/api/v1/category/limit?limit=${limit}&page=${page}`)
                 let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/category/limit?limit=${limit}&page=${page}`)
                 if (data.statusCode === 200) {
                     let categorys = data.data
@@ -117,7 +123,53 @@ const categoryModules = {
                     }
                 }
             }
+        },
+        async UpdateCategory(context, { category_id, payload }) {
+            try {
+                let config = {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Content-type": "Application/json",
+                        Authorization: `Bearer ${VueCookie.get("token")}`,
+                    },
+                };
+                let bodyFormData = new FormData();
+                bodyFormData.append("categoryImg", null);
+                bodyFormData.append("payload", JSON.stringify(payload));
+
+                // let localhost = "http://localhost:3000"
+                // let { data } = await axios.patch(`${localhost}/api/v1/category/${category_id}`, bodyFormData, config);
+                let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/category/${category_id}`, bodyFormData, config);
+                if (data.statusCode === 200) {
+
+                    context.commit("SetUpdateCategory", data.data)
+                    Swal.fire({
+                        icon: "success",
+                        title: VueI18n.t("succeed"),
+                        text: VueI18n.t("already edited"),
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                    });
+                    context.dispatch("GetCategorys")
+
+                }
+            } catch (error) {
+                Swal.fire({
+                    icon: "error",
+                    title: VueI18n.t("something went wrong"),
+                    text: error.response.data.message,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                })
+
+            }
         }
+
+
     },
     getters: {
         getCategoryOption(state) {

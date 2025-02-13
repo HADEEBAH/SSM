@@ -43,6 +43,14 @@
         <template v-slot:[`no-results`]>
           <div class="font-bold">{{ $t("no data found in table") }}</div>
         </template>
+        <template v-slot:[`item.kingdomStatus`]="{ item }">
+          <v-switch
+            v-model="item.isActive"
+            color="#ff6b81"
+            inset
+            @change="handleStatusChange(item)"
+          ></v-switch>
+        </template>
       </v-data-table>
     </div>
   </v-container>
@@ -66,6 +74,7 @@ export default {
     ...mapActions({
       GetCategorys: "CategoryModules/GetCategorys",
       DeleteCategory: "CategoryModules/DeleteCategory",
+      UpdateCategory: "CategoryModules/UpdateCategory",
     }),
     categoryDelete(category) {
       Swal.fire({
@@ -82,6 +91,34 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.DeleteCategory({ category_id: category.categoryId });
+        }
+      });
+    },
+    handleStatusChange(item) {
+      Swal.fire({
+        icon: "question",
+        title: `${this.$t("do you want to change kingdom status")} (${
+          this.$i18n.locale == "th" ? item.categoryNameTh : item.categoryNameEng
+        }) ${this.$t("?")}`,
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("cancel"),
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          let payload = {
+            categoryNameTh: item.categoryNameTh,
+            categoryNameEng: item.categoryNameEng,
+            taughtBy: item.taughtBy,
+            categoryDescription: item.categoryDescription,
+            isActive: item.isActive,
+          };
+          this.UpdateCategory({
+            category_id: item.categoryId,
+            payload: payload,
+          });
+        } else {
+          this.$store.dispatch("CategoryModules/GetCategorys");
         }
       });
     },
@@ -112,6 +149,12 @@ export default {
           align: "start",
           sortable: false,
           value: "taughtBy",
+        },
+        {
+          text: this.$t("close-open kingdom status"),
+          align: "start",
+          sortable: false,
+          value: "kingdomStatus",
         },
         { text: "", align: "center", value: "actions", sortable: false },
       ];

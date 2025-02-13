@@ -71,7 +71,7 @@
   "add coaach succeed": "เพิ่มโค้ชสำเร็จ",
   "as the number of seats in the package is less than the number of seats available for current students": "เนื่องจากจำนวนที่นั่งในแพ็คเกจน้อยกว่าจำนวนที่นั่งว่างสำหรับนักศึกษาปัจจุบัน",
   "add options":"เพิ่มช่วงเวลา",
-  "add video link":"เพิ่มลิ้งก์วีดิโอ",
+  "add video link":"เพิ่มลิงก์วิดีโอ",
   "add item":"เพิ่มรายการ",
 
   "date list": "รายการวันที่",
@@ -210,7 +210,7 @@
   "cannot resave the course to their parents": "ไม่สามารถบันทึกหลักสูตรใหม่ให้ผู้ปกครองได้",
   "cannot delete a coach as there must be at least 1 coach listed in the course": "ไม่สามารถลบโค้ชได้ เนื่องจากต้องมีโค้ชอย่างน้อย 1 คนอยู่ในรายการ",
   "can't select these dates because they are duplications of existing schedules":"ไม่สามารถเลือกวันที่เหล่านี้ได้เนื่องจากซ้ำกับกำหนดการที่มีอยู่",
-
+  "close-open kingdom status":"สถานะเปิด-ปิดอาณาจักร",
   "day": "วัน",
   "day and date": "วันและวันที่",
   "daily": "รายวัน",
@@ -297,6 +297,7 @@
   "delete holiday success":"ลบวันหยุดสำเร็จ",
   "delete":"ลบ",
   "delete package":"ลบแพ็กเกจ",
+  "do you want to change kingdom status":"คุณต้องการเปลี่ยนสถานะอาจักร",
 
   "edit": "แก้ไข",
   "edit wls": "แก้ไขอาณาจักร",
@@ -431,7 +432,7 @@
   "listed by": "ทำรายการโดย",
   "logout": "ออกจากระบบ",
   "login": "เข้าสู่ระบบ",
-  "link vdo": "ลิ้งก์วีดีโอ",
+  "link vdo": "ลิงก์วิดีโอ",
 
   "management": "การจัดการ",
   "manage": "จัดการ",
@@ -574,6 +575,7 @@
   "please filter yourse more class": "กรุณากรอกระดับชั้น",
   "please filter yourse nickname": "กรุณากรอกชื่อเล่น",
   "please filter yourse school": "กรุณากรอกชื่อโรงเรียนของนักเรียน",
+  "please filter school name": "กรุณากรอกชื่อโรงเรียนของนักเรียน",
   "please filter yourse class or nickname": "กรุณากรอกชื่อเล่น หรือ ระดับชั้น",
   "please filter yourse congenitalDisease": "กรุณากรอกโรคประจำตัว/อาหารที่แพ้",
   "please complete personal information": "กรุณากรอกข้อมูลส่วนตัวให้ครบถ้วนหรือกดปุ่มยกเลิกกรณีไม่ต้องการแก้ไขข้อมูล",
@@ -707,6 +709,8 @@
   "package cannot be deleted as there are students who have booked this package": "ไม่สามารถลบแพ็คเกจได้เนื่องจากมีนักเรียนจองเรียนในแพ็คเกจนี้",
   "please send only YouTube links":"กรุณากรอกลิ้งค์ให้ถูกต้อง",
   "please upload only 1 video link":"โปรดอัปโหลดเพียง 1 ลิงก์วิดีโอ",
+  "please upload link video iframe only 1 video link":"โปรดอัปโหลดลิงก์วิดีโอให้ถูกต้อง",
+  "please upload only mp4 file":"กรุณาอัปโหลดเฉพาะไฟล์ MP4 เท่านั้น",
 
   "receipt language": "ใบเสร็จภาษา",
   "reason for leave": "เหตุผลการลา",
@@ -983,6 +987,7 @@
   "unable to register Because the course is already in your registration history": "เนื่องจากหลักสูตรนี้อยู่ในประวัติการลงทะเบียนของคุณแล้ว",
   "Unable to pay because this course been removed": "ไม่สามารถดำเนินการชำระได้เนื่องจากคอร์สนี้ถูกลบไปแล้ว",
   "Unable to pay because this course Package Option has been removed": "ไม่สามารถดำเนินการชำระได้เนื่องจากแพ็คเกจนี้ถูกลบไปแล้ว",
+  "upload image and video Learning Journey":"อัปโหลดรูปภาพและวิดีโอ Learning Journey",
 
   "via email": "ผ่านอีเมล",
   "view financial status": "ดูสถานะการเงิน",
@@ -1092,6 +1097,7 @@
   "payee": "ผู้รับเงิน",
   "specify the teaching institution, e.g. Manila Tamarind Music Center": "ระบุสถาบันผู้จัดสอน เช่น ศูนย์ดนตรี Manila Tamarind",
   "suggestion : Should upload an image with size 1024 x 576 (16:9) and file size not over 5 Mb must be JPG, PNG file": "คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ ขนาดไฟล์ไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG",
+  "suggestion : Should upload an vdo file size not over 10 Mb must be MP4, MKV file":"คำแนะนำ : ควรอัปโหลดวีดิโอที่มีขนาดไฟล์ไม่เกิน 10 Mb ต้องเป็นไฟล์ MP4 เท่านั้น",
   "select wls": "เลือกอาณาจักร",
   "select course": "เลือกคอร์สเรียน",
   "send payment notification": "ส่งแจ้งเตือนการชำระ",
@@ -1113,6 +1119,8 @@
   "unable to add students to cart because the course already has students listed in the cart": "ไม่สามารถเพิ่มนักเรียนลงตะกร้าได้เนื่องจากหลักสูตรมีนักเรียนอยู่ในรายการรถเข็นแล้ว",
   "unable to add students to cart because the reservation could not be added": "ไม่สามารถเพิ่มนักเรียนลงตะกร้าได้เนื่องจากไม่สามารถเพิ่มการจองเข้าไปในรายการรถเข็นได้",
 
+  "vdo":"วีดิโอ",
+  "VDO":"วิดีโอ",
   "organized by": "จัดสอนโดย",
   "z": "z",
   "?": "ใช่หรือไม่"
