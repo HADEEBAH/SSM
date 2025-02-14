@@ -514,10 +514,32 @@
               <template>
                 <v-data-table
                   :headers="headersStatistic"
-                  :items="statisticData"
+                  :items="get_statustic.data"
                   hide-default-footer
                   class="elevation-1 header-table mx-3 my-3"
-                ></v-data-table>
+                >
+                  <template v-slot:[`item.courseType`]="{ item }">
+                    {{
+                      $i18n.locale == "th"
+                        ? `${item.courseTypeNameTh}`
+                        : `${item.courseTypeNameEn}`
+                    }}
+                  </template>
+                  <template v-slot:[`item.category`]="{ item }">
+                    {{
+                      $i18n.locale == "th"
+                        ? `${item.categoryNameTh}`
+                        : `${item.categoryNameEn}`
+                    }}
+                  </template>
+                  <template v-slot:[`item.courseName`]="{ item }">
+                    {{
+                      $i18n.locale == "th"
+                        ? `${item.courseNameTh}`
+                        : `${item.courseNameEn}`
+                    }}
+                  </template>
+                </v-data-table>
               </template>
             </v-card>
           </v-col>
@@ -1423,6 +1445,14 @@ export default {
     this.mapMonth = this.thaiMonths.filter(
       (item) => parseInt(item.key) === month
     )[0];
+    this.GetStatistic({
+      limit: 10,
+      page: 1,
+      search: "",
+      category: "",
+      course: "",
+      courseTypeId: "",
+    });
   },
   beforeMount() {},
   async mounted() {
@@ -1452,6 +1482,7 @@ export default {
       labels_chart_en: "DashboardModules/getLabelsChartEn",
       get_student_value: "DashboardModules/getStudentValue",
       categorys: "CategoryModules/getCategorys",
+      get_statustic: "DashboardModules/getStatistic",
     }),
 
     headersStatistic() {
@@ -1469,13 +1500,13 @@ export default {
           text: this.$t("number of students currently studying"),
           align: "center",
           sortable: false,
-          value: "currentlyStudent",
+          value: "studentCountInStudy",
         },
         {
           text: this.$t("number of students who have purchased courses"),
           align: "center",
           sortable: false,
-          value: "numberPurchasedCourses",
+          value: "studentCountInPotential",
         },
       ];
     },
@@ -1720,6 +1751,8 @@ export default {
       FilterYears: "DashboardModules/FilterYears",
       GetStudentValue: "DashboardModules/GetStudentValue",
       GetCategorys: "CategoryModules/GetCategorys",
+      GetStatistic: "DashboardModules/GetStatistic",
+      FilterStatistic: "DashboardModules/FilterStatistic",
     }),
 
     async openDialogexportStatistic() {
@@ -1742,7 +1775,8 @@ export default {
     },
     async exportStatistic() {
       // console.log("object :>> ", this.export_statistic);
-      this.loadingFilter = true;
+      await this.FilterStatistic({ export_data: this.export_statistic });
+      this.loadingFilter = false;
       this.filter_statistic = false;
       this.export_statistic = {
         course_type_id: null,
