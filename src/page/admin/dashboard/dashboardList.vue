@@ -2,7 +2,10 @@
 <template>
   <v-app class="background-color">
     <v-container class="overflow-x: hidden;">
-      <loading-overlay :loading="dashboard_loading"> </loading-overlay>
+      <loading-overlay
+        :loading="dashboard_loading ? dashboard_loading : statistic_loading"
+      >
+      </loading-overlay>
 
       <headerPage :title="$t('dashboard')"></headerPage>
       <!-- TOP CARD -->
@@ -1483,6 +1486,7 @@ export default {
       get_student_value: "DashboardModules/getStudentValue",
       categorys: "CategoryModules/getCategorys",
       get_statustic: "DashboardModules/getStatistic",
+      statistic_loading: "DashboardModules/getloadingStatistic",
     }),
 
     headersStatistic() {
@@ -1502,12 +1506,12 @@ export default {
           sortable: false,
           value: "studentCountInStudy",
         },
-        {
-          text: this.$t("number of students who have purchased courses"),
-          align: "center",
-          sortable: false,
-          value: "studentCountInPotential",
-        },
+        // {
+        //   text: this.$t("number of students who have purchased courses"),
+        //   align: "center",
+        //   sortable: false,
+        //   value: "studentCountInPotential",
+        // },
       ];
     },
 

@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <loading-overlay :loading="statistic_loading"> </loading-overlay>
     <v-row dense>
       <v-col cols="12" sm="6">
         <headerPage :breadcrumbs="breadcrumbs"></headerPage>
@@ -58,10 +59,12 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import headerPage from "@/components/header/headerPage.vue";
+import loadingOverlay from "@/components/loading/loadingOverlay.vue";
 
 export default {
   components: {
     headerPage,
+    loadingOverlay,
   },
   data: () => ({
     search: "",
@@ -79,6 +82,7 @@ export default {
     ...mapGetters({
       get_statustic: "DashboardModules/getStatistic",
       limit_statistic: "DashboardModules/getLimitStatistic",
+      statistic_loading: "DashboardModules/getloadingStatistic",
     }),
     breadcrumbs() {
       return [
@@ -103,12 +107,12 @@ export default {
           sortable: false,
           value: "studentCountInStudy",
         },
-        {
-          text: this.$t("number of students who have purchased courses"),
-          align: "center",
-          sortable: false,
-          value: "studentCountInPotential",
-        },
+        // {
+        //   text: this.$t("number of students who have purchased courses"),
+        //   align: "center",
+        //   sortable: false,
+        //   value: "studentCountInPotential",
+        // },
       ];
     },
     computedServerItemsLength() {

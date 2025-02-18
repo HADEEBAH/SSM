@@ -61,12 +61,16 @@ const dashboardModules = {
     get_student_list_value: [],
     get_statustic: [],
     limit_statistic: {},
-    statistic_filter: []
+    statistic_filter: [],
+    statistic_loading: false
 
 
 
   },
   mutations: {
+    SetLoadingStatistic(state, value) {
+      state.statistic_loading = value
+    },
     SetStatisticFilter(state, payload) {
       state.statistic_filter = payload
     },
@@ -154,7 +158,7 @@ const dashboardModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        context.commit("SetGetLoading", true)
+        context.commit("SetLoadingStatistic", true)
         let courseTypeId = ''
         let courseId = ''
         let categoryId = ''
@@ -208,7 +212,7 @@ const dashboardModules = {
             link.download = `statisticReport.xlsx`;
             link.click();
             URL.revokeObjectURL(url);
-            context.commit("SetGetLoading", false)
+            context.commit("SetLoadingStatistic", false)
 
           } else {
             Swal.fire({
@@ -220,16 +224,16 @@ const dashboardModules = {
               showCancelButton: false,
               showConfirmButton: false,
             })
-            context.commit("SetGetLoading", false)
+            context.commit("SetLoadingStatistic", false)
 
           }
         }
       } catch (error) {
-        context.commit("SetGetLoading", false)
+        context.commit("SetLoadingStatistic", false)
         Swal.fire({
           icon: "warning",
           title: VueI18n.t("something went wrong"),
-          text: VueI18n.t("data not found 222"),
+          text: VueI18n.t("data not found"),
           timer: 3000,
           timerProgressBar: true,
           showCancelButton: false,
@@ -240,7 +244,7 @@ const dashboardModules = {
     async GetStatistic(context, { limit, page, search, category, course, courseTypeId }) {
 
       // {limit, page, search, category, course, courseTypeId}
-      context.commit("SetGetLoading", true)
+      context.commit("SetLoadingStatistic", true)
       let queryLimit = ''
       let queryPage = ''
       let querySearch = ''
@@ -265,9 +269,11 @@ const dashboardModules = {
           await context.commit('SetLimitStatistic', { limit: limit, page: page, count: data.data.length })
           context.commit("SetGetStatistic", data.data)
         }
+        context.commit("SetLoadingStatistic", false)
+
       } catch (error) {
 
-        context.commit("SetGetLoading", false)
+        context.commit("SetLoadingStatistic", false)
 
       }
     },
@@ -592,6 +598,9 @@ const dashboardModules = {
 
   },
   getters: {
+    getloadingStatistic(state) {
+      return state.statistic_loading
+    },
     getLimitStatistic(state) {
       return state.limit_statistic
     },
