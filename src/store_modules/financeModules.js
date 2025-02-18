@@ -62,7 +62,7 @@ const financeModules = {
           let sumTotal = 0
           if (data.data.length > 0) {
             data.data.forEach(order => {
-              sumTotal = (parseFloat(order?.price || 0) - parseFloat(order?.discount || 0))- parseFloat(order?.other_discount || 0)
+              sumTotal = (parseFloat(order?.price || 0) - parseFloat(order?.discount || 0)) - parseFloat(order?.other_discount || 0)
               sumPrice = sumPrice + parseFloat(sumTotal)
               // sumPrice = sumPrice + parseFloat(order.price)
               if (order.payment_status === 'success') {
@@ -70,13 +70,13 @@ const financeModules = {
                 // sumSuccess = sumSuccess + parseFloat(order.price)
               }
               if (order.payment_status === 'pending') {
-                sumPending = sumPending  + (parseFloat(order?.price || 0) - parseFloat(order?.discount || 0))- parseFloat(order?.other_discount || 0)
+                sumPending = sumPending + (parseFloat(order?.price || 0) - parseFloat(order?.discount || 0)) - parseFloat(order?.other_discount || 0)
               }
               if (order.payment_status === 'cancel') {
-                sumCancel = sumCancel + (parseFloat(order?.price || 0) - parseFloat(order?.discount || 0))- parseFloat(order?.other_discount || 0)
+                sumCancel = sumCancel + (parseFloat(order?.price || 0) - parseFloat(order?.discount || 0)) - parseFloat(order?.other_discount || 0)
               }
               if (order.payment_status === 'fail') {
-                sumfail = sumfail  + (parseFloat(order?.price || 0) - parseFloat(order?.discount || 0))- parseFloat(order?.other_discount || 0)
+                sumfail = sumfail + (parseFloat(order?.price || 0) - parseFloat(order?.discount || 0)) - parseFloat(order?.other_discount || 0)
               }
               reports.push({
                 "วันที่สร้าง": moment(order.created_date).format("DD/MM/YYYY HH:mm"),
@@ -88,7 +88,8 @@ const financeModules = {
                 "ราคา": parseFloat(sumTotal).toLocaleString(undefined, { minimumFractionDigits: 2 }),
                 // "ราคา": parseFloat(order.price).toLocaleString(undefined, { minimumFractionDigits: 2 }),
                 "ผู้รับเงิน": order.payment?.recipient ? `${order.accountRecipientFirstNameTh} ${order.accountRecipientLastNameTh}` : '',
-                "คอร์ส": order.courseNameTh,
+                "ชื่ออาณาจักร": order.courseNameTh,
+                "ชื่อคอร์ส": order.courseNameTh,
                 "ประเภทคอร์ส": order.courseTypeNameTh,
                 "แพคเก็จ": order.packageName,
                 "ระยะเวลา": order.optionName,
@@ -101,8 +102,6 @@ const financeModules = {
                 "ผู้ซื้อ": order.created_by_name,
                 "วันที่ออกเอกสาร": moment().format("DD/MM/YYYY HH:mm"),
                 "หมายเหตุ": order.remark
-
-
               })
             });
             if (data.data.length === reports.length) {
