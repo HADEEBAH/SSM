@@ -274,43 +274,30 @@ const CourseModules = {
     },
     coach_data: [
       {
-        edited_coach: true,
         course_id: null,
         coach_id: null,
         course_coach_id: null,
         coach_name: null,
-        teach_days_used: [],
-        teach_day_data: [
-          {
-            day_of_week_id: null,
-            class_open: false,
-            teach_day: [],
-            course_coach_id: null,
-            class_date: [
-              {
-                start_time: null,
-                class_date_range: {
-                  time_id: null,
-                  day_of_week_id: null,
-                  start_time: null,
-                  start_time_object: {
-                    HH: null,
-                    mm: null
-                  },
-                  menu_start_time: false,
-                  end_time: null,
-                  end_time_object: {
-                    HH: null,
-                    mm: null
-                  },
-                  menu_end_time: false
-                },
-                students: 0
-              }
-            ]
-          }
-        ]
-      }
+        day_of_week_id: null,
+        class_open: true,
+        teach_day: [],
+        study_start_date: null,
+        time_id: null,
+        start_time: null,
+        start_time_object: {
+          HH: "",
+          mm: ""
+        },
+        menu_start_time: false,
+        end_time: null,
+        end_time_object: {
+          HH: "",
+          mm: ""
+        },
+        menu_end_time: false,
+        edited_options: true,
+        students: 0
+      },
     ],
     data_package: [
       {
@@ -776,37 +763,62 @@ const CourseModules = {
 
       // COACH
       const resetCoachData = [
+        // {
+        //   edited_coach: true,
+        //   course_id: null,
+        //   coach_id: null,
+        //   course_coach_id: null,
+        //   coach_name: null,
+        //   teach_days_used: [],
+        //   teach_day_data: [
+        //     {
+        //       day_of_week_id: null,
+        //       class_open: false,
+        //       teach_day: [],
+        //       course_coach_id: null,
+        //       class_date: [
+        //         {
+        //           start_time: null,
+        //           class_date_range: {
+        //             time_id: null,
+        //             day_of_week_id: null,
+        //             start_time: null,
+        //             start_time_object: { HH: null, mm: null },
+        //             menu_start_time: false,
+        //             end_time: null,
+        //             end_time_object: { HH: null, mm: null },
+        //             menu_end_time: false,
+        //           },
+        //           students: 0,
+        //         },
+        //       ],
+        //     },
+        //   ],
+        // },
         {
-          edited_coach: true,
           course_id: null,
           coach_id: null,
           course_coach_id: null,
           coach_name: null,
-          teach_days_used: [],
-          teach_day_data: [
-            {
-              day_of_week_id: null,
-              class_open: false,
-              teach_day: [],
-              course_coach_id: null,
-              class_date: [
-                {
-                  start_time: null,
-                  class_date_range: {
-                    time_id: null,
-                    day_of_week_id: null,
-                    start_time: null,
-                    start_time_object: { HH: null, mm: null },
-                    menu_start_time: false,
-                    end_time: null,
-                    end_time_object: { HH: null, mm: null },
-                    menu_end_time: false,
-                  },
-                  students: 0,
-                },
-              ],
-            },
-          ],
+          day_of_week_id: null,
+          class_open: true,
+          teach_day: [],
+          study_start_date: null,
+          time_id: null,
+          start_time: null,
+          start_time_object: {
+            HH: "",
+            mm: ""
+          },
+          menu_start_time: false,
+          end_time: null,
+          end_time_object: {
+            HH: "",
+            mm: ""
+          },
+          menu_end_time: false,
+          edited_options: true,
+          students: 0
         },
       ];
       state.coach_data = resetCoachData
@@ -3707,12 +3719,9 @@ const CourseModules = {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/manage/teachday-coach/${course_id}`, config)
         if (data.statusCode == 200) {
           data.data.map((items) => {
-            items.teach_day_data.map((item) => {
-              item.edited_coach = true
-              item.class_date?.map((options) => {
-                options.class_date_range.edited_options = true
-              })
-            })
+            items.edited_coach = true
+            items.edited_options = true
+
           })
           context.commit("SetCoachData", data.data)
         }
