@@ -193,13 +193,13 @@ const dashboardModules = {
                 "ประเภทคอร์ส": reserve.courseTypeNameTh ? reserve.courseTypeNameTh : '',
                 "อาณาจักร": reserve.categoryNameTh ? reserve.categoryNameTh : '',
                 "ชื่อคอร์ส": reserve.courseNameTh ? reserve.courseNameTh : '',
-                "จำนวนนักเรียนที่เรียนอยู่": reserve.studentCountInStudy ? reserve.studentCountInStudy : '',
+                "จำนวนนักเรียนที่เรียนอยู่": reserve.studentCountInStudy ? reserve.studentCountInStudy : 0,
                 "วันที่เรียน": reserve.courseDateInfo ? reserve.courseDateInfo : ''
               })
             }
             reports.push({}, {
               "ประเภทคอร์ส": "รวม",
-              "วันที่เรียน": data?.data?.data?.totalStudentCountInStudy ? data?.data?.data?.totalStudentCountInStudy : '',
+              "วันที่เรียน": data?.data?.data?.totalStudentCountInStudy ? data?.data?.data?.totalStudentCountInStudy : 0,
             })
             var workbook = XLSX.utils.book_new();
             var worksheet = XLSX.utils.json_to_sheet(reports);
@@ -255,8 +255,8 @@ const dashboardModules = {
       queryLimit += `&limit=${limit}`
       queryPage += `&page=${page}`
       querySearch += `&search=${search}`
-      queryCategory += `&category=${category}`
-      queryCourse += `&course=${course}`
+      queryCategory += `&categoryId=${category}`
+      queryCourse += `&courseId=${course}`
       queryCourseTypeId += `&courseTypeId=${courseTypeId}`
 
       try {
