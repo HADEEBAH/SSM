@@ -88,7 +88,7 @@ const financeModules = {
                 "ราคา": parseFloat(sumTotal).toLocaleString(undefined, { minimumFractionDigits: 2 }),
                 // "ราคา": parseFloat(order.price).toLocaleString(undefined, { minimumFractionDigits: 2 }),
                 "ผู้รับเงิน": order.payment?.recipient ? `${order.accountRecipientFirstNameTh} ${order.accountRecipientLastNameTh}` : '',
-                "ชื่ออาณาจักร": order.courseNameTh,
+                "ชื่ออาณาจักร": order.categoryNameTh,
                 "ชื่อคอร์ส": order.courseNameTh,
                 "ประเภทคอร์ส": order.courseTypeNameTh,
                 "แพคเก็จ": order.packageName,
