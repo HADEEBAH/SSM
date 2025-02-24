@@ -815,22 +815,54 @@ export default {
     },
 
     async save() {
-      this.loading = true;
+      // this.loading = true;
       // this.course_data.course_file = this.file;
-
       if (this.course_data.course_type_id === "CT_1") {
-        const mapped_coachs = this.coach_data.map((coach) => ({
-          coach_id: coach.coach_id,
-          day_of_week: coach.teach_day_data.map((dayData) => ({
-            status: dayData.class_open ? "Active" : "Inactive",
-            day: dayData.teach_day.join(","),
-            times: dayData.class_date.map((classDate) => ({
-              start: classDate.class_date_range.start_time,
-              end: classDate.class_date_range.end_time,
-              maximum_student: classDate.students,
-            })),
-          })),
-        }));
+        //  ---------------------------------------------------------
+        const mapped_coachs = Object.values(
+          this.coach_data.reduce((accumulator, session) => {
+            const {
+              coach_id,
+              teach_day,
+              start_time,
+              end_time,
+              students,
+              class_open,
+            } = session;
+
+            // ถ้า coach_id ยังไม่มีใน accumulator (ยังไม่เคยเจอโค้ชนี้มาก่อน) จะสร้างอ็อบเจ็กต์ใหม่ที่มี coach_id และ day_of_week เป็นอาเรย์ว่างๆ สำหรับเก็บข้อมูลวันเรียน
+            if (!accumulator[coach_id]) {
+              accumulator[coach_id] = { coach_id, day_of_week: [] };
+            }
+
+            // ดึงอ็อบเจ็กต์ของโค้ชที่เกี่ยวข้องจาก accumulator มาเก็บในตัวแปร coach
+            const coach = accumulator[coach_id];
+            // หาวันที่เรียนใน coach.day_of_week โดยใช้ find() เพื่อดูว่ามีวันที่ตรงกับ teach_day หรือไม่ (เรียงลำดับและแปลง teach_day เป็นสตริงที่คั่นด้วยเครื่องหมาย ,)
+            let found_teach_day = coach.day_of_week.find(
+              (day_data) =>
+                day_data.day === teach_day.sort((a, b) => a - b).join(",")
+            );
+
+            // ถ้ายังไม่เคยเพิ่มวันนี้ไปใน coach.day_of_week มาก่อนให้สร้างอ็อบเจ็กต์ใหม่สำหรับวันนั้น
+            if (!found_teach_day) {
+              found_teach_day = {
+                status: class_open === true ? "Active" : "InActive",
+                day: teach_day.sort((a, b) => a - b).join(","),
+                times: [],
+              };
+              coach.day_of_week.push(found_teach_day);
+            }
+
+            found_teach_day.times.push({
+              start: start_time,
+              end: end_time,
+              maximum_student: students,
+            });
+
+            return accumulator;
+          }, {})
+        );
+        // -------------------------------------------
 
         const mapped_packages = this.data_package.flatMap((items_package) =>
           items_package.options.map((option) => ({

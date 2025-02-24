@@ -14,10 +14,19 @@
     <div v-else>
       <v-row dense class="flex align-center justify-end my-2" v-if="edited">
         <v-col cols class="d-flex align-center justify-end">
-          <v-btn outlined color="success" @click="testFuncs()" class="mx-3">
+          <v-btn
+            outlined
+            color="success"
+            @click="saveFunc((update_scadul = true))"
+            class="mx-3"
+          >
             {{ $t("save and update schedule") }}
           </v-btn>
-          <v-btn outlined color="success" @click="testFuncs()">
+          <v-btn
+            outlined
+            color="success"
+            @click="saveFunc((update_scadul = false))"
+          >
             {{ $t("save") }}
           </v-btn>
         </v-col>
@@ -39,7 +48,7 @@
               <v-col cols="12" class="d-flex align-center justify-end">
                 <v-switch
                   inset
-                  @click="checkStudyByDay($event, teach_day)"
+                  @click="checkStudyByDay($event, coach)"
                   :disabled="coach.edited_coach"
                   v-model="coach.class_open"
                   color="green"
@@ -561,10 +570,19 @@
     </div>
     <v-row dense class="flex align-center justify-end" v-if="edited">
       <v-col cols class="d-flex align-center justify-end">
-        <v-btn outlined color="green" @click="testFuncs()" class="mx-3">
+        <v-btn
+          outlined
+          color="green"
+          @click="saveFunc((update_scadul = true))"
+          class="mx-3"
+        >
           {{ $t("save and update schedule") }}
         </v-btn>
-        <v-btn outlined color="green" @click="testFuncs()">
+        <v-btn
+          outlined
+          color="green"
+          @click="saveFunc((update_scadul = false))"
+        >
           {{ $t("save") }}
         </v-btn>
       </v-col>
@@ -788,7 +806,7 @@ export default {
             course_id: items.course_id,
             day_of_week_id: items.day_of_week_id,
             teach_day: items.teach_day.join(","),
-            class_open: items.class_open,
+            class_open: items.class_open === true ? "Active" : "InActive",
             time_id: items.time_id,
           };
           this.UpdateTeachdayCoach({
@@ -829,7 +847,8 @@ export default {
               course_coach_id: coach.course_coach_id, // Assuming all have the same course_coach_id
               teach_day_data: checked_out.map((teach_day) => ({
                 day_of_week_id: null,
-                class_open: teach_day.class_open ? true : false,
+                class_open:
+                  teach_day.class_open === true ? "Active" : "InActive",
                 teach_day: teach_day.teach_day?.join(","),
                 times: teach_day.class_date
                   .filter(
@@ -867,7 +886,8 @@ export default {
               course_coach_id: null, // Assuming all have the same course_coach_id
               teach_day_data: checked_out.map((teach_day) => ({
                 day_of_week_id: null,
-                class_open: teach_day.class_open ? true : false,
+                class_open:
+                  teach_day.class_open === true ? "Active" : "InActive",
                 teach_day: teach_day.teach_day?.join(","),
                 times: teach_day.class_date
                   .filter(
@@ -934,7 +954,8 @@ export default {
             teach_day_data: [
               {
                 day_of_week_id: teach_day.day_of_week_id,
-                class_open: teach_day.class_open,
+                class_open:
+                  teach_day.class_open === true ? "Active" : "InActive",
                 teach_day: teach_day.teach_day?.join(","),
                 times: teach_day.class_date
                   .filter(
@@ -1233,7 +1254,13 @@ export default {
         }
       }
     },
-    testFuncs() {},
+    saveFunc(updateScadule) {
+      this.coach_data.map((item) => {
+        item.update_scadule = updateScadule;
+      });
+
+      // console.log("payload :>> ", this.coach_data);
+    },
     DeleteCoachById(course_coach_id, course_id) {
       Swal.fire({
         icon: "question",
