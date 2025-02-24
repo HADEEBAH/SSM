@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- {{ setFunction }} -->
-    <div v-if="coach_data?.length === 0 && edited">
+    <div v-if="coach_data?.length <= 0 && edited">
       <template>
         <v-row class="fill-height ma-0" align="center" justify="center">
           <v-progress-circular
@@ -12,13 +12,27 @@
       </template>
     </div>
     <div v-else>
+      <v-row dense class="flex align-center justify-end my-2" v-if="edited">
+        <v-col cols class="d-flex align-center justify-end">
+          <v-btn outlined color="success" @click="testFuncs()" class="mx-3">
+            {{ $t("save and update schedule") }}
+          </v-btn>
+          <v-btn outlined color="success" @click="testFuncs()">
+            {{ $t("save") }}
+          </v-btn>
+        </v-col>
+      </v-row>
       <template v-for="(coach, coach_index) in coach_data">
         <v-card :class="`bg-[${color}] mb-5`" :key="coach_index">
           <v-card-text>
             <!-- HEAD -->
             <v-row dense>
               <v-col cols="12" class="d-flex align-center justify-end">
-                <v-btn icon color="red" @click="removeCoachCard(coach)">
+                <v-btn
+                  icon
+                  color="red"
+                  @click="removeCoachCard(coach, coach_index)"
+                >
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
               </v-col>
@@ -43,10 +57,14 @@
                 <v-autocomplete
                   dense
                   :disabled="
-                    coach.edited_coach ? coach.edited_coach : coach.added_option
+                    coach.edited_coach
+                      ? coach.edited_coach
+                      : coach.added_option
+                      ? coach.added_option
+                      : coach.added_teach_day
                   "
-                  :outlined="!coach.edited_coach || !coach.added_option"
-                  :filled="coach.edited_coach || coach.added_option"
+                  :outlined="!coach.edited_coach"
+                  :filled="coach.edited_coach"
                   v-model="coach.coach_id"
                   color="#FF6B81"
                   :items="coachsOptions(coach)"
@@ -116,14 +134,14 @@
                   item-value="value"
                   :placeholder="$t('please select a time')"
                   v-model="coach.teach_day"
-                  @change="
+                >
+                  <!-- @change="
                     selectDays(
                       teach_day.teach_day,
                       coach_index,
                       teach_day_index
                     )
-                  "
-                >
+                  " -->
                   <template v-slot:selection="{ attrs, item, selected }">
                     <v-chip
                       v-bind="attrs"
@@ -167,7 +185,7 @@
                   </v-col>
                   <v-col cols="12" sm="8" v-else>
                     <!-- ADD TEACH DAY -->
-                    <v-tooltip
+                    <!-- <v-tooltip
                       bottom
                       v-if="
                         lastCoachOccurrences[coach.coach_id] === coach_index
@@ -186,9 +204,9 @@
                         </v-icon>
                       </template>
                       <span>{{ $t("add teaching day") }}</span>
-                    </v-tooltip>
+                    </v-tooltip> -->
                     <!-- DELETE -->
-                    <v-tooltip bottom>
+                    <!-- <v-tooltip bottom>
                       <template v-slot:activator="{ on, attrs }">
                         <v-icon
                           color="#FF6B81"
@@ -202,7 +220,7 @@
                         </v-icon>
                       </template>
                       <span>{{ $t("delete teaching day") }}</span>
-                    </v-tooltip>
+                    </v-tooltip> -->
                     <!-- REFRESH -->
                     <v-tooltip bottom>
                       <template v-slot:activator="{ on, attrs }">
@@ -235,10 +253,26 @@
                       </template>
                       <span>{{ $t("save teaching day") }}</span>
                     </v-tooltip>
+                    <!-- CANCEL -->
+                    <!-- <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon
+                          class="mr-2"
+                          color="red"
+                          dark
+                          v-bind="attrs"
+                          v-on="on"
+                          @click="cancelCoach(coach)"
+                        >
+                          mdi-cancel
+                        </v-icon>
+                      </template>
+                      <span>{{ $t("cancel") }}</span>
+                    </v-tooltip> -->
                   </v-col>
                 </v-row>
-                <v-row dense v-if="!coach.day_of_week_id">
-                  <!-- ADD TEACH DAY -->
+                <!-- <v-row dense v-if="!coach.day_of_week_id">
+                  ADD TEACH DAY
                   <v-tooltip
                     bottom
                     v-if="lastCoachOccurrences[coach.coach_id] === coach_index"
@@ -257,9 +291,9 @@
                     </template>
                     <span>{{ $t("add teaching day") }}</span>
                   </v-tooltip>
-                </v-row>
+                </v-row> -->
               </v-col>
-              <v-col cols="12" sm="4" v-if="!edited"> </v-col>
+              <v-col cols="12" sm="4" v-if="!edited"></v-col>
             </v-row>
             <!-- FOTTER -->
             <v-row dense class="flex align-center justify-end">
@@ -280,8 +314,14 @@
                     ></v-text-field>
                     <VueTimepicker
                       class="time-picker-hidden"
-                      :hour-range="checkHour(coach_index)"
-                      :minute-range="checkMinute(coach.start_time)"
+                      :hour-range="checkHour(coach, coach_index)"
+                      :minute-range="
+                        checkMinute(
+                          coach.start_time_object.HH,
+                          coach,
+                          coach_index
+                        )
+                      "
                       hide-clear-button
                       advanced-keyboard
                       v-model="coach.start_time_object"
@@ -344,8 +384,8 @@
                           v-bind="attrs"
                           v-on="on"
                           class="ml-2"
-                          :class="{ 'disabled-icon': add_time_options }"
-                          @click="!add_time_options && editOptions(coach)"
+                          :class="{ 'disabled-icon': disable_teach_day }"
+                          @click="!disable_teach_day && editOptions(coach)"
                         >
                           mdi-pencil-outline
                         </v-icon>
@@ -355,7 +395,7 @@
                   </v-col>
                   <v-col cols="12" sm="8" v-else>
                     <!-- ADD TIME -->
-                    <v-tooltip
+                    <!-- <v-tooltip
                       bottom
                       v-if="
                         lastCoachOccurrences[coach.coach_id] === coach_index
@@ -367,19 +407,85 @@
                           dark
                           v-bind="attrs"
                           v-on="on"
-                          class="mx-2"
+                          class="mr-2"
                           @click="addTime(coach)"
                         >
                           mdi-timer-plus-outline
                         </v-icon>
                       </template>
                       <span>{{ $t("add time") }}</span>
+                    </v-tooltip> -->
+                    <!-- DEL TIME -->
+                    <!-- <template>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon
+                            color="red"
+                            dark
+                            v-bind="attrs"
+                            v-on="on"
+                            class="mr-2"
+                            @click="removeTimeData(coach)"
+                          >
+                            mdi-trash-can-outline
+                          </v-icon>
+                        </template>
+                        <span>{{ $t("delete") }}</span>
+                      </v-tooltip>
+                    </template> -->
+                    <!-- REFRESH -->
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon
+                          color="#FF6B81"
+                          dark
+                          v-bind="attrs"
+                          v-on="on"
+                          class="mr-2"
+                          @click="refreshOption(coach)"
+                        >
+                          mdi-refresh
+                        </v-icon>
+                      </template>
+                      <span>{{ $t("refresh") }}</span>
                     </v-tooltip>
+                    <!-- SAVE UPDATE-->
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon
+                          color="#FF6B81"
+                          dark
+                          v-bind="attrs"
+                          v-on="on"
+                          @click="saveUpdateOption(coach)"
+                          class="mr-2"
+                        >
+                          mdi-content-save
+                        </v-icon>
+                      </template>
+                      <span>{{ $t("save") }}</span>
+                    </v-tooltip>
+                    <!-- CANCEL -->
+                    <!-- <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon
+                          class="mr-2"
+                          color="red"
+                          dark
+                          v-bind="attrs"
+                          v-on="on"
+                          @click="cancelOption(coach)"
+                        >
+                          mdi-cancel
+                        </v-icon>
+                      </template>
+                      <span>{{ $t("cancel") }}</span>
+                    </v-tooltip> -->
                   </v-col>
                 </v-row>
-                <v-row dense v-if="!coach.day_of_week_id">
+                <!-- <v-row dense v-if="!coach.day_of_week_id">
                   <v-col cols="12" class="d-flex align-center">
-                    <!-- ADD TIME -->
+                    ADD TIME
                     <v-tooltip
                       bottom
                       v-if="
@@ -401,17 +507,18 @@
                       <span>{{ $t("add time") }}</span>
                     </v-tooltip>
                   </v-col>
-                </v-row>
+                </v-row> -->
               </v-col>
+              <v-col cols="12" sm="4" v-if="!edited"></v-col>
             </v-row>
             <!-- SAVE BUTTON -->
-            <v-row
+            <!-- <v-row
               dense
               class="flex align-center justify-end"
               v-if="!coach.day_of_week_id && edited"
             >
               <v-col cols class="d-flex align-center justify-end">
-                <!-- SAVE UPDATE -->
+                SAVE UPDATE
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn
@@ -423,16 +530,14 @@
                       v-bind="attrs"
                       v-on="on"
                       :disabled="checkDisableAddTeachDay(coach)"
-                      @click="
-                        FunctionAddNewCoach(coach, teach_day, coach_index)
-                      "
+                      @click="FunctionAddNewCoach(coach, coach_index)"
                     >
                       <v-icon>mdi-content-save-all</v-icon>
                     </v-btn>
                   </template>
                   <span>{{ $t("save") }}</span>
                 </v-tooltip>
-                <!-- DELETE -->
+                DELETE
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon
@@ -449,11 +554,21 @@
                   <span>{{ $t("delete teaching day") }}</span>
                 </v-tooltip>
               </v-col>
-            </v-row>
+            </v-row> -->
           </v-card-text>
         </v-card>
       </template>
     </div>
+    <v-row dense class="flex align-center justify-end" v-if="edited">
+      <v-col cols class="d-flex align-center justify-end">
+        <v-btn outlined color="green" @click="testFuncs()" class="mx-3">
+          {{ $t("save and update schedule") }}
+        </v-btn>
+        <v-btn outlined color="green" @click="testFuncs()">
+          {{ $t("save") }}
+        </v-btn>
+      </v-col>
+    </v-row>
   </div>
 </template>
 <script>
@@ -514,6 +629,7 @@ export default {
       });
       return lastOccurrences;
     },
+
     course() {
       return [
         (val) => (val || "").length > 0 || this.$t("please select a coach"),
@@ -531,6 +647,7 @@ export default {
           (val || "").length == 5 || this.$t("please select a start time"),
       ];
     },
+
     end_time() {
       return [
         (val) =>
@@ -576,6 +693,7 @@ export default {
     ...mapMutations({
       ResetStateCourseData: "CourseModules/ResetStateCourseData",
     }),
+
     editCoach(items) {
       items.edited_coach = false;
       this.disable_teach_day = true;
@@ -655,10 +773,13 @@ export default {
       Swal.fire({
         icon: "question",
         title: this.$t("do you want to edit teachday"),
-        showDenyButton: false,
-        showCancelButton: true,
-        confirmButtonText: this.$t("agree"),
-        cancelButtonText: this.$t("cancel"),
+        showDenyButton: true,
+        showCancelButton: false,
+        showCloseButton: true,
+        focusConfirm: false,
+        confirmButtonText: this.$t("save"),
+        denyButtonText: this.$t("save and update schedule"),
+        denyButtonColor: "#ff6b81",
       }).then(async (result) => {
         if (result.isConfirmed) {
           let update_payload = {
@@ -668,11 +789,14 @@ export default {
             day_of_week_id: items.day_of_week_id,
             teach_day: items.teach_day.join(","),
             class_open: items.class_open,
+            time_id: items.time_id,
           };
           this.UpdateTeachdayCoach({
             payload: update_payload,
             course_id: this.$route.params.course_id,
           });
+        } else if (result.isDenied) {
+          // console.log("false :>> ", false);
         } else {
           items.edited_coach = false;
         }
@@ -769,7 +893,7 @@ export default {
       items.edited_options = false;
       this.disable_coach = true;
     },
-    saveUpdateOption(class_date) {
+    saveUpdateOption(coach) {
       Swal.fire({
         icon: "question",
         title: this.$t("do you want to edit ooption"),
@@ -780,11 +904,11 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           let option_payload = {
-            time_id: class_date.class_date_range.time_id,
-            start_time: class_date.class_date_range.start_time,
-            end_time: class_date.class_date_range.end_time,
-            student_number: class_date.students,
-            day_of_week_id: class_date.class_date_range.day_of_week_id,
+            time_id: coach.time_id,
+            start_time: coach.start_time,
+            end_time: coach.end_time,
+            student_number: coach.students,
+            day_of_week_id: coach.day_of_week_id,
           };
           this.UpdateOptions({
             payload: option_payload,
@@ -837,23 +961,28 @@ export default {
       teach_day.splice(teach_day_index, 1);
     },
 
-    removeCoachCard(coach) {
-      Swal.fire({
-        icon: "question",
-        title: this.$t("do you want to delete this coach"),
-        showDenyButton: false,
-        showCancelButton: true,
-        confirmButtonText: this.$t("agree"),
-        cancelButtonText: this.$t("cancel"),
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          this.DeleteCourseCoach({
-            course_coach_id: coach.course_coach_id,
-            course_id: coach.course_id,
-          });
-        }
-      });
+    removeCoachCard(coach, coach_index) {
+      if (coach.day_of_week_id) {
+        Swal.fire({
+          icon: "question",
+          title: this.$t("do you want to delete this coach"),
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("cancel"),
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            this.DeleteCourseCoach({
+              course_coach_id: coach.course_coach_id,
+              course_id: coach.course_id,
+            });
+          }
+        });
+      } else {
+        this.coach_data.splice(coach_index, 1);
+      }
     },
+
     removeTeachingDay(items) {
       Swal.fire({
         icon: "question",
@@ -871,6 +1000,30 @@ export default {
         }
       });
     },
+    async cancelCoach(coach) {
+      await this.RefreshTeachDay({
+        course_id: this.$route.params.course_id,
+        day_of_week_id: coach.day_of_week_id,
+        course_coach_id: coach.course_coach_id,
+      }).then(() => {
+        coach.teach_day = this.refresh_teach_day.teach_day;
+        coach.coach_id = this.refresh_teach_day.coachId;
+      });
+      coach.edited_coach = true;
+    },
+    async cancelOption(coach) {
+      await this.RefreshOption({
+        course_id: this.$route.params.course_id,
+        time_id: coach.time_id,
+        day_of_week_id: coach.day_of_week_id,
+      });
+      coach.end_time = this.refresh_option.end;
+      coach.start_time = this.refresh_option.start;
+      coach.students = this.refresh_option.maximumStudent;
+      coach.end_time_object = this.refresh_option.end_time_object;
+      coach.start_time_object = this.refresh_option.start_time_object;
+      coach.edited_options = true;
+    },
     async refreshCoach(coach) {
       await this.RefreshTeachDay({
         course_id: this.$route.params.course_id,
@@ -880,76 +1033,42 @@ export default {
         coach.teach_day = this.refresh_teach_day.teach_day;
         coach.coach_id = this.refresh_teach_day.coachId;
       });
+      coach.edited_coach = true;
+      this.disable_coach = false;
+      this.disable_teach_day = false;
     },
-    async refreshOptionFunction(class_date) {
+    async refreshOption(coach) {
       await this.RefreshOption({
         course_id: this.$route.params.course_id,
-        time_id: class_date.class_date_range.time_id,
-        day_of_week_id: class_date.class_date_range.day_of_week_id,
+        time_id: coach.time_id,
+        day_of_week_id: coach.day_of_week_id,
       });
-      class_date.class_date_range.end_time = this.refresh_option.end;
-      class_date.class_date_range.start_time = this.refresh_option.start;
-      class_date.students = this.refresh_option.maximumStudent;
-      // class_date.class_date_range.start_time_object =
+      coach.end_time = this.refresh_option.end;
+      coach.start_time = this.refresh_option.start;
+      coach.students = this.refresh_option.maximumStudent;
+      coach.students = this.refresh_option.maximumStudent;
+      coach.end_time_object = this.refresh_option.end_time_object;
+      coach.start_time_object = this.refresh_option.start_time_object;
+      coach.edited_options = true;
+      this.disable_coach = false;
+      this.disable_teach_day = false;
     },
-    // checkMinute(teach_day, hours) {
-    //   if (teach_day.length > 1) {
-    //     let timeused = [];
-    //     let timeMinUsed = [];
-    //     timeused = teach_day.map((v) => {
-    //       return {
-    //         start_time: v.class_date_range.start_time_object,
-    //         end_time: v.class_date_range.end_time_object,
-    //       };
-    //     });
-    //     if (timeused.filter((v) => v.end_time.HH === hours).length > 0) {
-    //       timeused
-    //         .filter((v) => v.end_time.HH === hours)
-    //         .forEach((time) => {
-    //           if (hours === time.end_time.HH) {
-    //             let min_end = parseInt(time.end_time.mm);
-    //             for (let min = min_end; min < 60; min++) {
-    //               timeMinUsed.push(min);
-    //             }
-    //           }
-    //         });
-    //     } else {
-    //       for (let min = 0; min < 60; min++) {
-    //         timeMinUsed.push(min);
-    //       }
-    //     }
-    //     return timeMinUsed;
-    //   }
-    // },
-    // checkHour(teach_day, timeindex) {
-    //   let timeused = [];
-    //   let timeusedHH = [];
-    //   timeused = teach_day.map((v) => {
-    //     return {
-    //       start_time: v.class_date_range.start_time_object,
-    //       end_time: v.class_date_range.end_time_object,
-    //     };
-    //   });
-    //   timeused.forEach((time, index) => {
-    //     if (timeindex !== index) {
-    //       if (time.start_time.HH) {
-    //         timeusedHH.push(parseInt(time.start_time.HH));
-    //       }
-    //     }
-    //   });
-    //   return generateTimeArrayHours(timeusedHH);
-    // },
 
-    checkMinute(hours) {
-      if (this.coach_data?.length > 1) {
-        let timeused = [];
-        let timeMinUsed = [];
-        timeused = this.coach_data?.map((v) => {
-          return {
-            start_time: v.start_time_object,
-            end_time: v.end_time_object,
-          };
-        });
+    checkMinute(hours, coach, coach_index) {
+      if (!this.coach_data || this.coach_data.length < 1) return [];
+      let timeMinUsed = [];
+
+      if (this.coach_data[coach_index].teach_day?.length <= 0) {
+        // Filter coach_data based on matching coach_id and overlapping teach_day
+        let filteredCoaches = this.coach_data.filter(
+          (v) => v.coach_id === coach.coach_id
+        );
+
+        let timeused = filteredCoaches.map((v) => ({
+          start_time: v.start_time_object,
+          end_time: v.end_time_object,
+        }));
+
         if (timeused.filter((v) => v.end_time.HH === hours).length > 0) {
           timeused
             .filter((v) => v.end_time.HH === hours)
@@ -966,64 +1085,72 @@ export default {
             timeMinUsed.push(min);
           }
         }
-        return timeMinUsed;
-      }
-    },
+      } else {
+        // Filter coach_data based on matching coach_id and overlapping teach_day
+        let filteredCoaches = this.coach_data.filter(
+          (v) =>
+            v.coach_id === coach.coach_id &&
+            v.teach_day.some((day) => coach.teach_day.includes(day))
+        );
 
-    checkHour(coach_index) {
-      // let timeused = [];
-      let timeusedHH = [];
+        let timeused = filteredCoaches.map((v) => ({
+          start_time: v.start_time_object,
+          end_time: v.end_time_object,
+        }));
 
-      // Extract teach_day of the current coach
-      const currentTeachDays = this.coach_data[coach_index]?.teach_day || [];
-
-      this.coach_data.forEach((item, index) => {
-        if (index !== coach_index) {
-          const hasCommonTeachDay = item.teach_day.some((day) =>
-            currentTeachDays.includes(day)
-          );
-          if (hasCommonTeachDay) {
-            if (item.start_time_object?.HH) {
-              timeusedHH.push(parseInt(item.start_time_object.HH));
-            }
+        if (timeused.filter((v) => v.end_time.HH === hours).length > 0) {
+          timeused
+            .filter((v) => v.end_time.HH === hours)
+            .forEach((time) => {
+              if (hours === time.end_time.HH) {
+                let min_end = parseInt(time.end_time.mm);
+                for (let min = min_end; min < 60; min++) {
+                  timeMinUsed.push(min);
+                }
+              }
+            });
+        } else {
+          for (let min = 0; min < 60; min++) {
+            timeMinUsed.push(min);
           }
         }
-      });
-
-      // If there are common teach_day values, use time filtering
-      if (timeusedHH.length > 0) {
-        return generateTimeArrayHours(timeusedHH);
       }
-
-      // Otherwise, return normal range 00 - 23
-      return Array.from({ length: 24 }, (_, i) => String(i).padStart(2, "0"));
+      return timeMinUsed;
     },
 
-    // checkHour(coach_index) {
-    //   let timeused = [];
-    //   let timeusedHH = [];
-    //   timeused = this.coach_data?.map((v) => {
-    //     return {
-    //       start_time: v.start_time_object,
-    //       end_time: v.end_time_object,
-    //     };
-    //   });
-    //   timeused.forEach((time, index) => {
-    //     if (coach_index !== index) {
-    //       if (time.start_time.HH) {
-    //         timeusedHH.push(parseInt(time.start_time.HH));
-    //       }
-    //     }
-    //   });
-    //   console.log("timeused :>> ", timeused);
+    checkHour(coach, coach_index) {
+      let checkHours = [];
+      if (this.coach_data[coach_index].teach_day?.length <= 0) {
+        let checkSelectedDay = this.coach_data.filter(
+          (item) => item.coach_id === coach.coach_id
+        );
 
-    //   return generateTimeArrayHours(timeusedHH);
-    // },
+        for (const value of checkSelectedDay) {
+          if (value.start_time_object.HH) {
+            checkHours.push(parseInt(value.start_time_object.HH));
+          }
+        }
+      } else {
+        let checkSelectedDay = this.coach_data.filter(
+          (item) =>
+            item.coach_id === coach.coach_id &&
+            item.teach_day.some((day) => coach.teach_day.includes(day))
+        );
+
+        for (const value of checkSelectedDay) {
+          if (value.start_time_object.HH) {
+            checkHours.push(parseInt(value.start_time_object.HH));
+          }
+        }
+      }
+      return generateTimeArrayHours(checkHours);
+    },
 
     ChangeStartDate(date) {
       if (!date.start_time_object.mm) {
-        date.start_time_object.mm = "00";
+        date.start_time_object.mm = "";
       }
+
       date.start_time = `${date.start_time_object.HH}:${date.start_time_object.mm}`;
       if (
         parseInt(date.start_time_object.HH) +
@@ -1063,8 +1190,10 @@ export default {
         }
       } else {
         date.end_time_object.mm = `${
-          parseInt(date.start_time_object.mm) +
-          parseInt(this?.courses_data?.course_hour_time?.mm)
+          parseInt(date.start_time_object.mm)
+            ? parseInt(date.start_time_object.mm)
+            : parseInt("00") +
+              parseInt(this?.courses_data?.course_hour_time?.mm)
         }`.padStart(2, "0");
       }
       date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`;
@@ -1104,6 +1233,7 @@ export default {
         }
       }
     },
+    testFuncs() {},
     DeleteCoachById(course_coach_id, course_id) {
       Swal.fire({
         icon: "question",
@@ -1124,36 +1254,38 @@ export default {
     removeCoach(index) {
       this.coach_data.splice(index, 1);
     },
-    coachsOptions(coach_selected) {
-      const selectedCoachIds = this.coach_data.map((coach) => coach.coach_id);
-      const availableCoaches = this.coachs.filter(
-        (coach) =>
-          !selectedCoachIds.includes(coach.accountId) ||
-          coach.accountId === coach_selected.coach_id
-      );
+    coachsOptions() {
+      return this.coachs;
+      // const selectedCoachIds = this.coach_data.map((coach) => coach.coach_id);
+      // const availableCoaches = this.coachs.filter(
+      //   (coach) =>
+      //     !selectedCoachIds.includes(coach.accountId) ||
+      //     coach.accountId === coach_selected.coach_id
+      // );
 
-      return availableCoaches;
+      // return availableCoaches;
     },
     // filteredDays(coachIndex, teachDayIndex, state) {
-    //   if (state === "create") {
-    //     const teachDayData = this.coach_data[coachIndex].teach_day_data;
-    //     const currentTeachDay = teachDayData[teachDayIndex];
-    //     const usedDays = [];
-    //     teachDayData.forEach((teachDay) => {
-    //       if (teachDay !== currentTeachDay) {
-    //         usedDays.push(...teachDay.teach_day);
-    //       }
-    //     });
+    // if (state === "create") {
+    //   const teachDayData = this.coach_data[coachIndex].teach_day_data;
+    //   const currentTeachDay = teachDayData[teachDayIndex];
+    //   const usedDays = [];
+    //   teachDayData.forEach((teachDay) => {
+    //     if (teachDay !== currentTeachDay) {
+    //       usedDays.push(...teachDay.teach_day);
+    //     }
+    //   });
 
-    //     return this.days_confix.filter((day) => !usedDays.includes(day.value));
-    //   } else {
-    //     return this.days_confix;
-    //   }
+    //   return this.days_confix.filter((day) => !usedDays.includes(day.value));
+    // } else {
+    //   return this.days_confix;
+    // }
     // },
 
     filteredDays() {
       return this.days_confix;
     },
+
     removeChip(item, value) {
       value.splice(value.indexOf(item.value), 1);
     },
@@ -1280,6 +1412,7 @@ export default {
     },
     addTeachDay(coach) {
       const newEntry = {
+        add_new_coach: false,
         added_option: false,
         added_teach_day: true,
         course_id: null,
@@ -1321,7 +1454,7 @@ export default {
       }
     },
     removeTeachDay(data, index) {
-      data.splice(index, 1);
+      this.coach_data.splice(index, 1);
       // this.ChangeCourseData(this.course_data);
     },
     testFunc(coach) {
@@ -1329,7 +1462,9 @@ export default {
     },
     addTime(coach) {
       const newEntry = {
+        add_new_coach: false,
         added_option: true,
+        added_teach_day: false,
         course_id: null,
         coach_id: coach.coach_id,
         course_coach_id: null,
@@ -1369,10 +1504,10 @@ export default {
       }
     },
     removeTime(data, index) {
-      data.splice(index, 1);
+      this.coach_data.splice(index, 1);
       // this.ChangeCourseData(this.course_data);
     },
-    removeTimeData(teach_day, class_date) {
+    removeTimeData(coach) {
       Swal.fire({
         icon: "question",
         title: this.$t("do you want to delete this teaching time?"),
@@ -1383,8 +1518,8 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           this.DeleteOPtions({
-            course_id: this.$route.params.course_id,
-            time_id: class_date,
+            course_id: coach.course_id,
+            time_id: coach.time_id,
           });
         }
       });

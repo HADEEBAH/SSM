@@ -5,6 +5,7 @@
   "admin applies for course": "Admin already applies course",
   "admin": "Admin",
   "admin check in later": "Admin check in later",
+  "add":"Add",
   "add a package": "Add a package",
   "add a course": "Add a course",
   "add learner": "Add Learner",
@@ -786,12 +787,13 @@
   "recommendation": "(Recommendation: Upload an image with dimensions 1024 x 576 (16:9) and The file size is not more than 5 Mb, must be JPG, PNG files )",
   "role": "Role",
   "recommendations System satisfaction": "Recommendations System satisfaction",
-  "refresh":"Refresh",
+  "refresh":"Reset",
 
 
   "study start": "Study start date",
   "study end": "Study end date",
   "save": "Save",
+  "save and update schedule": "Save and update schedule",
   "save parent": "Save parent",
   "save student": "Save student",
   "save data successfully": "Save data successfully",

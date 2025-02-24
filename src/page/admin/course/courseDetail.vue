@@ -164,7 +164,7 @@
 
                     <v-btn outlined color="#FF6B81" @click="addCoach">
                       <v-icon>mdi-plus-circle-outline</v-icon>
-                      {{ $t("add coach") }}
+                      {{ $t("add") }}
                     </v-btn>
                   </template>
                 </headerCard>
@@ -5226,45 +5226,33 @@ export default {
     },
     addCoach() {
       this.coach_data.push({
-        coach_id: "",
-        coach_name: "",
-        teach_days_used: [],
-        teach_day_data: [
-          {
-            edited_coach: false,
-            class_open: false,
-            teach_day: [],
-            class_date: [
-              {
-                class_date_range: {
-                  start_time: "",
-                  start_time_object: { HH: "", mm: "" },
-                  menu_start_time: false,
-                  end_time: "",
-                  end_time_object: { HH: "", mm: "" },
-                  menu_end_time: false,
-                },
-                students: 0,
-              },
-            ],
-          },
-        ],
-        class_date_range: {
-          start_date: "",
-          menu_start_date: false,
-          end_date: "",
-          menu_end_date: false,
+        add_new_coach: true,
+        edited_coach: false,
+        edited_options: false,
+        added_option: false,
+        added_teach_day: false,
+        course_id: null,
+        coach_id: null,
+        course_coach_id: null,
+        coach_name: null,
+        day_of_week_id: null,
+        class_open: true,
+        teach_day: [],
+        study_start_date: null,
+        time_id: null,
+        start_time: null,
+        start_time_object: {
+          HH: "",
+          mm: "",
         },
-        register_date_range: {
-          start_date: "",
-          menu_start_date: false,
-          end_date: "",
-          menu_end_date: false,
+        menu_start_time: false,
+        end_time: null,
+        end_time_object: {
+          HH: "",
+          mm: "",
         },
-        period: {
-          start_time: "",
-          end_time: "",
-        },
+        menu_end_time: false,
+        students: 0,
       });
       this.ChangeCourseData(this.course_created_data);
     },

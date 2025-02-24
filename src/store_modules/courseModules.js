@@ -295,7 +295,7 @@ const CourseModules = {
           mm: ""
         },
         menu_end_time: false,
-        edited_options: true,
+        edited_options: false,
         students: 0
       },
     ],
@@ -817,7 +817,7 @@ const CourseModules = {
             mm: ""
           },
           menu_end_time: false,
-          edited_options: true,
+          edited_options: false,
           students: 0
         },
       ];
