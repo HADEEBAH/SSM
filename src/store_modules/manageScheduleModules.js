@@ -655,6 +655,8 @@ const manageScheduleModules = {
         let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/holiday/create`, payload)
         if (data.statusCode === 201) {
           context.commit("SetHolidayStatus", data.data);
+          await context.dispatch("GetAllHolidays")
+
         }
       } catch (error) {
         context.commit("SetHolidayStatus", error?.response?.data);
