@@ -13,6 +13,7 @@
     </div>
     <div v-else>
       <v-row dense class="flex align-center justify-end my-2" v-if="edited">
+        <!-- :disabled="checkDisabled" -->
         <v-col cols class="d-flex align-center justify-end">
           <v-btn
             outlined
@@ -52,7 +53,6 @@
                   :disabled="coach.edited_coach"
                   v-model="coach.class_open"
                   color="green"
-                  class="mr-10"
                   hide-details
                   :label="$t('teaching')"
                 ></v-switch>
@@ -640,6 +640,39 @@ export default {
       refresh_teach_day: "CourseModules/getTeachdayData",
       refresh_option: "CourseModules/getOptionData",
     }),
+    // checkDisabled() {
+    //   return this.coach_data?.some((items) => {
+    //     let coach_id = items.coach_id;
+    //     let teach_days = items.teach_day;
+    //     let start_time = items?.start_time;
+    //     let end_time = items?.end_time;
+    //     let student = items.students > 0;
+    //     let add_coach = items.add_new_coach;
+
+    //     console.log("coach_id :>> ", coach_id);
+    //     console.log("teach_days :>> ", teach_days);
+    //     console.log("start_time :>> ", start_time);
+    //     console.log("end_time :>> ", end_time);
+    //     console.log("student :>> ", student);
+    //     console.log("add_coach :>> ", add_coach);
+
+    //     if (
+    //       !add_coach ||
+    //       (add_coach &&
+    //         !coach_id &&
+    //         teach_days.length === 0 &&
+    //         !start_time &&
+    //         !end_time &&
+    //         !student)
+    //     ) {
+    //       console.log("111 :>> ", 111);
+    //       return true;
+    //     } else {
+    //       console.log("22 :>> ", 22);
+    //       return false;
+    //     }
+    //   });
+    // },
     lastCoachOccurrences() {
       let lastOccurrences = {};
       this.coach_data.forEach((coach, index) => {
@@ -707,6 +740,7 @@ export default {
       DeleteOPtions: "CourseModules/DeleteOPtions",
       RefreshTeachDay: "CourseModules/RefreshTeachDay",
       RefreshOption: "CourseModules/RefreshOption",
+      SaveUpdateSchedule: "CourseModules/SaveUpdateSchedule",
     }),
     ...mapMutations({
       ResetStateCourseData: "CourseModules/ResetStateCourseData",
@@ -1254,12 +1288,16 @@ export default {
         }
       }
     },
-    saveFunc(updateScadule) {
-      this.coach_data.map((item) => {
+    async saveFunc(updateScadule) {
+      let id_course = "";
+      await this.coach_data.map((item) => {
         item.update_scadule = updateScadule;
+        id_course = item.course_id;
       });
-
-      // console.log("payload :>> ", this.coach_data);
+      let payload = {
+        course: this.coach_data,
+      };
+      await this.SaveUpdateSchedule({ payload: payload, course_id: id_course });
     },
     DeleteCoachById(course_coach_id, course_id) {
       Swal.fire({

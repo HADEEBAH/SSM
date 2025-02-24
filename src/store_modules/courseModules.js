@@ -274,6 +274,7 @@ const CourseModules = {
     },
     coach_data: [
       {
+        add_new_coach: false,
         course_id: null,
         coach_id: null,
         course_coach_id: null,
@@ -389,6 +390,7 @@ const CourseModules = {
     course_vdo: [],
     limit_image: {},
     limit_vdo: {},
+    save_update_schedule: {}
 
 
 
@@ -396,6 +398,9 @@ const CourseModules = {
 
   },
   mutations: {
+    SetUpdateSchedule(state, payload) {
+      state.save_update_schedule = payload
+    },
     SetLimitImage(state, payload) {
       state.limit_image = payload
     },
@@ -763,39 +768,8 @@ const CourseModules = {
 
       // COACH
       const resetCoachData = [
-        // {
-        //   edited_coach: true,
-        //   course_id: null,
-        //   coach_id: null,
-        //   course_coach_id: null,
-        //   coach_name: null,
-        //   teach_days_used: [],
-        //   teach_day_data: [
-        //     {
-        //       day_of_week_id: null,
-        //       class_open: false,
-        //       teach_day: [],
-        //       course_coach_id: null,
-        //       class_date: [
-        //         {
-        //           start_time: null,
-        //           class_date_range: {
-        //             time_id: null,
-        //             day_of_week_id: null,
-        //             start_time: null,
-        //             start_time_object: { HH: null, mm: null },
-        //             menu_start_time: false,
-        //             end_time: null,
-        //             end_time_object: { HH: null, mm: null },
-        //             menu_end_time: false,
-        //           },
-        //           students: 0,
-        //         },
-        //       ],
-        //     },
-        //   ],
-        // },
         {
+          add_new_coach: false,
           course_id: null,
           coach_id: null,
           course_coach_id: null,
@@ -1007,6 +981,28 @@ const CourseModules = {
 
   },
   actions: {
+    async SaveUpdateSchedule(context, { payload, course_id }) {
+
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+
+
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.patch(`${localhost}/api/v1/manage/update-coach-all/${course_id}`, payload, config)
+        let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-coach-all/${course_id}`, payload, config)
+        if (data.statusCode == 200) {
+          context.commit("SetUpdateSchedule", data.data)
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
     async GetAllSeats(context, { courseId, coachId, courseTypeId, dayOfWeekId, timeId, coursePackageOptionsId }) {
 
       try {
@@ -3721,7 +3717,7 @@ const CourseModules = {
           data.data.map((items) => {
             items.edited_coach = true
             items.edited_options = true
-
+            items.add_new_coach = false
           })
           context.commit("SetCoachData", data.data)
         }
