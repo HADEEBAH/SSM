@@ -274,43 +274,31 @@ const CourseModules = {
     },
     coach_data: [
       {
-        edited_coach: true,
+        add_new_coach: false,
         course_id: null,
         coach_id: null,
         course_coach_id: null,
         coach_name: null,
-        teach_days_used: [],
-        teach_day_data: [
-          {
-            day_of_week_id: null,
-            class_open: false,
-            teach_day: [],
-            course_coach_id: null,
-            class_date: [
-              {
-                start_time: null,
-                class_date_range: {
-                  time_id: null,
-                  day_of_week_id: null,
-                  start_time: null,
-                  start_time_object: {
-                    HH: null,
-                    mm: null
-                  },
-                  menu_start_time: false,
-                  end_time: null,
-                  end_time_object: {
-                    HH: null,
-                    mm: null
-                  },
-                  menu_end_time: false
-                },
-                students: 0
-              }
-            ]
-          }
-        ]
-      }
+        day_of_week_id: null,
+        class_open: true,
+        teach_day: [],
+        study_start_date: null,
+        time_id: null,
+        start_time: null,
+        start_time_object: {
+          HH: "",
+          mm: ""
+        },
+        menu_start_time: false,
+        end_time: null,
+        end_time_object: {
+          HH: "",
+          mm: ""
+        },
+        menu_end_time: false,
+        edited_options: false,
+        students: 0
+      },
     ],
     data_package: [
       {
@@ -402,6 +390,8 @@ const CourseModules = {
     course_vdo: [],
     limit_image: {},
     limit_vdo: {},
+    save_update_schedule: {},
+    delete_coach_card: {}
 
 
 
@@ -409,6 +399,12 @@ const CourseModules = {
 
   },
   mutations: {
+    SetDeleteCoachCard(state, payload) {
+      state.delete_coach_card = payload
+    },
+    SetUpdateSchedule(state, payload) {
+      state.save_update_schedule = payload
+    },
     SetLimitImage(state, payload) {
       state.limit_image = payload
     },
@@ -777,36 +773,30 @@ const CourseModules = {
       // COACH
       const resetCoachData = [
         {
-          edited_coach: true,
+          add_new_coach: false,
           course_id: null,
           coach_id: null,
           course_coach_id: null,
           coach_name: null,
-          teach_days_used: [],
-          teach_day_data: [
-            {
-              day_of_week_id: null,
-              class_open: false,
-              teach_day: [],
-              course_coach_id: null,
-              class_date: [
-                {
-                  start_time: null,
-                  class_date_range: {
-                    time_id: null,
-                    day_of_week_id: null,
-                    start_time: null,
-                    start_time_object: { HH: null, mm: null },
-                    menu_start_time: false,
-                    end_time: null,
-                    end_time_object: { HH: null, mm: null },
-                    menu_end_time: false,
-                  },
-                  students: 0,
-                },
-              ],
-            },
-          ],
+          day_of_week_id: null,
+          class_open: true,
+          teach_day: [],
+          study_start_date: null,
+          time_id: null,
+          start_time: null,
+          start_time_object: {
+            HH: "",
+            mm: ""
+          },
+          menu_start_time: false,
+          end_time: null,
+          end_time_object: {
+            HH: "",
+            mm: ""
+          },
+          menu_end_time: false,
+          edited_options: false,
+          students: 0
         },
       ];
       state.coach_data = resetCoachData
@@ -995,6 +985,116 @@ const CourseModules = {
 
   },
   actions: {
+    async DeleteCoachCard(context, { coach_id, course_id, payload }) {
+
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          },
+          data: payload
+        }
+
+
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.delete(`${localhost}/api/v1/manage/delete-coach/${coach_id}`, config)
+        let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/manage/delete-coach/${coach_id}`, config)
+        if (data.statusCode == 200) {
+          context.commit("SetDeleteCoachCard", data.data)
+          await context.dispatch("CoachData", { course_id: course_id })
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("teaching days already deleted"),
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+          })
+        }
+      } catch (error) {
+        if (error.response.data.message == "This coach cannot be deleted. Because the middle of teaching") {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("can not delete coach"),
+            text: VueI18n.t(error.response.data.message),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "User not found.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("can not delete coach"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "Cannot delete a coach as there must be at least 1 coach listed in the course.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("cannot delete a coach as there must be at least 1 coach listed in the course"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("something went wrong"),
+            text: error.response.data.message,
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
+
+      }
+    },
+    async SaveUpdateSchedule(context, { payload, course_id }) {
+
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.patch(`${localhost}/api/v1/manage/update-coach-all/${course_id}`, payload, config)
+        let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-coach-all/${course_id}`, payload, config)
+        if (data.statusCode == 200) {
+          context.commit("SetUpdateSchedule", data.data)
+          await context.dispatch("CoachData", { course_id: course_id })
+
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: VueI18n.t("something went wrong"),
+          text: error.response.data.message,
+          timer: 3000,
+          showDenyButton: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        })
+      }
+    },
     async GetAllSeats(context, { courseId, coachId, courseTypeId, dayOfWeekId, timeId, coursePackageOptionsId }) {
 
       try {
@@ -2851,8 +2951,7 @@ const CourseModules = {
           }
         }
         // let localhost = "http://localhost:3000"
-        // let { data } = await axios.post(`${localhost}/api/v1/course/create`, data_payload, config)
-        // let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/course/create`, data_payload, config)
+        // let { data } = await axios.post(`${localhost}/api/v1/course/create`, data_payload, { timeout: 10000, ...config })
         let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/course/create`, data_payload, { timeout: 10000, ...config })
         if (data.statusCode === 201) {
           context.commit("SetCourseIsLoading", false)
@@ -3707,12 +3806,14 @@ const CourseModules = {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/detail/manage/teachday-coach/${course_id}`, config)
         if (data.statusCode == 200) {
           data.data.map((items) => {
-            items.teach_day_data.map((item) => {
-              item.edited_coach = true
-              item.class_date?.map((options) => {
-                options.class_date_range.edited_options = true
-              })
-            })
+            items.edited_coach = true
+            items.edited_options = true
+            items.add_new_coach = false
+            if (items.class_open === "InActive") {
+              items.class_open = false
+            } else {
+              items.class_open = true
+            }
           })
           context.commit("SetCoachData", data.data)
         }
