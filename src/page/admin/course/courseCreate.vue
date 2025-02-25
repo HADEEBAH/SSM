@@ -854,6 +854,7 @@ export default {
             }
 
             found_teach_day.times.push({
+              // status: class_open === true ? "Active" : "InActive",
               start: start_time,
               end: end_time,
               maximum_student: students,

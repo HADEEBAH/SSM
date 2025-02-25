@@ -52,7 +52,7 @@
               <v-col cols="12" class="d-flex align-center justify-end">
                 <v-switch
                   inset
-                  :disabled="coach.edited_coach"
+                  :disabled="coach.edited_options"
                   v-model="coach.class_open"
                   color="green"
                   hide-details
@@ -800,18 +800,12 @@ export default {
         denyButtonColor: "#ff6b81",
       }).then(async (result) => {
         if (result.isDenied) {
-          if (items.class_open === true) {
-            items.class_open = "Active";
-          } else {
-            items.class_open = "InActive";
-          }
           let update_payload = {
             coach_id: items.coach_id,
             course_coach_id: items.course_coach_id,
             course_id: items.course_id,
             day_of_week_id: items.day_of_week_id,
             teach_day: items.teach_day.join(","),
-            class_open: items.class_open,
             time_id: items.time_id,
             update_schedule: true,
           };
@@ -819,19 +813,15 @@ export default {
             payload: update_payload,
             course_id: this.$route.params.course_id,
           });
+          this.disable_teach_day = false;
+          this.disable_coach = false;
         } else if (result.isConfirmed) {
-          if (items.class_open === true) {
-            items.class_open = "Active";
-          } else {
-            items.class_open = "InActive";
-          }
           let update_payload = {
             coach_id: items.coach_id,
             course_coach_id: items.course_coach_id,
             course_id: items.course_id,
             day_of_week_id: items.day_of_week_id,
             teach_day: items.teach_day.join(","),
-            class_open: items.class_open,
             time_id: items.time_id,
             update_schedule: false,
           };
@@ -839,6 +829,8 @@ export default {
             payload: update_payload,
             course_id: this.$route.params.course_id,
           });
+          this.disable_teach_day = false;
+          this.disable_coach = false;
         } else {
           items.edited_coach = false;
         }
@@ -945,17 +937,25 @@ export default {
         cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
+          if (coach.class_open === true) {
+            coach.class_open = "Active";
+          } else {
+            coach.class_open = "InActive";
+          }
           let option_payload = {
             time_id: coach.time_id,
             start_time: coach.start_time,
             end_time: coach.end_time,
             student_number: coach.students,
             day_of_week_id: coach.day_of_week_id,
+            is_active: coach.class_open,
           };
           this.UpdateOptions({
             payload: option_payload,
             course_id: this.$route.params.course_id,
           });
+          this.disable_teach_day = false;
+          this.disable_coach = false;
         }
       });
     },
