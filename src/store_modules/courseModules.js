@@ -390,7 +390,8 @@ const CourseModules = {
     course_vdo: [],
     limit_image: {},
     limit_vdo: {},
-    save_update_schedule: {}
+    save_update_schedule: {},
+    delete_coach_card: {}
 
 
 
@@ -398,6 +399,9 @@ const CourseModules = {
 
   },
   mutations: {
+    SetDeleteCoachCard(state, payload) {
+      state.delete_coach_card = payload
+    },
     SetUpdateSchedule(state, payload) {
       state.save_update_schedule = payload
     },
@@ -981,6 +985,31 @@ const CourseModules = {
 
   },
   actions: {
+    async DeleteCoachCard(context, { coach_id, course_id, payload }) {
+
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          },
+          data: payload
+        }
+
+
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.delete(`${localhost}/api/v1/manage/delete-coach/${coach_id}`, config)
+        let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/manage/delete-coach/${coach_id}`, config)
+        if (data.statusCode == 200) {
+          context.commit("SetDeleteCoachCard", data.data)
+          await context.dispatch("CoachData", { course_id: course_id })
+
+        }
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
+    },
     async SaveUpdateSchedule(context, { payload, course_id }) {
 
       try {
@@ -998,6 +1027,8 @@ const CourseModules = {
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-coach-all/${course_id}`, payload, config)
         if (data.statusCode == 200) {
           context.commit("SetUpdateSchedule", data.data)
+          await context.dispatch("CoachData", { course_id: course_id })
+
         }
       } catch (error) {
         console.log('error :>> ', error);

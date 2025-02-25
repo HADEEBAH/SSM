@@ -13,11 +13,12 @@
     </div>
     <div v-else>
       <v-row dense class="flex align-center justify-end my-2" v-if="edited">
-        <!-- :disabled="checkDisabled" -->
         <v-col cols class="d-flex align-center justify-end">
           <v-btn
             outlined
+            :disabled="isDisabled"
             color="success"
+            :loading="save_scedule_loading"
             @click="saveFunc((update_scadul = true))"
             class="mx-3"
           >
@@ -25,7 +26,9 @@
           </v-btn>
           <v-btn
             outlined
+            :disabled="isDisabled"
             color="success"
+            :loading="save_loading"
             @click="saveFunc((update_scadul = false))"
           >
             {{ $t("save") }}
@@ -573,6 +576,8 @@
         <v-btn
           outlined
           color="green"
+          :disabled="isDisabled"
+          :loading="save_scedule_loading"
           @click="saveFunc((update_scadul = true))"
           class="mx-3"
         >
@@ -581,6 +586,8 @@
         <v-btn
           outlined
           color="green"
+          :loading="save_loading"
+          :disabled="isDisabled"
           @click="saveFunc((update_scadul = false))"
         >
           {{ $t("save") }}
@@ -623,13 +630,23 @@ export default {
     add_time_options: false,
     disable_coach: false,
     disable_teach_day: false,
+    isDisabled: true,
+    save_loading: false,
+    save_scedule_loading: false,
   }),
 
   created() {
     this.coachs_option = this.coachs;
   },
   mounted() {},
-  watch: {},
+  watch: {
+    coach_data: {
+      deep: true,
+      handler() {
+        this.updateDisabledState();
+      },
+    },
+  },
   computed: {
     ...mapGetters({
       courses_data: "CourseModules/getCoursesData",
@@ -640,39 +657,7 @@ export default {
       refresh_teach_day: "CourseModules/getTeachdayData",
       refresh_option: "CourseModules/getOptionData",
     }),
-    // checkDisabled() {
-    //   return this.coach_data?.some((items) => {
-    //     let coach_id = items.coach_id;
-    //     let teach_days = items.teach_day;
-    //     let start_time = items?.start_time;
-    //     let end_time = items?.end_time;
-    //     let student = items.students > 0;
-    //     let add_coach = items.add_new_coach;
 
-    //     console.log("coach_id :>> ", coach_id);
-    //     console.log("teach_days :>> ", teach_days);
-    //     console.log("start_time :>> ", start_time);
-    //     console.log("end_time :>> ", end_time);
-    //     console.log("student :>> ", student);
-    //     console.log("add_coach :>> ", add_coach);
-
-    //     if (
-    //       !add_coach ||
-    //       (add_coach &&
-    //         !coach_id &&
-    //         teach_days.length === 0 &&
-    //         !start_time &&
-    //         !end_time &&
-    //         !student)
-    //     ) {
-    //       console.log("111 :>> ", 111);
-    //       return true;
-    //     } else {
-    //       console.log("22 :>> ", 22);
-    //       return false;
-    //     }
-    //   });
-    // },
     lastCoachOccurrences() {
       let lastOccurrences = {};
       this.coach_data.forEach((coach, index) => {
@@ -741,11 +726,45 @@ export default {
       RefreshTeachDay: "CourseModules/RefreshTeachDay",
       RefreshOption: "CourseModules/RefreshOption",
       SaveUpdateSchedule: "CourseModules/SaveUpdateSchedule",
+      DeleteCoachCard: "CourseModules/DeleteCoachCard",
     }),
     ...mapMutations({
       ResetStateCourseData: "CourseModules/ResetStateCourseData",
     }),
 
+    updateDisabledState() {
+      this.coach_data?.some((items) => {
+        if (items.add_new_coach === false) {
+          this.isDisabled = true;
+        }
+        if (items.add_new_coach === true) {
+          let coach_id = null;
+          let teach_days = [];
+          let start_time = null;
+          let end_time = null;
+          let student = 0;
+
+          coach_id = items.coach_id;
+
+          teach_days = items.teach_day;
+          start_time = items?.start_time;
+          end_time = items?.end_time;
+          student = items.students > 0;
+
+          if (
+            !coach_id ||
+            teach_days.length === 0 ||
+            !start_time ||
+            !end_time ||
+            !student
+          ) {
+            this.isDisabled = true;
+          } else {
+            this.isDisabled = false;
+          }
+        }
+      });
+    },
     editCoach(items) {
       items.edited_coach = false;
       this.disable_teach_day = true;
@@ -1018,6 +1037,13 @@ export default {
 
     removeCoachCard(coach, coach_index) {
       if (coach.day_of_week_id) {
+        let payload = {
+          coach_id: coach.coach_id,
+          day_of_week_id: coach.day_of_week_id,
+          course_coach_id: coach.course_coach_id,
+          time_id: coach.time_id,
+          course_id: coach.course_id,
+        };
         Swal.fire({
           icon: "question",
           title: this.$t("do you want to delete this coach"),
@@ -1027,9 +1053,10 @@ export default {
           cancelButtonText: this.$t("cancel"),
         }).then(async (result) => {
           if (result.isConfirmed) {
-            this.DeleteCourseCoach({
-              course_coach_id: coach.course_coach_id,
+            this.DeleteCoachCard({
+              coach_id: coach.coach_id,
               course_id: coach.course_id,
+              payload: payload,
             });
           }
         });
@@ -1289,15 +1316,61 @@ export default {
       }
     },
     async saveFunc(updateScadule) {
-      let id_course = "";
-      await this.coach_data.map((item) => {
-        item.update_scadule = updateScadule;
-        id_course = item.course_id;
-      });
-      let payload = {
-        course: this.coach_data,
-      };
-      await this.SaveUpdateSchedule({ payload: payload, course_id: id_course });
+      if (updateScadule) {
+        Swal.fire({
+          icon: "question",
+          title: this.$t("do you want to save and update schedule"),
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("cancel"),
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            this.save_scedule_loading = true;
+            await this.coach_data.map((item) => {
+              item.update_scadule = updateScadule;
+              item.course_id = this.$route.params.course_id;
+              item.class_open =
+                item.class_open === true ? "Active" : "InActive";
+            });
+            let payload = {
+              course: this.coach_data,
+            };
+            await this.SaveUpdateSchedule({
+              payload: payload,
+              course_id: this.$route.params.course_id,
+            });
+          }
+          this.save_scedule_loading = false;
+        });
+      } else {
+        Swal.fire({
+          icon: "question",
+          title: this.$t("do you want to save"),
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: this.$t("agree"),
+          cancelButtonText: this.$t("cancel"),
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            this.save_loading = true;
+            await this.coach_data.map((item) => {
+              item.update_scadule = updateScadule;
+              item.course_id = this.$route.params.course_id;
+              item.class_open =
+                item.class_open === true ? "Active" : "InActive";
+            });
+            let payload = {
+              course: this.coach_data,
+            };
+            await this.SaveUpdateSchedule({
+              payload: payload,
+              course_id: this.$route.params.course_id,
+            });
+          }
+          this.save_loading = false;
+        });
+      }
     },
     DeleteCoachById(course_coach_id, course_id) {
       Swal.fire({
