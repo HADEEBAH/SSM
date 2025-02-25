@@ -52,7 +52,6 @@
               <v-col cols="12" class="d-flex align-center justify-end">
                 <v-switch
                   inset
-                  @click="checkStudyByDay($event, coach)"
                   :disabled="coach.edited_coach"
                   v-model="coach.class_open"
                   color="green"
@@ -523,50 +522,6 @@
               </v-col>
               <v-col cols="12" sm="4" v-if="!edited"></v-col>
             </v-row>
-            <!-- SAVE BUTTON -->
-            <!-- <v-row
-              dense
-              class="flex align-center justify-end"
-              v-if="!coach.day_of_week_id && edited"
-            >
-              <v-col cols class="d-flex align-center justify-end">
-                SAVE UPDATE
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                      icon
-                      v-if="
-                        lastCoachOccurrences[coach.coach_id] === coach_index
-                      "
-                      color="#FF6B81"
-                      v-bind="attrs"
-                      v-on="on"
-                      :disabled="checkDisableAddTeachDay(coach)"
-                      @click="FunctionAddNewCoach(coach, coach_index)"
-                    >
-                      <v-icon>mdi-content-save-all</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>{{ $t("save") }}</span>
-                </v-tooltip>
-                DELETE
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-icon
-                      color="#FF6B81"
-                      dark
-                      v-bind="attrs"
-                      v-on="on"
-                      class="mr-2"
-                      @click="removeTeachingDay(coach)"
-                    >
-                      mdi-trash-can-outline
-                    </v-icon>
-                  </template>
-                  <span>{{ $t("delete teaching day") }}</span>
-                </v-tooltip>
-              </v-col>
-            </v-row> -->
           </v-card-text>
         </v-card>
       </template>
@@ -696,14 +651,6 @@ export default {
           (val || "") > 0 || this.$t("please specify the number of students"),
       ];
     },
-    // setFunction() {
-    //   if (this.course_data.course_id) {
-    //     this.GetShortCourseMonitor({
-    //       course_id: this.course_data.course_id,
-    //     });
-    //   }
-    //   return "";
-    // },
   },
   destroyed() {
     this.ResetStateCourseData();
@@ -844,30 +791,54 @@ export default {
       Swal.fire({
         icon: "question",
         title: this.$t("do you want to edit teachday"),
-        showDenyButton: true,
         showCancelButton: false,
         showCloseButton: true,
         focusConfirm: false,
-        confirmButtonText: this.$t("save"),
+        showDenyButton: true,
         denyButtonText: this.$t("save and update schedule"),
+        confirmButtonText: this.$t("save"),
         denyButtonColor: "#ff6b81",
       }).then(async (result) => {
-        if (result.isConfirmed) {
+        if (result.isDenied) {
+          if (items.class_open === true) {
+            items.class_open = "Active";
+          } else {
+            items.class_open = "InActive";
+          }
           let update_payload = {
             coach_id: items.coach_id,
             course_coach_id: items.course_coach_id,
             course_id: items.course_id,
             day_of_week_id: items.day_of_week_id,
             teach_day: items.teach_day.join(","),
-            class_open: items.class_open === true ? "Active" : "InActive",
+            class_open: items.class_open,
             time_id: items.time_id,
+            update_schedule: true,
           };
           this.UpdateTeachdayCoach({
             payload: update_payload,
             course_id: this.$route.params.course_id,
           });
-        } else if (result.isDenied) {
-          // console.log("false :>> ", false);
+        } else if (result.isConfirmed) {
+          if (items.class_open === true) {
+            items.class_open = "Active";
+          } else {
+            items.class_open = "InActive";
+          }
+          let update_payload = {
+            coach_id: items.coach_id,
+            course_coach_id: items.course_coach_id,
+            course_id: items.course_id,
+            day_of_week_id: items.day_of_week_id,
+            teach_day: items.teach_day.join(","),
+            class_open: items.class_open,
+            time_id: items.time_id,
+            update_schedule: false,
+          };
+          this.UpdateTeachdayCoach({
+            payload: update_payload,
+            course_id: this.$route.params.course_id,
+          });
         } else {
           items.edited_coach = false;
         }
@@ -900,8 +871,7 @@ export default {
               course_coach_id: coach.course_coach_id, // Assuming all have the same course_coach_id
               teach_day_data: checked_out.map((teach_day) => ({
                 day_of_week_id: null,
-                class_open:
-                  teach_day.class_open === true ? "Active" : "InActive",
+                class_open: teach_day.class_open,
                 teach_day: teach_day.teach_day?.join(","),
                 times: teach_day.class_date
                   .filter(
@@ -939,8 +909,7 @@ export default {
               course_coach_id: null, // Assuming all have the same course_coach_id
               teach_day_data: checked_out.map((teach_day) => ({
                 day_of_week_id: null,
-                class_open:
-                  teach_day.class_open === true ? "Active" : "InActive",
+                class_open: teach_day.class_open,
                 teach_day: teach_day.teach_day?.join(","),
                 times: teach_day.class_date
                   .filter(
@@ -1007,8 +976,7 @@ export default {
             teach_day_data: [
               {
                 day_of_week_id: teach_day.day_of_week_id,
-                class_open:
-                  teach_day.class_open === true ? "Active" : "InActive",
+                class_open: teach_day.class_open,
                 teach_day: teach_day.teach_day?.join(","),
                 times: teach_day.class_date
                   .filter(
@@ -1288,33 +1256,33 @@ export default {
         .focus();
     },
 
-    checkStudyByDay(e, data) {
-      if (!data.class_open) {
-        if (
-          this.course_monitors.filter(
-            (v) => v.m_day_of_week_id === data.day_of_week_id
-          ).length > 0
-        ) {
-          if (
-            this.course_monitors
-              .filter((v) => v.m_day_of_week_id === data.day_of_week_id)
-              .some((v) => v.m_current_student > 0)
-          ) {
-            data.class_open = true;
-            e.target.click();
-            Swal.fire({
-              icon: "error",
-              title: this.$t("teaching days cannot be closed"),
-              text: this.$t("because there are students in the course"),
-              timer: 3000,
-              timerProgressBar: true,
-              showCancelButton: false,
-              showConfirmButton: false,
-            });
-          }
-        }
-      }
-    },
+    // checkStudyByDay(e, data) {
+    //   if (data.class_open === "InActive") {
+    //     if (
+    //       this.course_monitors.filter(
+    //         (v) => v.m_day_of_week_id === data.day_of_week_id
+    //       ).length > 0
+    //     ) {
+    //       if (
+    //         this.course_monitors
+    //           .filter((v) => v.m_day_of_week_id === data.day_of_week_id)
+    //           .some((v) => v.m_current_student > 0)
+    //       ) {
+    //         data.class_open = "Active";
+    //         e.target.click();
+    //         Swal.fire({
+    //           icon: "error",
+    //           title: this.$t("teaching days cannot be closed"),
+    //           text: this.$t("because there are students in the course"),
+    //           timer: 3000,
+    //           timerProgressBar: true,
+    //           showCancelButton: false,
+    //           showConfirmButton: false,
+    //         });
+    //       }
+    //     }
+    //   }
+    // },
     async saveFunc(updateScadule) {
       if (updateScadule) {
         Swal.fire({
@@ -1328,10 +1296,12 @@ export default {
           if (result.isConfirmed) {
             this.save_scedule_loading = true;
             await this.coach_data.map((item) => {
+              let check_swist =
+                item.class_open === true ? "Active" : "InActive";
+              item.class_open = check_swist;
               item.update_scadule = updateScadule;
               item.course_id = this.$route.params.course_id;
-              item.class_open =
-                item.class_open === true ? "Active" : "InActive";
+              item.teach_days_used = [];
             });
             let payload = {
               course: this.coach_data,
@@ -1355,10 +1325,12 @@ export default {
           if (result.isConfirmed) {
             this.save_loading = true;
             await this.coach_data.map((item) => {
+              let check_swist =
+                item.class_open === true ? "Active" : "InActive";
+              item.class_open = check_swist;
               item.update_scadule = updateScadule;
               item.course_id = this.$route.params.course_id;
-              item.class_open =
-                item.class_open === true ? "Active" : "InActive";
+              item.teach_days_used = [];
             });
             let payload = {
               course: this.coach_data,

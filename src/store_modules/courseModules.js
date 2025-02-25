@@ -1004,10 +1004,64 @@ const CourseModules = {
         if (data.statusCode == 200) {
           context.commit("SetDeleteCoachCard", data.data)
           await context.dispatch("CoachData", { course_id: course_id })
-
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("teaching days already deleted"),
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+          })
         }
       } catch (error) {
-        console.log('error :>> ', error);
+        if (error.response.data.message == "This coach cannot be deleted. Because the middle of teaching") {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("can not delete coach"),
+            text: VueI18n.t(error.response.data.message),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "User not found.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("can not delete coach"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else if (error.response.data.message == "Cannot delete a coach as there must be at least 1 coach listed in the course.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("cannot delete a coach as there must be at least 1 coach listed in the course"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("something went wrong"),
+            text: error.response.data.message,
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
+
       }
     },
     async SaveUpdateSchedule(context, { payload, course_id }) {
@@ -1020,8 +1074,6 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-
-
         // let localhost = "http://localhost:3000"
         // let { data } = await axios.patch(`${localhost}/api/v1/manage/update-coach-all/${course_id}`, payload, config)
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-coach-all/${course_id}`, payload, config)
@@ -1031,7 +1083,16 @@ const CourseModules = {
 
         }
       } catch (error) {
-        console.log('error :>> ', error);
+        Swal.fire({
+          icon: "error",
+          title: VueI18n.t("something went wrong"),
+          text: error.response.data.message,
+          timer: 3000,
+          showDenyButton: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        })
       }
     },
     async GetAllSeats(context, { courseId, coachId, courseTypeId, dayOfWeekId, timeId, coursePackageOptionsId }) {
@@ -3749,6 +3810,11 @@ const CourseModules = {
             items.edited_coach = true
             items.edited_options = true
             items.add_new_coach = false
+            if (items.class_open === "InActive") {
+              items.class_open = false
+            } else {
+              items.class_open = true
+            }
           })
           context.commit("SetCoachData", data.data)
         }
