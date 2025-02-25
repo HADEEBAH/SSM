@@ -281,6 +281,7 @@ const CourseModules = {
         coach_name: null,
         day_of_week_id: null,
         class_open: true,
+        is_active: true,
         teach_day: [],
         study_start_date: null,
         time_id: null,
@@ -780,6 +781,7 @@ const CourseModules = {
           coach_name: null,
           day_of_week_id: null,
           class_open: true,
+          is_active: true,
           teach_day: [],
           study_start_date: null,
           time_id: null,
@@ -3808,12 +3810,7 @@ const CourseModules = {
           data.data.map((items) => {
             items.edited_coach = true
             items.edited_options = true
-            items.add_new_coach = false
-            if (items.class_open === "InActive") {
-              items.class_open = false
-            } else {
-              items.class_open = true
-            }
+
           })
           context.commit("SetCoachData", data.data)
         }
