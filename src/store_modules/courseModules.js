@@ -1095,6 +1095,9 @@ const CourseModules = {
           showConfirmButton: false,
           timerProgressBar: true,
         })
+
+        context.commit("SetUpdateSchedule", error.response.data)
+
       }
     },
     async GetAllSeats(context, { courseId, coachId, courseTypeId, dayOfWeekId, timeId, coursePackageOptionsId }) {
@@ -4621,6 +4624,9 @@ const CourseModules = {
 
   },
   getters: {
+    getUpdateScedule(state) {
+      return state.save_update_schedule
+    },
     getLimitImage(state) {
       return state.limit_image
     },

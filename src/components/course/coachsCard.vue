@@ -15,20 +15,21 @@
       <v-row dense class="flex align-center justify-end my-2" v-if="edited">
         <v-col cols class="d-flex align-center justify-end">
           <v-btn
-            outlined
+            depressed
             :disabled="isDisabled"
-            color="success"
+            color="#ff6b81"
             :loading="save_scedule_loading"
             @click="saveFunc((update_scadul = true))"
-            class="mx-3"
+            class="mx-3 white--text"
           >
             {{ $t("save and update schedule") }}
           </v-btn>
           <v-btn
-            outlined
+            depressed
             :disabled="isDisabled"
-            color="success"
+            color="#ff6b81"
             :loading="save_loading"
+            class="white--text"
             @click="saveFunc((update_scadul = false))"
           >
             {{ $t("save") }}
@@ -84,10 +85,11 @@
                     $i18n.locale == 'th' ? 'fullNameTh' : 'fullNameEh'
                   "
                   item-color="#ff6b81"
-                  @change="findTeachDays(coach, coach_index)"
                   :rules="course"
                   :placeholder="$t('coach')"
                 >
+                  <!-- @change="findTeachDays(coach, coach_index)" -->
+
                   <template v-slot:no-data>
                     <v-list-item>
                       <v-list-item-title>
@@ -529,20 +531,21 @@
     <v-row dense class="flex align-center justify-end" v-if="edited">
       <v-col cols class="d-flex align-center justify-end">
         <v-btn
-          outlined
-          color="green"
+          depressed
           :disabled="isDisabled"
+          color="#ff6b81"
           :loading="save_scedule_loading"
           @click="saveFunc((update_scadul = true))"
-          class="mx-3"
+          class="mx-3 white--text"
         >
           {{ $t("save and update schedule") }}
         </v-btn>
         <v-btn
-          outlined
-          color="green"
-          :loading="save_loading"
+          depressed
           :disabled="isDisabled"
+          color="#ff6b81"
+          :loading="save_loading"
+          class="white--text"
           @click="saveFunc((update_scadul = false))"
         >
           {{ $t("save") }}
@@ -611,6 +614,7 @@ export default {
       coach_data: "CourseModules/getCoachData",
       refresh_teach_day: "CourseModules/getTeachdayData",
       refresh_option: "CourseModules/getOptionData",
+      save_update_schedule: "CourseModules/getUpdateScedule",
     }),
 
     lastCoachOccurrences() {
@@ -791,13 +795,17 @@ export default {
       Swal.fire({
         icon: "question",
         title: this.$t("do you want to edit teachday"),
-        showCancelButton: false,
+        showCancelButton: true,
         showCloseButton: true,
         focusConfirm: false,
         showDenyButton: true,
+        allowOutsideClick: false,
         denyButtonText: this.$t("save and update schedule"),
         confirmButtonText: this.$t("save"),
+        cancelButtonText: this.$t("cancel"),
         denyButtonColor: "#ff6b81",
+        confirmedButtonColor: "#99CCFF",
+        cancelButtonColor: "#FF3333",
       }).then(async (result) => {
         if (result.isDenied) {
           let update_payload = {
@@ -832,7 +840,10 @@ export default {
           this.disable_teach_day = false;
           this.disable_coach = false;
         } else {
-          items.edited_coach = false;
+          items.edited_coach = true;
+          items.edited_options = true;
+          this.disable_teach_day = false;
+          this.disable_coach = false;
         }
       });
       items.edited_coach = true;
@@ -937,11 +948,6 @@ export default {
         cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
-          // if (coach.class_open === true) {
-          //   coach.class_open = "Active";
-          // } else {
-          //   coach.class_open = "InActive";
-          // }
           let option_payload = {
             time_id: coach.time_id,
             start_time: coach.start_time,
@@ -1176,7 +1182,7 @@ export default {
         );
 
         for (const value of checkSelectedDay) {
-          if (value.start_time_object.HH) {
+          if (value?.start_time_object?.HH) {
             checkHours.push(parseInt(value.start_time_object.HH));
           }
         }
@@ -1188,7 +1194,7 @@ export default {
         );
 
         for (const value of checkSelectedDay) {
-          if (value.start_time_object.HH) {
+          if (value?.start_time_object?.HH) {
             checkHours.push(parseInt(value.start_time_object.HH));
           }
         }
@@ -1246,7 +1252,13 @@ export default {
               parseInt(this?.courses_data?.course_hour_time?.mm)
         }`.padStart(2, "0");
       }
-      date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`;
+      if (date.start_time_object.HH) {
+        date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`;
+      } else {
+        date.end_time = `HH:mm`;
+        date.start_time = ``;
+      }
+      // date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`;
     },
 
     SelectedStartDate(e) {
@@ -1319,9 +1331,19 @@ export default {
             await this.SaveUpdateSchedule({
               payload: payload,
               course_id: this.$route.params.course_id,
+            }).then(async () => {
+              if (
+                this.save_update_schedule?.statusCode === 400 ||
+                this.save_update_schedule?.statusCode === 500
+              ) {
+                this.isDisabled = false;
+              } else {
+                this.isDisabled = true;
+              }
             });
           }
           this.save_scedule_loading = false;
+          // this.isDisabled = true;
         });
       } else {
         Swal.fire({
@@ -1358,9 +1380,19 @@ export default {
             await this.SaveUpdateSchedule({
               payload: payload,
               course_id: this.$route.params.course_id,
+            }).then(async () => {
+              if (
+                this.save_update_schedule?.statusCode === 400 ||
+                this.save_update_schedule?.statusCode === 500
+              ) {
+                this.isDisabled = false;
+              } else {
+                this.isDisabled = true;
+              }
             });
           }
           this.save_loading = false;
+          // this.isDisabled = true;
         });
       }
     },
@@ -1532,14 +1564,14 @@ export default {
       }
       // this.ChangeCourseData(this.course_data);
     },
-    findTeachDays(coach_data, coach_index) {
-      this.select_coachs.push(coach_data.coach_id);
-      this.GetTeachDays(coach_data).then(() => {
-        this.coach_data[coach_index].teach_days_used = this.teach_days;
-        // this.course_data.coachs[coach_index].teach_days_used = this.teach_days;
-      });
-      // this.ChangeCourseData(this.course_data);
-    },
+    // findTeachDays(coach_data, coach_index) {
+    //   this.select_coachs.push(coach_data.coach_id);
+    //   this.GetTeachDays(coach_data).then(() => {
+    //     this.coach_data[coach_index].teach_days_used = this.teach_days;
+    //     // this.course_data.coachs[coach_index].teach_days_used = this.teach_days;
+    //   });
+    //   // this.ChangeCourseData(this.course_data);
+    // },
     addTeachDay(coach) {
       const newEntry = {
         add_new_coach: false,
