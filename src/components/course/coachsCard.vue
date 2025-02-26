@@ -53,7 +53,7 @@
                 <v-switch
                   inset
                   :disabled="coach.edited_options"
-                  v-model="coach.class_open"
+                  v-model="coach.is_active"
                   color="green"
                   hide-details
                   :label="$t('teaching')"
@@ -863,7 +863,7 @@ export default {
               course_coach_id: coach.course_coach_id, // Assuming all have the same course_coach_id
               teach_day_data: checked_out.map((teach_day) => ({
                 day_of_week_id: null,
-                class_open: teach_day.class_open,
+                is_active: teach_day.is_active,
                 teach_day: teach_day.teach_day?.join(","),
                 times: teach_day.class_date
                   .filter(
@@ -901,7 +901,7 @@ export default {
               course_coach_id: null, // Assuming all have the same course_coach_id
               teach_day_data: checked_out.map((teach_day) => ({
                 day_of_week_id: null,
-                class_open: teach_day.class_open,
+                is_active: teach_day.is_active,
                 teach_day: teach_day.teach_day?.join(","),
                 times: teach_day.class_date
                   .filter(
@@ -937,18 +937,18 @@ export default {
         cancelButtonText: this.$t("cancel"),
       }).then(async (result) => {
         if (result.isConfirmed) {
-          if (coach.class_open === true) {
-            coach.class_open = "Active";
-          } else {
-            coach.class_open = "InActive";
-          }
+          // if (coach.class_open === true) {
+          //   coach.class_open = "Active";
+          // } else {
+          //   coach.class_open = "InActive";
+          // }
           let option_payload = {
             time_id: coach.time_id,
             start_time: coach.start_time,
             end_time: coach.end_time,
             student_number: coach.students,
             day_of_week_id: coach.day_of_week_id,
-            is_active: coach.class_open,
+            is_active: coach.is_active,
           };
           this.UpdateOptions({
             payload: option_payload,
@@ -976,7 +976,7 @@ export default {
             teach_day_data: [
               {
                 day_of_week_id: teach_day.day_of_week_id,
-                class_open: teach_day.class_open,
+                is_active: teach_day.is_active,
                 teach_day: teach_day.teach_day?.join(","),
                 times: teach_day.class_date
                   .filter(
@@ -1295,13 +1295,23 @@ export default {
         }).then(async (result) => {
           if (result.isConfirmed) {
             this.save_scedule_loading = true;
-            await this.coach_data.map((item) => {
-              let check_swist =
-                item.class_open === true ? "Active" : "InActive";
-              item.class_open = check_swist;
+            let get_course_coach = [];
+            let get_day_of_week_id = [];
+            await this.coach_data.map(async (item) => {
+              get_course_coach = await this.coach_data.filter(
+                (value) => value.coach_id === item.coach_id
+              );
+              item.course_coach_id = get_course_coach[0].course_coach_id;
               item.update_scadule = updateScadule;
               item.course_id = this.$route.params.course_id;
               item.teach_days_used = [];
+              get_day_of_week_id = this.coach_data.filter(
+                (value) =>
+                  value.coach_id === item.coach_id &&
+                  JSON.stringify(value.teach_day.sort()) ===
+                    JSON.stringify(item.teach_day.sort()) // Sorting the arrays before comparing
+              );
+              item.day_of_week_id = get_day_of_week_id[0]?.day_of_week_id;
             });
             let payload = {
               course: this.coach_data,
@@ -1324,13 +1334,23 @@ export default {
         }).then(async (result) => {
           if (result.isConfirmed) {
             this.save_loading = true;
-            await this.coach_data.map((item) => {
-              let check_swist =
-                item.class_open === true ? "Active" : "InActive";
-              item.class_open = check_swist;
+            let get_course_coach = [];
+            let get_day_of_week_id = [];
+            await this.coach_data.map(async (item) => {
+              get_course_coach = await this.coach_data.filter(
+                (value) => value.coach_id === item.coach_id
+              );
+              item.course_coach_id = get_course_coach[0].course_coach_id;
               item.update_scadule = updateScadule;
               item.course_id = this.$route.params.course_id;
               item.teach_days_used = [];
+              get_day_of_week_id = this.coach_data.filter(
+                (value) =>
+                  value.coach_id === item.coach_id &&
+                  JSON.stringify(value.teach_day.sort()) ===
+                    JSON.stringify(item.teach_day.sort()) // Sorting the arrays before comparing
+              );
+              item.day_of_week_id = get_day_of_week_id[0]?.day_of_week_id;
             });
             let payload = {
               course: this.coach_data,
@@ -1531,6 +1551,7 @@ export default {
         coach_name: null,
         day_of_week_id: null,
         class_open: true,
+        is_active: true,
         teach_day: [],
         study_start_date: null,
         time_id: null,
@@ -1581,6 +1602,7 @@ export default {
         coach_name: null,
         day_of_week_id: null,
         class_open: true,
+        is_active: true,
         teach_day: coach.teach_day,
         study_start_date: null,
         time_id: null,

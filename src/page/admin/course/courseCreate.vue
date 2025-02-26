@@ -827,7 +827,7 @@ export default {
               start_time,
               end_time,
               students,
-              class_open,
+              is_active,
             } = session;
 
             // ถ้า coach_id ยังไม่มีใน accumulator (ยังไม่เคยเจอโค้ชนี้มาก่อน) จะสร้างอ็อบเจ็กต์ใหม่ที่มี coach_id และ day_of_week เป็นอาเรย์ว่างๆ สำหรับเก็บข้อมูลวันเรียน
@@ -846,7 +846,6 @@ export default {
             // ถ้ายังไม่เคยเพิ่มวันนี้ไปใน coach.day_of_week มาก่อนให้สร้างอ็อบเจ็กต์ใหม่สำหรับวันนั้น
             if (!found_teach_day) {
               found_teach_day = {
-                status: class_open === true ? "Active" : "InActive",
                 day: teach_day.sort((a, b) => a - b).join(","),
                 times: [],
               };
@@ -854,7 +853,7 @@ export default {
             }
 
             found_teach_day.times.push({
-              // status: class_open === true ? "Active" : "InActive",
+              is_active: is_active,
               start: start_time,
               end: end_time,
               maximum_student: students,
@@ -1063,9 +1062,9 @@ export default {
         course_id: null,
         coach_id: null,
         course_coach_id: null,
-        coach_name: null,
         day_of_week_id: null,
         class_open: true,
+        is_active: true,
         teach_day: [],
         study_start_date: null,
         time_id: null,

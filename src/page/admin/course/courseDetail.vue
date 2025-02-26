@@ -5237,6 +5237,7 @@ export default {
         coach_name: null,
         day_of_week_id: null,
         class_open: true,
+        is_active: true,
         teach_day: [],
         study_start_date: null,
         time_id: null,
