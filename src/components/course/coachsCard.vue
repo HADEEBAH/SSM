@@ -147,6 +147,7 @@
                   item-value="value"
                   :placeholder="$t('please select a time')"
                   v-model="coach.teach_day"
+                  @input="sortDay(coach)"
                 >
                   <!-- @change="
                     selectDays(
@@ -692,6 +693,8 @@ export default {
           let coach_id = null;
           let teach_days = [];
           let start_time = null;
+          let start_time_hh = null;
+          let start_time_mm = null;
           let end_time = null;
           let student = 0;
 
@@ -700,6 +703,8 @@ export default {
           teach_days = items.teach_day;
           start_time = items?.start_time;
           end_time = items?.end_time;
+          start_time_hh = items?.start_time_object.HH;
+          start_time_mm = items?.start_time_object.mm;
           student = items.students > 0;
 
           if (
@@ -707,6 +712,8 @@ export default {
             teach_days.length === 0 ||
             !start_time ||
             !end_time ||
+            !start_time_hh ||
+            !start_time_mm ||
             !student
           ) {
             this.isDisabled = true;
@@ -1295,6 +1302,11 @@ export default {
     //     }
     //   }
     // },
+    sortDay(item) {
+      return item.teach_day.sort(function (a, b) {
+        return a - b;
+      });
+    },
     async saveFunc(updateScadule) {
       if (updateScadule) {
         Swal.fire({
@@ -1314,7 +1326,7 @@ export default {
                 (value) => value.coach_id === item.coach_id
               );
               item.course_coach_id = get_course_coach[0].course_coach_id;
-              item.update_scadule = updateScadule;
+              item.update_schedule = updateScadule;
               item.course_id = this.$route.params.course_id;
               item.teach_days_used = [];
               get_day_of_week_id = this.coach_data.filter(
@@ -1363,7 +1375,7 @@ export default {
                 (value) => value.coach_id === item.coach_id
               );
               item.course_coach_id = get_course_coach[0].course_coach_id;
-              item.update_scadule = updateScadule;
+              item.update_schedule = updateScadule;
               item.course_id = this.$route.params.course_id;
               item.teach_days_used = [];
               get_day_of_week_id = this.coach_data.filter(
