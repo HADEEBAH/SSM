@@ -667,6 +667,7 @@
   "please specify price / person": "กรุณาระบุราคา/คน",
   "please specify the name of the holiday": "กรุณาระบุชื่อวันหยุด",
   "please specify the number of students": "กรุณาระบุจำนวนนักเรียน",
+  "please specify the number of students more than 0": "กรุณาระบุจำนวนนักเรียนมากกว่า 0",
   "please specify the number of times/person": "กรุณาระบุจำนวนครั้ง/คน",
   "please specify teaching notes": "กรุณาระบุบันทึกการสอน",
   "please specify the level of interest": "กรุณาระบุระดับความสนใจ",
@@ -958,6 +959,7 @@
   "this Time cannot be deleted. Because have student in course": "เวลานี้ไม่สามารถลบได้ เพราะมีนักเรียนอยู่ในหลักสูตร",
   "teaching time cannot be deleted because there must be 1 teaching time per teaching day": "ไม่สามารถลบเวลาสอนได้เนื่องจากต้องมีเวลาสอน 1 ครั้งต่อวันสอน",
   "teach day":"เพิ่มวันสอน",
+  "this coach is currently teaching":"โค้ชคนนี้อยู่ในระหว่างการสอน",
 
   "unable to update the compensation day": "ไม่สามารถอัปเดตวันชดเชยได้เนื่องจากวันชดเชยตรงกับวันหยุด โปรดเลือกวันชดเชยใหม่",
   "unable to update the compensation day because the compensation day coincides with the coach's leave": "ไม่สามารถอัปเดตวันชดเชยได้เนื่องจากวันชดเชยตรงกับวันลาโค้ช กรุณาเลือกวันชดเชยใหม่",

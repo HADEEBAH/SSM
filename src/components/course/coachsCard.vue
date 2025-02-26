@@ -260,6 +260,8 @@
                           dark
                           v-bind="attrs"
                           v-on="on"
+                          :disable="updateRowCoach(coach)"
+                          :class="{ 'disabled-icon': isDisableDay }"
                           @click="saveUpdateCoach(coach)"
                         >
                           mdi-content-save
@@ -456,7 +458,7 @@
                           v-bind="attrs"
                           v-on="on"
                           class="mr-2"
-                          @click="refreshOption(coach)"
+                          @click="refreshOptionFunc(coach)"
                         >
                           mdi-refresh
                         </v-icon>
@@ -471,6 +473,8 @@
                           dark
                           v-bind="attrs"
                           v-on="on"
+                          :disable="updateRowTime(coach)"
+                          :class="{ 'disabled-icon': isDisableTime }"
                           @click="saveUpdateOption(coach)"
                           class="mr-2"
                         >
@@ -590,6 +594,8 @@ export default {
     disable_coach: false,
     disable_teach_day: false,
     isDisabled: true,
+    isDisableTime: false,
+    isDisableDay: false,
     save_loading: false,
     save_scedule_loading: false,
   }),
@@ -684,6 +690,46 @@ export default {
       ResetStateCourseData: "CourseModules/ResetStateCourseData",
     }),
 
+    updateRowCoach(items) {
+      let coach_id = null;
+      let teach_days = [];
+
+      coach_id = items.coach_id;
+      teach_days = items.teach_day;
+
+      if (!coach_id || teach_days.length === 0) {
+        return (this.isDisableDay = true);
+      } else {
+        return (this.isDisableDay = false);
+      }
+    },
+
+    updateRowTime(items) {
+      let start_time = null;
+      let start_time_hh = null;
+      let start_time_mm = null;
+      let end_time = null;
+      let student = 0;
+
+      start_time = items?.start_time;
+      end_time = items?.end_time;
+      start_time_hh = items?.start_time_object.HH;
+      start_time_mm = items?.start_time_object.mm;
+      student = items.students > 0;
+
+      if (
+        !start_time ||
+        !end_time ||
+        !start_time_hh ||
+        !start_time_mm ||
+        !student
+      ) {
+        return (this.isDisableTime = true);
+      } else {
+        return (this.isDisableTime = false);
+      }
+    },
+
     updateDisabledState() {
       this.coach_data?.some((items) => {
         if (items.add_new_coach === false) {
@@ -699,7 +745,6 @@ export default {
           let student = 0;
 
           coach_id = items.coach_id;
-
           teach_days = items.teach_day;
           start_time = items?.start_time;
           end_time = items?.end_time;
@@ -716,9 +761,9 @@ export default {
             !start_time_mm ||
             !student
           ) {
-            this.isDisabled = true;
+            return true;
           } else {
-            this.isDisabled = false;
+            return false;
           }
         }
       });
@@ -822,6 +867,7 @@ export default {
             day_of_week_id: items.day_of_week_id,
             teach_day: items.teach_day.join(","),
             time_id: items.time_id,
+            is_active: items.is_active,
             update_schedule: true,
           };
           this.UpdateTeachdayCoach({
@@ -838,6 +884,7 @@ export default {
             day_of_week_id: items.day_of_week_id,
             teach_day: items.teach_day.join(","),
             time_id: items.time_id,
+            is_active: items.is_active,
             update_schedule: false,
           };
           this.UpdateTeachdayCoach({
@@ -1100,7 +1147,7 @@ export default {
       this.disable_coach = false;
       this.disable_teach_day = false;
     },
-    async refreshOption(coach) {
+    async refreshOptionFunc(coach) {
       await this.RefreshOption({
         course_id: this.$route.params.course_id,
         time_id: coach.time_id,
@@ -1109,9 +1156,10 @@ export default {
       coach.end_time = this.refresh_option.end;
       coach.start_time = this.refresh_option.start;
       coach.students = this.refresh_option.maximumStudent;
-      coach.students = this.refresh_option.maximumStudent;
+      // coach.students = this.refresh_option.maximumStudent;
       coach.end_time_object = this.refresh_option.end_time_object;
       coach.start_time_object = this.refresh_option.start_time_object;
+      // coach.is_active = this.refresh_option.is_active;
       coach.edited_options = true;
       this.disable_coach = false;
       this.disable_teach_day = false;
