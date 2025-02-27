@@ -4190,9 +4190,9 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
-        // let localhost = "http://localhost:3000"
-        // let { data } = await axios.get(`${localhost}/api/v1/manage/get-teach-time/courseId/${course_id}/timeId/${time_id}/dayOfWeekId/${day_of_week_id}`, config)
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/manage/get-teach-time/courseId/${course_id}/timeId/${time_id}/dayOfWeekId/${day_of_week_id}`, config)
+        let localhost = "http://localhost:3000"
+        let { data } = await axios.get(`${localhost}/api/v1/manage/get-teach-time/courseId/${course_id}/timeId/${time_id}/dayOfWeekId/${day_of_week_id}`, config)
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/manage/get-teach-time/courseId/${course_id}/timeId/${time_id}/dayOfWeekId/${day_of_week_id}`, config)
         if (data.statusCode == 200) {
           context.commit("SetRefreshOption", data.data)
 

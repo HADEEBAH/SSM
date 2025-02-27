@@ -857,7 +857,6 @@ export default {
         cancelButtonText: this.$t("cancel"),
         denyButtonColor: "#ff6b81",
         confirmedButtonColor: "#99CCFF",
-        cancelButtonColor: "#FF3333",
       }).then(async (result) => {
         if (result.isDenied) {
           let update_payload = {
@@ -1159,7 +1158,7 @@ export default {
       // coach.students = this.refresh_option.maximumStudent;
       coach.end_time_object = this.refresh_option.end_time_object;
       coach.start_time_object = this.refresh_option.start_time_object;
-      // coach.is_active = this.refresh_option.is_active;
+      coach.is_active = this.refresh_option.isActive;
       coach.edited_options = true;
       this.disable_coach = false;
       this.disable_teach_day = false;
