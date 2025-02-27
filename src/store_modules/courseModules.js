@@ -1040,6 +1040,17 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
+        } else if (error.response.data.message == "This coach cannot be deleted. Because the middle of teaching.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("this coach is currently teaching"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
         } else if (error.response.data.message == "Cannot delete a coach as there must be at least 1 coach listed in the course.") {
           Swal.fire({
             icon: "warning",
@@ -1095,6 +1106,9 @@ const CourseModules = {
           showConfirmButton: false,
           timerProgressBar: true,
         })
+
+        context.commit("SetUpdateSchedule", error.response.data)
+
       }
     },
     async GetAllSeats(context, { courseId, coachId, courseTypeId, dayOfWeekId, timeId, coursePackageOptionsId }) {
@@ -3975,7 +3989,18 @@ const CourseModules = {
 
         }
       } catch (error) {
-        console.log('error :>> ', error);
+        if (error.response.data.message == "The number of students should be more than 0.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("please specify the number of students more than 0"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
       }
     },
     async AddNewOptions(context, { payload, course_id, course_coach_id }) {
@@ -4621,6 +4646,9 @@ const CourseModules = {
 
   },
   getters: {
+    getUpdateScedule(state) {
+      return state.save_update_schedule
+    },
     getLimitImage(state) {
       return state.limit_image
     },

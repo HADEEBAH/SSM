@@ -717,6 +717,8 @@
   "please specify teaching notes": "Please specify teaching notes",
   "please specify the name of the holiday": "Please specify the name of the holiday",
   "please specify the number of students": "Please specify the number of students",
+  "please specify the number of students more than 0": "Please specify the number of students more than 0",
+
   "please specify the number of times/person": "Please specify the number of times/person",
   "please specify the level of interest": "Please specify the level of interest",
   "please specify the course name (english)": "Please specify the course name (English)",
@@ -1012,6 +1014,8 @@
   "this Time cannot be deleted. Because have student in course": "This Time cannot be deleted. Because have student in course",
   "teaching time cannot be deleted because there must be 1 teaching time per teaching day": "Teaching time cannot be deleted because there must be 1 teaching time per teaching day",
   "teach day":"Add teach day",
+  "this coach is currently teaching":"This coach is currently teaching",
+
 
 
   "unable to update the compensation day": "Unable to update the compensation day because the compensation day falls on a holiday, please select a new compensatory day",
