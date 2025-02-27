@@ -732,9 +732,9 @@ export default {
 
     updateDisabledState() {
       this.coach_data?.some((items) => {
-        if (items.add_new_coach === false) {
-          this.isDisabled = true;
-        }
+        // if (items.add_new_coach === false) {
+        //   this.isDisabled = true;
+        // }
         if (items.add_new_coach === true) {
           let coach_id = null;
           let teach_days = [];
@@ -761,9 +761,11 @@ export default {
             !start_time_mm ||
             !student
           ) {
-            return true;
+            // return true;
+            return (this.isDisabled = true);
           } else {
-            return false;
+            // return false;
+            return (this.isDisabled = false);
           }
         }
       });
@@ -1179,12 +1181,12 @@ export default {
           end_time: v.end_time_object,
         }));
 
-        if (timeused.filter((v) => v.end_time.HH === hours).length > 0) {
+        if (timeused.filter((v) => v?.end_time?.HH === hours).length > 0) {
           timeused
-            .filter((v) => v.end_time.HH === hours)
+            .filter((v) => v?.end_time?.HH === hours)
             .forEach((time) => {
-              if (hours === time.end_time.HH) {
-                let min_end = parseInt(time.end_time.mm);
+              if (hours === time?.end_time?.HH) {
+                let min_end = parseInt(time?.end_time?.mm);
                 for (let min = min_end; min < 60; min++) {
                   timeMinUsed.push(min);
                 }
