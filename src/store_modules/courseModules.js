@@ -998,14 +998,10 @@ const CourseModules = {
           },
           data: payload
         }
-
-
         // let localhost = "http://localhost:3000"
         // let { data } = await axios.delete(`${localhost}/api/v1/manage/delete-coach/${coach_id}`, config)
         let { data } = await axios.delete(`${process.env.VUE_APP_URL}/api/v1/manage/delete-coach/${coach_id}`, config)
         if (data.statusCode == 200) {
-          context.commit("SetDeleteCoachCard", data.data)
-          await context.dispatch("CoachData", { course_id: course_id })
           Swal.fire({
             icon: "success",
             title: VueI18n.t("succeed"),
@@ -1016,6 +1012,8 @@ const CourseModules = {
             timer: 3000,
             timerProgressBar: true,
           })
+          context.commit("SetDeleteCoachCard", data.data)
+          await context.dispatch("CoachData", { course_id: course_id })
         }
       } catch (error) {
         if (error.response.data.message == "This coach cannot be deleted. Because the middle of teaching") {
@@ -1074,7 +1072,6 @@ const CourseModules = {
             timerProgressBar: true,
           })
         }
-
       }
     },
     async SaveUpdateSchedule(context, { payload, course_id }) {
@@ -1091,6 +1088,16 @@ const CourseModules = {
         // let { data } = await axios.patch(`${localhost}/api/v1/manage/update-coach-all/${course_id}`, payload, config)
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/update-coach-all/${course_id}`, payload, config)
         if (data.statusCode == 200) {
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("saved"),
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+          })
           context.commit("SetUpdateSchedule", data.data)
           await context.dispatch("CoachData", { course_id: course_id })
 
