@@ -4979,12 +4979,18 @@ export default {
         Swal.fire({
           icon: "question",
           title: this.$t("do you want to edit your course?"),
-          showDenyButton: false,
           showCancelButton: true,
-          confirmButtonText: this.$t("agree"),
-          cancelButtonText: this.$t("no"),
+          showCloseButton: true,
+          focusConfirm: false,
+          showDenyButton: true,
+          allowOutsideClick: false,
+          denyButtonText: this.$t("save and update schedule"),
+          confirmButtonText: this.$t("save"),
+          cancelButtonText: this.$t("cancel"),
+          denyButtonColor: "#ff6b81",
+          confirmedButtonColor: "#99CCFF",
         }).then(async (result) => {
-          if (result.isConfirmed) {
+          if (result.isDenied) {
             let path = null;
             // this.update_loading = true;
             if (!this.courses_data?.courseImg?.lastModified) {
@@ -5050,6 +5056,7 @@ export default {
               course_period_end_date:
                 this.course_data?.course_study_time?.end_time_object ||
                 this.courses_data?.course_study_time?.end_time,
+              update_schedule: true,
 
               // course_checked_discount: this.courses_data?.checked_discount_bool,
             };
@@ -5063,8 +5070,179 @@ export default {
               this.update_loading = false;
             });
             this.course_edit = false;
+          } else if (result.isConfirmed) {
+            let path = null;
+            // this.update_loading = true;
+            if (!this.courses_data?.courseImg?.lastModified) {
+              const url = this.courses_data?.courseImg;
+              path = url?.split("/api/v1/files/")[1];
+            }
+            let payload = {
+              course_id: this.courses_data?.course_id,
+              course_name_th: this.courses_data?.course_name_th,
+              course_name_en: this.courses_data?.course_name_en,
+              course_open_date: this.courses_data?.course_open_date,
+              course_type_id: this.courses_data?.course_type_id,
+              course_location: this.courses_data?.location,
+              course_description: this.courses_data?.description,
+              course_music_performance: this.courses_data?.music_performance,
+              course_certification: this.courses_data?.certification,
+              course_image: null,
+              category_id: this.courses_data?.category_id,
+              course_img:
+                !this.courses_data?.courseImg ||
+                this.courses_data?.courseImg?.lastModified
+                  ? null
+                  : path,
+              reservation_start_date: this.courses_data?.reservation_start_date,
+              reservation_end_date: this.courses_data?.reservation_end_date,
+              student_recived: this.courses_data?.student_recived,
+              discount_price: this.courses_data?.discount_price
+                ? this.courses_data?.discount_price
+                : 0,
+              course_register_date: {
+                start_date:
+                  this.courses_data?.course_register_date?.start_date_formatted,
+                end_date:
+                  this.courses_data?.course_register_date?.end_date_formatted,
+              },
+              reservation: this.courses_data?.reservation,
+              coach_id: this.courses_data?.coach_id,
+              course_study_start_date:
+                this.courses_data?.course_study_date?.start_date_formatted,
+              course_study_end_date:
+                this.courses_data?.course_study_date?.end_date_formatted,
+              course_study_time: {
+                time_id: this.courses_data?.course_study_time?.time_id,
+                start_time: this.courses_data?.course_study_time?.start_time,
+                end_time: this.courses_data?.course_study_time?.end_time,
+                students: this.courses_data?.course_study_time?.students,
+                day_of_week_id:
+                  this.courses_data?.course_study_time?.day_of_week_id,
+              },
+              course_study_date: {
+                day_of_week_id:
+                  this.courses_data?.course_study_date?.day_of_week_id,
+                day_of_week_name: this.courses_data?.teach_day?.join(","),
+                course_coach_id:
+                  this.courses_data?.course_study_date?.course_coach_id,
+                status: this.courses_data?.course_study_date?.status,
+              },
+              course_per_time: this.courses_data?.course_hours,
+              course_price: this.courses_data?.course_price,
+              course_period_start_date:
+                this.course_data?.course_study_time?.start_time_object ||
+                this.courses_data?.course_study_time?.start_time,
+              course_period_end_date:
+                this.course_data?.course_study_time?.end_time_object ||
+                this.courses_data?.course_study_time?.end_time,
+              update_schedule: false,
+
+              // course_checked_discount: this.courses_data?.checked_discount_bool,
+            };
+            await this.UpdateCouserDetail({
+              course_id: this.courses_data?.course_id,
+              data_payload: payload,
+              course_file: this.courses_data?.courseImg,
+              artwork_files: this.courses_data.art_work_image_video,
+              url_link: this.courses_data.art_work_link,
+            }).then(() => {
+              this.update_loading = false;
+            });
+            this.course_edit = false;
+          } else {
+            this.course_edit = false;
           }
         });
+        // Swal.fire({
+        //   icon: "question",
+        //   title: this.$t("do you want to edit your course?"),
+        //   showDenyButton: false,
+        //   showCancelButton: true,
+        //   confirmButtonText: this.$t("agree"),
+        //   cancelButtonText: this.$t("no"),
+        // }).then(async (result) => {
+        //   if (result.isConfirmed) {
+        //     let path = null;
+        //     // this.update_loading = true;
+        //     if (!this.courses_data?.courseImg?.lastModified) {
+        //       const url = this.courses_data?.courseImg;
+        //       path = url?.split("/api/v1/files/")[1];
+        //     }
+        //     let payload = {
+        //       course_id: this.courses_data?.course_id,
+        //       course_name_th: this.courses_data?.course_name_th,
+        //       course_name_en: this.courses_data?.course_name_en,
+        //       course_open_date: this.courses_data?.course_open_date,
+        //       course_type_id: this.courses_data?.course_type_id,
+        //       course_location: this.courses_data?.location,
+        //       course_description: this.courses_data?.description,
+        //       course_music_performance: this.courses_data?.music_performance,
+        //       course_certification: this.courses_data?.certification,
+        //       course_image: null,
+        //       category_id: this.courses_data?.category_id,
+        //       course_img:
+        //         !this.courses_data?.courseImg ||
+        //         this.courses_data?.courseImg?.lastModified
+        //           ? null
+        //           : path,
+        //       reservation_start_date: this.courses_data?.reservation_start_date,
+        //       reservation_end_date: this.courses_data?.reservation_end_date,
+        //       student_recived: this.courses_data?.student_recived,
+        //       discount_price: this.courses_data?.discount_price
+        //         ? this.courses_data?.discount_price
+        //         : 0,
+        //       course_register_date: {
+        //         start_date:
+        //           this.courses_data?.course_register_date?.start_date_formatted,
+        //         end_date:
+        //           this.courses_data?.course_register_date?.end_date_formatted,
+        //       },
+        //       reservation: this.courses_data?.reservation,
+        //       coach_id: this.courses_data?.coach_id,
+        //       course_study_start_date:
+        //         this.courses_data?.course_study_date?.start_date_formatted,
+        //       course_study_end_date:
+        //         this.courses_data?.course_study_date?.end_date_formatted,
+        //       course_study_time: {
+        //         time_id: this.courses_data?.course_study_time?.time_id,
+        //         start_time: this.courses_data?.course_study_time?.start_time,
+        //         end_time: this.courses_data?.course_study_time?.end_time,
+        //         students: this.courses_data?.course_study_time?.students,
+        //         day_of_week_id:
+        //           this.courses_data?.course_study_time?.day_of_week_id,
+        //       },
+        //       course_study_date: {
+        //         day_of_week_id:
+        //           this.courses_data?.course_study_date?.day_of_week_id,
+        //         day_of_week_name: this.courses_data?.teach_day?.join(","),
+        //         course_coach_id:
+        //           this.courses_data?.course_study_date?.course_coach_id,
+        //         status: this.courses_data?.course_study_date?.status,
+        //       },
+        //       course_per_time: this.courses_data?.course_hours,
+        //       course_price: this.courses_data?.course_price,
+        //       course_period_start_date:
+        //         this.course_data?.course_study_time?.start_time_object ||
+        //         this.courses_data?.course_study_time?.start_time,
+        //       course_period_end_date:
+        //         this.course_data?.course_study_time?.end_time_object ||
+        //         this.courses_data?.course_study_time?.end_time,
+
+        //       // course_checked_discount: this.courses_data?.checked_discount_bool,
+        //     };
+        //     await this.UpdateCouserDetail({
+        //       course_id: this.courses_data?.course_id,
+        //       data_payload: payload,
+        //       course_file: this.courses_data?.courseImg,
+        //       artwork_files: this.courses_data.art_work_image_video,
+        //       url_link: this.courses_data.art_work_link,
+        //     }).then(() => {
+        //       this.update_loading = false;
+        //     });
+        //     this.course_edit = false;
+        //   }
+        // });
       }
 
       // this.$refs.course_form.validate();
