@@ -44,6 +44,7 @@
               <v-col cols="12" class="d-flex align-center justify-end">
                 <v-btn
                   icon
+                  v-if="coach_data?.length > 1"
                   color="red"
                   @click="removeCoachCard(coach, coach_index)"
                 >
