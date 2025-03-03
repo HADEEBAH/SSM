@@ -44,6 +44,7 @@
               <v-col cols="12" class="d-flex align-center justify-end">
                 <v-btn
                   icon
+                  v-if="coach_data?.length > 1"
                   color="red"
                   @click="removeCoachCard(coach, coach_index)"
                 >
@@ -87,6 +88,7 @@
                   item-color="#ff6b81"
                   :rules="course"
                   :placeholder="$t('coach')"
+                  @change="filterTimes(coach, coach_index)"
                 >
                   <!-- @change="findTeachDays(coach, coach_index)" -->
 
@@ -148,6 +150,7 @@
                   :placeholder="$t('please select a time')"
                   v-model="coach.teach_day"
                   @input="sortDay(coach)"
+                  @change="filterTimes(coach, coach_index)"
                 >
                   <!-- @change="
                     selectDays(
@@ -165,7 +168,9 @@
                       :disabled="coach.edited_coach || coach.added_option"
                       color="#ffeeee"
                       text-color="#ff6b81"
-                      @click:close="removeChip(item, coach.teach_day)"
+                      @click:close="
+                        removeChip(item, coach.teach_day, coach, coach_index)
+                      "
                     >
                       <strong>{{
                         $i18n.locale == "th" ? item.label : item.label_en
@@ -179,7 +184,10 @@
                 <v-row dense v-if="coach.day_of_week_id">
                   <v-col cols="12" v-if="coach.edited_coach">
                     <!-- EDIT BUTTON -->
-                    <v-col cols="12" v-if="coach.edited_coach">
+                    <v-col
+                      cols="12"
+                      v-if="coach.edited_coach && chackLastObject"
+                    >
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
                           <v-icon
@@ -187,7 +195,12 @@
                             dark
                             v-bind="attrs"
                             v-on="on"
-                            :class="{ 'disabled-icon': disable_coach }"
+                            :class="{
+                              'disabled-icon':
+                                chackLastObject.add_new_coach === true
+                                  ? disable_both_button
+                                  : disable_coach,
+                            }"
                             @click="!disable_coach && editCoach(coach)"
                           >
                             mdi-pencil-outline
@@ -400,7 +413,12 @@
                           v-bind="attrs"
                           v-on="on"
                           class="ml-2"
-                          :class="{ 'disabled-icon': disable_teach_day }"
+                          :class="{
+                            'disabled-icon':
+                              chackLastObject.add_new_coach === true
+                                ? disable_both_button
+                                : disable_teach_day,
+                          }"
                           @click="!disable_teach_day && editOptions(coach)"
                         >
                           mdi-pencil-outline
@@ -598,6 +616,7 @@ export default {
     isDisableDay: false,
     save_loading: false,
     save_scedule_loading: false,
+    disable_both_button: true,
   }),
 
   created() {
@@ -630,6 +649,12 @@ export default {
         lastOccurrences[coach.coach_id] = index;
       });
       return lastOccurrences;
+    },
+
+    chackLastObject() {
+      let lastElement = this.coach_data[this.coach_data.length - 1];
+
+      return lastElement;
     },
 
     course() {
@@ -689,6 +714,28 @@ export default {
     ...mapMutations({
       ResetStateCourseData: "CourseModules/ResetStateCourseData",
     }),
+
+    filterTimes(coach, coach_index) {
+      let checkSelectedDay = this.coach_data.filter(
+        (item) =>
+          item.coach_id === coach.coach_id &&
+          item.teach_day.some((day) => coach.teach_day.includes(day)) &&
+          item.start_time === coach.start_time &&
+          item.end_time === coach.end_time
+      );
+      if (checkSelectedDay?.length >= 2) {
+        this.coach_data[coach_index].start_time = null;
+        this.coach_data[coach_index].end_time = null;
+        this.coach_data[coach_index].start_time_object = {
+          HH: "",
+          mm: "",
+        };
+        this.coach_data[coach_index].end_time_object = {
+          HH: "",
+          mm: "",
+        };
+      }
+    },
 
     updateRowCoach(items) {
       let coach_id = null;
@@ -773,6 +820,7 @@ export default {
     editCoach(items) {
       items.edited_coach = false;
       this.disable_teach_day = true;
+      this.$emit("custom-event", "disable add coach");
     },
     checkDisableCoach(teach_day) {
       let coach_id = null;
@@ -900,6 +948,7 @@ export default {
           this.disable_teach_day = false;
           this.disable_coach = false;
         }
+        this.$emit("custom-event", "unDisable add coach");
       });
       items.edited_coach = true;
     },
@@ -989,9 +1038,11 @@ export default {
         });
       }
     },
+
     editOptions(items) {
       items.edited_options = false;
       this.disable_coach = true;
+      this.$emit("custom-event", "disable add coach");
     },
     saveUpdateOption(coach) {
       Swal.fire({
@@ -1017,6 +1068,7 @@ export default {
           });
           this.disable_teach_day = false;
           this.disable_coach = false;
+          this.$emit("custom-event", "unDisable add coach");
         }
       });
     },
@@ -1143,6 +1195,7 @@ export default {
       }).then(() => {
         coach.teach_day = this.refresh_teach_day.teach_day;
         coach.coach_id = this.refresh_teach_day.coachId;
+        this.$emit("custom-event", "unDisable add coach");
       });
       coach.edited_coach = true;
       this.disable_coach = false;
@@ -1164,6 +1217,7 @@ export default {
       coach.edited_options = true;
       this.disable_coach = false;
       this.disable_teach_day = false;
+      this.$emit("custom-event", "unDisable add coach");
     },
 
     checkMinute(hours, coach, coach_index) {
@@ -1509,8 +1563,9 @@ export default {
       return this.days_confix;
     },
 
-    removeChip(item, value) {
+    async removeChip(item, value, coach, coach_index) {
       value.splice(value.indexOf(item.value), 1);
+      await this.filterTimes(coach, coach_index);
     },
     disabledMinutes(hour, coachIndex, teachDayIndex) {
       const teach_days_used = this.coach_data[coachIndex].teach_days_used;

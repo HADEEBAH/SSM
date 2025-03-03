@@ -162,7 +162,12 @@
                   <template v-slot:actions>
                     <!-- :disabled="!course_edit" -->
 
-                    <v-btn outlined color="#FF6B81" @click="addCoach">
+                    <v-btn
+                      outlined
+                      color="#FF6B81"
+                      :disabled="disable_add_coach"
+                      @click="addCoach"
+                    >
                       <v-icon>mdi-plus-circle-outline</v-icon>
                       {{ $t("add") }}
                     </v-btn>
@@ -173,6 +178,7 @@
                   <v-form ref="coach_form" v-model="coachValidate">
                     <!-- COACH -->
                     <coachs-card
+                      @custom-event="handleEvent"
                       :disable="!course_edit"
                       :coachs="coachs"
                       edited
@@ -3985,6 +3991,7 @@ export default {
     biggesImage: null,
     show_attachment_dialog: false,
     typeImg: null,
+    disable_add_coach: false,
   }),
   mounted() {
     this.CoursesData({ course_id: this.$route.params.course_id });
@@ -4206,6 +4213,14 @@ export default {
       ArtWorkData: "CourseModules/ArtWorkData",
     }),
 
+    handleEvent(data) {
+      if (data === "disable add coach") {
+        this.disable_add_coach = true;
+      }
+      if (data === "unDisable add coach") {
+        this.disable_add_coach = false;
+      }
+    },
     addNewLink() {
       this.course_artwork.art_work_link?.push({
         url: null,

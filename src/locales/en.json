@@ -234,6 +234,7 @@
   
   "can't select these dates because they are duplications of existing schedules":"can't select these dates because they are duplications of existing schedules",
   "close-open kingdom status":"Close-open Kingdom status",
+  "coach has Been Deleted":"Coach has Been Deleted",
 
 
   "day": "Day",
@@ -574,6 +575,7 @@
   "option has been deleted": "Option has been deleted",
   "option has been created": "Option has been created",
   "option cannot be deleted as there must be at least one option in the course": "Option cannot be deleted as there must be at least one option in the course",
+  "overlapping teaching times and coaching days":"Overlapping teaching times and coaching days",
 
   "package": "Package",
   "parents cannot resave the course to their parents": "Parents cannot resave the course to their parents",

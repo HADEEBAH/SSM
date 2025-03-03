@@ -218,6 +218,7 @@
 
 
 
+  "coach has Been Deleted":"โค้ชถูกลบไปแล้ว",
   "day": "วัน",
   "day and date": "วันและวันที่",
   "daily": "รายวัน",
@@ -535,7 +536,7 @@
   "option has been deleted": "ลบช่วงเวลาเรียบร้อยแล้ว",
   "option has been created": "เพิ่มช่วงเวลาเรียบร้อยแล้ว",
   "option cannot be deleted as there must be at least one option in the course": "ไม่สามารถลบตัวเลือกได้เนื่องจากต้องมีอย่างน้อยหนึ่งตัวเลือกในหลักสูตร",
-
+  "overlapping teaching times and coaching days":"เวลาสอนและวันฝึกสอนทับซ้อนกัน",
   "package": "แพ็คเกจ",
   "parents cannot resave the course to their parents": "ผู้ปกครองไม่สามารถทำรายการให้ผู้ปกครองท่านอื่น",
 
