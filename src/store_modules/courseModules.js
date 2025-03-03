@@ -1103,16 +1103,29 @@ const CourseModules = {
 
         }
       } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: VueI18n.t("something went wrong"),
-          text: error.response.data.message,
-          timer: 3000,
-          showDenyButton: false,
-          showCancelButton: false,
-          showConfirmButton: false,
-          timerProgressBar: true,
-        })
+        if (error.response.data.message === 'Overlapping teaching times and coaching days.') {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("overlapping teaching times and coaching days"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: error.response.data.message,
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
 
         context.commit("SetUpdateSchedule", error.response.data)
 
@@ -2710,19 +2723,30 @@ const CourseModules = {
           await context.commit("SetCourseIsLoading", false)
         }
       } catch (error) {
+        if (error.response.data.message === 'Coach has Been Deleted.') {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("coach has Been Deleted"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: error.response.data.message,
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
         context.commit("SetCourseIsLoading", false)
-        Swal.fire({
-          icon: "error",
-          title: VueI18n.t("something went wrong"),
-          text: VueI18n.t(error.response?.data.message),
-          timer: 3000,
-          showDenyButton: false,
-          showCancelButton: false,
-          showConfirmButton: false,
-          timerProgressBar: true,
-        })
-
-        console.log(error)
       }
     },
     async GetPackagesAddStudent(context, { course_id }) {
@@ -3831,12 +3855,34 @@ const CourseModules = {
           data.data.map((items) => {
             items.edited_coach = true
             items.edited_options = true
-
+            items.add_new_coach = false
           })
           context.commit("SetCoachData", data.data)
         }
       } catch (error) {
-        console.log('error :>> ', error);
+        if (error.response.data.message === 'Overlapping teaching times and coaching days.') {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("overlapping teaching times and coaching days"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: error.response.data.message,
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
       }
     },
     async PackagesData(context, { course_id }) {
@@ -3965,7 +4011,30 @@ const CourseModules = {
 
         }
       } catch (error) {
-        console.log('error :>> ', error);
+        if (error.response.data.message === 'Overlapping teaching times and coaching days.') {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("overlapping teaching times and coaching days"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: error.response.data.message,
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
+
       }
     },
     async UpdateOptions(context, { payload, course_id }) {
