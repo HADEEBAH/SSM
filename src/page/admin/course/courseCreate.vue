@@ -957,13 +957,13 @@ export default {
               coach_id: this.course_data.coach_id,
               day_of_week: [
                 {
-                  status: "Active",
                   day: this.course_data.teach_day.join(","),
                   times: [
                     {
                       start: this.course_data.course_study_time.start_time,
                       end: this.course_data.course_study_time.end_time,
                       maximum_student: this.course_data.student_recived,
+                      is_active: true,
                     },
                   ],
                 },
