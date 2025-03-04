@@ -88,7 +88,9 @@
                   item-color="#ff6b81"
                   :rules="course"
                   :placeholder="$t('coach')"
-                  @change="filterTimes(coach, coach_index)"
+                  @change="
+                    coach.add_new_coach ? filterTimes(coach, coach_index) : ''
+                  "
                 >
                   <!-- @change="findTeachDays(coach, coach_index)" -->
 
@@ -150,7 +152,9 @@
                   :placeholder="$t('please select a time')"
                   v-model="coach.teach_day"
                   @input="sortDay(coach)"
-                  @change="filterTimes(coach, coach_index)"
+                  @change="
+                    coach.add_new_coach ? filterTimes(coach, coach_index) : ''
+                  "
                 >
                   <!-- @change="
                     selectDays(
@@ -653,7 +657,6 @@ export default {
 
     chackLastObject() {
       let lastElement = this.coach_data[this.coach_data.length - 1];
-
       return lastElement;
     },
 
@@ -1565,7 +1568,9 @@ export default {
 
     async removeChip(item, value, coach, coach_index) {
       value.splice(value.indexOf(item.value), 1);
-      await this.filterTimes(coach, coach_index);
+      if (coach.add_new_coach) {
+        await this.filterTimes(coach, coach_index);
+      }
     },
     disabledMinutes(hour, coachIndex, teachDayIndex) {
       const teach_days_used = this.coach_data[coachIndex].teach_days_used;

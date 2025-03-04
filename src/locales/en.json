@@ -920,6 +920,7 @@
   
 
   "study time": "Study Time",
+  "total price must not lest than 0 or equal to 0":"Total price must not lest than 0 or equal to 0",
   "the system will not display information if the user does not enter student and parent information": "The system will not display the information if the user does not fill in the student and parent information according to the template",
   "take annual leave": "Take annual leave",
   "take leave form": "Take leave form",

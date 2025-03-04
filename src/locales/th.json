@@ -874,6 +874,7 @@
 
 
   "study time": "เวลาเรียน",
+  "total price must not lest than 0 or equal to 0":"ราคารวมไม่ควรน้อยกว่า 0 หรือเท่ากับ 0",
   "take annual leave": "ลาพักร้อนประจำปี",
   "take leave form": "แบบฟอร์มการลา",
   "take leave date": "วันที่ลา",
