@@ -1114,6 +1114,17 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
+        } else if (error.response.data.message.courseId) {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("courseId is required"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          });
         } else {
           Swal.fire({
             icon: "warning",
@@ -4034,6 +4045,7 @@ const CourseModules = {
             timerProgressBar: true,
           })
         }
+        await context.dispatch("CoachData", { course_id: course_id })
 
       }
     },
@@ -4076,7 +4088,19 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: error.response.data.message,
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
         }
+        await context.dispatch("CoachData", { course_id: course_id })
       }
     },
     async AddNewOptions(context, { payload, course_id, course_coach_id }) {
