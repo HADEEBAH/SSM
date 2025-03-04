@@ -89,7 +89,9 @@
                   :rules="course"
                   :placeholder="$t('coach')"
                   @change="
-                    coach.add_new_coach ? filterTimes(coach, coach_index) : ''
+                    coach.add_new_coach || !edited
+                      ? filterTimes(coach, coach_index)
+                      : ''
                   "
                 >
                   <!-- @change="findTeachDays(coach, coach_index)" -->
@@ -153,7 +155,9 @@
                   v-model="coach.teach_day"
                   @input="sortDay(coach)"
                   @change="
-                    coach.add_new_coach ? filterTimes(coach, coach_index) : ''
+                    coach.add_new_coach || !edited
+                      ? filterTimes(coach, coach_index)
+                      : ''
                   "
                 >
                   <!-- @change="
@@ -1568,7 +1572,7 @@ export default {
 
     async removeChip(item, value, coach, coach_index) {
       value.splice(value.indexOf(item.value), 1);
-      if (coach.add_new_coach) {
+      if (coach.add_new_coach || !this.edited) {
         await this.filterTimes(coach, coach_index);
       }
     },
