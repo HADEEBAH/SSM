@@ -3414,8 +3414,12 @@ const orderModules = {
           config
         );
         if (data.statusCode === 200) {
-          for await (const item of data.data) {
-            item.dayOff = dayOfWeekArray(item.day?.day);
+          for await (const item of data?.data) {
+            if(item.day?.day){
+              item.dayOff = dayOfWeekArray(item.day?.day);
+            }else{
+              item.dayOff = '-';
+            }
             item.course_img = item.course_img
               ? `${process.env.VUE_APP_URL}/api/v1/files/${item.course_img}`
               : null;
