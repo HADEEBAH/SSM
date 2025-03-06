@@ -458,7 +458,12 @@
               <v-text-field
                 :placeholder="$t('specify price')"
                 dense
-                :rules="price"
+                :rules="
+                  course_data.checked_discount === 0 ||
+                  course_data.checked_discount === false
+                    ? ''
+                    : price
+                "
                 :disabled="disable"
                 :outlined="!disable"
                 :filled="disable"
@@ -2063,7 +2068,22 @@ export default {
       ];
     },
     price() {
-      return [(val) => val > 0 || this.$t("please specify price")];
+      // return [(val) => val > 0 || this.$t("please specify price")];
+      return [
+        () =>
+          this.course_data.course_price !== "" ||
+          this.$t("please fill out the information correctly"),
+        () =>
+          parseInt(this.course_data.course_price) -
+            parseInt(this.course_data.discount_price) >
+            0 ||
+          `${this.$t("number must be more than")} ${
+            this.course_data.discount_price
+          }`,
+        () =>
+          parseInt(this.course_data.course_price) >= 0 ||
+          this.$t("please specify price"),
+      ];
     },
     rulesDiscount() {
       return [
