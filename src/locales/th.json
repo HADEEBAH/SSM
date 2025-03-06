@@ -94,7 +94,7 @@
 
   "can't apply": "ไม่สามารถสมัครได้",
   "Can not use the same accountID to create Relations.": "ไม่สามารถใช้ผู้ใช้เดียวกันเพื่อสร้างความสัมพันธ์ได้",
-  "can't find items in the basket": "ไม่พบข้อมูลในตะกร้า",
+  "can't find items in the basket": "ไม่พบข้อมูลในรถเข็น",
   "can't find teaching summaries": "ไม่พบข้อมูลบันทึกสรุปการสอน",
   "can't be deleted Because the enrollment": "ไม่สามารถลบได้ เนื่องจากที่การสมัครเรียนแล้ว",
   "can't find full course information": "ไม่พบข้อมูลของคอร์สเต็ม",
@@ -513,6 +513,7 @@
   "november": "พฤศจิกายน",
   "number must be": "ตัวเลขควรที่จะเท่ากันหรือน้อยกว่า",
   "number must be lest than": "ตัวเลขควรที่จะน้อยกว่า",
+  "number must be more than": "ตัวเลขควรที่จะมากกว่า",
   "number must be 1": "ตัวเลขควรที่จะเท่ากับ 1 หรือมากกว่า",
   "number of students currently studying":"จำนวนนักเรียนที่เรียนอยู่ปัจุจบัน",
   "number of students who have purchased courses":"จำนวนนักเรียนที่เคยซื้อคอร์สเรียน",

@@ -102,7 +102,7 @@ const CourseModules = {
       location: "",
       detadescriptionil: "",
       discount: '',
-      checked_discount: 0,
+      checked_discount: false,
       music_performance: "",
       catification: "",
       course_price: 0,
@@ -1784,6 +1784,7 @@ const CourseModules = {
           }
 
         }
+        await context.dispatch("CoursesData", { course_id: course_id })
 
       }
     },
@@ -3821,6 +3822,7 @@ const CourseModules = {
             data.data.course_register_date.end_date_formatted = moment(data.data.course_register_date.end_date).format("YYYY-MM-DD");
             data.data.course_study_date.start_date_formatted = moment(data.data.course_study_date.start_date).format("YYYY-MM-DD");
             data.data.course_study_date.end_date_formatted = moment(data.data.course_study_date.end_date).format("YYYY-MM-DD");
+            data.data.checked_discount = data.data.checked_discount === 0 ? false : true;
             if (data.data?.art_work_image_video?.length > 0) {
               for (const artwork of data.data?.art_work_image_video) {
                 artwork.attachmentUrl = artwork.attachmentCourse ? `${process.env.VUE_APP_URL}/api/v1/files/${artwork.attachmentCourse}` : null
