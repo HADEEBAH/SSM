@@ -156,8 +156,6 @@
                 <v-col class="d-flex align-center font-bold text-base"
                   >{{ GenDate(schedule.date) }}
                 </v-col>
-                <!-- :disabled="schedule.checkedIn == 1" -->
-                <!-- <pre>{{ schedule }}</pre> -->
                 <v-col cols="auto">
                   <v-btn
                     depressed
@@ -728,14 +726,16 @@ export default {
       CheckInCoach: "adminCheckInModules/CheckInCoach",
     }),
 
-    checkDisable(schedule) {
-      const current = moment().format("YYYY/MM/DD");
-      const currentMoment = moment(current);
-      let ckeckedBool = false;
-      if (schedule.checkedIn === 1) {
-        ckeckedBool = true;
-      }
-      return currentMoment.isBefore(schedule.dateMoment) || ckeckedBool;
+    checkDisable() {
+      return false;
+      // schedule
+      // const current = moment().format("YYYY/MM/DD");
+      // const currentMoment = moment(current);
+      // let ckeckedBool = false;
+      // if (schedule.checkedIn === 1) {
+      //   ckeckedBool = true;
+      // }
+      // return currentMoment.isBefore(schedule.dateMoment) || ckeckedBool;
     },
     FilterStatusCheckIn() {
       for (const items of this.scheduleCheckin) {
