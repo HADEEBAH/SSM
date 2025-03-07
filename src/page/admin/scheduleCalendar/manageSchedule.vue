@@ -2533,15 +2533,6 @@ export default {
                   });
                   await this.closeAddHolidayDialog();
                   this.show_dialog_holoday = false;
-                  Swal.fire({
-                    icon: "success",
-                    title: this.$t("succeed"),
-                    text: this.$t("create holiday success"),
-                    timer: 3000,
-                    timerProgressBar: true,
-                    showCancelButton: false,
-                    showConfirmButton: false,
-                  });
                 }
               });
             } else {

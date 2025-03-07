@@ -743,19 +743,17 @@ const manageScheduleModules = {
         // let { data } = await axios.patch(`${localhost}/api/v1/schedule/holiday`, payload)
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/schedule/holiday`, payload)
         if (data.statusCode === 201) {
-          context.commit("SetEditCourseHoliday", data.data);
           Swal.fire({
             icon: "success",
             title: VueI18n.t("succeed"),
             text: VueI18n.t("already edited"),
-            // title: this.$t("succeed"),
-            // text: this.$t("save data successfully"),
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
             timer: 3000,
             timerProgressBar: true,
           });
+          context.commit("SetEditCourseHoliday", data.data);
         }
       } catch (error) {
         if (error?.response?.data?.message === "Can't select these dates because they are duplications of existing schedules.") {
@@ -782,12 +780,6 @@ const manageScheduleModules = {
 
       }
     },
-
-
-
-
-
-
 
   },
   getters: {
