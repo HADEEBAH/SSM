@@ -230,6 +230,7 @@
   "cannot delete a coach as there must be at least 1 coach listed in the course": "Cannot delete a coach as there must be at least 1 coach listed in the course",
   "can't select these dates because they are duplications of existing schedules":"can't select these dates because they are duplications of existing schedules",
   "close-open kingdom status":"Close-open Kingdom status",
+  "create holiday success":"Create holiday success",
 
 
   "day": "Day",

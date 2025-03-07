@@ -211,6 +211,12 @@
   "cannot delete a coach as there must be at least 1 coach listed in the course": "ไม่สามารถลบโค้ชได้ เนื่องจากต้องมีโค้ชอย่างน้อย 1 คนอยู่ในรายการ",
   "can't select these dates because they are duplications of existing schedules":"ไม่สามารถเลือกวันที่เหล่านี้ได้เนื่องจากซ้ำกับกำหนดการที่มีอยู่",
   "close-open kingdom status":"สถานะเปิด-ปิดอาณาจักร",
+  "create holiday success":"สร้างวันหยุดเรียบร้อยแล้ว",
+
+
+
+
+  
   "day": "วัน",
   "day and date": "วันและวันที่",
   "daily": "รายวัน",
