@@ -141,7 +141,11 @@
                         {{
                           $i18n.locale == "th"
                             ? item.coach_name
+                              ? item.coach_name
+                              : "-"
                             : item.coach_name_en
+                            ? item.coach_name_en
+                            : "-"
                         }}
                         <!-- {{ item?. first_name }}  {{ item?.last_name }} -->
                       </v-col>
