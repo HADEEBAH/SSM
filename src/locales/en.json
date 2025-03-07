@@ -72,7 +72,6 @@
   "attached file from teaching summary notes": "Attached file from teaching summary notes",
   "attachment from student assessment": "Attachment from student assessment",
   "available course information": "Available course information",
-  "average": "Average",
   "august": "August",
   "all students have been contacted": "All students have been contacted",
   "add new teachday succeed": "Add new teachday succeed",
@@ -235,6 +234,7 @@
   "can't select these dates because they are duplications of existing schedules":"can't select these dates because they are duplications of existing schedules",
   "close-open kingdom status":"Close-open Kingdom status",
   "coach has Been Deleted":"Coach has Been Deleted",
+
 
 
   "day": "Day",
