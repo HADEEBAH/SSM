@@ -273,18 +273,16 @@ const manageScheduleModules = {
           config
         );
         if (data.statusCode === 200) {
-          // Swal.fire({
-          //   icon: "success",
-          //   title: VueI18n.t("succeed"),
-          //   text: VueI18n.t("already edited"),
-          //   // title: this.$t("succeed"),
-          //   // text: this.$t("save data successfully"),
-          //   showDenyButton: false,
-          //   showCancelButton: false,
-          //   showConfirmButton: false,
-          //   timer: 3000,
-          //   timerProgressBar: true,
-          // });
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("already edited"),
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+          });
           context.dispatch("GetAllHolidays");
           // context.dispatch("GetDataInSchedule", { month: new Date().getMonth() + 1, yaer: new Date().getFullYear() });
         } else {
@@ -604,13 +602,20 @@ const manageScheduleModules = {
         // let { data } = await axios.post(`${localhost}/api/v1/schedule/holiday`, dataForm)
         let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/schedule/holiday`, dataForm)
         if (data.statusCode === 201) {
+          Swal.fire({
+            icon: "success",
+            title: VueI18n.t("succeed"),
+            text: VueI18n.t("create holiday success"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
           context.commit("SetCourseHoliday", data.data);
           await context.dispatch("GetAllHolidays")
           // await context.dispatch("GetAllCourse")
         }
       } catch (error) {
-        context.commit("SetCourseHoliday", error?.response?.data);
-
         if (error?.response?.data?.message === "Can't select these dates because they are duplications of existing schedules.") {
           Swal.fire({
             icon: "warning",
@@ -644,7 +649,7 @@ const manageScheduleModules = {
             timerProgressBar: true,
           });
         }
-
+        context.commit("SetCourseHoliday", error?.response?.status);
       }
     },
     async CreateHoliday(context, { payload }) {
@@ -738,19 +743,17 @@ const manageScheduleModules = {
         // let { data } = await axios.patch(`${localhost}/api/v1/schedule/holiday`, payload)
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/schedule/holiday`, payload)
         if (data.statusCode === 201) {
-          context.commit("SetEditCourseHoliday", data.data);
           Swal.fire({
             icon: "success",
             title: VueI18n.t("succeed"),
             text: VueI18n.t("already edited"),
-            // title: this.$t("succeed"),
-            // text: this.$t("save data successfully"),
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
             timer: 3000,
             timerProgressBar: true,
           });
+          context.commit("SetEditCourseHoliday", data.data);
         }
       } catch (error) {
         if (error?.response?.data?.message === "Can't select these dates because they are duplications of existing schedules.") {
@@ -777,12 +780,6 @@ const manageScheduleModules = {
 
       }
     },
-
-
-
-
-
-
 
   },
   getters: {
