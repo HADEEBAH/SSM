@@ -1316,66 +1316,109 @@ export default {
           }
         }
       }
+
       return generateTimeArrayHours(checkHours);
     },
 
+    // ChangeStartDate(date) {
+    //   if (!date.start_time_object.mm) {
+    //     date.start_time_object.mm = "";
+    //   }
+    //   console.log(
+    //     "this.courses_data :>> ",
+    //     this?.courses_data?.course_hour_time
+    //   );
+
+    //   date.start_time = `${date.start_time_object.HH}:${date.start_time_object.mm}`;
+    //   if (
+    //     parseInt(date.start_time_object.HH) +
+    //       parseInt(this?.courses_data?.course_hour_time?.HH) >=
+    //     24
+    //   ) {
+    //     date.end_time_object.HH = `${
+    //       parseInt(date.start_time_object.HH) +
+    //       parseInt(this?.courses_data?.course_hour_time?.HH) -
+    //       24
+    //     }`.padStart(2, "0");
+    //   } else {
+    //     date.end_time_object.HH = `${
+    //       parseInt(date.start_time_object.HH) +
+    //       parseInt(this?.courses_data?.course_hour_time?.HH)
+    //     }`.padStart(2, "0");
+    //   }
+    //   if (
+    //     parseInt(date.start_time_object.mm) +
+    //       parseInt(this?.courses_data?.course_hour_time?.mm) >
+    //     59
+    //   ) {
+    //     date.end_time_object.mm = `${
+    //       parseInt(date.start_time_object.mm) +
+    //       parseInt(this?.courses_data?.course_hour_time?.mm) -
+    //       60
+    //     }`.padStart(2, "0");
+
+    //     if (parseInt(date.end_time_object.HH) + 1 >= 24) {
+    //       date.end_time_object.HH = `${
+    //         parseInt(date.end_time_object.HH) + 1 - 24
+    //       }`.padStart(2, "0");
+    //     } else {
+    //       date.end_time_object.HH = `${
+    //         parseInt(date.end_time_object.HH) + 1
+    //       }`.padStart(2, "0");
+    //     }
+    //   } else {
+    //     date.end_time_object.mm = `${
+    //       parseInt(date.start_time_object.mm)
+    //         ? parseInt(date.start_time_object.mm)
+    //         : parseInt("00") +
+    //           parseInt(this?.courses_data?.course_hour_time?.mm)
+    //     }`.padStart(2, "0");
+    //   }
+    //   if (date.start_time_object.HH) {
+    //     date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`;
+    //   } else {
+    //     date.end_time = `HH:mm`;
+    //     date.start_time = ``;
+    //   }
+    //   // date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`;
+    // },
+
     ChangeStartDate(date) {
-      if (!date.start_time_object.mm) {
+      if (!date.start_time_object.mm || date.start_time_object.mm === "") {
         date.start_time_object.mm = "";
       }
 
       date.start_time = `${date.start_time_object.HH}:${date.start_time_object.mm}`;
-      if (
-        parseInt(date.start_time_object.HH) +
-          parseInt(this?.courses_data?.course_hour_time?.HH) >=
-        24
-      ) {
-        date.end_time_object.HH = `${
-          parseInt(date.start_time_object.HH) +
-          parseInt(this?.courses_data?.course_hour_time?.HH) -
-          24
-        }`.padStart(2, "0");
-      } else {
-        date.end_time_object.HH = `${
-          parseInt(date.start_time_object.HH) +
-          parseInt(this?.courses_data?.course_hour_time?.HH)
-        }`.padStart(2, "0");
-      }
-      if (
-        parseInt(date.start_time_object.mm) +
-          parseInt(this?.courses_data?.course_hour_time?.mm) >
-        59
-      ) {
-        date.end_time_object.mm = `${
-          parseInt(date.start_time_object.mm) +
-          parseInt(this?.courses_data?.course_hour_time?.mm) -
-          60
-        }`.padStart(2, "0");
 
-        if (parseInt(date.end_time_object.HH) + 1 >= 24) {
-          date.end_time_object.HH = `${
-            parseInt(date.end_time_object.HH) + 1 - 24
-          }`.padStart(2, "0");
-        } else {
-          date.end_time_object.HH = `${
-            parseInt(date.end_time_object.HH) + 1
-          }`.padStart(2, "0");
-        }
-      } else {
-        date.end_time_object.mm = `${
-          parseInt(date.start_time_object.mm)
-            ? parseInt(date.start_time_object.mm)
-            : parseInt("00") +
-              parseInt(this?.courses_data?.course_hour_time?.mm)
-        }`.padStart(2, "0");
+      // ✅ คำนวณชั่วโมงและนาที
+      let totalHH =
+        parseInt(date.start_time_object.HH) +
+        parseInt(this.courses_data.course_hour_time.HH);
+      let totalMM =
+        parseInt(date.start_time_object.mm) +
+        parseInt(this.courses_data.course_hour_time.mm);
+
+      // ✅ ถ้านาที >= 60 ให้เพิ่มชั่วโมง และหักลบ 60 นาทีออก
+      if (totalMM >= 60) {
+        totalMM -= 60;
+        totalHH += 1;
       }
-      if (date.start_time_object.HH) {
+
+      // ✅ ถ้าชั่วโมงเกิน 24 ให้จัดการให้ถูกต้อง
+      if (totalHH >= 24) {
+        totalHH -= 24;
+      }
+
+      // ✅ อัปเดตค่า end_time_object
+      date.end_time_object.HH = totalHH.toString().padStart(2, "0");
+      date.end_time_object.mm = totalMM.toString().padStart(2, "0");
+
+      // ✅ อัปเดตค่า end_time เพื่อให้ v-text-field แสดงผลได้ถูกต้อง
+      if (!date.start_time_object.mm) {
+        date.end_time = `${date.end_time_object.HH}:`;
+      } else {
         date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`;
-      } else {
-        date.end_time = `HH:mm`;
-        date.start_time = ``;
       }
-      // date.end_time = `${date.end_time_object.HH}:${date.end_time_object.mm}`;
     },
 
     SelectedStartDate(e) {
