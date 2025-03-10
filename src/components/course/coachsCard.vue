@@ -1291,18 +1291,62 @@ export default {
       return timeMinUsed;
     },
 
+    // checkHour(coach, coach_index) {
+    //   let checkHours = [];
+    //   if (this.coach_data[coach_index].teach_day?.length <= 0) {
+    //     let checkSelectedDay = this.coach_data.filter(
+    //       (item) => item.coach_id === coach.coach_id
+    //     );
+
+    //     for (const value of checkSelectedDay) {
+    //       if (value?.start_time_object?.HH) {
+    //         checkHours.push(parseInt(value.start_time_object.HH));
+    //       }
+    //     }
+    //   } else {
+    //     let checkSelectedDay = this.coach_data.filter(
+    //       (item) =>
+    //         item.coach_id === coach.coach_id &&
+    //         item.teach_day.some((day) => coach.teach_day.includes(day))
+    //     );
+
+    //     for (const value of checkSelectedDay) {
+    //       if (value?.start_time_object?.HH) {
+    //         checkHours.push(parseInt(value.start_time_object.HH));
+    //       }
+    //     }
+    //   }
+
+    //   return generateTimeArrayHours(checkHours);
+    // },
+
     checkHour(coach, coach_index) {
-      let checkHours = [];
+      let checkHoursRang = new Set();
+      // let checkHours = [];
+
       if (this.coach_data[coach_index].teach_day?.length <= 0) {
         let checkSelectedDay = this.coach_data.filter(
           (item) => item.coach_id === coach.coach_id
         );
 
+        // for (const value of checkSelectedDay) {
+        //   if (value?.start_time_object?.HH) {
+        //     checkHoursRang.push(parseInt(value.start_time_object.HH));
+        //   }
+        // }
+        // return generateTimeArrayHours(checkHoursRang);
         for (const value of checkSelectedDay) {
-          if (value?.start_time_object?.HH) {
-            checkHours.push(parseInt(value.start_time_object.HH));
+          if (value?.start_time_object?.HH && value?.end_time_object?.HH) {
+            let startHour = parseInt(value.start_time_object.HH);
+            let endHour = parseInt(value.end_time_object.HH);
+
+            for (let i = startHour; i < endHour; i++) {
+              checkHoursRang.add(i); // ปิดการใช้งาน startHour และช่วงเวลาระหว่าง start - end
+            }
           }
         }
+        let hourRange = Array.from(checkHoursRang);
+        return generateTimeArrayHours(hourRange);
       } else {
         let checkSelectedDay = this.coach_data.filter(
           (item) =>
@@ -1311,13 +1355,18 @@ export default {
         );
 
         for (const value of checkSelectedDay) {
-          if (value?.start_time_object?.HH) {
-            checkHours.push(parseInt(value.start_time_object.HH));
+          if (value?.start_time_object?.HH && value?.end_time_object?.HH) {
+            let startHour = parseInt(value.start_time_object.HH);
+            let endHour = parseInt(value.end_time_object.HH);
+
+            for (let i = startHour; i < endHour; i++) {
+              checkHoursRang.add(i); // ปิดการใช้งาน startHour และช่วงเวลาระหว่าง start - end
+            }
           }
         }
+        let hourRange = Array.from(checkHoursRang);
+        return generateTimeArrayHours(hourRange);
       }
-
-      return generateTimeArrayHours(checkHours);
     },
 
     // ChangeStartDate(date) {
