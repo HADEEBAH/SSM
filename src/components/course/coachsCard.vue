@@ -1052,6 +1052,7 @@ export default {
       this.$emit("custom-event", "disable add coach");
     },
     saveUpdateOption(coach) {
+      console.log("coach :>> ", coach);
       Swal.fire({
         icon: "question",
         title: this.$t("do you want to edit ooption"),
@@ -1068,6 +1069,7 @@ export default {
             student_number: coach.students,
             day_of_week_id: coach.day_of_week_id,
             is_active: coach.is_active,
+            coach_id: coach.coach_id,
           };
           this.UpdateOptions({
             payload: option_payload,
