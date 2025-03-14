@@ -1009,6 +1009,8 @@
   "teaching time cannot be deleted because there must be 1 teaching time per teaching day": "Teaching time cannot be deleted because there must be 1 teaching time per teaching day",
   "teach day":"Add teach day",
   "this coach is currently teaching":"This coach is currently teaching",
+  "the compensatory day does not match the class day Please select a new compensatory day" : "The compensatory day does not match the class day Please select a new compensatory day",
+
 
 
 

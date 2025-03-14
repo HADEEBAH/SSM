@@ -532,16 +532,31 @@ const adminCheckInModules = {
 
                 }
             } catch (error) {
-                Swal.fire({
-                    icon: "error",
-                    title: VueI18n.t("fail"),
-                    text: VueI18n.t("save failed"),
-                    timer: 3000,
-                    showDenyButton: false,
-                    showCancelButton: false,
-                    showConfirmButton: false,
-                    timerProgressBar: true,
-                })
+                if (error.response.data.message === "The compensatory day does not match the class day. Please select a new compensatory day.") {
+                    Swal.fire({
+                        icon: "warning",
+                        title: VueI18n.t("warning"),
+                        text: VueI18n.t("the compensatory day does not match the class day Please select a new compensatory day"),
+                        timer: 3000,
+                        showDenyButton: false,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        timerProgressBar: true,
+                    })
+
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: VueI18n.t("fail"),
+                        text: error.response.data.message,
+                        timer: 3000,
+                        showDenyButton: false,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        timerProgressBar: true,
+                    })
+                }
+                context.commit("SetCheckInStudent", { payload: payload })
                 context.commit("SetUpdateCheckinStudentsIsLoading", false)
             }
         },
