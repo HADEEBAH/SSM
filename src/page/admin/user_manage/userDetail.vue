@@ -1058,16 +1058,16 @@
                           </template>
 
                           <template v-slot:[`item.courseType`]="{ item }">
-                            {{
+                            <!-- {{
                               item.cpo.courseTypeNameTh
                                 ? item.cpo.courseTypeNameTh
                                 : "คอร์สระยะสั้น"
-                            }}
-                            <!-- {{
+                            }} -->
+                            {{
                               item.cpo
                                 ? item.cpo.courseTypeNameTh
                                 : "คอร์สระยะสั้น"
-                            }} -->
+                            }}
                           </template>
 
                           <template v-slot:[`item.timeLine`]="{ item }">
@@ -2430,10 +2430,7 @@ export default {
         },
         {
           text: this.$t("course type"),
-          value:
-            this.$i18n.locale == "th"
-              ? "cpo.courseTypeNameTh"
-              : "cpo.courseTypeNameEn",
+          value: "courseType",
         },
         {
           text: this.$t("number of times"),
