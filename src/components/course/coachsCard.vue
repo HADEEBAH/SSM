@@ -1052,16 +1052,21 @@ export default {
       this.$emit("custom-event", "disable add coach");
     },
     saveUpdateOption(coach) {
-      console.log("coach :>> ", coach);
       Swal.fire({
         icon: "question",
-        title: this.$t("do you want to edit ooption"),
-        showDenyButton: false,
+        title: this.$t("do you want to edit teachday"),
         showCancelButton: true,
-        confirmButtonText: this.$t("agree"),
+        showCloseButton: true,
+        focusConfirm: false,
+        showDenyButton: true,
+        allowOutsideClick: false,
+        denyButtonText: this.$t("save and update schedule"),
+        confirmButtonText: this.$t("save"),
         cancelButtonText: this.$t("cancel"),
+        denyButtonColor: "#ff6b81",
+        confirmedButtonColor: "#99CCFF",
       }).then(async (result) => {
-        if (result.isConfirmed) {
+        if (result.isDenied) {
           let option_payload = {
             time_id: coach.time_id,
             start_time: coach.start_time,
@@ -1070,16 +1075,69 @@ export default {
             day_of_week_id: coach.day_of_week_id,
             is_active: coach.is_active,
             coach_id: coach.coach_id,
+            update_schedule: true,
           };
-          this.UpdateOptions({
+          await this.UpdateOptions({
             payload: option_payload,
             course_id: this.$route.params.course_id,
           });
           this.disable_teach_day = false;
           this.disable_coach = false;
+          coach.edited_options = true;
+          this.$emit("custom-event", "unDisable add coach");
+        } else if (result.isConfirmed) {
+          let option_payload = {
+            time_id: coach.time_id,
+            start_time: coach.start_time,
+            end_time: coach.end_time,
+            student_number: coach.students,
+            day_of_week_id: coach.day_of_week_id,
+            is_active: coach.is_active,
+            coach_id: coach.coach_id,
+            update_schedule: false,
+          };
+          await this.UpdateOptions({
+            payload: option_payload,
+            course_id: this.$route.params.course_id,
+          });
+          coach.edited_options = true;
+          this.disable_teach_day = false;
+          this.disable_coach = false;
+          this.$emit("custom-event", "unDisable add coach");
+        } else {
+          coach.edited_options = true;
+          this.disable_teach_day = false;
+          this.disable_coach = false;
           this.$emit("custom-event", "unDisable add coach");
         }
       });
+      // Swal.fire({
+      //   icon: "question",
+      //   title: this.$t("do you want to edit ooption"),
+      //   showDenyButton: false,
+      //   showCancelButton: true,
+      //   confirmButtonText: this.$t("agree"),
+      //   cancelButtonText: this.$t("cancel"),
+      // }).then(async (result) => {
+      //   if (result.isConfirmed) {
+      //     let option_payload = {
+      //       time_id: coach.time_id,
+      //       start_time: coach.start_time,
+      //       end_time: coach.end_time,
+      //       student_number: coach.students,
+      //       day_of_week_id: coach.day_of_week_id,
+      //       is_active: coach.is_active,
+      //       coach_id: coach.coach_id,
+      //     };
+      //     this.UpdateOptions({
+      //       payload: option_payload,
+      //       course_id: this.$route.params.course_id,
+      //     });
+      //     this.disable_teach_day = false;
+      //     this.disable_coach = false;
+      //     this.$emit("custom-event", "unDisable add coach");
+      //   }
+      // });
     },
     saveAddNewOptions(coach, teach_day) {
       Swal.fire({
