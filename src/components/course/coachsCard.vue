@@ -1054,7 +1054,7 @@ export default {
     saveUpdateOption(coach) {
       Swal.fire({
         icon: "question",
-        title: this.$t("do you want to edit ooption"),
+        title: this.$t("do you want to edit option"),
         showCancelButton: true,
         showCloseButton: true,
         focusConfirm: false,
@@ -1113,7 +1113,7 @@ export default {
       });
       // Swal.fire({
       //   icon: "question",
-      //   title: this.$t("do you want to edit ooption"),
+      //   title: this.$t("do you want to edit option"),
       //   showDenyButton: false,
       //   showCancelButton: true,
       //   confirmButtonText: this.$t("agree"),
