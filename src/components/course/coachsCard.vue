@@ -1054,7 +1054,7 @@ export default {
     saveUpdateOption(coach) {
       Swal.fire({
         icon: "question",
-        title: this.$t("do you want to edit teachday"),
+        title: this.$t("do you want to edit ooption"),
         showCancelButton: true,
         showCloseButton: true,
         focusConfirm: false,
