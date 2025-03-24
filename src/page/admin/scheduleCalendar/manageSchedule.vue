@@ -1675,6 +1675,7 @@ export default {
       create_holiday: "ManageScheduleModules/getCreateHoliday",
       course_in_holidays: "ManageScheduleModules/getCourseHoliday",
       holiday_status: "ManageScheduleModules/getHolidayStatus",
+      query_data: "ManageScheduleModules/getQueryData",
     }),
 
     // filteredCheckInStatusOptions() {
@@ -2188,14 +2189,9 @@ export default {
         cancelButtonText: this.$t("no"),
       }).then(async (result) => {
         if (result.isConfirmed) {
-          await this.DeleteHoliday({ holiday_id: items.holidayId });
-          await this.GetDataInSchedule({
-            month: moment().format("MM"),
-            year: moment().format("YYYY"),
-            search: this.filter_search,
-            courseId: this.selectedCourse,
-            coachId: this.selectedCoach,
-            status: this.selectedCourseType,
+          await this.DeleteHoliday({
+            holiday_id: items.holidayId,
+            query_data: this.query_data,
           });
           this.show_dialog_edit_holoday = false;
         }
@@ -2473,7 +2469,7 @@ export default {
       this.show_dialog_holoday = true;
     },
     async CreateHolidays() {
-      let [year, month] = this.create_holiday_date_picker.split("-");
+      // let [year, month] = this.create_holiday_date_picker.split("-");
       this.$refs.add_holidat_dialog.validate();
       if (this.add_holidat_dialog) {
         Swal.fire({
@@ -2518,19 +2514,22 @@ export default {
                   dayOfWeekName: student.dayOfWeekName,
                 })),
               }));
-              await this.CreateCourseHoliday(mappedData).then(async () => {
+              await this.CreateCourseHoliday({
+                payload: mappedData,
+                queryData: this.query_data,
+              }).then(async () => {
                 if (
                   this.course_in_holidays !== 400 ||
                   this.course_in_holidays !== 500
                 ) {
-                  await this.GetDataInSchedule({
-                    month: month,
-                    year: year,
-                    search: this.filter_search,
-                    courseId: this.selectedCourse,
-                    coachId: this.selectedCoach,
-                    status: this.selectedCourseType,
-                  });
+                  // await this.GetDataInSchedule({
+                  //   month: month,
+                  //   year: year,
+                  //   search: this.filter_search,
+                  //   courseId: this.selectedCourse,
+                  //   coachId: this.selectedCoach,
+                  //   status: this.selectedCourseType,
+                  // });
                   await this.closeAddHolidayDialog();
                   this.show_dialog_holoday = false;
                 }
@@ -2542,30 +2541,33 @@ export default {
                 holidayMonth: this.create_holiday_date_picker.split("-")[1],
                 holidayYears: this.create_holiday_date_picker.split("-")[0],
               };
-              this.CreateHoliday({ payload: mappedData }).then(async () => {
+              this.CreateHoliday({
+                payload: mappedData,
+                queryData: this.query_data,
+              }).then(async () => {
                 if (
                   this.course_in_holidays !== 400 ||
                   this.course_in_holidays !== 500
                 ) {
-                  await this.GetDataInSchedule({
-                    month: month,
-                    year: year,
-                    search: this.filter_search,
-                    courseId: this.selectedCourse,
-                    coachId: this.selectedCoach,
-                    status: this.selectedCourseType,
-                  });
+                  // await this.GetDataInSchedule({
+                  //   month: month,
+                  //   year: year,
+                  //   search: this.filter_search,
+                  //   courseId: this.selectedCourse,
+                  //   coachId: this.selectedCoach,
+                  //   status: this.selectedCourseType,
+                  // });
                   await this.closeAddHolidayDialog();
                   this.show_dialog_holoday = false;
-                  Swal.fire({
-                    icon: "success",
-                    title: this.$t("succeed"),
-                    text: this.$t("create holiday success"),
-                    timer: 3000,
-                    timerProgressBar: true,
-                    showCancelButton: false,
-                    showConfirmButton: false,
-                  });
+                  // Swal.fire({
+                  //   icon: "success",
+                  //   title: this.$t("succeed"),
+                  //   text: this.$t("create holiday success"),
+                  //   timer: 3000,
+                  //   timerProgressBar: true,
+                  //   showCancelButton: false,
+                  //   showConfirmButton: false,
+                  // });
                 }
               });
             }
