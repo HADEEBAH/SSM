@@ -603,7 +603,7 @@ const manageScheduleModules = {
     async CreateCourseHoliday(context, { payload, queryData }) {
       try {
         // let localhost = "http://localhost:3000"
-        // let { data } = await axios.post(`${localhost}/api/v1/schedule/holiday`, dataForm)
+        // let { data } = await axios.post(`${localhost}/api/v1/schedule/holiday`, payload)
         let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/schedule/holiday`, payload)
         if (data.statusCode === 201) {
           Swal.fire({

@@ -490,6 +490,7 @@
                         :nudge-right="40"
                         transition="scale-transition"
                         offset-y
+                        color="#ff6b81"
                         min-width="auto"
                       >
                         <template v-slot:activator="{ on, attrs }">
@@ -514,6 +515,7 @@
                             setHolidaydates(create_holiday_date_picker),
                               (create_holiday_date_bool = false)
                           "
+                          color="#ff6b81"
                           :min="tomorrowDate()"
                           :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
                         ></v-date-picker>
@@ -543,8 +545,6 @@
                   </v-row>
 
                   <!-- ข้อมูลคอร์สทป-->
-
-                  <!-- <pre>{{ holiday_course }}</pre> -->
                   <div
                     v-if="
                       holiday_course?.length > 0 && create_holiday_date_string
@@ -759,7 +759,11 @@
                     </v-list-item>
                   </template>
                   <template v-slot:selection="{ item, index }">
-                    <v-chip v-if="index === 0">
+                    <v-chip
+                      v-if="index === 0"
+                      color="#FF6B81"
+                      class="white--text"
+                    >
                       <span>{{
                         $i18n.locale == "th"
                           ? item.courseNameTh
@@ -786,10 +790,8 @@
                   outlined
                   v-model="selectedCourseType"
                   :items="courseType"
-                  :item-text="
-                    $i18n.locale == 'th' ? 'coursTypeName' : 'coursTypeNameEn'
-                  "
-                  item-value="courseTypeValue"
+                  :item-text="$i18n.locale == 'th' ? 'typeName' : 'typeNameEn'"
+                  item-value="typeOfValue"
                   multiple
                   color="#FF6B81"
                   item-color="#FF6B81"
@@ -804,11 +806,13 @@
                     </v-list-item>
                   </template>
                   <template v-slot:selection="{ item, index }">
-                    <v-chip v-if="index === 0">
+                    <v-chip
+                      v-if="index === 0"
+                      color="#FF6B81"
+                      class="white--text"
+                    >
                       <span>{{
-                        $i18n.locale == "th"
-                          ? item.coursTypeName
-                          : item.coursTypeNameEn
+                        $i18n.locale == "th" ? item.typeName : item.typeNameEn
                       }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
@@ -847,7 +851,11 @@
                     </v-list-item>
                   </template>
                   <template v-slot:selection="{ item, index }">
-                    <v-chip v-if="index === 0">
+                    <v-chip
+                      v-if="index === 0"
+                      color="#FF6B81"
+                      class="white--text"
+                    >
                       <span>{{
                         $i18n.locale == "th" ? item.fullNameTh : item.fullNameEh
                       }}</span>
@@ -923,6 +931,7 @@
                   :nudge-right="40"
                   transition="scale-transition"
                   offset-y
+                  color="#FF6B81"
                   min-width="auto"
                 >
                   <template v-slot:activator="{ on, attrs }">
@@ -950,6 +959,7 @@
                   <v-date-picker
                     v-model="export_data.start_date"
                     @input="export_data.select_start_date = false"
+                    color="#FF6B81"
                     :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
                   ></v-date-picker>
                 </v-menu>
@@ -979,17 +989,23 @@
                       "
                       :placeholder="$t('please select an end date')"
                       outlined
-                      append-icon="mdi-calendar"
                       readonly
                       v-bind="attrs"
                       v-on="on"
                       color="#FF6B81"
-                    ></v-text-field>
+                    >
+                      <template v-slot:append>
+                        <v-icon :color="export_data.end_date ? '#FF6B81' : ''"
+                          >mdi-calendar</v-icon
+                        >
+                      </template>
+                    </v-text-field>
                   </template>
                   <v-date-picker
                     :min="export_data.start_date ? export_data.start_date : ''"
                     v-model="export_data.end_date"
                     @input="inputDate($event, 'selected end date')"
+                    color="#FF6B81"
                     locale="th-TH"
                   ></v-date-picker>
                 </v-menu>
