@@ -765,9 +765,9 @@ const manageScheduleModules = {
     async EditedHolidayCourse(context, { payload }) {
       try {
 
-        let localhost = "http://localhost:3000"
-        let { data } = await axios.patch(`${localhost}/api/v1/schedule/holiday`, payload)
-        // let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/schedule/holiday`, payload)
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.patch(`${localhost}/api/v1/schedule/holiday`, payload)
+        let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/schedule/holiday`, payload)
         if (data.statusCode === 201) {
           Swal.fire({
             icon: "success",
