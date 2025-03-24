@@ -230,10 +230,11 @@
   "cannot resave the course to their parents": "Cannot resave the course to their parents",
   "cannot delete a coach as there must be at least 1 coach listed in the course": "Cannot delete a coach as there must be at least 1 coach listed in the course",
   "category":"Category",
-  
   "can't select these dates because they are duplications of existing schedules":"can't select these dates because they are duplications of existing schedules",
   "close-open kingdom status":"Close-open Kingdom status",
   "coach has Been Deleted":"Coach has Been Deleted",
+  "can't select these dates because they are holidays":"can't select these dates because they are holidays",
+
 
 
 

@@ -637,11 +637,21 @@ const manageScheduleModules = {
             showCancelButton: false,
             showConfirmButton: false,
           })
+        } else if (error?.response?.data?.message === "Can't select these dates because they are holidays.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("can't select these dates because they are holidays"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          })
         } else {
           Swal.fire({
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
-            text: error,
+            text: error?.response?.data?.message,
             showDenyButton: false,
             showCancelButton: false,
             showConfirmButton: false,
@@ -766,11 +776,21 @@ const manageScheduleModules = {
             showCancelButton: false,
             showConfirmButton: false,
           })
+        } else if (error?.response?.data?.message === "Can't select these dates because they are holidays.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("can't select these dates because they are holidays"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          })
         } else {
           Swal.fire({
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
-            text: error,
+            text: error?.response?.data?.message,
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,

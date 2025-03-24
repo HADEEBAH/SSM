@@ -214,6 +214,7 @@
   "can't select these dates because they are duplications of existing schedules":"ไม่สามารถเลือกวันที่เหล่านี้ได้เนื่องจากซ้ำกับกำหนดการที่มีอยู่",
   "close-open kingdom status":"สถานะเปิด-ปิดอาณาจักร",
   "create holiday success":"สร้างวันหยุดเรียบร้อยแล้ว",
+  "can't select these dates because they are holidays":"ไม่สามารถเลือกวันนี้ได้เนื่องจากเป็นวันหยุด",
 
 
 
