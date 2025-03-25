@@ -72,7 +72,6 @@
   "attached file from teaching summary notes": "Attached file from teaching summary notes",
   "attachment from student assessment": "Attachment from student assessment",
   "available course information": "Available course information",
-  "average": "Average",
   "august": "August",
   "all students have been contacted": "All students have been contacted",
   "add new teachday succeed": "Add new teachday succeed",
@@ -102,6 +101,7 @@
   "because your orders are duplicated": "Because your orders are duplicated",
   "because this course is full": "เนื่องจากคอร์สนี้เต็ม",
   "because you have chosen this course": "Because you have chosen this course",
+  "create holiday success":"Create holiday success",
 
   "cash": "Cash",
   "can't apply": "Can't apply",
@@ -229,9 +229,13 @@
   "check in status": "Check in status",
   "cannot resave the course to their parents": "Cannot resave the course to their parents",
   "cannot delete a coach as there must be at least 1 coach listed in the course": "Cannot delete a coach as there must be at least 1 coach listed in the course",
+  "category":"Category",
   "can't select these dates because they are duplications of existing schedules":"can't select these dates because they are duplications of existing schedules",
   "close-open kingdom status":"Close-open Kingdom status",
   "coach has Been Deleted":"Coach has Been Deleted",
+  "can't select these dates because they are holidays":"can't select these dates because they are holidays",
+
+
 
 
   "day": "Day",
@@ -394,6 +398,8 @@
   "full courses": "Full courses",
   "full course information": "Full course information",
   "full day leave": "Full day leave",
+  "filter statistic":"Filter Statistic",
+
   "first name - last name(thai)": "First name - last name(ไทย)",
   "first name - last name(eng)": "First name - last name(อังกฤษ)",
 
@@ -547,6 +553,10 @@
   "number must be lest than": "Number must be less than",
   "number must be more than": "Number must be more than",
   "number must be 0": "Number must be 0 or more",
+  "number of students currently studying":"Number of students currently studying",
+  "number of students who have purchased courses":"Number of students who have purchased courses",
+
+
 
   "o'clock": "O'clock",
   "optional": "optional",
@@ -914,6 +924,7 @@
   "save package":"Save Package",
   "save option":"Save Option",
   "save teaching day":"Save Teaching day",
+  "statistic":"Statistic",
   "select student":"Select",
   "student detail":"Student detail",
 

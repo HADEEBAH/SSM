@@ -2,7 +2,10 @@
 <template>
   <v-app class="background-color">
     <v-container class="overflow-x: hidden;">
-      <loading-overlay :loading="dashboard_loading"> </loading-overlay>
+      <loading-overlay
+        :loading="dashboard_loading ? dashboard_loading : statistic_loading"
+      >
+      </loading-overlay>
 
       <headerPage :title="$t('dashboard')"></headerPage>
       <!-- TOP CARD -->
@@ -469,7 +472,249 @@
             </v-card>
           </v-col>
         </v-row>
+        <!-- Statistic -->
+        <v-row dense>
+          <v-col cols="12" sm="6" align="start">
+            <v-card-title>
+              <v-icon color="#ff6b81" class="ml-6"
+                >mdi-chart-box-multiple</v-icon
+              >
+              <span class="indent-5">{{ $t("statistic") }}</span>
+            </v-card-title>
+          </v-col>
+          <v-col cols="12" sm="6" align="end">
+            <v-card-text>
+              <v-btn
+                @click="openDialogexportStatistic"
+                class="mx-2"
+                color="#ffffff"
+                :loading="loadingFilter"
+              >
+                {{ $t("export") }}
+              </v-btn>
+              <v-btn
+                color="#ff6b81"
+                class="mx-5 white--text"
+                :to="{
+                  name: 'StatisticList',
+                  // params: {
+                  //   action: 'view',
+                  //   account_id: item.studentId,
+                  //   from: 'Dashboard',
+                  // },
+                }"
+              >
+                <v-icon>mdi-text-box-search-outline</v-icon>
+                {{ $t("see more") }}
+              </v-btn>
+            </v-card-text>
+          </v-col>
+        </v-row>
 
+        <v-row dense class="pa-2">
+          <v-col cols="12">
+            <v-card class="bg-white rounded-lg" style="height: 100%">
+              <template>
+                <v-data-table
+                  :headers="headersStatistic"
+                  :items="get_statustic.data"
+                  hide-default-footer
+                  class="elevation-1 header-table mx-3 my-3"
+                >
+                  <template v-slot:[`item.courseType`]="{ item }">
+                    {{
+                      $i18n.locale == "th"
+                        ? `${item.courseTypeNameTh}`
+                        : `${item.courseTypeNameEn}`
+                    }}
+                  </template>
+                  <template v-slot:[`item.category`]="{ item }">
+                    {{
+                      $i18n.locale == "th"
+                        ? `${item.categoryNameTh}`
+                        : `${item.categoryNameEn}`
+                    }}
+                  </template>
+                  <template v-slot:[`item.courseName`]="{ item }">
+                    {{
+                      $i18n.locale == "th"
+                        ? `${item.courseNameTh}`
+                        : `${item.courseNameEn}`
+                    }}
+                  </template>
+                </v-data-table>
+              </template>
+            </v-card>
+          </v-col>
+        </v-row>
+
+        <!-- DIALOG -->
+        <template>
+          <v-row justify="center" dense>
+            <v-dialog v-model="filter_statistic" persistent max-width="600px">
+              <v-card class="pa-3">
+                <!-- HEADER -->
+                <v-card-title>
+                  <v-row dense>
+                    <v-col align="center">
+                      {{ $t("filter statistic") }}
+                    </v-col>
+                    <v-col cols="auto" align="end">
+                      <v-btn icon @click="closeFilterStatistic">
+                        <v-icon color="#ff6b81">mdi-close</v-icon>
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-card-title>
+                <!-- BODY -->
+                <v-row dense>
+                  <!-- ประเภทคอร์ส  -->
+                  <v-col cols="12" sm="6">
+                    <label class="font-weight-bold">{{
+                      $t("course type")
+                    }}</label>
+                    <v-autocomplete
+                      dense
+                      :items="courseType"
+                      :item-text="
+                        $i18n.locale == 'th' ? 'typeName' : 'typeNameEn'
+                      "
+                      item-value="typeOfValue"
+                      v-model="export_statistic.course_type_id"
+                      :placeholder="$t('please select a course type')"
+                      outlined
+                      multiple
+                      color="#FF6B81"
+                      item-color="#FF6B81"
+                    >
+                      <template v-slot:selection="{ item, index }">
+                        <v-chip dark v-if="index === 0" color="#FF6B81">
+                          <span>{{ item.typeName }}</span>
+                        </v-chip>
+                        <span
+                          v-if="index === 1"
+                          class="grey--text text-caption"
+                        >
+                          (+{{ export_statistic.course_type_id.length - 1 }}
+                          {{ $t("Others") }})
+                        </span>
+                      </template>
+                    </v-autocomplete>
+                  </v-col>
+                  <!-- ชื่อคอร์ส  -->
+                  <v-col cols="12" sm="6">
+                    <label class="font-weight-bold">{{
+                      $t("course name")
+                    }}</label>
+                    <v-autocomplete
+                      outlined
+                      v-model="export_statistic.courses_id"
+                      :items="get_filter_course"
+                      :item-text="
+                        $i18n.locale == 'th' ? 'courseNameTh' : 'courseNameEn'
+                      "
+                      item-value="courseId"
+                      multiple
+                      color="#FF6B81"
+                      item-color="#FF6B81"
+                      dense
+                      :placeholder="this.$t('courses')"
+                    >
+                      <template v-slot:no-data>
+                        <v-list-item>
+                          <v-list-item-title>
+                            {{ $t("course information not found") }}
+                          </v-list-item-title>
+                        </v-list-item>
+                      </template>
+                      <template v-slot:selection="{ item, index }">
+                        <v-chip dark v-if="index === 0" color="#FF6B81">
+                          <span>{{
+                            $i18n.locale == "th"
+                              ? item.courseNameTh
+                              : item.courseNameEn
+                          }}</span>
+                        </v-chip>
+                        <span
+                          v-if="index === 1"
+                          class="grey--text text-caption"
+                        >
+                          (+{{ export_statistic.courses_id.length - 1 }}
+                          {{ $t("others") }})
+                        </span>
+                      </template>
+                    </v-autocomplete>
+                  </v-col>
+                  <!-- อาณาจักร์  -->
+                  <v-col cols="12" sm="6">
+                    <label class="font-weight-bold">{{ $t("category") }}</label>
+                    <v-autocomplete
+                      outlined
+                      v-model="export_statistic.category_id"
+                      :items="categorys"
+                      :item-text="
+                        $i18n.locale == 'th'
+                          ? 'categoryNameTh'
+                          : 'categoryNameEng'
+                      "
+                      item-value="categoryId"
+                      multiple
+                      color="#FF6B81"
+                      item-color="#FF6B81"
+                      dense
+                      :placeholder="this.$t('category')"
+                    >
+                      <template v-slot:no-data>
+                        <v-list-item>
+                          <v-list-item-title>
+                            {{ $t("course information not found") }}
+                          </v-list-item-title>
+                        </v-list-item>
+                      </template>
+                      <template v-slot:selection="{ item, index }">
+                        <v-chip dark v-if="index === 0" color="#FF6B81">
+                          <span>{{
+                            $i18n.locale == "th"
+                              ? item.categoryNameTh
+                              : item.categoryNameEng
+                          }}</span>
+                        </v-chip>
+                        <span
+                          v-if="index === 1"
+                          class="grey--text text-caption"
+                        >
+                          (+{{ export_statistic.category_id.length - 1 }}
+                          {{ $t("others") }})
+                        </span>
+                      </template>
+                    </v-autocomplete>
+                  </v-col>
+                </v-row>
+                <!-- BOTTOM -->
+                <v-row dense>
+                  <v-col cols="12" sm="8" align="end">
+                    <v-btn depressed @click="cleareDataStatic()">{{
+                      $t("clear data")
+                    }}</v-btn></v-col
+                  >
+                  <v-col cols="12" sm="4" align="end">
+                    <v-btn
+                      depressed
+                      dark
+                      color="#ff6b81"
+                      :loading="loadingFilter"
+                      @click="exportStatistic()"
+                    >
+                      {{ $t("view all") }}
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-card>
+            </v-dialog>
+          </v-row>
+        </template>
+
+        <!-- course status -->
         <v-row dense>
           <v-card-title>
             <v-img
@@ -1138,6 +1383,51 @@ export default {
     search_course_close: "",
     search_course_open: "",
     sumTotal: "",
+    statisticData: [
+      {
+        index: "1",
+        courseType: "ระยะสั้น",
+        category: "ทดสอบ อาณาจักร 1",
+        courseName: "ทดสอบ 1",
+        currentlyStudent: 10,
+        numberPurchasedCourses: 10,
+      },
+      {
+        index: "2",
+        courseType: "ทั่วไป",
+        category: "ทดสอบ อาณาจักร 1",
+        courseName: "ทดสอบ 2",
+        currentlyStudent: 20,
+        numberPurchasedCourses: 30,
+      },
+      {
+        index: "3",
+        courseType: "ระยะสั้น",
+        category: "ทดสอบ อาณาจักร 2",
+        courseName: "ทดสอบ 3",
+        currentlyStudent: 30,
+        numberPurchasedCourses: 20,
+      },
+    ],
+    courseType: [
+      {
+        typeName: "คอร์สทั่วไป",
+        typeNameEn: "General course",
+        typeOfValue: "CT_1",
+      },
+      {
+        typeName: "คอร์สระยะสั้น",
+        typeNameEn: "Short course",
+        typeOfValue: "CT_2",
+      },
+    ],
+    filter_statistic: false,
+    loadingFilter: false,
+    export_statistic: {
+      course_type_id: null,
+      courses_id: null,
+      category_id: null,
+    },
   }),
   created() {
     this.FilterYears().then(() => {
@@ -1158,6 +1448,14 @@ export default {
     this.mapMonth = this.thaiMonths.filter(
       (item) => parseInt(item.key) === month
     )[0];
+    this.GetStatistic({
+      limit: 10,
+      page: 1,
+      search: "",
+      category: "",
+      course: "",
+      courseTypeId: "",
+    });
   },
   beforeMount() {},
   async mounted() {
@@ -1167,192 +1465,9 @@ export default {
     this.donut_mounth = this.mapMonth;
     await this.GetStudentValue();
   },
-  methods: {
-    ...mapActions({
-      GetEmptyCourse: "DashboardModules/GetEmptyCourse",
-      GetCourseType: "DashboardModules/GetCourseType",
-      // GetPotential: "DashboardModules/GetPotential",
-      GetDonut: "DashboardModules/GetDonut",
-      GetGraf: "DashboardModules/GetGraf",
-      FilterYears: "DashboardModules/FilterYears",
-      GetStudentValue: "DashboardModules/GetStudentValue",
-    }),
-
-    genPersentSucces() {
-      let persent =
-        parseFloat(this.get_donut.sumTotalSuccess) /
-        (parseFloat(this.get_donut.sumTotalPending) +
-          parseFloat(this.get_donut.sumTotalSuccess))
-          ? parseFloat(this.get_donut.sumTotalSuccess) /
-            (parseFloat(this.get_donut.sumTotalPending) +
-              parseFloat(this.get_donut.sumTotalSuccess))
-          : 0;
-      persent = persent * 100;
-      return persent.toFixed(2);
-    },
-
-    genPersentPending() {
-      let persent =
-        parseFloat(this.get_donut.sumTotalPending) /
-        (parseFloat(this.get_donut.sumTotalPending) +
-          parseFloat(this.get_donut.sumTotalSuccess))
-          ? parseFloat(this.get_donut.sumTotalPending) /
-            (parseFloat(this.get_donut.sumTotalPending) +
-              parseFloat(this.get_donut.sumTotalSuccess))
-          : 0;
-      persent = persent * 100;
-      return persent.toFixed(2);
-    },
-
-    onYearChangeGraft() {
-      this.dashboard_graf = {
-        year: this.selectedYear,
-        month: this.selected_mounth.key,
-      };
-
-      this.GetGraf(this.dashboard_graf);
-    },
-
-    selectMunth() {
-      this.dashboard_graf = {
-        year: this.selectedYear,
-        month: this.selected_mounth.key,
-      };
-
-      this.GetGraf(this.dashboard_graf);
-    },
-
-    onYearChangeDonut() {
-      this.dashboard_donut = {
-        year: this.selectedYearDonut,
-        month: this.donut_mounth.key,
-      };
-      this.GetDonut(this.dashboard_donut);
-    },
-
-    selectDonutMounth() {
-      this.dashboard_donut = {
-        year: this.selectedYearDonut,
-        month: this.donut_mounth.key,
-      };
-
-      this.GetDonut(this.dashboard_donut);
-    },
-
-    heightGraf() {
-      switch (this.$vuetify.breakpoint.name) {
-        case "xs":
-          return 350;
-        case "sm":
-          return 300;
-        case "md":
-          return 250;
-      }
-    },
-    widthDonut() {
-      switch (this.$vuetify.breakpoint.name) {
-        case "sm":
-          return 480;
-        case "md":
-          return 460;
-        case "lg":
-          return 390;
-      }
-    },
-    widthPie() {
-      switch (this.$vuetify.breakpoint.name) {
-        case "sm":
-          return 400;
-        case "md":
-          return 350;
-        case "lg":
-          return 380;
-      }
-    },
-
-    pieCardWidth() {
-      switch (this.$vuetify.breakpoint.name) {
-        case "md":
-          return 400;
-        case "lg":
-          return 380;
-      }
-    },
-
-    customTooltip(series, seriesIndex, w) {
-      // let waiting for payment = ''
-      // let
-      let item = w.globals;
-      let color = item.colors[seriesIndex];
-      return this.get_donut?.datas[seriesIndex]
-        ? `
-        <div class="pa-3 ml-auto" style='background-color: ${color}'>
-          <h3 class="font-weight-bold">${item.seriesNames[seriesIndex]}</h3>
-          <i class="mdi mdi-circle " style="font-size:10px; color: #8cd977"></i> <span class="font-weight-bold">
-            ${this.$t("paid")} :</span> ${
-            this.get_donut?.datas[seriesIndex].stringSumSuccess
-          } ${this.$t("baht")}<br/>
-        <i class="mdi mdi-circle " style="font-size:10px; color: #fcc419"></i> <span class="font-weight-bold">${this.$t(
-          "pending"
-        )} : </span>${
-            this.get_donut?.datas[seriesIndex].stringSumPending
-          } ${this.$t("baht")}<br/>
-          <span class="font-weight-bold">${this.$t("total")} : </span>${
-            this.get_donut?.datas[seriesIndex].stringTotal
-          } ${this.$t("baht")}
-        </div>
-      `
-        : `
-        <div class="pa-3 ml-auto" style='background-color: ${color}'>
-          <h3 class="font-weight-bold">${item.seriesNames[seriesIndex]}</h3>
-          <i class="mdi mdi-circle " style="font-size:10px; color: #8cd977"></i> <span class="font-weight-bold"> ${this.$t(
-            "paid"
-          )} : </span>${this.get_donut?.otherTotal.sumSuccess
-            .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} ${this.$t("baht")}<br/>
-          <i class="mdi mdi-circle " style="font-size:10px; color: #fcc419"></i> <span class="font-weight-bold">${this.$t(
-            "pending"
-          )} : </span>${this.get_donut?.otherTotal.sumPending
-            .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} ${this.$t("baht")}<br/>
-          <span class="font-weight-bold">${this.$t("total")} : </span>${series[
-            seriesIndex
-          ]
-            .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} ${this.$t("baht")}
-        </div>
-        `;
-    },
-    dialogDetail(item) {
-      this.items_dialog = item;
-      this.dialog_course = true;
-    },
-
-    searchCourseClose(val) {
-      if (val) {
-        return this.get_empty_course_close.filter(
-          (v) =>
-            v.courseNameTh.indexOf(val) !== -1 ||
-            v.courseNameEn.indexOf(val) !== -1
-        );
-      } else {
-        return this.get_empty_course_close;
-      }
-    },
-    searchCourseOpen(val) {
-      if (val) {
-        return this.get_empty_course_open.filter(
-          (v) =>
-            v.courseNameTh.indexOf(val) !== -1 ||
-            v.courseNameEn.indexOf(val) !== -1
-        );
-      } else {
-        return this.get_empty_course_open;
-      }
-    },
-  },
   computed: {
     ...mapGetters({
+      get_filter_course: "ManageScheduleModules/getFilterCourse", //get all course
       get_empty_course: "DashboardModules/getEmptyCourse",
       get_empty_course_open: "DashboardModules/getEmptyCourseOpen",
       get_empty_course_close: "DashboardModules/getEmptyCourseClose",
@@ -1369,7 +1484,37 @@ export default {
       get_labels_line_chart_month: "DashboardModules/getLabelsLineChartMonth",
       labels_chart_en: "DashboardModules/getLabelsChartEn",
       get_student_value: "DashboardModules/getStudentValue",
+      categorys: "CategoryModules/getCategorys",
+      get_statustic: "DashboardModules/getStatistic",
+      statistic_loading: "DashboardModules/getloadingStatistic",
     }),
+
+    headersStatistic() {
+      return [
+        {
+          text: this.$t("no."),
+          align: "start",
+          value: "index",
+          sortable: false,
+        },
+        { text: this.$t("course type"), value: "courseType", sortable: false },
+        { text: this.$t("category"), value: "category", sortable: false },
+        { text: this.$t("course name"), value: "courseName", sortable: false },
+        {
+          text: this.$t("number of students currently studying"),
+          align: "center",
+          sortable: false,
+          value: "studentCountInStudy",
+        },
+        // {
+        //   text: this.$t("number of students who have purchased courses"),
+        //   align: "center",
+        //   sortable: false,
+        //   value: "studentCountInPotential",
+        // },
+      ];
+    },
+
     MobileSize() {
       const { xs } = this.$vuetify.breakpoint;
       return !!xs;
@@ -1596,6 +1741,226 @@ export default {
           color: "#ff6b81",
         },
       ];
+    },
+  },
+
+  methods: {
+    ...mapActions({
+      GetFilterCourse: "ManageScheduleModules/GetFilterCourse",
+      GetEmptyCourse: "DashboardModules/GetEmptyCourse",
+      GetCourseType: "DashboardModules/GetCourseType",
+      // GetPotential: "DashboardModules/GetPotential",
+      GetDonut: "DashboardModules/GetDonut",
+      GetGraf: "DashboardModules/GetGraf",
+      FilterYears: "DashboardModules/FilterYears",
+      GetStudentValue: "DashboardModules/GetStudentValue",
+      GetCategorys: "CategoryModules/GetCategorys",
+      GetStatistic: "DashboardModules/GetStatistic",
+      FilterStatistic: "DashboardModules/FilterStatistic",
+    }),
+
+    async openDialogexportStatistic() {
+      (this.loadingFilter = true), await this.GetFilterCourse();
+      await this.GetCategorys();
+      this.filter_statistic = true;
+      this.loadingFilter = false;
+    },
+
+    closeFilterStatistic() {
+      this.filter_statistic = false;
+    },
+
+    cleareDataStatic() {
+      this.export_statistic = {
+        course_type_id: null,
+        courses_id: null,
+        category_id: null,
+      };
+    },
+    async exportStatistic() {
+      // console.log("object :>> ", this.export_statistic);
+      await this.FilterStatistic({ export_data: this.export_statistic });
+      this.loadingFilter = false;
+      this.filter_statistic = false;
+      this.export_statistic = {
+        course_type_id: null,
+        courses_id: null,
+        category_id: null,
+      };
+      this.loadingFilter = false;
+    },
+
+    genPersentSucces() {
+      let persent =
+        parseFloat(this.get_donut.sumTotalSuccess) /
+        (parseFloat(this.get_donut.sumTotalPending) +
+          parseFloat(this.get_donut.sumTotalSuccess))
+          ? parseFloat(this.get_donut.sumTotalSuccess) /
+            (parseFloat(this.get_donut.sumTotalPending) +
+              parseFloat(this.get_donut.sumTotalSuccess))
+          : 0;
+      persent = persent * 100;
+      return persent.toFixed(2);
+    },
+
+    genPersentPending() {
+      let persent =
+        parseFloat(this.get_donut.sumTotalPending) /
+        (parseFloat(this.get_donut.sumTotalPending) +
+          parseFloat(this.get_donut.sumTotalSuccess))
+          ? parseFloat(this.get_donut.sumTotalPending) /
+            (parseFloat(this.get_donut.sumTotalPending) +
+              parseFloat(this.get_donut.sumTotalSuccess))
+          : 0;
+      persent = persent * 100;
+      return persent.toFixed(2);
+    },
+
+    onYearChangeGraft() {
+      this.dashboard_graf = {
+        year: this.selectedYear,
+        month: this.selected_mounth.key,
+      };
+
+      this.GetGraf(this.dashboard_graf);
+    },
+
+    selectMunth() {
+      this.dashboard_graf = {
+        year: this.selectedYear,
+        month: this.selected_mounth.key,
+      };
+
+      this.GetGraf(this.dashboard_graf);
+    },
+
+    onYearChangeDonut() {
+      this.dashboard_donut = {
+        year: this.selectedYearDonut,
+        month: this.donut_mounth.key,
+      };
+      this.GetDonut(this.dashboard_donut);
+    },
+
+    selectDonutMounth() {
+      this.dashboard_donut = {
+        year: this.selectedYearDonut,
+        month: this.donut_mounth.key,
+      };
+
+      this.GetDonut(this.dashboard_donut);
+    },
+
+    heightGraf() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return 350;
+        case "sm":
+          return 300;
+        case "md":
+          return 250;
+      }
+    },
+    widthDonut() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "sm":
+          return 480;
+        case "md":
+          return 460;
+        case "lg":
+          return 390;
+      }
+    },
+    widthPie() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "sm":
+          return 400;
+        case "md":
+          return 350;
+        case "lg":
+          return 380;
+      }
+    },
+
+    pieCardWidth() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "md":
+          return 400;
+        case "lg":
+          return 380;
+      }
+    },
+
+    customTooltip(series, seriesIndex, w) {
+      // let waiting for payment = ''
+      // let
+      let item = w.globals;
+      let color = item.colors[seriesIndex];
+      return this.get_donut?.datas[seriesIndex]
+        ? `
+        <div class="pa-3 ml-auto" style='background-color: ${color}'>
+          <h3 class="font-weight-bold">${item.seriesNames[seriesIndex]}</h3>
+          <i class="mdi mdi-circle " style="font-size:10px; color: #8cd977"></i> <span class="font-weight-bold">
+            ${this.$t("paid")} :</span> ${
+            this.get_donut?.datas[seriesIndex].stringSumSuccess
+          } ${this.$t("baht")}<br/>
+        <i class="mdi mdi-circle " style="font-size:10px; color: #fcc419"></i> <span class="font-weight-bold">${this.$t(
+          "pending"
+        )} : </span>${
+            this.get_donut?.datas[seriesIndex].stringSumPending
+          } ${this.$t("baht")}<br/>
+          <span class="font-weight-bold">${this.$t("total")} : </span>${
+            this.get_donut?.datas[seriesIndex].stringTotal
+          } ${this.$t("baht")}
+        </div>
+      `
+        : `
+        <div class="pa-3 ml-auto" style='background-color: ${color}'>
+          <h3 class="font-weight-bold">${item.seriesNames[seriesIndex]}</h3>
+          <i class="mdi mdi-circle " style="font-size:10px; color: #8cd977"></i> <span class="font-weight-bold"> ${this.$t(
+            "paid"
+          )} : </span>${this.get_donut?.otherTotal.sumSuccess
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} ${this.$t("baht")}<br/>
+          <i class="mdi mdi-circle " style="font-size:10px; color: #fcc419"></i> <span class="font-weight-bold">${this.$t(
+            "pending"
+          )} : </span>${this.get_donut?.otherTotal.sumPending
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} ${this.$t("baht")}<br/>
+          <span class="font-weight-bold">${this.$t("total")} : </span>${series[
+            seriesIndex
+          ]
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} ${this.$t("baht")}
+        </div>
+        `;
+    },
+    dialogDetail(item) {
+      this.items_dialog = item;
+      this.dialog_course = true;
+    },
+
+    searchCourseClose(val) {
+      if (val) {
+        return this.get_empty_course_close.filter(
+          (v) =>
+            v.courseNameTh.indexOf(val) !== -1 ||
+            v.courseNameEn.indexOf(val) !== -1
+        );
+      } else {
+        return this.get_empty_course_close;
+      }
+    },
+    searchCourseOpen(val) {
+      if (val) {
+        return this.get_empty_course_open.filter(
+          (v) =>
+            v.courseNameTh.indexOf(val) !== -1 ||
+            v.courseNameEn.indexOf(val) !== -1
+        );
+      } else {
+        return this.get_empty_course_open;
+      }
     },
   },
 };
