@@ -264,7 +264,7 @@ const manageScheduleModules = {
       }
     },
 
-    async GetEditHolidays(context, payload) {
+    async GetEditHolidays(context, { payload, queryData, mappedData }) {
       try {
         let config = {
           headers: {
@@ -280,6 +280,8 @@ const manageScheduleModules = {
           config
         );
         if (data.statusCode === 200) {
+          await context.dispatch("EditedHolidayCourse", { payload: mappedData, queryData: queryData })
+          // await context.dispatch("GetDataInSchedule", { month: queryData.month, year: queryData.year, search: queryData.search, courseId: queryData.courseId, coachId: queryData.coachId, status: queryData.status })
           context.commit("SetEditHoliday", data.data);
         }
         // if (data.statusCode === 200) {
@@ -309,6 +311,18 @@ const manageScheduleModules = {
         // }
       } catch (error) {
         console.log(error);
+        Swal.fire({
+          icon: "warning",
+          title: VueI18n.t("unsuccessful"),
+          text: error?.response?.data?.message,
+          showDenyButton: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+        });
+        await context.dispatch("GetDataInSchedule", { month: queryData.month, year: queryData.year, search: queryData.search, courseId: queryData.courseId, coachId: queryData.coachId, status: queryData.status })
+
       }
     },
 
