@@ -2667,7 +2667,7 @@ export default {
             try {
               let payload = {};
               payload = { ...this.setDataEditDialog };
-              await this.GetEditHolidays(payload);
+              // await this.GetEditHolidays(payload);
               let mappedData = [];
               mappedData = this.holiday_course.map((course) => ({
                 courseId: course.courseId,
@@ -2681,10 +2681,6 @@ export default {
                       ? course.selectStudyDate
                       : course.scheduleCompensationRefDate
                     : null,
-                // holidayName: this.nameHoliday,
-                // holidayDate: this.create_holiday_date_picker.split("-")[2],
-                // holidayMonth: this.create_holiday_date_picker.split("-")[1],
-                // holidayYears: this.create_holiday_date_picker.split("-")[0],
                 students: course.students.map((student) => ({
                   studentId: student.studentId,
                   firstNameTh: student.firstNameTh,
@@ -2704,11 +2700,20 @@ export default {
                   dayOfWeekName: student.dayOfWeekName,
                 })),
               }));
-
-              await this.EditedHolidayCourse({
-                payload: mappedData,
+              await this.GetEditHolidays({
+                payload: payload,
                 queryData: this.query_data,
+                mappedData: mappedData,
               });
+              // await this.EditedHolidayCourse({
+              //   payload: mappedData,
+              //   queryData: this.query_data,
+              // });
+
+              // await this.EditedHolidayCourse({
+              //   payload: mappedData,
+              //   queryData: this.query_data,
+              // });
               // this.GetDataInSchedule({
               //   month: new Date().getMonth() + 1,
               //   year: new Date().getFullYear(),
