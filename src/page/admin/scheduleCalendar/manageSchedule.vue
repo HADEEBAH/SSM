@@ -2705,20 +2705,23 @@ export default {
                 })),
               }));
 
-              await this.EditedHolidayCourse({ payload: mappedData });
-              this.GetDataInSchedule({
-                month: new Date().getMonth() + 1,
-                year: new Date().getFullYear(),
+              await this.EditedHolidayCourse({
+                payload: mappedData,
+                queryData: this.query_data,
               });
-              this.GetDataInSchedule({
-                month: this.select_month,
-                year: this.select_year,
-                // search: this.select_search ? this.select_search : "",
-                search: this.filter_search,
-                courseId: this.selectedCourse,
-                coachId: this.selectedCoach,
-                status: this.selectedCourseType,
-              });
+              // this.GetDataInSchedule({
+              //   month: new Date().getMonth() + 1,
+              //   year: new Date().getFullYear(),
+              // });
+              // this.GetDataInSchedule({
+              //   month: this.select_month,
+              //   year: this.select_year,
+              //   // search: this.select_search ? this.select_search : "",
+              //   search: this.filter_search,
+              //   courseId: this.selectedCourse,
+              //   coachId: this.selectedCoach,
+              //   status: this.selectedCourseType,
+              // });
               this.show_dialog_edit_holoday = false;
               this.editHolidayDates = null;
               this.setDataEditDialog = {};

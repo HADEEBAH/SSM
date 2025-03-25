@@ -27,7 +27,8 @@ const manageScheduleModules = {
     create_holiday: [],
     new_delete_holiday: [],
     edited_course_holiday: [],
-    query_data: {}
+    query_data: {},
+    edit_holiday: {}
   },
   mutations: {
     SetQueryData(state, payload) {
@@ -138,7 +139,9 @@ const manageScheduleModules = {
     SetEditCourseHoliday(state, payload) {
       state.edited_course_holiday = payload
     },
-
+    SetEditHoliday(state, payload) {
+      state.edit_holiday = payload;
+    },
 
 
 
@@ -277,30 +280,33 @@ const manageScheduleModules = {
           config
         );
         if (data.statusCode === 200) {
-          Swal.fire({
-            icon: "success",
-            title: VueI18n.t("succeed"),
-            text: VueI18n.t("already edited"),
-            showDenyButton: false,
-            showCancelButton: false,
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-          });
-          context.dispatch("GetAllHolidays");
-          // context.dispatch("GetDataInSchedule", { month: new Date().getMonth() + 1, yaer: new Date().getFullYear() });
-        } else {
-          Swal.fire({
-            icon: "warning",
-            title: VueI18n.t("unsuccessful"),
-            text: VueI18n.t("failed to resolve"),
-            showDenyButton: false,
-            showCancelButton: false,
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-          });
+          context.commit("SetEditHoliday", data.data);
         }
+        // if (data.statusCode === 200) {
+        //   Swal.fire({
+        //     icon: "success",
+        //     title: VueI18n.t("succeed"),
+        //     text: VueI18n.t("already edited"),
+        //     showDenyButton: false,
+        //     showCancelButton: false,
+        //     showConfirmButton: false,
+        //     timer: 3000,
+        //     timerProgressBar: true,
+        //   });
+        //   context.dispatch("GetAllHolidays");
+        //   // context.dispatch("GetDataInSchedule", { month: new Date().getMonth() + 1, yaer: new Date().getFullYear() });
+        // } else {
+        //   Swal.fire({
+        //     icon: "warning",
+        //     title: VueI18n.t("unsuccessful"),
+        //     text: VueI18n.t("failed to resolve"),
+        //     showDenyButton: false,
+        //     showCancelButton: false,
+        //     showConfirmButton: false,
+        //     timer: 3000,
+        //     timerProgressBar: true,
+        //   });
+        // }
       } catch (error) {
         console.log(error);
       }
@@ -762,13 +768,13 @@ const manageScheduleModules = {
 
       }
     },
-    async EditedHolidayCourse(context, { payload }) {
+    async EditedHolidayCourse(context, { payload, queryData }) {
       try {
 
         // let localhost = "http://localhost:3000"
         // let { data } = await axios.patch(`${localhost}/api/v1/schedule/holiday`, payload)
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/schedule/holiday`, payload)
-        if (data.statusCode === 201) {
+        if (data.statusCode === 200) {
           Swal.fire({
             icon: "success",
             title: VueI18n.t("succeed"),
@@ -779,7 +785,9 @@ const manageScheduleModules = {
             timer: 3000,
             timerProgressBar: true,
           });
-          context.commit("SetEditCourseHoliday", data.data);
+          await context.dispatch("GetDataInSchedule", { month: queryData.month, year: queryData.year, search: queryData.search, courseId: queryData.courseId, coachId: queryData.coachId, status: queryData.status })
+          await context.dispatch("GetAllHolidays");
+          await context.commit("SetEditCourseHoliday", data.data);
         }
       } catch (error) {
         if (error?.response?.data?.message === "Can't select these dates because they are duplications of existing schedules.") {
@@ -813,6 +821,7 @@ const manageScheduleModules = {
             showConfirmButton: false,
           })
         }
+        await context.dispatch("GetDataInSchedule", { month: queryData.month, year: queryData.year, search: queryData.search, courseId: queryData.courseId, coachId: queryData.coachId, status: queryData.status })
 
       }
     },
