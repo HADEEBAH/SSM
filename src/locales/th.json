@@ -519,6 +519,7 @@
   "number must be 1": "ตัวเลขควรที่จะเท่ากับ 1 หรือมากกว่า",
   "number of students currently studying":"จำนวนนักเรียนที่เรียนอยู่ปัจุจบัน",
   "number of students who have purchased courses":"จำนวนนักเรียนที่เคยซื้อคอร์สเรียน",
+  "no valid study dates selected":"ยังไม่ได้เลือกวันที่ศึกษาที่ถูกต้อง",
 
   "o'clock": "น.",
   "outside the register date": "อยู่นอกระยะเวลารับสมัคร",

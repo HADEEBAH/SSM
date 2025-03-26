@@ -517,6 +517,7 @@
                           "
                           color="#ff6b81"
                           :min="tomorrowDate()"
+                          :allowed-dates="disableDates"
                           :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
                         ></v-date-picker>
                       </v-menu>
@@ -606,6 +607,7 @@
                                 inputDateArr(items.selectStudyDate, items)
                               "
                               :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
+                              :allowed-dates="disableDates"
                               color="#ff6b81"
                             ></v-date-picker>
                           </v-menu>
@@ -1692,6 +1694,7 @@ export default {
       course_in_holidays: "ManageScheduleModules/getCourseHoliday",
       holiday_status: "ManageScheduleModules/getHolidayStatus",
       query_data: "ManageScheduleModules/getQueryData",
+      holiday_dates: "ManageScheduleModules/getHolidayDates",
     }),
 
     // filteredCheckInStatusOptions() {
@@ -1850,7 +1853,9 @@ export default {
       DeleteHoliday: "ManageScheduleModules/DeleteHoliday",
       EditedHolidayCourse: "ManageScheduleModules/EditedHolidayCourse",
     }),
-
+    disableDates(date) {
+      return !this.holiday_dates.includes(date); // Disable if in the list
+    },
     compensationStartDate(e) {
       e.target.parentNode.parentNode.parentNode.parentNode.parentNode
         .getElementsByClassName("time-picker-hidden")[0]
@@ -2773,6 +2778,9 @@ export default {
       this.create_holiday_date_bool = false;
       this.create_holiday_date_string = null;
       this.nameHoliday = null;
+      this.$nextTick(() => {
+        this.$refs.add_holidat_dialog?.reset();
+      });
     },
     closeDialog() {
       this.$refs.add_holidat_dialog.reset();

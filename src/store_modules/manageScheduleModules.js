@@ -28,7 +28,8 @@ const manageScheduleModules = {
     new_delete_holiday: [],
     edited_course_holiday: [],
     query_data: {},
-    edit_holiday: {}
+    edit_holiday: {},
+    holiday_dates: []
   },
   mutations: {
     SetQueryData(state, payload) {
@@ -142,7 +143,9 @@ const manageScheduleModules = {
     SetEditHoliday(state, payload) {
       state.edit_holiday = payload;
     },
-
+    SetHolidayDates(state, payload) {
+      state.holiday_dates = payload;
+    },
 
 
   },
@@ -238,7 +241,7 @@ const manageScheduleModules = {
             date_Holy_arr.push(items.dateFormat);
           }
           await context.commit("SetGetHolidayDateArray", date_Holy_arr);
-
+          let holidayDates = []
           data.data.map((item) => {
             item.fullDateHolidaysTh = `${item.holidayDate} ${thaiMonths[parseInt(item.holidayMonth) - 1]} ${parseInt(item.holidayYears) + 543}`
             item.fullDate = `${item.holidayYears}-${item.holidayMonth}-${item.holidayDate}`
@@ -252,7 +255,9 @@ const manageScheduleModules = {
                 mm: item.holidayEndTime.split(":")[1],
               }
             }
+            holidayDates.push(item.dateFormat)
           });
+          context.commit("SetHolidayDates", holidayDates);
           context.commit("SetGetAllHolidays", data.data);
           context.commit("SetGetAllHolidaysIsLoading", false)
           context.commit("SetEvents", events);
@@ -672,6 +677,16 @@ const manageScheduleModules = {
             showCancelButton: false,
             showConfirmButton: false,
           })
+        } else if (error?.response?.data?.message === "No valid study dates selected.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("no valid study dates selected"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          })
         } else {
           Swal.fire({
             icon: "warning",
@@ -824,6 +839,16 @@ const manageScheduleModules = {
             showCancelButton: false,
             showConfirmButton: false,
           })
+        } else if (error?.response?.data?.message === "No valid study dates selected.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("no valid study dates selected"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          })
         } else {
           Swal.fire({
             icon: "warning",
@@ -894,6 +919,9 @@ const manageScheduleModules = {
     },
     getHolidayStatus(state) {
       return state.holiday_status;
+    },
+    getHolidayDates(state) {
+      return state.holiday_dates;
     },
   },
 };
