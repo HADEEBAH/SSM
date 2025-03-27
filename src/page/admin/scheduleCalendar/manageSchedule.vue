@@ -570,6 +570,35 @@
                             "
                           >
                           </v-text-field>
+                          <!-- TIMES -->
+                          <!-- <v-row dense>
+                            <v-col cols="6">
+                              <label class="font-weight-bold">{{
+                                $t("start time")
+                              }}</label>
+                              <v-text-field
+                                dense
+                                outlined
+                                readonly
+                                color="#FF6B81"
+                                v-model="items.students[0].timeStart"
+                              >
+                              </v-text-field>
+                            </v-col>
+                            <v-col cols="6">
+                              <label class="font-weight-bold">{{
+                                $t("end time")
+                              }}</label>
+                              <v-text-field
+                                dense
+                                outlined
+                                readonly
+                                color="#FF6B81"
+                                v-model="items.students[0].timeEnd"
+                              >
+                              </v-text-field>
+                            </v-col>
+                          </v-row> -->
                           <!-- วัน/เวลาชดเชย -->
                           <label class="font-weight-bold">{{
                             $t("compensation date")
@@ -793,9 +822,11 @@
                 <v-autocomplete
                   outlined
                   v-model="selectedCourseType"
-                  :items="courseType"
-                  :item-text="$i18n.locale == 'th' ? 'typeName' : 'typeNameEn'"
-                  item-value="typeOfValue"
+                  :items="courseStatus"
+                  :item-text="
+                    $i18n.locale == 'th' ? 'coursTypeName' : 'coursTypeNameEn'
+                  "
+                  item-value="courseTypeValue"
                   multiple
                   color="#FF6B81"
                   item-color="#FF6B81"
@@ -816,7 +847,9 @@
                       class="white--text"
                     >
                       <span>{{
-                        $i18n.locale == "th" ? item.typeName : item.typeNameEn
+                        $i18n.locale == "th"
+                          ? item.coursTypeName
+                          : item.coursTypeNameEn
                       }}</span>
                     </v-chip>
                     <span v-if="index === 1" class="grey--text text-caption">
