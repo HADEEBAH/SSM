@@ -5,6 +5,43 @@ import axios from "axios";
 import VueCookie from "vue-cookie";
 import Swal from "sweetalert2";
 import VueI18n from "../i18n";
+function dayOfWeekArray(day) {
+  let days = day;
+  const weekdays = [
+    VueI18n.t("sunday"),
+    VueI18n.t("monday"),
+    VueI18n.t("tuesday"),
+    VueI18n.t("wednesday"),
+    VueI18n.t("thursday"),
+    VueI18n.t("friday"),
+    VueI18n.t("saturday"),
+  ];
+  days.sort();
+  let ranges = [];
+  if (days[0]) {
+    let rangeStart = parseInt(days[0]);
+    let prevDay = rangeStart;
+    for (let i = 1; i < days.length; i++) {
+      const day = parseInt(days[i]);
+      if (day === prevDay + 1) {
+        prevDay = day;
+      } else {
+        const rangeEnd = prevDay;
+        ranges.push({ start: rangeStart, end: rangeEnd });
+        rangeStart = day;
+        prevDay = day;
+      }
+    }
+    ranges.push({ start: rangeStart, end: prevDay });
+    return ranges
+      .map(({ start, end }) =>
+        start === end
+          ? weekdays[start]
+          : `${weekdays[start]} - ${weekdays[end]}`
+      )
+      .join(", ");
+  }
+}
 const manageScheduleModules = {
   namespaced: true,
   state: {
@@ -600,6 +637,8 @@ const manageScheduleModules = {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/schedule/holiday?holidayDate=${holidayDate}&holidayMonth=${holidayMonth}&holidayYears=${holidayYears}`)
         if (data.statusCode === 200) {
           data.data?.map((items) => {
+            let convertDayNames = items.dayOfWeek.split(",");
+            items.dayOfweekNames = dayOfWeekArray(convertDayNames)
             if (items.scheduleCompensationRefDate) {
               // items.edit_date_string = VueI18n.locale == 'th' ? moment(items.scheduleCompensationRefDate).format("D MMMM YYYY") : moment(items.scheduleCompensationRefDate).format("D MMMM YYYY")
               items.edit_date_string = new Date(items.scheduleCompensationRefDate).toLocaleDateString(VueI18n.locale == 'th' ? 'th-TH' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric', })

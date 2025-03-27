@@ -522,9 +522,7 @@
                         ></v-date-picker>
                       </v-menu>
                     </v-col>
-                    <!-- </v-row> -->
                     <!-- ชื่อวันหยุด -->
-                    <!-- <v-row dense> -->
                     <v-col cols="12">
                       <label class="font-weight-bold">{{
                         $t("holiday name")
@@ -611,6 +609,11 @@
                               color="#ff6b81"
                             ></v-date-picker>
                           </v-menu>
+                          <div class="ml-2 font-bold">
+                            *** {{ $t("please select a date that falls on") }}
+                            {{ items.dayOfweekNames }}
+                          </div>
+
                           <!-- </v-col> -->
                           <!-- Time -->
                           <!-- <v-col cols="12" dense>
@@ -686,7 +689,6 @@
                     </div>
                   </div>
                 </v-card-text>
-                <!-- <pre>{{ holiday_course }}</pre>/ -->
                 <v-card-actions>
                   <v-row dense>
                     <v-col cols="12" align="center">
