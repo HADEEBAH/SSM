@@ -687,6 +687,16 @@ const manageScheduleModules = {
             showCancelButton: false,
             showConfirmButton: false,
           })
+        } else if (error?.response?.data?.message === "These dates cannot be selected because the selected compensatory class date does not match the schedule.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("these dates cannot be selected because the selected compensatory class date does not match the schedule"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          })
         } else {
           Swal.fire({
             icon: "warning",
@@ -844,6 +854,16 @@ const manageScheduleModules = {
             icon: "warning",
             title: VueI18n.t("this item cannot be made"),
             text: VueI18n.t("no valid study dates selected"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          })
+        } else if (error?.response?.data?.message === "These dates cannot be selected because the selected compensatory class date does not match the schedule.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("these dates cannot be selected because the selected compensatory class date does not match the schedule"),
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
