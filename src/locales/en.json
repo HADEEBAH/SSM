@@ -1022,6 +1022,10 @@
   "teaching time cannot be deleted because there must be 1 teaching time per teaching day": "Teaching time cannot be deleted because there must be 1 teaching time per teaching day",
   "teach day":"Add teach day",
   "this coach is currently teaching":"This coach is currently teaching",
+<<<<<<< HEAD
+=======
+  "the compensatory day does not match the class day Please select a new compensatory day" : "The compensatory day does not match the class day Please select a new compensatory day",
+>>>>>>> a8abb9f6 (lang config)
   "these dates cannot be selected because the selected compensatory class date does not match the schedule":"These dates cannot be selected because the selected compensatory class date does not match the schedule",
 
 

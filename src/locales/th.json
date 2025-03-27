@@ -976,6 +976,7 @@
   "teaching time cannot be deleted because there must be 1 teaching time per teaching day": "ไม่สามารถลบเวลาสอนได้เนื่องจากต้องมีเวลาสอน 1 ครั้งต่อวันสอน",
   "teach day":"เพิ่มวันสอน",
   "this coach is currently teaching":"โค้ชคนนี้อยู่ในระหว่างการสอน",
+  "the compensatory day does not match the class day Please select a new compensatory day" : "วันชดเชยไม่ตรงกับวันเรียน กรุณาเลือกวันชดเชยใหม่",
   "these dates cannot be selected because the selected compensatory class date does not match the schedule":"ไม่สามารถเลือกวันที่นี้ได้ เนื่องจากวันที่เรียนชดเชยที่เลือกไม่ตรงกับวันเรียน",
 
   "unable to update the compensation day": "ไม่สามารถอัปเดตวันชดเชยได้เนื่องจากวันชดเชยตรงกับวันหยุด โปรดเลือกวันชดเชยใหม่",
