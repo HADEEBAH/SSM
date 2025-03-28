@@ -412,9 +412,14 @@
                                 inputEditDateArr(items.selectStudyDate, items)
                               "
                               :locale="$i18n.locale == 'th' ? 'th-TH' : 'en-US'"
+                              :allowed-dates="disableDates"
                               color="#ff6b81"
                             ></v-date-picker>
                           </v-menu>
+                          <div class="ml-2 font-bold">
+                            *** {{ $t("please select a date that falls on") }}
+                            {{ items.dayOfweekNames }}
+                          </div>
                         </v-card-text>
                       </v-card>
                     </div>
