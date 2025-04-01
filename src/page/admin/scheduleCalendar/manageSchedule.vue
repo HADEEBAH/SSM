@@ -420,6 +420,9 @@
                             *** {{ $t("please select a date that falls on") }}
                             {{ items.dayOfweekNames }}
                           </div>
+                          <div class="ml-2 font-bold">
+                         *** {{ $t("coach") }} {{ items.coachFirstNameTh }} {{ items.coachLastNameTh }}
+                          </div>
                         </v-card-text>
                       </v-card>
                     </div>
@@ -647,7 +650,9 @@
                             *** {{ $t("please select a date that falls on") }}
                             {{ items.dayOfweekNames }}
                           </div>
-
+                          <div class="ml-2 font-bold">
+                            *** {{ $t("coach") }} {{ items.coachFirstNameTh }} {{ items.coachLastNameTh }}
+                          </div>
                           <!-- </v-col> -->
                           <!-- Time -->
                           <!-- <v-col cols="12" dense>
@@ -2546,6 +2551,8 @@ export default {
             if (this.holiday_course?.length > 0) {
               mappedData = this.holiday_course.map((course) => ({
                 courseId: course.courseId,
+                coachId: course.coachId,
+                dayOfWeekId: course.dayOfWeekId,
                 courseNameTh: course.courseNameTh,
                 courseNameEn: course.courseNameEn,
                 courseTypeId: course.courseTypeId,
@@ -2558,7 +2565,7 @@ export default {
                 holidayYears: this.create_holiday_date_picker.split("-")[0],
                 students: course.students.map((student) => ({
                   studentId: student.studentId,
-                  firstNameTh: student.firstNameTh,
+                  firstNameTh: student.firstNameTh, 
                   lastNameTh: student.lastNameTh,
                   packageName: student.packageName,
                   optionName: student.optionName,
@@ -2566,8 +2573,8 @@ export default {
                   timeStart: student.timeStart,
                   timeEnd: student.timeEnd,
                   orderId: student.orderId,
-                  coachId: student.coachId,
-                  dayOfWeekId: student.dayOfWeekId,
+                  coachId: course.coachId,
+                  dayOfWeekId: course.dayOfWeekId,
                   orderItemId: student.orderItemId,
                   timeId: student.timeId,
                   coursePackageOptionId: student.coursePackageOptionId,
@@ -2716,6 +2723,8 @@ export default {
               let mappedData = [];
               mappedData = this.holiday_course.map((course) => ({
                 courseId: course.courseId,
+                coachId: course.coachId,
+                dayOfWeekId: course.dayOfWeekId,
                 courseNameTh: course.courseNameTh,
                 courseNameEn: course.courseNameEn,
                 courseTypeId: course.courseTypeId,
@@ -2736,8 +2745,8 @@ export default {
                   timeStart: student.timeStart,
                   timeEnd: student.timeEnd,
                   orderId: student.orderId,
-                  coachId: student.coachId,
-                  dayOfWeekId: student.dayOfWeekId,
+                  coachId: course.coachId,
+                  dayOfWeekId: course.dayOfWeekId,
                   orderItemId: student.orderItemId,
                   timeId: student.timeId,
                   coursePackageOptionId: student.coursePackageOptionId,
