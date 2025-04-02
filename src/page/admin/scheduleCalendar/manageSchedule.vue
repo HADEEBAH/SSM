@@ -377,6 +377,22 @@
                             "
                           >
                           </v-text-field>
+                          <!-- coach name -->
+                          <label class="font-weight-bold">{{
+                            $t("coach")
+                          }}</label>
+                          <v-text-field
+                            dense
+                            outlined
+                            readonly
+                            color="#FF6B81"
+                            :value="
+                              $i18n.locale == 'th'
+                                ? items.fullCoachNameThai
+                                : items.fullCoachNameEng
+                            "
+                          >
+                          </v-text-field>
                           <!-- วัน/เวลาชดเชย -->
                           <label class="font-weight-bold">{{
                             $t("compensation date")
@@ -419,9 +435,6 @@
                           <div class="ml-2 font-bold">
                             *** {{ $t("please select a date that falls on") }}
                             {{ items.dayOfweekNames }}
-                          </div>
-                          <div class="ml-2 font-bold">
-                         *** {{ $t("coach") }} {{ items.coachFirstNameTh }} {{ items.coachLastNameTh }}
                           </div>
                         </v-card-text>
                       </v-card>
@@ -578,6 +591,22 @@
                             "
                           >
                           </v-text-field>
+                          <!-- coach name -->
+                          <label class="font-weight-bold">{{
+                            $t("coach")
+                          }}</label>
+                          <v-text-field
+                            dense
+                            outlined
+                            readonly
+                            color="#FF6B81"
+                            :value="
+                              $i18n.locale == 'th'
+                                ? items.fullCoachNameThai
+                                : items.fullCoachNameEng
+                            "
+                          >
+                          </v-text-field>
                           <!-- TIMES -->
                           <!-- <v-row dense>
                             <v-col cols="6">
@@ -649,9 +678,6 @@
                           <div class="ml-2 font-bold">
                             *** {{ $t("please select a date that falls on") }}
                             {{ items.dayOfweekNames }}
-                          </div>
-                          <div class="ml-2 font-bold">
-                            *** {{ $t("coach") }} {{ items.coachFirstNameTh }} {{ items.coachLastNameTh }}
                           </div>
                           <!-- </v-col> -->
                           <!-- Time -->
@@ -2565,7 +2591,7 @@ export default {
                 holidayYears: this.create_holiday_date_picker.split("-")[0],
                 students: course.students.map((student) => ({
                   studentId: student.studentId,
-                  firstNameTh: student.firstNameTh, 
+                  firstNameTh: student.firstNameTh,
                   lastNameTh: student.lastNameTh,
                   packageName: student.packageName,
                   optionName: student.optionName,

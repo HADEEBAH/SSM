@@ -639,6 +639,8 @@ const manageScheduleModules = {
           data.data?.map((items) => {
             let convertDayNames = items.dayOfWeek.split(",");
             items.dayOfweekNames = dayOfWeekArray(convertDayNames)
+            items.fullCoachNameThai = items.coachFirstNameTh + " " + items.coachLastNameTh
+            items.fullCoachNameEng = items.coachFirstNameEn + " " + items.coachLastNameEn
             if (items.scheduleCompensationRefDate) {
               // items.edit_date_string = VueI18n.locale == 'th' ? moment(items.scheduleCompensationRefDate).format("D MMMM YYYY") : moment(items.scheduleCompensationRefDate).format("D MMMM YYYY")
               items.edit_date_string = new Date(items.scheduleCompensationRefDate).toLocaleDateString(VueI18n.locale == 'th' ? 'th-TH' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric', })
