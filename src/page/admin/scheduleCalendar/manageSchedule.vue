@@ -646,6 +646,7 @@
                             transition="scale-transition"
                             min-width="auto"
                             color="#ff6b81"
+                            @input="inDays(items)"
                           >
                             <template v-slot:activator="{ on, attrs }">
                               <v-text-field
@@ -1496,6 +1497,8 @@ export default {
     headerPage,
   },
   data: () => ({
+    courseDates: [],
+    compensation_dates: false,
     today: new Date(),
     filter_search: "",
     dialog: true,
@@ -1926,6 +1929,11 @@ export default {
       EditedHolidayCourse: "ManageScheduleModules/EditedHolidayCourse",
     }),
     disableDates(date) {
+      if (this.compensation_dates) {
+        return (
+          !this.holiday_dates.includes(date) && !this.courseDates.includes(date)
+        );
+      }
       return !this.holiday_dates.includes(date); // Disable if in the list
     },
     compensationStartDate(e) {
@@ -1933,6 +1941,10 @@ export default {
         .getElementsByClassName("time-picker-hidden")[0]
         .getElementsByTagName("input")[0]
         .focus();
+    },
+    inDays(items) {
+      this.courseDates = items.scheduleCourseDate;
+      this.compensation_dates = true;
     },
     inputDateArr(newDate, compenData) {
       let options = {
