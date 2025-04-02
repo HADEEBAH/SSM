@@ -377,6 +377,22 @@
                             "
                           >
                           </v-text-field>
+                          <!-- coach name -->
+                          <label class="font-weight-bold">{{
+                            $t("coach")
+                          }}</label>
+                          <v-text-field
+                            dense
+                            outlined
+                            readonly
+                            color="#FF6B81"
+                            :value="
+                              $i18n.locale == 'th'
+                                ? items.fullCoachNameThai
+                                : items.fullCoachNameEng
+                            "
+                          >
+                          </v-text-field>
                           <!-- วัน/เวลาชดเชย -->
                           <label class="font-weight-bold">{{
                             $t("compensation date")
@@ -572,6 +588,22 @@
                               $i18n.locale == 'th'
                                 ? items.courseNameTh
                                 : items.courseNameEn
+                            "
+                          >
+                          </v-text-field>
+                          <!-- coach name -->
+                          <label class="font-weight-bold">{{
+                            $t("coach")
+                          }}</label>
+                          <v-text-field
+                            dense
+                            outlined
+                            readonly
+                            color="#FF6B81"
+                            :value="
+                              $i18n.locale == 'th'
+                                ? items.fullCoachNameThai
+                                : items.fullCoachNameEng
                             "
                           >
                           </v-text-field>
