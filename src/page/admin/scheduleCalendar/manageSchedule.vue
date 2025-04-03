@@ -403,6 +403,7 @@
                             transition="scale-transition"
                             min-width="auto"
                             color="#ff6b81"
+                            @input="inDays(items)"
                           >
                             <template v-slot:activator="{ on, attrs }">
                               <v-text-field
@@ -1944,7 +1945,9 @@ export default {
     },
     inDays(items) {
       this.courseDates = items.scheduleCourseDate;
-      this.compensation_dates = true;
+      this.compensation_dates = items.compensation_date_bool
+        ? items.compensation_date_bool
+        : items.edit_date_bool;
     },
     inputDateArr(newDate, compenData) {
       let options = {
@@ -2590,6 +2593,7 @@ export default {
             if (this.holiday_course?.length > 0) {
               mappedData = this.holiday_course.map((course) => ({
                 courseId: course.courseId,
+                coachId: course.coachId,
                 courseNameTh: course.courseNameTh,
                 courseNameEn: course.courseNameEn,
                 courseTypeId: course.courseTypeId,
@@ -2760,6 +2764,7 @@ export default {
               let mappedData = [];
               mappedData = this.holiday_course.map((course) => ({
                 courseId: course.courseId,
+                coachId: course.coachId,
                 courseNameTh: course.courseNameTh,
                 courseNameEn: course.courseNameEn,
                 courseTypeId: course.courseTypeId,
