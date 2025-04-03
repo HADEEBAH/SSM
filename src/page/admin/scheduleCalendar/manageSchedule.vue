@@ -403,6 +403,7 @@
                             transition="scale-transition"
                             min-width="auto"
                             color="#ff6b81"
+                            @input="inDays(items)"
                           >
                             <template v-slot:activator="{ on, attrs }">
                               <v-text-field
@@ -1943,7 +1944,9 @@ export default {
     },
     inDays(items) {
       this.courseDates = items.scheduleCourseDate;
-      this.compensation_dates = true;
+      this.compensation_dates = items.compensation_date_bool
+        ? items.compensation_date_bool
+        : items.edit_date_bool;
     },
     inputDateArr(newDate, compenData) {
       let options = {
@@ -2590,10 +2593,10 @@ export default {
               mappedData = this.holiday_course.map((course) => ({
                 courseId: course.courseId,
                 coachId: course.coachId,
-                dayOfWeekId: course.dayOfWeekId,
                 courseNameTh: course.courseNameTh,
                 courseNameEn: course.courseNameEn,
                 courseTypeId: course.courseTypeId,
+                dayOfWeekId: course.dayOfWeekId,
                 holidaySelectDate: this.create_holiday_date_picker,
                 selectStudyDate:
                   course.courseTypeId == "CT_1" ? course.selectStudyDate : null,
@@ -2613,6 +2616,8 @@ export default {
                   orderId: student.orderId,
                   coachId: course.coachId,
                   dayOfWeekId: course.dayOfWeekId,
+                  // coachId: student.coachId,
+                  // dayOfWeekId: student.dayOfWeekId,
                   orderItemId: student.orderItemId,
                   timeId: student.timeId,
                   coursePackageOptionId: student.coursePackageOptionId,
@@ -2783,6 +2788,8 @@ export default {
                   timeStart: student.timeStart,
                   timeEnd: student.timeEnd,
                   orderId: student.orderId,
+                  // coachId: student.coachId,
+                  // dayOfWeekId: student.dayOfWeekId,
                   coachId: course.coachId,
                   dayOfWeekId: course.dayOfWeekId,
                   orderItemId: student.orderItemId,
