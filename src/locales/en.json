@@ -234,6 +234,7 @@
   "close-open kingdom status":"Close-open Kingdom status",
   "coach has Been Deleted":"Coach has Been Deleted",
   "can't select these dates because they are holidays":"can't select these dates because they are holidays",
+  "compensation date is overlapped , please select new compensation date":"Compensation date is overlapped , please select new compensation date",
 
 
 
@@ -1059,6 +1060,8 @@
   "unable to register Due to insufficient seats or the coach teaching in another package": "Unable to register Due to insufficient seats or the coach teaching in another package",
   "unable to register Because the course is already in your registration history": "Because the course is already in your registration history",
   "upload image and video Learning Journey":"Upload image and video Learning Journey",
+  "unable to update the compensation date due to overlapping times, please select new compensation date":"Unable to update the compensation date due to overlapping times, please select new compensation date",
+  "unable to update the compensation day because the compensation day falls on a holiday, please select a new compensatory day":"Unable to update the compensation day because the compensation day falls on a holiday, please select a new compensatory day",
 
   "via email": "Via email",
   "view financial status": "View financial status",

@@ -215,6 +215,7 @@
   "close-open kingdom status":"สถานะเปิด-ปิดอาณาจักร",
   "create holiday success":"สร้างวันหยุดเรียบร้อยแล้ว",
   "can't select these dates because they are holidays":"ไม่สามารถเลือกวันนี้ได้เนื่องจากเป็นวันหยุด",
+  "compensation date is overlapped , please select new compensation date":"วันชดเชยทับซ้อนกัน กรุณาเลือกวันชดเชยใหม่",
 
 
 
@@ -1013,6 +1014,9 @@
   "Unable to pay because this course been removed": "ไม่สามารถดำเนินการชำระได้เนื่องจากคอร์สนี้ถูกลบไปแล้ว",
   "Unable to pay because this course Package Option has been removed": "ไม่สามารถดำเนินการชำระได้เนื่องจากแพ็คเกจนี้ถูกลบไปแล้ว",
   "upload image and video Learning Journey":"อัปโหลดรูปภาพและวิดีโอ Learning Journey",
+  "unable to update the compensation date due to overlapping times, please select new compensation date":"ไม่สามารถอัปเดตวันที่ชดเชยได้เนื่องจากเวลาทับซ้อนกัน กรุณาเลือกวันที่ชดเชยหรือเวลาใหม่",
+  "unable to update the compensation day because the compensation day falls on a holiday, please select a new compensatory day":"ไม่สามารถอัปเดตวันชดเชยได้เนื่องจากวันชดเชยตรงกับวันหยุด กรุณาเลือกวันชดเชยใหม่",
+
 
   "via email": "ผ่านอีเมล",
   "view financial status": "ดูสถานะการเงิน",
