@@ -729,15 +729,16 @@ export default {
       const startHour = new Date(startTime).getHours();
       return [...Array(startHour + 1).keys()]; // Disable hours before the selected start time
     },
-    checkDisable(schedule) {
-      // return false;
-      const current = moment().format("YYYY/MM/DD");
-      const currentMoment = moment(current);
-      let ckeckedBool = false;
-      if (schedule.checkedIn === 1) {
-        ckeckedBool = true;
-      }
-      return currentMoment.isBefore(schedule.dateMoment) || ckeckedBool;
+    checkDisable() {
+      return false;
+      // schedule
+      // const current = moment().format("YYYY/MM/DD");
+      // const currentMoment = moment(current);
+      // let ckeckedBool = false;
+      // if (schedule.checkedIn === 1) {
+      //   ckeckedBool = true;
+      // }
+      // return currentMoment.isBefore(schedule.dateMoment) || ckeckedBool;
     },
     FilterStatusCheckIn(student) {
       for (const items of this.scheduleCheckin) {
