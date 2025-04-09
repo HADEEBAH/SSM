@@ -14,6 +14,7 @@
           outlined
           color="#ff6b81"
           :placeholder="$t('enter order number')"
+          @keypress.enter="HandleInputOrderNumber(orderNumder)"
         >
         </v-text-field>
       </v-col>
@@ -46,7 +47,9 @@
           <v-card-text>
             <v-row dense>
               <v-col class="font-bold text-lg">
-                {{ order.courseNameTh }}
+                {{
+                  $i18n.locale == "th" ? order.courseNameTh : order.courseNameEn
+                }}
               </v-col>
               <v-col class="font-bold">
                 {{ order.cpo?.packageName }}
@@ -57,7 +60,11 @@
                 {{ $t("periods") }}
               </v-col>
               <v-col class="font-bold">
-                {{ order.cpo?.optionName }}
+                {{
+                  $i18n.locale == "th"
+                    ? order.cpo?.optionName
+                    : order.cpo?.optionNameEn
+                }}
               </v-col>
               <v-col cols="2">
                 {{ $t("class date") }}
@@ -71,7 +78,7 @@
                 {{ $t("coach") }}
               </v-col>
               <v-col class="font-bold">
-                {{ order.coachName }}
+                {{ $i18n.locale == "th" ? order.coachName : order.coachNameEn }}
               </v-col>
               <v-col cols="2">
                 {{ $t("class time") }}
@@ -93,7 +100,7 @@
               outlined
             >
               <v-col class="pl-8 font-bold">
-                {{ student.name }}
+                {{ $i18n.locale == "th" ? student.name : student.nameEn }}
               </v-col>
             </v-row>
           </v-card-text>
@@ -201,7 +208,7 @@
         </v-col>
       </v-row>
     </v-form>
-    <div v-if="checkCourseType == 'CT_2'">
+    <div v-if="checkCourseType == 'CT_2' && clickActive">
       <div>{{ verifyGeneralCourse() }}</div>
     </div>
   </v-container>
@@ -229,7 +236,7 @@ export default {
       countNumber: "",
       valid: false,
       checkCourseType: "",
-      // clickActive: false,
+      clickActive: false,
       getCpo: "",
       maxNumber: 0,
     };
@@ -306,14 +313,17 @@ export default {
       return value.includes(".");
     },
 
-    SelectCourse(orders) {
+    async SelectCourse(orders) {
+      orders.active = true;
+      this.clickActive = await orders.active;
       this.seletedCourse = orders.orderItemId;
       this.checkCourseType = orders.courseTypeId;
       this.maxNumber = orders?.cpo?.HPT;
       this.getCpo = orders?.cpo;
       if (orders.courseTypeId == "CT_2") {
-        // this.clickActive = true;
-        this.verifyGeneralCourse();
+        await this.verifyGeneralCourse();
+        orders.active = false;
+        this.clickActive = await orders.active;
       }
     },
     verifyGeneralCourse() {
@@ -338,6 +348,8 @@ export default {
       this.GetOrderDetailByOrderNumber({
         orderNumber,
       });
+      this.checkCourseType = "";
+      this.type = "";
       this.endClassDate = "";
       this.lastTime = "";
     },

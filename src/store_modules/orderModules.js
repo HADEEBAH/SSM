@@ -3415,9 +3415,9 @@ const orderModules = {
         );
         if (data.statusCode === 200) {
           for await (const item of data?.data) {
-            if(item.day?.day){
+            if (item.day?.day) {
               item.dayOff = dayOfWeekArray(item.day?.day);
-            }else{
+            } else {
               item.dayOff = '-';
             }
             item.course_img = item.course_img
@@ -4634,6 +4634,9 @@ const orderModules = {
           `${process.env.VUE_APP_URL}/api/v1/schedule/order?orderNumber=${orderNumber}`
         );
         if (data.statusCode === 200) {
+          data.data?.map((items) => {
+            items.active = false
+          })
           context.commit("SetOrderNumberDetail", data.data);
         }
       } catch (error) {
