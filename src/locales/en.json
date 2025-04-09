@@ -581,6 +581,8 @@
   "option has been created": "Option has been created",
   "option cannot be deleted as there must be at least one option in the course": "Option cannot be deleted as there must be at least one option in the course",
   "overlapping teaching times and coaching days":"Overlapping teaching times and coaching days",
+  "order not success":"Order not success",
+
 
   "package": "Package",
   "parents cannot resave the course to their parents": "Parents cannot resave the course to their parents",

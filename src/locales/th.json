@@ -322,7 +322,7 @@
   "english last name": "นามสกุลภาษาอังกฤษ",
   "enter last time": "กรุณาระบุจำนวนครั้งคงเหลือ",
   "enter last date": "กรุณาระบุวันที่เรียนจบ",
-  "enter order number": "กรอกหมายเลขคำสั่งซื้อ",
+  "enter order number": "กรุณากรอกหมายเลขคำสั่งซื้อ",
   "enter course name": "กรุณากรอกชื่อคอร์สให้ถูกต้อง",
   "enter course details": "กรอกรายละเอียดคอร์ส",
   "enter details": "กรอกรายละเอียด",
@@ -542,9 +542,10 @@
   "option has been created": "เพิ่มช่วงเวลาเรียบร้อยแล้ว",
   "option cannot be deleted as there must be at least one option in the course": "ไม่สามารถลบตัวเลือกได้เนื่องจากต้องมีอย่างน้อยหนึ่งตัวเลือกในหลักสูตร",
   "overlapping teaching times and coaching days":"เวลาสอนและวันฝึกสอนทับซ้อนกัน",
+  "order not success":"คำสั่งซื้อไม่สำเร็จ",
+
   "package": "แพ็คเกจ",
   "parents cannot resave the course to their parents": "ผู้ปกครองไม่สามารถทำรายการให้ผู้ปกครองท่านอื่น",
-
   "package no.": "แพ็คเกจที่",
   "page not found": "ไม่พบหน้านี้",
   "paid price": "ราคาชำระ",

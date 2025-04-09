@@ -31,9 +31,17 @@
     </v-row>
     <v-row dense>
       <v-col>
-        <v-card v-if="order_number_detail.length === 0" outlined>
+        <v-card
+          v-if="order_number_detail.length === 0 && !orderNumder"
+          outlined
+        >
           <v-card-text class="text-center font-bold">
             {{ $t("enter order number") }}
+          </v-card-text>
+        </v-card>
+        <v-card v-if="order_number_detail.length === 0 && orderNumder" outlined>
+          <v-card-text class="text-center font-bold">
+            {{ $t("order not success") }}
           </v-card-text>
         </v-card>
         <v-card
@@ -140,7 +148,6 @@
                     }}
                   </v-col>
                 </v-row>
-                <!-- <pre>{{ order_number_detail }}</pre> -->
                 <v-row>
                   <v-col>
                     <v-menu
@@ -226,7 +233,7 @@ export default {
   },
   data() {
     return {
-      orderNumder: "",
+      orderNumder: null,
       type: "",
       menuEndClassDate: false,
       endClassDate: "",

@@ -4640,16 +4640,41 @@ const orderModules = {
           context.commit("SetOrderNumberDetail", data.data);
         }
       } catch (error) {
-        await Swal.fire({
-          icon: "error",
-          title: VueI18n.t("something went wrong"),
-          text: VueI18n.t(error.response.data.message),
-          timer: 3000,
-          showDenyButton: false,
-          showCancelButton: false,
-          showConfirmButton: false,
-          timerProgressBar: true,
-        });
+        if (error.response.data.message === "order not success.") {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("something went wrong"),
+            text: VueI18n.t("order not success"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          });
+        } else if (error.response.data.message === "order not found.") {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("something went wrong"),
+            text: VueI18n.t("enter order number"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          });
+        } else {
+          await Swal.fire({
+            icon: "error",
+            title: VueI18n.t("something went wrong"),
+            text: error.response.data.message,
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          });
+        }
+        context.commit("SetOrderNumberDetail", error.response.data.data);
       }
     },
     async UpdateScheduleAndCheckIn(
