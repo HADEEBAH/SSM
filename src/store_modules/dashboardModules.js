@@ -199,7 +199,7 @@ const dashboardModules = {
             }
             reports.push({}, {
               "ประเภทคอร์ส": "รวม",
-              "วันที่เรียน": data?.data?.data?.totalStudentCountInStudy ? data?.data?.data?.totalStudentCountInStudy : 0,
+              "จำนวนนักเรียนที่เรียนอยู่": data?.data?.data?.totalStudentCountInStudy ? data?.data?.data?.totalStudentCountInStudy : 0,
             })
             var workbook = XLSX.utils.book_new();
             var worksheet = XLSX.utils.json_to_sheet(reports);
