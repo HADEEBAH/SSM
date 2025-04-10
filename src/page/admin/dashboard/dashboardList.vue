@@ -1760,7 +1760,8 @@ export default {
     }),
 
     async openDialogexportStatistic() {
-      (this.loadingFilter = true), await this.GetFilterCourse();
+      this.loadingFilter = true;
+      await this.GetFilterCourse();
       await this.GetCategorys();
       this.filter_statistic = true;
       this.loadingFilter = false;
