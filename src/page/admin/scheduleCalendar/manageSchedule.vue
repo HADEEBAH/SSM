@@ -450,6 +450,7 @@
                       <v-btn
                         class="w-full"
                         depressed
+                        :disabled="disable_delete"
                         @click="deletedHolidayFunction(setDataEditDialog)"
                       >
                         {{ $t("delete holiday") }}
@@ -1734,6 +1735,7 @@ export default {
     create_holiday_date_bool: false,
     create_holiday_date_string: "",
     create_holiday_date_picker: "",
+    full_holiday_date: null,
   }),
 
   created() {
@@ -1772,6 +1774,15 @@ export default {
       holiday_dates: "ManageScheduleModules/getHolidayDates",
     }),
 
+    disable_delete() {
+      const holidayDate = moment(this.full_holiday_date);
+      const todayDate = moment();
+      if (holidayDate.isSameOrBefore(todayDate, "day")) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     // filteredCheckInStatusOptions() {
     //   let options = this.checkInStatusOptions;
     //   if (this.storedData.account_id == "200438430336") {
@@ -2200,8 +2211,8 @@ export default {
     closeEdited() {
       this.show_dialog_edit_holoday = false;
       this.create_holiday_date_string = null;
-      this.holiday_course = [];
-      this.holiday_course.map(
+      // this.holiday_course = [];
+      this.holiday_course?.map(
         (course) => (
           (course.create_holiday_date_string = null),
           (course.create_holiday_date_string = null)
@@ -2590,7 +2601,7 @@ export default {
           if (result.isConfirmed) {
             let mappedData = [];
             if (this.holiday_course?.length > 0) {
-              mappedData = this.holiday_course.map((course) => ({
+              mappedData = this.holiday_course?.map((course) => ({
                 courseId: course.courseId,
                 coachId: course.coachId,
                 courseNameTh: course.courseNameTh,
@@ -2720,6 +2731,7 @@ export default {
         this.$i18n.locale == "th" ? "th-TH" : "en-US",
         options
       );
+      this.full_holiday_date = holiday.fullDate;
     },
 
     async editHolidaysData(holiday_data) {
@@ -2764,7 +2776,7 @@ export default {
               payload = { ...this.setDataEditDialog };
               // await this.GetEditHolidays(payload);
               let mappedData = [];
-              mappedData = this.holiday_course.map((course) => ({
+              mappedData = this.holiday_course?.map((course) => ({
                 courseId: course.courseId,
                 coachId: course.coachId,
                 dayOfWeekId: course.dayOfWeekId,

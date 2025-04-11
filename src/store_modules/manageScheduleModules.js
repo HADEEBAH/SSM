@@ -833,6 +833,16 @@ const manageScheduleModules = {
             showCancelButton: false,
             showConfirmButton: false,
           })
+        } else if (error?.response?.data?.message === 'Holiday date is in the past. Skipping update/delete actions.') {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("this holiday has passed"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          })
         } else {
           Swal.fire({
             icon: "warning",

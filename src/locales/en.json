@@ -1029,7 +1029,7 @@
   "this coach is currently teaching":"This coach is currently teaching",
   "the compensatory day does not match the class day Please select a new compensatory day" : "The compensatory day does not match the class day Please select a new compensatory day",
   "these dates cannot be selected because the selected compensatory class date does not match the schedule":"These dates cannot be selected because the selected compensatory class date does not match the schedule",
-
+  "this holiday has passed":"This holiday has passed",
 
 
   "unable to update the compensation day": "Unable to update the compensation day because the compensation day falls on a holiday, please select a new compensatory day",

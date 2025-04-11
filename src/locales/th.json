@@ -981,6 +981,7 @@
   "this coach is currently teaching":"โค้ชคนนี้อยู่ในระหว่างการสอน",
   "the compensatory day does not match the class day Please select a new compensatory day" : "วันชดเชยไม่ตรงกับวันเรียน กรุณาเลือกวันชดเชยใหม่",
   "these dates cannot be selected because the selected compensatory class date does not match the schedule":"ไม่สามารถเลือกวันที่นี้ได้ เนื่องจากวันที่เรียนชดเชยที่เลือกไม่ตรงกับวันเรียน",
+  "this holiday has passed":"วันหยุดนี้ได้ผ่านมาแล้ว",
 
   "unable to update the compensation day": "ไม่สามารถอัปเดตวันชดเชยได้เนื่องจากวันชดเชยตรงกับวันหยุด โปรดเลือกวันชดเชยใหม่",
   "unable to update the compensation day because the compensation day coincides with the coach's leave": "ไม่สามารถอัปเดตวันชดเชยได้เนื่องจากวันชดเชยตรงกับวันลาโค้ช กรุณาเลือกวันชดเชยใหม่",
