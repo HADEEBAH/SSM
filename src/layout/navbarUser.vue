@@ -549,6 +549,10 @@
       v-if="!user_detail?.closeIsAlert && !dialogSatisfaction"
       :alert-maintain="alertData"
     ></dialogMaintain>
+
+    <v-dialog v-model="concent_dialog" max-width="800px" persistent scrollable>
+      <concent-page></concent-page>
+    </v-dialog>
   </v-app>
 </template>
 
@@ -557,11 +561,13 @@ import mixin from "@/mixin";
 import { mapActions, mapGetters } from "vuex";
 import Swal from "sweetalert2";
 import dialogMaintain from "@/components/dialog/dialogMaintain.vue";
+import concentPage from "../components/concent_component/concentPage.vue";
 export default {
   mixins: [mixin],
   name: "navbarUser",
-  components: { dialogMaintain },
+  components: { dialogMaintain, concentPage },
   data: () => ({
+    concent_dialog: true,
     dialogSatisfaction: true,
     satisfaction: {
       rate: 0,
