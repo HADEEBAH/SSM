@@ -698,6 +698,17 @@ const manageScheduleModules = {
             timer: 3000,
             timerProgressBar: true,
           });
+        } else if (error?.response?.data?.message === "Schedule date does not match.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("these dates cannot be selected because the selected compensatory class date does not match the schedule"),
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+          });
         } else if (error?.response?.data?.message === 'Holiday with the same date already exists.') {
           Swal.fire({
             icon: "warning",
