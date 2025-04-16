@@ -550,8 +550,14 @@
       :alert-maintain="alertData"
     ></dialogMaintain>
 
-    <v-dialog v-model="concent_dialog" max-width="800px" persistent scrollable>
-      <concent-page></concent-page>
+    <v-dialog
+      fullscreen
+      v-model="concent_dialog"
+      max-width="800px"
+      persistent
+      scrollable
+    >
+      <concentPage @consent-given="concent_dialog = false"></concentPage>
     </v-dialog>
   </v-app>
 </template>
@@ -646,6 +652,7 @@ export default {
       : "th";
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     this.dialogSatisfaction = this.user_detail?.isEvaluate;
+    // this.concent_dialog = this.user_detail?.isEvaluate;
     if (this.user_detail?.account_id) {
       this.GetAlertMaintain();
       this.GetSurvey();
