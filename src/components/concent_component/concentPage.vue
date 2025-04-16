@@ -140,8 +140,6 @@
           >
         </p>
       </section>
-
-      {{ consentChecked }}
     </v-card-text>
   </v-card>
   <!-- </v-container> -->

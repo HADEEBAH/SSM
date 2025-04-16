@@ -550,15 +550,14 @@
       :alert-maintain="alertData"
     ></dialogMaintain>
 
-    <v-dialog
-      fullscreen
-      v-model="concent_dialog"
-      max-width="800px"
-      persistent
-      scrollable
-    >
+    <!-- <v-dialog fullscreen v-model="concent_dialog" persistent scrollable>
       <concentPage @consent-given="concent_dialog = false"></concentPage>
-    </v-dialog>
+      <template #default>
+        <div class="concent-wrapper">
+          <concentPage @consent-given="concent_dialog = false" />
+        </div>
+      </template>
+    </v-dialog> -->
   </v-app>
 </template>
 
@@ -567,11 +566,14 @@ import mixin from "@/mixin";
 import { mapActions, mapGetters } from "vuex";
 import Swal from "sweetalert2";
 import dialogMaintain from "@/components/dialog/dialogMaintain.vue";
-import concentPage from "../components/concent_component/concentPage.vue";
+// import concentPage from "../components/concent_component/concentPage.vue";
 export default {
   mixins: [mixin],
   name: "navbarUser",
-  components: { dialogMaintain, concentPage },
+  components: {
+    dialogMaintain,
+    // concentPage
+  },
   data: () => ({
     concent_dialog: true,
     dialogSatisfaction: true,
@@ -652,7 +654,7 @@ export default {
       : "th";
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     this.dialogSatisfaction = this.user_detail?.isEvaluate;
-    // this.concent_dialog = this.user_detail?.isEvaluate;
+    this.concent_dialog = this.user_detail?.checkPDPA;
     if (this.user_detail?.account_id) {
       this.GetAlertMaintain();
       this.GetSurvey();
@@ -823,6 +825,10 @@ export default {
 };
 </script>
 <style scoped>
+.concent-wrapper {
+  height: 100vh;
+  overflow-y: auto;
+}
 .bg-navbar-user {
   background: linear-gradient(141.48deg, #ff8092 43%, #fdcb6e 85.47%);
 }
