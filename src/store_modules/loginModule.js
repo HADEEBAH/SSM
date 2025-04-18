@@ -16,6 +16,8 @@ const loginModules = {
         is_loading: false,
         username_list: [],
         profile_fail: false,
+        send_concent: {},
+        get_concent: {}
     },
     mutations: {
         SetProfileFail(state, payload) {
@@ -45,7 +47,13 @@ const loginModules = {
         },
         ResetUserData(state) {
             state.user_data = []
-        }
+        },
+        SetSendConcent(state, payload) {
+            state.send_concent = payload
+        },
+        SetGetConcent(state, payload) {
+            state.get_concent = payload
+        },
     },
     actions: {
         async searchNameUser(context, { search_name }) {
@@ -197,12 +205,12 @@ const loginModules = {
                 if (data.statusCode === 200) {
                     if (data.data?.userOneId) {
                         data.data.school = data.data?.school ? data.data.school : {
-                            schoolNameTh : null,
-                            schoolNameEn : null,
+                            schoolNameTh: null,
+                            schoolNameEn: null,
                         }
                         data.data.class = data.data?.class ? data.data.class : {
-                            classNameTh : null,
-                            classNameEn : null,
+                            classNameTh: null,
+                            classNameEn: null,
                         }
                         if (type === 'student') {
                             context.commit("SetUserStudentData", [data.data])
@@ -256,9 +264,12 @@ const loginModules = {
                 })
                 if (data.statusCode === 200) {
                     let roles = []
+                    let roleNumber = ''
                     if (data.data.roles.length > 0) {
                         data.data.roles.forEach((role) => {
                             roles.push(role.roleId)
+                            roleNumber = role.roleId
+
                         });
                     }
                     let payload = {
@@ -280,26 +291,38 @@ const loginModules = {
                         nicknameEn: data.data.nicknameEn,
                         class: data.data?.class,
                         congenitalDisease: data.data.congenitalDisease,
-
+                        role_id: roleNumber
                     }
                     VueCookie.set("token", data.data.token, 1)
                     localStorage.setItem("userDetail", JSON.stringify(payload))
                     let order = JSON.parse(localStorage.getItem("Order"))
                     context.commit("SetIsLoading", false)
                     if (!payload.first_name_th || !payload.last_name_th) {
+                        await context.dispatch("GetConcent")
+                        let payload_concent = { concent_data: context.state.get_concent }
+                        localStorage.setItem("dataConcent", JSON.stringify(payload_concent))
                         router.replace({ name: "ProfileDetail", params: { profile_id: payload.account_id } })
                         context.commit("SetProfileFail", true)
+
                     } else {
                         if (order?.category_id && order?.course_id) {
+                            await context.dispatch("GetConcent")
+                            let payload_concent = { concent_data: context.state.get_concent }
+                            localStorage.setItem("dataConcent", JSON.stringify(payload_concent))
                             if (order.course_type_id === "CT_1") {
                                 router.replace({ name: "userCoursePackage_courseId", params: { course_id: order.course_id } })
                             } else {
                                 router.replace({ name: "userCourseDetail_courseId", params: { course_id: order.course_id } })
                             }
                         } else {
-                            router.replace({ name: "UserKingdom" })
+                            await context.dispatch("GetConcent")
+                            let payload_concent = { concent_data: context.state.get_concent }
+                            localStorage.setItem("dataConcent", JSON.stringify(payload_concent))
+                            await router.replace({ name: "UserKingdom" })
                         }
                     }
+                    context.commit("SetIsLoading", false)
+
                 }
             } catch (response) {
                 context.commit("SetIsLoading", false)
@@ -358,7 +381,7 @@ const loginModules = {
                         school: data.data.school,
                         nicknameTh: data.data.nicknameTh,
                         nicknameEn: data.data.nicknameEn,
-                        class:data.data.class,
+                        class: data.data.class,
                         congenitalDisease: data.data.congenitalDisease,
                     }
                     localStorage.setItem("userDetail", JSON.stringify(payload))
@@ -400,9 +423,6 @@ const loginModules = {
             }
 
         },
-
-
-
         logOut(context) {
             Swal.fire({
                 icon: "question",
@@ -425,7 +445,65 @@ const loginModules = {
 
 
 
-        }
+        },
+        async SendConcent(context, { payload }) {
+            try {
+                let config = {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Content-type": "Application/json",
+                        Authorization: `Bearer ${VueCookie.get("token")}`,
+                    },
+                };
+                // let localhost = "http://localhost:3000"
+                // const { data } = await axios.patch(`${localhost}/api/v1/consent/createConsenByUser`, payload, config)
+                const { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/consent/createConsenByUser`, payload, config)
+                context.commit("SetSendConcent", data.consent)
+
+            } catch (error) {
+
+                Swal.fire({
+                    icon: 'error',
+                    title: VueI18n.t("something went wrong"),
+                    text: error.response.data.message,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                })
+
+            }
+
+        },
+        async GetConcent(context) {
+            try {
+                let config = {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Content-type": "Application/json",
+                        Authorization: `Bearer ${VueCookie.get("token")}`,
+                    },
+                };
+                // let localhost = "http://localhost:3000"
+                // const { data } = await axios.get(`${localhost}/api/v1/consent/getConsenUser`, config)
+                const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/consent/getConsenUser`, config)
+                context.commit("SetGetConcent", data.consent)
+            } catch (error) {
+                console.log('error :>> ', error);
+                // Swal.fire({
+                //     icon: 'error',
+                //     title: VueI18n.t("something went wrong"),
+                //     text: error.response.data.message,
+                //     timer: 3000,
+                //     timerProgressBar: true,
+                //     showCancelButton: false,
+                //     showConfirmButton: false,
+                // })
+
+            }
+            context.commit("SetIsLoading", false)
+        },
+
     },
     getters: {
         getProfileFail(state) {
@@ -445,6 +523,9 @@ const loginModules = {
         },
         getIsLoading(state) {
             return state.is_loading
+        },
+        getConcent(state) {
+            return state.get_concent
         }
     },
 };
