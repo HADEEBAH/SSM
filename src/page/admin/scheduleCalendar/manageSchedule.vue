@@ -417,6 +417,7 @@
                                 v-model="items.edit_date_string"
                                 append-icon="mdi-calendar"
                                 color="#ff6b81"
+                                :disabled="items.scheduleCompensationIsHoliday"
                               >
                               </v-text-field>
                             </template>
