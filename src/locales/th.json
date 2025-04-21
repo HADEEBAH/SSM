@@ -4,6 +4,7 @@
   "admin applies for course": "แอดมินสมัครคอร์ส",
   "admin": "ผู้ดูแลระบบ",
   "admin check in later": "เช็คอินย้อนหลังตามคอร์สเรียน",
+  "add":"เพิ่ม",
   "add coach": "เพิ่มโค้ช",
   "add user": "เพิ่มผู้ใช้",
   "add learner": "เพิ่มผู้เรียน",
@@ -93,7 +94,7 @@
 
   "can't apply": "ไม่สามารถสมัครได้",
   "Can not use the same accountID to create Relations.": "ไม่สามารถใช้ผู้ใช้เดียวกันเพื่อสร้างความสัมพันธ์ได้",
-  "can't find items in the basket": "ไม่พบข้อมูลในตะกร้า",
+  "can't find items in the basket": "ไม่พบข้อมูลในรถเข็น",
   "can't find teaching summaries": "ไม่พบข้อมูลบันทึกสรุปการสอน",
   "can't be deleted Because the enrollment": "ไม่สามารถลบได้ เนื่องจากที่การสมัครเรียนแล้ว",
   "can't find full course information": "ไม่พบข้อมูลของคอร์สเต็ม",
@@ -211,6 +212,7 @@
   "cannot delete a coach as there must be at least 1 coach listed in the course": "ไม่สามารถลบโค้ชได้ เนื่องจากต้องมีโค้ชอย่างน้อย 1 คนอยู่ในรายการ",
   "can't select these dates because they are duplications of existing schedules":"ไม่สามารถเลือกวันที่เหล่านี้ได้เนื่องจากซ้ำกับกำหนดการที่มีอยู่",
   "close-open kingdom status":"สถานะเปิด-ปิดอาณาจักร",
+  "coach has Been Deleted":"โค้ชถูกลบไปแล้ว",
   "day": "วัน",
   "day and date": "วันและวันที่",
   "daily": "รายวัน",
@@ -282,8 +284,8 @@
   "do you want to add more teachday": "คุณต้องการเพิ่มวันสอนใช่หรือไม่?",
   "do you want to delete teachday": "คุณต้องการลบวันสอนใช่หรือไม่?",
   "do you want to delete this coach": "คุณต้องการลบโค้ชใช่หรือไม่?",
-  "do you want to edit teachday": "คุณต้องการบันทึกการแก้ไขวันสอนใช่หรือไม่?",
-  "do you want to edit ooption": "คุณต้องการบันทึกการแก้ไขระยะเวลาการสอนหรือจำนวนนักเรียนใช่หรือไม่?",
+  "do you want to edit teachday": "คุณต้องการบันทึกการแก้ไขโค้ชหรือวันสอนใช่หรือไม่?",
+  "do you want to edit option": "คุณต้องการบันทึกการแก้ไขระยะเวลาการสอนหรือจำนวนนักเรียนใช่หรือไม่?",
   "do you want to add more option": "คุณต้องการเพิ่มเวลาสอนใช่หรือไม่?",
   "do you want to update a package": "คุณต้องการบันทึกการแก้ไขแพ็กเกจใช่หรือไม่?",
   "do you want to delete a package": "คุณต้องการลบแพ็คเกจใช่หรือไม่?",
@@ -297,7 +299,9 @@
   "delete holiday success":"ลบวันหยุดสำเร็จ",
   "delete":"ลบ",
   "delete package":"ลบแพ็กเกจ",
-  "do you want to change kingdom status":"คุณต้องการเปลี่ยนสถานะอาจักร",
+  "do you want to change kingdom status":"คุณต้องการเปลี่ยนสถานะอาจักรใช่หรือไม่?",
+  "do you want to save":"คุณต้องการบันทึกใช่หรือไม่?",
+  "do you want to save and update schedule":"คุณต้องการบันทึกและอัพเดทตารางใช่หรือไม่?",
 
   "edit": "แก้ไข",
   "edit wls": "แก้ไขอาณาจักร",
@@ -502,6 +506,7 @@
   "november": "พฤศจิกายน",
   "number must be": "ตัวเลขควรที่จะเท่ากันหรือน้อยกว่า",
   "number must be lest than": "ตัวเลขควรที่จะน้อยกว่า",
+  "number must be more than": "ตัวเลขควรที่จะมากกว่า",
   "number must be 1": "ตัวเลขควรที่จะเท่ากับ 1 หรือมากกว่า",
 
   "o'clock": "น.",
@@ -523,7 +528,7 @@
   "option has been deleted": "ลบช่วงเวลาเรียบร้อยแล้ว",
   "option has been created": "เพิ่มช่วงเวลาเรียบร้อยแล้ว",
   "option cannot be deleted as there must be at least one option in the course": "ไม่สามารถลบตัวเลือกได้เนื่องจากต้องมีอย่างน้อยหนึ่งตัวเลือกในหลักสูตร",
-
+  "overlapping teaching times and coaching days":"เวลาสอนและวันฝึกสอนทับซ้อนกัน",
   "package": "แพ็คเกจ",
   "parents cannot resave the course to their parents": "ผู้ปกครองไม่สามารถทำรายการให้ผู้ปกครองท่านอื่น",
 
@@ -664,6 +669,7 @@
   "please specify price / person": "กรุณาระบุราคา/คน",
   "please specify the name of the holiday": "กรุณาระบุชื่อวันหยุด",
   "please specify the number of students": "กรุณาระบุจำนวนนักเรียน",
+  "please specify the number of students more than 0": "กรุณาระบุจำนวนนักเรียนมากกว่า 0",
   "please specify the number of times/person": "กรุณาระบุจำนวนครั้ง/คน",
   "please specify teaching notes": "กรุณาระบุบันทึกการสอน",
   "please specify the level of interest": "กรุณาระบุระดับความสนใจ",
@@ -744,11 +750,12 @@
   "recommendation": "( คำแนะนำ : ควรอัปโหลดรูปที่มีขนาด 1024 x 576 (16:9) และ ขนาดไฟล์ไม่เกิน 5 Mb ต้องเป็นไฟล์ JPG, PNG )",
   "role": "บทบาท",
   "recommendations System satisfaction": "คำแนะนำ ความพึงพอใจของระบบ",
-  "refresh":"รีเฟรข",
+  "refresh":"รีเซ็ต",
 
   "study start": "วันที่เริ่มเรียน",
   "study end": "วันที่เรียนจบ",
   "save": "บันทึก",
+  "save and update schedule": "บันทึกและอัพเดทตารางเรียน",
   "save parent": "บันทึกผู้ปกครอง",
   "save student": "บันทึกนักเรียน",
   "save data successfully": "บันทึกข้อมูลสำเร็จ",
@@ -868,6 +875,7 @@
 
 
   "study time": "เวลาเรียน",
+  "total price must not lest than 0 or equal to 0":"ราคารวมไม่ควรน้อยกว่า 0 หรือเท่ากับ 0",
   "take annual leave": "ลาพักร้อนประจำปี",
   "take leave form": "แบบฟอร์มการลา",
   "take leave date": "วันที่ลา",
@@ -954,6 +962,8 @@
   "this Time cannot be deleted. Because have student in course": "เวลานี้ไม่สามารถลบได้ เพราะมีนักเรียนอยู่ในหลักสูตร",
   "teaching time cannot be deleted because there must be 1 teaching time per teaching day": "ไม่สามารถลบเวลาสอนได้เนื่องจากต้องมีเวลาสอน 1 ครั้งต่อวันสอน",
   "teach day":"เพิ่มวันสอน",
+  "this coach is currently teaching":"โค้ชคนนี้อยู่ในระหว่างการสอน",
+  "the compensatory day does not match the class day Please select a new compensatory day" : "วันชดเชยไม่ตรงกับวันเรียน กรุณาเลือกวันชดเชยใหม่",
 
   "unable to update the compensation day": "ไม่สามารถอัปเดตวันชดเชยได้เนื่องจากวันชดเชยตรงกับวันหยุด โปรดเลือกวันชดเชยใหม่",
   "unable to update the compensation day because the compensation day coincides with the coach's leave": "ไม่สามารถอัปเดตวันชดเชยได้เนื่องจากวันชดเชยตรงกับวันลาโค้ช กรุณาเลือกวันชดเชยใหม่",
