@@ -4090,6 +4090,17 @@ const CourseModules = {
             showConfirmButton: false,
             timerProgressBar: true,
           })
+        } else if (error.response.data.message === 'Overlapping teaching times and coaching days.') {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("overlapping teaching times and coaching days"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
         } else {
           Swal.fire({
             icon: "warning",
