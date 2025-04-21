@@ -150,6 +150,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import loadingOverlay from "../loading/loadingOverlay.vue";
+import Swal from "sweetalert2";
 
 export default {
   name: "PDPAInformation",
@@ -179,21 +180,32 @@ export default {
     }),
 
     async saveConsent() {
-      this.consent_loading = true;
-
-      let payload = {
-        consent: true,
-      };
-      await this.SendConcent({ payload });
-      if (this.user_detail) {
-        await this.GetConcent();
-        let payload_concent = { concent_data: this.get_concent };
-        localStorage.setItem("dataConcent", JSON.stringify(payload_concent));
-      }
-
-      this.$emit("pdpa-accepted");
-
-      this.consent_loading = false;
+      Swal.fire({
+        icon: "question",
+        title: this.$t("do you want to assent"),
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: this.$t("agree"),
+        cancelButtonText: this.$t("no"),
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          this.consent_loading = true;
+          let payload = {
+            consent: true,
+          };
+          await this.SendConcent({ payload });
+          if (this.user_detail) {
+            await this.GetConcent();
+            let payload_concent = { concent_data: this.get_concent };
+            localStorage.setItem(
+              "dataConcent",
+              JSON.stringify(payload_concent)
+            );
+          }
+          this.$emit("pdpa-accepted");
+          this.consent_loading = false;
+        }
+      });
     },
     async cancelConsent() {
       this.consent_loading = true;
