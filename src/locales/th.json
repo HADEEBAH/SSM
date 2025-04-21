@@ -73,6 +73,8 @@
   "add options":"เพิ่มช่วงเวลา",
   "add video link":"เพิ่มลิงก์วิดีโอ",
   "add item":"เพิ่มรายการ",
+  "assent":"ยินยอม",
+
 
   "date list": "รายการวันที่",
   "baht": "บาท",
@@ -299,6 +301,7 @@
   "delete package":"ลบแพ็กเกจ",
   "do you want to change kingdom status":"คุณต้องการเปลี่ยนสถานะอาจักร",
   "don't accept":"ไม่ยอมรับ",
+  "don't consent":"ไม่ยินยอม",
 
   "edit": "แก้ไข",
   "edit wls": "แก้ไขอาณาจักร",
