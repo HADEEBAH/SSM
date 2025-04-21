@@ -17,7 +17,9 @@ const loginModules = {
         username_list: [],
         profile_fail: false,
         send_concent: {},
-        get_concent: {}
+        get_concent: {},
+        cancel_concent: {}
+
     },
     mutations: {
         SetProfileFail(state, payload) {
@@ -54,6 +56,10 @@ const loginModules = {
         SetGetConcent(state, payload) {
             state.get_concent = payload
         },
+        SetCancelConcent(state, payload) {
+            state.cancel_concent = payload
+        },
+
     },
     actions: {
         async searchNameUser(context, { search_name }) {
@@ -503,6 +509,15 @@ const loginModules = {
             }
             context.commit("SetIsLoading", false)
         },
+        cancelConcent(context) {
+            VueCookie.delete("token")
+            context.commit("ResetUserOneId")
+            context.commit("ResetUserData")
+            localStorage.removeItem("userDetail")
+            localStorage.removeItem("Order")
+            localStorage.removeItem("relations")
+            router.push({ name: "Login" });
+        }
 
     },
     getters: {

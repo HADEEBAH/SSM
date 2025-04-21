@@ -175,6 +175,7 @@ export default {
     ...mapActions({
       SendConcent: "loginModules/SendConcent",
       GetConcent: "loginModules/GetConcent",
+      cancelConcent: "loginModules/cancelConcent",
     }),
 
     async saveConsent() {
@@ -198,6 +199,7 @@ export default {
       this.consent_loading = true;
       let payload_concent = { concent_data: true };
       localStorage.setItem("dataConcent", JSON.stringify(payload_concent));
+      this.cancelConcent();
       this.$emit("pdpa-canceled");
       this.consent_loading = false;
     },
