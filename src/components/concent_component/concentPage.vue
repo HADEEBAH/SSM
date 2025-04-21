@@ -103,10 +103,14 @@
             โรงเรียนวรพัฒน์<br />
             63 ซอยพัฒโนอุทิศ ตำบลหาดใหญ่ อำเภอหาดใหญ่ จังหวัดสงขลา 90110<br />
             074-236-020<br />
-            www.warraphat.ac.th<br />
+            <span>
+              <a href="https://warraphat.ac.th/" target="_blank"
+                >https://warraphat.ac.th/</a
+              >
+            </span>
+            <!-- https://warraphat.ac.th/<br /> -->
           </p>
         </section>
-
         <section>
           <p class="indent-10">
             ข้าพเจ้าขอให้ความยินยอมแก่บริษัทในการเก็บรวบรวม ใช้ ประมวลผล

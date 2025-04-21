@@ -461,9 +461,9 @@ const loginModules = {
                         Authorization: `Bearer ${VueCookie.get("token")}`,
                     },
                 };
-                // let localhost = "http://localhost:3000"
-                // const { data } = await axios.patch(`${localhost}/api/v1/consent/createConsenByUser`, payload, config)
-                const { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/consent/createConsenByUser`, payload, config)
+                let localhost = "http://localhost:3000"
+                const { data } = await axios.patch(`${localhost}/api/v1/consent/createConsenByUser`, payload, config)
+                // const { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/consent/createConsenByUser`, payload, config)
                 context.commit("SetSendConcent", data.consent)
 
             } catch (error) {
@@ -490,9 +490,9 @@ const loginModules = {
                         Authorization: `Bearer ${VueCookie.get("token")}`,
                     },
                 };
-                // let localhost = "http://localhost:3000"
-                // const { data } = await axios.get(`${localhost}/api/v1/consent/getConsenUser`, config)
-                const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/consent/getConsenUser`, config)
+                let localhost = "http://localhost:3000"
+                const { data } = await axios.get(`${localhost}/api/v1/consent/getConsenUser`, config)
+                // const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/consent/getConsenUser`, config)
                 context.commit("SetGetConcent", data.consent)
             } catch (error) {
                 console.log('error :>> ', error);
