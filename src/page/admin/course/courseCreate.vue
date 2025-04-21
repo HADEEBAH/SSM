@@ -815,22 +815,54 @@ export default {
     },
 
     async save() {
-      this.loading = true;
+      // this.loading = true;
       // this.course_data.course_file = this.file;
-
       if (this.course_data.course_type_id === "CT_1") {
-        const mapped_coachs = this.coach_data.map((coach) => ({
-          coach_id: coach.coach_id,
-          day_of_week: coach.teach_day_data.map((dayData) => ({
-            status: dayData.class_open ? "Active" : "Inactive",
-            day: dayData.teach_day.join(","),
-            times: dayData.class_date.map((classDate) => ({
-              start: classDate.class_date_range.start_time,
-              end: classDate.class_date_range.end_time,
-              maximum_student: classDate.students,
-            })),
-          })),
-        }));
+        //  ---------------------------------------------------------
+        const mapped_coachs = Object.values(
+          this.coach_data.reduce((accumulator, session) => {
+            const {
+              coach_id,
+              teach_day,
+              start_time,
+              end_time,
+              students,
+              is_active,
+            } = session;
+
+            // ถ้า coach_id ยังไม่มีใน accumulator (ยังไม่เคยเจอโค้ชนี้มาก่อน) จะสร้างอ็อบเจ็กต์ใหม่ที่มี coach_id และ day_of_week เป็นอาเรย์ว่างๆ สำหรับเก็บข้อมูลวันเรียน
+            if (!accumulator[coach_id]) {
+              accumulator[coach_id] = { coach_id, day_of_week: [] };
+            }
+
+            // ดึงอ็อบเจ็กต์ของโค้ชที่เกี่ยวข้องจาก accumulator มาเก็บในตัวแปร coach
+            const coach = accumulator[coach_id];
+            // หาวันที่เรียนใน coach.day_of_week โดยใช้ find() เพื่อดูว่ามีวันที่ตรงกับ teach_day หรือไม่ (เรียงลำดับและแปลง teach_day เป็นสตริงที่คั่นด้วยเครื่องหมาย ,)
+            let found_teach_day = coach.day_of_week.find(
+              (day_data) =>
+                day_data.day === teach_day.sort((a, b) => a - b).join(",")
+            );
+
+            // ถ้ายังไม่เคยเพิ่มวันนี้ไปใน coach.day_of_week มาก่อนให้สร้างอ็อบเจ็กต์ใหม่สำหรับวันนั้น
+            if (!found_teach_day) {
+              found_teach_day = {
+                day: teach_day.sort((a, b) => a - b).join(","),
+                times: [],
+              };
+              coach.day_of_week.push(found_teach_day);
+            }
+
+            found_teach_day.times.push({
+              is_active: is_active,
+              start: start_time,
+              end: end_time,
+              maximum_student: students,
+            });
+
+            return accumulator;
+          }, {})
+        );
+        // -------------------------------------------
 
         const mapped_packages = this.data_package.flatMap((items_package) =>
           items_package.options.map((option) => ({
@@ -925,13 +957,13 @@ export default {
               coach_id: this.course_data.coach_id,
               day_of_week: [
                 {
-                  status: "Active",
                   day: this.course_data.teach_day.join(","),
                   times: [
                     {
                       start: this.course_data.course_study_time.start_time,
                       end: this.course_data.course_study_time.end_time,
                       maximum_student: this.course_data.student_recived,
+                      is_active: true,
                     },
                   ],
                 },
@@ -1022,105 +1054,34 @@ export default {
     },
     addCoach() {
       this.coach_data.push({
+        add_new_coach: true,
+        edited_coach: false,
+        edited_options: false,
+        added_option: false,
+        added_teach_day: false,
         course_id: null,
         coach_id: null,
         course_coach_id: null,
-        coach_name: null,
-        register_date_range: {
-          start_date: "",
-          menu_start_date: false,
-          end_date: "",
-          menu_end_date: false,
+        day_of_week_id: null,
+        class_open: true,
+        is_active: true,
+        teach_day: [],
+        study_start_date: null,
+        time_id: null,
+        start_time: null,
+        start_time_object: {
+          HH: "",
+          mm: "",
         },
-        teach_day_data: [
-          {
-            day_of_week_id: null,
-            class_open: false,
-            teach_day: [],
-            course_coach_id: null,
-            class_date: [
-              {
-                start_time: null,
-                class_date_range: {
-                  time_id: null,
-                  day_of_week_id: null,
-                  start_time: null,
-                  start_time_object: {
-                    HH: null,
-                    mm: null,
-                  },
-                  menu_start_time: false,
-                  end_time: null,
-                  end_time_object: {
-                    HH: null,
-                    mm: null,
-                  },
-                  menu_end_time: false,
-                },
-
-                students: 0,
-              },
-            ],
-          },
-        ],
-        class_date_range: {
-          start_date: "",
-          menu_start_date: false,
-          end_date: "",
-          menu_end_date: false,
+        menu_start_time: false,
+        end_time: null,
+        end_time_object: {
+          HH: "",
+          mm: "",
         },
-        period: {
-          start_time: "",
-          start_time_object: { HH: "", mm: "" },
-          end_time: "",
-          end_time_object: { HH: "", mm: "" },
-        },
+        menu_end_time: false,
+        students: 0,
       });
-
-      // this.course_data.coachs.push({
-      //   coach_id: "",
-      //   coach_name: "",
-      //   teach_days_used: [],
-      //   teach_day_data: [
-      //     {
-      //       class_open: false,
-      //       teach_day: [],
-      //       class_date: [
-      //         {
-      //           class_date_range: {
-      //             start_time: "",
-      //             start_time_object: { HH: "", mm: "" },
-      //             menu_start_time: false,
-      //             end_time: "",
-      //             end_time_object: { HH: "", mm: "" },
-      //             menu_end_time: false,
-      //           },
-      //           students: 0,
-      //         },
-      //       ],
-      //     },
-      //   ],
-      //   class_date_range: {
-      //     start_date: "",
-      //     menu_start_date: false,
-      //     end_date: "",
-      //     menu_end_date: false,
-      //   },
-      //   register_date_range: {
-      //     start_date: "",
-      //     menu_start_date: false,
-      //     end_date: "",
-      //     menu_end_date: false,
-      //   },
-      //   period: {
-      //     start_time: "",
-      //     start_time_object: { HH: "", mm: "" },
-      //     end_time: "",
-      //     end_time_object: { HH: "", mm: "" },
-      //   },
-      // });
-
-      // this.ChangeCourseData(this.course_data);
     },
     removeCoach(data, index) {
       data.splice(index, 1);

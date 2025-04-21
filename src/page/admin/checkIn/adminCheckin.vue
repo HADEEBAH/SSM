@@ -79,7 +79,6 @@
               <template v-slot:no-data>
                 <v-list-item>
                   <v-list-item-title>
-                    <!-- {{ $t("no data found") }} -->
                     {{
                       !filter.course && !filter.coach
                         ? $t("please select a course")
@@ -97,7 +96,7 @@
               outlined
               hide-details
               :items="time"
-              item-value="timeId"
+              return-object
               item-text="time"
               color="#ff6B81"
               item-color="#ff6b81"
@@ -138,7 +137,6 @@
           </v-row>
         </v-card-text>
       </v-card>
-      <!-- <pre>{{ scheduleCheckin }}</pre> -->
       <v-form v-model="validate" ref="validate_form">
         <div
           v-for="(schedule, IndexSchedule) in scheduleCheckin"
@@ -156,8 +154,6 @@
                 <v-col class="d-flex align-center font-bold text-base"
                   >{{ GenDate(schedule.date) }}
                 </v-col>
-                <!-- :disabled="schedule.checkedIn == 1" -->
-                <!-- <pre>{{ schedule }}</pre> -->
                 <v-col cols="auto">
                   <v-btn
                     depressed
@@ -245,7 +241,6 @@
                   outlined
                   rounded="lg"
                 >
-                  <!-- <pre>{{ student }}</pre> -->
                   <v-card-text>
                     <v-row>
                       <v-col
@@ -325,12 +320,7 @@
                           outlined
                           dense
                           color="#ff6b81"
-                          :items="
-                            FilterStatusCheckIn(
-                              check_in_status_options,
-                              student
-                            )
-                          "
+                          :items="FilterStatusCheckIn(student)"
                           item-text="label"
                           item-value="value"
                         >
@@ -667,9 +657,13 @@ export default {
         if (val.course && val.coach && val.dayOfWeek && val.time) {
           await this.GetScheduleCheckIn({
             ...val,
-            timeStart: this.time.filter((v) => v.timeId === val.time)[0]
-              .timeStart,
-            timeEnd: this.time.filter((v) => v.timeId === val.time)[0].timeEnd,
+            timeId: val.time.timeId,
+            timeStart: val.time.timeStart,
+            timeEnd: val.time.timeEnd,
+            // ...val,
+            // timeStart: this.time.filter((v) => v.timeId === val.time)[0]
+            //   .timeStart,
+            // timeEnd: this.time.filter((v) => v.timeId === val.time)[0].timeEnd,
           });
         }
       },
@@ -729,6 +723,7 @@ export default {
     }),
 
     checkDisable(schedule) {
+      // return false;
       const current = moment().format("YYYY/MM/DD");
       const currentMoment = moment(current);
       let ckeckedBool = false;
@@ -737,17 +732,27 @@ export default {
       }
       return currentMoment.isBefore(schedule.dateMoment) || ckeckedBool;
     },
-    FilterStatusCheckIn() {
+    FilterStatusCheckIn(student) {
       for (const items of this.scheduleCheckin) {
         if (items.courseTypeId === "CT_2") {
           return this.check_in_status_options.filter(
             (v) => v.value !== "leave"
           );
         } else {
-          return this.check_in_status_options;
+          if (parseInt(student.totalCheckIn / 4) > student.countCheckInleave) {
+            return this.check_in_status_options;
+          } else {
+            if (student.status === "leave") {
+              return this.check_in_status_options;
+            } else {
+              return this.check_in_status_options.filter(
+                (v) => v.value !== "leave"
+              );
+            }
+          }
+          // return this.check_in_status_options;
         }
       }
-      // console.log("selected_data :>> ", this.scheduleCheckin);
     },
     GenDate(date) {
       return new Date(date).toLocaleDateString(

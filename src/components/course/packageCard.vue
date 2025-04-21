@@ -1010,14 +1010,17 @@ export default {
       let option_id = null;
       let student_anount = 0;
       let price = 0;
+      let checkDel = 0;
       option_id = option.option_id;
       student_anount = option.amount;
       price = option.price_unit > 0;
+      checkDel = option.price_unit - option.discount_price <= 0;
       return (
         !option_id ||
         !student_anount ||
         !price ||
-        (option.discount && option.discount_price < 1)
+        (option.discount && option.discount_price < 1) ||
+        checkDel
       );
     },
     checked() {

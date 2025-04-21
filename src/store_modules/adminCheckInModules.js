@@ -414,7 +414,7 @@ const adminCheckInModules = {
                 console.log(error)
             }
         },
-        async GetScheduleCheckIn(context, { course, coach, dayOfWeek, time, timeStart, timeEnd }) {
+        async GetScheduleCheckIn(context, { course, coach, dayOfWeek, timeId, timeStart, timeEnd }) {
             let response = []
             try {
                 context.commit("SetScheduleCheckinIsLoadIng", true)
@@ -427,7 +427,7 @@ const adminCheckInModules = {
                 };
                 // let localhost = "http://localhost:3000"
                 // const { data } = await axios.get(`${localhost}/api/v1/adminfeature/schedule?courseId=${course}&coachId=${coach}&dowId=${dayOfWeek}&timeId=${time}&timeStart=${timeStart}&timeEnd=${timeEnd}`, config)
-                const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminfeature/schedule?courseId=${course}&coachId=${coach}&dowId=${dayOfWeek}&timeId=${time}&timeStart=${timeStart}&timeEnd=${timeEnd}`, config)
+                const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/adminfeature/schedule?courseId=${course}&coachId=${coach}&dowId=${dayOfWeek}&timeId=${timeId}&timeStart=${timeStart}&timeEnd=${timeEnd}`, config)
                 if (data.statusCode == 200) {
                     // for await (let items of data.data) {
                     data.data.map((items) => {
@@ -523,7 +523,7 @@ const adminCheckInModules = {
                         course: courseId,
                         coach: coachId,
                         dayOfWeek: dayOfWeekId,
-                        time: timeId,
+                        timeId: timeId,
                         timeStart,
                         timeEnd
                     })
@@ -532,16 +532,31 @@ const adminCheckInModules = {
 
                 }
             } catch (error) {
-                Swal.fire({
-                    icon: "error",
-                    title: VueI18n.t("fail"),
-                    text: VueI18n.t("save failed"),
-                    timer: 3000,
-                    showDenyButton: false,
-                    showCancelButton: false,
-                    showConfirmButton: false,
-                    timerProgressBar: true,
-                })
+                if (error.response.data.message === "The compensatory day does not match the class day. Please select a new compensatory day.") {
+                    Swal.fire({
+                        icon: "warning",
+                        title: VueI18n.t("warning"),
+                        text: VueI18n.t("the compensatory day does not match the class day Please select a new compensatory day"),
+                        timer: 3000,
+                        showDenyButton: false,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        timerProgressBar: true,
+                    })
+
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: VueI18n.t("fail"),
+                        text: error.response.data.message,
+                        timer: 3000,
+                        showDenyButton: false,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        timerProgressBar: true,
+                    })
+                }
+                context.commit("SetCheckInStudent", { payload: payload })
                 context.commit("SetUpdateCheckinStudentsIsLoading", false)
             }
         },
