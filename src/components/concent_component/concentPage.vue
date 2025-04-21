@@ -114,8 +114,8 @@
             และตกลงที่จะผูกพันตามข้อกำหนดและเงื่อนไขที่ปรากฏในหนังสือฉบับนี้
             และนโยบายการคุ้มครองข้อมูลส่วนบุคคล รายละเอียดปรากฏตาม
             <span>
-              <a href="https://warraphat.one.th/privacy_policy" target="_blank"
-                >https://warraphat.one.th/privacy_policy</a
+              <a href="https://warraphat.one.th/profileRules" target="_blank"
+                >https://warraphat.one.th/profileRules</a
               >
             </span>
             ทุกประการ
