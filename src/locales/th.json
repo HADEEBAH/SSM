@@ -74,6 +74,8 @@
   "add options":"เพิ่มช่วงเวลา",
   "add video link":"เพิ่มลิงก์วิดีโอ",
   "add item":"เพิ่มรายการ",
+  "assent":"ยินยอม",
+
 
   "date list": "รายการวันที่",
   "baht": "บาท",
@@ -299,7 +301,10 @@
   "delete holiday success":"ลบวันหยุดสำเร็จ",
   "delete":"ลบ",
   "delete package":"ลบแพ็กเกจ",
-  "do you want to change kingdom status":"คุณต้องการเปลี่ยนสถานะอาจักรใช่หรือไม่?",
+  "do you want to change kingdom status":"คุณต้องการเปลี่ยนสถานะอาจักร",
+  "don't accept":"ไม่ยอมรับ",
+  "don't consent":"ไม่ยินยอม",
+  "do you want to assent":"คุณต้องการยินยอมใช่หรือไม่?",
   "do you want to save":"คุณต้องการบันทึกใช่หรือไม่?",
   "do you want to save and update schedule":"คุณต้องการบันทึกและอัพเดทตารางใช่หรือไม่?",
 

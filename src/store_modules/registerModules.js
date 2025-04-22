@@ -31,7 +31,9 @@ const RegisterModules = {
             account_id: "",
         },
         is_loading: false,
-        register_by_one: false
+        register_by_one: false,
+        get_concent: {}
+
     },
     mutations: {
         ShowDialogRegisterOneId(state, value) {
@@ -85,7 +87,10 @@ const RegisterModules = {
 
         SetRegisterByOne(state, value) {
             state.register_by_one = value
-        }
+        },
+        SetGetConcent(state, payload) {
+            state.get_concent = payload
+        },
     },
     actions: {
         async RemoveRelation(context, { studentId, parentId }) {
@@ -147,7 +152,7 @@ const RegisterModules = {
             try {
                 let phone_number = context.state.user_one_id.phone_number.replaceAll("-", "")
                 // let localhost = "http://localhost:3000"
-                // let { data } = await axios.post(`${localhost}/api/v1/register`
+                // let { data } = await axios.post(`${localhost}/api/v1/register`, {
                 let { data } = await axios.post(`${process.env.VUE_APP_URL}/api/v1/register`, {
                     "accountTitleTh": "",
                     "firstNameTh": context.state.user_one_id.firstname_th,
@@ -160,7 +165,8 @@ const RegisterModules = {
                     "email": "",
                     "mobileNo": phone_number,
                     "userName": context.state.user_one_id.username,
-                    "passWord": context.state.user_one_id.password
+                    "passWord": context.state.user_one_id.password,
+                    "consent": false,
                 })
                 if (data.statusCode === 201) {
                     context.commit("SetIsLoading", false)
@@ -312,7 +318,8 @@ const RegisterModules = {
                         "email": "",
                         "mobileNo": phone_number,
                         "userName": context.state.user_one_id.username,
-                        "passWord": context.state.user_one_id.password
+                        "passWord": context.state.user_one_id.password,
+                        "consent": false,
                     })
                 if (data.statusCode === 201) {
                     Swal.fire({
@@ -323,36 +330,68 @@ const RegisterModules = {
                         timerProgressBar: true,
                         showCancelButton: false,
                         showConfirmButton: false,
-                    }).finally(() => {
-                        axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login`, {
-                            "username": context.state.user_one_id.username,
-                            "password": context.state.user_one_id.password,
-                        }).then((res) => {
-                            if (res.data.statusCode === 200) {
-                                let roles_data = []
-                                res.data.data.roles.forEach((role) => {
-                                    roles_data.push(role?.role_name_en)
-                                });
-                                let payload = {
-                                    account_id: res.data.data.account_id,
-                                    email: res.data.data.email,
-                                    username: context.state.user_one_id.username,
-                                    password: context.state.user_one_id.password,
-                                    first_name_en: res.data.data.first_name_en,
-                                    first_name_th: res.data.data.first_name_th,
-                                    last_name_en: res.data.data.last_name_en,
-                                    last_name_th: res.data.data.last_name_th,
-                                    role: res.data.data.role,
-                                    roles: roles_data,
-                                    tel: res.data.data.tel,
+                    }).finally(async () => {
+                        try {
+                            axios.post(`${process.env.VUE_APP_URL}/api/v1/auth/login`, {
+                                "username": context.state.user_one_id.username,
+                                "password": context.state.user_one_id.password,
+                            }).then(async (res) => {
+                                if (res.data.statusCode === 200) {
+                                    let roleNumber = ''
+                                    let roles_data = []
+                                    res.data.data.roles.forEach((role) => {
+                                        roles_data.push(role?.role_name_en)
+                                        roleNumber = role.roleId
+                                    });
+                                    let payload = {
+                                        account_id: res.data.data.account_id,
+                                        email: res.data.data.email,
+                                        username: context.state.user_one_id.username,
+                                        password: context.state.user_one_id.password,
+                                        first_name_en: res.data.data.first_name_en,
+                                        first_name_th: res.data.data.first_name_th,
+                                        last_name_en: res.data.data.last_name_en,
+                                        last_name_th: res.data.data.last_name_th,
+                                        role: res.data.data.role,
+                                        roles: roles_data,
+                                        tel: res.data.data.tel,
+                                        role_id: roleNumber
+
+                                    }
+                                    VueCookie.set("token", res.data.data.token, 1)
+                                    localStorage.setItem("userDetail", JSON.stringify(payload))
+                                    context.commit("SetIsLoading", false)
+                                    // context.commit("ResetUserOneID")
+                                    try {
+                                        let config = {
+                                            headers: {
+                                                "Access-Control-Allow-Origin": "*",
+                                                "Content-type": "Application/json",
+                                                Authorization: `Bearer ${VueCookie.get("token")}`,
+                                            },
+                                        };
+                                        // let localhost = "http://localhost:3000"
+                                        // const { data } = await axios.get(`${localhost}/api/v1/consent/getConsenUser`, config)
+                                        const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/consent/getConsenUser`, config)
+                                        let payload_concent = { concent_data: data.consent };
+                                        localStorage.setItem("dataConcent", JSON.stringify(payload_concent));
+                                        await context.commit("SetGetConcent", data.consent)
+                                        await router.replace({ name: "UserKingdom" });
+                                        context.commit("SetIsLoading", false)
+                                        context.commit("ResetUserOneID")
+
+                                    } catch (error) {
+                                        console.log('errorConsent :>> ', error);
+
+                                    }
                                 }
-                                VueCookie.set("token", res.data.data.token, 1)
-                                localStorage.setItem("userDetail", JSON.stringify(payload))
-                                context.commit("SetIsLoading", false)
-                                router.replace({ name: "UserKingdom" });
-                                context.commit("ResetUserOneID")
-                            }
-                        })
+                            })
+                        } catch (error) {
+                            console.log('er :>> ', error);
+                        }
+
+
+
 
                     })
                 }
