@@ -1177,6 +1177,14 @@ export default {
               {
                 text: `${
                   this.pdf_lang == "th"
+                    ? course.course.categoryNameTh
+                    : course.course.categoryNameEng
+                }`,
+                color: "#ff6b81",
+              },
+              {
+                text: `${
+                  this.pdf_lang == "th"
                     ? course.course.courseNameTh
                     : course.course.courseNameEn
                 }(${this.dayOfWeekArray(course.course.dayOfWeekName)} (${
