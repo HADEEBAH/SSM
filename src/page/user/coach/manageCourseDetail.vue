@@ -1483,7 +1483,7 @@ export default {
       date: this.$route.params.date,
       time_id: this.$route.params.timeId,
       time_start: this.$route.params.timeStart,
-      time_end : this.$route.params.timeEnd
+      time_end: this.$route.params.timeEnd,
     });
   },
   mounted() {
@@ -1529,7 +1529,7 @@ export default {
         date: this.$route.params.date,
         time_id: this.$route.params.timeId,
         time_start: this.$route.params.timeStart,
-        time_end :this.$route.params.timeEnd
+        time_end: this.$route.params.timeEnd,
       });
       await this.GetCoachCheckIn({
         course_id: this.$route.params.courseId,
@@ -1706,12 +1706,12 @@ export default {
     },
     //check in by date
     CheckInByDate() {
-      let check_in_date = moment(this.$route.params.date).format("YYYY-MM-DD")
-      let today = moment().format("YYYY-MM-DD")
-      if(moment(today).isSame(check_in_date)){
-        return false
-      }else{
-        return true
+      let check_in_date = moment(this.$route.params.date).format("YYYY-MM-DD");
+      let today = moment().format("YYYY-MM-DD");
+      if (moment(today).isSame(check_in_date)) {
+        return false;
+      } else {
+        return true;
       }
 
       // const current = moment().format("YYYY/MM/DD");
@@ -1945,7 +1945,7 @@ export default {
               date: this.$route.params.date,
               time_id: this.$route.params.timeId,
               time_start: this.$route.params.timeStart,
-              time_end : this.$route.params.timeEnd
+              time_end: this.$route.params.timeEnd,
             });
 
             if (potential_student.length > 0) {
@@ -2000,7 +2000,7 @@ export default {
               date: this.$route.params.date,
               time_id: this.$route.params.timeId,
               time_start: this.$route.params.timeStart,
-              time_end: this.$route.params.timeEnd
+              time_end: this.$route.params.timeEnd,
             });
             let payload = {
               notificationName: "แจ้งเตือนการประเมินผู้เรียน",
@@ -2057,7 +2057,7 @@ export default {
               date: this.$route.params.date,
               time_id: this.$route.params.timeId,
               time_start: this.$route.params.timeStart,
-              time_end: this.$route.params.timeEnd
+              time_end: this.$route.params.timeEnd,
             });
             let payload = {
               notificationName: "แจ้งเตือนการเช็คอิน",

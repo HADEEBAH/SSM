@@ -213,7 +213,6 @@ const userModules = {
         },
 
         async GetStudentSchedule(context, student_id) {
-            context.commit("SetStudentSchedule", [])
             try {
                 let config = {
                     headers: {

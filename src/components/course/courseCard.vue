@@ -449,7 +449,6 @@
               </v-autocomplete>
             </v-col>
             <!-- @change="ChangeCourseData(course_data)" -->
-
             <v-col cols="12" sm="6">
               <label-custom
                 required
@@ -458,7 +457,16 @@
               <v-text-field
                 :placeholder="$t('specify price')"
                 dense
-                :rules="price"
+                :rules="
+                  (course_data.checked_discount === false &&
+                    course_data.course_price !== '') ||
+                  parseInt(course_data.course_price) >
+                    parseInt(course_data.discount_price) ||
+                  (course_data.checked_discount === true &&
+                    course_data.discount_price === '')
+                    ? []
+                    : price
+                "
                 :disabled="disable"
                 :outlined="!disable"
                 :filled="disable"
@@ -467,6 +475,9 @@
                 type="number"
                 v-model="course_data.course_price"
                 color="#FF6B81"
+                :error-messages="
+                  getErrorMessage(course_data.course_price, 'number')
+                "
               >
               </v-text-field>
             </v-col>
@@ -489,7 +500,12 @@
                 dense
                 class="input-text-right"
                 :disabled="disable"
-                :rules="rulesDiscount"
+                :rules="
+                  parseInt(course_data.course_price) >
+                  parseInt(course_data.discount_price)
+                    ? ''
+                    : rulesDiscount
+                "
                 :min="1"
                 :max="
                   checkMaxPrice(
@@ -501,6 +517,9 @@
                 type="number"
                 v-model="course_data.discount_price"
                 color="#FF6B81"
+                :error-messages="
+                  getErrorMessage(course_data.discount_price, 'number')
+                "
               >
               </v-text-field
             ></v-col>
@@ -2063,7 +2082,22 @@ export default {
       ];
     },
     price() {
-      return [(val) => val > 0 || this.$t("please specify price")];
+      // return [(val) => val > 0 || this.$t("please specify price")];
+      return [
+        () =>
+          this.course_data.course_price !== "" ||
+          this.$t("please fill out the information correctly"),
+        () =>
+          parseInt(this.course_data.course_price) >= 0 ||
+          this.$t("please specify price"),
+        () =>
+          parseInt(this.course_data.course_price) -
+            parseInt(this.course_data.discount_price) >
+            0 ||
+          `${this.$t("number must be more than")} ${
+            this.course_data.discount_price
+          }`,
+      ];
     },
     rulesDiscount() {
       return [
@@ -2413,6 +2447,8 @@ export default {
         return [this.$t("invalid Thai languages")];
       } else if (language === "english" && !englishPattern.test(text)) {
         return [this.$t("invalid English languages")];
+      } else if (language === "number" && parseInt(text) <= 0) {
+        return [this.$t("please fill out the information correctly")];
       } else {
         return [];
       }

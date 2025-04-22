@@ -162,9 +162,14 @@
                   <template v-slot:actions>
                     <!-- :disabled="!course_edit" -->
 
-                    <v-btn outlined color="#FF6B81" @click="addCoach">
+                    <v-btn
+                      outlined
+                      color="#FF6B81"
+                      :disabled="disable_add_coach"
+                      @click="addCoach"
+                    >
                       <v-icon>mdi-plus-circle-outline</v-icon>
-                      {{ $t("add coach") }}
+                      {{ $t("add") }}
                     </v-btn>
                   </template>
                 </headerCard>
@@ -173,6 +178,7 @@
                   <v-form ref="coach_form" v-model="coachValidate">
                     <!-- COACH -->
                     <coachs-card
+                      @custom-event="handleEvent"
                       :disable="!course_edit"
                       :coachs="coachs"
                       edited
@@ -3985,6 +3991,7 @@ export default {
     biggesImage: null,
     show_attachment_dialog: false,
     typeImg: null,
+    disable_add_coach: false,
   }),
   mounted() {
     this.CoursesData({ course_id: this.$route.params.course_id });
@@ -4206,6 +4213,14 @@ export default {
       ArtWorkData: "CourseModules/ArtWorkData",
     }),
 
+    handleEvent(data) {
+      if (data === "disable add coach") {
+        this.disable_add_coach = true;
+      }
+      if (data === "unDisable add coach") {
+        this.disable_add_coach = false;
+      }
+    },
     addNewLink() {
       this.course_artwork.art_work_link?.push({
         url: null,
@@ -4961,95 +4976,282 @@ export default {
     async CourseUpdateDetail() {
       this.$refs.course_form.validate();
       if (this.courseValidate) {
-        Swal.fire({
-          icon: "question",
-          title: this.$t("do you want to edit your course?"),
-          showDenyButton: false,
-          showCancelButton: true,
-          confirmButtonText: this.$t("agree"),
-          cancelButtonText: this.$t("no"),
-        }).then(async (result) => {
-          if (result.isConfirmed) {
-            let path = null;
-            // this.update_loading = true;
-            if (!this.courses_data?.courseImg?.lastModified) {
-              const url = this.courses_data?.courseImg;
-              path = url?.split("/api/v1/files/")[1];
-            }
-            let payload = {
-              course_id: this.courses_data?.course_id,
-              course_name_th: this.courses_data?.course_name_th,
-              course_name_en: this.courses_data?.course_name_en,
-              course_open_date: this.courses_data?.course_open_date,
-              course_type_id: this.courses_data?.course_type_id,
-              course_location: this.courses_data?.location,
-              course_description: this.courses_data?.description,
-              course_music_performance: this.courses_data?.music_performance,
-              course_certification: this.courses_data?.certification,
-              course_image: null,
-              category_id: this.courses_data?.category_id,
-              course_img:
-                !this.courses_data?.courseImg ||
-                this.courses_data?.courseImg?.lastModified
-                  ? null
-                  : path,
-              reservation_start_date: this.courses_data?.reservation_start_date,
-              reservation_end_date: this.courses_data?.reservation_end_date,
-              student_recived: this.courses_data?.student_recived,
-              discount_price: this.courses_data?.discount_price
-                ? this.courses_data?.discount_price
-                : 0,
-              course_register_date: {
-                start_date:
-                  this.courses_data?.course_register_date?.start_date_formatted,
-                end_date:
-                  this.courses_data?.course_register_date?.end_date_formatted,
-              },
-              reservation: this.courses_data?.reservation,
-              coach_id: this.courses_data?.coach_id,
-              course_study_start_date:
-                this.courses_data?.course_study_date?.start_date_formatted,
-              course_study_end_date:
-                this.courses_data?.course_study_date?.end_date_formatted,
-              course_study_time: {
-                time_id: this.courses_data?.course_study_time?.time_id,
-                start_time: this.courses_data?.course_study_time?.start_time,
-                end_time: this.courses_data?.course_study_time?.end_time,
-                students: this.courses_data?.course_study_time?.students,
-                day_of_week_id:
-                  this.courses_data?.course_study_time?.day_of_week_id,
-              },
-              course_study_date: {
-                day_of_week_id:
-                  this.courses_data?.course_study_date?.day_of_week_id,
-                day_of_week_name: this.courses_data?.teach_day?.join(","),
-                course_coach_id:
-                  this.courses_data?.course_study_date?.course_coach_id,
-                status: this.courses_data?.course_study_date?.status,
-              },
-              course_per_time: this.courses_data?.course_hours,
-              course_price: this.courses_data?.course_price,
-              course_period_start_date:
-                this.course_data?.course_study_time?.start_time_object ||
-                this.courses_data?.course_study_time?.start_time,
-              course_period_end_date:
-                this.course_data?.course_study_time?.end_time_object ||
-                this.courses_data?.course_study_time?.end_time,
+        if (this.courses_data?.course_type_id === "CT_1") {
+          Swal.fire({
+            icon: "question",
+            title: this.$t("do you want to edit your course?"),
+            showDenyButton: false,
+            showCancelButton: true,
+            confirmButtonText: this.$t("agree"),
+            cancelButtonText: this.$t("no"),
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              let path = null;
+              // this.update_loading = true;
+              if (!this.courses_data?.courseImg?.lastModified) {
+                const url = this.courses_data?.courseImg;
+                path = url?.split("/api/v1/files/")[1];
+              }
+              let payload = {
+                course_id: this.courses_data?.course_id,
+                course_name_th: this.courses_data?.course_name_th,
+                course_name_en: this.courses_data?.course_name_en,
+                course_open_date: this.courses_data?.course_open_date,
+                course_type_id: this.courses_data?.course_type_id,
+                course_location: this.courses_data?.location,
+                course_description: this.courses_data?.description,
+                course_music_performance: this.courses_data?.music_performance,
+                course_certification: this.courses_data?.certification,
+                course_image: null,
+                category_id: this.courses_data?.category_id,
+                course_img:
+                  !this.courses_data?.courseImg ||
+                  this.courses_data?.courseImg?.lastModified
+                    ? null
+                    : path,
+                reservation_start_date:
+                  this.courses_data?.reservation_start_date,
+                reservation_end_date: this.courses_data?.reservation_end_date,
+                student_recived: this.courses_data?.student_recived,
+                discount_price: this.courses_data?.discount_price
+                  ? this.courses_data?.discount_price
+                  : 0,
+                course_register_date: {
+                  start_date:
+                    this.courses_data?.course_register_date
+                      ?.start_date_formatted,
+                  end_date:
+                    this.courses_data?.course_register_date?.end_date_formatted,
+                },
+                reservation: this.courses_data?.reservation,
+                coach_id: this.courses_data?.coach_id,
+                course_study_start_date:
+                  this.courses_data?.course_study_date?.start_date_formatted,
+                course_study_end_date:
+                  this.courses_data?.course_study_date?.end_date_formatted,
+                course_study_time: {
+                  time_id: this.courses_data?.course_study_time?.time_id,
+                  start_time: this.courses_data?.course_study_time?.start_time,
+                  end_time: this.courses_data?.course_study_time?.end_time,
+                  students: this.courses_data?.course_study_time?.students,
+                  day_of_week_id:
+                    this.courses_data?.course_study_time?.day_of_week_id,
+                },
+                course_study_date: {
+                  day_of_week_id:
+                    this.courses_data?.course_study_date?.day_of_week_id,
+                  day_of_week_name: this.courses_data?.teach_day?.join(","),
+                  course_coach_id:
+                    this.courses_data?.course_study_date?.course_coach_id,
+                  status: this.courses_data?.course_study_date?.status,
+                },
+                course_per_time: this.courses_data?.course_hours,
+                course_price: this.courses_data?.course_price,
+                course_period_start_date:
+                  this.course_data?.course_study_time?.start_time_object ||
+                  this.courses_data?.course_study_time?.start_time,
+                course_period_end_date:
+                  this.course_data?.course_study_time?.end_time_object ||
+                  this.courses_data?.course_study_time?.end_time,
 
-              // course_checked_discount: this.courses_data?.checked_discount_bool,
-            };
-            await this.UpdateCouserDetail({
-              course_id: this.courses_data?.course_id,
-              data_payload: payload,
-              course_file: this.courses_data?.courseImg,
-              artwork_files: this.courses_data.art_work_image_video,
-              url_link: this.courses_data.art_work_link,
-            }).then(() => {
-              this.update_loading = false;
-            });
-            this.course_edit = false;
-          }
-        });
+                // course_checked_discount: this.courses_data?.checked_discount_bool,
+              };
+              await this.UpdateCouserDetail({
+                course_id: this.courses_data?.course_id,
+                data_payload: payload,
+                course_file: this.courses_data?.courseImg,
+                artwork_files: this.courses_data.art_work_image_video,
+                url_link: this.courses_data.art_work_link,
+              }).then(() => {
+                this.update_loading = false;
+              });
+              this.course_edit = false;
+            }
+          });
+        } else {
+          Swal.fire({
+            icon: "question",
+            title: this.$t("do you want to edit your course?"),
+            showCancelButton: true,
+            showCloseButton: true,
+            focusConfirm: false,
+            showDenyButton: true,
+            allowOutsideClick: false,
+            denyButtonText: this.$t("save and update schedule"),
+            confirmButtonText: this.$t("save"),
+            cancelButtonText: this.$t("cancel"),
+            denyButtonColor: "#ff6b81",
+            confirmedButtonColor: "#99CCFF",
+          }).then(async (result) => {
+            if (result.isDenied) {
+              let path = null;
+              // this.update_loading = true;
+              if (!this.courses_data?.courseImg?.lastModified) {
+                const url = this.courses_data?.courseImg;
+                path = url?.split("/api/v1/files/")[1];
+              }
+              let payload = {
+                course_id: this.courses_data?.course_id,
+                course_name_th: this.courses_data?.course_name_th,
+                course_name_en: this.courses_data?.course_name_en,
+                course_open_date: this.courses_data?.course_open_date,
+                course_type_id: this.courses_data?.course_type_id,
+                course_location: this.courses_data?.location,
+                course_description: this.courses_data?.description,
+                course_music_performance: this.courses_data?.music_performance,
+                course_certification: this.courses_data?.certification,
+                course_image: null,
+                category_id: this.courses_data?.category_id,
+                course_img:
+                  !this.courses_data?.courseImg ||
+                  this.courses_data?.courseImg?.lastModified
+                    ? null
+                    : path,
+                reservation_start_date:
+                  this.courses_data?.reservation_start_date,
+                reservation_end_date: this.courses_data?.reservation_end_date,
+                student_recived: this.courses_data?.student_recived,
+                discount_price: this.courses_data?.discount_price
+                  ? this.courses_data?.discount_price
+                  : 0,
+                course_register_date: {
+                  start_date:
+                    this.courses_data?.course_register_date
+                      ?.start_date_formatted,
+                  end_date:
+                    this.courses_data?.course_register_date?.end_date_formatted,
+                },
+                reservation: this.courses_data?.reservation,
+                coach_id: this.courses_data?.coach_id,
+                course_study_start_date:
+                  this.courses_data?.course_study_date?.start_date_formatted,
+                course_study_end_date:
+                  this.courses_data?.course_study_date?.end_date_formatted,
+                course_study_time: {
+                  time_id: this.courses_data?.course_study_time?.time_id,
+                  start_time: this.courses_data?.course_study_time?.start_time,
+                  end_time: this.courses_data?.course_study_time?.end_time,
+                  students: this.courses_data?.course_study_time?.students,
+                  day_of_week_id:
+                    this.courses_data?.course_study_time?.day_of_week_id,
+                },
+                course_study_date: {
+                  day_of_week_id:
+                    this.courses_data?.course_study_date?.day_of_week_id,
+                  day_of_week_name: this.courses_data?.teach_day?.join(","),
+                  course_coach_id:
+                    this.courses_data?.course_study_date?.course_coach_id,
+                  status: this.courses_data?.course_study_date?.status,
+                },
+                course_per_time: this.courses_data?.course_hours,
+                course_price: this.courses_data?.course_price,
+                course_period_start_date:
+                  this.course_data?.course_study_time?.start_time_object ||
+                  this.courses_data?.course_study_time?.start_time,
+                course_period_end_date:
+                  this.course_data?.course_study_time?.end_time_object ||
+                  this.courses_data?.course_study_time?.end_time,
+                update_schedule: true,
+
+                // course_checked_discount: this.courses_data?.checked_discount_bool,
+              };
+              await this.UpdateCouserDetail({
+                course_id: this.courses_data?.course_id,
+                data_payload: payload,
+                course_file: this.courses_data?.courseImg,
+                artwork_files: this.courses_data.art_work_image_video,
+                url_link: this.courses_data.art_work_link,
+              }).then(() => {
+                this.update_loading = false;
+              });
+              this.course_edit = false;
+            } else if (result.isConfirmed) {
+              let path = null;
+              // this.update_loading = true;
+              if (!this.courses_data?.courseImg?.lastModified) {
+                const url = this.courses_data?.courseImg;
+                path = url?.split("/api/v1/files/")[1];
+              }
+              let payload = {
+                course_id: this.courses_data?.course_id,
+                course_name_th: this.courses_data?.course_name_th,
+                course_name_en: this.courses_data?.course_name_en,
+                course_open_date: this.courses_data?.course_open_date,
+                course_type_id: this.courses_data?.course_type_id,
+                course_location: this.courses_data?.location,
+                course_description: this.courses_data?.description,
+                course_music_performance: this.courses_data?.music_performance,
+                course_certification: this.courses_data?.certification,
+                course_image: null,
+                category_id: this.courses_data?.category_id,
+                course_img:
+                  !this.courses_data?.courseImg ||
+                  this.courses_data?.courseImg?.lastModified
+                    ? null
+                    : path,
+                reservation_start_date:
+                  this.courses_data?.reservation_start_date,
+                reservation_end_date: this.courses_data?.reservation_end_date,
+                student_recived: this.courses_data?.student_recived,
+                discount_price: this.courses_data?.discount_price
+                  ? this.courses_data?.discount_price
+                  : 0,
+                course_register_date: {
+                  start_date:
+                    this.courses_data?.course_register_date
+                      ?.start_date_formatted,
+                  end_date:
+                    this.courses_data?.course_register_date?.end_date_formatted,
+                },
+                reservation: this.courses_data?.reservation,
+                coach_id: this.courses_data?.coach_id,
+                course_study_start_date:
+                  this.courses_data?.course_study_date?.start_date_formatted,
+                course_study_end_date:
+                  this.courses_data?.course_study_date?.end_date_formatted,
+                course_study_time: {
+                  time_id: this.courses_data?.course_study_time?.time_id,
+                  start_time: this.courses_data?.course_study_time?.start_time,
+                  end_time: this.courses_data?.course_study_time?.end_time,
+                  students: this.courses_data?.course_study_time?.students,
+                  day_of_week_id:
+                    this.courses_data?.course_study_time?.day_of_week_id,
+                },
+                course_study_date: {
+                  day_of_week_id:
+                    this.courses_data?.course_study_date?.day_of_week_id,
+                  day_of_week_name: this.courses_data?.teach_day?.join(","),
+                  course_coach_id:
+                    this.courses_data?.course_study_date?.course_coach_id,
+                  status: this.courses_data?.course_study_date?.status,
+                },
+                course_per_time: this.courses_data?.course_hours,
+                course_price: this.courses_data?.course_price,
+                course_period_start_date:
+                  this.course_data?.course_study_time?.start_time_object ||
+                  this.courses_data?.course_study_time?.start_time,
+                course_period_end_date:
+                  this.course_data?.course_study_time?.end_time_object ||
+                  this.courses_data?.course_study_time?.end_time,
+                update_schedule: false,
+
+                // course_checked_discount: this.courses_data?.checked_discount_bool,
+              };
+              await this.UpdateCouserDetail({
+                course_id: this.courses_data?.course_id,
+                data_payload: payload,
+                course_file: this.courses_data?.courseImg,
+                artwork_files: this.courses_data.art_work_image_video,
+                url_link: this.courses_data.art_work_link,
+              }).then(() => {
+                this.update_loading = false;
+              });
+              this.course_edit = false;
+            } else {
+              this.course_edit = false;
+            }
+          });
+        }
       }
 
       // this.$refs.course_form.validate();
@@ -5226,45 +5428,34 @@ export default {
     },
     addCoach() {
       this.coach_data.push({
-        coach_id: "",
-        coach_name: "",
-        teach_days_used: [],
-        teach_day_data: [
-          {
-            edited_coach: false,
-            class_open: false,
-            teach_day: [],
-            class_date: [
-              {
-                class_date_range: {
-                  start_time: "",
-                  start_time_object: { HH: "", mm: "" },
-                  menu_start_time: false,
-                  end_time: "",
-                  end_time_object: { HH: "", mm: "" },
-                  menu_end_time: false,
-                },
-                students: 0,
-              },
-            ],
-          },
-        ],
-        class_date_range: {
-          start_date: "",
-          menu_start_date: false,
-          end_date: "",
-          menu_end_date: false,
+        add_new_coach: true,
+        edited_coach: false,
+        edited_options: false,
+        added_option: false,
+        added_teach_day: false,
+        course_id: null,
+        coach_id: null,
+        course_coach_id: null,
+        coach_name: null,
+        day_of_week_id: null,
+        class_open: true,
+        is_active: true,
+        teach_day: [],
+        study_start_date: null,
+        time_id: null,
+        start_time: null,
+        start_time_object: {
+          HH: "",
+          mm: "",
         },
-        register_date_range: {
-          start_date: "",
-          menu_start_date: false,
-          end_date: "",
-          menu_end_date: false,
+        menu_start_time: false,
+        end_time: null,
+        end_time_object: {
+          HH: "",
+          mm: "",
         },
-        period: {
-          start_time: "",
-          end_time: "",
-        },
+        menu_end_time: false,
+        students: 0,
       });
       this.ChangeCourseData(this.course_created_data);
     },
