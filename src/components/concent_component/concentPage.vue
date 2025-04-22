@@ -161,7 +161,6 @@ export default {
   data() {
     return {
       consentChecked: false,
-      concent_detail: null,
       user_detail: null,
       consent_loading: false,
     };
@@ -172,7 +171,6 @@ export default {
     }),
   },
   mounted() {
-    this.concent_detail = JSON.parse(localStorage.getItem("dataConcent"));
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
   },
   methods: {
