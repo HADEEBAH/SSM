@@ -62,7 +62,10 @@ const dashboardModules = {
     get_statustic: [],
     limit_statistic: {},
     statistic_filter: [],
-    statistic_loading: false
+    statistic_loading: false,
+    limit_course_status_close: {},
+    limit_course_status_open: {},
+
 
 
 
@@ -145,6 +148,12 @@ const dashboardModules = {
     },
     SetGetStudentListValue(state, payload) {
       state.get_student_list_value = payload
+    },
+    SetLimitCourseStatusClose(state, payload) {
+      state.limit_course_status_close = payload
+    },
+    SetLimitCourseStatusOpen(state, payload) {
+      state.limit_course_status_open = payload
     },
 
   },
@@ -242,8 +251,6 @@ const dashboardModules = {
       }
     },
     async GetStatistic(context, { limit, page, search, category, course, courseTypeId }) {
-
-      // {limit, page, search, category, course, courseTypeId}
       context.commit("SetLoadingStatistic", true)
       let queryLimit = ''
       let queryPage = ''
@@ -303,7 +310,17 @@ const dashboardModules = {
         let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/course-type`)
         if (data.statusCode === 200) {
           await context.commit("SetGetCourseType", data.data)
-          await context.dispatch("GetEmptyCourse")
+          await context.dispatch("GetCloseCourse", {
+            limit: 10,
+            page: 1,
+            status: "Close",
+          })
+          await context.dispatch("GetEmptyCourse", {
+            limit: 10,
+            page: 1,
+            status: "Open",
+          })
+          // await context.dispatch("GetEmptyCourse")
           // await context.dispatch("GetPotential")
         }
       } catch (error) {
@@ -311,25 +328,71 @@ const dashboardModules = {
       }
     },
     // 3
-    async GetEmptyCourse(context) {
-      try {
-        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/course-status`)
+    async GetEmptyCourse(context, { limit, page, status, search }) {
+      let queryLimit = ''
+      let queryPage = ''
+      let queryStatus = ''
+      let querySearch = ''
 
+      queryLimit += `&limit=${limit}`
+      queryPage += `&page=${page}`
+      queryStatus += `&statusCourse=${status}`
+      querySearch += `&search=${search ? search : ''}`
+
+      try {
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/dashboard/course-status?${queryLimit}${queryPage}${queryStatus}${querySearch}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/course-status?${queryLimit}${queryPage}${queryStatus}${querySearch}`)
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/course-status`)
         let EmptyCourseOpen = []
-        let EmptyCourseClose = []
         if (data.statusCode === 200) {
-          data.data.courseStatus.map((items) => {
-            items.time = `${items.start} - ${items.end}`
-            items.dayOfWeek = dayOfWeekArray(items.dayOfWeekName.split(','))
-            if (items.status === "Open") {
-              EmptyCourseOpen.push(items)
-            } else {
-              EmptyCourseClose.push(items)
-            }
-          })
-          // await context.dispatch("SetGetCourseType")
+          if (status == 'Open') {
+            await data.data.courseStatus.map((items) => {
+              items.time = `${items.start} - ${items.end}`
+              items.dayOfWeek = dayOfWeekArray(items.dayOfWeekName.split(','))
+              if (items.status === "Open") {
+                EmptyCourseOpen.push(items)
+              }
+            })
+          }
+          await context.commit('SetLimitCourseStatusOpen', { limit: limit, page: page, count: data.data.courseStatus?.length, searchData: search })
           await context.commit("SetGetEmptyCourse", data.data)
           await context.commit("SetGetEmptyCourseOpen", EmptyCourseOpen)
+          // await context.commit("SetGetEmptyCourseClose", EmptyCourseClose)
+          await context.commit("SetGetLoading", false)
+        }
+      } catch (error) {
+        await context.commit("SetGetLoading", false)
+      }
+    },
+    async GetCloseCourse(context, { limit, page, status, search }) {
+      let queryLimit = ''
+      let queryPage = ''
+      let queryStatus = ''
+      let querySearch = ''
+      queryLimit += `&limit=${limit}`
+      queryPage += `&page=${page}`
+      queryStatus += `&statusCourse=${status}`
+      querySearch += `&search=${search ? search : ''}`
+      try {
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/dashboard/course-status?${queryLimit}${queryPage}${queryStatus}${querySearch}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/course-status?${queryLimit}${queryPage}${queryStatus}${querySearch}`)
+        // let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/course-status`)
+        let EmptyCourseClose = []
+        if (data.statusCode === 200) {
+          if (status == 'Close') {
+            await data.data.courseStatus.map((items) => {
+              items.time = `${items.start} - ${items.end}`
+              items.dayOfWeek = dayOfWeekArray(items.dayOfWeekName.split(','))
+              if (items.status === "Close") {
+                EmptyCourseClose.push(items)
+              }
+
+            })
+          }
+          await context.commit('SetLimitCourseStatusClose', { limit: limit, page: page, count: data.data.courseStatus?.length, searchData: search })
+          await context.commit("SetGetEmptyCourse", data.data)
           await context.commit("SetGetEmptyCourseClose", EmptyCourseClose)
           await context.commit("SetGetLoading", false)
         }
@@ -673,7 +736,12 @@ const dashboardModules = {
     getStudentListValue(state) {
       return state.get_student_list_value
     },
-
+    getLimitCourseStatusClose(state) {
+      return state.limit_course_status_close
+    },
+    getLimitCourseStatusOpen(state) {
+      return state.limit_course_status_open
+    },
 
   },
 };
