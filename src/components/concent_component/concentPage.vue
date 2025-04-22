@@ -104,11 +104,10 @@
             63 ซอยพัฒโนอุทิศ ตำบลหาดใหญ่ อำเภอหาดใหญ่ จังหวัดสงขลา 90110<br />
             074-236-020<br />
             <span>
-              <a href="https://warraphat.ac.th/" target="_blank"
-                >https://warraphat.ac.th/</a
+              <a href="https://warraphat.ac.th" target="_blank"
+                >https://warraphat.ac.th</a
               >
             </span>
-            <!-- https://warraphat.ac.th/<br /> -->
           </p>
         </section>
         <section>
@@ -118,10 +117,15 @@
             และตกลงที่จะผูกพันตามข้อกำหนดและเงื่อนไขที่ปรากฏในหนังสือฉบับนี้
             และนโยบายการคุ้มครองข้อมูลส่วนบุคคล รายละเอียดปรากฏตาม
             <span>
+              <a :href="profileRulesLink" target="_blank">{{
+                profileRulesLink
+              }}</a>
+            </span>
+            <!-- <span>
               <a href="https://warraphat.one.th/profileRules" target="_blank"
                 >https://warraphat.one.th/profileRules</a
               >
-            </span>
+            </span> -->
             ทุกประการ
           </p>
         </section>
@@ -171,6 +175,9 @@ export default {
     ...mapGetters({
       get_concent: "loginModules/getConcent",
     }),
+    profileRulesLink() {
+      return `${process.env.VUE_APP_URL}/profileRules`;
+    },
   },
   mounted() {
     this.concent_detail = JSON.parse(localStorage.getItem("dataConcent"));
