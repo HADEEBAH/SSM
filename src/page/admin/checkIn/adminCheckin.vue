@@ -722,15 +722,16 @@ export default {
       CheckInCoach: "adminCheckInModules/CheckInCoach",
     }),
 
-    checkDisable(schedule) {
-      // return false;
-      const current = moment().format("YYYY/MM/DD");
-      const currentMoment = moment(current);
-      let ckeckedBool = false;
-      if (schedule.checkedIn === 1) {
-        ckeckedBool = true;
-      }
-      return currentMoment.isBefore(schedule.dateMoment) || ckeckedBool;
+    checkDisable() {
+      // schedule
+      return false;
+      // const current = moment().format("YYYY/MM/DD");
+      // const currentMoment = moment(current);
+      // let ckeckedBool = false;
+      // if (schedule.checkedIn === 1) {
+      //   ckeckedBool = true;
+      // }
+      // return currentMoment.isBefore(schedule.dateMoment) || ckeckedBool;
     },
     FilterStatusCheckIn(student) {
       for (const items of this.scheduleCheckin) {
