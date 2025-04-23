@@ -65,6 +65,7 @@ const dashboardModules = {
     statistic_loading: false,
     limit_course_status_close: {},
     limit_course_status_open: {},
+    get_all_course_dashboard: {},
 
 
 
@@ -154,6 +155,9 @@ const dashboardModules = {
     },
     SetLimitCourseStatusOpen(state, payload) {
       state.limit_course_status_open = payload
+    },
+    SetAllCourseDashboard(state, payload) {
+      state.get_all_course_dashboard = payload
     },
 
   },
@@ -604,6 +608,22 @@ const dashboardModules = {
 
       }
     },
+    async GetAllCourseDashboard(context) {
+      context.commit("SetGetLoading", true)
+      try {
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/course/all-dashboard`)
+
+        if (data.statusCode === 200) {
+          context.commit("SetAllCourseDashboard", data.data)
+          context.commit("SetGetLoading", false)
+
+        }
+      } catch (error) {
+        context.commit("SetAllCourseDashboard", [])
+        context.commit("SetGetLoading", false)
+
+      }
+    },
 
 
     // async GetPotential(context) {
@@ -741,6 +761,9 @@ const dashboardModules = {
     },
     getLimitCourseStatusOpen(state) {
       return state.limit_course_status_open
+    },
+    getAllCourseDashboard(state) {
+      return state.get_all_course_dashboard
     },
 
   },

@@ -613,7 +613,7 @@
                     <v-autocomplete
                       outlined
                       v-model="export_statistic.courses_id"
-                      :items="get_filter_course"
+                      :items="get_all_course_dashboard"
                       :item-text="
                         $i18n.locale == 'th' ? 'courseNameTh' : 'courseNameEn'
                       "
@@ -1529,6 +1529,7 @@ export default {
       statistic_loading: "DashboardModules/getloadingStatistic",
       limit_course_status_open: "DashboardModules/getLimitCourseStatusOpen",
       limit_course_status_close: "DashboardModules/getLimitCourseStatusClose",
+      get_all_course_dashboard: "DashboardModules/getAllCourseDashboard",
     }),
 
     headersStatistic() {
@@ -1800,6 +1801,7 @@ export default {
       GetStatistic: "DashboardModules/GetStatistic",
       FilterStatistic: "DashboardModules/FilterStatistic",
       GetCloseCourse: "DashboardModules/GetCloseCourse",
+      GetAllCourseDashboard: "DashboardModules/GetAllCourseDashboard",
     }),
 
     async handleScrollOpen(e) {
@@ -1811,25 +1813,28 @@ export default {
       if (scrollTop + clientHeight >= scrollHeight - 50 && !this.loading) {
         const nextIndex = this.currentScrollIndex + 8;
 
-        // ตรวจสอบว่า index หาร 8 ลงตัวไหม
-        if (
-          this.search_course_open &&
-          this.get_empty_course_open?.length < this.get_empty_course.countSearch
-        ) {
-          if (nextIndex % 8 === 0) {
-            this.loading = true;
-            try {
-              const newData = await this.fetchMoreCoursesOpen(nextIndex); // ยิง API
-              this.allCourses.push(...newData);
-              this.currentScrollIndex = nextIndex;
-            } catch (err) {
-              console.error("Error loading more courses", err);
-            } finally {
-              this.loading = false;
+        if (this.search_course_open) {
+          if (
+            this.get_empty_course?.courseStatus?.length <
+            this.get_empty_course.countSearch
+          ) {
+            // ตรวจสอบว่า index หาร 8 ลงตัวไหม
+            if (nextIndex % 8 === 0) {
+              this.loading = true;
+              try {
+                const newData = await this.fetchMoreCoursesOpen(nextIndex); // ยิง API
+                this.allCourses.push(...newData);
+                this.currentScrollIndex = nextIndex;
+              } catch (err) {
+                console.error("Error loading more courses", err);
+              } finally {
+                this.loading = false;
+              }
             }
           }
         } else {
           if (nextIndex % 8 === 0) {
+            // ตรวจสอบว่า index หาร 8 ลงตัวไหม
             this.loading = true;
             try {
               const newData = await this.fetchMoreCoursesOpen(nextIndex); // ยิง API
@@ -1877,26 +1882,27 @@ export default {
       if (scrollTop + clientHeight >= scrollHeight - 50 && !this.loading) {
         const nextIndex = this.currentScrollIndex + 8;
 
-        // ตรวจสอบว่า index หาร 8 ลงตัวไหม
-
-        if (
-          this.search_course_close &&
-          this.get_empty_course_close?.length <
+        if (this.search_course_close) {
+          if (
+            this.get_empty_course?.courseStatus?.length <
             this.get_empty_course.countSearch
-        ) {
-          if (nextIndex % 8 === 0) {
-            this.loading = true;
-            try {
-              const newData = await this.fetchMoreCoursesClose(nextIndex); // ยิง API
-              this.allCourses.push(...newData);
-              this.currentScrollIndex = nextIndex;
-            } catch (err) {
-              console.error("Error loading more courses", err);
-            } finally {
-              this.loading = false;
+          ) {
+            // ตรวจสอบว่า index หาร 8 ลงตัวไหม
+            if (nextIndex % 8 === 0) {
+              this.loading = true;
+              try {
+                const newData = await this.fetchMoreCoursesClose(nextIndex); // ยิง API
+                this.allCourses.push(...newData);
+                this.currentScrollIndex = nextIndex;
+              } catch (err) {
+                console.error("Error loading more courses", err);
+              } finally {
+                this.loading = false;
+              }
             }
           }
         } else {
+          // ตรวจสอบว่า index หาร 8 ลงตัวไหม
           if (nextIndex % 8 === 0) {
             this.loading = true;
             try {
@@ -1938,8 +1944,9 @@ export default {
 
     async openDialogexportStatistic() {
       this.loadingFilter = true;
-      await this.GetFilterCourse();
+      // await this.GetFilterCourse();
       await this.GetCategorys();
+      await this.GetAllCourseDashboard();
       this.filter_statistic = true;
       this.loadingFilter = false;
     },
