@@ -334,7 +334,7 @@ const dashboardModules = {
       let queryStatus = ''
       let querySearch = ''
 
-      queryLimit += `&limit=${limit}`
+      queryLimit += `limit=${limit}`
       queryPage += `&page=${page}`
       queryStatus += `&statusCourse=${status}`
       querySearch += `&search=${search ? search : ''}`
@@ -370,7 +370,7 @@ const dashboardModules = {
       let queryPage = ''
       let queryStatus = ''
       let querySearch = ''
-      queryLimit += `&limit=${limit}`
+      queryLimit += `limit=${limit}`
       queryPage += `&page=${page}`
       queryStatus += `&statusCourse=${status}`
       querySearch += `&search=${search ? search : ''}`

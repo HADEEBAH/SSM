@@ -589,7 +589,11 @@
                     >
                       <template v-slot:selection="{ item, index }">
                         <v-chip dark v-if="index === 0" color="#FF6B81">
-                          <span>{{ item.typeName }}</span>
+                          <span>{{
+                            $i18n.locale == "th"
+                              ? item.typeName
+                              : item.typeNameEn
+                          }}</span>
                         </v-chip>
                         <span
                           v-if="index === 1"
@@ -1809,9 +1813,22 @@ export default {
 
         // ตรวจสอบว่า index หาร 8 ลงตัวไหม
         if (
-          this.get_empty_course_open?.length <=
-          this.get_empty_course_close?.countSearch
+          this.search_course_open &&
+          this.get_empty_course_open?.length < this.get_empty_course.countSearch
         ) {
+          if (nextIndex % 8 === 0) {
+            this.loading = true;
+            try {
+              const newData = await this.fetchMoreCoursesOpen(nextIndex); // ยิง API
+              this.allCourses.push(...newData);
+              this.currentScrollIndex = nextIndex;
+            } catch (err) {
+              console.error("Error loading more courses", err);
+            } finally {
+              this.loading = false;
+            }
+          }
+        } else {
           if (nextIndex % 8 === 0) {
             this.loading = true;
             try {
@@ -1837,6 +1854,7 @@ export default {
         search: this.limit_course_status_open.searchData,
       });
       this.loading_course_open = false;
+      return (await this.get_empty_course_open) || []; // หากไม่ได้ค่าหรือมีปัญหา ให้คืนค่าเป็น array ว่าง
     },
 
     async searchOpenCourse(itemSearch) {
@@ -1862,9 +1880,23 @@ export default {
         // ตรวจสอบว่า index หาร 8 ลงตัวไหม
 
         if (
-          this.get_empty_course_close?.length <=
-          this.get_empty_course_close?.countSearch
+          this.search_course_close &&
+          this.get_empty_course_close?.length <
+            this.get_empty_course.countSearch
         ) {
+          if (nextIndex % 8 === 0) {
+            this.loading = true;
+            try {
+              const newData = await this.fetchMoreCoursesClose(nextIndex); // ยิง API
+              this.allCourses.push(...newData);
+              this.currentScrollIndex = nextIndex;
+            } catch (err) {
+              console.error("Error loading more courses", err);
+            } finally {
+              this.loading = false;
+            }
+          }
+        } else {
           if (nextIndex % 8 === 0) {
             this.loading = true;
             try {
@@ -1890,6 +1922,7 @@ export default {
         search: this.limit_course_status_close.searchData,
       });
       this.loading_course_close = false;
+      return (await this.get_empty_course_close) || []; // หากไม่ได้ค่าหรือมีปัญหา ให้คืนค่าเป็น array ว่าง
     },
 
     async searchCloseCourse(itemSearch) {
@@ -1924,8 +1957,9 @@ export default {
     },
     async exportStatistic() {
       // console.log("object :>> ", this.export_statistic);
+      this.loadingFilter = true;
       await this.FilterStatistic({ export_data: this.export_statistic });
-      this.loadingFilter = false;
+      // this.loadingFilter = false;
       this.filter_statistic = false;
       this.export_statistic = {
         course_type_id: null,
