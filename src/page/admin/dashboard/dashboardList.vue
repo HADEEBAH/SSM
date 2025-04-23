@@ -1808,16 +1808,21 @@ export default {
         const nextIndex = this.currentScrollIndex + 8;
 
         // ตรวจสอบว่า index หาร 8 ลงตัวไหม
-        if (nextIndex % 8 === 0) {
-          this.loading = true;
-          try {
-            const newData = await this.fetchMoreCoursesOpen(nextIndex); // ยิง API
-            this.allCourses.push(...newData);
-            this.currentScrollIndex = nextIndex;
-          } catch (err) {
-            console.error("Error loading more courses", err);
-          } finally {
-            this.loading = false;
+        if (
+          this.get_empty_course_open?.length <=
+          this.get_empty_course_close?.countSearch
+        ) {
+          if (nextIndex % 8 === 0) {
+            this.loading = true;
+            try {
+              const newData = await this.fetchMoreCoursesOpen(nextIndex); // ยิง API
+              this.allCourses.push(...newData);
+              this.currentScrollIndex = nextIndex;
+            } catch (err) {
+              console.error("Error loading more courses", err);
+            } finally {
+              this.loading = false;
+            }
           }
         }
       }
@@ -1855,16 +1860,22 @@ export default {
         const nextIndex = this.currentScrollIndex + 8;
 
         // ตรวจสอบว่า index หาร 8 ลงตัวไหม
-        if (nextIndex % 8 === 0) {
-          this.loading = true;
-          try {
-            const newData = await this.fetchMoreCoursesClose(nextIndex); // ยิง API
-            this.allCourses.push(...newData);
-            this.currentScrollIndex = nextIndex;
-          } catch (err) {
-            console.error("Error loading more courses", err);
-          } finally {
-            this.loading = false;
+
+        if (
+          this.get_empty_course_close?.length <=
+          this.get_empty_course_close?.countSearch
+        ) {
+          if (nextIndex % 8 === 0) {
+            this.loading = true;
+            try {
+              const newData = await this.fetchMoreCoursesClose(nextIndex); // ยิง API
+              this.allCourses.push(...newData);
+              this.currentScrollIndex = nextIndex;
+            } catch (err) {
+              console.error("Error loading more courses", err);
+            } finally {
+              this.loading = false;
+            }
           }
         }
       }
