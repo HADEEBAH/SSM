@@ -1176,6 +1176,8 @@ export default {
             stack: [
               {
                 text: `${
+                  this.pdf_lang == "th" ? "อาณาจักร" : "Category Name"
+                }: ${
                   this.pdf_lang == "th"
                     ? course.course.categoryNameTh
                     : course.course.categoryNameEng
@@ -1184,6 +1186,8 @@ export default {
               },
               {
                 text: `${
+                  this.pdf_lang == "th" ? "คอร์สเรียน" : "Course Name"
+                }: ${
                   this.pdf_lang == "th"
                     ? course.course.courseNameTh
                     : course.course.courseNameEn
@@ -1193,13 +1197,13 @@ export default {
                 color: "#ff6b81",
               },
               {
-                text: `${
+                text: `${this.pdf_lang == "th" ? "แพ็กเกจ" : "Package Name"}: ${
                   course?.cpo?.packageName ? course.cpo.packageName : ""
                 }`,
                 color: "#ff6b81",
               },
               {
-                text: `${
+                text: `${this.pdf_lang == "th" ? "ช่วงเวลา" : "Option"}: ${
                   course?.cpo?.optionName
                     ? this.pdf_lang == "th"
                       ? course.cpo.optionName
