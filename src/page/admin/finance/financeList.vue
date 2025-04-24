@@ -320,7 +320,6 @@
                   item-color="#ff6b81"
                   chips
                   deletable-chips
-                  prepend-inner-icon="mdi-magnify"
                   v-model="export_filter.students"
                   cache-items
                   :items="username_list"
@@ -333,6 +332,7 @@
                   multiple
                   clearable
                   @input="search_student = null"
+                  class="py-1"
                 >
                   <template v-slot:no-data>
                     <v-list-item>
