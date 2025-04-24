@@ -316,23 +316,32 @@
                 <label-custom :text="$t('student name')"></label-custom>
                 <v-autocomplete
                   dense
+                  color="#FF6B81"
+                  item-color="#ff6b81"
+                  chips
+                  deletable-chips
+                  prepend-inner-icon="mdi-magnify"
                   v-model="export_filter.students"
+                  cache-items
                   :items="username_list"
                   :search-input.sync="search_student"
-                  @input="search_student = null"
-                  multiple
+                  :placeholder="$t('please enter the student name')"
+                  :label="$t(`search`)"
                   item-text="fullname"
                   item-value="userOneId"
-                  class="py-1"
-                  :placeholder="$t('please enter the student name')"
                   outlined
-                  color="#FF6B81"
-                  item-color="#FF6B81"
+                  multiple
+                  clearable
+                  @input="search_student = null"
                 >
                   <template v-slot:no-data>
                     <v-list-item>
                       <v-list-item-title>
-                        {{ $t("no data found") }}
+                        {{
+                          export_filter.students
+                            ? $t(`data not found`)
+                            : $t(`please enter the student's name`)
+                        }}
                       </v-list-item-title>
                     </v-list-item>
                   </template>
