@@ -212,9 +212,18 @@
   "course has been created": "( สร้างคอร์สเรียบร้อยแล้ว )",
   "cannot resave the course to their parents": "ไม่สามารถบันทึกหลักสูตรใหม่ให้ผู้ปกครองได้",
   "cannot delete a coach as there must be at least 1 coach listed in the course": "ไม่สามารถลบโค้ชได้ เนื่องจากต้องมีโค้ชอย่างน้อย 1 คนอยู่ในรายการ",
+  "category":"อาณาจักร",
   "can't select these dates because they are duplications of existing schedules":"ไม่สามารถเลือกวันที่เหล่านี้ได้เนื่องจากซ้ำกับกำหนดการที่มีอยู่",
   "close-open kingdom status":"สถานะเปิด-ปิดอาณาจักร",
+  "create holiday success":"สร้างวันหยุดเรียบร้อยแล้ว",
+  "can't select these dates because they are holidays":"ไม่สามารถเลือกวันนี้ได้เนื่องจากเป็นวันหยุด",
+  "compensation date is overlapped , please select new compensation date":"วันชดเชยทับซ้อนกัน กรุณาเลือกวันชดเชยใหม่",
+
+
+
+
   "coach has Been Deleted":"โค้ชถูกลบไปแล้ว",
+  
   "day": "วัน",
   "day and date": "วันและวันที่",
   "daily": "รายวัน",
@@ -318,7 +327,7 @@
   "english last name": "นามสกุลภาษาอังกฤษ",
   "enter last time": "กรุณาระบุจำนวนครั้งคงเหลือ",
   "enter last date": "กรุณาระบุวันที่เรียนจบ",
-  "enter order number": "กรอกหมายเลขคำสั่งซื้อ",
+  "enter order number": "กรุณากรอกหมายเลขคำสั่งซื้อ",
   "enter course name": "กรุณากรอกชื่อคอร์สให้ถูกต้อง",
   "enter course details": "กรอกรายละเอียดคอร์ส",
   "enter details": "กรอกรายละเอียด",
@@ -369,6 +378,7 @@
   "friday": "วันศุกร์",
   "february": "กุมภาพันธ์",
   "from": "จากวันที่",
+  "filter statistic":"กรองจำนวนนักเรียนในคอร์ส",
 
   "graduating students": "ผู้เรียนที่ใกล้จบ",
   "general": "ทั่วไป",
@@ -513,6 +523,9 @@
   "number must be lest than": "ตัวเลขควรที่จะน้อยกว่า",
   "number must be more than": "ตัวเลขควรที่จะมากกว่า",
   "number must be 1": "ตัวเลขควรที่จะเท่ากับ 1 หรือมากกว่า",
+  "number of students currently studying":"จำนวนนักเรียนที่เรียนอยู่ปัจุจบัน",
+  "number of students who have purchased courses":"จำนวนนักเรียนที่เคยซื้อคอร์สเรียน",
+  "no valid study dates selected":"ยังไม่ได้เลือกวันที่ศึกษาที่ถูกต้อง",
 
   "o'clock": "น.",
   "outside the register date": "อยู่นอกระยะเวลารับสมัคร",
@@ -534,9 +547,10 @@
   "option has been created": "เพิ่มช่วงเวลาเรียบร้อยแล้ว",
   "option cannot be deleted as there must be at least one option in the course": "ไม่สามารถลบตัวเลือกได้เนื่องจากต้องมีอย่างน้อยหนึ่งตัวเลือกในหลักสูตร",
   "overlapping teaching times and coaching days":"เวลาสอนและวันฝึกสอนทับซ้อนกัน",
+  "order not success":"คำสั่งซื้อไม่สำเร็จ",
+
   "package": "แพ็คเกจ",
   "parents cannot resave the course to their parents": "ผู้ปกครองไม่สามารถทำรายการให้ผู้ปกครองท่านอื่น",
-
   "package no.": "แพ็คเกจที่",
   "page not found": "ไม่พบหน้านี้",
   "paid price": "ราคาชำระ",
@@ -722,6 +736,7 @@
   "please upload only 1 video link":"โปรดอัปโหลดเพียง 1 ลิงก์วิดีโอ",
   "please upload link video iframe only 1 video link":"โปรดอัปโหลดลิงก์วิดีโอให้ถูกต้อง",
   "please upload only mp4 file":"กรุณาอัปโหลดเฉพาะไฟล์ MP4 เท่านั้น",
+  "please select a date that falls on":"กรุณาเลือกวันให้ตรงกับวัน",
 
   "receipt language": "ใบเสร็จภาษา",
   "reason for leave": "เหตุผลการลา",
@@ -875,6 +890,7 @@
   "save package":"บันทึกแพ็กเกจ",
   "save option":"บันทึกช่วงเวลา",
   "save teaching day":"บันทึกวันสอน",
+  "statistic":"สถิติ",
   "select student":"เลือก",
   "student detail":"ข้อมูลเพิ่มเติม",
 
@@ -969,6 +985,8 @@
   "teach day":"เพิ่มวันสอน",
   "this coach is currently teaching":"โค้ชคนนี้อยู่ในระหว่างการสอน",
   "the compensatory day does not match the class day Please select a new compensatory day" : "วันชดเชยไม่ตรงกับวันเรียน กรุณาเลือกวันชดเชยใหม่",
+  "these dates cannot be selected because the selected compensatory class date does not match the schedule":"ไม่สามารถเลือกวันที่นี้ได้ เนื่องจากวันที่เรียนชดเชยที่เลือกไม่ตรงกับวันเรียน",
+  "this holiday has passed":"วันหยุดนี้ได้ผ่านมาแล้ว",
 
   "unable to update the compensation day": "ไม่สามารถอัปเดตวันชดเชยได้เนื่องจากวันชดเชยตรงกับวันหยุด โปรดเลือกวันชดเชยใหม่",
   "unable to update the compensation day because the compensation day coincides with the coach's leave": "ไม่สามารถอัปเดตวันชดเชยได้เนื่องจากวันชดเชยตรงกับวันลาโค้ช กรุณาเลือกวันชดเชยใหม่",
@@ -1003,6 +1021,9 @@
   "Unable to pay because this course been removed": "ไม่สามารถดำเนินการชำระได้เนื่องจากคอร์สนี้ถูกลบไปแล้ว",
   "Unable to pay because this course Package Option has been removed": "ไม่สามารถดำเนินการชำระได้เนื่องจากแพ็คเกจนี้ถูกลบไปแล้ว",
   "upload image and video Learning Journey":"อัปโหลดรูปภาพและวิดีโอ Learning Journey",
+  "unable to update the compensation date due to overlapping times, please select new compensation date":"ไม่สามารถอัปเดตวันที่ชดเชยได้เนื่องจากเวลาทับซ้อนกัน กรุณาเลือกวันที่ชดเชยหรือเวลาใหม่",
+  "unable to update the compensation day because the compensation day falls on a holiday, please select a new compensatory day":"ไม่สามารถอัปเดตวันชดเชยได้เนื่องจากวันชดเชยตรงกับวันหยุด กรุณาเลือกวันชดเชยใหม่",
+
 
   "via email": "ผ่านอีเมล",
   "view financial status": "ดูสถานะการเงิน",

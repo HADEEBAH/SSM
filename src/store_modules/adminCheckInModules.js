@@ -532,29 +532,68 @@ const adminCheckInModules = {
 
                 }
             } catch (error) {
-                if (error.response.data.message === "The compensatory day does not match the class day. Please select a new compensatory day.") {
+                if (error.response.data.message === "The compensatory day overlaps with the holiday. please select a new compensatory day") {
                     Swal.fire({
                         icon: "warning",
                         title: VueI18n.t("warning"),
-                        text: VueI18n.t("the compensatory day does not match the class day Please select a new compensatory day"),
+                        text: VueI18n.t('unable to study on the specified date. because there are already classes on the specified date'),
                         timer: 3000,
-                        showDenyButton: false,
+                        timerProgressBar: true,
                         showCancelButton: false,
                         showConfirmButton: false,
-                        timerProgressBar: true,
                     })
 
+                } else if (error.response.data.message === "The compensatory day does not match the class day. Please select a new compensatory day.") {
+                    Swal.fire({
+                        icon: "warning",
+                        title: VueI18n.t("warning"),
+                        text: VueI18n.t('the compensatory day does not match the class day Please select a new compensatory day'),
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                    })
+                } else if (error.response.data.message === "compensation date is overlapped , please select new compensation date") {
+                    Swal.fire({
+                        icon: "warning",
+                        title: VueI18n.t("warning"),
+                        text: VueI18n.t('compensation date is overlapped , please select new compensation date'),
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                    })
+                } else if (error.response.data.message === "Unable to update the compensation date due to overlapping times, please select new compensation date") {
+                    Swal.fire({
+                        icon: "warning",
+                        title: VueI18n.t("warning"),
+                        text: VueI18n.t('unable to update the compensation date due to overlapping times, please select new compensation date'),
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                    })
+                } else if (error.response.data.message === "Unable to update the compensation day because the compensation day falls on a holiday, please select a new compensatory day") {
+                    Swal.fire({
+                        icon: "warning",
+                        title: VueI18n.t("warning"),
+                        text: VueI18n.t('unable to update the compensation date due to overlapping times, please select new compensation date'),
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                    })
                 } else {
                     Swal.fire({
                         icon: "error",
-                        title: VueI18n.t("fail"),
+                        title: VueI18n.t("something went wrong"),
                         text: error.response.data.message,
                         timer: 3000,
-                        showDenyButton: false,
+                        timerProgressBar: true,
                         showCancelButton: false,
                         showConfirmButton: false,
-                        timerProgressBar: true,
                     })
+
                 }
                 context.commit("SetCheckInStudent", { payload: payload })
                 context.commit("SetUpdateCheckinStudentsIsLoading", false)

@@ -1757,7 +1757,42 @@ export default {
       };
     }
   },
-  mounted() {},
+  mounted() {
+    if (this.course_data.course_type_id === "CT_2") {
+      this.$watch(
+        "course_data.course_study_time.start_time_object",
+        (newValue) => {
+          const { HH, mm } = newValue;
+          this.course_data.course_study_time.start_time = `${HH}:${mm}`;
+        },
+        { deep: true }
+      );
+
+      this.$watch("course_data.course_study_time.start_time", (newValue) => {
+        if (newValue) {
+          const [HH, mm] = newValue?.split(":");
+          this.course_data.course_study_time.start_time_object = { HH, mm };
+        }
+      });
+
+      this.$watch(
+        "course_data.course_study_time.end_time_object",
+        (newValue) => {
+          const { HH, mm } = newValue;
+          this.course_data.course_study_time.end_time = `${HH}:${mm}`;
+        },
+        { deep: true }
+      );
+
+      this.$watch("course_data.course_study_time.end_time", (newValue) => {
+        if (newValue) {
+          const [HH, mm] = newValue?.split(":");
+          this.course_data.course_study_time.end_time_object = { HH, mm };
+        }
+      });
+    }
+  },
+
   watch: {
     // course_data: function () {
     //   this.short_preview_artwork_files = [];
@@ -1783,43 +1818,44 @@ export default {
       ) {
         // Filter out empty objects from art_work_image_video
         this.short_preview_artwork_files =
-          this.course_data.art_work_image_video.filter(
+          this.course_data?.art_work_image_video?.filter(
             (item) => Object.keys(item).length > 0
           );
       } else if (this.course_data?.art_work_link?.length > 0) {
         this.preview_artwork_link = this.course_data.art_work_link;
       }
     },
+
     // Watch for changes in start_time_object and update start_time
-    "course_data.course_study_time.start_time_object": {
-      deep: true,
-      handler(newValue) {
-        const { HH, mm } = newValue;
-        this.course_data.course_study_time.start_time = `${HH}:${mm}`;
-      },
-    },
-    // Watch for changes in start_time and update start_time_object
-    "course_data.course_study_time.start_time": {
-      handler(newValue) {
-        const [HH, mm] = newValue.split(":");
-        this.course_data.course_study_time.start_time_object = { HH, mm };
-      },
-    },
-    // Watch for changes in end_time_object and update end_time
-    "course_data.course_study_time.end_time_object": {
-      deep: true,
-      handler(newValue) {
-        const { HH, mm } = newValue;
-        this.course_data.course_study_time.end_time = `${HH}:${mm}`;
-      },
-    },
+    // "course_data.course_study_time.start_time_object": {
+    //   deep: true,
+    //   handler(newValue) {
+    //     const { HH, mm } = newValue;
+    //     this.course_data.course_study_time.start_time = `${HH}:${mm}`;
+    //   },
+    // },
+    // // Watch for changes in start_time and update start_time_object
+    // "course_data.course_study_time.start_time": {
+    //   handler(newValue) {
+    //     const [HH, mm] = newValue?.split();
+    //     this.course_data.course_study_time.start_time_object = { HH, mm };
+    //   },
+    // },
+    // // Watch for changes in end_time_object and update end_time
+    // "course_data.course_study_time.end_time_object": {
+    //   deep: true,
+    //   handler(newValue) {
+    //     const { HH, mm } = newValue;
+    //     this.course_data.course_study_time.end_time = `${HH}:${mm}`;
+    //   },
+    // },
     // Watch for changes in end_time and update end_time_object
-    "course_data.course_study_time.end_time": {
-      handler(newValue) {
-        const [HH, mm] = newValue.split(":");
-        this.course_data.course_study_time.end_time_object = { HH, mm };
-      },
-    },
+    // "course_data.course_study_time.end_time": {
+    //   handler(newValue) {
+    //     const [HH, mm] = newValue.split(":");
+    //     this.course_data.course_study_time.end_time_object = { HH, mm };
+    //   },
+    // },
     disable: function () {
       if (this.edited) {
         if (this.disable) {
@@ -2179,7 +2215,7 @@ export default {
     },
 
     previewArtWorkFile(event) {
-      let accept = event.target.accept.split(",");
+      let accept = event?.target?.accept?.split(",");
       const selectedFiles = event.target.files;
       const fileUrls = [];
       let type_file = [];

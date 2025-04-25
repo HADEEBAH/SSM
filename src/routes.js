@@ -60,6 +60,7 @@ import Banner from '@/page/admin/banner/manageBanner.vue'
 // admin dashboard
 import Dashboard from '@/page/admin/dashboard/dashboardList.vue'
 import StudentList from '@/page/admin/dashboard/studentList.vue'
+import StatisticList from '@/page/admin/dashboard/statisticList.vue'
 // admin course reserve
 import manageCourseReserve from '@/page/admin/courseReserve/manageCourseReserve.vue'
 // portfolio
@@ -121,14 +122,14 @@ const routes = [
         component: satisfactionReport,
       },
       {
-        path:"ManageCheckInLater",
-        name:"ManageCheckInLater",
-        component:ManageCheckInLater,
+        path: "manageCheckInLater",
+        name: "ManageCheckInLater",
+        component: ManageCheckInLater,
       },
       {
-        path:"adminCheckin",
-        name:"AdminCheckin",
-        component:AdminCheckin,
+        path: "adminCheckin",
+        name: "AdminCheckin",
+        component: AdminCheckin,
       },
       {
         path: 'courseReserve',
@@ -226,6 +227,11 @@ const routes = [
         component: StudentList,
       },
       {
+        path: 'statisticList',
+        name: 'StatisticList',
+        component: StatisticList,
+      },
+      {
         path: 'importUser',
         name: 'importUser',
         component: ImportUser,
@@ -242,7 +248,7 @@ const routes = [
     name: 'FrontPortfolio',
     component: FrontPortfolio,
   },
- 
+
   // user
   {
     path: '/',

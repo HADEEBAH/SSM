@@ -34,6 +34,7 @@ const coachModules = {
     course_coach_list: [],
     calendar_coach: [],
     studentCheckInLoading: false,
+    check_in_status: {}
     // filter_leave_data: []
 
   },
@@ -115,6 +116,9 @@ const coachModules = {
     },
     SetStudentCheckInLoading(state, payload) {
       state.studentCheckInLoading = payload
+    },
+    SetCheckInStatus(state, payload) {
+      state.check_in_status = payload
     },
   },
   actions: {
@@ -454,6 +458,7 @@ const coachModules = {
         // const { data } = await axios.patch(`http://localhost:3000/api/v1/checkin/studentall`, students, config)
         // const { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/checkin/studentall`, students, config)
         if (data.statusCode == 200) {
+          context.commit("SetCheckInStatus", data.data)
           context.commit("SetStudentCheckInIsLoading", false)
           await Swal.fire({
             icon: "success",
@@ -474,43 +479,79 @@ const coachModules = {
           })
         }
         context.commit("SetStudentCheckInIsLoading", false)
-      } catch ({ response }) {
-        context.commit("SetStudentCheckInIsLoading", false)
-        if (response.status === 400) {
+      } catch (error) {
+        if (error.response.data.message === "The compensatory day overlaps with the holiday. please select a new compensatory day") {
           Swal.fire({
             icon: "warning",
             title: VueI18n.t("warning"),
-            text: `( ${VueI18n.t('unable to study on the specified date. because there are already classes on the specified date')} )`,
+            text: VueI18n.t('unable to study on the specified date. because there are already classes on the specified date'),
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
             showConfirmButton: false,
           })
-          context.dispatch("GetStudentByTimeId", {
-            course_id: course_id,
-            date: date,
-            time_id: time_id,
-            time_start: time_start,
-            time_end: time_end
+
+        } else if (error.response.data.message === "The compensatory day does not match the class day. Please select a new compensatory day.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("warning"),
+            text: VueI18n.t('the compensatory day does not match the class day Please select a new compensatory day'),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          })
+        } else if (error.response.data.message === "compensation date is overlapped , please select new compensation date") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("warning"),
+            text: VueI18n.t('compensation date is overlapped , please select new compensation date'),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          })
+        } else if (error.response.data.message === "Unable to update the compensation date due to overlapping times, please select new compensation date") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("warning"),
+            text: VueI18n.t('unable to update the compensation date due to overlapping times, please select new compensation date'),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          })
+        } else if (error.response.data.message === "Unable to update the compensation day because the compensation day falls on a holiday, please select a new compensatory day") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("warning"),
+            text: VueI18n.t('unable to update the compensation date due to overlapping times, please select new compensation date'),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
           })
         } else {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("something went wrong"),
+            text: error.response.data.message,
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
             showConfirmButton: false,
           })
-          context.dispatch("GetStudentByTimeId", {
-            course_id: course_id,
-            date: date,
-            time_id: time_id,
-            time_start: time_start,
-            time_end: time_end
-          })
-        }
 
+        }
+        context.commit("SetCheckInStatus", error.response.data)
+        context.dispatch("GetStudentByTimeId", {
+          course_id: course_id,
+          date: date,
+          time_id: time_id,
+          time_start: time_start,
+          time_end: time_end
+        })
+        context.commit("SetStudentCheckInIsLoading", false)
       }
     },
     async GetStudentByTimeId(context, { course_id, date, time_id, time_start = null, time_end = null }) {
@@ -1118,6 +1159,9 @@ const coachModules = {
     },
     getStudentCheckInLoading(state) {
       return state.studentCheckInLoading
+    },
+    getCheckInStatus(state) {
+      return state.check_in_status
     },
 
   },

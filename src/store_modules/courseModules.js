@@ -3398,8 +3398,8 @@ const CourseModules = {
 
               if (date.checked) {
                 // const localhost = 'http://localhost:3000'
-                // let { data } = await axios.get(`${localhost}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach.coachId}/date/${date.date}/time/${date.timeId}`, config)
-                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/studentlist/checkin/course/${course_id}/coach/${coach.coachId}/date/${date.date}/time/${date.timeId}`, config)
+                // let { data } = await axios.get(`${localhost}/api/v1/coachmanagement/checkin/course/${course_id}/coach/${coach.coachId}/date/${date.date}/time/${date.timeId}`, config)
+                let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/coachmanagement/checkin/course/${course_id}/coach/${coach.coachId}/date/${date.date}/time/${date.timeId}`, config)
                 if (data.statusCode === 200) {
                   if (data.data.length > 0) {
                     for await (const student of data.data) {
