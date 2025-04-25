@@ -464,7 +464,7 @@ const loginModules = {
                 // let localhost = "http://localhost:3000"
                 // const { data } = await axios.patch(`${localhost}/api/v1/consent/createConsenByUser`, payload, config)
                 const { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/consent/createConsenByUser`, payload, config)
-                context.commit("SetSendConcent", data.consent)
+                context.commit("SetSendConcent", data.data.consent)
 
             } catch (error) {
 
@@ -493,18 +493,18 @@ const loginModules = {
                 // let localhost = "http://localhost:3000"
                 // const { data } = await axios.get(`${localhost}/api/v1/consent/getConsenUser`, config)
                 const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/consent/getConsenUser`, config)
-                context.commit("SetGetConcent", data.consent)
+                context.commit("SetGetConcent", data.data.consent)
             } catch (error) {
                 console.log('error :>> ', error);
-                // Swal.fire({
-                //     icon: 'error',
-                //     title: VueI18n.t("something went wrong"),
-                //     text: error.response.data.message,
-                //     timer: 3000,
-                //     timerProgressBar: true,
-                //     showCancelButton: false,
-                //     showConfirmButton: false,
-                // })
+                Swal.fire({
+                    icon: 'error',
+                    title: VueI18n.t("something went wrong"),
+                    text: error.response.data.message,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                })
 
             }
             context.commit("SetIsLoading", false)
