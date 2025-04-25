@@ -464,7 +464,7 @@ const loginModules = {
                 // let localhost = "http://localhost:3000"
                 // const { data } = await axios.patch(`${localhost}/api/v1/consent/createConsenByUser`, payload, config)
                 const { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/consent/createConsenByUser`, payload, config)
-                context.commit("SetSendConcent", data.consent)
+                context.commit("SetSendConcent", data.data.consent)
 
             } catch (error) {
 
