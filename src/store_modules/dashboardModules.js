@@ -359,7 +359,7 @@ const dashboardModules = {
               }
             })
           }
-          await context.commit('SetLimitCourseStatusOpen', { limit: limit, page: page, count: data.data.courseStatus?.length, searchData: search })
+          await context.commit('SetLimitCourseStatusOpen', { limit: limit, page: page, count: data.data.courseStatus?.length, searchData: search, status: status })
           await context.commit("SetGetEmptyCourse", data.data)
           await context.commit("SetGetEmptyCourseOpen", EmptyCourseOpen)
           // await context.commit("SetGetEmptyCourseClose", EmptyCourseClose)
@@ -395,7 +395,7 @@ const dashboardModules = {
 
             })
           }
-          await context.commit('SetLimitCourseStatusClose', { limit: limit, page: page, count: data.data.courseStatus?.length, searchData: search })
+          await context.commit('SetLimitCourseStatusClose', { limit: limit, page: page, count: data.data.courseStatus?.length, searchData: search, status: status })
           await context.commit("SetGetEmptyCourse", data.data)
           await context.commit("SetGetEmptyCourseClose", EmptyCourseClose)
           await context.commit("SetGetLoading", false)

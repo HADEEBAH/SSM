@@ -1812,10 +1812,29 @@ export default {
 
       if (scrollTop + clientHeight >= scrollHeight - 50 && !this.loading) {
         const nextIndex = this.currentScrollIndex + 8;
-
+        // if (this.search_course_open) {
+        //   if (
+        //     this.get_empty_course?.courseStatus?.length <
+        //     this.get_empty_course.countSearch
+        //   ) {
+        //     // ตรวจสอบว่า index หาร 8 ลงตัวไหม
+        //     if (nextIndex % 8 === 0) {
+        //       this.loading = true;
+        //       try {
+        //         const newData = await this.fetchMoreCoursesOpen(nextIndex); // ยิง API
+        //         this.allCourses.push(...newData);
+        //         this.currentScrollIndex = nextIndex;
+        //       } catch (err) {
+        //         console.error("Error loading more courses", err);
+        //       } finally {
+        //         this.loading = false;
+        //       }
+        //     }
+        //   }
+        // } else {
+        // if (this.limit_course_status_open.status === "Open") {
         if (
-          this.get_empty_course?.courseStatus?.length <
-          this.get_empty_course.countSearch
+          this.get_empty_course_open?.length < this.get_empty_course.countSearch
         ) {
           // ตรวจสอบว่า index หาร 8 ลงตัวไหม
           if (nextIndex % 8 === 0) {
@@ -1831,6 +1850,8 @@ export default {
             }
           }
         }
+        // }
+        // }
       }
     },
 
@@ -1865,11 +1886,32 @@ export default {
 
       if (scrollTop + clientHeight >= scrollHeight - 50 && !this.loading) {
         const nextIndex = this.currentScrollIndex + 8;
+
+        // if (this.search_course_open) {
+        //   if (
+        //     this.get_empty_course?.courseStatus?.length <
+        //     this.get_empty_course.countSearch
+        //   ) {
+        //     // ตรวจสอบว่า index หาร 8 ลงตัวไหม
+        //     if (nextIndex % 8 === 0) {
+        //       this.loading = true;
+        //       try {
+        //         const newData = await this.fetchMoreCoursesClose(nextIndex); // ยิง API
+        //         this.allCourses.push(...newData);
+        //         this.currentScrollIndex = nextIndex;
+        //       } catch (err) {
+        //         console.error("Error loading more courses", err);
+        //       } finally {
+        //         this.loading = false;
+        //       }
+        //     }
+        //   }
+        // } else {
+        // if (this.limit_course_status_close.status === "Close") {
         if (
-          this.get_empty_course?.courseStatus?.length <
+          this.get_empty_course_close?.length <
           this.get_empty_course.countSearch
         ) {
-          // ตรวจสอบว่า index หาร 8 ลงตัวไหม
           if (nextIndex % 8 === 0) {
             this.loading = true;
             try {
@@ -1883,6 +1925,8 @@ export default {
             }
           }
         }
+        // }
+        // }
       }
     },
 
