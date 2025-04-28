@@ -558,7 +558,8 @@ const orderModules = {
               order_item.students.forEach((student) => {
                 if (
                   !student_name_list.includes(
-                    `${student?.firstNameTh} ${student?.lastNameTh}`
+                    student?.studentId
+                    // `${student?.firstNameTh} ${student?.lastNameTh}`
                   )
                 ) {
                   student_name_list.push(
@@ -3415,9 +3416,9 @@ const orderModules = {
         );
         if (data.statusCode === 200) {
           for await (const item of data?.data) {
-            if(item.day?.day){
+            if (item.day?.day) {
               item.dayOff = dayOfWeekArray(item.day?.day);
-            }else{
+            } else {
               item.dayOff = '-';
             }
             item.course_img = item.course_img
