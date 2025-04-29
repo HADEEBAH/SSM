@@ -11,7 +11,7 @@
           dense
           prepend-inner-icon="mdi-magnify"
           outlined
-          :placeholder="$t('search')"
+          :placeholder="$t('search category or course name here')"
           v-model="search"
           color="#FF6B81"
           @click:append-outer="seachData(search)"
