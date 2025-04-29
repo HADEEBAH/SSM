@@ -584,7 +584,11 @@
                     >
                       <template v-slot:selection="{ item, index }">
                         <v-chip dark v-if="index === 0" color="#FF6B81">
-                          <span>{{ item.typeName }}</span>
+                          <span>{{
+                            $i18n.locale == "th"
+                              ? item.typeName
+                              : item.typeNameEn
+                          }}</span>
                         </v-chip>
                         <span
                           v-if="index === 1"
@@ -604,7 +608,7 @@
                     <v-autocomplete
                       outlined
                       v-model="export_statistic.courses_id"
-                      :items="get_filter_course"
+                      :items="get_all_course_dashboard"
                       :item-text="
                         $i18n.locale == 'th' ? 'courseNameTh' : 'courseNameEn'
                       "
@@ -772,6 +776,9 @@
                             :label="$t('search full course name here')"
                             prepend-inner-icon="mdi-magnify"
                             color="#ff6b81"
+                            @keypress.enter="
+                              searchCloseCourse(search_course_close)
+                            "
                           >
                           </v-text-field>
                         </v-col>
@@ -784,6 +791,8 @@
                           style="overflow-y: scroll; overflow-x: hidden"
                           height="400px"
                           class="rounded-lg"
+                          @scroll="handleScrollClose"
+                          ref="scrollContainerClose"
                         >
                           <v-card-text
                             style="
@@ -811,12 +820,13 @@
                           </v-card-text>
 
                           <v-card-text>
+                            <!-- v-for="(item, index) in searchCourseClose(
+                                search_course_close
+                              )" -->
                             <v-card
                               outlined
                               class="mb-3 rounded-lg"
-                              v-for="(item, index) in searchCourseClose(
-                                search_course_close
-                              )"
+                              v-for="(item, index) in get_empty_course_close"
                               :key="index"
                             >
                               <v-card-text class="pa-0">
@@ -909,14 +919,24 @@
                                 </v-row>
                               </v-card-text>
                             </v-card>
+                            <v-card-text
+                              v-if="loading_course_close"
+                              class="text-center"
+                            >
+                              <v-progress-circular
+                                indeterminate
+                                color="#FF6B81"
+                                size="30"
+                                width="4"
+                              ></v-progress-circular>
+                            </v-card-text>
                           </v-card-text>
                           <!-- ไม่พบข้อมูลของคอร์สนี้ -->
-                          <v-row
-                            v-if="
+                          <!-- v-if="
                               searchCourseClose(search_course_close).length ===
                               0
-                            "
-                          >
+                            " -->
+                          <v-row v-if="get_empty_course_close?.length === 0">
                             <v-col align="center" class="text-lg font-bold">
                               <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
                               {{ $t("can't find full course information") }}
@@ -959,6 +979,9 @@
                             :label="$t('search available course name here')"
                             prepend-inner-icon="mdi-magnify"
                             color="#ff6b81"
+                            @keypress.enter="
+                              searchOpenCourse(search_course_open)
+                            "
                           >
                           </v-text-field>
                         </v-col>
@@ -971,6 +994,8 @@
                           style="overflow-y: scroll; overflow-x: hidden"
                           height="400px"
                           class="rounded-lg"
+                          @scroll="handleScrollOpen"
+                          ref="scrollContainerOpen"
                         >
                           <v-card-text
                             style="
@@ -998,12 +1023,13 @@
                           </v-card-text>
 
                           <v-card-text>
+                            <!-- v-for="(item, index) in searchCourseOpen(
+                                search_course_open
+                              )" -->
                             <v-card
                               outlined
                               class="mb-3 rounded-lg"
-                              v-for="(item, index) in searchCourseOpen(
-                                search_course_open
-                              )"
+                              v-for="(item, index) in get_empty_course_open"
                               :key="index"
                             >
                               <v-card-text class="pa-0">
@@ -1100,14 +1126,24 @@
                                 </v-row>
                               </v-card-text>
                             </v-card>
+                            <v-card-text
+                              v-if="loading_course_open"
+                              class="text-center"
+                            >
+                              <v-progress-circular
+                                indeterminate
+                                color="#FF6B81"
+                                size="30"
+                                width="4"
+                              ></v-progress-circular>
+                            </v-card-text>
                           </v-card-text>
 
                           <!-- ไม่พบข้อมูลของคอร์สนี้ -->
-                          <v-row
-                            v-if="
+                          <!-- v-if="
                               searchCourseOpen(search_course_open).length === 0
-                            "
-                          >
+                            " -->
+                          <v-row v-if="get_empty_course_open?.length === 0">
                             <v-col align="center" class="text-lg font-bold">
                               <v-icon color="#ff6b81">mdi-alert-outline</v-icon>
                               {{
@@ -1423,6 +1459,10 @@ export default {
       courses_id: null,
       category_id: null,
     },
+    currentScrollIndex: 0,
+    loading_course_open: false,
+    loading_course_close: false,
+    allCourses: [],
   }),
   created() {
     this.FilterYears().then(() => {
@@ -1482,6 +1522,9 @@ export default {
       categorys: "CategoryModules/getCategorys",
       get_statustic: "DashboardModules/getStatistic",
       statistic_loading: "DashboardModules/getloadingStatistic",
+      limit_course_status_open: "DashboardModules/getLimitCourseStatusOpen",
+      limit_course_status_close: "DashboardModules/getLimitCourseStatusClose",
+      get_all_course_dashboard: "DashboardModules/getAllCourseDashboard",
     }),
 
     headersStatistic() {
@@ -1752,11 +1795,165 @@ export default {
       GetCategorys: "CategoryModules/GetCategorys",
       GetStatistic: "DashboardModules/GetStatistic",
       FilterStatistic: "DashboardModules/FilterStatistic",
+      GetCloseCourse: "DashboardModules/GetCloseCourse",
+      GetAllCourseDashboard: "DashboardModules/GetAllCourseDashboard",
     }),
 
+    async handleScrollOpen(e) {
+      const scrollContainer = e.target;
+      const scrollTop = scrollContainer.scrollTop;
+      const scrollHeight = scrollContainer.scrollHeight;
+      const clientHeight = scrollContainer.clientHeight;
+
+      if (scrollTop + clientHeight >= scrollHeight - 50 && !this.loading) {
+        const nextIndex = this.currentScrollIndex + 8;
+        if (this.search_course_open) {
+          if (
+            this.get_empty_course?.courseStatus?.length <
+            this.get_empty_course.countSearch
+          ) {
+            // ตรวจสอบว่า index หาร 8 ลงตัวไหม
+            if (nextIndex % 8 === 0) {
+              this.loading = true;
+              try {
+                const newData = await this.fetchMoreCoursesOpen(nextIndex); // ยิง API
+                this.allCourses.push(...newData);
+                this.currentScrollIndex = nextIndex;
+              } catch (err) {
+                console.error("Error loading more courses", err);
+              } finally {
+                this.loading = false;
+              }
+            }
+          }
+        } else {
+          if (this.limit_course_status_open.status === "Open") {
+            if (
+              this.get_empty_course_open?.length <
+              this.get_empty_course.countSearch
+            ) {
+              // ตรวจสอบว่า index หาร 8 ลงตัวไหม
+              if (nextIndex % 8 === 0) {
+                this.loading = true;
+                try {
+                  const newData = await this.fetchMoreCoursesOpen(nextIndex); // ยิง API
+                  this.allCourses.push(...newData);
+                  this.currentScrollIndex = nextIndex;
+                } catch (err) {
+                  console.error("Error loading more courses", err);
+                } finally {
+                  this.loading = false;
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    async fetchMoreCoursesOpen() {
+      this.loading_course_open = true;
+      await this.GetEmptyCourse({
+        limit: this.limit_course_status_open.limit,
+        page: this.limit_course_status_open.page + 1,
+        status: "Open",
+        search: this.limit_course_status_open.searchData,
+      });
+      this.loading_course_open = false;
+      return (await this.get_empty_course_open) || []; // หากไม่ได้ค่าหรือมีปัญหา ให้คืนค่าเป็น array ว่าง
+    },
+
+    async searchOpenCourse(itemSearch) {
+      this.loading_course_open = true;
+      await this.GetEmptyCourse({
+        limit: this.limit_course_status_open.limit,
+        page: 1,
+        status: "Open",
+        search: itemSearch,
+      });
+      this.loading_course_open = false;
+    },
+
+    async handleScrollClose(e) {
+      const scrollContainer = e.target;
+      const scrollTop = scrollContainer.scrollTop;
+      const scrollHeight = scrollContainer.scrollHeight;
+      const clientHeight = scrollContainer.clientHeight;
+
+      if (scrollTop + clientHeight >= scrollHeight - 50 && !this.loading) {
+        const nextIndex = this.currentScrollIndex + 8;
+
+        if (this.search_course_open) {
+          if (
+            this.get_empty_course?.courseStatus?.length <
+            this.get_empty_course.countSearch
+          ) {
+            // ตรวจสอบว่า index หาร 8 ลงตัวไหม
+            if (nextIndex % 8 === 0) {
+              this.loading = true;
+              try {
+                const newData = await this.fetchMoreCoursesClose(nextIndex); // ยิง API
+                this.allCourses.push(...newData);
+                this.currentScrollIndex = nextIndex;
+              } catch (err) {
+                console.error("Error loading more courses", err);
+              } finally {
+                this.loading = false;
+              }
+            }
+          }
+        } else {
+          if (this.limit_course_status_close.status === "Close") {
+            if (
+              this.get_empty_course_close?.length <
+              this.get_empty_course.countSearch
+            ) {
+              if (nextIndex % 8 === 0) {
+                this.loading = true;
+                try {
+                  const newData = await this.fetchMoreCoursesClose(nextIndex); // ยิง API
+                  this.allCourses.push(...newData);
+                  this.currentScrollIndex = nextIndex;
+                } catch (err) {
+                  console.error("Error loading more courses", err);
+                } finally {
+                  this.loading = false;
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    async fetchMoreCoursesClose() {
+      this.loading_course_close = true;
+      await this.GetCloseCourse({
+        limit: this.limit_course_status_close.limit,
+        page: this.limit_course_status_close.page + 1,
+        status: "Close",
+        search: this.limit_course_status_close.searchData,
+      });
+      this.loading_course_close = false;
+      return (await this.get_empty_course_close) || []; // หากไม่ได้ค่าหรือมีปัญหา ให้คืนค่าเป็น array ว่าง
+    },
+
+    async searchCloseCourse(itemSearch) {
+      this.loading_course_close = true;
+      await this.GetCloseCourse({
+        limit: this.limit_course_status_close.limit,
+        page: 1,
+        status: "Close",
+        search: itemSearch,
+      });
+      this.loading_course_close = false;
+    },
+
     async openDialogexportStatistic() {
-      (this.loadingFilter = true), await this.GetFilterCourse();
+      this.loadingFilter = true;
+      // await this.GetFilterCourse();
       await this.GetCategorys();
+      await this.GetAllCourseDashboard();
       this.filter_statistic = true;
       this.loadingFilter = false;
     },
@@ -1774,8 +1971,9 @@ export default {
     },
     async exportStatistic() {
       // console.log("object :>> ", this.export_statistic);
+      this.loadingFilter = true;
       await this.FilterStatistic({ export_data: this.export_statistic });
-      this.loadingFilter = false;
+      // this.loadingFilter = false;
       this.filter_statistic = false;
       this.export_statistic = {
         course_type_id: null,
