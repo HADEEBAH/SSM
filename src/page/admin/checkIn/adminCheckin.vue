@@ -437,6 +437,9 @@
                           :class="student.endTime ? 'active' : ''"
                           :placeholder="$t('end time')"
                           v-model="student.compensationEndTime"
+                          :disabled-hours="
+                            () => disabledHours(student.compensationStartTime)
+                          "
                         ></TimePicker>
                       </v-col>
                     </v-row>
@@ -721,16 +724,21 @@ export default {
       UpdateCheckinStudents: "adminCheckInModules/UpdateCheckinStudents",
       CheckInCoach: "adminCheckInModules/CheckInCoach",
     }),
-
-    checkDisable(schedule) {
-      // return false;
-      const current = moment().format("YYYY/MM/DD");
-      const currentMoment = moment(current);
-      let ckeckedBool = false;
-      if (schedule.checkedIn === 1) {
-        ckeckedBool = true;
-      }
-      return currentMoment.isBefore(schedule.dateMoment) || ckeckedBool;
+    disabledHours(startTime) {
+      if (!startTime) return []; // No restriction if start time is not selected
+      const startHour = new Date(startTime).getHours();
+      return [...Array(startHour + 1).keys()]; // Disable hours before the selected start time
+    },
+    checkDisable() {
+      return false;
+      // schedule
+      // const current = moment().format("YYYY/MM/DD");
+      // const currentMoment = moment(current);
+      // let ckeckedBool = false;
+      // if (schedule.checkedIn === 1) {
+      //   ckeckedBool = true;
+      // }
+      // return currentMoment.isBefore(schedule.dateMoment) || ckeckedBool;
     },
     FilterStatusCheckIn(student) {
       for (const items of this.scheduleCheckin) {

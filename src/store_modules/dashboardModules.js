@@ -1,8 +1,8 @@
-
-
-
 import axios from "axios";
 import VueI18n from "../i18n";
+import VueCookie from "vue-cookie";
+var XLSX = require("xlsx");
+import Swal from "sweetalert2";
 function dayOfWeekArray(day) {
   let days = day
   const weekdays = [
@@ -59,10 +59,27 @@ const dashboardModules = {
     get_potential_student: [],
     get_reserve_student: [],
     get_student_list_value: [],
+    get_statustic: [],
+    limit_statistic: {},
+    statistic_filter: [],
+    statistic_loading: false
+
 
 
   },
   mutations: {
+    SetLoadingStatistic(state, value) {
+      state.statistic_loading = value
+    },
+    SetStatisticFilter(state, payload) {
+      state.statistic_filter = payload
+    },
+    SetGetStatistic(state, payload) {
+      state.get_statustic = payload
+    },
+    SetLimitStatistic(state, payload) {
+      state.limit_statistic = payload
+    },
     SetGetEmptyCourse(state, payload) {
       state.get_empty_course = payload
     },
@@ -132,6 +149,134 @@ const dashboardModules = {
 
   },
   actions: {
+    async FilterStatistic(context, { export_data }) {
+      try {
+        let config = {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-type": "Application/json",
+            'Authorization': `Bearer ${VueCookie.get("token")}`
+          }
+        }
+        context.commit("SetLoadingStatistic", true)
+        let courseTypeId = ''
+        let courseId = ''
+        let categoryId = ''
+
+        if (export_data) {
+
+          if (export_data?.courses_id) {
+            for (const idCourse of export_data?.courses_id) {
+              courseId += `&courseId=${idCourse}`
+            }
+          }
+          if (export_data?.course_type_id) {
+            for (const typeCourse of export_data?.course_type_id) {
+              courseTypeId += `&courseTypeId=${typeCourse}`
+            }
+          }
+          if (export_data?.category_id) {
+            for (const idCategory of export_data?.category_id) {
+              categoryId += `&categoryId=${idCategory}`
+            }
+          }
+        }
+
+        // let localhost = "http://localhost:3000"
+        // let data = await axios.get(`${localhost}/api/v1/dashboard/statistic-course?limit=${''}${courseTypeId}${courseId}${categoryId}`, config)
+        let data = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/statistic-course?limit=${''}${courseTypeId}${courseId}${categoryId}`, config)
+        if (data?.data?.statusCode === 200) {
+          if (data?.data?.data?.data?.length > 0) {
+            const reports = []
+            for await (const reserve of data?.data?.data?.data) {
+              reports.push({
+                "ประเภทคอร์ส": reserve.courseTypeNameTh ? reserve.courseTypeNameTh : '',
+                "อาณาจักร": reserve.categoryNameTh ? reserve.categoryNameTh : '',
+                "ชื่อคอร์ส": reserve.courseNameTh ? reserve.courseNameTh : '',
+                "จำนวนนักเรียนที่เรียนอยู่": reserve.studentCountInStudy ? reserve.studentCountInStudy : 0,
+                "วันที่เรียน": reserve.courseDateInfo ? reserve.courseDateInfo : ''
+              })
+            }
+            reports.push({}, {
+              "ประเภทคอร์ส": "รวม",
+              "จำนวนนักเรียนที่เรียนอยู่": data?.data?.data?.totalStudentCountInStudy ? data?.data?.data?.totalStudentCountInStudy : 0,
+            })
+            var workbook = XLSX.utils.book_new();
+            var worksheet = XLSX.utils.json_to_sheet(reports);
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'sheet1');
+            var excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+            var blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+            var url = URL.createObjectURL(blob);
+            var link = document.createElement("a");
+            link.href = url;
+            link.download = `statisticReport.xlsx`;
+            link.click();
+            URL.revokeObjectURL(url);
+            context.commit("SetLoadingStatistic", false)
+
+          } else {
+            Swal.fire({
+              icon: "warning",
+              title: VueI18n.t("something went wrong"),
+              text: VueI18n.t("data not found"),
+              timer: 3000,
+              timerProgressBar: true,
+              showCancelButton: false,
+              showConfirmButton: false,
+            })
+            context.commit("SetLoadingStatistic", false)
+
+          }
+        }
+      } catch (error) {
+        context.commit("SetLoadingStatistic", false)
+        Swal.fire({
+          icon: "warning",
+          title: VueI18n.t("something went wrong"),
+          text: VueI18n.t("data not found"),
+          timer: 3000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
+        })
+      }
+    },
+    async GetStatistic(context, { limit, page, search, category, course, courseTypeId }) {
+
+      // {limit, page, search, category, course, courseTypeId}
+      context.commit("SetLoadingStatistic", true)
+      let queryLimit = ''
+      let queryPage = ''
+      let querySearch = ''
+      let queryCategory = ''
+      let queryCourse = ''
+      let queryCourseTypeId = ''
+
+      queryLimit += `&limit=${limit}`
+      queryPage += `&page=${page}`
+      querySearch += `&search=${search}`
+      queryCategory += `&categoryId=${category}`
+      queryCourse += `&courseId=${course}`
+      queryCourseTypeId += `&courseTypeId=${courseTypeId}`
+
+      try {
+
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.get(`${localhost}/api/v1/dashboard/statistic-course?${queryLimit}${queryPage}${querySearch}${queryCategory}${queryCourse}${queryCourseTypeId}`)
+        let { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/dashboard/statistic-course?${queryLimit}${queryPage}${querySearch}${queryCategory}${queryCourse}${queryCourseTypeId}`)
+
+        if (data.statusCode === 200) {
+          await context.commit('SetLimitStatistic', { limit: limit, page: page, count: data.data.length })
+          context.commit("SetGetStatistic", data.data)
+        }
+        context.commit("SetLoadingStatistic", false)
+
+      } catch (error) {
+
+        context.commit("SetLoadingStatistic", false)
+
+      }
+    },
 
     // student type 1
     async GetStudentValue(context) {
@@ -453,6 +598,15 @@ const dashboardModules = {
 
   },
   getters: {
+    getloadingStatistic(state) {
+      return state.statistic_loading
+    },
+    getLimitStatistic(state) {
+      return state.limit_statistic
+    },
+    getStatistic(state) {
+      return state.get_statustic
+    },
     getEmptyCourse(state) {
       return state.get_empty_course
     },
