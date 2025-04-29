@@ -3415,9 +3415,9 @@ const orderModules = {
         );
         if (data.statusCode === 200) {
           for await (const item of data?.data) {
-            if(item.day?.day){
+            if (item.day?.day) {
               item.dayOff = dayOfWeekArray(item.day?.day);
-            }else{
+            } else {
               item.dayOff = '-';
             }
             item.course_img = item.course_img
@@ -4634,19 +4634,47 @@ const orderModules = {
           `${process.env.VUE_APP_URL}/api/v1/schedule/order?orderNumber=${orderNumber}`
         );
         if (data.statusCode === 200) {
+          data.data?.map((items) => {
+            items.active = false
+          })
           context.commit("SetOrderNumberDetail", data.data);
         }
       } catch (error) {
-        await Swal.fire({
-          icon: "error",
-          title: VueI18n.t("something went wrong"),
-          text: VueI18n.t(error.response.data.message),
-          timer: 3000,
-          showDenyButton: false,
-          showCancelButton: false,
-          showConfirmButton: false,
-          timerProgressBar: true,
-        });
+        if (error.response.data.message === "order not success.") {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("something went wrong"),
+            text: VueI18n.t("order not success"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          });
+        } else if (error.response.data.message === "order not found.") {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("something went wrong"),
+            text: VueI18n.t("enter order number"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          });
+        } else {
+          await Swal.fire({
+            icon: "error",
+            title: VueI18n.t("something went wrong"),
+            text: error.response.data.message,
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          });
+        }
+        context.commit("SetOrderNumberDetail", error.response.data.data);
       }
     },
     async UpdateScheduleAndCheckIn(

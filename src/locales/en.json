@@ -72,7 +72,6 @@
   "attached file from teaching summary notes": "Attached file from teaching summary notes",
   "attachment from student assessment": "Attachment from student assessment",
   "available course information": "Available course information",
-  "average": "Average",
   "august": "August",
   "all students have been contacted": "All students have been contacted",
   "add new teachday succeed": "Add new teachday succeed",
@@ -103,6 +102,7 @@
   "because your orders are duplicated": "Because your orders are duplicated",
   "because this course is full": "เนื่องจากคอร์สนี้เต็ม",
   "because you have chosen this course": "Because you have chosen this course",
+  "create holiday success":"Create holiday success",
 
   "cash": "Cash",
   "can't apply": "Can't apply",
@@ -231,10 +231,13 @@
   "cannot resave the course to their parents": "Cannot resave the course to their parents",
   "cannot delete a coach as there must be at least 1 coach listed in the course": "Cannot delete a coach as there must be at least 1 coach listed in the course",
   "category":"Category",
-  
   "can't select these dates because they are duplications of existing schedules":"can't select these dates because they are duplications of existing schedules",
   "close-open kingdom status":"Close-open Kingdom status",
   "coach has Been Deleted":"Coach has Been Deleted",
+  "can't select these dates because they are holidays":"can't select these dates because they are holidays",
+  "compensation date is overlapped , please select new compensation date":"Compensation date is overlapped , please select new compensation date",
+
+
 
 
   "day": "Day",
@@ -558,6 +561,8 @@
   "number must be 0": "Number must be 0 or more",
   "number of students currently studying":"Number of students currently studying",
   "number of students who have purchased courses":"Number of students who have purchased courses",
+  "no valid study dates selected":"No valid study dates selected",
+
 
 
 
@@ -581,6 +586,8 @@
   "option has been created": "Option has been created",
   "option cannot be deleted as there must be at least one option in the course": "Option cannot be deleted as there must be at least one option in the course",
   "overlapping teaching times and coaching days":"Overlapping teaching times and coaching days",
+  "order not success":"Order not success",
+
 
   "package": "Package",
   "parents cannot resave the course to their parents": "Parents cannot resave the course to their parents",
@@ -772,6 +779,8 @@
   "please upload only 1 video link":"Please upload only 1 video link",
   "please upload link video iframe only 1 video link":"Please upload link video iframe only 1 video link",
   "please upload only mp4 file":"Please upload only mp4 file",
+  "please select a date that falls on":"Please select a date that falls on",
+
 
 
   "reason for leave": "Reason for leave",
@@ -1025,8 +1034,8 @@
   "teach day":"Add teach day",
   "this coach is currently teaching":"This coach is currently teaching",
   "the compensatory day does not match the class day Please select a new compensatory day" : "The compensatory day does not match the class day Please select a new compensatory day",
-
-
+  "these dates cannot be selected because the selected compensatory class date does not match the schedule":"These dates cannot be selected because the selected compensatory class date does not match the schedule",
+  "this holiday has passed":"This holiday has passed",
 
 
   "unable to update the compensation day": "Unable to update the compensation day because the compensation day falls on a holiday, please select a new compensatory day",
@@ -1059,6 +1068,8 @@
   "unable to register Due to insufficient seats or the coach teaching in another package": "Unable to register Due to insufficient seats or the coach teaching in another package",
   "unable to register Because the course is already in your registration history": "Because the course is already in your registration history",
   "upload image and video Learning Journey":"Upload image and video Learning Journey",
+  "unable to update the compensation date due to overlapping times, please select new compensation date":"Unable to update the compensation date due to overlapping times, please select new compensation date",
+  "unable to update the compensation day because the compensation day falls on a holiday, please select a new compensatory day":"Unable to update the compensation day because the compensation day falls on a holiday, please select a new compensatory day",
 
   "via email": "Via email",
   "view financial status": "View financial status",

@@ -102,8 +102,6 @@ const financeModules = {
                 "ผู้ซื้อ": order.created_by_name,
                 "วันที่ออกเอกสาร": moment().format("DD/MM/YYYY HH:mm"),
                 "หมายเหตุ": order.remark
-
-
               })
             });
             if (data.data.length === reports.length) {

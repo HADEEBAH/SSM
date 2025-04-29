@@ -271,12 +271,7 @@
                           dense
                           :style="`width:${width()}px;`"
                           style="position: absolute; display: block; z-index: 4"
-                          @focus="
-                            SelectedStartDate(
-                              $event,
-                              item.compensationStartTime
-                            )
-                          "
+                          @focus="SelectedStartDate($event)"
                           :rules="start_time"
                           :value="genTime(item.compensationStartTime)"
                         >
@@ -286,8 +281,8 @@
                           :minuteStep="30"
                           :placeholder="$t('start time')"
                           :style="`width:${width()}px;`"
-                          :class="item.start_time ? 'active' : ''"
                           format="HH:mm"
+                          :class="item.start_time ? 'active' : ''"
                           v-model="item.compensationStartTime"
                         >
                         </TimePicker>
@@ -298,9 +293,7 @@
                           dense
                           :style="`width:${width()}px;`"
                           style="position: absolute; display: block; z-index: 4"
-                          @focus="
-                            SelectedStartDate($event, item.compensationEndTime)
-                          "
+                          @focus="SelectedStartDate($event)"
                           :rules="end_time"
                           :value="genTime(item.compensationEndTime)"
                         >
@@ -313,6 +306,9 @@
                           :class="item.end_time ? 'active' : ''"
                           :placeholder="$t('end time')"
                           v-model="item.compensationEndTime"
+                          :disabled-hours="
+                            () => disabledHours(item.compensationStartTime)
+                          "
                         ></TimePicker>
                       </v-col>
                     </v-row>
@@ -1548,6 +1544,7 @@ export default {
       coach_check_in_is_loading: "CoachModules/getCoachCheckInIsLoading",
       student_check_in_is_loading: "CoachModules/getStudentCheckInIsLoading",
       studentCheckInLoading: "CoachModules/getStudentCheckInLoading",
+      check_in_status: "CoachModules/getCheckInStatus",
     }),
     start_time() {
       return [(val) => !!val || this.$t("please specify start time")];
@@ -1699,20 +1696,24 @@ export default {
     //   });
     //   return matchedStudents;
     // },
-
+    disabledHours(startTime) {
+      if (!startTime) return []; // No restriction if start time is not selected
+      const startHour = new Date(startTime).getHours();
+      return [...Array(startHour + 1).keys()]; // Disable hours before the selected start time
+    },
     showAttachmentDialog(item) {
       this.files_attachment_dialog = item.url ? item.url : item;
       this.show_attachment_dialog = true;
     },
     //check in by date
     CheckInByDate() {
-      // let check_in_date = moment(this.$route.params.date).format("YYYY-MM-DD");
-      // let today = moment().format("YYYY-MM-DD");
-      // if (moment(today).isSame(check_in_date)) {
-      return false;
-      // } else {
-      //   return true;
-      // }
+      let check_in_date = moment(this.$route.params.date).format("YYYY-MM-DD");
+      let today = moment().format("YYYY-MM-DD");
+      if (moment(today).isSame(check_in_date)) {
+        return false;
+      } else {
+        return true;
+      }
 
       // const current = moment().format("YYYY/MM/DD");
       // const currentMoment = moment(current);
@@ -1722,12 +1723,17 @@ export default {
 
       // return false;
     },
-    genTime(time) {
-      if (time) {
-        return moment(time).format("HH:mm");
-      } else {
-        return "";
-      }
+    // genTime(time) {
+    //   if (time) {
+    //     return moment(time).format("HH:mm");
+    //   } else {
+    //     return "";
+    //   }
+    // },
+    genTime(value) {
+      if (!value) return "";
+      const parsedTime = moment(value, "HH:mm", true);
+      return parsedTime.isValid() ? parsedTime.format("HH:mm") : "Invalid Date";
     },
     width() {
       switch (this.$vuetify.breakpoint.name) {
@@ -2051,7 +2057,7 @@ export default {
           cancelButtonText: this.$t("no"),
         }).then(async (result) => {
           if (result.isConfirmed) {
-            this.UpdateCheckInStudent({
+            await this.UpdateCheckInStudent({
               students: this.student_check_in,
               course_id: this.$route.params.courseId,
               date: this.$route.params.date,
@@ -2059,6 +2065,12 @@ export default {
               time_start: this.$route.params.timeStart,
               time_end: this.$route.params.timeEnd,
             });
+            if (
+              (await this.check_in_status?.statusCode) === 400 ||
+              (await this.check_in_status?.statusCode) === 500
+            ) {
+              this.expanded_index = [];
+            }
             let payload = {
               notificationName: "แจ้งเตือนการเช็คอิน",
               notificationNameEn: "Check-in notification",
@@ -2178,15 +2190,16 @@ export default {
         item.end_time || "End time"
       }`;
     },
-    selectCheckInStatus(item, status) {
+    async selectCheckInStatus(item, status) {
       if (status === "leave") {
-        this.expanded_index.push(item);
+        await this.expanded_index.push(item);
       } else {
-        this.expanded_index.forEach((expanded, index) => {
+        await this.expanded_index.forEach((expanded, index) => {
           if (expanded.checkInStudentId === item.checkInStudentId) {
             this.expanded_index.splice(index, 1);
           }
         });
+        this.expanded_index = [];
         item.compensation_date_str = null;
         item.compensationDate = null;
         item.compensationStartTime = null;

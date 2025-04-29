@@ -473,7 +473,7 @@
           </v-col>
         </v-row>
         <!-- Statistic -->
-        <v-row dense>
+        <!-- <v-row dense>
           <v-col cols="12" sm="6" align="start">
             <v-card-title>
               <v-icon color="#ff6b81" class="ml-6"
@@ -497,11 +497,6 @@
                 class="mx-5 white--text"
                 :to="{
                   name: 'StatisticList',
-                  // params: {
-                  //   action: 'view',
-                  //   account_id: item.studentId,
-                  //   from: 'Dashboard',
-                  // },
                 }"
               >
                 <v-icon>mdi-text-box-search-outline</v-icon>
@@ -509,9 +504,9 @@
               </v-btn>
             </v-card-text>
           </v-col>
-        </v-row>
+        </v-row> -->
 
-        <v-row dense class="pa-2">
+        <!-- <v-row dense class="pa-2">
           <v-col cols="12">
             <v-card class="bg-white rounded-lg" style="height: 100%">
               <template>
@@ -546,7 +541,7 @@
               </template>
             </v-card>
           </v-col>
-        </v-row>
+        </v-row> -->
 
         <!-- DIALOG -->
         <template>
@@ -1488,14 +1483,14 @@ export default {
     this.mapMonth = this.thaiMonths.filter(
       (item) => parseInt(item.key) === month
     )[0];
-    this.GetStatistic({
-      limit: 10,
-      page: 1,
-      search: "",
-      category: "",
-      course: "",
-      courseTypeId: "",
-    });
+    // this.GetStatistic({
+    //   limit: 10,
+    //   page: 1,
+    //   search: "",
+    //   category: "",
+    //   course: "",
+    //   courseTypeId: "",
+    // });
   },
   beforeMount() {},
   async mounted() {

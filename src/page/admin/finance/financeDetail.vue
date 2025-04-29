@@ -1177,8 +1177,8 @@ export default {
               {
                 text: `${
                   this.pdf_lang == "th"
-                    ? course.course.categoryNameTh
-                    : course.course.categoryNameEng
+                    ? course?.course?.categoryNameTh
+                    : course?.course?.categoryNameEng
                 }`,
                 color: "#ff6b81",
               },
