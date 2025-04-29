@@ -32,7 +32,7 @@ const RegisterModules = {
         },
         is_loading: false,
         register_by_one: false,
-        get_concent: {}
+        get_concent_reg: {}
 
     },
     mutations: {
@@ -89,7 +89,7 @@ const RegisterModules = {
             state.register_by_one = value
         },
         SetGetConcent(state, payload) {
-            state.get_concent = payload
+            state.get_concent_reg = payload
         },
     },
     actions: {
@@ -373,9 +373,7 @@ const RegisterModules = {
                                         // let localhost = "http://localhost:3000"
                                         // const { data } = await axios.get(`${localhost}/api/v1/consent/getConsenUser`, config)
                                         const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/consent/getConsenUser`, config)
-                                        let payload_concent = { concent_data: data.consent };
-                                        localStorage.setItem("dataConcent", JSON.stringify(payload_concent));
-                                        await context.commit("SetGetConcent", data.consent)
+                                        await context.commit("SetGetConcent", data.data.consent)
                                         await router.replace({ name: "UserKingdom" });
                                         context.commit("SetIsLoading", false)
                                         context.commit("ResetUserOneID")
@@ -614,6 +612,9 @@ const RegisterModules = {
         },
         setRegisterOneId(state) {
             return state.register_by_one
+        },
+        getConcentReg(state) {
+            return state.get_concent_reg
         }
 
     }
