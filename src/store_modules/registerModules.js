@@ -379,7 +379,28 @@ const RegisterModules = {
                                         context.commit("ResetUserOneID")
 
                                     } catch (error) {
-                                        console.log('errorConsent :>> ', error);
+                                        if (error.response.data.message === 'Unauthorized') {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: VueI18n.t("something went wrong"),
+                                                text: error.response.data.message,
+                                                timer: 3000,
+                                                timerProgressBar: true,
+                                                showCancelButton: false,
+                                                showConfirmButton: false,
+                                            })
+                                        } else {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: VueI18n.t("something went wrong"),
+                                                text: error.response.data.message,
+                                                timer: 3000,
+                                                timerProgressBar: true,
+                                                showCancelButton: false,
+                                                showConfirmButton: false,
+                                            })
+                                        }
+
 
                                     }
                                 }

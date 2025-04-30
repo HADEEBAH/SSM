@@ -491,16 +491,28 @@ const loginModules = {
                 // context.commit("SetGetConcent", data.consent)
                 context.commit("SetGetConcent", data.data.consent)
             } catch (error) {
-                console.log('error :>> ', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: VueI18n.t("something went wrong"),
-                    text: error.response.data.message,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    showCancelButton: false,
-                    showConfirmButton: false,
-                })
+                if (error.response.data.message === 'Unauthorized') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: VueI18n.t("something went wrong"),
+                        text: error.response.data.message,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                    })
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: VueI18n.t("something went wrong"),
+                        text: error.response.data.message,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                    })
+                }
+
 
             }
             context.commit("SetIsLoading", false)
