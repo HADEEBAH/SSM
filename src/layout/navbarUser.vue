@@ -565,6 +565,8 @@ import { mapActions, mapGetters } from "vuex";
 import Swal from "sweetalert2";
 import dialogMaintain from "@/components/dialog/dialogMaintain.vue";
 import concentPage from "../components/concent_component/concentPage.vue";
+import VueCookie from "vue-cookie";
+
 export default {
   mixins: [mixin],
   name: "navbarUser",
@@ -648,7 +650,11 @@ export default {
   }),
 
   async created() {
-    await this.GetConcent();
+    let get_token = null;
+    get_token = VueCookie.get("token");
+    if (get_token) {
+      await this.GetConcent();
+    }
     this.$i18n.locale = localStorage.getItem("lang")
       ? localStorage.getItem("lang")
       : "th";

@@ -372,7 +372,11 @@ export default {
   //   }
   // },
   async created() {
-    await this.GetConcent();
+    let get_token = null;
+    get_token = VueCookie.get("token");
+    if (get_token) {
+      await this.GetConcent();
+    }
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     await this.GetClassList();
     this.selectedClass = await this.profile_detail.class;

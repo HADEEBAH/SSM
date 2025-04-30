@@ -495,7 +495,7 @@ const loginModules = {
                     Swal.fire({
                         icon: 'error',
                         title: VueI18n.t("something went wrong"),
-                        text: error.response.data.message,
+                        text: VueI18n.t("unauthorized"),
                         timer: 3000,
                         timerProgressBar: true,
                         showCancelButton: false,
