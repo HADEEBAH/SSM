@@ -372,6 +372,7 @@ export default {
   //   }
   // },
   async created() {
+    await this.GetConcent();
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     await this.GetClassList();
     this.selectedClass = await this.profile_detail.class;

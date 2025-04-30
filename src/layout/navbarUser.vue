@@ -647,7 +647,8 @@ export default {
     alertNotify: true,
   }),
 
-  created() {
+  async created() {
+    await this.GetConcent();
     this.$i18n.locale = localStorage.getItem("lang")
       ? localStorage.getItem("lang")
       : "th";
