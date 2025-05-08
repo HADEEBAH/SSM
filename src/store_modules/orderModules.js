@@ -1842,7 +1842,6 @@ const orderModules = {
                 total_price: 0,
               });
               context.commit("SetRegisStatus", error?.response?.data);
-
               context.commit("SetOrderIsLoading", false);
               context.commit("SetOrderIsStatus", false);
               if (
@@ -1871,6 +1870,18 @@ const orderModules = {
                   text: VueI18n.t(
                     "unable to purchase the course because the course is in reserved status"
                   ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (
+                error?.response?.data?.message === "Unable to register students under care because they are the same user as the user account used to log in to the system."
+              ) {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t("unable to register to student of parent"),
+                  text: VueI18n.t("unable to register to student"),
                   timer: 3000,
                   timerProgressBar: true,
                   showCancelButton: false,
@@ -2426,18 +2437,6 @@ const orderModules = {
                   icon: "warning",
                   title: VueI18n.t("unable to register"),
                   text: "parent is Require",
-                  timer: 3000,
-                  timerProgressBar: true,
-                  showCancelButton: false,
-                  showConfirmButton: false,
-                });
-              } else if (
-                error?.response?.data?.message?.parent === "Unable to register students under care because they are the same user as the user account used to log in to the system."
-              ) {
-                Swal.fire({
-                  icon: "warning",
-                  title: VueI18n.t("unable to register"),
-                  text: "unable to register to student",
                   timer: 3000,
                   timerProgressBar: true,
                   showCancelButton: false,
