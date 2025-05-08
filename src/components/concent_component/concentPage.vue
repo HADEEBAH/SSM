@@ -195,14 +195,7 @@ export default {
             consent: true,
           };
           await this.SendConcent({ payload });
-          if (this.user_detail) {
-            await this.GetConcent();
-            let payload_concent = { concent_data: this.get_concent };
-            localStorage.setItem(
-              "dataConcent",
-              JSON.stringify(payload_concent)
-            );
-          }
+
           this.$emit("pdpa-accepted");
           this.consent_loading = false;
         }
@@ -210,8 +203,7 @@ export default {
     },
     async cancelConsent() {
       this.consent_loading = true;
-      let payload_concent = { concent_data: true };
-      localStorage.setItem("dataConcent", JSON.stringify(payload_concent));
+
       this.cancelConcent();
       this.$emit("pdpa-canceled");
       this.consent_loading = false;
