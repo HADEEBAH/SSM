@@ -2491,7 +2491,7 @@ export default {
         for (const item of await items?.students) {
           if (seen.has(item.username)) {
             Swal.fire({
-              icon: "info",
+              icon: "warning",
               title: this.$t("duplicate username"),
               text: this.$t(
                 "please verify the accuracy of your information before continuing"
@@ -3438,10 +3438,43 @@ export default {
             course_id: this.course_data.course_id,
           }).then(() => {
             if (type === "student") {
+              const isDuplicate = this.course_order?.students?.some(
+                (student) =>
+                  student.username === this.profile_detail?.userName &&
+                  this.course_order.apply_for_parent
+              );
+              if (isDuplicate) {
+                Swal.fire({
+                  icon: "warning",
+                  title: this.$t("warning"),
+                  text: this.$t(
+                    "unable to register with this username in the admin registration mode"
+                  ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+                let student = this.course_order.students.filter(
+                  (v) => v.username === username
+                )[0];
+                if (student) {
+                  student.firstname_en = "";
+                  student.lastname_en = "";
+                  student.firstname_th = "";
+                  student.lastname_th = "";
+                  student.student_name = "";
+                  student.tel = "";
+                  student.username = "";
+                  student.account_id = "";
+                }
+              }
+
               if (
                 this.course_order.students.filter(
                   (v) => v.username === username
-                ).length === 1
+                ).length === 1 &&
+                !isDuplicate
               ) {
                 let student = this.course_order.students.filter(
                   (v) => v.username === username
@@ -3490,7 +3523,8 @@ export default {
               } else if (
                 this.course_order.students.filter(
                   (v) => v.username === username
-                ).length > 1
+                ).length > 1 &&
+                !isDuplicate
               ) {
                 Swal.fire({
                   icon: "warning",

@@ -1027,7 +1027,7 @@
   "upload image and video Learning Journey":"อัปโหลดรูปภาพและวิดีโอ Learning Journey",
   "unable to update the compensation date due to overlapping times, please select new compensation date":"ไม่สามารถอัปเดตวันที่ชดเชยได้เนื่องจากเวลาทับซ้อนกัน กรุณาเลือกวันที่ชดเชยหรือเวลาใหม่",
   "unable to update the compensation day because the compensation day falls on a holiday, please select a new compensatory day":"ไม่สามารถอัปเดตวันชดเชยได้เนื่องจากวันชดเชยตรงกับวันหยุด กรุณาเลือกวันชดเชยใหม่",
-
+  "unable to register with this username in the admin registration mode":"ไม่สามารถลงทะเบียนกับชื่อผู้ใช้นี้ได้",
 
   "via email": "ผ่านอีเมล",
   "view financial status": "ดูสถานะการเงิน",
