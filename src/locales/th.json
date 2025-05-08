@@ -316,6 +316,8 @@
   "do you want to assent":"คุณต้องการยินยอมใช่หรือไม่?",
   "do you want to save":"คุณต้องการบันทึกใช่หรือไม่?",
   "do you want to save and update schedule":"คุณต้องการบันทึกและอัพเดทตารางใช่หรือไม่?",
+  "duplicate username":"Username ซ้ำกัน",
+
 
   "edit": "แก้ไข",
   "edit wls": "แก้ไขอาณาจักร",

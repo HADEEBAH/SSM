@@ -1888,6 +1888,18 @@ const orderModules = {
                   showConfirmButton: false,
                 });
               } else if (
+                error?.response?.data?.message === "Student Duplicate"
+              ) {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t("unable to register"),
+                  text: VueI18n.t("duplicate username"),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (
                 error?.response?.data?.message === "Over Registration"
               ) {
                 Swal.fire({
