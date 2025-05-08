@@ -207,6 +207,7 @@
             v-model="course_order.apply_for_yourself"
             color="#ff6B81"
             :label="$t('register for yourself')"
+            @click="checkDuplicate(course_order)"
           ></v-checkbox>
         </v-col>
         <v-col cols="auto" v-if="course_order.apply_for_yourself">
@@ -2483,6 +2484,32 @@ export default {
       GetTimeAddStudent: "CourseModules/GetTimeAddStudent",
       GetCoachAddStudent: "CourseModules/GetCoachAddStudent",
     }),
+    async checkDuplicate(items) {
+      if (items.apply_for_others) {
+        let seen = new Set();
+
+        for (const item of await items?.students) {
+          if (seen.has(item.username)) {
+            Swal.fire({
+              icon: "info",
+              title: this.$t("duplicate username"),
+              text: this.$t(
+                "please verify the accuracy of your information before continuing"
+              ),
+              timer: 3000,
+              showDenyButton: false,
+              showCancelButton: false,
+              showConfirmButton: false,
+              timerProgressBar: true,
+            });
+            items.apply_for_yourself = false;
+            return true; // พบ username ซ้ำ
+          }
+          seen.add(item.username);
+        }
+        return false; // ไม่พบ username ซ้ำ
+      }
+    },
 
     editStudentData(item_student) {
       this.data_student = item_student;
