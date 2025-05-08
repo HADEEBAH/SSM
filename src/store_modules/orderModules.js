@@ -1444,6 +1444,9 @@ const orderModules = {
             course.course_data?.course_study_start_date?.trim()
           ).format("YYYY-MM-DD");
           payload.courses.push({
+            apply_for_yourself: !course.apply_for_yourself ? false : course.apply_for_yourself, // ลงทะเบียนให้ตัวเอง
+            apply_for_others: !course.apply_for_others ? false : course.apply_for_others, //ลงทะเบียนให้ผู้อื่น
+            apply_for_parent: !course.apply_for_parent ? false : course.apply_for_parent, // ลงทะเบียนให้นรในความดูแล
             course_id: course.course_id ? course.course_id : null,
             course_type_id: course.course_type_id
               ? course.course_type_id

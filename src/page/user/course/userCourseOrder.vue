@@ -340,7 +340,6 @@
           ></v-checkbox>
         </v-col>
       </v-row>
-      <!-- <pre>{{ course_order.students }}</pre> -->
       <!-- Apply For Parent -->
       <v-row dense v-if="checkRoleParent()">
         <v-col cols="12" sm="6" class="d-flex align-center">
@@ -350,6 +349,8 @@
                 ? true
                 : course_order.apply_for_parent
                 ? false
+                : course_order.apply_for_yourself
+                ? true
                 : checkMaximumStudent()
             "
             v-model="course_order.apply_for_parent"
