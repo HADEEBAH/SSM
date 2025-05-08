@@ -2430,6 +2430,18 @@ const orderModules = {
                   showCancelButton: false,
                   showConfirmButton: false,
                 });
+              } else if (
+                error?.response?.data?.message?.parent === "Unable to register students under care because they are the same user as the user account used to log in to the system."
+              ) {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t("unable to register"),
+                  text: "unable to register to student",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
               } else {
                 Swal.fire({
                   icon: "error",

@@ -1155,6 +1155,7 @@
   "unable to purchase the course because the course is in reserved status": "ไม่สามารถซื้อหลักสูตรได้เนื่องจากหลักสูตรอยู่ในสถานะจอง",
   "unable to add students to cart because the course already has students listed in the cart": "ไม่สามารถเพิ่มนักเรียนลงตะกร้าได้เนื่องจากหลักสูตรมีนักเรียนอยู่ในรายการรถเข็นแล้ว",
   "unable to add students to cart because the reservation could not be added": "ไม่สามารถเพิ่มนักเรียนลงตะกร้าได้เนื่องจากไม่สามารถเพิ่มการจองเข้าไปในรายการรถเข็นได้",
+  "unable to register to student":"ไม่สามารถลงทะเบียนในรูปแบบ'ลงทะเบียนให้นักเรียนในความดูแล'ได้ เนื่องจากเป็นผู้ใช้เดียวกันกับบัญชีผู้ใช้งานที่ใช้ในการล็อกอินเข้าระบบ",
 
   "vdo":"วีดิโอ",
   "VDO":"วิดีโอ",

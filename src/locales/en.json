@@ -1169,8 +1169,8 @@
   "unable to add students to cart because the reservation could not be added": "unable to add students to cart because the reservation could not be added",
   "Unable to pay because this course been removed": "Unable to pay because this course been removed.",
   "Unable to pay because this course Package Option has been removed": "Unable to pay because this course Package Option has been removed.",
+  "unable to register to student":"Unable to register in case of 'register to studen of parent' because it is the same user as the user account used to log in to the system.",
   "VDO":"Video",
-
   "organized by": "Organized by",
   "vdo":"Video",
 
