@@ -445,107 +445,115 @@
         </v-row>
       </v-container>
     </v-footer>
-    <!-- DIALOG :: SATISFACTION -->
-    <v-dialog
-      v-model="dialogSatisfaction"
-      class="rounded-xl"
-      max-width="500"
-      persistent
+    <div
+      v-if="
+        (this.get_concent_reg || this.get_concent) && user_detail.isEvaluate
+      "
     >
-      <v-card>
-        <v-card-title primary-title class="justify-end">
-          <v-btn
-            absolute
-            class="top-0 right-0"
-            icon
-            @click="closeDialogSatisfaction()"
-          >
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
-        <v-card-text>
-          <v-row dense>
-            <v-col class="text-xl text-[#ff6b81] text-center">
-              <strong>{{
-                $t("evaluate satisfaction with using the system")
-              }}</strong>
-            </v-col>
-          </v-row>
-          <v-row dense>
-            <v-col class="text-wrap">
-              {{ $t("evaluate") }}
-              <!-- จากที่ได้เข้าร่วมบริการระบบ Smart School Managemet
+      <!-- DIALOG :: SATISFACTION -->
+      <v-dialog
+        v-model="dialogSatisfaction"
+        class="rounded-xl"
+        max-width="500"
+        persistent
+      >
+        <v-card>
+          <v-card-title primary-title class="justify-end">
+            <v-btn
+              absolute
+              class="top-0 right-0"
+              icon
+              @click="closeDialogSatisfaction()"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-card-title>
+          <v-card-text>
+            <v-row dense>
+              <v-col class="text-xl text-[#ff6b81] text-center">
+                <strong>{{
+                  $t("evaluate satisfaction with using the system")
+                }}</strong>
+              </v-col>
+            </v-row>
+            <v-row dense>
+              <v-col class="text-wrap">
+                {{ $t("evaluate") }}
+                <!-- จากที่ได้เข้าร่วมบริการระบบ Smart School Managemet
               กรุณาประเมินความพึงพอใจ
               เพื่อให้ทางระบบที่ท่านเข้าใช้บริการนำความคิดเห็นของท่านไปปรับปรุงการให้บริการต่อไป -->
-            </v-col>
-          </v-row>
-          <div
-            v-for="(surveyData, surveyIndex) in survey"
-            :key="`${surveyIndex}-survey`"
-          >
-            <v-row dense>
-              <v-col class="font-bold">
-                {{ `${surveyData.index}.${surveyData.title}` }}
               </v-col>
             </v-row>
             <div
-              v-for="(question, questionIndex) in surveyData.questions"
-              :key="`${questionIndex}-question`"
+              v-for="(surveyData, surveyIndex) in survey"
+              :key="`${surveyIndex}-survey`"
             >
-              <v-row dense :class="$vuetify.breakpoint.mdAndUp ? 'pl-5' : ''">
-                <v-col cols="12" md="6" class="d-flex align-center">
-                  {{ `${surveyData.index}.${question.index}.${question.text}` }}
-                </v-col>
-                <v-col cols="12" md="6" class="d-flex align-center">
-                  <v-rating
-                    v-model="question.rate"
-                    background-color="grey lighten-2"
-                    color="warning"
-                    hover
-                    length="5"
-                    size="30"
-                  ></v-rating>
+              <v-row dense>
+                <v-col class="font-bold">
+                  {{ `${surveyData.index}.${surveyData.title}` }}
                 </v-col>
               </v-row>
-              <v-divider
-                v-if="questionIndex !== surveyData.questions.length - 1"
-              ></v-divider>
+              <div
+                v-for="(question, questionIndex) in surveyData.questions"
+                :key="`${questionIndex}-question`"
+              >
+                <v-row dense :class="$vuetify.breakpoint.mdAndUp ? 'pl-5' : ''">
+                  <v-col cols="12" md="6" class="d-flex align-center">
+                    {{
+                      `${surveyData.index}.${question.index}.${question.text}`
+                    }}
+                  </v-col>
+                  <v-col cols="12" md="6" class="d-flex align-center">
+                    <v-rating
+                      v-model="question.rate"
+                      background-color="grey lighten-2"
+                      color="warning"
+                      hover
+                      length="5"
+                      size="30"
+                    ></v-rating>
+                  </v-col>
+                </v-row>
+                <v-divider
+                  v-if="questionIndex !== surveyData.questions.length - 1"
+                ></v-divider>
+              </div>
+              <v-row dense class="mb-3">
+                <v-col>
+                  <v-textarea
+                    v-model="surveyData.remark"
+                    outlined
+                    color="#ff6b81"
+                    hide-details
+                    :placeholder="$t('suggestions')"
+                  ></v-textarea>
+                </v-col>
+              </v-row>
             </div>
-            <v-row dense class="mb-3">
-              <v-col>
-                <v-textarea
-                  v-model="surveyData.remark"
+            <v-row>
+              <v-col align="right">
+                <v-btn
                   outlined
                   color="#ff6b81"
-                  hide-details
-                  :placeholder="$t('suggestions')"
-                ></v-textarea>
+                  @click="closeDialogSatisfaction()"
+                  >{{ $t("cancel") }}</v-btn
+                >
+              </v-col>
+              <v-col cols="auto">
+                <v-btn
+                  depressed
+                  :dark="!disableSendSatisfaction"
+                  :disabled="disableSendSatisfaction"
+                  color="#ff6b81"
+                  @click="send()"
+                  >{{ $t("send") }}</v-btn
+                >
               </v-col>
             </v-row>
-          </div>
-          <v-row>
-            <v-col align="right">
-              <v-btn
-                outlined
-                color="#ff6b81"
-                @click="closeDialogSatisfaction()"
-                >{{ $t("cancel") }}</v-btn
-              >
-            </v-col>
-            <v-col cols="auto">
-              <v-btn
-                depressed
-                :dark="!disableSendSatisfaction"
-                :disabled="disableSendSatisfaction"
-                color="#ff6b81"
-                @click="send()"
-                >{{ $t("send") }}</v-btn
-              >
-            </v-col>
-          </v-row>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+    </div>
     <dialogMaintain
       v-if="!user_detail?.closeIsAlert && !dialogSatisfaction"
       :alert-maintain="alertData"
