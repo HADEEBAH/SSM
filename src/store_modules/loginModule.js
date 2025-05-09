@@ -305,16 +305,12 @@ const loginModules = {
                     context.commit("SetIsLoading", false)
                     if (!payload.first_name_th || !payload.last_name_th) {
                         await context.dispatch("GetConcent")
-                        let payload_concent = { concent_data: context.state.get_concent }
-                        localStorage.setItem("dataConcent", JSON.stringify(payload_concent))
                         router.replace({ name: "ProfileDetail", params: { profile_id: payload.account_id } })
                         context.commit("SetProfileFail", true)
 
                     } else {
                         if (order?.category_id && order?.course_id) {
                             await context.dispatch("GetConcent")
-                            let payload_concent = { concent_data: context.state.get_concent }
-                            localStorage.setItem("dataConcent", JSON.stringify(payload_concent))
                             if (order.course_type_id === "CT_1") {
                                 router.replace({ name: "userCoursePackage_courseId", params: { course_id: order.course_id } })
                             } else {
@@ -322,8 +318,6 @@ const loginModules = {
                             }
                         } else {
                             await context.dispatch("GetConcent")
-                            let payload_concent = { concent_data: context.state.get_concent }
-                            localStorage.setItem("dataConcent", JSON.stringify(payload_concent))
                             await router.replace({ name: "UserKingdom" })
                         }
                     }
@@ -464,8 +458,8 @@ const loginModules = {
                 // let localhost = "http://localhost:3000"
                 // const { data } = await axios.patch(`${localhost}/api/v1/consent/createConsenByUser`, payload, config)
                 const { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/consent/createConsenByUser`, payload, config)
-                context.commit("SetSendConcent", data.consent)
-                // context.commit("SetSendConcent", data.data.consent)
+                // context.commit("SetSendConcent", data.consent)
+                context.commit("SetSendConcent", data.data.consent)
 
             } catch (error) {
 
@@ -494,19 +488,31 @@ const loginModules = {
                 // let localhost = "http://localhost:3000"
                 // const { data } = await axios.get(`${localhost}/api/v1/consent/getConsenUser`, config)
                 const { data } = await axios.get(`${process.env.VUE_APP_URL}/api/v1/consent/getConsenUser`, config)
-                context.commit("SetGetConcent", data.consent)
-                // context.commit("SetGetConcent", data.data.consent)
+                // context.commit("SetGetConcent", data.consent)
+                context.commit("SetGetConcent", data.data.consent)
             } catch (error) {
-                console.log('error :>> ', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: VueI18n.t("something went wrong"),
-                    text: error.response.data.message,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    showCancelButton: false,
-                    showConfirmButton: false,
-                })
+                if (error.response.data.message === 'Unauthorized') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: VueI18n.t("something went wrong"),
+                        text: VueI18n.t("unauthorized"),
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                    })
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: VueI18n.t("something went wrong"),
+                        text: error.response.data.message,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                    })
+                }
+
 
             }
             context.commit("SetIsLoading", false)

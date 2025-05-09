@@ -558,7 +558,8 @@ const orderModules = {
               order_item.students.forEach((student) => {
                 if (
                   !student_name_list.includes(
-                    `${student?.firstNameTh} ${student?.lastNameTh}`
+                    student?.studentId
+                    // `${student?.firstNameTh} ${student?.lastNameTh}`
                   )
                 ) {
                   student_name_list.push(

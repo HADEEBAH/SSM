@@ -1170,6 +1170,8 @@
   "unable to add students to cart because the reservation could not be added": "unable to add students to cart because the reservation could not be added",
   "Unable to pay because this course been removed": "Unable to pay because this course been removed.",
   "Unable to pay because this course Package Option has been removed": "Unable to pay because this course Package Option has been removed.",
+ "unauthorized":"Login denied due to lack of permissions.",
+  
   "VDO":"Video",
 
   "organized by": "Organized by",
