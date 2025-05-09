@@ -447,7 +447,7 @@
     </v-footer>
     <div
       v-if="
-        (this.get_concent_reg || this.get_concent) && user_detail.isEvaluate
+        (this.get_concent_reg || this.get_concent) && user_detail?.isEvaluate
       "
     >
       <!-- DIALOG :: SATISFACTION -->
