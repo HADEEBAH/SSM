@@ -715,6 +715,7 @@ const orderModules = {
                         ? student.parents[0].tel
                         : null,
                 },
+                role_id: student.role ? student.role : ""
               });
             } else {
               students.push({
@@ -725,6 +726,7 @@ const orderModules = {
                 tel: student.tel,
                 is_other: student.is_other,
                 parent: {},
+                role_id: student.role ? student.role : ""
               });
             }
           }
@@ -922,6 +924,18 @@ const orderModules = {
             icon: "error",
             title: VueI18n.t("unable to register"),
             text: VueI18n.t("please enter your name and class"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (
+          error?.response?.data?.message?.roleId === "Require."
+        ) {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("unable to register"),
+            text: "roleId is Require",
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -1246,7 +1260,7 @@ const orderModules = {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("this item cannot be made"),
-            text: error,
+            text: error?.response?.data?.message,
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -3496,6 +3510,27 @@ const orderModules = {
         }
       } catch (error) {
         context.commit("SetCartListIsLoading", false);
+        if (error?.response?.data?.message === "Coach has Been Deleted.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("coach has Been Deleted"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("this item cannot be made"),
+            text: error?.response?.data?.message,
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        }
       }
     },
     async DeleteCart(context, { cart_id }) {
@@ -3550,6 +3585,27 @@ const orderModules = {
         }
       } catch (error) {
         context.commit("SetCartListIsLoading", false);
+        if (error?.response?.data?.message === "Coach has Been Deleted.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("coach has Been Deleted"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("this item cannot be made"),
+            text: error?.response?.data?.message,
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        }
       }
     },
     async userUpdateOrderCancelStatus(context, { order_number }) {
@@ -3799,6 +3855,7 @@ const orderModules = {
                             ? student.parents[0].tel
                             : null,
                     },
+                    role_id: student.role ? student.role : ""
                   });
                 } else {
                   studentsArr.push({
@@ -3809,8 +3866,8 @@ const orderModules = {
                     tel: student.tel,
                     is_other: student.is_other,
                     is_waraphat: student.IsWaraphat,
-
                     parent: {},
+                    role_id: student.role ? student.role : ""
                   });
                 }
               }
@@ -3913,43 +3970,22 @@ const orderModules = {
                       : 0,
                 admin_discount: 0,
               });
-              let config = {
-                headers: {
-                  "Access-Control-Allow-Origin": "*",
-                  "Content-type": "Application/json",
-                  Authorization: `Bearer ${VueCookie.get("token")}`,
-                },
-              };
-              let { data } = await axios.post(
-                // `http://localhost:3002/api/v1/order/reserve/create`,
-                `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
-                payload,
-                config
-              );
-              if (data.statusCode === 201) {
-                // count = count + 1;
-                // if (studentsArr.length === course_data.students.length) {
-                await Swal.fire({
-                  icon: "success",
-                  title: VueI18n.t("succeed"),
-                  text: VueI18n.t(
-                    "successfully reserved a course Staff will contact you later"
-                  ),
-                  showDenyButton: false,
-                  showCancelButton: false,
-                  showConfirmButton: false,
-                  timer: 3000,
-                  timerProgressBar: true,
-                }).finally(() => {
-                  router.replace({ name: "UserKingdom" });
-                });
-                // }
-              } else {
-                throw { error: data.data };
-              }
-              // }
-
-              // if (count === course_data.students.length) {
+              // let config = {
+              //   headers: {
+              //     "Access-Control-Allow-Origin": "*",
+              //     "Content-type": "Application/json",
+              //     Authorization: `Bearer ${VueCookie.get("token")}`,
+              //   },
+              // };
+              // let { data } = await axios.post(
+              //   // `http://localhost:3002/api/v1/order/reserve/create`,
+              //   `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
+              //   payload,
+              //   config
+              // );
+              // if (data.statusCode === 201) {
+              //   // count = count + 1;
+              //   // if (studentsArr.length === course_data.students.length) {
               //   await Swal.fire({
               //     icon: "success",
               //     title: VueI18n.t("succeed"),
@@ -3964,7 +4000,88 @@ const orderModules = {
               //   }).finally(() => {
               //     router.replace({ name: "UserKingdom" });
               //   });
+              //   // }
+              // } else {
+              //   console.log('222222 :>> ', 222222);
+              //   throw { error: data.data };
               // }
+
+
+              try {
+                let config = {
+                  headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Content-type": "Application/json",
+                    Authorization: `Bearer ${VueCookie.get("token")}`,
+                  },
+                };
+                let { data } = await axios.post(
+                  // `http://localhost:3002/api/v1/order/reserve/create`,
+                  `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
+                  payload,
+                  config
+                );
+                if (data.statusCode === 201) {
+                  // count = count + 1;
+                  // if (studentsArr.length === course_data.students.length) {
+                  await Swal.fire({
+                    icon: "success",
+                    title: VueI18n.t("succeed"),
+                    text: VueI18n.t(
+                      "successfully reserved a course Staff will contact you later"
+                    ),
+                    showDenyButton: false,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                  }).finally(() => {
+                    router.replace({ name: "UserKingdom" });
+                  });
+                  // }
+                }
+              } catch (error) {
+                if (
+                  error.response?.data?.message ===
+                  "Parents cannot resave the course to their parents."
+                ) {
+                  Swal.fire({
+                    icon: "error",
+                    title: VueI18n.t("something went wrong"),
+                    text: VueI18n.t(
+                      "parents cannot resave the course to their parents"
+                    ),
+                    showDenyButton: false,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                  });
+                } else if (
+                  error?.response?.data?.message?.roleId === "Require."
+                ) {
+                  Swal.fire({
+                    icon: "warning",
+                    title: VueI18n.t("unable to register"),
+                    text: "roleId is Require",
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                  });
+                } else {
+                  Swal.fire({
+                    icon: "error",
+                    title: VueI18n.t("something went wrong"),
+                    text: error.response?.data?.message,
+                    showDenyButton: false,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                  })
+                }
+              }
             }
           });
         } else {
@@ -4131,42 +4248,121 @@ const orderModules = {
               admin_discount: 0,
             });
 
-            let config = {
-              headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Content-type": "Application/json",
-                Authorization: `Bearer ${VueCookie.get("token")}`,
-              },
-            };
-            let { data } = await axios.post(
-              // `http://localhost:3002/api/v1/order/reserve/create`,
-              `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
-              payload,
-              config
-            );
-            if (data.statusCode === 201) {
-              // count = count + 1;
-              // if (studentsArr.length === course_data.students.length) {
+            // let config = {
+            //   headers: {
+            //     "Access-Control-Allow-Origin": "*",
+            //     "Content-type": "Application/json",
+            //     Authorization: `Bearer ${VueCookie.get("token")}`,
+            //   },
+            // };
+            // let { data } = await axios.post(
+            //   // `http://localhost:3002/api/v1/order/reserve/create`,
+            //   `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
+            //   payload,
+            //   config
+            // );
+            // if (data.statusCode === 201) {
+            //   // count = count + 1;
+            //   // if (studentsArr.length === course_data.students.length) {
 
-              await Swal.fire({
-                icon: "success",
-                title: VueI18n.t("succeed"),
-                text: VueI18n.t(
-                  "successfully reserved a course Staff will contact you later"
-                ),
-                showDenyButton: false,
-                showCancelButton: false,
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-              }).finally(() => {
-                router.replace({ name: "UserKingdom" });
-              });
-              // }
-            } else {
-              throw { error: data.data };
-            }
+            //   await Swal.fire({
+            //     icon: "success",
+            //     title: VueI18n.t("succeed"),
+            //     text: VueI18n.t(
+            //       "successfully reserved a course Staff will contact you later"
+            //     ),
+            //     showDenyButton: false,
+            //     showCancelButton: false,
+            //     showConfirmButton: false,
+            //     timer: 3000,
+            //     timerProgressBar: true,
+            //   }).finally(() => {
+            //     router.replace({ name: "UserKingdom" });
+            //   });
+            //   // }
+            // } else {
+            //   console.log('111111 :>> ', 111111);
+            //   throw { error: data.data };
             // }
+            // }
+
+
+            try {
+              let config = {
+                headers: {
+                  "Access-Control-Allow-Origin": "*",
+                  "Content-type": "Application/json",
+                  Authorization: `Bearer ${VueCookie.get("token")}`,
+                },
+              };
+              let { data } = await axios.post(
+                // `http://localhost:3002/api/v1/order/reserve/create`,
+                `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
+                payload,
+                config
+              );
+              if (data.statusCode === 201) {
+                // count = count + 1;
+                // if (studentsArr.length === course_data.students.length) {
+
+                await Swal.fire({
+                  icon: "success",
+                  title: VueI18n.t("succeed"),
+                  text: VueI18n.t(
+                    "successfully reserved a course Staff will contact you later"
+                  ),
+                  showDenyButton: false,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                  timer: 3000,
+                  timerProgressBar: true,
+                }).finally(() => {
+                  router.replace({ name: "UserKingdom" });
+                });
+                // }
+              }
+            } catch (error) {
+              if (
+                error.response?.data?.message ===
+                "Parents cannot resave the course to their parents."
+              ) {
+                Swal.fire({
+                  icon: "error",
+                  title: VueI18n.t("something went wrong"),
+                  text: VueI18n.t(
+                    "parents cannot resave the course to their parents"
+                  ),
+                  showDenyButton: false,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                  timer: 3000,
+                  timerProgressBar: true,
+                });
+              } else if (
+                error?.response?.data?.message?.roleId === "Require."
+              ) {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t("unable to register"),
+                  text: "roleId is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: VueI18n.t("something went wrong"),
+                  text: error.response?.data?.message,
+                  showDenyButton: false,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                  timer: 3000,
+                  timerProgressBar: true,
+                })
+              }
+            }
           }
         }
 
