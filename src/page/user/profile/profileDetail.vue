@@ -346,7 +346,11 @@ export default {
     checkTrue: true,
   }),
   beforeRouteLeave(to, from, next) {
-    if (
+    // บล็อกการเปลี่ยนหน้า
+    this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
+    if (!this.user_detail) {
+      next(); // อนุญาตให้ออก ถ้า !this.user_detail
+    } else if (
       this.profile_detail.firstNameTh &&
       this.profile_detail.lastNameTh &&
       !this.isEnabled
@@ -356,7 +360,23 @@ export default {
       this.changeProfileFail(true);
     }
   },
+  // beforeRouteLeave(to, from, next) {
+  //   if (
+  //     this.profile_detail.firstNameTh &&
+  //     this.profile_detail.lastNameTh &&
+  //     !this.isEnabled
+  //   ) {
+  //     next();
+  //   } else {
+  //     this.changeProfileFail(true);
+  //   }
+  // },
   async created() {
+    let get_token = null;
+    get_token = VueCookie.get("token");
+    if (get_token) {
+      await this.GetConcent();
+    }
     this.user_detail = JSON.parse(localStorage.getItem("userDetail"));
     await this.GetClassList();
     this.selectedClass = await this.profile_detail.class;

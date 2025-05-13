@@ -1155,7 +1155,8 @@
   "unable to purchase the course because the course is in reserved status": "ไม่สามารถซื้อหลักสูตรได้เนื่องจากหลักสูตรอยู่ในสถานะจอง",
   "unable to add students to cart because the course already has students listed in the cart": "ไม่สามารถเพิ่มนักเรียนลงตะกร้าได้เนื่องจากหลักสูตรมีนักเรียนอยู่ในรายการรถเข็นแล้ว",
   "unable to add students to cart because the reservation could not be added": "ไม่สามารถเพิ่มนักเรียนลงตะกร้าได้เนื่องจากไม่สามารถเพิ่มการจองเข้าไปในรายการรถเข็นได้",
-
+ "unauthorized":"การเข้าสู่ระบบถูกปฏิเสธ เนื่องจากไม่มีสิทธิ์",
+ 
   "vdo":"วีดิโอ",
   "VDO":"วิดีโอ",
   "organized by": "จัดสอนโดย",
