@@ -1347,6 +1347,8 @@ const orderModules = {
                         lastNameTh: student.lastname_th,
                         firstNameEng: student.firstname_en,
                         lastNameEng: student.lastname_en,
+                        role_id: student.role
+                          ? student.role : ""
                       });
                     } else {
                       allStudentsValid = false;
@@ -1423,6 +1425,7 @@ const orderModules = {
                         ? student.parents[0].tel
                         : null,
                 },
+                role_id: student.role ? student.role : ""
               });
             } else {
               students.push({
@@ -1433,6 +1436,7 @@ const orderModules = {
                 tel: student.tel,
                 is_other: student.is_other,
                 parent: {},
+                role_id: student.role ? student.role : ""
               });
             }
 

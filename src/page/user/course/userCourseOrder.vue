@@ -2169,6 +2169,7 @@ export default {
           nicknameTh: this.profile_detail.nicknameTh,
           class: this.profile_detail?.class?.classNameTh,
           otherClass: this.otherCheckClassData,
+          role: "R_5",
         });
       } else {
         this.course_order.students.forEach((student, index) => {
@@ -2613,6 +2614,7 @@ export default {
         username: item_student.userName,
         otherClass:
           item_student.class === "อื่นๆ" ? item_student.otherClass : null,
+        role: "R_5",
       };
 
       const index = this.course_order.students.findIndex(
