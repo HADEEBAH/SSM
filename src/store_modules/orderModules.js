@@ -1907,6 +1907,30 @@ const orderModules = {
                   showConfirmButton: false,
                 });
               } else if (
+                error?.response?.data?.message === "Parents cannot purchase courses for them"
+              ) {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t("unable to register"),
+                  text: VueI18n.t("unable to purchase courses for parents"),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (
+                error?.response?.data?.message === "User not found."
+              ) {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t("unable to register"),
+                  text: VueI18n.t("this user could not be found"),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (
                 error?.response?.data?.message === "Over Registration"
               ) {
                 Swal.fire({
@@ -2121,16 +2145,6 @@ const orderModules = {
                   icon: "warning",
                   title: VueI18n.t("unable to register"),
                   text: VueI18n.t("please enter your name and class"),
-                  timer: 3000,
-                  timerProgressBar: true,
-                  showCancelButton: false,
-                  showConfirmButton: false,
-                });
-              } else if (error?.response?.data?.message === "User not found.") {
-                Swal.fire({
-                  icon: "warning",
-                  title: VueI18n.t("unable to register"),
-                  text: VueI18n.t("this user could not be found"),
                   timer: 3000,
                   timerProgressBar: true,
                   showCancelButton: false,
@@ -2465,7 +2479,7 @@ const orderModules = {
                 Swal.fire({
                   icon: "error",
                   title: VueI18n.t("unable to register"),
-                  text: error,
+                  text: error?.response?.data?.message,
                   timer: 3000,
                   timerProgressBar: true,
                   showCancelButton: false,

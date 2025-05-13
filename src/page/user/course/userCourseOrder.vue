@@ -503,7 +503,7 @@
                       disabled
                     ></v-text-field>
                   </v-col>
-                  <!-- thai eng -->
+                  <!-- thai last -->
                   <v-col cols="12" sm="6">
                     <labelCustom
                       required
@@ -2560,13 +2560,14 @@ export default {
               : items.class,
         };
         await this.UpdateStudentDetail({ payload: data_payload });
-        this.order_data = JSON.parse(localStorage.getItem("Order"));
-        this.user_login = JSON.parse(localStorage.getItem("userDetail"));
-        await this.GetProfileDetail(this.user_login.account_id);
-        await this.GetClassList();
-        if (!this.course_order.course_id) {
-          this.$router.replace({ name: "UserKingdom" });
-        }
+        // ปิดเพราะข้อมูลเพี้ยน
+        // this.order_data = JSON.parse(localStorage.getItem("Order"));
+        // this.user_login = JSON.parse(localStorage.getItem("userDetail"));
+        // await this.GetProfileDetail(this.user_login.account_id);
+        // await this.GetClassList();
+        // if (!this.course_order.course_id) {
+        //   this.$router.replace({ name: "UserKingdom" });
+        // }
         this.update_loading = false;
         this.dialog_student_detail = false;
       }
@@ -2614,7 +2615,7 @@ export default {
         username: item_student.userName,
         otherClass:
           item_student.class === "อื่นๆ" ? item_student.otherClass : null,
-        role: "R_5",
+        role: item_student?.role?.roleId ? item_student?.role?.roleId : null,
       };
 
       const index = this.course_order.students.findIndex(

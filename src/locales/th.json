@@ -1160,6 +1160,7 @@
   "unable to add students to cart because the reservation could not be added": "ไม่สามารถเพิ่มนักเรียนลงตะกร้าได้เนื่องจากไม่สามารถเพิ่มการจองเข้าไปในรายการรถเข็นได้",
   "unable to register to student of parent":"ไม่สามารถลงทะเบียนในรูปแบบ 'ลงทะเบียนให้นักเรียนในความดูแล' ได้",
   "unable to register to student":"เนื่องจากเป็นผู้ใช้เดียวกันกับบัญชีผู้ใช้งานที่ใช้ในการล็อกอินเข้าระบบ",
+  "unable to purchase courses for parents":"ไม่สามารถซื้อหลักสูตรให้ผู้ปกครองได้",
 
  "unauthorized":"การเข้าสู่ระบบถูกปฏิเสธ เนื่องจากไม่มีสิทธิ์",
  

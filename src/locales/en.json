@@ -1175,6 +1175,7 @@
   "unable to register to student of parent":"Unable to register in case of 'register to studen of parent'",
   "unable to register to student":"because it is the same user as the user account used to log in to the system.",
   "unauthorized":"Login denied due to lack of permissions.",
+  "unable to purchase courses for parents":"Unable to purchase courses for parents",
   
   "VDO":"Video",
   "organized by": "Organized by",
