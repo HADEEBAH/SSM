@@ -3090,7 +3090,7 @@ export default {
         username: "",
         tel: "",
       };
-      this.user_data = [];
+      // this.user_data = [];
       this.changeCourseOrderData(this.course_order);
       this.dialog_parent = false;
     },
@@ -3581,50 +3581,70 @@ export default {
             course_id: this.course_data.course_id,
           }).then(() => {
             if (
-              this.course_order.students.filter((v) => v.username === username)
-                .length === 0
+              this.user_data[0].roles?.roleId === "R_5" ||
+              this.user_data[0].roles?.roleId === "R_3" ||
+              this.user_data[0].roles?.roleId === "R_2" ||
+              this.user_data[0].roles?.roleId === "R_1"
             ) {
-              if (this.user_data.length > 0) {
-                if (this.edit_parent) {
-                  this.edit_parent = false;
-                }
-                this.parent = {
-                  account_id: this.user_data[0].userOneId,
-                  username: username,
-                  firstname_en: this.user_data[0].firstNameEng,
-                  lastname_en: this.user_data[0].lastNameEng,
-                  tel: this.user_data[0].mobileNo,
-                };
-                if (
-                  this.course_order.students.filter(
-                    (v) => v.is_other === false
-                  )[0].parents.length > 0
-                ) {
+              Swal.fire({
+                icon: "warning",
+                title: this.$t("warning"),
+                text: this.$t(
+                  "unable to register with this username in the admin registration mode"
+                ),
+                timer: 3000,
+                timerProgressBar: true,
+                showCancelButton: false,
+                showConfirmButton: false,
+              });
+            } else {
+              if (
+                this.course_order.students.filter(
+                  (v) => v.username === username
+                ).length === 0
+              ) {
+                if (this.user_data.length > 0) {
+                  if (this.edit_parent) {
+                    this.edit_parent = false;
+                  }
+                  this.parent = {
+                    account_id: this.user_data[0].userOneId,
+                    username: username,
+                    firstname_en: this.user_data[0].firstNameEng,
+                    lastname_en: this.user_data[0].lastNameEng,
+                    tel: this.user_data[0].mobileNo,
+                  };
+                  if (
+                    this.course_order.students.filter(
+                      (v) => v.is_other === false
+                    )[0].parents.length > 0
+                  ) {
+                    let parents = this.course_order.students.filter(
+                      (v) => v.is_other === false
+                    )[0].parents;
+                    parents[0].firstname_en = this.user_data[0].firstNameEng;
+                    parents[0].lastname_en = this.user_data[0].lastNameEng;
+                    parents[0].tel = this.user_data[0].mobileNo;
+                    parents[0].account_id = this.user_data[0].userOneId;
+                    parents[0].username = username;
+                  }
+                } else {
+                  this.parent = {
+                    account_id: "",
+                    username: "",
+                    firstname_en: "",
+                    lastname_en: "",
+                    tel: "",
+                  };
                   let parents = this.course_order.students.filter(
                     (v) => v.is_other === false
                   )[0].parents;
-                  parents[0].firstname_en = this.user_data[0].firstNameEng;
-                  parents[0].lastname_en = this.user_data[0].lastNameEng;
-                  parents[0].tel = this.user_data[0].mobileNo;
-                  parents[0].account_id = this.user_data[0].userOneId;
-                  parents[0].username = username;
+                  parents[0].firstname_en = "";
+                  parents[0].lastname_en = "";
+                  parents[0].tel = "";
+                  parents[0].account_id = "";
+                  parents[0].username = "";
                 }
-              } else {
-                this.parent = {
-                  account_id: "",
-                  username: "",
-                  firstname_en: "",
-                  lastname_en: "",
-                  tel: "",
-                };
-                let parents = this.course_order.students.filter(
-                  (v) => v.is_other === false
-                )[0].parents;
-                parents[0].firstname_en = "";
-                parents[0].lastname_en = "";
-                parents[0].tel = "";
-                parents[0].account_id = "";
-                parents[0].username = "";
               }
             }
           });

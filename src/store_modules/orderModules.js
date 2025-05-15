@@ -4079,7 +4079,6 @@ const orderModules = {
                   tel: student.tel,
                   is_other: student.is_other,
                   is_waraphat: student.IsWaraphat,
-
                   parent: {
                     account_id: student.parents[0].account_id,
                     parent_first_name_th: student.parents[0].firstname_th
@@ -4091,9 +4090,9 @@ const orderModules = {
                     parent_first_name_en: student.parents[0].firstname_en,
                     parent_last_name_eh: student.parents[0].lastname_en,
                     parent_tel: student.parents[0].tel,
-                    role_id: student.role ? student.role : ""
-
                   },
+                  role_id: student.role ? student.role : ""
+
                 });
               } else {
                 studentsArr.push({
