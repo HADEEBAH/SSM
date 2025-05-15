@@ -3443,7 +3443,7 @@ export default {
           }).then(() => {
             if (type === "student") {
               if (this.course_order?.apply_for_parent) {
-                if (this.user_student_data[0]?.roles) {
+                if (this.user_student_data[0]?.roles?.roleId === "R_4") {
                   Swal.fire({
                     icon: "warning",
                     title: this.$t("warning"),
