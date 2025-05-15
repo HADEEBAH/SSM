@@ -3442,6 +3442,35 @@ export default {
             course_id: this.course_data.course_id,
           }).then(() => {
             if (type === "student") {
+              if (this.course_order?.apply_for_parent) {
+                if (this.user_student_data[0]?.roles) {
+                  Swal.fire({
+                    icon: "warning",
+                    title: this.$t("warning"),
+                    text: this.$t(
+                      "unable to register with this username in the admin registration mode"
+                    ),
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                  });
+                  let student = this.course_order.students.filter(
+                    (v) => v.username === username
+                  )[0];
+                  if (student) {
+                    student.firstname_en = "";
+                    student.lastname_en = "";
+                    student.firstname_th = "";
+                    student.lastname_th = "";
+                    student.student_name = "";
+                    student.tel = "";
+                    student.username = "";
+                    student.account_id = "";
+                  }
+                }
+              }
+
               const isDuplicate = this.course_order?.students?.some(
                 (student) =>
                   student.username === this.profile_detail?.userName &&
