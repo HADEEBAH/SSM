@@ -1450,7 +1450,7 @@ const orderModules = {
                 tel: student.tel,
                 is_other: student.is_other,
                 parent: {},
-                role_id: regis_type == "addStudent" ? itemRole ? itemRole : "" : student.role ? student.role : ""
+                role_id: regis_type == "addStudent" || regis_type == "cart" ? itemRole ? itemRole : "" : student.role ? student.role : ""
               });
             }
 
