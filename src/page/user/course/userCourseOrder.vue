@@ -3280,14 +3280,14 @@ export default {
         .parents.splice(0, 1);
     },
     removeStudent(student) {
-      this.remove_student_button = true;
-
       this.course_order.students.splice(
         this.course_order.students.findIndex(
-          (v) => v.username === student.username
+          (v) =>
+            v.username === student.username && v.is_other === student.is_other
         ),
         1
       );
+
       if (
         this.course_order.students.filter((v) => v.is_other === true).length ===
         0
