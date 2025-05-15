@@ -874,10 +874,10 @@ const orderModules = {
             Authorization: `Bearer ${VueCookie.get("token")}`,
           },
         };
-        const localhost = 'http://localhost:3002'
+        // const localhost = 'http://localhost:3002'
         let { data } = await axios.post(
-          `${localhost}/api/v1/order/cart`,
-          // `${process.env.VUE_APP_URL}/api/v1/order/cart`,
+          // `${localhost}/api/v1/order/cart`,
+          `${process.env.VUE_APP_URL}/api/v1/order/cart`,
           payload,
           config
         );
@@ -1341,7 +1341,6 @@ const orderModules = {
                     !itemRole
                   ) {
                     if (student.nicknameTh && student.class) {
-                      console.log('111 :>> ', 111);
                       let checkClass =
                         student.class === "อื่นๆ"
                           ? (student.class = "Other")
@@ -1383,7 +1382,6 @@ const orderModules = {
             }
             let parent_data = JSON.parse(localStorage.getItem("userDetail"));
             if (course.apply_for_parent === true || student.parents[0]) {
-              console.log('2222 :>> ', 2222);
               students.push({
                 account_id: student.account_id ? student.account_id : "",
                 username: student.username,
@@ -1444,8 +1442,6 @@ const orderModules = {
                 role_id: student.role ? student.role : ""
               });
             } else {
-              console.log('3333 :>> ', itemRole);
-              console.log('regis_type :>> ', regis_type);
               students.push({
                 account_id: student.account_id ? student.account_id : "",
                 username: student.username,
@@ -1701,10 +1697,10 @@ const orderModules = {
           );
           if (data.statusCode === 201) {
             try {
-              const localhost = "http://localhost:3002";
+              // const localhost = "http://localhost:3002";
               let { data } = await axios.post(
-                `${localhost}/api/v1/order/regis/course`,
-                // `${process.env.VUE_APP_URL}/api/v1/order/regis/course`,
+                // `${localhost}/api/v1/order/regis/course`,
+                `${process.env.VUE_APP_URL}/api/v1/order/regis/course`,
                 payload,
                 config
               );
@@ -3983,8 +3979,8 @@ const orderModules = {
                   },
                 };
                 let { data } = await axios.post(
-                  `http://localhost:3002/api/v1/order/reserve/create`,
-                  // `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
+                  // `http://localhost:3002/api/v1/order/reserve/create`,
+                  `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
                   payload,
                   config
                 );
@@ -4227,8 +4223,8 @@ const orderModules = {
                 },
               };
               let { data } = await axios.post(
-                `http://localhost:3002/api/v1/order/reserve/create`,
-                // `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
+                // `http://localhost:3002/api/v1/order/reserve/create`,
+                `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
                 payload,
                 config
               );
