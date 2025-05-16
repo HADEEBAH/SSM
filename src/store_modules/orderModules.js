@@ -3178,8 +3178,8 @@ const orderModules = {
         } else {
           Swal.fire({
             icon: "error",
-            title: VueI18n.t("this item cannot be made"),
-            text: error,
+            title: error?.response?.data?.data ? VueI18n.t("this item cannot be made") : VueI18n.t("this username is not yet logged in"),
+            text: error?.response?.data?.data ? error?.response?.data?.message : VueI18n.t("please add a role or have this user log in"),
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,

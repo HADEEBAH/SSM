@@ -740,6 +740,7 @@
   "please upload only mp4 file":"กรุณาอัปโหลดเฉพาะไฟล์ MP4 เท่านั้น",
   "please select a date that falls on":"กรุณาเลือกวันให้ตรงกับวัน",
   "please verify the accuracy of your information before continuing":"กรุณาตรวจสอบความถูกต้องของข้อมูลก่อนดำเนินการต่อ",
+  "please add a role or have this user log in":"กรุณาเพิ่มบทบาทหรือให้ผู้ใช้นี้กดเข้าสู่ระบบ",
 
   "receipt language": "ใบเสร็จภาษา",
   "reason for leave": "เหตุผลการลา",
@@ -991,6 +992,7 @@
   "the compensatory day does not match the class day Please select a new compensatory day" : "วันชดเชยไม่ตรงกับวันเรียน กรุณาเลือกวันชดเชยใหม่",
   "these dates cannot be selected because the selected compensatory class date does not match the schedule":"ไม่สามารถเลือกวันที่นี้ได้ เนื่องจากวันที่เรียนชดเชยที่เลือกไม่ตรงกับวันเรียน",
   "this holiday has passed":"วันหยุดนี้ได้ผ่านมาแล้ว",
+  "this username is not yet logged in":"ชื่อผู้ใช้นี้ยังไม่ได้อยู่ในระบบ",
 
   "unable to update the compensation day": "ไม่สามารถอัปเดตวันชดเชยได้เนื่องจากวันชดเชยตรงกับวันหยุด โปรดเลือกวันชดเชยใหม่",
   "unable to update the compensation day because the compensation day coincides with the coach's leave": "ไม่สามารถอัปเดตวันชดเชยได้เนื่องจากวันชดเชยตรงกับวันลาโค้ช กรุณาเลือกวันชดเชยใหม่",

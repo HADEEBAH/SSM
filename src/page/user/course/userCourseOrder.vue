@@ -1635,13 +1635,6 @@
           >
         </v-col>
         <v-col cols="12" sm="6">
-          <!-- v-if="
-              course_seat?.status === 'Close' ||
-              Number(course_order.students.length) +
-                Number(course_seat?.countSeatByCourse) >
-                course_seat?.maxStudentByCourse ||
-              course_data.course_status === 'Reserve'
-            " -->
           <v-btn
             v-if="
               allSeatDatas?.status === 'Close' ||
@@ -1651,17 +1644,17 @@
               course_data.course_status === 'Reserve'
             "
             class="w-full"
-            :disabled="validateButton || ValidateReserve()"
+            :disabled="validateButton || isReserveValid"
             :class="
-              validateButton || ValidateReserve()
+              validateButton || isReserveValid
                 ? 'bg-[#C4C4C4] font-black'
                 : 'bg-[#ff6b81] white--text'
             "
+            :color="validateButton || isReserveValid ? '#C4C4C4' : '#ff6b81'"
             outlined
             dense
             :loading="reserveLoading"
             @click="CreateReserve"
-            :color="validateButton || ValidateReserve() ? '#C4C4C4' : '#ff6b81'"
             >{{ $t("reserve") }}
           </v-btn>
 
@@ -2056,6 +2049,7 @@ export default {
     selected_students: [],
     selected_student_bool: false,
     update_loading: false,
+    isReserveValid: false,
   }),
   async created() {
     this.order_data = JSON.parse(localStorage.getItem("Order"));
@@ -2069,6 +2063,7 @@ export default {
     if (!this.course_order.course_id) {
       this.$router.replace({ name: "UserKingdom" });
     }
+    this.updateReserveValidation();
     // let user_data = JSON.parse(localStorage.getItem("Order"));
     // // console.log("user_data :>> ", user_data);
     // this.GetDayAddStudent({
@@ -2077,10 +2072,21 @@ export default {
     //   option_id: user_data?.option?.period_package,
     // });
   },
+
   watch: {
     "course_order.time": function () {
       this.course_order.coach_id = null;
       this.coachSelect = false;
+    },
+
+    "course_order.students": {
+      handler() {
+        this.updateReserveValidation();
+      },
+      deep: true,
+    },
+    "course_order.students.length": function () {
+      this.updateReserveValidation();
     },
 
     // "course_order?.students?.find((v) => !v.is_other)?.class": function (
@@ -2145,9 +2151,11 @@ export default {
           });
         }
       } else {
-        this.course_order.students.forEach((student, index) => {
+        this.course_order.students.forEach((student) => {
+          // index
           if (student.is_other === true) {
-            this.course_order.students.splice(index, 1);
+            this.course_order.students = [];
+            // this.course_order.students.splice(index, 1);
           }
         });
       }
@@ -2198,9 +2206,11 @@ export default {
           otherClass: null,
         });
       } else {
-        this.course_order.students.forEach((student, index) => {
+        this.course_order.students.forEach((student) => {
+          // index
           if (student.is_other === true) {
-            this.course_order.students.splice(index, 1);
+            // this.course_order.students.splice(index, 1);
+            this.course_order.students = [];
           }
         });
       }
@@ -2719,10 +2729,13 @@ export default {
     Validation(e, lang) {
       inputValidation(e, lang);
     },
-    ValidateReserve() {
+    async updateReserveValidation() {
+      const result = await this.ValidateReserve();
+      this.isReserveValid = result;
+    },
+
+    async ValidateReserve() {
       if (this.course_data.course_status === "Reserve") {
-        // console.log('this.course_data.reservation_start_date :>> ', this.course_data.reservation_start_date);
-        // console.log('this.course_data.reservation_start_date :>> ', this.course_data.reservation_start_date);
         const today = moment().format("YYYY-MM-DD");
         const start = moment(this.course_data.reservation_start_date).format(
           "YYYY-MM-DD"
@@ -2730,55 +2743,77 @@ export default {
         const end = moment(this.course_data.reservation_end_date).format(
           "YYYY-MM-DD"
         );
+
+        // ❗ ถ้าวันนี้ไม่อยู่ในช่วงจอง → ผ่านเลย
         if (!(moment(today) >= moment(start) && moment(today) <= moment(end))) {
           return true;
-          // let validate_reserve = [];
-          // if (this.course_order.students.length > 0) {
-          //   for (let student of this.course_order.students) {
-          //     validate_reserve.push(
-          //       this.reserve_list.some((v) => v.studentId == student.account_id)
-          //     );
-          //   }
-          // }
-          // if (validate_reserve.includes(true)) {
-          //   return true;
-          // } else {
-          //   return false;
-          // }
-        } else {
-          let validate_reserve = [];
-          if (this.course_order.students.length > 0) {
-            for (let student of this.course_order.students) {
-              validate_reserve.push(
-                this.reserve_list.some((v) => v.studentId == student.account_id)
-              );
-            }
-          } else {
-            return true;
-          }
-          if (validate_reserve.includes(true)) {
-            return true;
-          } else {
-            return false;
-          }
         }
-      } else {
-        let validate_reserve = [];
-        if (this.course_order.students.length > 0) {
-          for (let student of this.course_order.students) {
-            validate_reserve.push(
-              this.reserve_list.some((v) => v.studentId === student.account_id)
-            );
-          }
-        } else {
+
+        // 🔹 เตรียมตรวจนักเรียน
+        if (this.course_order.students.length === 0) {
           return true;
         }
-        if (validate_reserve.includes(true)) {
-          return true;
-        } else {
+
+        // 🔹 เช็กว่าใน reserve_list มี student ไหม
+        const hasStudentInReserveList = this.course_order.students.some(
+          (student) =>
+            this.reserve_list.some((v) => v.studentId == student.account_id)
+        );
+
+        if (!hasStudentInReserveList) {
           return false;
         }
+
+        // 🔹 รวมข้อมูลที่ตรง student ทั้งหมด
+        let filter_item = [];
+        for (let student of this.course_order.students) {
+          const matched = this.reserve_list?.filter(
+            (v) => v.studentId == student.account_id
+          );
+          filter_item.push(...matched);
+        }
+        // 🔍 ตรวจสอบสถานะของแต่ละรายการ
+        for (const item of filter_item) {
+          const order = item?.order;
+
+          // ไม่มี order → ผ่านได้
+          if (!order) {
+            return true;
+          }
+
+          // มี order และไม่มี checkInPotentialId
+          if (!order?.checkInPotentialId) {
+            if (["cancel", "null", "fail"].includes(order.paymentStatus)) {
+              continue; // ยังไม่ผ่าน → ดูคนต่อไป
+            } else {
+              return true; // ผ่าน
+            }
+          }
+
+          // มี checkInPotentialId
+          if (order?.checkInPotentialId) {
+            if (["cancel", "null", "fail"].includes(order.paymentStatus)) {
+              continue;
+            } else {
+              return true;
+            }
+          }
+        }
+
+        // ถ้าเช็กหมดแล้วไม่มีใครผ่านเลย → return false
+        return false;
       }
+
+      // ❗ ถ้า course_status ไม่ใช่ "Reserve"
+      if (this.course_order.students.length === 0) {
+        return true;
+      }
+
+      const hasAny = this.course_order.students.some((student) =>
+        this.reserve_list.some((v) => v.studentId == student.account_id)
+      );
+
+      return hasAny;
     },
     GenCoachNumberStudent(coach_id, dayOfWeekId, timeId, item) {
       let checkPackage = "";

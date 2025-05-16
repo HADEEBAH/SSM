@@ -782,6 +782,7 @@
   "please upload only mp4 file":"Please upload only mp4 file",
   "please select a date that falls on":"Please select a date that falls on",
   "please verify the accuracy of your information before continuing":"Please verify the accuracy of your information before continuing.",
+  "please add a role or have this user log in":"Please add a role or have this user log in",
 
 
 
@@ -1038,6 +1039,7 @@
   "the compensatory day does not match the class day Please select a new compensatory day" : "The compensatory day does not match the class day Please select a new compensatory day",
   "these dates cannot be selected because the selected compensatory class date does not match the schedule":"These dates cannot be selected because the selected compensatory class date does not match the schedule",
   "this holiday has passed":"This holiday has passed",
+  "this username is not yet logged in":"This username is not yet logged in",
 
 
   "unable to update the compensation day": "Unable to update the compensation day because the compensation day falls on a holiday, please select a new compensatory day",
