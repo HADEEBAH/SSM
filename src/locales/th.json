@@ -980,6 +980,7 @@
   "the compensatory day overlaps with the holiday. please select a new compensatory day": "วันชดเชยทับซ้อนกับวันหยุด กรุณาเลือกวันชดเชยใหม่",
   "time has been deleted": "ลบช่วงเวลาสำเร็จ",
   "there is no teaching day. Please contact the staff": "ไม่มีวันเปิดสอน กรุณาติดต่อเจ้าหน้าที่",
+  "there is no time teaching day. Please contact the staff": "ไม่มีเลาเปิดสอน กรุณาติดต่อเจ้าหน้าที่",
   "this teaching day cannot be deleted as the coach must have at least 1 teaching day": "วันสอนนี้ไม่สามารถลบได้ เนื่องจากโค้ชต้องมีวันสอนอย่างน้อย 1 วัน",
   "this Time cannot be deleted. Because have student in course": "เวลานี้ไม่สามารถลบได้ เพราะมีนักเรียนอยู่ในหลักสูตร",
   "teaching time cannot be deleted because there must be 1 teaching time per teaching day": "ไม่สามารถลบเวลาสอนได้เนื่องจากต้องมีเวลาสอน 1 ครั้งต่อวันสอน",
