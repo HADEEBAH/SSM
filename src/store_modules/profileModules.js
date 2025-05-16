@@ -329,6 +329,12 @@ const profileModules = {
 
           response.mystudents?.map((item) => {
             item.selected_student = false
+            if (item.school === null) {
+              item.school = {
+                schoolNameTh: null,
+                schoolNameEn: null,
+              }
+            }
 
           })
 

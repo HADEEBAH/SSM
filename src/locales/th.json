@@ -316,6 +316,8 @@
   "do you want to assent":"คุณต้องการยินยอมใช่หรือไม่?",
   "do you want to save":"คุณต้องการบันทึกใช่หรือไม่?",
   "do you want to save and update schedule":"คุณต้องการบันทึกและอัพเดทตารางใช่หรือไม่?",
+  "duplicate username":"Username ซ้ำกัน",
+
 
   "edit": "แก้ไข",
   "edit wls": "แก้ไขอาณาจักร",
@@ -737,6 +739,8 @@
   "please upload link video iframe only 1 video link":"โปรดอัปโหลดลิงก์วิดีโอให้ถูกต้อง",
   "please upload only mp4 file":"กรุณาอัปโหลดเฉพาะไฟล์ MP4 เท่านั้น",
   "please select a date that falls on":"กรุณาเลือกวันให้ตรงกับวัน",
+  "please verify the accuracy of your information before continuing":"กรุณาตรวจสอบความถูกต้องของข้อมูลก่อนดำเนินการต่อ",
+  "please add a role or have this user log in":"กรุณาเพิ่มบทบาทหรือให้ผู้ใช้นี้กดเข้าสู่ระบบ",
 
   "receipt language": "ใบเสร็จภาษา",
   "reason for leave": "เหตุผลการลา",
@@ -989,6 +993,7 @@
   "the compensatory day does not match the class day Please select a new compensatory day" : "วันชดเชยไม่ตรงกับวันเรียน กรุณาเลือกวันชดเชยใหม่",
   "these dates cannot be selected because the selected compensatory class date does not match the schedule":"ไม่สามารถเลือกวันที่นี้ได้ เนื่องจากวันที่เรียนชดเชยที่เลือกไม่ตรงกับวันเรียน",
   "this holiday has passed":"วันหยุดนี้ได้ผ่านมาแล้ว",
+  "this username is not yet logged in":"ชื่อผู้ใช้นี้ยังไม่ได้อยู่ในระบบ",
 
   "unable to update the compensation day": "ไม่สามารถอัปเดตวันชดเชยได้เนื่องจากวันชดเชยตรงกับวันหยุด โปรดเลือกวันชดเชยใหม่",
   "unable to update the compensation day because the compensation day coincides with the coach's leave": "ไม่สามารถอัปเดตวันชดเชยได้เนื่องจากวันชดเชยตรงกับวันลาโค้ช กรุณาเลือกวันชดเชยใหม่",
@@ -1025,7 +1030,7 @@
   "upload image and video Learning Journey":"อัปโหลดรูปภาพและวิดีโอ Learning Journey",
   "unable to update the compensation date due to overlapping times, please select new compensation date":"ไม่สามารถอัปเดตวันที่ชดเชยได้เนื่องจากเวลาทับซ้อนกัน กรุณาเลือกวันที่ชดเชยหรือเวลาใหม่",
   "unable to update the compensation day because the compensation day falls on a holiday, please select a new compensatory day":"ไม่สามารถอัปเดตวันชดเชยได้เนื่องจากวันชดเชยตรงกับวันหยุด กรุณาเลือกวันชดเชยใหม่",
-
+  "unable to register with this username in the admin registration mode":"ไม่สามารถลงทะเบียนกับชื่อผู้ใช้นี้ได้",
 
   "via email": "ผ่านอีเมล",
   "view financial status": "ดูสถานะการเงิน",
@@ -1156,6 +1161,10 @@
   "unable to purchase the course because the course is in reserved status": "ไม่สามารถซื้อหลักสูตรได้เนื่องจากหลักสูตรอยู่ในสถานะจอง",
   "unable to add students to cart because the course already has students listed in the cart": "ไม่สามารถเพิ่มนักเรียนลงตะกร้าได้เนื่องจากหลักสูตรมีนักเรียนอยู่ในรายการรถเข็นแล้ว",
   "unable to add students to cart because the reservation could not be added": "ไม่สามารถเพิ่มนักเรียนลงตะกร้าได้เนื่องจากไม่สามารถเพิ่มการจองเข้าไปในรายการรถเข็นได้",
+  "unable to register to student of parent":"ไม่สามารถลงทะเบียนในรูปแบบ 'ลงทะเบียนให้นักเรียนในความดูแล' ได้",
+  "unable to register to student":"เนื่องจากเป็นผู้ใช้เดียวกันกับบัญชีผู้ใช้งานที่ใช้ในการล็อกอินเข้าระบบ",
+  "unable to purchase courses for parents":"ไม่สามารถซื้อหลักสูตรให้ผู้ปกครองได้",
+
  "unauthorized":"การเข้าสู่ระบบถูกปฏิเสธ เนื่องจากไม่มีสิทธิ์",
  
   "vdo":"วีดิโอ",
