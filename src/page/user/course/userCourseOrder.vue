@@ -2151,13 +2151,14 @@ export default {
           });
         }
       } else {
-        this.course_order.students.forEach((student) => {
-          // index
-          if (student.is_other === true) {
-            this.course_order.students = [];
-            // this.course_order.students.splice(index, 1);
-          }
-        });
+        this.course_order.students = this.course_order.students.filter(
+          (student) => !student.is_other
+        );
+        // this.course_order.students.forEach((student, index) => {
+        //   if (student.is_other === true) {
+        //     this.course_order.students.splice(index, 1);
+        //   }
+        // });
       }
     },
     "course_order.apply_for_yourself": function () {
@@ -2206,13 +2207,15 @@ export default {
           otherClass: null,
         });
       } else {
-        this.course_order.students.forEach((student) => {
-          // index
-          if (student.is_other === true) {
-            // this.course_order.students.splice(index, 1);
-            this.course_order.students = [];
-          }
-        });
+        this.course_order.students = this.course_order.students.filter(
+          (student) => !student.is_other
+        );
+
+        // this.course_order.students.forEach((student, index) => {
+        //   if (student.is_other === true) {
+        //     this.course_order.students.splice(index, 1);
+        //   }
+        // });
       }
     },
     last_user_registered: function () {
