@@ -3364,16 +3364,43 @@ const CourseModules = {
             'Authorization': `Bearer ${VueCookie.get("token")}`
           }
         }
+        // let localhost = "http://localhost:3000"
+        // let { data } = await axios.patch(`${localhost}/api/v1/manage/toggle-course`, { "courseId": courseId, "courseStatus": courseStatus }, config)
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/toggle-course`, { "courseId": courseId, "courseStatus": courseStatus }, config)
-
         if (data.statusCode === 200) {
           context.commit("SetStatusCourse", data.data)
 
         } else {
+
           throw { error: data };
         }
       } catch (error) {
-        console.log(error);
+        context.commit("SetStatusCourse", error)
+        if (error?.response?.data?.message === "Please specify the start and end dates of your booking.") {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("something went wrong"),
+            text: VueI18n.t("please specify the start and end dates of your booking"),
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+          context.commit("SetStatusCourse", error)
+
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("something went wrong"),
+            text: error.response.data.message,
+            timer: 3000,
+            showDenyButton: false,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+        }
       }
 
     },

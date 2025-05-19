@@ -741,6 +741,7 @@
   "please select a date that falls on":"กรุณาเลือกวันให้ตรงกับวัน",
   "please verify the accuracy of your information before continuing":"กรุณาตรวจสอบความถูกต้องของข้อมูลก่อนดำเนินการต่อ",
   "please add a role or have this user log in":"กรุณาเพิ่มบทบาทหรือให้ผู้ใช้นี้กดเข้าสู่ระบบ",
+  "please specify the start and end dates of your booking":"โปรดระบุวันที่เริ่มต้นและสิ้นสุดการจองของคุณ",
 
   "receipt language": "ใบเสร็จภาษา",
   "reason for leave": "เหตุผลการลา",
