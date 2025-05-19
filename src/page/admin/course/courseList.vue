@@ -358,7 +358,7 @@ export default {
                 });
                 if (
                   status === "Reserve" &&
-                  this.update_status_course?.response?.status !== 200
+                  this.update_status_course.response.status !== 200
                 ) {
                   item.status = "Active";
                 }

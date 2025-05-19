@@ -3367,13 +3367,13 @@ const CourseModules = {
         // let localhost = "http://localhost:3000"
         // let { data } = await axios.patch(`${localhost}/api/v1/manage/toggle-course`, { "courseId": courseId, "courseStatus": courseStatus }, config)
         let { data } = await axios.patch(`${process.env.VUE_APP_URL}/api/v1/manage/toggle-course`, { "courseId": courseId, "courseStatus": courseStatus }, config)
-        if (data.statusCode === 200) {
-          context.commit("SetStatusCourse", data.data)
+        // if (data.statusCode === 200) {
+        context.commit("SetStatusCourse", data.data)
 
-        } else {
+        // } else {
 
-          throw { error: data };
-        }
+        //   throw { error: data };
+        // }
       } catch (error) {
         context.commit("SetStatusCourse", error)
         if (error?.response?.data?.message === "Please specify the start and end dates of your booking.") {
