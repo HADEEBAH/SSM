@@ -360,7 +360,8 @@ export default {
                   status === "Reserve" &&
                   this.update_status_course.response.status !== 200
                 ) {
-                  item.status = "Active";
+                  // item.status = "Active";
+                  this.$store.dispatch("CourseModules/GetCoursesList");
                 }
               }
             }
