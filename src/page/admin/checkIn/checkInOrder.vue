@@ -411,7 +411,8 @@ export default {
             await this.UpdateScheduleAndCheckIn({
               orderNumber: this.orderNumder,
               orderItemId: this.seletedCourse,
-              lastTime: this.lastTime,
+              lastTime:
+                this.type === "last-time" ? parseInt(this.lastTime) : Number(0),
               type: this.type,
               endDate: this.endClassDate,
             });
