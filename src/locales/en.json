@@ -335,6 +335,7 @@
 
   "do you want to save":"Do you want to save?",
   "do you want to save and update schedule":"Do you want to save and update schedule?",
+  "duplicate username":"Duplicate Username",
 
 
 
@@ -780,6 +781,9 @@
   "please upload link video iframe only 1 video link":"Please upload link video iframe only 1 video link",
   "please upload only mp4 file":"Please upload only mp4 file",
   "please select a date that falls on":"Please select a date that falls on",
+  "please verify the accuracy of your information before continuing":"Please verify the accuracy of your information before continuing.",
+  "please add a role or have this user log in":"Please add a role or have this user log in",
+  "please specify the start and end dates of your booking":"Please specify the start and end dates of your booking",
 
 
 
@@ -1037,6 +1041,7 @@
   "the compensatory day does not match the class day Please select a new compensatory day" : "The compensatory day does not match the class day Please select a new compensatory day",
   "these dates cannot be selected because the selected compensatory class date does not match the schedule":"These dates cannot be selected because the selected compensatory class date does not match the schedule",
   "this holiday has passed":"This holiday has passed",
+  "this username is not yet logged in":"This username is not yet logged in",
 
 
   "unable to update the compensation day": "Unable to update the compensation day because the compensation day falls on a holiday, please select a new compensatory day",
@@ -1071,6 +1076,7 @@
   "upload image and video Learning Journey":"Upload image and video Learning Journey",
   "unable to update the compensation date due to overlapping times, please select new compensation date":"Unable to update the compensation date due to overlapping times, please select new compensation date",
   "unable to update the compensation day because the compensation day falls on a holiday, please select a new compensatory day":"Unable to update the compensation day because the compensation day falls on a holiday, please select a new compensatory day",
+  "unable to register with this username in the admin registration mode":"Unable to register with this username",
 
   "via email": "Via email",
   "view financial status": "View financial status",
@@ -1170,10 +1176,12 @@
   "unable to add students to cart because the reservation could not be added": "unable to add students to cart because the reservation could not be added",
   "Unable to pay because this course been removed": "Unable to pay because this course been removed.",
   "Unable to pay because this course Package Option has been removed": "Unable to pay because this course Package Option has been removed.",
- "unauthorized":"Login denied due to lack of permissions.",
+  "unable to register to student of parent":"Unable to register in case of 'register to studen of parent'",
+  "unable to register to student":"because it is the same user as the user account used to log in to the system.",
+  "unauthorized":"Login denied due to lack of permissions.",
+  "unable to purchase courses for parents":"Unable to purchase courses for parents",
   
   "VDO":"Video",
-
   "organized by": "Organized by",
   "vdo":"Video",
 

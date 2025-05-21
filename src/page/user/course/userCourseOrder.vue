@@ -207,6 +207,7 @@
             v-model="course_order.apply_for_yourself"
             color="#ff6B81"
             :label="$t('register for yourself')"
+            @click="checkDuplicate(course_order)"
           ></v-checkbox>
         </v-col>
         <v-col cols="auto" v-if="course_order.apply_for_yourself">
@@ -339,7 +340,6 @@
           ></v-checkbox>
         </v-col>
       </v-row>
-      <!-- <pre>{{ course_order.students }}</pre> -->
       <!-- Apply For Parent -->
       <v-row dense v-if="checkRoleParent()">
         <v-col cols="12" sm="6" class="d-flex align-center">
@@ -349,6 +349,8 @@
                 ? true
                 : course_order.apply_for_parent
                 ? false
+                : course_order.apply_for_yourself
+                ? true
                 : checkMaximumStudent()
             "
             v-model="course_order.apply_for_parent"
@@ -501,7 +503,7 @@
                       disabled
                     ></v-text-field>
                   </v-col>
-                  <!-- thai eng -->
+                  <!-- thai last -->
                   <v-col cols="12" sm="6">
                     <labelCustom
                       required
@@ -1633,13 +1635,6 @@
           >
         </v-col>
         <v-col cols="12" sm="6">
-          <!-- v-if="
-              course_seat?.status === 'Close' ||
-              Number(course_order.students.length) +
-                Number(course_seat?.countSeatByCourse) >
-                course_seat?.maxStudentByCourse ||
-              course_data.course_status === 'Reserve'
-            " -->
           <v-btn
             v-if="
               allSeatDatas?.status === 'Close' ||
@@ -1649,17 +1644,17 @@
               course_data.course_status === 'Reserve'
             "
             class="w-full"
-            :disabled="validateButton || ValidateReserve()"
+            :disabled="validateButton || isReserveValid"
             :class="
-              validateButton || ValidateReserve()
+              validateButton || isReserveValid
                 ? 'bg-[#C4C4C4] font-black'
                 : 'bg-[#ff6b81] white--text'
             "
+            :color="validateButton || isReserveValid ? '#C4C4C4' : '#ff6b81'"
             outlined
             dense
             :loading="reserveLoading"
             @click="CreateReserve"
-            :color="validateButton || ValidateReserve() ? '#C4C4C4' : '#ff6b81'"
             >{{ $t("reserve") }}
           </v-btn>
 
@@ -2055,6 +2050,7 @@ export default {
     selected_student_bool: false,
     update_loading: false,
     filtered_times: [],
+    isReserveValid: false,
   }),
   async created() {
     this.order_data = JSON.parse(localStorage.getItem("Order"));
@@ -2068,6 +2064,7 @@ export default {
     if (!this.course_order.course_id) {
       this.$router.replace({ name: "UserKingdom" });
     }
+    this.updateReserveValidation();
     // let user_data = JSON.parse(localStorage.getItem("Order"));
     // // console.log("user_data :>> ", user_data);
     // this.GetDayAddStudent({
@@ -2076,10 +2073,21 @@ export default {
     //   option_id: user_data?.option?.period_package,
     // });
   },
+
   watch: {
     "course_order.time": function () {
       this.course_order.coach_id = null;
       this.coachSelect = false;
+    },
+
+    "course_order.students": {
+      handler() {
+        this.updateReserveValidation();
+      },
+      deep: true,
+    },
+    "course_order.students.length": function () {
+      this.updateReserveValidation();
     },
 
     // "course_order?.students?.find((v) => !v.is_other)?.class": function (
@@ -2144,11 +2152,14 @@ export default {
           });
         }
       } else {
-        this.course_order.students.forEach((student, index) => {
-          if (student.is_other === true) {
-            this.course_order.students.splice(index, 1);
-          }
-        });
+        this.course_order.students = this.course_order.students.filter(
+          (student) => !student.is_other
+        );
+        // this.course_order.students.forEach((student, index) => {
+        //   if (student.is_other === true) {
+        //     this.course_order.students.splice(index, 1);
+        //   }
+        // });
       }
     },
     "course_order.apply_for_yourself": function () {
@@ -2168,6 +2179,7 @@ export default {
           nicknameTh: this.profile_detail.nicknameTh,
           class: this.profile_detail?.class?.classNameTh,
           otherClass: this.otherCheckClassData,
+          role: "R_5",
         });
       } else {
         this.course_order.students.forEach((student, index) => {
@@ -2196,11 +2208,15 @@ export default {
           otherClass: null,
         });
       } else {
-        this.course_order.students.forEach((student, index) => {
-          if (student.is_other === true) {
-            this.course_order.students.splice(index, 1);
-          }
-        });
+        this.course_order.students = this.course_order.students.filter(
+          (student) => !student.is_other
+        );
+
+        // this.course_order.students.forEach((student, index) => {
+        //   if (student.is_other === true) {
+        //     this.course_order.students.splice(index, 1);
+        //   }
+        // });
       }
     },
     last_user_registered: function () {
@@ -2490,6 +2506,32 @@ export default {
       GetTimeAddStudent: "CourseModules/GetTimeAddStudent",
       GetCoachAddStudent: "CourseModules/GetCoachAddStudent",
     }),
+    async checkDuplicate(items) {
+      if (items.apply_for_others) {
+        let seen = new Set();
+
+        for (const item of await items?.students) {
+          if (seen.has(item.username)) {
+            Swal.fire({
+              icon: "warning",
+              title: this.$t("duplicate username"),
+              text: this.$t(
+                "please verify the accuracy of your information before continuing"
+              ),
+              timer: 3000,
+              showDenyButton: false,
+              showCancelButton: false,
+              showConfirmButton: false,
+              timerProgressBar: true,
+            });
+            items.apply_for_yourself = false;
+            return true; // พบ username ซ้ำ
+          }
+          seen.add(item.username);
+        }
+        return false; // ไม่พบ username ซ้ำ
+      }
+    },
 
     async updateFilteredTimes(item_times) {
       const getTimes = item_times?.filter(
@@ -2544,13 +2586,14 @@ export default {
               : items.class,
         };
         await this.UpdateStudentDetail({ payload: data_payload });
-        this.order_data = JSON.parse(localStorage.getItem("Order"));
-        this.user_login = JSON.parse(localStorage.getItem("userDetail"));
-        await this.GetProfileDetail(this.user_login.account_id);
-        await this.GetClassList();
-        if (!this.course_order.course_id) {
-          this.$router.replace({ name: "UserKingdom" });
-        }
+        // ปิดเพราะข้อมูลเพี้ยน
+        // this.order_data = JSON.parse(localStorage.getItem("Order"));
+        // this.user_login = JSON.parse(localStorage.getItem("userDetail"));
+        // await this.GetProfileDetail(this.user_login.account_id);
+        // await this.GetClassList();
+        // if (!this.course_order.course_id) {
+        //   this.$router.replace({ name: "UserKingdom" });
+        // }
         this.update_loading = false;
         this.dialog_student_detail = false;
       }
@@ -2598,6 +2641,7 @@ export default {
         username: item_student.userName,
         otherClass:
           item_student.class === "อื่นๆ" ? item_student.otherClass : null,
+        role: item_student?.role?.roleId ? item_student?.role?.roleId : null,
       };
 
       const index = this.course_order.students.findIndex(
@@ -2701,10 +2745,13 @@ export default {
     Validation(e, lang) {
       inputValidation(e, lang);
     },
-    ValidateReserve() {
+    async updateReserveValidation() {
+      const result = await this.ValidateReserve();
+      this.isReserveValid = result;
+    },
+
+    async ValidateReserve() {
       if (this.course_data.course_status === "Reserve") {
-        // console.log('this.course_data.reservation_start_date :>> ', this.course_data.reservation_start_date);
-        // console.log('this.course_data.reservation_start_date :>> ', this.course_data.reservation_start_date);
         const today = moment().format("YYYY-MM-DD");
         const start = moment(this.course_data.reservation_start_date).format(
           "YYYY-MM-DD"
@@ -2712,55 +2759,77 @@ export default {
         const end = moment(this.course_data.reservation_end_date).format(
           "YYYY-MM-DD"
         );
+
+        // ❗ ถ้าวันนี้ไม่อยู่ในช่วงจอง → ผ่านเลย
         if (!(moment(today) >= moment(start) && moment(today) <= moment(end))) {
           return true;
-          // let validate_reserve = [];
-          // if (this.course_order.students.length > 0) {
-          //   for (let student of this.course_order.students) {
-          //     validate_reserve.push(
-          //       this.reserve_list.some((v) => v.studentId == student.account_id)
-          //     );
-          //   }
-          // }
-          // if (validate_reserve.includes(true)) {
-          //   return true;
-          // } else {
-          //   return false;
-          // }
-        } else {
-          let validate_reserve = [];
-          if (this.course_order.students.length > 0) {
-            for (let student of this.course_order.students) {
-              validate_reserve.push(
-                this.reserve_list.some((v) => v.studentId == student.account_id)
-              );
-            }
-          } else {
-            return true;
-          }
-          if (validate_reserve.includes(true)) {
-            return true;
-          } else {
-            return false;
-          }
         }
-      } else {
-        let validate_reserve = [];
-        if (this.course_order.students.length > 0) {
-          for (let student of this.course_order.students) {
-            validate_reserve.push(
-              this.reserve_list.some((v) => v.studentId === student.account_id)
-            );
-          }
-        } else {
+
+        // 🔹 เตรียมตรวจนักเรียน
+        if (this.course_order.students.length === 0) {
           return true;
         }
-        if (validate_reserve.includes(true)) {
-          return true;
-        } else {
+
+        // 🔹 เช็กว่าใน reserve_list มี student ไหม
+        const hasStudentInReserveList = this.course_order.students.some(
+          (student) =>
+            this.reserve_list.some((v) => v.studentId == student.account_id)
+        );
+
+        if (!hasStudentInReserveList) {
           return false;
         }
+
+        // 🔹 รวมข้อมูลที่ตรง student ทั้งหมด
+        let filter_item = [];
+        for (let student of this.course_order.students) {
+          const matched = this.reserve_list?.filter(
+            (v) => v.studentId == student.account_id
+          );
+          filter_item.push(...matched);
+        }
+        // 🔍 ตรวจสอบสถานะของแต่ละรายการ
+        for (const item of filter_item) {
+          const order = item?.order;
+
+          // ไม่มี order → ผ่านได้
+          if (!order) {
+            return true;
+          }
+
+          // มี order และไม่มี checkInPotentialId
+          if (!order?.checkInPotentialId) {
+            if (["cancel", "null", "fail"].includes(order.paymentStatus)) {
+              continue; // ยังไม่ผ่าน → ดูคนต่อไป
+            } else {
+              return true; // ผ่าน
+            }
+          }
+
+          // มี checkInPotentialId
+          if (order?.checkInPotentialId) {
+            if (["cancel", "null", "fail"].includes(order.paymentStatus)) {
+              continue;
+            } else {
+              return true;
+            }
+          }
+        }
+
+        // ถ้าเช็กหมดแล้วไม่มีใครผ่านเลย → return false
+        return false;
       }
+
+      // ❗ ถ้า course_status ไม่ใช่ "Reserve"
+      if (this.course_order.students.length === 0) {
+        return true;
+      }
+
+      const hasAny = this.course_order.students.some((student) =>
+        this.reserve_list.some((v) => v.studentId == student.account_id)
+      );
+
+      return hasAny;
     },
     GenCoachNumberStudent(coach_id, dayOfWeekId, timeId, item) {
       let checkPackage = "";
@@ -3072,7 +3141,7 @@ export default {
         username: "",
         tel: "",
       };
-      this.user_data = [];
+      // this.user_data = [];
       this.changeCourseOrderData(this.course_order);
       this.dialog_parent = false;
     },
@@ -3262,14 +3331,14 @@ export default {
         .parents.splice(0, 1);
     },
     removeStudent(student) {
-      this.remove_student_button = true;
-
       this.course_order.students.splice(
         this.course_order.students.findIndex(
-          (v) => v.username === student.username
+          (v) =>
+            v.username === student.username && v.is_other === student.is_other
         ),
         1
       );
+
       if (
         this.course_order.students.filter((v) => v.is_other === true).length ===
         0
@@ -3424,10 +3493,72 @@ export default {
             course_id: this.course_data.course_id,
           }).then(() => {
             if (type === "student") {
+              if (this.course_order?.apply_for_parent) {
+                if (this.user_student_data[0]?.roles?.roleId === "R_4") {
+                  Swal.fire({
+                    icon: "warning",
+                    title: this.$t("warning"),
+                    text: this.$t(
+                      "unable to register with this username in the admin registration mode"
+                    ),
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                  });
+                  let student = this.course_order.students.filter(
+                    (v) => v.username === username
+                  )[0];
+                  if (student) {
+                    student.firstname_en = "";
+                    student.lastname_en = "";
+                    student.firstname_th = "";
+                    student.lastname_th = "";
+                    student.student_name = "";
+                    student.tel = "";
+                    student.username = "";
+                    student.account_id = "";
+                  }
+                }
+              }
+
+              const isDuplicate = this.course_order?.students?.some(
+                (student) =>
+                  student.username === this.profile_detail?.userName &&
+                  this.course_order.apply_for_parent
+              );
+              if (isDuplicate) {
+                Swal.fire({
+                  icon: "warning",
+                  title: this.$t("warning"),
+                  text: this.$t(
+                    "unable to register with this username in the admin registration mode"
+                  ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+                let student = this.course_order.students.filter(
+                  (v) => v.username === username
+                )[0];
+                if (student) {
+                  student.firstname_en = "";
+                  student.lastname_en = "";
+                  student.firstname_th = "";
+                  student.lastname_th = "";
+                  student.student_name = "";
+                  student.tel = "";
+                  student.username = "";
+                  student.account_id = "";
+                }
+              }
+
               if (
                 this.course_order.students.filter(
                   (v) => v.username === username
-                ).length === 1
+                ).length === 1 &&
+                !isDuplicate
               ) {
                 let student = this.course_order.students.filter(
                   (v) => v.username === username
@@ -3476,7 +3607,8 @@ export default {
               } else if (
                 this.course_order.students.filter(
                   (v) => v.username === username
-                ).length > 1
+                ).length > 1 &&
+                !isDuplicate
               ) {
                 Swal.fire({
                   icon: "warning",
@@ -3500,50 +3632,70 @@ export default {
             course_id: this.course_data.course_id,
           }).then(() => {
             if (
-              this.course_order.students.filter((v) => v.username === username)
-                .length === 0
+              this.user_data[0].roles?.roleId === "R_5" ||
+              this.user_data[0].roles?.roleId === "R_3" ||
+              this.user_data[0].roles?.roleId === "R_2" ||
+              this.user_data[0].roles?.roleId === "R_1"
             ) {
-              if (this.user_data.length > 0) {
-                if (this.edit_parent) {
-                  this.edit_parent = false;
-                }
-                this.parent = {
-                  account_id: this.user_data[0].userOneId,
-                  username: username,
-                  firstname_en: this.user_data[0].firstNameEng,
-                  lastname_en: this.user_data[0].lastNameEng,
-                  tel: this.user_data[0].mobileNo,
-                };
-                if (
-                  this.course_order.students.filter(
-                    (v) => v.is_other === false
-                  )[0].parents.length > 0
-                ) {
+              Swal.fire({
+                icon: "warning",
+                title: this.$t("warning"),
+                text: this.$t(
+                  "unable to register with this username in the admin registration mode"
+                ),
+                timer: 3000,
+                timerProgressBar: true,
+                showCancelButton: false,
+                showConfirmButton: false,
+              });
+            } else {
+              if (
+                this.course_order.students.filter(
+                  (v) => v.username === username
+                ).length === 0
+              ) {
+                if (this.user_data.length > 0) {
+                  if (this.edit_parent) {
+                    this.edit_parent = false;
+                  }
+                  this.parent = {
+                    account_id: this.user_data[0].userOneId,
+                    username: username,
+                    firstname_en: this.user_data[0].firstNameEng,
+                    lastname_en: this.user_data[0].lastNameEng,
+                    tel: this.user_data[0].mobileNo,
+                  };
+                  if (
+                    this.course_order.students.filter(
+                      (v) => v.is_other === false
+                    )[0].parents.length > 0
+                  ) {
+                    let parents = this.course_order.students.filter(
+                      (v) => v.is_other === false
+                    )[0].parents;
+                    parents[0].firstname_en = this.user_data[0].firstNameEng;
+                    parents[0].lastname_en = this.user_data[0].lastNameEng;
+                    parents[0].tel = this.user_data[0].mobileNo;
+                    parents[0].account_id = this.user_data[0].userOneId;
+                    parents[0].username = username;
+                  }
+                } else {
+                  this.parent = {
+                    account_id: "",
+                    username: "",
+                    firstname_en: "",
+                    lastname_en: "",
+                    tel: "",
+                  };
                   let parents = this.course_order.students.filter(
                     (v) => v.is_other === false
                   )[0].parents;
-                  parents[0].firstname_en = this.user_data[0].firstNameEng;
-                  parents[0].lastname_en = this.user_data[0].lastNameEng;
-                  parents[0].tel = this.user_data[0].mobileNo;
-                  parents[0].account_id = this.user_data[0].userOneId;
-                  parents[0].username = username;
+                  parents[0].firstname_en = "";
+                  parents[0].lastname_en = "";
+                  parents[0].tel = "";
+                  parents[0].account_id = "";
+                  parents[0].username = "";
                 }
-              } else {
-                this.parent = {
-                  account_id: "",
-                  username: "",
-                  firstname_en: "",
-                  lastname_en: "",
-                  tel: "",
-                };
-                let parents = this.course_order.students.filter(
-                  (v) => v.is_other === false
-                )[0].parents;
-                parents[0].firstname_en = "";
-                parents[0].lastname_en = "";
-                parents[0].tel = "";
-                parents[0].account_id = "";
-                parents[0].username = "";
               }
             }
           });

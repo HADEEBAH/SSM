@@ -715,6 +715,7 @@ const orderModules = {
                         ? student.parents[0].tel
                         : null,
                 },
+                role_id: student.role ? student.role : ""
               });
             } else {
               students.push({
@@ -725,6 +726,7 @@ const orderModules = {
                 tel: student.tel,
                 is_other: student.is_other,
                 parent: {},
+                role_id: student.role ? student.role : ""
               });
             }
           }
@@ -922,6 +924,18 @@ const orderModules = {
             icon: "error",
             title: VueI18n.t("unable to register"),
             text: VueI18n.t("please enter your name and class"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else if (
+          error?.response?.data?.message?.roleId === "Require."
+        ) {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("unable to register"),
+            text: "roleId is Require",
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -1246,7 +1260,7 @@ const orderModules = {
           Swal.fire({
             icon: "error",
             title: VueI18n.t("this item cannot be made"),
-            text: error,
+            text: error?.response?.data?.message,
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -1347,6 +1361,8 @@ const orderModules = {
                         lastNameTh: student.lastname_th,
                         firstNameEng: student.firstname_en,
                         lastNameEng: student.lastname_en,
+                        role_id: student.role
+                          ? student.role : ""
                       });
                     } else {
                       allStudentsValid = false;
@@ -1423,6 +1439,7 @@ const orderModules = {
                         ? student.parents[0].tel
                         : null,
                 },
+                role_id: student.role ? student.role : ""
               });
             } else {
               students.push({
@@ -1433,6 +1450,7 @@ const orderModules = {
                 tel: student.tel,
                 is_other: student.is_other,
                 parent: {},
+                role_id: regis_type == "addStudent" || regis_type == "cart" ? itemRole ? itemRole : "" : student.role ? student.role : ""
               });
             }
 
@@ -1444,6 +1462,9 @@ const orderModules = {
             course.course_data?.course_study_start_date?.trim()
           ).format("YYYY-MM-DD");
           payload.courses.push({
+            apply_for_yourself: !course.apply_for_yourself ? false : course.apply_for_yourself, // ลงทะเบียนให้ตัวเอง
+            apply_for_others: !course.apply_for_others ? false : course.apply_for_others, //ลงทะเบียนให้ผู้อื่น
+            apply_for_parent: !course.apply_for_parent ? false : course.apply_for_parent, // ลงทะเบียนให้นรในความดูแล
             course_id: course.course_id ? course.course_id : null,
             course_type_id: course.course_type_id
               ? course.course_type_id
@@ -1842,7 +1863,6 @@ const orderModules = {
                 total_price: 0,
               });
               context.commit("SetRegisStatus", error?.response?.data);
-
               context.commit("SetOrderIsLoading", false);
               context.commit("SetOrderIsStatus", false);
               if (
@@ -1871,6 +1891,54 @@ const orderModules = {
                   text: VueI18n.t(
                     "unable to purchase the course because the course is in reserved status"
                   ),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (
+                error?.response?.data?.message === "Unable to register students under care because they are the same user as the user account used to log in to the system."
+              ) {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t("unable to register to student of parent"),
+                  text: VueI18n.t("unable to register to student"),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (
+                error?.response?.data?.message === "Student Duplicate"
+              ) {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t("unable to register"),
+                  text: VueI18n.t("duplicate username"),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (
+                error?.response?.data?.message === "Parents cannot purchase courses for them"
+              ) {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t("unable to register"),
+                  text: VueI18n.t("unable to purchase courses for parents"),
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else if (
+                error?.response?.data?.message === "User not found."
+              ) {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t("unable to register"),
+                  text: VueI18n.t("this user could not be found"),
                   timer: 3000,
                   timerProgressBar: true,
                   showCancelButton: false,
@@ -2091,16 +2159,6 @@ const orderModules = {
                   icon: "warning",
                   title: VueI18n.t("unable to register"),
                   text: VueI18n.t("please enter your name and class"),
-                  timer: 3000,
-                  timerProgressBar: true,
-                  showCancelButton: false,
-                  showConfirmButton: false,
-                });
-              } else if (error?.response?.data?.message === "User not found.") {
-                Swal.fire({
-                  icon: "warning",
-                  title: VueI18n.t("unable to register"),
-                  text: VueI18n.t("this user could not be found"),
                   timer: 3000,
                   timerProgressBar: true,
                   showCancelButton: false,
@@ -2435,7 +2493,7 @@ const orderModules = {
                 Swal.fire({
                   icon: "error",
                   title: VueI18n.t("unable to register"),
-                  text: error,
+                  text: error?.response?.data?.message,
                   timer: 3000,
                   timerProgressBar: true,
                   showCancelButton: false,
@@ -3120,8 +3178,8 @@ const orderModules = {
         } else {
           Swal.fire({
             icon: "error",
-            title: VueI18n.t("this item cannot be made"),
-            text: error,
+            title: error?.response?.data?.data ? VueI18n.t("this item cannot be made") : VueI18n.t("this username is not yet logged in"),
+            text: error?.response?.data?.data ? error?.response?.data?.message : VueI18n.t("please add a role or have this user log in"),
             timer: 3000,
             timerProgressBar: true,
             showCancelButton: false,
@@ -3452,6 +3510,27 @@ const orderModules = {
         }
       } catch (error) {
         context.commit("SetCartListIsLoading", false);
+        if (error?.response?.data?.message === "Coach has Been Deleted.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("coach has Been Deleted"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("this item cannot be made"),
+            text: error?.response?.data?.message,
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        }
       }
     },
     async DeleteCart(context, { cart_id }) {
@@ -3506,6 +3585,27 @@ const orderModules = {
         }
       } catch (error) {
         context.commit("SetCartListIsLoading", false);
+        if (error?.response?.data?.message === "Coach has Been Deleted.") {
+          Swal.fire({
+            icon: "warning",
+            title: VueI18n.t("this item cannot be made"),
+            text: VueI18n.t("coach has Been Deleted"),
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: VueI18n.t("this item cannot be made"),
+            text: error?.response?.data?.message,
+            timer: 3000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        }
       }
     },
     async userUpdateOrderCancelStatus(context, { order_number }) {
@@ -3755,6 +3855,7 @@ const orderModules = {
                             ? student.parents[0].tel
                             : null,
                     },
+                    role_id: student.role ? student.role : ""
                   });
                 } else {
                   studentsArr.push({
@@ -3765,8 +3866,8 @@ const orderModules = {
                     tel: student.tel,
                     is_other: student.is_other,
                     is_waraphat: student.IsWaraphat,
-
                     parent: {},
+                    role_id: student.role ? student.role : ""
                   });
                 }
               }
@@ -3869,58 +3970,81 @@ const orderModules = {
                       : 0,
                 admin_discount: 0,
               });
-              let config = {
-                headers: {
-                  "Access-Control-Allow-Origin": "*",
-                  "Content-type": "Application/json",
-                  Authorization: `Bearer ${VueCookie.get("token")}`,
-                },
-              };
-              let { data } = await axios.post(
-                // `http://localhost:3002/api/v1/order/reserve/create`,
-                `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
-                payload,
-                config
-              );
-              if (data.statusCode === 201) {
-                // count = count + 1;
-                // if (studentsArr.length === course_data.students.length) {
-                await Swal.fire({
-                  icon: "success",
-                  title: VueI18n.t("succeed"),
-                  text: VueI18n.t(
-                    "successfully reserved a course Staff will contact you later"
-                  ),
-                  showDenyButton: false,
-                  showCancelButton: false,
-                  showConfirmButton: false,
-                  timer: 3000,
-                  timerProgressBar: true,
-                }).finally(() => {
-                  router.replace({ name: "UserKingdom" });
-                });
-                // }
-              } else {
-                throw { error: data.data };
+              try {
+                let config = {
+                  headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Content-type": "Application/json",
+                    Authorization: `Bearer ${VueCookie.get("token")}`,
+                  },
+                };
+                let { data } = await axios.post(
+                  // `http://localhost:3002/api/v1/order/reserve/create`,
+                  `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
+                  payload,
+                  config
+                );
+                if (data.statusCode === 201) {
+                  // count = count + 1;
+                  // if (studentsArr.length === course_data.students.length) {
+                  await Swal.fire({
+                    icon: "success",
+                    title: VueI18n.t("succeed"),
+                    text: VueI18n.t(
+                      "successfully reserved a course Staff will contact you later"
+                    ),
+                    showDenyButton: false,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                  }).finally(() => {
+                    router.replace({ name: "UserKingdom" });
+                  });
+                  // }
+                }
+              } catch (error) {
+                if (
+                  error.response?.data?.message ===
+                  "Parents cannot resave the course to their parents."
+                ) {
+                  Swal.fire({
+                    icon: "error",
+                    title: VueI18n.t("something went wrong"),
+                    text: VueI18n.t(
+                      "parents cannot resave the course to their parents"
+                    ),
+                    showDenyButton: false,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                  });
+                } else if (
+                  error?.response?.data?.message?.roleId === "Require."
+                ) {
+                  Swal.fire({
+                    icon: "warning",
+                    title: VueI18n.t("unable to register"),
+                    text: "roleId is Require",
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                  });
+                } else {
+                  Swal.fire({
+                    icon: "error",
+                    title: VueI18n.t("something went wrong"),
+                    text: error.response?.data?.message,
+                    showDenyButton: false,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                  })
+                }
               }
-              // }
-
-              // if (count === course_data.students.length) {
-              //   await Swal.fire({
-              //     icon: "success",
-              //     title: VueI18n.t("succeed"),
-              //     text: VueI18n.t(
-              //       "successfully reserved a course Staff will contact you later"
-              //     ),
-              //     showDenyButton: false,
-              //     showCancelButton: false,
-              //     showConfirmButton: false,
-              //     timer: 3000,
-              //     timerProgressBar: true,
-              //   }).finally(() => {
-              //     router.replace({ name: "UserKingdom" });
-              //   });
-              // }
             }
           });
         } else {
@@ -3955,7 +4079,6 @@ const orderModules = {
                   tel: student.tel,
                   is_other: student.is_other,
                   is_waraphat: student.IsWaraphat,
-
                   parent: {
                     account_id: student.parents[0].account_id,
                     parent_first_name_th: student.parents[0].firstname_th
@@ -3968,6 +4091,8 @@ const orderModules = {
                     parent_last_name_eh: student.parents[0].lastname_en,
                     parent_tel: student.parents[0].tel,
                   },
+                  role_id: student.role ? student.role : ""
+
                 });
               } else {
                 studentsArr.push({
@@ -3978,8 +4103,9 @@ const orderModules = {
                   tel: student.tel,
                   is_other: student.is_other,
                   is_waraphat: student.IsWaraphat,
-
                   parent: {},
+                  role_id: student.role ? student.role : ""
+
                 });
               }
             }
@@ -4087,42 +4213,82 @@ const orderModules = {
               admin_discount: 0,
             });
 
-            let config = {
-              headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Content-type": "Application/json",
-                Authorization: `Bearer ${VueCookie.get("token")}`,
-              },
-            };
-            let { data } = await axios.post(
-              // `http://localhost:3002/api/v1/order/reserve/create`,
-              `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
-              payload,
-              config
-            );
-            if (data.statusCode === 201) {
-              // count = count + 1;
-              // if (studentsArr.length === course_data.students.length) {
+            try {
+              let config = {
+                headers: {
+                  "Access-Control-Allow-Origin": "*",
+                  "Content-type": "Application/json",
+                  Authorization: `Bearer ${VueCookie.get("token")}`,
+                },
+              };
+              let { data } = await axios.post(
+                // `http://localhost:3002/api/v1/order/reserve/create`,
+                `${process.env.VUE_APP_URL}/api/v1/order/reserve/create`,
+                payload,
+                config
+              );
+              if (data.statusCode === 201) {
+                // count = count + 1;
+                // if (studentsArr.length === course_data.students.length) {
 
-              await Swal.fire({
-                icon: "success",
-                title: VueI18n.t("succeed"),
-                text: VueI18n.t(
-                  "successfully reserved a course Staff will contact you later"
-                ),
-                showDenyButton: false,
-                showCancelButton: false,
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-              }).finally(() => {
-                router.replace({ name: "UserKingdom" });
-              });
-              // }
-            } else {
-              throw { error: data.data };
+                await Swal.fire({
+                  icon: "success",
+                  title: VueI18n.t("succeed"),
+                  text: VueI18n.t(
+                    "successfully reserved a course Staff will contact you later"
+                  ),
+                  showDenyButton: false,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                  timer: 3000,
+                  timerProgressBar: true,
+                }).finally(() => {
+                  router.replace({ name: "UserKingdom" });
+                });
+                // }
+              }
+            } catch (error) {
+              if (
+                error.response?.data?.message ===
+                "Parents cannot resave the course to their parents."
+              ) {
+                Swal.fire({
+                  icon: "error",
+                  title: VueI18n.t("something went wrong"),
+                  text: VueI18n.t(
+                    "parents cannot resave the course to their parents"
+                  ),
+                  showDenyButton: false,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                  timer: 3000,
+                  timerProgressBar: true,
+                });
+              } else if (
+                error?.response?.data?.message?.roleId === "Require."
+              ) {
+                Swal.fire({
+                  icon: "warning",
+                  title: VueI18n.t("unable to register"),
+                  text: "roleId is Require",
+                  timer: 3000,
+                  timerProgressBar: true,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: VueI18n.t("something went wrong"),
+                  text: error.response?.data?.message,
+                  showDenyButton: false,
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                  timer: 3000,
+                  timerProgressBar: true,
+                })
+              }
             }
-            // }
           }
         }
 

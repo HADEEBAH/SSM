@@ -1321,16 +1321,22 @@ export default {
       });
     },
     validateRegisterCourse() {
-      // eslint-disable-next-line no-unused-vars
-      let tobay = moment().format("YYYY-MM-DD");
-
-      return !moment(tobay).isBetween(
-        this.course_data.course_register_start_date,
-        this.course_data.course_register_end_date,
-        null,
-        "[]"
-      );
-      // return false;
+      let today = moment().format("YYYY-MM-DD");
+      if (this.course_data?.course_status === "Reserve") {
+        return !moment(today).isBetween(
+          this.course_data?.reservation_start_date,
+          this.course_data?.reservation_end_date,
+          null,
+          "[]"
+        );
+      } else {
+        return !moment(today).isBetween(
+          this.course_data?.course_register_start_date,
+          this.course_data?.course_register_end_date,
+          null,
+          "[]"
+        );
+      }
     },
     registerCourse() {
       this.order.order_step = 1;
