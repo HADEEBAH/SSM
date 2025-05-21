@@ -95,7 +95,7 @@
           </v-row>
         </v-radio-group>
 
-        <template v-if="course_order.day && time_list?.length > 0">
+        <template v-if="course_order.day && filtered_times?.length > 0">
           <v-row>
             <v-col class="text-lg font-bold">{{
               $t("choose a class time")
@@ -107,7 +107,7 @@
               <v-col
                 cols="12"
                 sm="6"
-                v-for="(time, time_index) in time_list"
+                v-for="(time, time_index) in filtered_times"
                 :key="time_index"
               >
                 <v-row dense>
@@ -2054,6 +2054,7 @@ export default {
     selected_students: [],
     selected_student_bool: false,
     update_loading: false,
+    filtered_times: [],
   }),
   async created() {
     this.order_data = JSON.parse(localStorage.getItem("Order"));
@@ -2260,6 +2261,12 @@ export default {
     },
     "$i18n.locale": function () {
       this.GetCourse(this.order_data.course_id);
+    },
+    time_list: {
+      immediate: true,
+      handler(val) {
+        this.updateFilteredTimes(val);
+      },
     },
   },
   computed: {
@@ -2484,6 +2491,12 @@ export default {
       GetCoachAddStudent: "CourseModules/GetCoachAddStudent",
     }),
 
+    async updateFilteredTimes(item_times) {
+      const getTimes = item_times?.filter(
+        (items) => items.status === "Open" && items.isActive === 1
+      );
+      this.filtered_times = getTimes;
+    },
     editStudentData(item_student) {
       this.data_student = item_student;
       this.dialog_student_detail = true;

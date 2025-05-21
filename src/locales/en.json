@@ -1029,6 +1029,7 @@
   "the compensatory day overlaps with the holiday. please select a new compensatory day": "The compensatory day overlaps with the holiday. please select a new compensatory day",
   "time has been deleted": "Time has been deleted",
   "there is no teaching day. Please contact the staff": "There is no teaching day. Please contact the staff",
+  "there is no time day. Please contact the staff": "There is no time day. Please contact the staff",
   "this Time cannot be deleted. Because have student in course": "This Time cannot be deleted. Because have student in course",
   "teaching time cannot be deleted because there must be 1 teaching time per teaching day": "Teaching time cannot be deleted because there must be 1 teaching time per teaching day",
   "teach day":"Add teach day",
